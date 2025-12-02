@@ -1,0 +1,148 @@
+//! Punctuated
+
+// Imports
+use {
+	crate::{Format, parser::Parse, print::Print},
+	either::Either,
+};
+
+/// Punctuated type `T`, separated by `P`
+#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(serde::Serialize, serde::Deserialize)]
+#[derive(Parse, Format, Print)]
+pub struct Punctuated<T, P> {
+	pub first: T,
+	pub rest:  Rest<T, P>,
+}
+
+// TODO: Remove this alias once `thiserror` actually adds the correct
+//       bounds without it.
+type Rest<T, P> = Vec<(P, T)>;
+
+impl<T, P> Punctuated<T, P> {
+	/// Splits this punctuated at the first value
+	pub fn split_first_mut(
+		&mut self,
+	) -> (
+		&mut T,
+		impl DoubleEndedIterator<Item = (&mut P, &mut T)> + ExactSizeIterator,
+	) {
+		(
+			&mut self.first,
+			self.rest.iter_mut().map(|(punct, value)| (punct, value)),
+		)
+	}
+
+	/// Splits this punctuated at the last value
+	pub fn split_last_mut(&mut self) -> (SplitLastMut<'_, T, P>, &mut T) {
+		let mut rest = self.rest.iter_mut();
+		match rest.next_back() {
+			Some((punct, value)) => {
+				let iter = SplitLastMut {
+					next_value: Some(&mut self.first),
+					last_punct: Some(punct),
+					rest,
+				};
+				(iter, value)
+			},
+			None => {
+				let iter = SplitLastMut {
+					next_value: None,
+					last_punct: None,
+					rest,
+				};
+				(iter, &mut self.first)
+			},
+		}
+	}
+
+	/// Returns an iterator over all elements
+	pub fn iter(&self) -> impl Iterator<Item = Either<&T, &P>> {
+		itertools::chain![
+			[Either::Left(&self.first)],
+			self.rest
+				.iter()
+				.flat_map(|(punct, value)| [Either::Right(punct), Either::Left(value)])
+		]
+	}
+
+	/// Returns a mutable iterator over all elements
+	pub fn iter_mut(&mut self) -> impl Iterator<Item = Either<&mut T, &mut P>> {
+		itertools::chain![
+			[Either::Left(&mut self.first)],
+			self.rest
+				.iter_mut()
+				.flat_map(|(punct, value)| [Either::Right(punct), Either::Left(value)])
+		]
+	}
+
+	/// Returns a mutable iterator over all values
+	pub fn values_mut(&mut self) -> impl Iterator<Item = &mut T> {
+		itertools::chain![[&mut self.first], self.rest.iter_mut().map(|(_, value)| value)]
+	}
+
+	/// Returns a mutable iterator over all punctuation
+	pub fn punct_mut(&mut self) -> impl Iterator<Item = &mut P> {
+		self.rest.iter_mut().map(|(punct, _)| punct)
+	}
+}
+
+/// Punctuated type `T`, separated by `P` with an optional trailing `P`.
+#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(serde::Serialize, serde::Deserialize)]
+#[derive(Parse, Format, Print)]
+pub struct PunctuatedTrailing<T, P> {
+	pub punctuated: Punctuated<T, P>,
+	pub trailing:   Option<P>,
+}
+
+impl<T, P> PunctuatedTrailing<T, P> {
+	/// Splits this punctuated at the last value
+	pub fn split_last_mut(&mut self) -> (SplitLastMut<'_, T, P>, &mut T, &mut Option<P>) {
+		let (iter, last) = self.punctuated.split_last_mut();
+		(iter, last, &mut self.trailing)
+	}
+
+	/// Returns an iterator over all elements
+	pub fn iter(&self) -> impl Iterator<Item = Either<&T, &P>> {
+		itertools::chain![self.punctuated.iter(), self.trailing.as_ref().map(Either::Right),]
+	}
+}
+
+/// Iterator for [`Punctuated::split_last_mut`]
+pub struct SplitLastMut<'a, T, P> {
+	/// Next value to yield
+	next_value: Option<&'a mut T>,
+
+	/// Last punctuated to yield once the slice is empty
+	last_punct: Option<&'a mut P>,
+
+	/// Rest of the slice
+	rest: std::slice::IterMut<'a, (P, T)>,
+}
+
+impl<'a, T, P> Iterator for SplitLastMut<'a, T, P> {
+	type Item = (&'a mut T, &'a mut P);
+
+	fn next(&mut self) -> Option<Self::Item> {
+		// If we don't have a next value, we're finished
+		let value = self.next_value.take()?;
+
+		// If we do, get the punctuation
+		let punct = match self.rest.next() {
+			// If there's still something in the slice, save the value
+			// for the next iteration
+			Some((punct, value)) => {
+				self.next_value = Some(value);
+				punct
+			},
+
+			// Otherwise, use our last punctuation
+			// Note: If we had a next value, we're guaranteed
+			//       to have a last punctuation.
+			None => self.last_punct.take().expect("Should exist"),
+		};
+
+		Some((value, punct))
+	}
+}

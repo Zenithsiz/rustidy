@@ -1,0 +1,61 @@
+//! Character literal
+
+// Imports
+use {
+	crate::{AstStr, Format, Parse, ParseError, Parser, Print, ast::whitespace::Whitespace, parser::ParserError},
+	std::fmt,
+};
+
+
+/// `CHAR_LITERAL`
+#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(serde::Serialize, serde::Deserialize)]
+#[derive(Format, Print)]
+pub struct CharLiteral(#[format(str)] pub AstStr, #[format(whitespace)] pub Whitespace);
+
+#[derive(Debug, ParseError)]
+pub enum CharLiteralError {
+	#[parse_error(fmt = "Expected `'`")]
+	StartQuote,
+
+	#[parse_error(fmt = "Expected `'` after `'`")]
+	// Note: Not fatal because of lifetimes
+	ExpectedEndQuote,
+
+	#[parse_error(transparent)]
+	Whitespace(ParserError<Whitespace>),
+}
+
+impl Parse for CharLiteral {
+	type Error = CharLiteralError;
+
+	fn name() -> Option<impl fmt::Display> {
+		Some("a character literal")
+	}
+
+	fn parse_from(parser: &mut Parser) -> Result<Self, Self::Error> {
+		let literal = parser.try_update_with(|s| {
+			if !s.starts_with('\'') {
+				return Err(CharLiteralError::StartQuote);
+			}
+			*s = &s[1..];
+
+			// TODO: Parse escapes better?
+			// TODO: We should limit this to a single token / escape
+			loop {
+				let end = s.find('\'').ok_or(CharLiteralError::ExpectedEndQuote)?;
+				let is_escape = s[..end].ends_with('\\') && !s[..end].ends_with("\\\\");
+				*s = &s[end + 1..];
+				if !is_escape {
+					break;
+				}
+			}
+
+			Ok(())
+		})?;
+
+		let whitespace = parser.parse::<Whitespace>().map_err(CharLiteralError::Whitespace)?;
+
+		Ok(Self(literal, whitespace))
+	}
+}

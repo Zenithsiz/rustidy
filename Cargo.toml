@@ -1,0 +1,67 @@
+[workspace]
+
+members  = ["rustidy", "rustidy-macros"]
+resolver = "2"
+
+[workspace.package]
+description = "Rust-tidy formatter"
+edition     = "2024"
+license     = "MIT OR Apache-2.0"
+publish     = ["filipejr"]
+repository  = "https://github.com/zenithsiz/rustidy"
+version     = "0.1.10"
+
+[workspace.dependencies]
+
+# Workspace
+rustidy        = { path = "rustidy" }
+rustidy-macros = { path = "rustidy-macros" }
+
+app-error        = { git = "https://github.com/Zenithsiz/app-error", rev = "e21d2eab03d97a675c4b44ccfa4df00e18d56ba7" }
+assert-json-diff = "2.0.2"
+clap             = "4.5.47"
+convert_case     = "0.8.0"
+darling          = "0.21.3"
+derive_more      = "2.0.1"
+either           = "1.15.0"
+extend           = "1.2.0"
+itertools        = "0.14.0"
+proc-macro2      = "1.0.102"
+quote            = "1.0.41"
+ref-cast         = "1.0.25"
+serde            = "1.0.228"
+serde_json       = "1.0.145"
+strum            = "0.27.2"
+syn              = "2.0.106"
+thiserror        = "2.0.17"
+tracing          = "0.1.41"
+unicode-ident    = "1.0.19"
+zutil-logger     = { git = "https://github.com/Zenithsiz/zutil", rev = "2913756373a37f36e50c2ffc90090b2ff1a7ce49" }
+
+[workspace.lints]
+
+rust.unexpected_cfgs = { check-cfg = ['cfg(rust_analyzer)'], level = "warn" }
+
+clippy.nursery  = { level = "warn", priority = -1 }
+clippy.pedantic = { level = "warn", priority = -1 }
+
+clippy.unnecessary_self_imports = "warn"
+
+# Style
+clippy.match_bool         = "allow"
+clippy.option_if_let_else = "allow"
+clippy.similar_names      = "allow"
+clippy.single_match_else  = "allow"
+clippy.struct_field_names = "allow"
+
+# Misc
+clippy.empty_enum                   = "allow"
+clippy.items-after-statements       = "allow"
+clippy.unnecessary_debug_formatting = "allow"
+clippy.wildcard_imports             = "allow"
+
+# TODO:
+clippy.large_enum_variant = "allow"
+clippy.missing_errors_doc = "allow"
+clippy.missing_panics_doc = "allow"
+clippy.too_many_lines     = "allow"

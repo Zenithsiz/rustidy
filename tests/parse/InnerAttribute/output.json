@@ -1,0 +1,97 @@
+{
+	"shebang": null,
+	"prefix_ws": { "first": [0, 0], "rest": [] },
+	"inner_attrs": [
+		{
+			"Attr": {
+				"pound": [[0, 1], { "first": [1, 1], "rest": [] }],
+				"not": [[1, 2], { "first": [2, 2], "rest": [] }],
+				"attr": {
+					"prefix": [[2, 3], { "first": [3, 3], "rest": [] }],
+					"value": {
+						"path": {
+							"prefix": null,
+							"segments": {
+								"first": {
+									"Ident": {
+										"NonKw": {
+											"ident": [[3, 4], { "first": [4, 4], "rest": [] }]
+										}
+									}
+								},
+								"rest": [
+									[
+										[[4, 6], { "first": [6, 6], "rest": [] }],
+										{
+											"Ident": {
+												"NonKw": {
+													"ident": [[6, 7], { "first": [7, 7], "rest": [] }]
+												}
+											}
+										}
+									],
+									[
+										[[7, 9], { "first": [9, 9], "rest": [] }],
+										{
+											"Ident": {
+												"NonKw": {
+													"ident": [[9, 10], { "first": [10, 10], "rest": [] }]
+												}
+											}
+										}
+									]
+								]
+							}
+						},
+						"input": null
+					},
+					"suffix": [[10, 11], { "first": [11, 12], "rest": [] }]
+				}
+			}
+		},
+		{
+			"Attr": {
+				"pound": [[12, 13], { "first": [13, 13], "rest": [] }],
+				"not": [[13, 14], { "first": [14, 14], "rest": [] }],
+				"attr": {
+					"prefix": [[14, 15], { "first": [15, 15], "rest": [] }],
+					"value": {
+						"path": {
+							"prefix": [[15, 17], { "first": [17, 17], "rest": [] }],
+							"segments": {
+								"first": {
+									"DollarCrate": [[17, 23], { "first": [23, 23], "rest": [] }]
+								},
+								"rest": [
+									[
+										[[23, 25], { "first": [25, 25], "rest": [] }],
+										{
+											"Ident": {
+												"NonKw": {
+													"ident": [[25, 26], { "first": [26, 26], "rest": [] }]
+												}
+											}
+										}
+									]
+								]
+							}
+						},
+						"input": null
+					},
+					"suffix": [[26, 27], { "first": [27, 28], "rest": [] }]
+				}
+			}
+		},
+		{
+			"DocComment": {
+				"InnerLine": {
+					"prefix": [[28, 31], { "first": [31, 31], "rest": [] }],
+					"comment": [31, 33],
+					"whitespace": { "first": [33, 33], "rest": [] }
+				}
+			}
+		}
+	],
+	"items": [],
+	"trailing_line_comment": null
+}

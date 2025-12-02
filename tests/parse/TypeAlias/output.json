@@ -1,0 +1,772 @@
+{
+	"shebang": null,
+	"prefix_ws": { "first": [0, 0], "rest": [] },
+	"inner_attrs": [],
+	"items": [
+		{
+			"attrs": [],
+			"inner": {
+				"Vis": {
+					"vis": null,
+					"inner": {
+						"TypeAlias": {
+							"type_": [[0, 4], { "first": [4, 5], "rest": [] }],
+							"ident": {
+								"NonKw": { "ident": [[5, 6], { "first": [6, 6], "rest": [] }] }
+							},
+							"generics": null,
+							"bounds": null,
+							"where_": null,
+							"eq": null,
+							"semi": [[6, 7], { "first": [7, 9], "rest": [] }]
+						}
+					}
+				}
+			}
+		},
+		{
+			"attrs": [],
+			"inner": {
+				"Vis": {
+					"vis": null,
+					"inner": {
+						"TypeAlias": {
+							"type_": [[9, 13], { "first": [13, 14], "rest": [] }],
+							"ident": {
+								"NonKw": {
+									"ident": [[14, 15], { "first": [15, 15], "rest": [] }]
+								}
+							},
+							"generics": {
+								"open": [[15, 16], { "first": [16, 16], "rest": [] }],
+								"params": {
+									"punctuated": {
+										"first": {
+											"attrs": [],
+											"inner": {
+												"Type": {
+													"ident": {
+														"NonKw": {
+															"ident": [
+																[16, 17],
+																{ "first": [17, 17], "rest": [] }
+															]
+														}
+													},
+													"bounds": null,
+													"eq_ty": null
+												}
+											}
+										},
+										"rest": []
+									},
+									"trailing": null
+								},
+								"close": [[17, 18], { "first": [18, 18], "rest": [] }]
+							},
+							"bounds": null,
+							"where_": null,
+							"eq": null,
+							"semi": [[18, 19], { "first": [19, 20], "rest": [] }]
+						}
+					}
+				}
+			}
+		},
+		{
+			"attrs": [],
+			"inner": {
+				"Vis": {
+					"vis": null,
+					"inner": {
+						"TypeAlias": {
+							"type_": [[20, 24], { "first": [24, 25], "rest": [] }],
+							"ident": {
+								"NonKw": {
+									"ident": [[25, 26], { "first": [26, 26], "rest": [] }]
+								}
+							},
+							"generics": null,
+							"bounds": {
+								"colon": [[26, 27], { "first": [27, 28], "rest": [] }],
+								"bounds": {
+									"punctuated": {
+										"first": {
+											"Trait": {
+												"Normal": {
+													"prefix": null,
+													"path": {
+														"prefix": null,
+														"segments": {
+															"first": {
+																"path": {
+																	"Ident": {
+																		"NonKw": {
+																			"ident": [
+																				[28, 29],
+																				{ "first": [29, 29], "rest": [] }
+																			]
+																		}
+																	}
+																},
+																"generics": null
+															},
+															"rest": []
+														}
+													}
+												}
+											}
+										},
+										"rest": []
+									},
+									"trailing": null
+								}
+							},
+							"where_": null,
+							"eq": null,
+							"semi": [[29, 30], { "first": [30, 31], "rest": [] }]
+						}
+					}
+				}
+			}
+		},
+		{
+			"attrs": [],
+			"inner": {
+				"Vis": {
+					"vis": null,
+					"inner": {
+						"TypeAlias": {
+							"type_": [[31, 35], { "first": [35, 36], "rest": [] }],
+							"ident": {
+								"NonKw": {
+									"ident": [[36, 37], { "first": [37, 38], "rest": [] }]
+								}
+							},
+							"generics": null,
+							"bounds": null,
+							"where_": {
+								"where_": [[38, 43], { "first": [43, 44], "rest": [] }],
+								"items": {
+									"punctuated": {
+										"first": {
+											"Type": {
+												"for_lifetimes": null,
+												"ty": {
+													"TraitObject": {
+														"dyn_": null,
+														"bound": {
+															"punctuated": {
+																"first": {
+																	"Trait": {
+																		"Normal": {
+																			"prefix": null,
+																			"path": {
+																				"prefix": null,
+																				"segments": {
+																					"first": {
+																						"path": {
+																							"Ident": {
+																								"NonKw": {
+																									"ident": [
+																										[44, 45],
+																										{
+																											"first": [45, 45],
+																											"rest": []
+																										}
+																									]
+																								}
+																							}
+																						},
+																						"generics": null
+																					},
+																					"rest": []
+																				}
+																			}
+																		}
+																	}
+																},
+																"rest": []
+															},
+															"trailing": null
+														}
+													}
+												},
+												"colon": [[45, 46], { "first": [46, 47], "rest": [] }],
+												"bounds": {
+													"punctuated": {
+														"first": {
+															"Trait": {
+																"Normal": {
+																	"prefix": null,
+																	"path": {
+																		"prefix": null,
+																		"segments": {
+																			"first": {
+																				"path": {
+																					"Ident": {
+																						"NonKw": {
+																							"ident": [
+																								[47, 48],
+																								{
+																									"first": [48, 48],
+																									"rest": []
+																								}
+																							]
+																						}
+																					}
+																				},
+																				"generics": null
+																			},
+																			"rest": []
+																		}
+																	}
+																}
+															}
+														},
+														"rest": []
+													},
+													"trailing": null
+												}
+											}
+										},
+										"rest": []
+									},
+									"trailing": null
+								}
+							},
+							"eq": null,
+							"semi": [[48, 49], { "first": [49, 51], "rest": [] }]
+						}
+					}
+				}
+			}
+		},
+		{
+			"attrs": [],
+			"inner": {
+				"Vis": {
+					"vis": null,
+					"inner": {
+						"TypeAlias": {
+							"type_": [[51, 55], { "first": [55, 56], "rest": [] }],
+							"ident": {
+								"NonKw": {
+									"ident": [[56, 57], { "first": [57, 58], "rest": [] }]
+								}
+							},
+							"generics": null,
+							"bounds": null,
+							"where_": null,
+							"eq": {
+								"eq": [[58, 59], { "first": [59, 60], "rest": [] }],
+								"ty": {
+									"TraitObject": {
+										"dyn_": null,
+										"bound": {
+											"punctuated": {
+												"first": {
+													"Trait": {
+														"Normal": {
+															"prefix": null,
+															"path": {
+																"prefix": null,
+																"segments": {
+																	"first": {
+																		"path": {
+																			"Ident": {
+																				"NonKw": {
+																					"ident": [
+																						[60, 61],
+																						{ "first": [61, 61], "rest": [] }
+																					]
+																				}
+																			}
+																		},
+																		"generics": null
+																	},
+																	"rest": []
+																}
+															}
+														}
+													}
+												},
+												"rest": []
+											},
+											"trailing": null
+										}
+									}
+								},
+								"where_": null
+							},
+							"semi": [[61, 62], { "first": [62, 63], "rest": [] }]
+						}
+					}
+				}
+			}
+		},
+		{
+			"attrs": [],
+			"inner": {
+				"Vis": {
+					"vis": null,
+					"inner": {
+						"TypeAlias": {
+							"type_": [[63, 67], { "first": [67, 68], "rest": [] }],
+							"ident": {
+								"NonKw": {
+									"ident": [[68, 69], { "first": [69, 70], "rest": [] }]
+								}
+							},
+							"generics": null,
+							"bounds": null,
+							"where_": null,
+							"eq": {
+								"eq": [[70, 71], { "first": [71, 72], "rest": [] }],
+								"ty": {
+									"TraitObject": {
+										"dyn_": null,
+										"bound": {
+											"punctuated": {
+												"first": {
+													"Trait": {
+														"Normal": {
+															"prefix": null,
+															"path": {
+																"prefix": null,
+																"segments": {
+																	"first": {
+																		"path": {
+																			"Ident": {
+																				"NonKw": {
+																					"ident": [
+																						[72, 73],
+																						{ "first": [73, 74], "rest": [] }
+																					]
+																				}
+																			}
+																		},
+																		"generics": null
+																	},
+																	"rest": []
+																}
+															}
+														}
+													}
+												},
+												"rest": []
+											},
+											"trailing": null
+										}
+									}
+								},
+								"where_": {
+									"where_": [[74, 79], { "first": [79, 80], "rest": [] }],
+									"items": {
+										"punctuated": {
+											"first": {
+												"Type": {
+													"for_lifetimes": null,
+													"ty": {
+														"TraitObject": {
+															"dyn_": null,
+															"bound": {
+																"punctuated": {
+																	"first": {
+																		"Trait": {
+																			"Normal": {
+																				"prefix": null,
+																				"path": {
+																					"prefix": null,
+																					"segments": {
+																						"first": {
+																							"path": {
+																								"Ident": {
+																									"NonKw": {
+																										"ident": [
+																											[80, 81],
+																											{
+																												"first": [81, 81],
+																												"rest": []
+																											}
+																										]
+																									}
+																								}
+																							},
+																							"generics": null
+																						},
+																						"rest": []
+																					}
+																				}
+																			}
+																		}
+																	},
+																	"rest": []
+																},
+																"trailing": null
+															}
+														}
+													},
+													"colon": [
+														[81, 82],
+														{ "first": [82, 83], "rest": [] }
+													],
+													"bounds": {
+														"punctuated": {
+															"first": {
+																"Trait": {
+																	"Normal": {
+																		"prefix": null,
+																		"path": {
+																			"prefix": null,
+																			"segments": {
+																				"first": {
+																					"path": {
+																						"Ident": {
+																							"NonKw": {
+																								"ident": [
+																									[83, 84],
+																									{
+																										"first": [84, 84],
+																										"rest": []
+																									}
+																								]
+																							}
+																						}
+																					},
+																					"generics": null
+																				},
+																				"rest": []
+																			}
+																		}
+																	}
+																}
+															},
+															"rest": []
+														},
+														"trailing": null
+													}
+												}
+											},
+											"rest": []
+										},
+										"trailing": null
+									}
+								}
+							},
+							"semi": [[84, 85], { "first": [85, 87], "rest": [] }]
+						}
+					}
+				}
+			}
+		},
+		{
+			"attrs": [],
+			"inner": {
+				"Vis": {
+					"vis": null,
+					"inner": {
+						"TypeAlias": {
+							"type_": [[87, 91], { "first": [91, 92], "rest": [] }],
+							"ident": {
+								"NonKw": {
+									"ident": [[92, 93], { "first": [93, 93], "rest": [] }]
+								}
+							},
+							"generics": {
+								"open": [[93, 94], { "first": [94, 94], "rest": [] }],
+								"params": {
+									"punctuated": {
+										"first": {
+											"attrs": [],
+											"inner": {
+												"Type": {
+													"ident": {
+														"NonKw": {
+															"ident": [
+																[94, 95],
+																{ "first": [95, 95], "rest": [] }
+															]
+														}
+													},
+													"bounds": null,
+													"eq_ty": null
+												}
+											}
+										},
+										"rest": []
+									},
+									"trailing": null
+								},
+								"close": [[95, 96], { "first": [96, 96], "rest": [] }]
+							},
+							"bounds": {
+								"colon": [[96, 97], { "first": [97, 98], "rest": [] }],
+								"bounds": {
+									"punctuated": {
+										"first": {
+											"Trait": {
+												"Normal": {
+													"prefix": null,
+													"path": {
+														"prefix": null,
+														"segments": {
+															"first": {
+																"path": {
+																	"Ident": {
+																		"NonKw": {
+																			"ident": [
+																				[98, 99],
+																				{ "first": [99, 100], "rest": [] }
+																			]
+																		}
+																	}
+																},
+																"generics": null
+															},
+															"rest": []
+														}
+													}
+												}
+											}
+										},
+										"rest": []
+									},
+									"trailing": null
+								}
+							},
+							"where_": {
+								"where_": [[100, 105], { "first": [105, 106], "rest": [] }],
+								"items": {
+									"punctuated": {
+										"first": {
+											"Type": {
+												"for_lifetimes": null,
+												"ty": {
+													"TraitObject": {
+														"dyn_": null,
+														"bound": {
+															"punctuated": {
+																"first": {
+																	"Trait": {
+																		"Normal": {
+																			"prefix": null,
+																			"path": {
+																				"prefix": null,
+																				"segments": {
+																					"first": {
+																						"path": {
+																							"Ident": {
+																								"NonKw": {
+																									"ident": [
+																										[106, 107],
+																										{
+																											"first": [107, 107],
+																											"rest": []
+																										}
+																									]
+																								}
+																							}
+																						},
+																						"generics": null
+																					},
+																					"rest": []
+																				}
+																			}
+																		}
+																	}
+																},
+																"rest": []
+															},
+															"trailing": null
+														}
+													}
+												},
+												"colon": [
+													[107, 108],
+													{ "first": [108, 109], "rest": [] }
+												],
+												"bounds": {
+													"punctuated": {
+														"first": {
+															"Trait": {
+																"Normal": {
+																	"prefix": null,
+																	"path": {
+																		"prefix": null,
+																		"segments": {
+																			"first": {
+																				"path": {
+																					"Ident": {
+																						"NonKw": {
+																							"ident": [
+																								[109, 110],
+																								{
+																									"first": [110, 111],
+																									"rest": []
+																								}
+																							]
+																						}
+																					}
+																				},
+																				"generics": null
+																			},
+																			"rest": []
+																		}
+																	}
+																}
+															}
+														},
+														"rest": []
+													},
+													"trailing": null
+												}
+											}
+										},
+										"rest": []
+									},
+									"trailing": null
+								}
+							},
+							"eq": {
+								"eq": [[111, 112], { "first": [112, 113], "rest": [] }],
+								"ty": {
+									"TraitObject": {
+										"dyn_": null,
+										"bound": {
+											"punctuated": {
+												"first": {
+													"Trait": {
+														"Normal": {
+															"prefix": null,
+															"path": {
+																"prefix": null,
+																"segments": {
+																	"first": {
+																		"path": {
+																			"Ident": {
+																				"NonKw": {
+																					"ident": [
+																						[113, 114],
+																						{ "first": [114, 115], "rest": [] }
+																					]
+																				}
+																			}
+																		},
+																		"generics": null
+																	},
+																	"rest": []
+																}
+															}
+														}
+													}
+												},
+												"rest": []
+											},
+											"trailing": null
+										}
+									}
+								},
+								"where_": {
+									"where_": [[115, 120], { "first": [120, 121], "rest": [] }],
+									"items": {
+										"punctuated": {
+											"first": {
+												"Type": {
+													"for_lifetimes": null,
+													"ty": {
+														"TraitObject": {
+															"dyn_": null,
+															"bound": {
+																"punctuated": {
+																	"first": {
+																		"Trait": {
+																			"Normal": {
+																				"prefix": null,
+																				"path": {
+																					"prefix": null,
+																					"segments": {
+																						"first": {
+																							"path": {
+																								"Ident": {
+																									"NonKw": {
+																										"ident": [
+																											[121, 122],
+																											{
+																												"first": [122, 122],
+																												"rest": []
+																											}
+																										]
+																									}
+																								}
+																							},
+																							"generics": null
+																						},
+																						"rest": []
+																					}
+																				}
+																			}
+																		}
+																	},
+																	"rest": []
+																},
+																"trailing": null
+															}
+														}
+													},
+													"colon": [
+														[122, 123],
+														{ "first": [123, 124], "rest": [] }
+													],
+													"bounds": {
+														"punctuated": {
+															"first": {
+																"Trait": {
+																	"Normal": {
+																		"prefix": null,
+																		"path": {
+																			"prefix": null,
+																			"segments": {
+																				"first": {
+																					"path": {
+																						"Ident": {
+																							"NonKw": {
+																								"ident": [
+																									[124, 125],
+																									{
+																										"first": [125, 125],
+																										"rest": []
+																									}
+																								]
+																							}
+																						}
+																					},
+																					"generics": null
+																				},
+																				"rest": []
+																			}
+																		}
+																	}
+																}
+															},
+															"rest": []
+														},
+														"trailing": null
+													}
+												}
+											},
+											"rest": []
+										},
+										"trailing": null
+									}
+								}
+							},
+							"semi": [[125, 126], { "first": [126, 127], "rest": [] }]
+						}
+					}
+				}
+			}
+		}
+	],
+	"trailing_line_comment": null
+}
