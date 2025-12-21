@@ -511,7 +511,7 @@ mod tests {
 				test_suffix: true,
 			},
 			CaseKinds {
-				source: "  /*  a  */  /*  b  */  /*  c  */  ",
+				source: "/*  a  */  /*  b  */  /*  c  */",
 				expected_remove: "/*  a  *//*  b  *//*  c  */",
 				expected_set_single: " /*  a  */ /*  b  */ /*  c  */ ",
 				expected_set_indent: "\n\t\t/*  a  */\n\t\t/*  b  */\n\t\t/*  c  */\n\t\t",
