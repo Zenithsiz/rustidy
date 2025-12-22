@@ -1,7 +1,10 @@
 //! Formattable types
 
+// Modules
+pub mod config;
+
 // Exports
-pub use rustidy_macros::Format;
+pub use {self::config::Config, rustidy_macros::Format};
 
 // Imports
 use crate::{Parser, ast::whitespace::Whitespace};
@@ -250,13 +253,6 @@ impl<'a, 'input> Context<'a, 'input> {
 	pub const fn set_indent_depth(&mut self, indent_depth: usize) {
 		self.indent_depth = indent_depth;
 	}
-}
-
-/// Format config
-#[derive(Clone, Debug)]
-pub struct Config {
-	/// Indentation string
-	pub indent: String,
 }
 
 /// A formatting function

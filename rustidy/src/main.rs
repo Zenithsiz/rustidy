@@ -64,9 +64,7 @@ fn run() -> Result<(), AppError> {
 		let mut crate_ = rustidy::parse(file_path, &mut parser).context("Unable to parse file")?;
 
 		// Format
-		let config = format::Config {
-			indent: "\t".to_owned(),
-		};
+		let config = format::Config::default();
 		let mut ctx = format::Context::new(&parser, &config);
 		crate_.format(&mut ctx);
 

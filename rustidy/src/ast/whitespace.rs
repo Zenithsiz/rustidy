@@ -81,12 +81,14 @@ impl Whitespace {
 	fn format(&mut self, ctx: &mut format::Context, kind: FormatKind) {
 		let (prefix, rest) = self.0.split_first_mut();
 
-		prefix.0.replace(kind.prefix_str(ctx, rest.is_empty()));
+		prefix
+			.0
+			.replace(kind.prefix_str(ctx, prefix.0.as_str(ctx.parser()), rest.is_empty()));
 		for (pos, (comment, ws)) in rest.with_position() {
 			let is_last = matches!(pos, itertools::Position::Last | itertools::Position::Only);
 			match comment.is_line() {
 				true => ws.0.replace(kind.after_newline_str(ctx, is_last)),
-				false => ws.0.replace(kind.normal_str(ctx, is_last)),
+				false => ws.0.replace(kind.normal_str(ctx, ws.0.as_str(ctx.parser()), is_last)),
 			}
 		}
 	}
@@ -109,20 +111,25 @@ impl FormatKind {
 	}
 
 	/// Returns the indentation string, with a newline *before*
-	fn indent_str_nl(ctx: &format::Context) -> String {
-		"\n".to_owned() + &Self::indent_str(ctx)
+	fn indent_str_nl(ctx: &format::Context, cur_str: &str) -> String {
+		let newlines = cur_str.chars().filter(|&ch| ch == '\n').count();
+		let newlines = newlines.clamp(ctx.config().empty_line_spacing.min, ctx.config().empty_line_spacing.max);
+
+		"\n".repeat(newlines) + &Self::indent_str(ctx)
 	}
 
 	/// Returns the prefix string
-	fn prefix_str(self, ctx: &mut format::Context, is_last: bool) -> Cow<'static, str> {
+	fn prefix_str(self, ctx: &mut format::Context, cur_str: &str, is_last: bool) -> Cow<'static, str> {
 		match self {
 			Self::Remove => "".into(),
 			Self::Single => " ".into(),
-			Self::Indent => Self::indent_str_nl(ctx).into(),
-			Self::PrevIndent => ctx.without_indent_if(is_last, |ctx| Self::indent_str_nl(ctx)).into(),
+			Self::Indent => Self::indent_str_nl(ctx, cur_str).into(),
+			Self::PrevIndent => ctx
+				.without_indent_if(is_last, |ctx| Self::indent_str_nl(ctx, cur_str))
+				.into(),
 			Self::PrevIndentOrRemove => match is_last {
 				true => "".into(),
-				false => Self::indent_str_nl(ctx).into(),
+				false => Self::indent_str_nl(ctx, cur_str).into(),
 			},
 		}
 	}
@@ -138,13 +145,14 @@ impl FormatKind {
 	}
 
 	/// Returns the normal string
-	fn normal_str(self, ctx: &mut format::Context, is_last: bool) -> Cow<'static, str> {
+	fn normal_str(self, ctx: &mut format::Context, cur_str: &str, is_last: bool) -> Cow<'static, str> {
 		match self {
 			Self::Remove => "".into(),
 			Self::Single => " ".into(),
-			Self::Indent => Self::indent_str_nl(ctx).into(),
-			Self::PrevIndent | Self::PrevIndentOrRemove =>
-				ctx.without_indent_if(is_last, |ctx| Self::indent_str_nl(ctx)).into(),
+			Self::Indent => Self::indent_str_nl(ctx, cur_str).into(),
+			Self::PrevIndent | Self::PrevIndentOrRemove => ctx
+				.without_indent_if(is_last, |ctx| Self::indent_str_nl(ctx, cur_str))
+				.into(),
 		}
 	}
 }
@@ -520,11 +528,19 @@ mod tests {
 				test_prefix: true,
 				test_suffix: true,
 			},
+			CaseKinds {
+				source: "\n\n\n\n",
+				expected_remove: "",
+				expected_set_single: " ",
+				expected_set_indent: "\n\n\t\t",
+				expected_set_prev_indent: "\n\n\t",
+				expected_set_prev_indent_or_remove: "",
+				test_prefix: true,
+				test_suffix: true,
+			},
 		];
 
-		let fmt_config = format::Config {
-			indent: "\t".to_owned(),
-		};
+		let fmt_config = format::Config::default();
 		let config = Config { indent_depth: 2 };
 		self::test_cases_with(cases, &fmt_config, &config).map_err(AppError::flatten)
 	}
