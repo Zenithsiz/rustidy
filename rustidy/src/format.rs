@@ -42,23 +42,12 @@ pub trait Format {
 	}
 
 	/// Sets the trailing whitespace to the current indentation
-	fn trailing_ws_set_indent(&mut self, ctx: &mut Context) {
-		if let Some(whitespace) = self.trailing_ws(ctx) {
-			whitespace.set_indent(ctx);
-		}
-	}
-
-	/// Sets the trailing whitespace to the current indentation or removes it if empty
-	fn trailing_ws_set_prev_indent_or_remove(&mut self, ctx: &mut Context) {
-		if let Some(whitespace) = self.trailing_ws(ctx) {
-			whitespace.set_prev_indent_or_remove(ctx);
-		}
-	}
-
-	/// Sets the trailing whitespace to the previous indentation
-	fn trailing_ws_set_prev_indent(&mut self, ctx: &mut Context) {
-		if let Some(whitespace) = self.trailing_ws(ctx) {
-			whitespace.set_prev_indent(ctx);
+	#[must_use]
+	fn trailing_ws_set_indent(prev: bool, remove_if_empty: bool) -> impl Fn(&mut Self, &mut Context) {
+		move |this, ctx| {
+			if let Some(whitespace) = this.trailing_ws(ctx) {
+				whitespace.set_indent(ctx, prev, remove_if_empty);
+			}
 		}
 	}
 }

@@ -62,20 +62,8 @@ impl Whitespace {
 	}
 
 	/// Sets this whitespace to a newline + indentation
-	pub fn set_indent(&mut self, ctx: &mut format::Context) {
-		self.format(ctx, FormatKind::Indent);
-	}
-
-	/// Sets this whitespace to the previous indentation.
-	///
-	/// Any comments before that will be at the current indentation
-	pub fn set_prev_indent(&mut self, ctx: &mut format::Context) {
-		self.format(ctx, FormatKind::PrevIndent);
-	}
-
-	/// Sets this whitespace to a newline + previous indentation if any comments exists, otherwise removes
-	pub fn set_prev_indent_or_remove(&mut self, ctx: &mut format::Context) {
-		self.format(ctx, FormatKind::PrevIndentOrRemove);
+	pub fn set_indent(&mut self, ctx: &mut format::Context, prev: bool, remove_if_empty: bool) {
+		self.format(ctx, FormatKind::Indent { prev, remove_if_empty });
 	}
 
 	fn format(&mut self, ctx: &mut format::Context, kind: FormatKind) {
@@ -99,9 +87,14 @@ impl Whitespace {
 enum FormatKind {
 	Remove,
 	Single,
-	Indent,
-	PrevIndent,
-	PrevIndentOrRemove,
+	Indent {
+		/// Use previous indentation
+		// TODO: Make this an offset instead?
+		prev: bool,
+
+		/// Remove if no comments exist
+		remove_if_empty: bool,
+	},
 }
 
 impl FormatKind {
@@ -123,13 +116,11 @@ impl FormatKind {
 		match self {
 			Self::Remove => "".into(),
 			Self::Single => " ".into(),
-			Self::Indent => Self::indent_str_nl(ctx, cur_str).into(),
-			Self::PrevIndent => ctx
-				.without_indent_if(is_last, |ctx| Self::indent_str_nl(ctx, cur_str))
-				.into(),
-			Self::PrevIndentOrRemove => match is_last {
+			Self::Indent { prev, remove_if_empty } => match remove_if_empty && is_last {
 				true => "".into(),
-				false => Self::indent_str_nl(ctx, cur_str).into(),
+				false => ctx
+					.without_indent_if(prev && is_last, |ctx| Self::indent_str_nl(ctx, cur_str))
+					.into(),
 			},
 		}
 	}
@@ -138,9 +129,9 @@ impl FormatKind {
 	fn after_newline_str(self, ctx: &mut format::Context, is_last: bool) -> Cow<'static, str> {
 		match self {
 			Self::Remove | Self::Single => "".into(),
-			Self::Indent => Self::indent_str(ctx).into(),
-			Self::PrevIndent | Self::PrevIndentOrRemove =>
-				ctx.without_indent_if(is_last, |ctx| Self::indent_str(ctx)).into(),
+			Self::Indent { prev, .. } => ctx
+				.without_indent_if(prev && is_last, |ctx| Self::indent_str(ctx))
+				.into(),
 		}
 	}
 
@@ -149,9 +140,8 @@ impl FormatKind {
 		match self {
 			Self::Remove => "".into(),
 			Self::Single => " ".into(),
-			Self::Indent => Self::indent_str_nl(ctx, cur_str).into(),
-			Self::PrevIndent | Self::PrevIndentOrRemove => ctx
-				.without_indent_if(is_last, |ctx| Self::indent_str_nl(ctx, cur_str))
+			Self::Indent { prev, .. } => ctx
+				.without_indent_if(prev && is_last, |ctx| Self::indent_str_nl(ctx, cur_str))
 				.into(),
 		}
 	}
@@ -440,9 +430,18 @@ mod tests {
 				[
 					(case.expected_remove, FormatKind::Remove),
 					(case.expected_set_single, FormatKind::Single),
-					(case.expected_set_indent, FormatKind::Indent),
-					(case.expected_set_prev_indent, FormatKind::PrevIndent),
-					(case.expected_set_prev_indent_or_remove, FormatKind::PrevIndentOrRemove),
+					(case.expected_set_indent, FormatKind::Indent {
+						prev:            false,
+						remove_if_empty: false,
+					}),
+					(case.expected_set_prev_indent, FormatKind::Indent {
+						prev:            true,
+						remove_if_empty: false,
+					}),
+					(case.expected_set_prev_indent_or_remove, FormatKind::Indent {
+						prev:            true,
+						remove_if_empty: true,
+					}),
 				]
 				.into_iter()
 				.map(|(expected, kind)| {
