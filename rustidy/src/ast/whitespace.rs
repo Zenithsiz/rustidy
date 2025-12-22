@@ -429,8 +429,6 @@ mod tests {
 		expected_set_indent: &'a str,
 		expected_set_prev_indent: &'a str,
 		expected_set_prev_indent_or_remove: &'a str,
-		test_prefix: bool,
-		test_suffix: bool,
 	}
 
 	fn test_cases_with(
@@ -459,17 +457,7 @@ mod tests {
 				]
 				.into_iter()
 				.map(|(expected, kind)| {
-					let mut mods = vec![("", "")];
-					if case.test_prefix {
-						mods.push(("  ", ""));
-					}
-					if case.test_suffix {
-						mods.push(("", "  "));
-					}
-					if case.test_prefix && case.test_suffix {
-						mods.push(("  ", "  "));
-					}
-
+					let mods = [("", ""), ("  ", ""), ("", "  "), ("  ", "  ")];
 					mods.into_iter()
 						.map(|(prefix, suffix)| {
 							let source = format!("{prefix}{}{suffix}", case.source);
@@ -498,8 +486,6 @@ mod tests {
 				expected_set_indent: "\n\t\t",
 				expected_set_prev_indent: "\n\t",
 				expected_set_prev_indent_or_remove: "",
-				test_prefix: true,
-				test_suffix: true,
 			},
 			CaseKinds {
 				source: "//a  \n",
@@ -508,8 +494,6 @@ mod tests {
 				expected_set_indent: "\n\t\t//a  \n\t\t",
 				expected_set_prev_indent: "\n\t\t//a  \n\t",
 				expected_set_prev_indent_or_remove: "\n\t\t//a  \n\t",
-				test_prefix: true,
-				test_suffix: true,
 			},
 			CaseKinds {
 				source: "/*  a  */",
@@ -518,8 +502,6 @@ mod tests {
 				expected_set_indent: "\n\t\t/*  a  */\n\t\t",
 				expected_set_prev_indent: "\n\t\t/*  a  */\n\t",
 				expected_set_prev_indent_or_remove: "\n\t\t/*  a  */\n\t",
-				test_prefix: true,
-				test_suffix: true,
 			},
 			CaseKinds {
 				source: "/*  a  */  /*  b  */",
@@ -528,8 +510,6 @@ mod tests {
 				expected_set_indent: "\n\t\t/*  a  */\n\t\t/*  b  */\n\t\t",
 				expected_set_prev_indent: "\n\t\t/*  a  */\n\t\t/*  b  */\n\t",
 				expected_set_prev_indent_or_remove: "\n\t\t/*  a  */\n\t\t/*  b  */\n\t",
-				test_prefix: true,
-				test_suffix: true,
 			},
 			CaseKinds {
 				source: "/*  a  */  /*  b  */  /*  c  */",
@@ -538,8 +518,6 @@ mod tests {
 				expected_set_indent: "\n\t\t/*  a  */\n\t\t/*  b  */\n\t\t/*  c  */\n\t\t",
 				expected_set_prev_indent: "\n\t\t/*  a  */\n\t\t/*  b  */\n\t\t/*  c  */\n\t",
 				expected_set_prev_indent_or_remove: "\n\t\t/*  a  */\n\t\t/*  b  */\n\t\t/*  c  */\n\t",
-				test_prefix: true,
-				test_suffix: true,
 			},
 			CaseKinds {
 				source: "\n\n\n\n",
@@ -548,8 +526,6 @@ mod tests {
 				expected_set_indent: "\n\n\t\t",
 				expected_set_prev_indent: "\n\n\t",
 				expected_set_prev_indent_or_remove: "",
-				test_prefix: true,
-				test_suffix: true,
 			},
 			CaseKinds {
 				source: "//a\n\n\n//b\n",
@@ -558,8 +534,6 @@ mod tests {
 				expected_set_indent: "\n\t\t//a\n\n\n\t\t//b\n\t\t",
 				expected_set_prev_indent: "\n\t\t//a\n\n\n\t\t//b\n\t",
 				expected_set_prev_indent_or_remove: "\n\t\t//a\n\n\n\t\t//b\n\t",
-				test_prefix: true,
-				test_suffix: true,
 			},
 			CaseKinds {
 				source: "/*a*/\n\n/*b*/",
@@ -568,8 +542,6 @@ mod tests {
 				expected_set_indent: "\n\t\t/*a*/\n\n\t\t/*b*/\n\t\t",
 				expected_set_prev_indent: "\n\t\t/*a*/\n\n\t\t/*b*/\n\t",
 				expected_set_prev_indent_or_remove: "\n\t\t/*a*/\n\n\t\t/*b*/\n\t",
-				test_prefix: true,
-				test_suffix: true,
 			},
 		];
 
