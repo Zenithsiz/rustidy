@@ -247,33 +247,20 @@ impl<'a, 'input> Context<'a, 'input> {
 /// A formatting function
 pub trait FormatFn<T: ?Sized> = Fn(&mut T, &mut Context);
 
-/// Extension trait to apply a formatting function to an `Option`
-#[extend::ext(name = FormatOption)]
-pub impl<T> Option<T> {
-	fn format_with<F>(f: F) -> impl FormatFn<Self>
-	where
-		F: FormatFn<T>,
-	{
-		move |value, ctx| {
-			if let Some(value) = value {
-				f(value, ctx);
-			}
+/// Formats an `Option<Self>` with `f` if it is `Some`.
+pub fn format_option_with<T>(f: impl FormatFn<T>) -> impl FormatFn<Option<T>> {
+	move |value, ctx| {
+		if let Some(value) = value {
+			f(value, ctx);
 		}
 	}
 }
 
-/// Extension trait to apply a formatting function to a `Vec<T>`
-#[extend::ext(name = FormatVec)]
-pub impl<T> Vec<T> {
-	/// Formats each item in this option with `F`.
-	fn format_each_with<F>(f: F) -> impl FormatFn<Self>
-	where
-		F: FormatFn<T>,
-	{
-		move |values, ctx| {
-			for value in values {
-				f(value, ctx);
-			}
+/// Formats a `Vec<Self>` with `f`
+pub fn format_vec_each_with<T>(f: impl FormatFn<T>) -> impl FormatFn<Vec<T>> {
+	move |values, ctx| {
+		for value in values {
+			f(value, ctx);
 		}
 	}
 }
