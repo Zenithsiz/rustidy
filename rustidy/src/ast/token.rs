@@ -185,7 +185,7 @@ decl_tokens! {
 	Not = '!' must_not_follow '=';
 	Tilde = '~';
 	Plus = '+' skip_if_tag "skip:`+`" must_not_follow '=';
-	Minus = '-' must_not_follow '=';
+	Minus = '-' must_not_follow '=' must_not_follow '>';
 	Star = '*' skip_if_tag "skip:`*`" must_not_follow '=';
 	Slash = '/' must_not_follow '=';
 	Percent = '%' must_not_follow '=';
