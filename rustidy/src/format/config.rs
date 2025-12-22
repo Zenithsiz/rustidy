@@ -24,7 +24,7 @@ impl Default for Config {
 	fn default() -> Self {
 		Self {
 			indent:             "\t".to_owned(),
-			empty_line_spacing: EmptyLineSpacing { min: 1, max: 2 },
+			empty_line_spacing: EmptyLineSpacing { min: 0, max: 2 },
 		}
 	}
 }

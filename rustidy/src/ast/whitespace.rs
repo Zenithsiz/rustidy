@@ -107,9 +107,15 @@ impl FormatKind {
 	}
 
 	/// Returns the indentation string, with a newline *before*
-	fn indent_str_nl(ctx: &format::Context, cur_str: &str) -> String {
+	fn indent_str_nl(ctx: &format::Context, cur_str: &str, after_newline: bool) -> String {
+		let min_newlines = ctx.config().empty_line_spacing.min;
+		let max_newlines = ctx.config().empty_line_spacing.max;
+		let (min_newlines, max_newlines) = match after_newline {
+			true => (min_newlines, max_newlines),
+			false => (min_newlines + 1, max_newlines + 1),
+		};
 		let newlines = cur_str.chars().filter(|&ch| ch == '\n').count();
-		let newlines = newlines.clamp(ctx.config().empty_line_spacing.min, ctx.config().empty_line_spacing.max);
+		let newlines = newlines.clamp(min_newlines, max_newlines);
 
 		"\n".repeat(newlines) + &Self::indent_str(ctx)
 	}
@@ -125,7 +131,7 @@ impl FormatKind {
 			} => match remove_if_empty && is_last {
 				true => "".into(),
 				false => ctx
-					.with_indent_offset_if(offset, is_last, |ctx| Self::indent_str_nl(ctx, cur_str))
+					.with_indent_offset_if(offset, is_last, |ctx| Self::indent_str_nl(ctx, cur_str, false))
 					.into(),
 			},
 		}
@@ -137,7 +143,7 @@ impl FormatKind {
 			Self::Remove | Self::Single => "".into(),
 			Self::Indent { offset, .. } => match is_last {
 				true => ctx.with_indent_offset(offset, |ctx| Self::indent_str(ctx)),
-				false => Self::indent_str_nl(ctx, cur_str),
+				false => Self::indent_str_nl(ctx, cur_str, true),
 			}
 			.into(),
 		}
@@ -149,8 +155,8 @@ impl FormatKind {
 			Self::Remove => "".into(),
 			Self::Single => " ".into(),
 			Self::Indent { offset, .. } => match is_last {
-				true => ctx.with_indent_offset(offset, |ctx| Self::indent_str_nl(ctx, cur_str)),
-				false => Self::indent_str_nl(ctx, cur_str),
+				true => ctx.with_indent_offset(offset, |ctx| Self::indent_str_nl(ctx, cur_str, false)),
+				false => Self::indent_str_nl(ctx, cur_str, false),
 			}
 			.into(),
 		}
@@ -523,12 +529,12 @@ mod tests {
 				source: "\n\n\n\n",
 				expected_remove: "",
 				expected_set_single: " ",
-				expected_set_indent: "\n\n\t\t",
-				expected_set_prev_indent: "\n\n\t",
+				expected_set_indent: "\n\n\n\t\t",
+				expected_set_prev_indent: "\n\n\n\t",
 				expected_set_prev_indent_or_remove: "",
 			},
 			CaseKinds {
-				source: "//a\n\n\n//b\n",
+				source: "//a\n\n\n\n//b\n",
 				expected_remove: "//a\n//b\n",
 				expected_set_single: " //a\n//b\n",
 				expected_set_indent: "\n\t\t//a\n\n\n\t\t//b\n\t\t",
@@ -536,12 +542,20 @@ mod tests {
 				expected_set_prev_indent_or_remove: "\n\t\t//a\n\n\n\t\t//b\n\t",
 			},
 			CaseKinds {
-				source: "/*a*/\n\n/*b*/",
+				source: "//a\n//b\n",
+				expected_remove: "//a\n//b\n",
+				expected_set_single: " //a\n//b\n",
+				expected_set_indent: "\n\t\t//a\n\t\t//b\n\t\t",
+				expected_set_prev_indent: "\n\t\t//a\n\t\t//b\n\t",
+				expected_set_prev_indent_or_remove: "\n\t\t//a\n\t\t//b\n\t",
+			},
+			CaseKinds {
+				source: "/*a*/\n\n\n\n/*b*/",
 				expected_remove: "/*a*//*b*/",
 				expected_set_single: " /*a*/ /*b*/ ",
-				expected_set_indent: "\n\t\t/*a*/\n\n\t\t/*b*/\n\t\t",
-				expected_set_prev_indent: "\n\t\t/*a*/\n\n\t\t/*b*/\n\t",
-				expected_set_prev_indent_or_remove: "\n\t\t/*a*/\n\n\t\t/*b*/\n\t",
+				expected_set_indent: "\n\t\t/*a*/\n\n\n\t\t/*b*/\n\t\t",
+				expected_set_prev_indent: "\n\t\t/*a*/\n\n\n\t\t/*b*/\n\t",
+				expected_set_prev_indent_or_remove: "\n\t\t/*a*/\n\n\n\t\t/*b*/\n\t",
 			},
 		];
 
