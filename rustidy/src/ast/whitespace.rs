@@ -78,7 +78,8 @@ impl Whitespace {
 		for (pos, (comment, ws)) in rest.with_position() {
 			let is_last = matches!(pos, itertools::Position::Last | itertools::Position::Only);
 			match comment.is_line() {
-				true => ws.0.replace(kind.after_newline_str(ctx, is_last)),
+				true =>
+					ws.0.replace(kind.after_newline_str(ctx, ws.0.as_str(ctx.parser()), is_last)),
 				false => ws.0.replace(kind.normal_str(ctx, ws.0.as_str(ctx.parser()), is_last)),
 			}
 		}
@@ -131,12 +132,14 @@ impl FormatKind {
 	}
 
 	/// Returns the string after a newline
-	fn after_newline_str(self, ctx: &mut format::Context, is_last: bool) -> Cow<'static, str> {
+	fn after_newline_str(self, ctx: &mut format::Context, cur_str: &str, is_last: bool) -> Cow<'static, str> {
 		match self {
 			Self::Remove | Self::Single => "".into(),
-			Self::Indent { offset, .. } => ctx
-				.with_indent_offset_if(offset, is_last, |ctx| Self::indent_str(ctx))
-				.into(),
+			Self::Indent { offset, .. } => match is_last {
+				true => ctx.with_indent_offset(offset, |ctx| Self::indent_str(ctx)),
+				false => Self::indent_str_nl(ctx, cur_str),
+			}
+			.into(),
 		}
 	}
 
@@ -145,9 +148,11 @@ impl FormatKind {
 		match self {
 			Self::Remove => "".into(),
 			Self::Single => " ".into(),
-			Self::Indent { offset, .. } => ctx
-				.with_indent_offset_if(offset, is_last, |ctx| Self::indent_str_nl(ctx, cur_str))
-				.into(),
+			Self::Indent { offset, .. } => match is_last {
+				true => ctx.with_indent_offset(offset, |ctx| Self::indent_str_nl(ctx, cur_str)),
+				false => Self::indent_str_nl(ctx, cur_str),
+			}
+			.into(),
 		}
 	}
 }
@@ -543,6 +548,26 @@ mod tests {
 				expected_set_indent: "\n\n\t\t",
 				expected_set_prev_indent: "\n\n\t",
 				expected_set_prev_indent_or_remove: "",
+				test_prefix: true,
+				test_suffix: true,
+			},
+			CaseKinds {
+				source: "//a\n\n\n//b\n",
+				expected_remove: "//a\n//b\n",
+				expected_set_single: " //a\n//b\n",
+				expected_set_indent: "\n\t\t//a\n\n\n\t\t//b\n\t\t",
+				expected_set_prev_indent: "\n\t\t//a\n\n\n\t\t//b\n\t",
+				expected_set_prev_indent_or_remove: "\n\t\t//a\n\n\n\t\t//b\n\t",
+				test_prefix: true,
+				test_suffix: true,
+			},
+			CaseKinds {
+				source: "/*a*/\n\n/*b*/",
+				expected_remove: "/*a*//*b*/",
+				expected_set_single: " /*a*/ /*b*/ ",
+				expected_set_indent: "\n\t\t/*a*/\n\n\t\t/*b*/\n\t\t",
+				expected_set_prev_indent: "\n\t\t/*a*/\n\n\t\t/*b*/\n\t",
+				expected_set_prev_indent_or_remove: "\n\t\t/*a*/\n\n\t\t/*b*/\n\t",
 				test_prefix: true,
 				test_suffix: true,
 			},
