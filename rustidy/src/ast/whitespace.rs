@@ -62,8 +62,11 @@ impl Whitespace {
 	}
 
 	/// Sets this whitespace to a newline + indentation
-	pub fn set_indent(&mut self, ctx: &mut format::Context, prev: bool, remove_if_empty: bool) {
-		self.format(ctx, FormatKind::Indent { prev, remove_if_empty });
+	pub fn set_indent(&mut self, ctx: &mut format::Context, offset: isize, remove_if_empty: bool) {
+		self.format(ctx, FormatKind::Indent {
+			offset,
+			remove_if_empty,
+		});
 	}
 
 	fn format(&mut self, ctx: &mut format::Context, kind: FormatKind) {
@@ -88,9 +91,8 @@ enum FormatKind {
 	Remove,
 	Single,
 	Indent {
-		/// Use previous indentation
-		// TODO: Make this an offset instead?
-		prev: bool,
+		/// Indentation offset
+		offset: isize,
 
 		/// Remove if no comments exist
 		remove_if_empty: bool,
@@ -116,10 +118,13 @@ impl FormatKind {
 		match self {
 			Self::Remove => "".into(),
 			Self::Single => " ".into(),
-			Self::Indent { prev, remove_if_empty } => match remove_if_empty && is_last {
+			Self::Indent {
+				offset,
+				remove_if_empty,
+			} => match remove_if_empty && is_last {
 				true => "".into(),
 				false => ctx
-					.without_indent_if(prev && is_last, |ctx| Self::indent_str_nl(ctx, cur_str))
+					.with_indent_offset_if(offset, is_last, |ctx| Self::indent_str_nl(ctx, cur_str))
 					.into(),
 			},
 		}
@@ -129,8 +134,8 @@ impl FormatKind {
 	fn after_newline_str(self, ctx: &mut format::Context, is_last: bool) -> Cow<'static, str> {
 		match self {
 			Self::Remove | Self::Single => "".into(),
-			Self::Indent { prev, .. } => ctx
-				.without_indent_if(prev && is_last, |ctx| Self::indent_str(ctx))
+			Self::Indent { offset, .. } => ctx
+				.with_indent_offset_if(offset, is_last, |ctx| Self::indent_str(ctx))
 				.into(),
 		}
 	}
@@ -140,8 +145,8 @@ impl FormatKind {
 		match self {
 			Self::Remove => "".into(),
 			Self::Single => " ".into(),
-			Self::Indent { prev, .. } => ctx
-				.without_indent_if(prev && is_last, |ctx| Self::indent_str_nl(ctx, cur_str))
+			Self::Indent { offset, .. } => ctx
+				.with_indent_offset_if(offset, is_last, |ctx| Self::indent_str_nl(ctx, cur_str))
 				.into(),
 		}
 	}
@@ -431,15 +436,15 @@ mod tests {
 					(case.expected_remove, FormatKind::Remove),
 					(case.expected_set_single, FormatKind::Single),
 					(case.expected_set_indent, FormatKind::Indent {
-						prev:            false,
+						offset:          0,
 						remove_if_empty: false,
 					}),
 					(case.expected_set_prev_indent, FormatKind::Indent {
-						prev:            true,
+						offset:          -1,
 						remove_if_empty: false,
 					}),
 					(case.expected_set_prev_indent_or_remove, FormatKind::Indent {
-						prev:            true,
+						offset:          -1,
 						remove_if_empty: true,
 					}),
 				]

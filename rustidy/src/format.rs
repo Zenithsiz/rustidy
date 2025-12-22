@@ -42,9 +42,9 @@ pub trait Format {
 	}
 
 	/// Sets the trailing whitespace to the current indentation
-	fn trailing_ws_set_indent(&mut self, ctx: &mut Context, prev: bool, remove_if_empty: bool) {
+	fn trailing_ws_set_indent(&mut self, ctx: &mut Context, offset: isize, remove_if_empty: bool) {
 		if let Some(whitespace) = self.trailing_ws(ctx) {
-			whitespace.set_indent(ctx, prev, remove_if_empty);
+			whitespace.set_indent(ctx, offset, remove_if_empty);
 		}
 	}
 }
@@ -219,18 +219,33 @@ impl<'a, 'input> Context<'a, 'input> {
 
 	/// Runs `f` with one less indentation level
 	pub fn without_indent<O>(&mut self, f: impl for<'b> FnOnce(&'b mut Self) -> O) -> O {
-		let prev_depth = self.indent_depth;
-		self.indent_depth = prev_depth.saturating_sub(1);
-		let output = f(self);
-		self.indent_depth = prev_depth;
-		output
+		self.with_indent_offset(-1, f)
 	}
 
 	/// Runs `f` with one less indentation level if `pred` is true, otherwise
 	/// runs it with the current indent
 	pub fn without_indent_if<O>(&mut self, pred: bool, f: impl for<'b> FnOnce(&'b mut Self) -> O) -> O {
+		self.with_indent_offset_if(-1, pred, f)
+	}
+
+	/// Runs `f` with an indentation offset of `offset`
+	pub fn with_indent_offset<O>(&mut self, offset: isize, f: impl for<'b> FnOnce(&'b mut Self) -> O) -> O {
+		let prev_depth = self.indent_depth;
+		self.indent_depth = prev_depth.saturating_add_signed(offset);
+		let output = f(self);
+		self.indent_depth = prev_depth;
+		output
+	}
+
+	/// Runs `f` with an indentation offset of `offset` if `pred` is true
+	pub fn with_indent_offset_if<O>(
+		&mut self,
+		offset: isize,
+		pred: bool,
+		f: impl for<'b> FnOnce(&'b mut Self) -> O,
+	) -> O {
 		match pred {
-			true => self.without_indent(f),
+			true => self.with_indent_offset(offset, f),
 			false => f(self),
 		}
 	}
@@ -245,8 +260,8 @@ impl<'a, 'input> Context<'a, 'input> {
 pub trait FormatFn<T: ?Sized> = Fn(&mut T, &mut Context);
 
 /// Sets the trailing whitespace to the current indentation
-pub fn trailing_ws_set_indent<T: Format>(prev: bool, remove_if_empty: bool) -> impl Fn(&mut T, &mut Context) {
-	move |this, ctx| this.trailing_ws_set_indent(ctx, prev, remove_if_empty)
+pub fn trailing_ws_set_indent<T: Format>(offset: isize, remove_if_empty: bool) -> impl Fn(&mut T, &mut Context) {
+	move |this, ctx| this.trailing_ws_set_indent(ctx, offset, remove_if_empty)
 }
 
 /// Formats an `Option<Self>` with `f` if it is `Some`.
