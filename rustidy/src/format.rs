@@ -42,12 +42,9 @@ pub trait Format {
 	}
 
 	/// Sets the trailing whitespace to the current indentation
-	#[must_use]
-	fn trailing_ws_set_indent(prev: bool, remove_if_empty: bool) -> impl Fn(&mut Self, &mut Context) {
-		move |this, ctx| {
-			if let Some(whitespace) = this.trailing_ws(ctx) {
-				whitespace.set_indent(ctx, prev, remove_if_empty);
-			}
+	fn trailing_ws_set_indent(&mut self, ctx: &mut Context, prev: bool, remove_if_empty: bool) {
+		if let Some(whitespace) = self.trailing_ws(ctx) {
+			whitespace.set_indent(ctx, prev, remove_if_empty);
 		}
 	}
 }
@@ -246,6 +243,11 @@ impl<'a, 'input> Context<'a, 'input> {
 
 /// A formatting function
 pub trait FormatFn<T: ?Sized> = Fn(&mut T, &mut Context);
+
+/// Sets the trailing whitespace to the current indentation
+pub fn trailing_ws_set_indent<T: Format>(prev: bool, remove_if_empty: bool) -> impl Fn(&mut T, &mut Context) {
+	move |this, ctx| this.trailing_ws_set_indent(ctx, prev, remove_if_empty)
+}
 
 /// Formats an `Option<Self>` with `f` if it is `Some`.
 pub fn format_option_with<T>(f: impl FormatFn<T>) -> impl FormatFn<Option<T>> {
