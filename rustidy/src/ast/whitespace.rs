@@ -375,14 +375,18 @@ mod tests {
 				.0
 				.iter()
 				.map(|comment| match comment {
-					either::Either::Left(ws) => ws.0.as_str(parser).replace(' ', "·"),
+					either::Either::Left(ws) => ws.0.as_str(parser).replace(' ', "·").replace('\t', "⭾"),
 					either::Either::Right(comment) => match comment {
-						Comment::Line(comment) => comment.0.as_str(parser).replace(' ', "·"),
-						Comment::Block(comment) => comment.0.as_str(parser).replace(' ', "·"),
+						Comment::Line(comment) => comment.0.as_str(parser).replace(' ', "·").replace('\t', "⭾"),
+						Comment::Block(comment) => comment.0.as_str(parser).replace(' ', "·").replace('\t', "⭾"),
 					},
 				})
 				.collect::<Vec<_>>()
 		};
+
+		let source = source.replace(' ', "·").replace('\t', "⭾");
+		let expected = expected.replace(' ', "·").replace('\t', "⭾");
+		let output = output.replace(' ', "·").replace('\t', "⭾");
 
 		// TODO: We only have ascii in the tests, but this breaks on non-ascii,
 		//       we should use a proper table to represent the errors.
@@ -402,11 +406,11 @@ mod tests {
 			"Found wrong output.\nKind    : {:?}\nInput   : {:?}{source_debug_padding} {:?}\nExpected: \
 			 {:?}{expected_debug_padding} {:?}\nFound   : {:?}{output_debug_padding} {:?}",
 			kind,
-			source.replace(' ', "·"),
+			source,
 			whitespace_debug(&parser, &whitespace),
-			expected.replace(' ', "·"),
+			expected,
 			whitespace_debug(&parser_expected, &whitespace_expected),
-			output.replace(' ', "·"),
+			output,
 			whitespace_debug(&parser, &whitespace_output),
 		);
 
