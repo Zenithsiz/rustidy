@@ -95,9 +95,11 @@
 							"tree": {
 								"Group": {
 									"prefix": null,
-									"open": [[31, 32], { "first": [32, 32], "rest": [] }],
-									"tree": null,
-									"close": [[32, 33], { "first": [33, 33], "rest": [] }]
+									"tree": {
+										"prefix": [[31, 32], { "first": [32, 32], "rest": [] }],
+										"value": null,
+										"suffix": [[32, 33], { "first": [33, 33], "rest": [] }]
+									}
 								}
 							},
 							"semi": [[33, 34], { "first": [34, 35], "rest": [] }]
@@ -117,20 +119,25 @@
 							"tree": {
 								"Group": {
 									"prefix": null,
-									"open": [[39, 40], { "first": [40, 40], "rest": [] }],
 									"tree": {
-										"punctuated": {
-											"first": {
-												"Glob": {
-													"prefix": null,
-													"glob": [[40, 41], { "first": [41, 41], "rest": [] }]
-												}
+										"prefix": [[39, 40], { "first": [40, 40], "rest": [] }],
+										"value": {
+											"punctuated": {
+												"first": {
+													"Glob": {
+														"prefix": null,
+														"glob": [
+															[40, 41],
+															{ "first": [41, 41], "rest": [] }
+														]
+													}
+												},
+												"rest": []
 											},
-											"rest": []
+											"trailing": null
 										},
-										"trailing": null
-									},
-									"close": [[41, 42], { "first": [42, 42], "rest": [] }]
+										"suffix": [[41, 42], { "first": [42, 42], "rest": [] }]
+									}
 								}
 							},
 							"semi": [[42, 43], { "first": [43, 44], "rest": [] }]
@@ -150,20 +157,25 @@
 							"tree": {
 								"Group": {
 									"prefix": null,
-									"open": [[48, 49], { "first": [49, 49], "rest": [] }],
 									"tree": {
-										"punctuated": {
-											"first": {
-												"Glob": {
-													"prefix": null,
-													"glob": [[49, 50], { "first": [50, 50], "rest": [] }]
-												}
+										"prefix": [[48, 49], { "first": [49, 49], "rest": [] }],
+										"value": {
+											"punctuated": {
+												"first": {
+													"Glob": {
+														"prefix": null,
+														"glob": [
+															[49, 50],
+															{ "first": [50, 50], "rest": [] }
+														]
+													}
+												},
+												"rest": []
 											},
-											"rest": []
+											"trailing": [[50, 51], { "first": [51, 51], "rest": [] }]
 										},
-										"trailing": [[50, 51], { "first": [51, 51], "rest": [] }]
-									},
-									"close": [[51, 52], { "first": [52, 52], "rest": [] }]
+										"suffix": [[51, 52], { "first": [52, 52], "rest": [] }]
+									}
 								}
 							},
 							"semi": [[52, 53], { "first": [53, 54], "rest": [] }]
@@ -183,62 +195,69 @@
 							"tree": {
 								"Group": {
 									"prefix": null,
-									"open": [[58, 59], { "first": [59, 59], "rest": [] }],
 									"tree": {
-										"punctuated": {
-											"first": {
-												"Glob": {
-													"prefix": null,
-													"glob": [[59, 60], { "first": [60, 60], "rest": [] }]
-												}
-											},
-											"rest": [
-												[
-													[[60, 61], { "first": [61, 61], "rest": [] }],
-													{
-														"Group": {
-															"prefix": null,
-															"open": [
-																[61, 62],
-																{ "first": [62, 62], "rest": [] }
-															],
-															"tree": null,
-															"close": [
-																[62, 63],
-																{ "first": [63, 63], "rest": [] }
-															]
-														}
+										"prefix": [[58, 59], { "first": [59, 59], "rest": [] }],
+										"value": {
+											"punctuated": {
+												"first": {
+													"Glob": {
+														"prefix": null,
+														"glob": [
+															[59, 60],
+															{ "first": [60, 60], "rest": [] }
+														]
 													}
-												],
-												[
-													[[63, 64], { "first": [64, 64], "rest": [] }],
-													{
-														"Simple": {
-															"path": {
+												},
+												"rest": [
+													[
+														[[60, 61], { "first": [61, 61], "rest": [] }],
+														{
+															"Group": {
 																"prefix": null,
-																"segments": {
-																	"first": {
-																		"Ident": {
-																			"NonKw": {
-																				"ident": [
-																					[64, 65],
-																					{ "first": [65, 65], "rest": [] }
-																				]
-																			}
-																		}
-																	},
-																	"rest": []
+																"tree": {
+																	"prefix": [
+																		[61, 62],
+																		{ "first": [62, 62], "rest": [] }
+																	],
+																	"value": null,
+																	"suffix": [
+																		[62, 63],
+																		{ "first": [63, 63], "rest": [] }
+																	]
 																}
-															},
-															"as_": null
+															}
 														}
-													}
+													],
+													[
+														[[63, 64], { "first": [64, 64], "rest": [] }],
+														{
+															"Simple": {
+																"path": {
+																	"prefix": null,
+																	"segments": {
+																		"first": {
+																			"Ident": {
+																				"NonKw": {
+																					"ident": [
+																						[64, 65],
+																						{ "first": [65, 65], "rest": [] }
+																					]
+																				}
+																			}
+																		},
+																		"rest": []
+																	}
+																},
+																"as_": null
+															}
+														}
+													]
 												]
-											]
+											},
+											"trailing": null
 										},
-										"trailing": null
-									},
-									"close": [[65, 66], { "first": [66, 66], "rest": [] }]
+										"suffix": [[65, 66], { "first": [66, 66], "rest": [] }]
+									}
 								}
 							},
 							"semi": [[66, 67], { "first": [67, 68], "rest": [] }]
@@ -258,58 +277,33 @@
 							"tree": {
 								"Group": {
 									"prefix": null,
-									"open": [[72, 73], { "first": [73, 73], "rest": [] }],
 									"tree": {
-										"punctuated": {
-											"first": {
-												"Glob": {
-													"prefix": null,
-													"glob": [[73, 74], { "first": [74, 74], "rest": [] }]
-												}
-											},
-											"rest": [
-												[
-													[[74, 75], { "first": [75, 75], "rest": [] }],
-													{
-														"Group": {
-															"prefix": null,
-															"open": [
-																[75, 76],
-																{ "first": [76, 76], "rest": [] }
-															],
-															"tree": {
-																"punctuated": {
-																	"first": {
-																		"Simple": {
-																			"path": {
-																				"prefix": null,
-																				"segments": {
-																					"first": {
-																						"Ident": {
-																							"NonKw": {
-																								"ident": [
-																									[76, 77],
-																									{
-																										"first": [77, 77],
-																										"rest": []
-																									}
-																								]
-																							}
-																						}
-																					},
-																					"rest": []
-																				}
-																			},
-																			"as_": null
-																		}
-																	},
-																	"rest": [
-																		[
-																			[
-																				[77, 78],
-																				{ "first": [78, 78], "rest": [] }
-																			],
-																			{
+										"prefix": [[72, 73], { "first": [73, 73], "rest": [] }],
+										"value": {
+											"punctuated": {
+												"first": {
+													"Glob": {
+														"prefix": null,
+														"glob": [
+															[73, 74],
+															{ "first": [74, 74], "rest": [] }
+														]
+													}
+												},
+												"rest": [
+													[
+														[[74, 75], { "first": [75, 75], "rest": [] }],
+														{
+															"Group": {
+																"prefix": null,
+																"tree": {
+																	"prefix": [
+																		[75, 76],
+																		{ "first": [76, 76], "rest": [] }
+																	],
+																	"value": {
+																		"punctuated": {
+																			"first": {
 																				"Simple": {
 																					"path": {
 																						"prefix": null,
@@ -318,9 +312,9 @@
 																								"Ident": {
 																									"NonKw": {
 																										"ident": [
-																											[78, 79],
+																											[76, 77],
 																											{
-																												"first": [79, 79],
+																												"first": [77, 77],
 																												"rest": []
 																											}
 																										]
@@ -332,48 +326,80 @@
 																					},
 																					"as_": null
 																				}
-																			}
-																		]
-																	]
-																},
-																"trailing": null
-															},
-															"close": [
-																[79, 80],
-																{ "first": [80, 80], "rest": [] }
-															]
-														}
-													}
-												],
-												[
-													[[80, 81], { "first": [81, 81], "rest": [] }],
-													{
-														"Simple": {
-															"path": {
-																"prefix": null,
-																"segments": {
-																	"first": {
-																		"Ident": {
-																			"NonKw": {
-																				"ident": [
-																					[81, 82],
-																					{ "first": [82, 82], "rest": [] }
+																			},
+																			"rest": [
+																				[
+																					[
+																						[77, 78],
+																						{ "first": [78, 78], "rest": [] }
+																					],
+																					{
+																						"Simple": {
+																							"path": {
+																								"prefix": null,
+																								"segments": {
+																									"first": {
+																										"Ident": {
+																											"NonKw": {
+																												"ident": [
+																													[78, 79],
+																													{
+																														"first": [79, 79],
+																														"rest": []
+																													}
+																												]
+																											}
+																										}
+																									},
+																									"rest": []
+																								}
+																							},
+																							"as_": null
+																						}
+																					}
 																				]
-																			}
-																		}
+																			]
+																		},
+																		"trailing": null
 																	},
-																	"rest": []
+																	"suffix": [
+																		[79, 80],
+																		{ "first": [80, 80], "rest": [] }
+																	]
 																}
-															},
-															"as_": null
+															}
 														}
-													}
+													],
+													[
+														[[80, 81], { "first": [81, 81], "rest": [] }],
+														{
+															"Simple": {
+																"path": {
+																	"prefix": null,
+																	"segments": {
+																		"first": {
+																			"Ident": {
+																				"NonKw": {
+																					"ident": [
+																						[81, 82],
+																						{ "first": [82, 82], "rest": [] }
+																					]
+																				}
+																			}
+																		},
+																		"rest": []
+																	}
+																},
+																"as_": null
+															}
+														}
+													]
 												]
-											]
+											},
+											"trailing": null
 										},
-										"trailing": null
-									},
-									"close": [[82, 83], { "first": [83, 83], "rest": [] }]
+										"suffix": [[82, 83], { "first": [83, 83], "rest": [] }]
+									}
 								}
 							},
 							"semi": [[83, 84], { "first": [84, 86], "rest": [] }]

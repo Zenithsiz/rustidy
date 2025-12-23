@@ -3,7 +3,7 @@
 // Imports
 use crate::{
 	Format,
-	ast::{ident::Ident, path::SimplePath, punct::PunctuatedTrailing, token},
+	ast::{delimited::Braced, ident::Ident, path::SimplePath, punct::PunctuatedTrailing, token},
 	parser::Parse,
 	print::Print,
 };
@@ -14,6 +14,7 @@ use crate::{
 #[derive(Parse, Format, Print)]
 #[parse(name = "use declaration")]
 pub struct UseDeclaration {
+	#[format(and_with = Format::trailing_ws_set_single)]
 	use_: token::Use,
 	#[parse(fatal)]
 	tree: UseTree,
@@ -22,6 +23,7 @@ pub struct UseDeclaration {
 
 /// `UseTree`
 #[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(strum::EnumIs)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub enum UseTree {
@@ -51,10 +53,7 @@ pub struct UseTreeGlobPrefix {
 #[derive(Parse, Format, Print)]
 pub struct UseTreeGroup {
 	prefix: Option<UseTreeGroupPrefix>,
-	open:   token::BracesOpen,
-	#[parse(fatal)]
-	tree:   Option<PunctuatedTrailing<Box<UseTree>, token::Comma>>,
-	close:  token::BracesClose,
+	tree:   Braced<Option<PunctuatedTrailing<Box<UseTree>, token::Comma>>>,
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]
