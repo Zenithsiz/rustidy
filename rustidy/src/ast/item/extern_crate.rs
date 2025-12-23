@@ -5,7 +5,7 @@ use crate::{
 	Format,
 	Parse,
 	Print,
-	ast::{ident::Ident, token},
+	ast::{ident::Identifier, token},
 };
 
 /// `ExternCrate`
@@ -27,7 +27,7 @@ pub struct ExternCrate {
 #[derive(Parse, Format, Print)]
 pub enum CrateRef {
 	Self_(token::SelfLower),
-	Ident(Ident),
+	Ident(Identifier),
 }
 
 /// `AsClause`
@@ -44,5 +44,5 @@ pub struct AsClause {
 #[derive(Parse, Format, Print)]
 pub enum AsClauseName {
 	Underscore(token::Underscore),
-	Ident(Ident),
+	Ident(Identifier),
 }

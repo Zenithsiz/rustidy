@@ -2,7 +2,7 @@
 
 // Imports
 use {
-	super::{ident::Ident, punct::Punctuated, token},
+	super::{ident::Identifier, punct::Punctuated, token},
 	crate::{Format, Print, parser::Parse},
 	core::fmt::Debug,
 };
@@ -26,5 +26,5 @@ pub enum SimplePathSegment {
 	SelfLower(token::SelfLower),
 	Crate(token::Crate),
 	DollarCrate(token::DollarCrate),
-	Ident(Ident),
+	Ident(Identifier),
 }

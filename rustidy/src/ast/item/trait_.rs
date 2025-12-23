@@ -12,7 +12,7 @@ use {
 	},
 	crate::{
 		Format,
-		ast::{attr::InnerAttrOrDocComment, ident::Ident, token, with_attrs::WithOuterAttributes},
+		ast::{attr::InnerAttrOrDocComment, ident::Identifier, token, with_attrs::WithOuterAttributes},
 		parser::Parse,
 		print::Print,
 	},
@@ -26,7 +26,7 @@ use {
 pub struct Trait {
 	trait_:   token::Trait,
 	#[parse(fatal)]
-	ident:    Ident,
+	ident:    Identifier,
 	generics: Option<GenericParams>,
 	bounds:   Option<TraitColonBounds>,
 	open:     token::BracesOpen,

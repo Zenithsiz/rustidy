@@ -7,7 +7,7 @@ use {
 		Format,
 		Parse,
 		Print,
-		ast::{ident::Ident, token, ty::Type},
+		ast::{ident::Identifier, token, ty::Type},
 	},
 };
 
@@ -18,7 +18,7 @@ use {
 pub struct TypeAlias {
 	type_:    token::Type,
 	#[parse(fatal)]
-	ident:    Ident,
+	ident:    Identifier,
 	generics: Option<GenericParams>,
 	bounds:   Option<TypeAliasBounds>,
 	where_:   Option<WhereClause>,

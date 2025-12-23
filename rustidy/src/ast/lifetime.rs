@@ -3,7 +3,7 @@
 // Imports
 use {
 	super::{
-		ident::{IdentOrKeyword, NonKeywordIdentifier},
+		ident::{IdentifierOrKeyword, NonKeywordIdentifier},
 		token,
 		whitespace::Whitespace,
 	},
@@ -22,7 +22,7 @@ pub struct Lifetime(LifetimeToken);
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub enum LifetimeToken {
-	IdentOrKeyword(QuoteNotQuote<IdentOrKeyword>),
+	IdentOrKeyword(QuoteNotQuote<IdentifierOrKeyword>),
 	Underscore(QuoteNotQuote<token::Underscore>),
 	// TODO: `r#'ident`
 }

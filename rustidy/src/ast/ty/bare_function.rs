@@ -9,7 +9,7 @@ use {
 		Print,
 		ast::{
 			delimited::Parenthesized,
-			ident::Ident,
+			ident::Identifier,
 			item::function::{ExternAbi, ForLifetimes},
 			punct::{Punctuated, PunctuatedTrailing},
 			token,
@@ -78,11 +78,11 @@ pub struct MaybeNamedParamInnerName {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub enum MaybeNamedParamInnerNameInner {
-	Ident(Ident),
+	Ident(Identifier),
 	Underscore(token::Underscore),
 }
 
-/// `MaybeNamedFunctionParameters`
+/// `MaybeNamedFunctionParametersVariadic`
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]

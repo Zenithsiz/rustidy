@@ -10,7 +10,7 @@ use {
 			at_least::AtLeast1,
 			delimited::Parenthesized,
 			expr::with_block::BlockExpression,
-			ident::Ident,
+			ident::Identifier,
 			item::function::TypeParamBounds,
 			lifetime::Lifetime,
 			longest::Longest,
@@ -67,7 +67,7 @@ pub enum PathIdentSegment {
 	SelfUpper(token::SelfUpper),
 	Crate(token::Crate),
 	DollarCrate(token::DollarCrate),
-	Ident(Ident),
+	Ident(Identifier),
 }
 
 /// `GenericArgs`
@@ -119,7 +119,7 @@ pub enum GenericArgsConst {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct GenericArgsBinding {
-	ident:    Ident,
+	ident:    Identifier,
 	generics: Option<Box<GenericArgs>>,
 	eq:       token::Eq,
 	#[parse(fatal)]
@@ -131,7 +131,7 @@ pub struct GenericArgsBinding {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct GenericArgsBounds {
-	ident:    Ident,
+	ident:    Identifier,
 	generics: Option<Box<GenericArgs>>,
 	colon:    token::Colon,
 	#[parse(fatal)]

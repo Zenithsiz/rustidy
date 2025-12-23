@@ -7,7 +7,7 @@ use crate::{
 		attr::OuterAttrOrDocComment,
 		delimited::Parenthesized,
 		expr::{BlockExpression, LiteralExpression, StringLiteral},
-		ident::Ident,
+		ident::Identifier,
 		lifetime::Lifetime,
 		pat::PatternNoTopAlt,
 		punct::PunctuatedTrailing,
@@ -28,7 +28,7 @@ pub struct Function {
 	qualifiers: FunctionQualifiers,
 	fn_:        token::Fn,
 	#[parse(fatal)]
-	ident:      Ident,
+	ident:      Identifier,
 	generics:   Option<GenericParams>,
 	params:     Parenthesized<Option<FunctionParameters>>,
 	ret:        Option<FunctionReturnType>,
@@ -261,7 +261,7 @@ pub struct LifetimeBounds(PunctuatedTrailing<Lifetime, token::Plus>);
 #[derive(Parse, Format, Print)]
 #[parse(name = "a type parameter")]
 pub struct TypeParam {
-	ident:  Ident,
+	ident:  Identifier,
 	bounds: Option<TypeParamColonBounds>,
 	eq_ty:  Option<TypeParamEqType>,
 }
@@ -381,7 +381,7 @@ pub struct ForLifetimes {
 #[derive(Parse, Format, Print)]
 pub struct ConstParam {
 	const_: token::Const,
-	ident:  Ident,
+	ident:  Identifier,
 	colon:  token::Colon,
 	ty:     Box<Type>,
 	rest:   Option<ConstParamRest>,
@@ -392,6 +392,6 @@ pub struct ConstParam {
 #[derive(Parse, Format, Print)]
 pub enum ConstParamRest {
 	Eq((token::Eq, Box<BlockExpression>)),
-	Ident(Ident),
+	Ident(Identifier),
 	Literal((Option<token::Minus>, Box<LiteralExpression>)),
 }

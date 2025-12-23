@@ -7,7 +7,7 @@ use crate::{AstStr, Format, Parse, ParseError, Parser, Print, ast::whitespace::W
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Format, Print)]
-pub struct IdentOrKeyword(#[format(str)] pub AstStr, #[format(whitespace)] pub Whitespace);
+pub struct IdentifierOrKeyword(#[format(str)] pub AstStr, #[format(whitespace)] pub Whitespace);
 
 #[derive(Debug, ParseError)]
 pub enum IdentOrKeywordError {
@@ -21,7 +21,7 @@ pub enum IdentOrKeywordError {
 	Whitespace(ParserError<Whitespace>),
 }
 
-impl Parse for IdentOrKeyword {
+impl Parse for IdentifierOrKeyword {
 	type Error = IdentOrKeywordError;
 
 	#[coverage(off)]
@@ -48,7 +48,7 @@ impl Parse for IdentOrKeyword {
 	}
 }
 
-impl AsRef<Whitespace> for IdentOrKeyword {
+impl AsRef<Whitespace> for IdentifierOrKeyword {
 	fn as_ref(&self) -> &Whitespace {
 		&self.1
 	}

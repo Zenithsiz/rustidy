@@ -5,7 +5,7 @@ pub mod ident_or_keyword;
 pub mod keyword;
 
 // Exports
-pub use self::{ident_or_keyword::IdentOrKeyword, keyword::STRICT_OR_RESERVED_KEYWORDS};
+pub use self::{ident_or_keyword::IdentifierOrKeyword, keyword::STRICT_OR_RESERVED_KEYWORDS};
 
 // Imports
 use {
@@ -23,12 +23,12 @@ use {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 #[parse(name = "an identifier")]
-pub enum Ident {
+pub enum Identifier {
 	NonKw(NonKeywordIdentifier),
 	Raw(!),
 }
 
-impl AsRef<crate::AstStr> for Ident {
+impl AsRef<crate::AstStr> for Identifier {
 	fn as_ref(&self) -> &crate::AstStr {
 		match *self {
 			Self::NonKw(ref non_keyword_identifier) => &non_keyword_identifier.ident.0,
@@ -42,7 +42,7 @@ impl AsRef<crate::AstStr> for Ident {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Format, Print)]
 pub struct NonKeywordIdentifier {
-	pub ident: IdentOrKeyword,
+	pub ident: IdentifierOrKeyword,
 }
 
 impl Parse for NonKeywordIdentifier {
@@ -55,7 +55,7 @@ impl Parse for NonKeywordIdentifier {
 
 	fn parse_from(parser: &mut Parser) -> Result<Self, Self::Error> {
 		let ident = parser
-			.parse::<IdentOrKeyword>()
+			.parse::<IdentifierOrKeyword>()
 			.map_err(NonKeywordIdentifierError::Ident)?;
 
 		if STRICT_OR_RESERVED_KEYWORDS.contains(&parser.str(&ident.0)) {
@@ -68,7 +68,7 @@ impl Parse for NonKeywordIdentifier {
 #[derive(Debug, crate::parser::ParseError)]
 pub enum NonKeywordIdentifierError {
 	#[parse_error(transparent)]
-	Ident(ParserError<IdentOrKeyword>),
+	Ident(ParserError<IdentifierOrKeyword>),
 
 	#[parse_error(fmt = "Identifier was a strict or reserved keyword")]
 	StrictOrReserved,

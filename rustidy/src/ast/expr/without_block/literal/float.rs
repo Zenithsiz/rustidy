@@ -7,7 +7,7 @@ use {
 		Format,
 		Parse,
 		Print,
-		ast::{ident::IdentOrKeyword, token},
+		ast::{ident::IdentifierOrKeyword, token},
 	},
 };
 
@@ -21,5 +21,5 @@ pub struct FloatLiteral {
 	int:    DecLiteral,
 	dot:    token::Dot,
 	frac:   DecLiteral,
-	suffix: Option<IdentOrKeyword>,
+	suffix: Option<IdentifierOrKeyword>,
 }

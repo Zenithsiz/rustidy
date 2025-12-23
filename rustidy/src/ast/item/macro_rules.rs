@@ -9,7 +9,7 @@ use crate::{
 		at_least::AtLeast1,
 		attr::DelimTokenTree,
 		delimited::{Braced, Bracketed, Parenthesized},
-		ident::{Ident, IdentOrKeyword},
+		ident::{Identifier, IdentifierOrKeyword},
 		punct::PunctuatedTrailing,
 		token::{self, Token},
 	},
@@ -23,7 +23,7 @@ pub struct MacroRulesDefinition {
 	macro_rules: token::MacroRules,
 	#[parse(fatal)]
 	not:         token::Not,
-	ident:       Ident,
+	ident:       Identifier,
 	def:         MacroRulesDef,
 }
 
@@ -118,7 +118,7 @@ pub struct MacroMatchDollarIdent {
 #[derive(Parse, Format, Print)]
 pub enum MacroMatchDollarIdentInner {
 	#[parse(with_tag = "skip:`crate`")]
-	IdentOrKw(IdentOrKeyword),
+	IdentOrKw(IdentifierOrKeyword),
 	Raw(!),
 	Underscore(token::Underscore),
 }

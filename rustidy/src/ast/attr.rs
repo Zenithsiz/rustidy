@@ -59,7 +59,7 @@ pub struct InnerLineDoc {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub enum OuterAttrOrDocComment {
-	Attr(OuterAttr),
+	Attr(OuterAttribute),
 	DocComment(OuterDocComment),
 }
 
@@ -67,7 +67,7 @@ pub enum OuterAttrOrDocComment {
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
-pub struct OuterAttr {
+pub struct OuterAttribute {
 	pound: token::Pound,
 	open:  Bracketed<Attr>,
 }

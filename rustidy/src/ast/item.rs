@@ -41,7 +41,7 @@ use {
 	super::{
 		attr::{DelimTokenTree, DelimTokenTreeInner},
 		delimited::{Braced, Parenthesized},
-		ident::Ident,
+		ident::Identifier,
 		punct::PunctuatedTrailing,
 		token,
 		vis::Visibility,
@@ -108,7 +108,7 @@ pub enum MacroItem {
 pub struct DeclMacro {
 	macro_: token::Macro,
 	#[parse(fatal)]
-	ident:  Ident,
+	ident:  Identifier,
 	body:   DeclMacroBody,
 }
 

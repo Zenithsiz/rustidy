@@ -5,7 +5,7 @@ use crate::{
 	Format,
 	Parse,
 	Print,
-	ast::{expr::Expression, ident::Ident, token, ty::Type},
+	ast::{expr::Expression, ident::Identifier, token, ty::Type},
 };
 
 /// `ConstantItem`
@@ -26,7 +26,7 @@ pub struct ConstantItem {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub enum ConstantItemName {
-	Ident(Ident),
+	Ident(Identifier),
 	Underscore(token::Underscore),
 }
 

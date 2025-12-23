@@ -7,7 +7,7 @@ use {
 		Format,
 		Parse,
 		Print,
-		ast::{expr::Expression, ident::Ident, token, ty::Type},
+		ast::{expr::Expression, ident::Identifier, token, ty::Type},
 	},
 };
 
@@ -19,7 +19,7 @@ pub struct StaticItem {
 	safety:  Option<ItemSafety>,
 	static_: token::Static,
 	mut_:    Option<token::Mut>,
-	ident:   Ident,
+	ident:   Identifier,
 	colon:   token::Colon,
 	ty:      Type,
 	value:   Option<StaticItemValue>,

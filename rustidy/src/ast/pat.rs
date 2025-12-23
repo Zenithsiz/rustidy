@@ -11,7 +11,7 @@ use {
 			PathExpression,
 			without_block::{literal::TupleIndex, path::PathInExpression},
 		},
-		ident::Ident,
+		ident::Identifier,
 		punct::{Punctuated, PunctuatedTrailing},
 		token,
 		with_attrs::WithOuterAttributes,
@@ -50,7 +50,7 @@ pub enum PatternWithoutRange {
 
 	Literal(LiteralPattern),
 	// TODO: Parse this for single identifiers too?
-	#[parse(peek = (Option::<token::Ref>, Option::<token::Mut>, Ident, token::At))]
+	#[parse(peek = (Option::<token::Ref>, Option::<token::Mut>, Identifier, token::At))]
 	Ident(IdentifierPattern),
 	Wildcard(WildcardPattern),
 	Rest(RestPattern),
@@ -182,7 +182,7 @@ pub struct StructPatternFieldTuplePat {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct StructPatternFieldIdentPat {
-	ident: Ident,
+	ident: Identifier,
 	dot:   token::Colon,
 	pat:   Box<Pattern>,
 }
@@ -193,7 +193,7 @@ pub struct StructPatternFieldIdentPat {
 pub struct StructPatternFieldIdent {
 	ref_:  Option<token::Ref>,
 	mut_:  Option<token::Mut>,
-	ident: Ident,
+	ident: Identifier,
 }
 
 /// `StructPatternEtCetera`
@@ -268,7 +268,7 @@ pub struct LiteralPattern {
 pub struct IdentifierPattern {
 	ref_:  Option<token::Ref>,
 	mut_:  Option<token::Mut>,
-	ident: Ident,
+	ident: Identifier,
 	rest:  Option<IdentifierPatternRest>,
 }
 

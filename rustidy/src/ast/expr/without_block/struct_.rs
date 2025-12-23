@@ -7,7 +7,7 @@ use {
 		Format,
 		Parse,
 		Print,
-		ast::{expr::Expression, ident::Ident, punct::Punctuated, token, with_attrs::WithOuterAttributes},
+		ast::{expr::Expression, ident::Identifier, punct::Punctuated, token, with_attrs::WithOuterAttributes},
 	},
 };
 
@@ -66,7 +66,7 @@ type StructExprField = WithOuterAttributes<StructExprFieldInner>;
 #[derive(Parse, Format, Print)]
 pub enum StructExprFieldInner {
 	WithExpr(StructExprFieldInnerWithExpr),
-	Ident(Ident),
+	Ident(Identifier),
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]
@@ -82,7 +82,7 @@ pub struct StructExprFieldInnerWithExpr {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub enum StructExprFieldInnerWithExprStart {
-	Ident(Ident),
+	Ident(Identifier),
 	Tuple(TupleIndex),
 }
 

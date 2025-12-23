@@ -7,7 +7,7 @@ use {
 		Format,
 		Parse,
 		Print,
-		ast::{attr::InnerAttrOrDocComment, delimited::Braced, ident::Ident, token},
+		ast::{attr::InnerAttrOrDocComment, delimited::Braced, ident::Identifier, token},
 	},
 };
 
@@ -20,7 +20,7 @@ pub struct Module {
 	unsafe_: Option<token::Unsafe>,
 	mod_:    token::Mod,
 	#[parse(fatal)]
-	ident:   Ident,
+	ident:   Identifier,
 	inner:   ModuleInner,
 }
 

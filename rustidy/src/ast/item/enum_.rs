@@ -13,7 +13,7 @@ use {
 		ast::{
 			delimited::{Braced, Parenthesized},
 			expr::Expression,
-			ident::Ident,
+			ident::Identifier,
 			punct::PunctuatedTrailing,
 			token,
 			vis::Visibility,
@@ -29,7 +29,7 @@ use {
 pub struct Enumeration {
 	pub enum_:    token::Enum,
 	#[parse(fatal)]
-	pub ident:    Ident,
+	pub ident:    Identifier,
 	pub generic:  Option<GenericParams>,
 	pub where_:   Option<WhereClause>,
 	pub variants: Braced<Option<EnumVariants>>,
@@ -49,7 +49,7 @@ pub type EnumVariant = WithOuterAttributes<EnumVariantInner>;
 #[derive(Parse, Format, Print)]
 pub struct EnumVariantInner {
 	vis:          Option<Visibility>,
-	ident:        Ident,
+	ident:        Identifier,
 	kind:         Option<EnumVariantKind>,
 	discriminant: Option<EnumVariantDiscriminant>,
 }

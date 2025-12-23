@@ -10,7 +10,7 @@ use {
 		Format,
 		Parse,
 		Print,
-		ast::{delimited::Braced, ident::Ident, token},
+		ast::{delimited::Braced, ident::Identifier, token},
 	},
 };
 
@@ -21,7 +21,7 @@ use {
 pub struct Union {
 	union:    token::Union,
 	#[parse(fatal)]
-	ident:    Ident,
+	ident:    Identifier,
 	generics: Option<GenericParams>,
 	where_:   Option<WhereClause>,
 	fields:   Braced<Option<StructFields>>,

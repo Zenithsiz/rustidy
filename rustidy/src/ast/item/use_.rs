@@ -3,7 +3,7 @@
 // Imports
 use crate::{
 	Format,
-	ast::{delimited::Braced, ident::Ident, path::SimplePath, punct::PunctuatedTrailing, token},
+	ast::{delimited::Braced, ident::Identifier, path::SimplePath, punct::PunctuatedTrailing, token},
 	parser::Parse,
 	print::Print,
 };
@@ -85,6 +85,6 @@ pub struct UseTreeSimpleAs {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub enum UseTreeSimpleAsValue {
-	Ident(Ident),
+	Ident(Identifier),
 	Underscore(token::Underscore),
 }

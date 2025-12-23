@@ -6,7 +6,7 @@ use {
 		Format,
 		ParseRecursive,
 		Print,
-		ast::{ident::Ident, token},
+		ast::{ident::Identifier, token},
 	},
 };
 
@@ -20,5 +20,5 @@ use {
 pub struct FieldExpression {
 	pub expr:  Box<Expression>,
 	pub dot:   token::Dot,
-	pub ident: Ident,
+	pub ident: Identifier,
 }

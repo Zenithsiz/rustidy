@@ -9,7 +9,7 @@ use {
 		Print,
 		ast::{
 			delimited::{Braced, Parenthesized},
-			ident::Ident,
+			ident::Identifier,
 			punct::PunctuatedTrailing,
 			token,
 			ty::Type,
@@ -34,7 +34,7 @@ pub enum Struct {
 #[derive(Parse, Format, Print)]
 pub struct StructStruct {
 	struct_:  token::Struct,
-	ident:    Ident,
+	ident:    Identifier,
 	generics: Option<GenericParams>,
 	where_:   Option<WhereClause>,
 	inner:    StructStructInner,
@@ -62,7 +62,7 @@ pub type StructField = WithOuterAttributes<StructFieldInner>;
 #[derive(Parse, Format, Print)]
 pub struct StructFieldInner {
 	vis:   Option<Visibility>,
-	ident: Ident,
+	ident: Identifier,
 	colon: token::Colon,
 	ty:    Type,
 }
@@ -73,7 +73,7 @@ pub struct StructFieldInner {
 #[derive(Parse, Format, Print)]
 pub struct TupleStruct {
 	struct_:  token::Struct,
-	ident:    Ident,
+	ident:    Identifier,
 	generics: Option<GenericParams>,
 	fields:   Parenthesized<Option<TupleFields>>,
 	#[parse(fatal)]

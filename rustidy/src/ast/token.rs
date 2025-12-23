@@ -4,7 +4,7 @@
 use {
 	super::{
 		expr::{IntegerLiteral, StringLiteral, without_block::literal::CharLiteral},
-		ident::IdentOrKeyword,
+		ident::IdentifierOrKeyword,
 		lifetime::LifetimeToken,
 		whitespace::Whitespace,
 	},
@@ -249,7 +249,7 @@ decl_tokens! {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub enum Token {
-	IdentOrKeyword(IdentOrKeyword),
+	IdentOrKeyword(IdentifierOrKeyword),
 	RawIdent(!),
 	CharLiteral(CharLiteral),
 	StringLiteral(StringLiteral),
