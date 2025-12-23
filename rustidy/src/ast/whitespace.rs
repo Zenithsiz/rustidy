@@ -72,15 +72,12 @@ impl Whitespace {
 	fn format(&mut self, ctx: &mut format::Context, kind: FormatKind) {
 		let (prefix, rest) = self.0.split_first_mut();
 
-		prefix
-			.0
-			.replace(kind.prefix_str(ctx, prefix.0.as_str(ctx.parser()), rest.is_empty()));
+		prefix.0.replace(kind.prefix_str(ctx, &prefix.0, rest.is_empty()));
 		for (pos, (comment, ws)) in rest.with_position() {
 			let is_last = matches!(pos, itertools::Position::Last | itertools::Position::Only);
 			match comment.is_line() {
-				true =>
-					ws.0.replace(kind.after_newline_str(ctx, ws.0.as_str(ctx.parser()), is_last)),
-				false => ws.0.replace(kind.normal_str(ctx, ws.0.as_str(ctx.parser()), is_last)),
+				true => ws.0.replace(kind.after_newline_str(ctx, &ws.0, is_last)),
+				false => ws.0.replace(kind.normal_str(ctx, &ws.0, is_last)),
 			}
 		}
 	}
@@ -107,21 +104,24 @@ impl FormatKind {
 	}
 
 	/// Returns the indentation string, with a newline *before*
-	fn indent_str_nl(ctx: &format::Context, cur_str: &str, after_newline: bool) -> String {
+	fn indent_str_nl(ctx: &format::Context, cur_str: &AstStr) -> String {
+		// TODO: Should we be checking for multiple newlines?
+		let after_newline = ctx.parser().str_before(cur_str).ends_with('\n');
+
 		let min_newlines = ctx.config().empty_line_spacing.min;
 		let max_newlines = ctx.config().empty_line_spacing.max;
 		let (min_newlines, max_newlines) = match after_newline {
 			true => (min_newlines, max_newlines),
 			false => (min_newlines + 1, max_newlines + 1),
 		};
-		let newlines = cur_str.chars().filter(|&ch| ch == '\n').count();
+		let newlines = cur_str.as_str(ctx.parser()).chars().filter(|&ch| ch == '\n').count();
 		let newlines = newlines.clamp(min_newlines, max_newlines);
 
 		"\n".repeat(newlines) + &Self::indent_str(ctx)
 	}
 
 	/// Returns the prefix string
-	fn prefix_str(self, ctx: &mut format::Context, cur_str: &str, is_last: bool) -> Cow<'static, str> {
+	fn prefix_str(self, ctx: &mut format::Context, cur_str: &AstStr, is_last: bool) -> Cow<'static, str> {
 		match self {
 			Self::Remove => "".into(),
 			Self::Single => " ".into(),
@@ -131,32 +131,32 @@ impl FormatKind {
 			} => match remove_if_empty && is_last {
 				true => "".into(),
 				false => ctx
-					.with_indent_offset_if(offset, is_last, |ctx| Self::indent_str_nl(ctx, cur_str, false))
+					.with_indent_offset_if(offset, is_last, |ctx| Self::indent_str_nl(ctx, cur_str))
 					.into(),
 			},
 		}
 	}
 
 	/// Returns the string after a newline
-	fn after_newline_str(self, ctx: &mut format::Context, cur_str: &str, is_last: bool) -> Cow<'static, str> {
+	fn after_newline_str(self, ctx: &mut format::Context, cur_str: &AstStr, is_last: bool) -> Cow<'static, str> {
 		match self {
 			Self::Remove | Self::Single => "".into(),
 			Self::Indent { offset, .. } => match is_last {
 				true => ctx.with_indent_offset(offset, |ctx| Self::indent_str(ctx)),
-				false => Self::indent_str_nl(ctx, cur_str, true),
+				false => Self::indent_str_nl(ctx, cur_str),
 			}
 			.into(),
 		}
 	}
 
 	/// Returns the normal string
-	fn normal_str(self, ctx: &mut format::Context, cur_str: &str, is_last: bool) -> Cow<'static, str> {
+	fn normal_str(self, ctx: &mut format::Context, cur_str: &AstStr, is_last: bool) -> Cow<'static, str> {
 		match self {
 			Self::Remove => "".into(),
 			Self::Single => " ".into(),
 			Self::Indent { offset, .. } => match is_last {
-				true => ctx.with_indent_offset(offset, |ctx| Self::indent_str_nl(ctx, cur_str, false)),
-				false => Self::indent_str_nl(ctx, cur_str, false),
+				true => ctx.with_indent_offset(offset, |ctx| Self::indent_str_nl(ctx, cur_str)),
+				false => Self::indent_str_nl(ctx, cur_str),
 			}
 			.into(),
 		}

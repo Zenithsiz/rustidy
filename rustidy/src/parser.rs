@@ -274,6 +274,12 @@ impl<'input> Parser<'input> {
 		&self.input[s.range().0.end.0..]
 	}
 
+	/// Returns everything before a range.
+	#[must_use]
+	pub fn str_before(&self, s: &AstStr) -> &'input str {
+		&self.input[..s.range().0.start.0]
+	}
+
 	/// Returns if the parser is finished
 	#[must_use]
 	pub fn is_finished(&self) -> bool {
