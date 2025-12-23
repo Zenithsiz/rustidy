@@ -11,12 +11,13 @@ use {
 	crate::{
 		AstStr,
 		Format,
-		parser::{Parse, ParseError, Parser, ParserError},
+		parser::{Parse, ParseError, Parser},
 		print::Print,
 	},
 };
 
 pub macro decl_tokens(
+	$raw:ident;
 	$(
 		$TokenName:ident = $Token:literal
 		$( skip_if_tag $skip_if_tag:literal )?
@@ -24,75 +25,84 @@ pub macro decl_tokens(
 		;
 	)*
 ) {
+	pub mod $raw {
+		use super::*;
+
+		$(
+			#[derive(PartialEq, Eq, Clone, Debug)]
+			#[derive(serde::Serialize, serde::Deserialize)]
+			#[derive(Format, Print)]
+			pub struct $TokenName(
+				#[format(str)]
+				pub AstStr,
+			);
+
+			#[derive(Debug, ParseError)]
+			pub enum ${concat($TokenName, RawError)} {
+				#[parse_error(fmt = concat!("Expected `", $Token, "`"))]
+				NotFound,
+
+				#[parse_error(fmt = "Token ends with `XID_CONTINUE` and follows `XID_START` or `_`")]
+				FollowsXid,
+
+				$(
+					#[parse_error(fmt = concat!("Tag `", $skip_if_tag, "` was present"))]
+					Tag,
+				)?
+			}
+
+			impl Parse for $TokenName {
+				type Error = ${concat($TokenName, RawError)};
+
+				#[coverage(off)]
+				fn name() -> Option<impl std::fmt::Display> {
+					None::<!>
+				}
+
+				fn parse_from(parser: &mut Parser) -> Result<Self, Self::Error> {
+					$(
+						if parser.has_tag($skip_if_tag) {
+							return Err(Self::Error::Tag);
+						}
+					)?
+
+					let token = parser.strip_prefix($Token).ok_or(Self::Error::NotFound)?;
+
+					// Note: This checks prevents matching `match` on `matches`
+					{
+						let token = parser.str(&token);
+						let remaining = parser.remaining();
+
+						if token.ends_with(unicode_ident::is_xid_continue) &&
+							remaining.starts_with(|ch: char| unicode_ident::is_xid_start(ch) || matches!(ch, '_')) {
+							return Err(Self::Error::FollowsXid);
+						}
+
+					}
+
+					$(
+						// TODO: Different error message?
+						if parser.strip_prefix($must_not_follow).is_some() {
+							return Err(Self::Error::NotFound);
+						}
+					)*
+
+					Ok(Self(token.into()))
+				}
+			}
+		)*
+	}
+
 	$(
 		#[derive(PartialEq, Eq, Clone, Debug)]
 		#[derive(serde::Serialize, serde::Deserialize)]
-		#[derive(Format, Print)]
+		#[derive(Parse, Format, Print)]
 		pub struct $TokenName(
-			#[format(str)]
-			pub AstStr,
+			pub raw::$TokenName,
 
 			#[format(whitespace)]
 			pub Whitespace,
 		);
-
-		#[derive(Debug, ParseError)]
-		pub enum ${concat($TokenName, Error)} {
-			#[parse_error(fmt = concat!("Expected `", $Token, "`"))]
-			NotFound,
-
-			#[parse_error(fmt = "Token ends with `XID_CONTINUE` and follows `XID_START` or `_`")]
-			FollowsXid,
-
-			#[parse_error(transparent)]
-			Whitespace(ParserError<Whitespace>),
-
-			$(
-				#[parse_error(fmt = concat!("Tag `", $skip_if_tag, "` was present"))]
-				Tag,
-			)?
-		}
-
-		impl Parse for $TokenName {
-			type Error = ${concat($TokenName, Error)};
-
-			#[coverage(off)]
-			fn name() -> Option<impl std::fmt::Display> {
-				None::<!>
-			}
-
-			fn parse_from(parser: &mut Parser) -> Result<Self, Self::Error> {
-				$(
-					if parser.has_tag($skip_if_tag) {
-						return Err(Self::Error::Tag);
-					}
-				)?
-
-				let token = parser.strip_prefix($Token).ok_or(Self::Error::NotFound)?;
-
-				// Note: This checks prevents matching `match` on `matches`
-				{
-					let token = parser.str(&token);
-					let remaining = parser.remaining();
-
-					if token.ends_with(unicode_ident::is_xid_continue) &&
-						remaining.starts_with(|ch: char| unicode_ident::is_xid_start(ch) || matches!(ch, '_')) {
-						return Err(Self::Error::FollowsXid);
-					}
-
-				}
-
-				$(
-					// TODO: Different error message?
-					if parser.strip_prefix($must_not_follow).is_some() {
-						return Err(Self::Error::NotFound);
-					}
-				)*
-				let whitespace = parser.parse::<Whitespace>().map_err(Self::Error::Whitespace)?;
-
-				Ok(Self(token.into(), whitespace))
-			}
-		}
 
 		impl AsRef<Whitespace> for $TokenName {
 			fn as_ref(&self) -> &Whitespace {
@@ -103,6 +113,8 @@ pub macro decl_tokens(
 }
 
 decl_tokens! {
+	raw;
+
 	InnerLineDoc = "//!";
 	OuterLineDoc = "///";
 
