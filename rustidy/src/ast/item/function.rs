@@ -4,7 +4,6 @@
 use crate::{
 	Format,
 	ast::{
-		attr::OuterAttrOrDocComment,
 		delimited::Parenthesized,
 		expr::{BlockExpression, LiteralExpression, StringLiteral},
 		ident::Identifier,
@@ -119,14 +118,7 @@ pub struct FunctionParametersFullSelf {
 }
 
 /// `FunctionParam`
-#[derive(PartialEq, Eq, Clone, Debug)]
-#[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
-#[parse(name = "&self parameter")]
-pub struct FunctionParam {
-	attrs: Vec<OuterAttrOrDocComment>,
-	inner: FunctionParamInner,
-}
+pub type FunctionParam = WithOuterAttributes<FunctionParamInner>;
 
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
@@ -149,14 +141,7 @@ pub struct FunctionParamPattern {
 }
 
 /// `SelfParam`
-#[derive(PartialEq, Eq, Clone, Debug)]
-#[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
-#[parse(name = "&self parameter")]
-pub struct SelfParam {
-	attrs: Vec<OuterAttrOrDocComment>,
-	self_: ShorthandOrTypedSelf,
-}
+pub type SelfParam = WithOuterAttributes<ShorthandOrTypedSelf>;
 
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]

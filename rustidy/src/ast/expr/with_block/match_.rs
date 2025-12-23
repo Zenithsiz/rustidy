@@ -8,7 +8,7 @@ use {
 		Parse,
 		Print,
 		ast::{
-			attr::{InnerAttrOrDocComment, OuterAttrOrDocComment},
+			attr::InnerAttrOrDocComment,
 			expr::ExpressionWithoutBlock,
 			pat::Pattern,
 			token,
@@ -73,7 +73,6 @@ pub type MatchArm = WithOuterAttributes<MatchArmInner>;
 #[derive(Parse, Format, Print)]
 #[parse(name = "a match arm")]
 pub struct MatchArmInner {
-	attrs: Vec<OuterAttrOrDocComment>,
 	pat:   Pattern,
 	guard: Option<MatchArmGuard>,
 }
