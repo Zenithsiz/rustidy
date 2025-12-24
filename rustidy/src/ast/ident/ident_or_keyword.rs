@@ -3,14 +3,27 @@
 // Imports
 use crate::{AstStr, Format, Parse, ParseError, Parser, Print, ast::whitespace::Whitespace, parser::ParserError};
 
-/// `IDENTIFIER_OR_KEYWORD`
+/// `IDENTIFIER_OR_KEYWORD` (with whitespace)
+#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(serde::Serialize, serde::Deserialize)]
+#[derive(Parse, Format, Print)]
+pub struct IdentifierOrKeyword(pub IdentifierOrKeywordRaw, #[format(whitespace)] pub Whitespace);
+
+
+impl AsRef<Whitespace> for IdentifierOrKeyword {
+	fn as_ref(&self) -> &Whitespace {
+		&self.1
+	}
+}
+
+/// `IDENTIFIER_OR_KEYWORD` (without whitespace)
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Format, Print)]
-pub struct IdentifierOrKeyword(#[format(str)] pub AstStr, #[format(whitespace)] pub Whitespace);
+pub struct IdentifierOrKeywordRaw(#[format(str)] pub AstStr);
 
 #[derive(Debug, ParseError)]
-pub enum IdentOrKeywordError {
+pub enum IdentOrKeywordRawError {
 	#[parse_error(fmt = "Expected `XID_START`")]
 	XidStart,
 
@@ -21,8 +34,8 @@ pub enum IdentOrKeywordError {
 	Whitespace(ParserError<Whitespace>),
 }
 
-impl Parse for IdentifierOrKeyword {
-	type Error = IdentOrKeywordError;
+impl Parse for IdentifierOrKeywordRaw {
+	type Error = IdentOrKeywordRawError;
 
 	#[coverage(off)]
 	fn name() -> Option<impl std::fmt::Display> {
@@ -34,22 +47,15 @@ impl Parse for IdentifierOrKeyword {
 			*s = s
 				.strip_prefix(unicode_ident::is_xid_start)
 				.or_else(|| s.strip_prefix('_'))
-				.ok_or(IdentOrKeywordError::XidStart)?;
+				.ok_or(IdentOrKeywordRawError::XidStart)?;
 			*s = s.trim_start_matches(unicode_ident::is_xid_continue);
 
 			Ok(())
 		})?;
 		if ident.as_str(parser) == "_" {
-			return Err(IdentOrKeywordError::SingleUnderscore);
+			return Err(IdentOrKeywordRawError::SingleUnderscore);
 		}
-		let whitespace = parser.parse::<Whitespace>().map_err(IdentOrKeywordError::Whitespace)?;
 
-		Ok(Self(ident, whitespace))
-	}
-}
-
-impl AsRef<Whitespace> for IdentifierOrKeyword {
-	fn as_ref(&self) -> &Whitespace {
-		&self.1
+		Ok(Self(ident))
 	}
 }

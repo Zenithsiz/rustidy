@@ -1,19 +1,19 @@
 //! Suffix
 
 // Imports
-use crate::{Format, Parse, ParseError, Parser, Print, ast::ident::IdentifierOrKeyword, parser::ParserError};
+use crate::{Format, Parse, ParseError, Parser, Print, ast::ident::IdentifierOrKeywordRaw, parser::ParserError};
 
 /// `SUFFIX`
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
-pub struct Suffix(IdentifierOrKeyword);
+pub struct Suffix(IdentifierOrKeywordRaw);
 
 /// `SUFFIX_NO_E`
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Format, Print)]
-pub struct SuffixNoE(IdentifierOrKeyword);
+pub struct SuffixNoE(IdentifierOrKeywordRaw);
 
 #[derive(Debug, ParseError)]
 pub enum SuffixNoEError {
@@ -21,7 +21,7 @@ pub enum SuffixNoEError {
 	StartedWithE,
 
 	#[parse_error(transparent)]
-	IdentOrKeyword(ParserError<IdentifierOrKeyword>),
+	IdentOrKeyword(ParserError<IdentifierOrKeywordRaw>),
 }
 
 impl Parse for SuffixNoE {
@@ -34,7 +34,7 @@ impl Parse for SuffixNoE {
 
 	fn parse_from(parser: &mut Parser) -> Result<Self, Self::Error> {
 		let ident = parser
-			.parse::<IdentifierOrKeyword>()
+			.parse::<IdentifierOrKeywordRaw>()
 			.map_err(SuffixNoEError::IdentOrKeyword)?;
 		if ident.0.as_str(parser).starts_with(['e', 'E']) {
 			return Err(SuffixNoEError::StartedWithE);
