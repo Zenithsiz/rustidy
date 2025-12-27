@@ -8,11 +8,10 @@ use {
 		Parse,
 		Print,
 		ast::{
-			attr::InnerAttrOrDocComment,
 			delimited::Braced,
 			token,
 			vis::Visibility,
-			with_attrs::WithOuterAttributes,
+			with_attrs::{WithInnerAttributes, WithOuterAttributes},
 		},
 	},
 };
@@ -25,15 +24,7 @@ pub struct ExternBlock {
 	pub unsafe_: Option<token::Unsafe>,
 	pub extern_: token::Extern,
 	pub abi:     Option<Abi>,
-	pub inner:   Braced<ExternBlockInner>,
-}
-
-#[derive(PartialEq, Eq, Clone, Debug)]
-#[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
-pub struct ExternBlockInner {
-	attrs: Vec<InnerAttrOrDocComment>,
-	items: Vec<ExternalItem>,
+	pub inner:   Braced<WithInnerAttributes<Vec<ExternalItem>>>,
 }
 
 /// `ExternalItem`

@@ -13,11 +13,10 @@ use {
 	crate::{
 		Format,
 		ast::{
-			attr::InnerAttrOrDocComment,
 			delimited::Braced,
 			ident::Identifier,
 			token,
-			with_attrs::WithOuterAttributes,
+			with_attrs::{WithInnerAttributes, WithOuterAttributes},
 		},
 		parser::Parse,
 		print::Print,
@@ -35,7 +34,7 @@ pub struct Trait {
 	ident:    Identifier,
 	generics: Option<GenericParams>,
 	bounds:   Option<TraitColonBounds>,
-	body:     Braced<TraitBody>,
+	body:     Braced<WithInnerAttributes<Vec<AssociatedItem>>>,
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]
@@ -44,14 +43,6 @@ pub struct Trait {
 pub struct TraitColonBounds {
 	colon:  token::Colon,
 	bounds: Option<TypeParamBounds>,
-}
-
-#[derive(PartialEq, Eq, Clone, Debug)]
-#[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
-pub struct TraitBody {
-	attrs: Vec<InnerAttrOrDocComment>,
-	items: Vec<AssociatedItem>,
 }
 
 /// `AssociatedItem`

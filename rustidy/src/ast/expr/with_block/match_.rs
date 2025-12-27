@@ -8,11 +8,10 @@ use {
 		Parse,
 		Print,
 		ast::{
-			attr::InnerAttrOrDocComment,
 			expr::ExpressionWithoutBlock,
 			pat::Pattern,
 			token,
-			with_attrs::WithOuterAttributes,
+			with_attrs::{WithInnerAttributes, WithOuterAttributes},
 		},
 	},
 };
@@ -27,8 +26,7 @@ pub struct MatchExpression {
 	#[parse(fatal)]
 	scrutinee: Box<Scrutinee>,
 	open:      token::BracesOpen,
-	attrs:     Vec<InnerAttrOrDocComment>,
-	arms:      Option<MatchArms>,
+	arms:      WithInnerAttributes<Option<MatchArms>>,
 	close:     token::BracesClose,
 }
 

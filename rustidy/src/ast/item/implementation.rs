@@ -9,10 +9,10 @@ use {
 	crate::{
 		Format,
 		ast::{
-			attr::InnerAttrOrDocComment,
 			delimited::Braced,
 			token,
 			ty::{Type, TypePath},
+			with_attrs::WithInnerAttributes,
 		},
 		parser::Parse,
 		print::Print,
@@ -38,7 +38,7 @@ pub struct InherentImpl {
 	generics: Option<GenericParams>,
 	ty:       Type,
 	where_:   Option<WhereClause>,
-	body:     Braced<ImplBody>,
+	body:     Braced<WithInnerAttributes<Vec<AssociatedItem>>>,
 }
 
 /// `TraitImpl`
@@ -55,13 +55,5 @@ pub struct TraitImpl {
 	for_:     token::For,
 	ty:       Type,
 	where_:   Option<WhereClause>,
-	body:     Braced<ImplBody>,
-}
-
-#[derive(PartialEq, Eq, Clone, Debug)]
-#[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
-pub struct ImplBody {
-	attrs: Vec<InnerAttrOrDocComment>,
-	items: Vec<AssociatedItem>,
+	body:     Braced<WithInnerAttributes<Vec<AssociatedItem>>>,
 }

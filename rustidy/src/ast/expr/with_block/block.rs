@@ -3,7 +3,7 @@
 // Imports
 use crate::{
 	Format,
-	ast::{attr::InnerAttrOrDocComment, delimited::Braced, expr::ExpressionWithoutBlock, stmt::Statement},
+	ast::{delimited::Braced, expr::ExpressionWithoutBlock, stmt::Statement, with_attrs::WithInnerAttributes},
 	parser::Parse,
 	print::Print,
 };
@@ -14,15 +14,7 @@ use crate::{
 #[derive(Parse, Format, Print)]
 #[parse(name = "a block expression")]
 #[parse(skip_if_tag = "skip:BlockExpression")]
-pub struct BlockExpression(pub Braced<BlockExpressionInner>);
-
-#[derive(PartialEq, Eq, Clone, Debug)]
-#[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
-pub struct BlockExpressionInner {
-	attrs: Vec<InnerAttrOrDocComment>,
-	stmts: Statements,
-}
+pub struct BlockExpression(pub Braced<WithInnerAttributes<Statements>>);
 
 /// `Statements`
 #[derive(PartialEq, Eq, Clone, Debug)]

@@ -7,7 +7,7 @@ use {
 		Format,
 		Parse,
 		Print,
-		ast::{attr::InnerAttrOrDocComment, delimited::Braced, ident::Identifier, token},
+		ast::{delimited::Braced, ident::Identifier, token, with_attrs::WithInnerAttributes},
 	},
 };
 
@@ -29,13 +29,5 @@ pub struct Module {
 #[derive(Parse, Format, Print)]
 pub enum ModuleInner {
 	None(token::Semi),
-	Def(Braced<ModuleDefInner>),
-}
-
-#[derive(PartialEq, Eq, Clone, Debug)]
-#[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
-pub struct ModuleDefInner {
-	attrs: Vec<InnerAttrOrDocComment>,
-	items: Vec<Item>,
+	Def(Braced<WithInnerAttributes<Vec<Item>>>),
 }

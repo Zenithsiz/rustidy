@@ -2,7 +2,7 @@
 
 // Imports
 use {
-	super::attr::OuterAttrOrDocComment,
+	super::attr::{InnerAttrOrDocComment, OuterAttrOrDocComment},
 	crate::{Format, Parse, Print, parser::ParsableRecursive},
 	core::marker::PhantomData,
 };
@@ -93,4 +93,13 @@ where
 			_phantom: PhantomData,
 		}
 	}
+}
+
+/// A type with inner attributes
+#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(serde::Serialize, serde::Deserialize)]
+#[derive(Parse, Format, Print)]
+pub struct WithInnerAttributes<T> {
+	pub attrs: Vec<InnerAttrOrDocComment>,
+	pub inner: T,
 }
