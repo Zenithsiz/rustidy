@@ -8,6 +8,7 @@ use {
 		Parse,
 		Print,
 		ast::{
+			delimited::Braced,
 			expr::ExpressionWithoutBlock,
 			pat::Pattern,
 			token,
@@ -25,9 +26,7 @@ pub struct MatchExpression {
 	match_:    token::Match,
 	#[parse(fatal)]
 	scrutinee: Box<Scrutinee>,
-	open:      token::BracesOpen,
-	arms:      WithInnerAttributes<Option<MatchArms>>,
-	close:     token::BracesClose,
+	arms:      Braced<WithInnerAttributes<Option<MatchArms>>>,
 }
 
 /// `Scrutinee`
