@@ -7,7 +7,14 @@ use {
 		Format,
 		Parse,
 		Print,
-		ast::{expr::Expression, ident::Identifier, punct::Punctuated, token, with_attrs::WithOuterAttributes},
+		ast::{
+			delimited::Braced,
+			expr::Expression,
+			ident::Identifier,
+			punct::Punctuated,
+			token,
+			with_attrs::WithOuterAttributes,
+		},
 	},
 };
 
@@ -19,10 +26,7 @@ use {
 #[parse(skip_if_tag = "skip:StructExpression")]
 pub struct StructExpression {
 	path:  PathInExpression,
-	open:  token::BracesOpen,
-	#[parse(fatal)]
-	inner: Option<StructExpressionInner>,
-	close: token::BracesClose,
+	inner: Braced<Option<StructExpressionInner>>,
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]

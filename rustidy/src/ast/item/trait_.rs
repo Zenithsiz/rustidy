@@ -12,7 +12,13 @@ use {
 	},
 	crate::{
 		Format,
-		ast::{attr::InnerAttrOrDocComment, ident::Identifier, token, with_attrs::WithOuterAttributes},
+		ast::{
+			attr::InnerAttrOrDocComment,
+			delimited::Braced,
+			ident::Identifier,
+			token,
+			with_attrs::WithOuterAttributes,
+		},
 		parser::Parse,
 		print::Print,
 	},
@@ -29,9 +35,7 @@ pub struct Trait {
 	ident:    Identifier,
 	generics: Option<GenericParams>,
 	bounds:   Option<TraitColonBounds>,
-	open:     token::BracesOpen,
-	body:     TraitBody,
-	close:    token::BracesClose,
+	body:     Braced<TraitBody>,
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]

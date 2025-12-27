@@ -7211,21 +7211,23 @@
 																							"rest": []
 																						}
 																					},
-																					"open": [
-																						{
-																							"first": [1219, 1220],
-																							"rest": []
-																						},
-																						[1220, 1221]
-																					],
-																					"inner": null,
-																					"close": [
-																						{
-																							"first": [1221, 1221],
-																							"rest": []
-																						},
-																						[1221, 1222]
-																					]
+																					"inner": {
+																						"prefix": [
+																							{
+																								"first": [1219, 1220],
+																								"rest": []
+																							},
+																							[1220, 1221]
+																						],
+																						"value": null,
+																						"suffix": [
+																							{
+																								"first": [1221, 1221],
+																								"rest": []
+																							},
+																							[1221, 1222]
+																						]
+																					}
 																				}
 																			}
 																		}
@@ -7289,46 +7291,48 @@
 																							"rest": []
 																						}
 																					},
-																					"open": [
-																						{
-																							"first": [1234, 1235],
-																							"rest": []
-																						},
-																						[1235, 1236]
-																					],
 																					"inner": {
-																						"Fields": {
-																							"fields": {
-																								"first": {
-																									"attrs": [],
-																									"inner": {
-																										"Ident": {
-																											"NonKw": {
-																												"ident": [
-																													{
-																														"first": [
-																															1236, 1237
-																														],
-																														"rest": []
-																													},
-																													[1237, 1238]
-																												]
-																											}
-																										}
-																									}
-																								},
+																						"prefix": [
+																							{
+																								"first": [1234, 1235],
 																								"rest": []
 																							},
-																							"end": null
-																						}
-																					},
-																					"close": [
-																						{
-																							"first": [1238, 1239],
-																							"rest": []
+																							[1235, 1236]
+																						],
+																						"value": {
+																							"Fields": {
+																								"fields": {
+																									"first": {
+																										"attrs": [],
+																										"inner": {
+																											"Ident": {
+																												"NonKw": {
+																													"ident": [
+																														{
+																															"first": [
+																																1236, 1237
+																															],
+																															"rest": []
+																														},
+																														[1237, 1238]
+																													]
+																												}
+																											}
+																										}
+																									},
+																									"rest": []
+																								},
+																								"end": null
+																							}
 																						},
-																						[1239, 1240]
-																					]
+																						"suffix": [
+																							{
+																								"first": [1238, 1239],
+																								"rest": []
+																							},
+																							[1239, 1240]
+																						]
+																					}
 																				}
 																			}
 																		}
@@ -7392,73 +7396,77 @@
 																							"rest": []
 																						}
 																					},
-																					"open": [
-																						{
-																							"first": [1252, 1253],
-																							"rest": []
-																						},
-																						[1253, 1254]
-																					],
 																					"inner": {
-																						"Fields": {
-																							"fields": {
-																								"first": {
-																									"attrs": [],
-																									"inner": {
-																										"WithExpr": {
-																											"start": {
-																												"Ident": {
-																													"NonKw": {
-																														"ident": [
-																															{
-																																"first": [
-																																	1254, 1255
-																																],
-																																"rest": []
-																															},
-																															[1255, 1256]
-																														]
-																													}
-																												}
-																											},
-																											"colon": [
-																												{
-																													"first": [1256, 1256],
-																													"rest": []
-																												},
-																												[1256, 1257]
-																											],
-																											"expr": {
-																												"WithoutBlock": {
-																													"attrs": [],
-																													"inner": {
-																														"Path": {
-																															"Normal": {
-																																"prefix": null,
-																																"segments": {
-																																	"first": {
-																																		"ident": {
-																																			"Ident": {
-																																				"NonKw": {
-																																					"ident": [
-																																						{
-																																							"first": [
-																																								1257,
-																																								1258
-																																							],
-																																							"rest": []
-																																						},
-																																						[
-																																							1258,
-																																							1259
-																																						]
-																																					]
-																																				}
-																																			}
-																																		},
-																																		"generic": null
-																																	},
+																						"prefix": [
+																							{
+																								"first": [1252, 1253],
+																								"rest": []
+																							},
+																							[1253, 1254]
+																						],
+																						"value": {
+																							"Fields": {
+																								"fields": {
+																									"first": {
+																										"attrs": [],
+																										"inner": {
+																											"WithExpr": {
+																												"start": {
+																													"Ident": {
+																														"NonKw": {
+																															"ident": [
+																																{
+																																	"first": [
+																																		1254, 1255
+																																	],
 																																	"rest": []
+																																},
+																																[1255, 1256]
+																															]
+																														}
+																													}
+																												},
+																												"colon": [
+																													{
+																														"first": [
+																															1256, 1256
+																														],
+																														"rest": []
+																													},
+																													[1256, 1257]
+																												],
+																												"expr": {
+																													"WithoutBlock": {
+																														"attrs": [],
+																														"inner": {
+																															"Path": {
+																																"Normal": {
+																																	"prefix": null,
+																																	"segments": {
+																																		"first": {
+																																			"ident": {
+																																				"Ident": {
+																																					"NonKw": {
+																																						"ident": [
+																																							{
+																																								"first": [
+																																									1257,
+																																									1258
+																																								],
+																																								"rest": []
+																																							},
+																																							[
+																																								1258,
+																																								1259
+																																							]
+																																						]
+																																					}
+																																				}
+																																			},
+																																			"generic": null
+																																		},
+																																		"rest": []
+																																	}
 																																}
 																															}
 																														}
@@ -7466,20 +7474,20 @@
 																												}
 																											}
 																										}
-																									}
+																									},
+																									"rest": []
 																								},
+																								"end": null
+																							}
+																						},
+																						"suffix": [
+																							{
+																								"first": [1259, 1260],
 																								"rest": []
 																							},
-																							"end": null
-																						}
-																					},
-																					"close": [
-																						{
-																							"first": [1259, 1260],
-																							"rest": []
-																						},
-																						[1260, 1261]
-																					]
+																							[1260, 1261]
+																						]
+																					}
 																				}
 																			}
 																		}
@@ -7543,82 +7551,84 @@
 																							"rest": []
 																						}
 																					},
-																					"open": [
-																						{
-																							"first": [1273, 1274],
-																							"rest": []
-																						},
-																						[1274, 1275]
-																					],
 																					"inner": {
-																						"Fields": {
-																							"fields": {
-																								"first": {
-																									"attrs": [],
-																									"inner": {
-																										"Ident": {
-																											"NonKw": {
-																												"ident": [
-																													{
-																														"first": [
-																															1275, 1276
-																														],
-																														"rest": []
-																													},
-																													[1276, 1277]
-																												]
-																											}
-																										}
-																									}
-																								},
-																								"rest": [
-																									[
-																										[
-																											{
-																												"first": [1277, 1277],
-																												"rest": []
-																											},
-																											[1277, 1278]
-																										],
-																										{
-																											"attrs": [],
-																											"inner": {
-																												"Ident": {
-																													"NonKw": {
-																														"ident": [
-																															{
-																																"first": [
-																																	1278, 1279
-																																],
-																																"rest": []
-																															},
-																															[1279, 1280]
-																														]
-																													}
+																						"prefix": [
+																							{
+																								"first": [1273, 1274],
+																								"rest": []
+																							},
+																							[1274, 1275]
+																						],
+																						"value": {
+																							"Fields": {
+																								"fields": {
+																									"first": {
+																										"attrs": [],
+																										"inner": {
+																											"Ident": {
+																												"NonKw": {
+																													"ident": [
+																														{
+																															"first": [
+																																1275, 1276
+																															],
+																															"rest": []
+																														},
+																														[1276, 1277]
+																													]
 																												}
 																											}
 																										}
-																									]
-																								]
-																							},
-																							"end": {
-																								"TrailingComma": [
-																									{
-																										"first": [1280, 1280],
-																										"rest": []
 																									},
-																									[1280, 1281]
-																								]
+																									"rest": [
+																										[
+																											[
+																												{
+																													"first": [1277, 1277],
+																													"rest": []
+																												},
+																												[1277, 1278]
+																											],
+																											{
+																												"attrs": [],
+																												"inner": {
+																													"Ident": {
+																														"NonKw": {
+																															"ident": [
+																																{
+																																	"first": [
+																																		1278, 1279
+																																	],
+																																	"rest": []
+																																},
+																																[1279, 1280]
+																															]
+																														}
+																													}
+																												}
+																											}
+																										]
+																									]
+																								},
+																								"end": {
+																									"TrailingComma": [
+																										{
+																											"first": [1280, 1280],
+																											"rest": []
+																										},
+																										[1280, 1281]
+																									]
+																								}
 																							}
-																						}
-																					},
-																					"close": [
-																						{
-																							"first": [1281, 1282],
-																							"rest": []
 																						},
-																						[1282, 1283]
-																					]
+																						"suffix": [
+																							{
+																								"first": [1281, 1282],
+																								"rest": []
+																							},
+																							[1282, 1283]
+																						]
+																					}
 																				}
 																			}
 																		}
@@ -7682,84 +7692,86 @@
 																							"rest": []
 																						}
 																					},
-																					"open": [
-																						{
-																							"first": [1295, 1296],
-																							"rest": []
-																						},
-																						[1296, 1297]
-																					],
 																					"inner": {
-																						"Fields": {
-																							"fields": {
-																								"first": {
-																									"attrs": [],
-																									"inner": {
-																										"Ident": {
-																											"NonKw": {
-																												"ident": [
-																													{
-																														"first": [
-																															1297, 1298
-																														],
-																														"rest": []
-																													},
-																													[1298, 1299]
-																												]
-																											}
-																										}
-																									}
-																								},
+																						"prefix": [
+																							{
+																								"first": [1295, 1296],
 																								"rest": []
 																							},
-																							"end": {
-																								"Base": {
-																									"comma": [
-																										{
-																											"first": [1299, 1299],
-																											"rest": []
-																										},
-																										[1299, 1300]
-																									],
-																									"base": {
-																										"dot_dot": [
+																							[1296, 1297]
+																						],
+																						"value": {
+																							"Fields": {
+																								"fields": {
+																									"first": {
+																										"attrs": [],
+																										"inner": {
+																											"Ident": {
+																												"NonKw": {
+																													"ident": [
+																														{
+																															"first": [
+																																1297, 1298
+																															],
+																															"rest": []
+																														},
+																														[1298, 1299]
+																													]
+																												}
+																											}
+																										}
+																									},
+																									"rest": []
+																								},
+																								"end": {
+																									"Base": {
+																										"comma": [
 																											{
-																												"first": [1300, 1301],
+																												"first": [1299, 1299],
 																												"rest": []
 																											},
-																											[1301, 1303]
+																											[1299, 1300]
 																										],
-																										"expr": {
-																											"WithoutBlock": {
-																												"attrs": [],
-																												"inner": {
-																													"Path": {
-																														"Normal": {
-																															"prefix": null,
-																															"segments": {
-																																"first": {
-																																	"ident": {
-																																		"Ident": {
-																																			"NonKw": {
-																																				"ident": [
-																																					{
-																																						"first": [
+																										"base": {
+																											"dot_dot": [
+																												{
+																													"first": [1300, 1301],
+																													"rest": []
+																												},
+																												[1301, 1303]
+																											],
+																											"expr": {
+																												"WithoutBlock": {
+																													"attrs": [],
+																													"inner": {
+																														"Path": {
+																															"Normal": {
+																																"prefix": null,
+																																"segments": {
+																																	"first": {
+																																		"ident": {
+																																			"Ident": {
+																																				"NonKw": {
+																																					"ident": [
+																																						{
+																																							"first": [
+																																								1303,
+																																								1303
+																																							],
+																																							"rest": []
+																																						},
+																																						[
 																																							1303,
-																																							1303
-																																						],
-																																						"rest": []
-																																					},
-																																					[
-																																						1303,
-																																						1304
+																																							1304
+																																						]
 																																					]
-																																				]
+																																				}
 																																			}
-																																		}
+																																		},
+																																		"generic": null
 																																	},
-																																	"generic": null
-																																},
-																																"rest": []
+																																	"rest": []
+																																}
 																															}
 																														}
 																													}
@@ -7769,15 +7781,15 @@
 																									}
 																								}
 																							}
-																						}
-																					},
-																					"close": [
-																						{
-																							"first": [1304, 1305],
-																							"rest": []
 																						},
-																						[1305, 1306]
-																					]
+																						"suffix": [
+																							{
+																								"first": [1304, 1305],
+																								"rest": []
+																							},
+																							[1305, 1306]
+																						]
+																					}
 																				}
 																			}
 																		}
@@ -7841,65 +7853,70 @@
 																							"rest": []
 																						}
 																					},
-																					"open": [
-																						{
-																							"first": [1318, 1319],
-																							"rest": []
-																						},
-																						[1319, 1320]
-																					],
 																					"inner": {
-																						"Base": {
-																							"dot_dot": [
-																								{
-																									"first": [1320, 1321],
-																									"rest": []
-																								},
-																								[1321, 1323]
-																							],
-																							"expr": {
-																								"WithoutBlock": {
-																									"attrs": [],
-																									"inner": {
-																										"Path": {
-																											"Normal": {
-																												"prefix": null,
-																												"segments": {
-																													"first": {
-																														"ident": {
-																															"Ident": {
-																																"NonKw": {
-																																	"ident": [
-																																		{
-																																			"first": [
+																						"prefix": [
+																							{
+																								"first": [1318, 1319],
+																								"rest": []
+																							},
+																							[1319, 1320]
+																						],
+																						"value": {
+																							"Base": {
+																								"dot_dot": [
+																									{
+																										"first": [1320, 1321],
+																										"rest": []
+																									},
+																									[1321, 1323]
+																								],
+																								"expr": {
+																									"WithoutBlock": {
+																										"attrs": [],
+																										"inner": {
+																											"Path": {
+																												"Normal": {
+																													"prefix": null,
+																													"segments": {
+																														"first": {
+																															"ident": {
+																																"Ident": {
+																																	"NonKw": {
+																																		"ident": [
+																																			{
+																																				"first": [
+																																					1323,
+																																					1323
+																																				],
+																																				"rest": []
+																																			},
+																																			[
 																																				1323,
-																																				1323
-																																			],
-																																			"rest": []
-																																		},
-																																		[1323, 1324]
-																																	]
+																																				1324
+																																			]
+																																		]
+																																	}
 																																}
-																															}
+																															},
+																															"generic": null
 																														},
-																														"generic": null
-																													},
-																													"rest": []
+																														"rest": []
+																													}
 																												}
 																											}
 																										}
 																									}
 																								}
 																							}
-																						}
-																					},
-																					"close": [
-																						{
-																							"first": [1324, 1325],
-																							"rest": []
 																						},
-																						[1325, 1326]
-																					]
+																						"suffix": [
+																							{
+																								"first": [1324, 1325],
+																								"rest": []
+																							},
+																							[1325, 1326]
+																						]
+																					}
 																				}
 																			}
 																		}
