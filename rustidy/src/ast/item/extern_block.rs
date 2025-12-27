@@ -37,7 +37,10 @@ pub struct ExternBlockInner {
 }
 
 /// `ExternalItem`
-pub type ExternalItem = WithOuterAttributes<ExternalItemInner>;
+#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(serde::Serialize, serde::Deserialize)]
+#[derive(Parse, Format, Print)]
+pub struct ExternalItem(pub WithOuterAttributes<ExternalItemInner>);
 
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]

@@ -158,7 +158,10 @@ pub struct StructPatternElementsFieldsEtCetera {
 pub struct StructPatternFields(Punctuated<StructPatternField, token::Comma>);
 
 /// `StructPatternField`
-pub type StructPatternField = WithOuterAttributes<StructPatternFieldInner>;
+#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(serde::Serialize, serde::Deserialize)]
+#[derive(Parse, Format, Print)]
+pub struct StructPatternField(pub WithOuterAttributes<StructPatternFieldInner>);
 
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]

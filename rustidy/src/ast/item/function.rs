@@ -118,7 +118,10 @@ pub struct FunctionParametersFullSelf {
 }
 
 /// `FunctionParam`
-pub type FunctionParam = WithOuterAttributes<FunctionParamInner>;
+#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(serde::Serialize, serde::Deserialize)]
+#[derive(Parse, Format, Print)]
+pub struct FunctionParam(pub WithOuterAttributes<FunctionParamInner>);
 
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
@@ -141,7 +144,10 @@ pub struct FunctionParamPattern {
 }
 
 /// `SelfParam`
-pub type SelfParam = WithOuterAttributes<ShorthandOrTypedSelf>;
+#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(serde::Serialize, serde::Deserialize)]
+#[derive(Parse, Format, Print)]
+pub struct SelfParam(pub WithOuterAttributes<ShorthandOrTypedSelf>);
 
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
@@ -205,7 +211,10 @@ pub struct GenericParams {
 }
 
 /// `GenericParam`
-pub type GenericParam = WithOuterAttributes<GenericParamInner>;
+#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(serde::Serialize, serde::Deserialize)]
+#[derive(Parse, Format, Print)]
+pub struct GenericParam(pub WithOuterAttributes<GenericParamInner>);
 
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]

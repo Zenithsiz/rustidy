@@ -51,7 +51,10 @@ pub struct TraitBody {
 }
 
 /// `AssociatedItem`
-pub type AssociatedItem = WithOuterAttributes<AssociatedItemInner>;
+#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(serde::Serialize, serde::Deserialize)]
+#[derive(Parse, Format, Print)]
+pub struct AssociatedItem(pub WithOuterAttributes<AssociatedItemInner>);
 
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]

@@ -51,7 +51,10 @@ use {
 };
 
 /// `Item`
-pub type Item = WithOuterAttributes<ItemInner>;
+#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(serde::Serialize, serde::Deserialize)]
+#[derive(Parse, Format, Print)]
+pub struct Item(pub WithOuterAttributes<ItemInner>);
 
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]

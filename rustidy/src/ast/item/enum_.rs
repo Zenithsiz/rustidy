@@ -42,7 +42,10 @@ pub struct Enumeration {
 pub struct EnumVariants(PunctuatedTrailing<EnumVariant, token::Comma>);
 
 /// `EnumVariant`
-pub type EnumVariant = WithOuterAttributes<EnumVariantInner>;
+#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(serde::Serialize, serde::Deserialize)]
+#[derive(Parse, Format, Print)]
+pub struct EnumVariant(pub WithOuterAttributes<EnumVariantInner>);
 
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
@@ -63,10 +66,16 @@ pub enum EnumVariantKind {
 }
 
 /// `EnumVariantTuple`
-pub type EnumVariantTuple = Parenthesized<TupleFields>;
+#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(serde::Serialize, serde::Deserialize)]
+#[derive(Parse, Format, Print)]
+pub struct EnumVariantTuple(pub Parenthesized<TupleFields>);
 
 /// `EnumVariantStruct`
-pub type EnumVariantStruct = Braced<StructFields>;
+#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(serde::Serialize, serde::Deserialize)]
+#[derive(Parse, Format, Print)]
+pub struct EnumVariantStruct(pub Braced<StructFields>);
 
 /// `EnumVariantDiscriminant`
 #[derive(PartialEq, Eq, Clone, Debug)]

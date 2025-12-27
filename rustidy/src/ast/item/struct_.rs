@@ -55,7 +55,10 @@ pub enum StructStructInner {
 pub struct StructFields(PunctuatedTrailing<StructField, token::Comma>);
 
 /// `StructField`
-pub type StructField = WithOuterAttributes<StructFieldInner>;
+#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(serde::Serialize, serde::Deserialize)]
+#[derive(Parse, Format, Print)]
+pub struct StructField(pub WithOuterAttributes<StructFieldInner>);
 
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
@@ -88,7 +91,10 @@ pub struct TupleStruct {
 pub struct TupleFields(PunctuatedTrailing<TupleField, token::Comma>);
 
 /// `TupleField`
-pub type TupleField = WithOuterAttributes<TupleFieldInner>;
+#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(serde::Serialize, serde::Deserialize)]
+#[derive(Parse, Format, Print)]
+pub struct TupleField(pub WithOuterAttributes<TupleFieldInner>);
 
 /// `TupleFieldInner`
 #[derive(PartialEq, Eq, Clone, Debug)]

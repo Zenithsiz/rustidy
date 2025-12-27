@@ -26,7 +26,10 @@ pub enum Statement {
 }
 
 /// `LetStatement`
-pub type LetStatement = WithOuterAttributes<LetStatementInner>;
+#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(serde::Serialize, serde::Deserialize)]
+#[derive(Parse, Format, Print)]
+pub struct LetStatement(pub WithOuterAttributes<LetStatementInner>);
 
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]

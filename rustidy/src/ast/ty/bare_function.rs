@@ -56,7 +56,10 @@ pub enum FunctionParametersMaybeNamedVariadic {
 pub struct MaybeNamedFunctionParameters(PunctuatedTrailing<MaybeNamedParam, token::Comma>);
 
 /// `MaybeNamedParam`
-pub type MaybeNamedParam = WithOuterAttributes<MaybeNamedParamInner>;
+#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(serde::Serialize, serde::Deserialize)]
+#[derive(Parse, Format, Print)]
+pub struct MaybeNamedParam(pub WithOuterAttributes<MaybeNamedParamInner>);
 
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
