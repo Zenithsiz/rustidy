@@ -3,12 +3,12 @@ Unable to parse ast
   #![
      ^
   └─Expected a crate at 1:1
-    └─Expected an inner attribute at 2:1
-      └─Expected a simple path at 3:1
+    └─Expected an inner attribute at 1:1
+      └─Expected a simple path at 2:4
         └─Multiple errors:
           ├─Expected `super`
           ├─Expected `self`
           ├─Expected `crate`
           ├─Expected `$crate`
-          └─Expected an identifier at 3:1
+          └─Expected an identifier at 2:4
             └─Expected `XID_START`

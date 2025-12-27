@@ -13,11 +13,11 @@ use {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Format, Print)]
 pub struct StringLiteral {
+	#[format(whitespace)]
+	pub ws:     Whitespace,
 	#[format(str)]
 	pub s:      AstStr,
 	pub suffix: Option<Suffix>,
-	#[format(whitespace)]
-	pub ws:     Whitespace,
 }
 
 #[derive(Debug, ParseError)]
@@ -45,6 +45,7 @@ impl Parse for StringLiteral {
 	}
 
 	fn parse_from(parser: &mut Parser) -> Result<Self, Self::Error> {
+		let ws = parser.parse::<Whitespace>().map_err(StringLiteralError::Whitespace)?;
 		let s = parser.try_update_with(|s| {
 			if !s.starts_with('"') {
 				return Err(StringLiteralError::StartQuote);
@@ -65,8 +66,6 @@ impl Parse for StringLiteral {
 		})?;
 		let suffix = parser.parse().map_err(StringLiteralError::Suffix)?;
 
-		let ws = parser.parse::<Whitespace>().map_err(StringLiteralError::Whitespace)?;
-
-		Ok(Self { s, suffix, ws })
+		Ok(Self { ws, s, suffix })
 	}
 }

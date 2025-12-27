@@ -14,7 +14,6 @@ use crate::{
 #[derive(Parse, Format, Print)]
 #[parse(name = "use declaration")]
 pub struct UseDeclaration {
-	#[format(and_with = Format::trailing_ws_set_single)]
 	use_: token::Use,
 	#[parse(fatal)]
 	tree: UseTree,

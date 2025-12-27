@@ -1,6 +1,5 @@
 {
 	"shebang": null,
-	"prefix_ws": { "first": [0, 0], "rest": [] },
 	"inner_attrs": [],
 	"items": [
 		{
@@ -10,21 +9,21 @@
 					"vis": null,
 					"inner": {
 						"DeclMacro": {
-							"macro_": [[0, 5], { "first": [5, 6], "rest": [] }],
+							"macro_": [{ "first": [0, 0], "rest": [] }, [0, 5]],
 							"ident": {
-								"NonKw": { "ident": [[6, 7], { "first": [7, 7], "rest": [] }] }
+								"NonKw": { "ident": [{ "first": [5, 6], "rest": [] }, [6, 7]] }
 							},
 							"body": {
 								"Inline": {
 									"args": {
-										"prefix": [[7, 8], { "first": [8, 8], "rest": [] }],
+										"prefix": [{ "first": [7, 7], "rest": [] }, [7, 8]],
 										"value": [],
-										"suffix": [[8, 9], { "first": [9, 10], "rest": [] }]
+										"suffix": [{ "first": [8, 8], "rest": [] }, [8, 9]]
 									},
 									"body": {
-										"prefix": [[10, 11], { "first": [11, 11], "rest": [] }],
+										"prefix": [{ "first": [9, 10], "rest": [] }, [10, 11]],
 										"value": [],
-										"suffix": [[11, 12], { "first": [12, 13], "rest": [] }]
+										"suffix": [{ "first": [11, 11], "rest": [] }, [11, 12]]
 									}
 								}
 							}
@@ -40,42 +39,42 @@
 					"vis": null,
 					"inner": {
 						"DeclMacro": {
-							"macro_": [[13, 18], { "first": [18, 19], "rest": [] }],
+							"macro_": [{ "first": [12, 13], "rest": [] }, [13, 18]],
 							"ident": {
 								"NonKw": {
-									"ident": [[19, 20], { "first": [20, 21], "rest": [] }]
+									"ident": [{ "first": [18, 19], "rest": [] }, [19, 20]]
 								}
 							},
 							"body": {
 								"Branches": {
-									"prefix": [[21, 22], { "first": [22, 23], "rest": [] }],
+									"prefix": [{ "first": [20, 21], "rest": [] }, [21, 22]],
 									"value": {
 										"punctuated": {
 											"first": {
 												"args": {
 													"Parens": {
 														"prefix": [
-															[23, 24],
-															{ "first": [24, 24], "rest": [] }
+															{ "first": [22, 23], "rest": [] },
+															[23, 24]
 														],
 														"value": [],
 														"suffix": [
-															[24, 25],
-															{ "first": [25, 26], "rest": [] }
+															{ "first": [24, 24], "rest": [] },
+															[24, 25]
 														]
 													}
 												},
-												"arrow": [[26, 28], { "first": [28, 29], "rest": [] }],
+												"arrow": [{ "first": [25, 26], "rest": [] }, [26, 28]],
 												"body": {
 													"Braces": {
 														"prefix": [
-															[29, 30],
-															{ "first": [30, 30], "rest": [] }
+															{ "first": [28, 29], "rest": [] },
+															[29, 30]
 														],
 														"value": [],
 														"suffix": [
-															[30, 31],
-															{ "first": [31, 32], "rest": [] }
+															{ "first": [30, 30], "rest": [] },
+															[30, 31]
 														]
 													}
 												}
@@ -84,7 +83,7 @@
 										},
 										"trailing": null
 									},
-									"suffix": [[32, 33], { "first": [33, 34], "rest": [] }]
+									"suffix": [{ "first": [31, 32], "rest": [] }, [32, 33]]
 								}
 							}
 						}
@@ -99,77 +98,77 @@
 					"vis": null,
 					"inner": {
 						"DeclMacro": {
-							"macro_": [[34, 39], { "first": [39, 40], "rest": [] }],
+							"macro_": [{ "first": [33, 34], "rest": [] }, [34, 39]],
 							"ident": {
 								"NonKw": {
-									"ident": [[40, 41], { "first": [41, 42], "rest": [] }]
+									"ident": [{ "first": [39, 40], "rest": [] }, [40, 41]]
 								}
 							},
 							"body": {
 								"Branches": {
-									"prefix": [[42, 43], { "first": [43, 44], "rest": [] }],
+									"prefix": [{ "first": [41, 42], "rest": [] }, [42, 43]],
 									"value": {
 										"punctuated": {
 											"first": {
 												"args": {
 													"Parens": {
 														"prefix": [
-															[44, 45],
-															{ "first": [45, 45], "rest": [] }
+															{ "first": [43, 44], "rest": [] },
+															[44, 45]
 														],
 														"value": [],
 														"suffix": [
-															[45, 46],
-															{ "first": [46, 47], "rest": [] }
+															{ "first": [45, 45], "rest": [] },
+															[45, 46]
 														]
 													}
 												},
-												"arrow": [[47, 49], { "first": [49, 50], "rest": [] }],
+												"arrow": [{ "first": [46, 47], "rest": [] }, [47, 49]],
 												"body": {
 													"Braces": {
 														"prefix": [
-															[50, 51],
-															{ "first": [51, 51], "rest": [] }
+															{ "first": [49, 50], "rest": [] },
+															[50, 51]
 														],
 														"value": [],
 														"suffix": [
-															[51, 52],
-															{ "first": [52, 52], "rest": [] }
+															{ "first": [51, 51], "rest": [] },
+															[51, 52]
 														]
 													}
 												}
 											},
 											"rest": [
 												[
-													[[52, 53], { "first": [53, 54], "rest": [] }],
+													[{ "first": [52, 52], "rest": [] }, [52, 53]],
 													{
 														"args": {
 															"Parens": {
 																"prefix": [
-																	[54, 55],
-																	{ "first": [55, 55], "rest": [] }
+																	{ "first": [53, 54], "rest": [] },
+																	[54, 55]
 																],
 																"value": [],
 																"suffix": [
-																	[55, 56],
-																	{ "first": [56, 57], "rest": [] }
+																	{ "first": [55, 55], "rest": [] },
+																	[55, 56]
 																]
 															}
 														},
 														"arrow": [
-															[57, 59],
-															{ "first": [59, 60], "rest": [] }
+															{ "first": [56, 57], "rest": [] },
+															[57, 59]
 														],
 														"body": {
 															"Braces": {
 																"prefix": [
-																	[60, 61],
-																	{ "first": [61, 61], "rest": [] }
+																	{ "first": [59, 60], "rest": [] },
+																	[60, 61]
 																],
 																"value": [],
 																"suffix": [
-																	[61, 62],
-																	{ "first": [62, 63], "rest": [] }
+																	{ "first": [61, 61], "rest": [] },
+																	[61, 62]
 																]
 															}
 														}
@@ -179,7 +178,7 @@
 										},
 										"trailing": null
 									},
-									"suffix": [[63, 64], { "first": [64, 65], "rest": [] }]
+									"suffix": [{ "first": [62, 63], "rest": [] }, [63, 64]]
 								}
 							}
 						}
@@ -194,77 +193,77 @@
 					"vis": null,
 					"inner": {
 						"DeclMacro": {
-							"macro_": [[65, 70], { "first": [70, 71], "rest": [] }],
+							"macro_": [{ "first": [64, 65], "rest": [] }, [65, 70]],
 							"ident": {
 								"NonKw": {
-									"ident": [[71, 72], { "first": [72, 73], "rest": [] }]
+									"ident": [{ "first": [70, 71], "rest": [] }, [71, 72]]
 								}
 							},
 							"body": {
 								"Branches": {
-									"prefix": [[73, 74], { "first": [74, 75], "rest": [] }],
+									"prefix": [{ "first": [72, 73], "rest": [] }, [73, 74]],
 									"value": {
 										"punctuated": {
 											"first": {
 												"args": {
 													"Parens": {
 														"prefix": [
-															[75, 76],
-															{ "first": [76, 76], "rest": [] }
+															{ "first": [74, 75], "rest": [] },
+															[75, 76]
 														],
 														"value": [],
 														"suffix": [
-															[76, 77],
-															{ "first": [77, 78], "rest": [] }
+															{ "first": [76, 76], "rest": [] },
+															[76, 77]
 														]
 													}
 												},
-												"arrow": [[78, 80], { "first": [80, 81], "rest": [] }],
+												"arrow": [{ "first": [77, 78], "rest": [] }, [78, 80]],
 												"body": {
 													"Braces": {
 														"prefix": [
-															[81, 82],
-															{ "first": [82, 82], "rest": [] }
+															{ "first": [80, 81], "rest": [] },
+															[81, 82]
 														],
 														"value": [],
 														"suffix": [
-															[82, 83],
-															{ "first": [83, 83], "rest": [] }
+															{ "first": [82, 82], "rest": [] },
+															[82, 83]
 														]
 													}
 												}
 											},
 											"rest": [
 												[
-													[[83, 84], { "first": [84, 85], "rest": [] }],
+													[{ "first": [83, 83], "rest": [] }, [83, 84]],
 													{
 														"args": {
 															"Parens": {
 																"prefix": [
-																	[85, 86],
-																	{ "first": [86, 86], "rest": [] }
+																	{ "first": [84, 85], "rest": [] },
+																	[85, 86]
 																],
 																"value": [],
 																"suffix": [
-																	[86, 87],
-																	{ "first": [87, 88], "rest": [] }
+																	{ "first": [86, 86], "rest": [] },
+																	[86, 87]
 																]
 															}
 														},
 														"arrow": [
-															[88, 90],
-															{ "first": [90, 91], "rest": [] }
+															{ "first": [87, 88], "rest": [] },
+															[88, 90]
 														],
 														"body": {
 															"Braces": {
 																"prefix": [
-																	[91, 92],
-																	{ "first": [92, 92], "rest": [] }
+																	{ "first": [90, 91], "rest": [] },
+																	[91, 92]
 																],
 																"value": [],
 																"suffix": [
-																	[92, 93],
-																	{ "first": [93, 93], "rest": [] }
+																	{ "first": [92, 92], "rest": [] },
+																	[92, 93]
 																]
 															}
 														}
@@ -272,9 +271,9 @@
 												]
 											]
 										},
-										"trailing": [[93, 94], { "first": [94, 95], "rest": [] }]
+										"trailing": [{ "first": [93, 93], "rest": [] }, [93, 94]]
 									},
-									"suffix": [[95, 96], { "first": [96, 97], "rest": [] }]
+									"suffix": [{ "first": [94, 95], "rest": [] }, [95, 96]]
 								}
 							}
 						}
@@ -283,5 +282,6 @@
 			}
 		}
 	],
+	"suffix_ws": { "first": [96, 97], "rest": [] },
 	"trailing_line_comment": null
 }

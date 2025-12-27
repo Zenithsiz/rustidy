@@ -98,15 +98,15 @@ pub macro decl_tokens(
 		#[derive(serde::Serialize, serde::Deserialize)]
 		#[derive(Parse, Format, Print)]
 		pub struct $TokenName(
-			pub raw::$TokenName,
-
 			#[format(whitespace)]
 			pub Whitespace,
+
+			pub raw::$TokenName,
 		);
 
 		impl AsRef<Whitespace> for $TokenName {
 			fn as_ref(&self) -> &Whitespace {
-				&self.1
+				&self.0
 			}
 		}
 	)*

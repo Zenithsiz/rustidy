@@ -33,7 +33,7 @@ pub enum IntegerLiteralInner {
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Format, Print)]
-pub struct DecLiteral(#[format(str)] pub AstStr, #[format(whitespace)] pub Whitespace);
+pub struct DecLiteral(#[format(whitespace)] pub Whitespace, #[format(str)] pub AstStr);
 
 #[derive(Debug, ParseError)]
 pub enum DecLiteralError {
@@ -52,6 +52,7 @@ impl Parse for DecLiteral {
 	}
 
 	fn parse_from(parser: &mut Parser) -> Result<Self, Self::Error> {
+		let whitespace = parser.parse::<Whitespace>().map_err(DecLiteralError::Whitespace)?;
 		let literal = parser.try_update_with(|s| {
 			if !s.starts_with(|ch: char| ch.is_ascii_digit()) {
 				return Err(DecLiteralError::StartDigit);
@@ -67,8 +68,6 @@ impl Parse for DecLiteral {
 			Ok(())
 		})?;
 
-		let whitespace = parser.parse::<Whitespace>().map_err(DecLiteralError::Whitespace)?;
-
-		Ok(Self(literal, whitespace))
+		Ok(Self(whitespace, literal))
 	}
 }

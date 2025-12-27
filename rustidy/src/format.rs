@@ -24,26 +24,26 @@ pub trait Format {
 	/// Formats this type
 	fn format(&mut self, ctx: &mut Context);
 
-	/// Returns the last whitespace of this type, if any
-	fn trailing_ws(&mut self, ctx: &mut Context) -> Option<&mut Whitespace>;
+	/// Returns the first whitespace of this type, if any
+	fn prefix_ws(&mut self, ctx: &mut Context) -> Option<&mut Whitespace>;
 
-	/// Remove the trailing whitespace, if any
-	fn trailing_ws_remove(&mut self, ctx: &mut Context) {
-		if let Some(whitespace) = self.trailing_ws(ctx) {
+	/// Remove the prefix whitespace, if any
+	fn prefix_ws_remove(&mut self, ctx: &mut Context) {
+		if let Some(whitespace) = self.prefix_ws(ctx) {
 			whitespace.remove(ctx);
 		}
 	}
 
-	/// Sets the trailing whitespace to a single space
-	fn trailing_ws_set_single(&mut self, ctx: &mut Context) {
-		if let Some(whitespace) = self.trailing_ws(ctx) {
+	/// Sets the prefix whitespace to a single space
+	fn prefix_ws_set_single(&mut self, ctx: &mut Context) {
+		if let Some(whitespace) = self.prefix_ws(ctx) {
 			whitespace.set_single(ctx);
 		}
 	}
 
-	/// Sets the trailing whitespace to the current indentation
-	fn trailing_ws_set_indent(&mut self, ctx: &mut Context, offset: isize, remove_if_empty: bool) {
-		if let Some(whitespace) = self.trailing_ws(ctx) {
+	/// Sets the prefix whitespace to the current indentation
+	fn prefix_ws_set_indent(&mut self, ctx: &mut Context, offset: isize, remove_if_empty: bool) {
+		if let Some(whitespace) = self.prefix_ws(ctx) {
 			whitespace.set_indent(ctx, offset, remove_if_empty);
 		}
 	}
@@ -58,8 +58,8 @@ impl<T: Format> Format for &'_ mut T {
 		(**self).format(ctx);
 	}
 
-	fn trailing_ws(&mut self, ctx: &mut Context) -> Option<&mut Whitespace> {
-		(**self).trailing_ws(ctx)
+	fn prefix_ws(&mut self, ctx: &mut Context) -> Option<&mut Whitespace> {
+		(**self).prefix_ws(ctx)
 	}
 }
 
@@ -72,8 +72,8 @@ impl<T: Format> Format for Box<T> {
 		(**self).format(ctx);
 	}
 
-	fn trailing_ws(&mut self, ctx: &mut Context) -> Option<&mut Whitespace> {
-		(**self).trailing_ws(ctx)
+	fn prefix_ws(&mut self, ctx: &mut Context) -> Option<&mut Whitespace> {
+		(**self).prefix_ws(ctx)
 	}
 }
 
@@ -91,8 +91,8 @@ impl<T: Format> Format for Option<T> {
 		}
 	}
 
-	fn trailing_ws(&mut self, ctx: &mut Context) -> Option<&mut Whitespace> {
-		self.as_mut().and_then(|value| value.trailing_ws(ctx))
+	fn prefix_ws(&mut self, ctx: &mut Context) -> Option<&mut Whitespace> {
+		self.as_mut().and_then(|value| value.prefix_ws(ctx))
 	}
 }
 
@@ -107,8 +107,8 @@ impl<T: Format> Format for Vec<T> {
 		}
 	}
 
-	fn trailing_ws(&mut self, ctx: &mut Context) -> Option<&mut Whitespace> {
-		self.last_mut().and_then(|value| value.trailing_ws(ctx))
+	fn prefix_ws(&mut self, ctx: &mut Context) -> Option<&mut Whitespace> {
+		self.first_mut().and_then(|value| value.prefix_ws(ctx))
 	}
 }
 
@@ -121,7 +121,7 @@ impl Format for ! {
 		*self
 	}
 
-	fn trailing_ws(&mut self, _ctx: &mut Context) -> Option<&mut Whitespace> {
+	fn prefix_ws(&mut self, _ctx: &mut Context) -> Option<&mut Whitespace> {
 		*self
 	}
 }
@@ -133,7 +133,7 @@ impl Format for () {
 
 	fn format(&mut self, _ctx: &mut Context) {}
 
-	fn trailing_ws(&mut self, _ctx: &mut Context) -> Option<&mut Whitespace> {
+	fn prefix_ws(&mut self, _ctx: &mut Context) -> Option<&mut Whitespace> {
 		None
 	}
 }
@@ -158,9 +158,9 @@ macro tuple_impl ($N:literal, $($T:ident),* $(,)?) {
 			${concat( Tuple, $N )} { $( $T, )* }.format(ctx)
 		}
 
-		fn trailing_ws(&mut self, ctx: &mut Context) -> Option<&mut Whitespace> {
+		fn prefix_ws(&mut self, ctx: &mut Context) -> Option<&mut Whitespace> {
 			let ( $($T,)* ) = self;
-			let whitespace = &raw mut *${concat( Tuple, $N )} { $( $T, )* }.trailing_ws(ctx)?;
+			let whitespace = &raw mut *${concat( Tuple, $N )} { $( $T, )* }.prefix_ws(ctx)?;
 
 			// SAFETY: `whitespace` is borrowed from `self`
 			Some(unsafe { &mut *whitespace })
@@ -259,9 +259,9 @@ impl<'a, 'input> Context<'a, 'input> {
 /// A formatting function
 pub trait FormatFn<T: ?Sized> = Fn(&mut T, &mut Context);
 
-/// Sets the trailing whitespace to the current indentation
-pub fn trailing_ws_set_indent<T: Format>(offset: isize, remove_if_empty: bool) -> impl Fn(&mut T, &mut Context) {
-	move |this, ctx| this.trailing_ws_set_indent(ctx, offset, remove_if_empty)
+/// Sets the prefix whitespace to the current indentation
+pub fn prefix_ws_set_indent<T: Format>(offset: isize, remove_if_empty: bool) -> impl Fn(&mut T, &mut Context) {
+	move |this, ctx| this.prefix_ws_set_indent(ctx, offset, remove_if_empty)
 }
 
 /// Formats an `Option<Self>` with `f` if it is `Some`.

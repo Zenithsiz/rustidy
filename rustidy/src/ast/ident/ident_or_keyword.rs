@@ -7,12 +7,12 @@ use crate::{AstStr, Format, Parse, ParseError, Parser, Print, ast::whitespace::W
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
-pub struct IdentifierOrKeyword(pub IdentifierOrKeywordRaw, #[format(whitespace)] pub Whitespace);
+pub struct IdentifierOrKeyword(#[format(whitespace)] pub Whitespace, pub IdentifierOrKeywordRaw);
 
 
 impl AsRef<Whitespace> for IdentifierOrKeyword {
 	fn as_ref(&self) -> &Whitespace {
-		&self.1
+		&self.0
 	}
 }
 

@@ -1,6 +1,5 @@
 {
 	"shebang": null,
-	"prefix_ws": { "first": [0, 0], "rest": [] },
 	"inner_attrs": [],
 	"items": [
 		{
@@ -10,14 +9,14 @@
 					"vis": null,
 					"inner": {
 						"Use": {
-							"use_": [[0, 3], { "first": [3, 4], "rest": [] }],
+							"use_": [{ "first": [0, 0], "rest": [] }, [0, 3]],
 							"tree": {
 								"Glob": {
 									"prefix": null,
-									"glob": [[4, 5], { "first": [5, 5], "rest": [] }]
+									"glob": [{ "first": [3, 4], "rest": [] }, [4, 5]]
 								}
 							},
-							"semi": [[5, 6], { "first": [6, 7], "rest": [] }]
+							"semi": [{ "first": [5, 5], "rest": [] }, [5, 6]]
 						}
 					}
 				}
@@ -30,17 +29,17 @@
 					"vis": null,
 					"inner": {
 						"Use": {
-							"use_": [[7, 10], { "first": [10, 11], "rest": [] }],
+							"use_": [{ "first": [6, 7], "rest": [] }, [7, 10]],
 							"tree": {
 								"Glob": {
 									"prefix": {
 										"path": null,
-										"sep": [[11, 13], { "first": [13, 13], "rest": [] }]
+										"sep": [{ "first": [10, 11], "rest": [] }, [11, 13]]
 									},
-									"glob": [[13, 14], { "first": [14, 14], "rest": [] }]
+									"glob": [{ "first": [13, 13], "rest": [] }, [13, 14]]
 								}
 							},
-							"semi": [[14, 15], { "first": [15, 16], "rest": [] }]
+							"semi": [{ "first": [14, 14], "rest": [] }, [14, 15]]
 						}
 					}
 				}
@@ -53,7 +52,7 @@
 					"vis": null,
 					"inner": {
 						"Use": {
-							"use_": [[16, 19], { "first": [19, 20], "rest": [] }],
+							"use_": [{ "first": [15, 16], "rest": [] }, [16, 19]],
 							"tree": {
 								"Glob": {
 									"prefix": {
@@ -64,8 +63,8 @@
 													"Ident": {
 														"NonKw": {
 															"ident": [
-																[20, 21],
-																{ "first": [21, 21], "rest": [] }
+																{ "first": [19, 20], "rest": [] },
+																[20, 21]
 															]
 														}
 													}
@@ -73,12 +72,12 @@
 												"rest": []
 											}
 										},
-										"sep": [[21, 23], { "first": [23, 23], "rest": [] }]
+										"sep": [{ "first": [21, 21], "rest": [] }, [21, 23]]
 									},
-									"glob": [[23, 24], { "first": [24, 24], "rest": [] }]
+									"glob": [{ "first": [23, 23], "rest": [] }, [23, 24]]
 								}
 							},
-							"semi": [[24, 25], { "first": [25, 27], "rest": [] }]
+							"semi": [{ "first": [24, 24], "rest": [] }, [24, 25]]
 						}
 					}
 				}
@@ -91,18 +90,18 @@
 					"vis": null,
 					"inner": {
 						"Use": {
-							"use_": [[27, 30], { "first": [30, 31], "rest": [] }],
+							"use_": [{ "first": [25, 27], "rest": [] }, [27, 30]],
 							"tree": {
 								"Group": {
 									"prefix": null,
 									"tree": {
-										"prefix": [[31, 32], { "first": [32, 32], "rest": [] }],
+										"prefix": [{ "first": [30, 31], "rest": [] }, [31, 32]],
 										"value": null,
-										"suffix": [[32, 33], { "first": [33, 33], "rest": [] }]
+										"suffix": [{ "first": [32, 32], "rest": [] }, [32, 33]]
 									}
 								}
 							},
-							"semi": [[33, 34], { "first": [34, 35], "rest": [] }]
+							"semi": [{ "first": [33, 33], "rest": [] }, [33, 34]]
 						}
 					}
 				}
@@ -115,20 +114,20 @@
 					"vis": null,
 					"inner": {
 						"Use": {
-							"use_": [[35, 38], { "first": [38, 39], "rest": [] }],
+							"use_": [{ "first": [34, 35], "rest": [] }, [35, 38]],
 							"tree": {
 								"Group": {
 									"prefix": null,
 									"tree": {
-										"prefix": [[39, 40], { "first": [40, 40], "rest": [] }],
+										"prefix": [{ "first": [38, 39], "rest": [] }, [39, 40]],
 										"value": {
 											"punctuated": {
 												"first": {
 													"Glob": {
 														"prefix": null,
 														"glob": [
-															[40, 41],
-															{ "first": [41, 41], "rest": [] }
+															{ "first": [40, 40], "rest": [] },
+															[40, 41]
 														]
 													}
 												},
@@ -136,11 +135,11 @@
 											},
 											"trailing": null
 										},
-										"suffix": [[41, 42], { "first": [42, 42], "rest": [] }]
+										"suffix": [{ "first": [41, 41], "rest": [] }, [41, 42]]
 									}
 								}
 							},
-							"semi": [[42, 43], { "first": [43, 44], "rest": [] }]
+							"semi": [{ "first": [42, 42], "rest": [] }, [42, 43]]
 						}
 					}
 				}
@@ -153,32 +152,32 @@
 					"vis": null,
 					"inner": {
 						"Use": {
-							"use_": [[44, 47], { "first": [47, 48], "rest": [] }],
+							"use_": [{ "first": [43, 44], "rest": [] }, [44, 47]],
 							"tree": {
 								"Group": {
 									"prefix": null,
 									"tree": {
-										"prefix": [[48, 49], { "first": [49, 49], "rest": [] }],
+										"prefix": [{ "first": [47, 48], "rest": [] }, [48, 49]],
 										"value": {
 											"punctuated": {
 												"first": {
 													"Glob": {
 														"prefix": null,
 														"glob": [
-															[49, 50],
-															{ "first": [50, 50], "rest": [] }
+															{ "first": [49, 49], "rest": [] },
+															[49, 50]
 														]
 													}
 												},
 												"rest": []
 											},
-											"trailing": [[50, 51], { "first": [51, 51], "rest": [] }]
+											"trailing": [{ "first": [50, 50], "rest": [] }, [50, 51]]
 										},
-										"suffix": [[51, 52], { "first": [52, 52], "rest": [] }]
+										"suffix": [{ "first": [51, 51], "rest": [] }, [51, 52]]
 									}
 								}
 							},
-							"semi": [[52, 53], { "first": [53, 54], "rest": [] }]
+							"semi": [{ "first": [52, 52], "rest": [] }, [52, 53]]
 						}
 					}
 				}
@@ -191,45 +190,45 @@
 					"vis": null,
 					"inner": {
 						"Use": {
-							"use_": [[54, 57], { "first": [57, 58], "rest": [] }],
+							"use_": [{ "first": [53, 54], "rest": [] }, [54, 57]],
 							"tree": {
 								"Group": {
 									"prefix": null,
 									"tree": {
-										"prefix": [[58, 59], { "first": [59, 59], "rest": [] }],
+										"prefix": [{ "first": [57, 58], "rest": [] }, [58, 59]],
 										"value": {
 											"punctuated": {
 												"first": {
 													"Glob": {
 														"prefix": null,
 														"glob": [
-															[59, 60],
-															{ "first": [60, 60], "rest": [] }
+															{ "first": [59, 59], "rest": [] },
+															[59, 60]
 														]
 													}
 												},
 												"rest": [
 													[
-														[[60, 61], { "first": [61, 61], "rest": [] }],
+														[{ "first": [60, 60], "rest": [] }, [60, 61]],
 														{
 															"Group": {
 																"prefix": null,
 																"tree": {
 																	"prefix": [
-																		[61, 62],
-																		{ "first": [62, 62], "rest": [] }
+																		{ "first": [61, 61], "rest": [] },
+																		[61, 62]
 																	],
 																	"value": null,
 																	"suffix": [
-																		[62, 63],
-																		{ "first": [63, 63], "rest": [] }
+																		{ "first": [62, 62], "rest": [] },
+																		[62, 63]
 																	]
 																}
 															}
 														}
 													],
 													[
-														[[63, 64], { "first": [64, 64], "rest": [] }],
+														[{ "first": [63, 63], "rest": [] }, [63, 64]],
 														{
 															"Simple": {
 																"path": {
@@ -239,8 +238,8 @@
 																			"Ident": {
 																				"NonKw": {
 																					"ident": [
-																						[64, 65],
-																						{ "first": [65, 65], "rest": [] }
+																						{ "first": [64, 64], "rest": [] },
+																						[64, 65]
 																					]
 																				}
 																			}
@@ -256,11 +255,11 @@
 											},
 											"trailing": null
 										},
-										"suffix": [[65, 66], { "first": [66, 66], "rest": [] }]
+										"suffix": [{ "first": [65, 65], "rest": [] }, [65, 66]]
 									}
 								}
 							},
-							"semi": [[66, 67], { "first": [67, 68], "rest": [] }]
+							"semi": [{ "first": [66, 66], "rest": [] }, [66, 67]]
 						}
 					}
 				}
@@ -273,33 +272,33 @@
 					"vis": null,
 					"inner": {
 						"Use": {
-							"use_": [[68, 71], { "first": [71, 72], "rest": [] }],
+							"use_": [{ "first": [67, 68], "rest": [] }, [68, 71]],
 							"tree": {
 								"Group": {
 									"prefix": null,
 									"tree": {
-										"prefix": [[72, 73], { "first": [73, 73], "rest": [] }],
+										"prefix": [{ "first": [71, 72], "rest": [] }, [72, 73]],
 										"value": {
 											"punctuated": {
 												"first": {
 													"Glob": {
 														"prefix": null,
 														"glob": [
-															[73, 74],
-															{ "first": [74, 74], "rest": [] }
+															{ "first": [73, 73], "rest": [] },
+															[73, 74]
 														]
 													}
 												},
 												"rest": [
 													[
-														[[74, 75], { "first": [75, 75], "rest": [] }],
+														[{ "first": [74, 74], "rest": [] }, [74, 75]],
 														{
 															"Group": {
 																"prefix": null,
 																"tree": {
 																	"prefix": [
-																		[75, 76],
-																		{ "first": [76, 76], "rest": [] }
+																		{ "first": [75, 75], "rest": [] },
+																		[75, 76]
 																	],
 																	"value": {
 																		"punctuated": {
@@ -312,11 +311,11 @@
 																								"Ident": {
 																									"NonKw": {
 																										"ident": [
-																											[76, 77],
 																											{
-																												"first": [77, 77],
+																												"first": [76, 76],
 																												"rest": []
-																											}
+																											},
+																											[76, 77]
 																										]
 																									}
 																								}
@@ -330,8 +329,8 @@
 																			"rest": [
 																				[
 																					[
-																						[77, 78],
-																						{ "first": [78, 78], "rest": [] }
+																						{ "first": [77, 77], "rest": [] },
+																						[77, 78]
 																					],
 																					{
 																						"Simple": {
@@ -342,11 +341,11 @@
 																										"Ident": {
 																											"NonKw": {
 																												"ident": [
-																													[78, 79],
 																													{
-																														"first": [79, 79],
+																														"first": [78, 78],
 																														"rest": []
-																													}
+																													},
+																													[78, 79]
 																												]
 																											}
 																										}
@@ -363,15 +362,15 @@
 																		"trailing": null
 																	},
 																	"suffix": [
-																		[79, 80],
-																		{ "first": [80, 80], "rest": [] }
+																		{ "first": [79, 79], "rest": [] },
+																		[79, 80]
 																	]
 																}
 															}
 														}
 													],
 													[
-														[[80, 81], { "first": [81, 81], "rest": [] }],
+														[{ "first": [80, 80], "rest": [] }, [80, 81]],
 														{
 															"Simple": {
 																"path": {
@@ -381,8 +380,8 @@
 																			"Ident": {
 																				"NonKw": {
 																					"ident": [
-																						[81, 82],
-																						{ "first": [82, 82], "rest": [] }
+																						{ "first": [81, 81], "rest": [] },
+																						[81, 82]
 																					]
 																				}
 																			}
@@ -398,11 +397,11 @@
 											},
 											"trailing": null
 										},
-										"suffix": [[82, 83], { "first": [83, 83], "rest": [] }]
+										"suffix": [{ "first": [82, 82], "rest": [] }, [82, 83]]
 									}
 								}
 							},
-							"semi": [[83, 84], { "first": [84, 86], "rest": [] }]
+							"semi": [{ "first": [83, 83], "rest": [] }, [83, 84]]
 						}
 					}
 				}
@@ -415,7 +414,7 @@
 					"vis": null,
 					"inner": {
 						"Use": {
-							"use_": [[86, 89], { "first": [89, 90], "rest": [] }],
+							"use_": [{ "first": [84, 86], "rest": [] }, [86, 89]],
 							"tree": {
 								"Simple": {
 									"path": {
@@ -425,8 +424,8 @@
 												"Ident": {
 													"NonKw": {
 														"ident": [
-															[90, 91],
-															{ "first": [91, 91], "rest": [] }
+															{ "first": [89, 90], "rest": [] },
+															[90, 91]
 														]
 													}
 												}
@@ -437,7 +436,7 @@
 									"as_": null
 								}
 							},
-							"semi": [[91, 92], { "first": [92, 93], "rest": [] }]
+							"semi": [{ "first": [91, 91], "rest": [] }, [91, 92]]
 						}
 					}
 				}
@@ -450,7 +449,7 @@
 					"vis": null,
 					"inner": {
 						"Use": {
-							"use_": [[93, 96], { "first": [96, 97], "rest": [] }],
+							"use_": [{ "first": [92, 93], "rest": [] }, [93, 96]],
 							"tree": {
 								"Simple": {
 									"path": {
@@ -460,8 +459,8 @@
 												"Ident": {
 													"NonKw": {
 														"ident": [
-															[97, 98],
-															{ "first": [98, 99], "rest": [] }
+															{ "first": [96, 97], "rest": [] },
+															[97, 98]
 														]
 													}
 												}
@@ -470,13 +469,13 @@
 										}
 									},
 									"as_": {
-										"as_": [[99, 101], { "first": [101, 102], "rest": [] }],
+										"as_": [{ "first": [98, 99], "rest": [] }, [99, 101]],
 										"value": {
 											"Ident": {
 												"NonKw": {
 													"ident": [
-														[102, 103],
-														{ "first": [103, 103], "rest": [] }
+														{ "first": [101, 102], "rest": [] },
+														[102, 103]
 													]
 												}
 											}
@@ -484,7 +483,7 @@
 									}
 								}
 							},
-							"semi": [[103, 104], { "first": [104, 105], "rest": [] }]
+							"semi": [{ "first": [103, 103], "rest": [] }, [103, 104]]
 						}
 					}
 				}
@@ -497,7 +496,7 @@
 					"vis": null,
 					"inner": {
 						"Use": {
-							"use_": [[105, 108], { "first": [108, 109], "rest": [] }],
+							"use_": [{ "first": [104, 105], "rest": [] }, [105, 108]],
 							"tree": {
 								"Simple": {
 									"path": {
@@ -507,8 +506,8 @@
 												"Ident": {
 													"NonKw": {
 														"ident": [
-															[109, 110],
-															{ "first": [110, 111], "rest": [] }
+															{ "first": [108, 109], "rest": [] },
+															[109, 110]
 														]
 													}
 												}
@@ -517,22 +516,23 @@
 										}
 									},
 									"as_": {
-										"as_": [[111, 113], { "first": [113, 114], "rest": [] }],
+										"as_": [{ "first": [110, 111], "rest": [] }, [111, 113]],
 										"value": {
 											"Underscore": [
-												[114, 115],
-												{ "first": [115, 115], "rest": [] }
+												{ "first": [113, 114], "rest": [] },
+												[114, 115]
 											]
 										}
 									}
 								}
 							},
-							"semi": [[115, 116], { "first": [116, 117], "rest": [] }]
+							"semi": [{ "first": [115, 115], "rest": [] }, [115, 116]]
 						}
 					}
 				}
 			}
 		}
 	],
+	"suffix_ws": { "first": [116, 117], "rest": [] },
 	"trailing_line_comment": null
 }

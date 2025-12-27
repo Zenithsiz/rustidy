@@ -139,11 +139,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 	let impl_generics = util::with_bounds(&attrs, |ty| parse_quote! { #ty: crate::format::Format });
 	let (impl_generics, ty_generics, fmt_where_clause) = impl_generics.split_for_impl();
 
-	let Impls {
-		len,
-		format,
-		trailing_ws,
-	} = impls;
+	let Impls { len, format, prefix_ws } = impls;
 
 	let format = self::derive_format(
 		parse_quote! { self },
@@ -179,8 +175,8 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 			}
 
 			#[allow(unreachable_code)]
-			fn trailing_ws(&mut self, ctx: &mut crate::format::Context) -> Option<&mut crate::ast::whitespace::Whitespace> {
-				#trailing_ws
+			fn prefix_ws(&mut self, ctx: &mut crate::format::Context) -> Option<&mut crate::ast::whitespace::Whitespace> {
+				#prefix_ws
 			}
 		}
 	};
@@ -206,38 +202,26 @@ fn derive_enum(variants: &[VariantAttrs]) -> Impls<syn::Expr, syn::Expr, syn::Ex
 				Self::#variant_ident(ref mut value) => #format,
 			};
 
-			let trailing_ws = parse_quote! { Self::#variant_ident(ref mut value) => value.trailing_ws(ctx), };
+			let prefix_ws = parse_quote! { Self::#variant_ident(ref mut value) => value.prefix_ws(ctx), };
 
-			Impls {
-				len,
-				format,
-				trailing_ws,
-			}
+			Impls { len, format, prefix_ws }
 		})
 		.collect::<Impls<Vec<syn::Arm>, Vec<syn::Arm>, Vec<syn::Arm>>>();
 
 
-	let Impls {
-		len,
-		format,
-		trailing_ws,
-	} = variant_impls;
+	let Impls { len, format, prefix_ws } = variant_impls;
 	let len = parse_quote! { match *self { #( #len )* } };
 	let format = parse_quote! { match *self { #( #format )* } };
-	let trailing_ws = parse_quote! { match *self { #( #trailing_ws )* } };
+	let prefix_ws = parse_quote! { match *self { #( #prefix_ws )* } };
 
-	Impls {
-		len,
-		format,
-		trailing_ws,
-	}
+	Impls { len, format, prefix_ws }
 }
 
 fn derive_struct(fields: &darling::ast::Fields<FieldAttrs>) -> Impls<syn::Expr, syn::Expr, syn::Expr> {
 	let Impls {
 		len,
 		format,
-		trailing_ws: (),
+		prefix_ws: (),
 	} = fields
 		.iter()
 		.enumerate()
@@ -247,7 +231,7 @@ fn derive_struct(fields: &darling::ast::Fields<FieldAttrs>) -> Impls<syn::Expr, 
 	let len = parse_quote! { 0 #( + #len )* };
 	let format = parse_quote! {{ #( #format; )* }};
 
-	let trailing_ws_fields = fields.iter().enumerate().rev().map(|(field_idx, field)| -> syn::Expr {
+	let prefix_ws_fields = fields.iter().enumerate().map(|(field_idx, field)| -> syn::Expr {
 		let field_ident = util::field_member_access(field_idx, field);
 
 		if field.str {
@@ -263,7 +247,7 @@ fn derive_struct(fields: &darling::ast::Fields<FieldAttrs>) -> Impls<syn::Expr, 
 			let is_empty = crate::format::Format::is_empty(&mut self.#field_ident, ctx);
 
 			// If we got the whitespace, return it
-			if let Some(whitespace) = crate::format::Format::trailing_ws(&mut self.#field_ident, ctx) {
+			if let Some(whitespace) = crate::format::Format::prefix_ws(&mut self.#field_ident, ctx) {
 				return Some(whitespace);
 			}
 
@@ -274,17 +258,13 @@ fn derive_struct(fields: &darling::ast::Fields<FieldAttrs>) -> Impls<syn::Expr, 
 			}
 		}}
 	});
-	let trailing_ws = parse_quote! {{
-		#( #trailing_ws_fields; )*
+	let prefix_ws = parse_quote! {{
+		#( #prefix_ws_fields; )*
 
 		None
 	}};
 
-	Impls {
-		len,
-		format,
-		trailing_ws,
-	}
+	Impls { len, format, prefix_ws }
 }
 
 fn derive_struct_field(field_idx: usize, field: &FieldAttrs) -> Impls<syn::Expr, syn::Expr, ()> {
@@ -309,7 +289,7 @@ fn derive_struct_field(field_idx: usize, field: &FieldAttrs) -> Impls<syn::Expr,
 	Impls {
 		len,
 		format,
-		trailing_ws: (),
+		prefix_ws: (),
 	}
 }
 
@@ -455,10 +435,10 @@ fn derive_and_with_wrapper(fields: &darling::ast::Fields<FieldAttrs>, and_with_w
 }
 
 #[derive(Default, Debug)]
-struct Impls<Len, Format, TrailingWs> {
-	len:         Len,
-	format:      Format,
-	trailing_ws: TrailingWs,
+struct Impls<Len, Format, PrefixWs> {
+	len:       Len,
+	format:    Format,
+	prefix_ws: PrefixWs,
 }
 
 impl<T0, T1, T2, A0, A1, A2> FromIterator<Impls<A0, A1, A2>> for Impls<T0, T1, T2>
@@ -472,7 +452,7 @@ where
 		for impls in iter {
 			output.len.extend_one(impls.len);
 			output.format.extend_one(impls.format);
-			output.trailing_ws.extend_one(impls.trailing_ws);
+			output.prefix_ws.extend_one(impls.prefix_ws);
 		}
 
 		output

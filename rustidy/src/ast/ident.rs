@@ -34,7 +34,7 @@ pub enum Identifier {
 impl AsRef<crate::AstStr> for Identifier {
 	fn as_ref(&self) -> &crate::AstStr {
 		match *self {
-			Self::NonKw(ref non_keyword_identifier) => &non_keyword_identifier.ident.0.0,
+			Self::NonKw(ref non_keyword_identifier) => &non_keyword_identifier.ident.1.0,
 			Self::Raw(never) => never,
 		}
 	}
@@ -61,7 +61,7 @@ impl Parse for NonKeywordIdentifier {
 			.parse::<IdentifierOrKeyword>()
 			.map_err(NonKeywordIdentifierError::Ident)?;
 
-		if STRICT_OR_RESERVED_KEYWORDS.contains(&parser.str(&ident.0.0)) {
+		if STRICT_OR_RESERVED_KEYWORDS.contains(&parser.str(&ident.1.0)) {
 			return Err(NonKeywordIdentifierError::StrictOrReserved);
 		}
 

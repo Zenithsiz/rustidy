@@ -11,7 +11,7 @@ use {
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Format, Print)]
-pub struct CharLiteral(#[format(str)] pub AstStr, #[format(whitespace)] pub Whitespace);
+pub struct CharLiteral(#[format(whitespace)] pub Whitespace, #[format(str)] pub AstStr);
 
 #[derive(Debug, ParseError)]
 pub enum CharLiteralError {
@@ -34,6 +34,7 @@ impl Parse for CharLiteral {
 	}
 
 	fn parse_from(parser: &mut Parser) -> Result<Self, Self::Error> {
+		let whitespace = parser.parse::<Whitespace>().map_err(CharLiteralError::Whitespace)?;
 		let literal = parser.try_update_with(|s| {
 			if !s.starts_with('\'') {
 				return Err(CharLiteralError::StartQuote);
@@ -54,8 +55,6 @@ impl Parse for CharLiteral {
 			Ok(())
 		})?;
 
-		let whitespace = parser.parse::<Whitespace>().map_err(CharLiteralError::Whitespace)?;
-
-		Ok(Self(literal, whitespace))
+		Ok(Self(whitespace, literal))
 	}
 }

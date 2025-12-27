@@ -48,10 +48,10 @@ pub enum InnerDocComment {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct InnerLineDoc {
-	prefix:     token::raw::InnerLineDoc,
-	comment:    RemainingLine,
 	#[format(whitespace)]
 	whitespace: Whitespace,
+	prefix:     token::raw::InnerLineDoc,
+	comment:    RemainingLine,
 }
 
 /// Outer attribute or doc comment
@@ -86,10 +86,10 @@ pub enum OuterDocComment {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct OuterLineDoc {
-	prefix:     token::raw::OuterLineDoc,
-	comment:    RemainingLine,
 	#[format(whitespace)]
 	whitespace: Whitespace,
+	prefix:     token::raw::OuterLineDoc,
+	comment:    RemainingLine,
 }
 
 /// `Attr`
