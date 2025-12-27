@@ -4,7 +4,7 @@
 pub use rustidy_macros::Print;
 
 // Imports
-use {crate::Parser, std::fmt};
+use {crate::Parser, core::marker::PhantomData, std::fmt};
 
 /// Printable types
 pub trait Print: Sized {
@@ -47,6 +47,12 @@ impl<T: Print> Print for Vec<T> {
 impl Print for ! {
 	fn print(&self, _f: &mut PrintFmt) -> Result<(), fmt::Error> {
 		*self
+	}
+}
+
+impl<T> Print for PhantomData<T> {
+	fn print(&self, _f: &mut PrintFmt) -> Result<(), fmt::Error> {
+		Ok(())
 	}
 }
 

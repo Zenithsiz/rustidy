@@ -7,7 +7,10 @@ pub mod config;
 pub use {self::config::Config, rustidy_macros::Format};
 
 // Imports
-use crate::{Parser, ast::whitespace::Whitespace};
+use {
+	crate::{Parser, ast::whitespace::Whitespace},
+	core::marker::PhantomData,
+};
 
 /// Formattable type
 pub trait Format {
@@ -123,6 +126,18 @@ impl Format for ! {
 
 	fn prefix_ws(&mut self, _ctx: &mut Context) -> Option<&mut Whitespace> {
 		*self
+	}
+}
+
+impl<T> Format for PhantomData<T> {
+	fn len(&mut self, _ctx: &mut Context) -> usize {
+		0
+	}
+
+	fn format(&mut self, _ctx: &mut Context) {}
+
+	fn prefix_ws(&mut self, _ctx: &mut Context) -> Option<&mut Whitespace> {
+		None
 	}
 }
 

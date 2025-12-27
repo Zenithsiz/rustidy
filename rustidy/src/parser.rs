@@ -20,6 +20,7 @@ use {
 	crate::AstStr,
 	app_error::AppError,
 	core::{
+		marker::PhantomData,
 		mem,
 		ops::{Index, Range, Residual, Try},
 	},
@@ -73,6 +74,19 @@ impl Parse for ! {
 
 	fn parse_from(_parser: &mut Parser) -> Result<Self, Self::Error> {
 		Err(NeverError)
+	}
+}
+
+impl<T> Parse for PhantomData<T> {
+	type Error = !;
+
+	#[coverage(off)]
+	fn name() -> Option<impl fmt::Display> {
+		None::<!>
+	}
+
+	fn parse_from(_parser: &mut Parser) -> Result<Self, Self::Error> {
+		Ok(Self)
 	}
 }
 
