@@ -60,13 +60,36 @@ use {
 };
 
 /// `ExpressionWithoutBlock`
-pub type ExpressionWithoutBlock = WithOuterAttributes<ExpressionWithoutBlockInner>;
-
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(derive_more::From)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, ParseRecursive, Format, Print)]
-#[parse(from = RecursiveWrapper::<ExpressionWithoutBlockInner, Expression>)]
+#[parse(from = RecursiveWrapper::<ExpressionWithoutBlock, Expression>)]
+#[parse_recursive(root = Expression)]
+#[parse_recursive(transparent)]
+pub struct ExpressionWithoutBlock(pub WithOuterAttributes<ExpressionWithoutBlockInner, Self>);
+
+impl From<ExpressionWithoutBlockInner> for ExpressionWithoutBlock {
+	fn from(expr: ExpressionWithoutBlockInner) -> Self {
+		Self(WithOuterAttributes::without_attributes(expr))
+	}
+}
+
+impl TryFrom<Expression> for ExpressionWithoutBlock {
+	type Error = ();
+
+	fn try_from(expr: Expression) -> Result<Self, Self::Error> {
+		match expr {
+			Expression::WithoutBlock(inner) => Ok(inner),
+			Expression::WithBlock(_) => Err(()),
+		}
+	}
+}
+
+#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(derive_more::From)]
+#[derive(serde::Serialize, serde::Deserialize)]
+#[derive(ParseRecursive, Format, Print)]
 #[parse_recursive(root = Expression)]
 #[parse_recursive(into_root = ExpressionWithoutBlock)]
 pub enum ExpressionWithoutBlockInner {
@@ -106,17 +129,6 @@ pub enum ExpressionWithoutBlockInner {
 	Continue(ContinueExpression),
 	Break(BreakExpression),
 	AsyncBlock(AsyncBlockExpression),
-}
-
-impl TryFrom<Expression> for ExpressionWithoutBlockInner {
-	type Error = ();
-
-	fn try_from(expr: Expression) -> Result<Self, Self::Error> {
-		match expr {
-			Expression::WithoutBlock(ExpressionWithoutBlock { inner, .. }) => Ok(inner),
-			Expression::WithBlock(_) => Err(()),
-		}
-	}
 }
 
 // TODO: The specification doesn't have this, so we need to refine it

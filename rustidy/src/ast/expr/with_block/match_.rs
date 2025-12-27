@@ -66,7 +66,10 @@ pub struct MatchArmWithExpr<E, C> {
 }
 
 /// `MatchArm`
-pub type MatchArm = WithOuterAttributes<MatchArmInner>;
+#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(serde::Serialize, serde::Deserialize)]
+#[derive(Parse, Format, Print)]
+pub struct MatchArm(pub WithOuterAttributes<MatchArmInner>);
 
 #[derive(PartialEq, Eq, Clone, derive_more::Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]

@@ -2,8 +2,10 @@
 
 // Imports
 use {
+	crate::util,
 	app_error::{AppError, Context},
 	darling::FromDeriveInput,
+	itertools::Itertools,
 	quote::quote,
 	syn::parse_quote,
 };
@@ -83,6 +85,9 @@ struct Attrs {
 	generics: syn::Generics,
 	data:     darling::ast::Data<VariantAttrs, FieldAttrs>,
 
+	#[darling(default)]
+	transparent: bool,
+
 	root:        syn::TypePath,
 	into_root:   Option<syn::TypePath>,
 	skip_if_tag: Option<syn::LitStr>,
@@ -95,6 +100,10 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 
 	let attrs = Attrs::from_derive_input(&input).context("Unable to parse attributes")?;
 	let item_ident = &attrs.ident;
+
+	if attrs.transparent {
+		return self::emit_transparent(&attrs);
+	}
 
 	let ident_base = syn::Ident::new(&format!("{item_ident}Base"), item_ident.span());
 	let ident_prefix = syn::Ident::new(&format!("{item_ident}Prefix"), item_ident.span());
@@ -510,6 +519,51 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 	Ok(output.into())
 }
 
+/// Emits a transparent derive
+fn emit_transparent(attrs: &Attrs) -> Result<proc_macro::TokenStream, AppError> {
+	let darling::ast::Data::Struct(fields) = &attrs.data else {
+		app_error::bail!("`#[parse_recursive(transparent)]` is only supported on structs");
+	};
+
+	let item_ident = &attrs.ident;
+	let root_ty = &attrs.root;
+
+	let field = fields
+		.fields
+		.iter()
+		.exactly_one()
+		.context("`#[parse_recursive(transparent)]` expects a single field")?;
+	let field_ty = &field.ty;
+	let field_member = util::field_member_access(0, field);
+
+	let output = quote! {
+		#[automatically_derived]
+		impl crate::parser::ParsableRecursive<#root_ty> for #item_ident {
+			type Prefix = <#field_ty as crate::parser::ParsableRecursive<#root_ty>>::Prefix;
+			type Base   = <#field_ty as crate::parser::ParsableRecursive<#root_ty>>::Base;
+			type Suffix = <#field_ty as crate::parser::ParsableRecursive<#root_ty>>::Suffix;
+			type Infix  = <#field_ty as crate::parser::ParsableRecursive<#root_ty>>::Infix;
+
+			fn into_root(self) -> #root_ty {
+				self.#field_member.into_root()
+			}
+			fn join_prefix(prefix: Self::Prefix, root: #root_ty) -> Self {
+				Self(<#field_ty as crate::parser::ParsableRecursive<#root_ty>>::join_prefix(prefix, root))
+			}
+			fn from_base(base: Self::Base) -> Self {
+				Self(<#field_ty as crate::parser::ParsableRecursive<#root_ty>>::from_base(base))
+			}
+			fn join_suffix(root: #root_ty, suffix: Self::Suffix) -> Self {
+				Self(<#field_ty as crate::parser::ParsableRecursive<#root_ty>>::join_suffix(root, suffix))
+			}
+			fn join_infix(lhs: #root_ty, infix: Self::Infix, rhs: #root_ty) -> Self {
+				Self(<#field_ty as crate::parser::ParsableRecursive<#root_ty>>::join_infix(lhs, infix, rhs))
+			}
+		}
+	};
+
+	Ok(output.into())
+}
 
 /// Gets a variant's single unnamed field
 fn get_variant_as_unnamed_single(variant: &VariantAttrs) -> Option<&VariantFieldAttrs> {

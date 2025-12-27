@@ -22,7 +22,10 @@ use {
 };
 
 /// `ExpressionWithBlock`
-pub type ExpressionWithBlock = WithOuterAttributes<ExpressionWithBlockInner>;
+#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(serde::Serialize, serde::Deserialize)]
+#[derive(Parse, Format, Print)]
+pub struct ExpressionWithBlock(pub WithOuterAttributes<ExpressionWithBlockInner>);
 
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]

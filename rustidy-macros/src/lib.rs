@@ -1,7 +1,7 @@
 //! Macros for [`rustidy`](../rustidy/index.html)
 
 // Features
-#![feature(proc_macro_def_site, extend_one, decl_macro, macro_derive, if_let_guard)]
+#![feature(proc_macro_def_site, extend_one, decl_macro, macro_derive, if_let_guard, yeet_expr)]
 // Lints
 #![expect(clippy::needless_continue, reason = "Macro-generated code")]
 

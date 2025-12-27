@@ -61,7 +61,10 @@ pub struct ClosureParameters {
 }
 
 /// `ClosureParameter`
-pub type ClosureParameter = WithOuterAttributes<ClosureParameterInner>;
+#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(serde::Serialize, serde::Deserialize)]
+#[derive(Parse, Format, Print)]
+pub struct ClosureParameter(pub WithOuterAttributes<ClosureParameterInner>);
 
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
