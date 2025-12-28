@@ -532,11 +532,11 @@
 																			"sep": null,
 																			"inner": {
 																				"GenericArgs": {
-																					"open": [
+																					"prefix": [
 																						{ "first": [114, 114], "rest": [] },
 																						[114, 115]
 																					],
-																					"inner": {
+																					"value": {
 																						"args": {
 																							"punctuated": {
 																								"first": {
@@ -602,7 +602,7 @@
 																							]
 																						}
 																					},
-																					"close": [
+																					"suffix": [
 																						{ "first": [120, 120], "rest": [] },
 																						[120, 121]
 																					]
@@ -906,11 +906,11 @@
 																			],
 																			"inner": {
 																				"GenericArgs": {
-																					"open": [
+																					"prefix": [
 																						{ "first": [158, 158], "rest": [] },
 																						[158, 159]
 																					],
-																					"inner": {
+																					"value": {
 																						"args": {
 																							"punctuated": {
 																								"first": {
@@ -976,7 +976,7 @@
 																							]
 																						}
 																					},
-																					"close": [
+																					"suffix": [
 																						{ "first": [164, 164], "rest": [] },
 																						[164, 165]
 																					]
@@ -2626,52 +2626,54 @@
 									"NoBounds": {
 										"QualifiedPathIn": {
 											"qualified": {
-												"open": [
+												"prefix": [
 													{ "first": [505, 506], "rest": [] },
 													[506, 507]
 												],
-												"ty": {
-													"TraitObject": {
-														"dyn_": null,
-														"bound": {
-															"punctuated": {
-																"first": {
-																	"Trait": {
-																		"Normal": {
-																			"prefix": null,
-																			"path": {
+												"value": {
+													"ty": {
+														"TraitObject": {
+															"dyn_": null,
+															"bound": {
+																"punctuated": {
+																	"first": {
+																		"Trait": {
+																			"Normal": {
 																				"prefix": null,
-																				"segments": {
-																					"first": {
-																						"path": {
-																							"Ident": {
-																								"NonKw": {
-																									"ident": [
-																										{
-																											"first": [507, 507],
-																											"rest": []
-																										},
-																										[507, 508]
-																									]
+																				"path": {
+																					"prefix": null,
+																					"segments": {
+																						"first": {
+																							"path": {
+																								"Ident": {
+																									"NonKw": {
+																										"ident": [
+																											{
+																												"first": [507, 507],
+																												"rest": []
+																											},
+																											[507, 508]
+																										]
+																									}
 																								}
-																							}
+																							},
+																							"generics": null
 																						},
-																						"generics": null
-																					},
-																					"rest": []
+																						"rest": []
+																					}
 																				}
 																			}
 																		}
-																	}
+																	},
+																	"rest": []
 																},
-																"rest": []
-															},
-															"trailing": null
+																"trailing": null
+															}
 														}
-													}
+													},
+													"as_": null
 												},
-												"as_": null,
-												"close": [
+												"suffix": [
 													{ "first": [508, 508], "rest": [] },
 													[508, 509]
 												]
@@ -2728,76 +2730,78 @@
 									"NoBounds": {
 										"QualifiedPathIn": {
 											"qualified": {
-												"open": [
+												"prefix": [
 													{ "first": [522, 523], "rest": [] },
 													[523, 524]
 												],
-												"ty": {
-													"TraitObject": {
-														"dyn_": null,
-														"bound": {
-															"punctuated": {
-																"first": {
-																	"Trait": {
-																		"Normal": {
-																			"prefix": null,
-																			"path": {
+												"value": {
+													"ty": {
+														"TraitObject": {
+															"dyn_": null,
+															"bound": {
+																"punctuated": {
+																	"first": {
+																		"Trait": {
+																			"Normal": {
 																				"prefix": null,
-																				"segments": {
-																					"first": {
-																						"path": {
-																							"Ident": {
-																								"NonKw": {
-																									"ident": [
-																										{
-																											"first": [524, 524],
-																											"rest": []
-																										},
-																										[524, 525]
-																									]
+																				"path": {
+																					"prefix": null,
+																					"segments": {
+																						"first": {
+																							"path": {
+																								"Ident": {
+																									"NonKw": {
+																										"ident": [
+																											{
+																												"first": [524, 524],
+																												"rest": []
+																											},
+																											[524, 525]
+																										]
+																									}
 																								}
-																							}
+																							},
+																							"generics": null
 																						},
-																						"generics": null
-																					},
-																					"rest": []
+																						"rest": []
+																					}
 																				}
 																			}
 																		}
-																	}
+																	},
+																	"rest": []
+																},
+																"trailing": null
+															}
+														}
+													},
+													"as_": {
+														"as_": [
+															{ "first": [525, 526], "rest": [] },
+															[526, 528]
+														],
+														"ty": {
+															"prefix": null,
+															"segments": {
+																"first": {
+																	"path": {
+																		"Ident": {
+																			"NonKw": {
+																				"ident": [
+																					{ "first": [528, 529], "rest": [] },
+																					[529, 530]
+																				]
+																			}
+																		}
+																	},
+																	"generics": null
 																},
 																"rest": []
-															},
-															"trailing": null
+															}
 														}
 													}
 												},
-												"as_": {
-													"as_": [
-														{ "first": [525, 526], "rest": [] },
-														[526, 528]
-													],
-													"ty": {
-														"prefix": null,
-														"segments": {
-															"first": {
-																"path": {
-																	"Ident": {
-																		"NonKw": {
-																			"ident": [
-																				{ "first": [528, 529], "rest": [] },
-																				[529, 530]
-																			]
-																		}
-																	}
-																},
-																"generics": null
-															},
-															"rest": []
-														}
-													}
-												},
-												"close": [
+												"suffix": [
 													{ "first": [530, 530], "rest": [] },
 													[530, 531]
 												]
@@ -2854,76 +2858,78 @@
 									"NoBounds": {
 										"QualifiedPathIn": {
 											"qualified": {
-												"open": [
+												"prefix": [
 													{ "first": [544, 545], "rest": [] },
 													[545, 546]
 												],
-												"ty": {
-													"TraitObject": {
-														"dyn_": null,
-														"bound": {
-															"punctuated": {
-																"first": {
-																	"Trait": {
-																		"Normal": {
-																			"prefix": null,
-																			"path": {
+												"value": {
+													"ty": {
+														"TraitObject": {
+															"dyn_": null,
+															"bound": {
+																"punctuated": {
+																	"first": {
+																		"Trait": {
+																			"Normal": {
 																				"prefix": null,
-																				"segments": {
-																					"first": {
-																						"path": {
-																							"Ident": {
-																								"NonKw": {
-																									"ident": [
-																										{
-																											"first": [546, 546],
-																											"rest": []
-																										},
-																										[546, 547]
-																									]
+																				"path": {
+																					"prefix": null,
+																					"segments": {
+																						"first": {
+																							"path": {
+																								"Ident": {
+																									"NonKw": {
+																										"ident": [
+																											{
+																												"first": [546, 546],
+																												"rest": []
+																											},
+																											[546, 547]
+																										]
+																									}
 																								}
-																							}
+																							},
+																							"generics": null
 																						},
-																						"generics": null
-																					},
-																					"rest": []
+																						"rest": []
+																					}
 																				}
 																			}
 																		}
-																	}
+																	},
+																	"rest": []
+																},
+																"trailing": null
+															}
+														}
+													},
+													"as_": {
+														"as_": [
+															{ "first": [547, 548], "rest": [] },
+															[548, 550]
+														],
+														"ty": {
+															"prefix": null,
+															"segments": {
+																"first": {
+																	"path": {
+																		"Ident": {
+																			"NonKw": {
+																				"ident": [
+																					{ "first": [550, 551], "rest": [] },
+																					[551, 552]
+																				]
+																			}
+																		}
+																	},
+																	"generics": null
 																},
 																"rest": []
-															},
-															"trailing": null
+															}
 														}
 													}
 												},
-												"as_": {
-													"as_": [
-														{ "first": [547, 548], "rest": [] },
-														[548, 550]
-													],
-													"ty": {
-														"prefix": null,
-														"segments": {
-															"first": {
-																"path": {
-																	"Ident": {
-																		"NonKw": {
-																			"ident": [
-																				{ "first": [550, 551], "rest": [] },
-																				[551, 552]
-																			]
-																		}
-																	}
-																},
-																"generics": null
-															},
-															"rest": []
-														}
-													}
-												},
-												"close": [
+												"suffix": [
 													{ "first": [552, 552], "rest": [] },
 													[552, 553]
 												]
@@ -3049,11 +3055,11 @@
 													[586, 589]
 												],
 												"params": {
-													"open": [
+													"prefix": [
 														{ "first": [589, 589], "rest": [] },
 														[589, 590]
 													],
-													"params": {
+													"value": {
 														"punctuated": {
 															"first": {
 																"attrs": [],
@@ -3079,7 +3085,7 @@
 														},
 														"trailing": null
 													},
-													"close": [
+													"suffix": [
 														{ "first": [592, 592], "rest": [] },
 														[592, 593]
 													]
@@ -4136,11 +4142,11 @@
 													[839, 842]
 												],
 												"params": {
-													"open": [
+													"prefix": [
 														{ "first": [842, 842], "rest": [] },
 														[842, 843]
 													],
-													"params": {
+													"value": {
 														"punctuated": {
 															"first": {
 																"attrs": [],
@@ -4166,7 +4172,7 @@
 														},
 														"trailing": null
 													},
-													"close": [
+													"suffix": [
 														{ "first": [845, 845], "rest": [] },
 														[845, 846]
 													]
@@ -4502,11 +4508,11 @@
 													[912, 915]
 												],
 												"params": {
-													"open": [
+													"prefix": [
 														{ "first": [915, 915], "rest": [] },
 														[915, 916]
 													],
-													"params": {
+													"value": {
 														"punctuated": {
 															"first": {
 																"attrs": [],
@@ -4532,7 +4538,7 @@
 														},
 														"trailing": null
 													},
-													"close": [
+													"suffix": [
 														{ "first": [918, 918], "rest": [] },
 														[918, 919]
 													]

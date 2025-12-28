@@ -9,6 +9,7 @@ use {
 		ParseRecursive,
 		Print,
 		ast::{
+			delimited::Delimited,
 			expr::Expression,
 			pat::PatternNoTopAlt,
 			punct::PunctuatedTrailing,
@@ -40,7 +41,7 @@ pub struct ClosureExpression {
 #[derive(Parse, Format, Print)]
 pub enum ClosureParams {
 	NoParams(token::OrOr),
-	WithParams((token::Or, Option<ClosureParameters>, token::Or)),
+	WithParams(Delimited<Option<ClosureParameters>, token::Or, token::Or>),
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]

@@ -8,7 +8,7 @@ use {
 		Print,
 		ast::{
 			at_least::AtLeast1,
-			delimited::Parenthesized,
+			delimited::{Delimited, Parenthesized},
 			expr::with_block::BlockExpression,
 			ident::Identifier,
 			item::function::TypeParamBounds,
@@ -75,12 +75,7 @@ pub enum PathIdentSegment {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 #[parse(name = "generic arguments")]
-pub struct GenericArgs {
-	open:  token::Lt,
-	#[parse(fatal)]
-	inner: Option<GenericArgsInner>,
-	close: token::Gt,
-}
+pub struct GenericArgs(pub Delimited<Option<GenericArgsInner>, token::Lt, token::Gt>);
 
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
@@ -174,12 +169,14 @@ pub struct QualifiedPathInExpression {
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
-pub struct QualifiedPathType {
-	open:  token::Lt,
-	#[parse(fatal)]
-	ty:    Box<Type>,
-	as_:   Option<QualifiedPathTypeAs>,
-	close: token::Gt,
+pub struct QualifiedPathType(Delimited<QualifiedPathTypeInner, token::Lt, token::Gt>);
+
+#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(serde::Serialize, serde::Deserialize)]
+#[derive(Parse, Format, Print)]
+pub struct QualifiedPathTypeInner {
+	ty:  Box<Type>,
+	as_: Option<QualifiedPathTypeAs>,
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]

@@ -4,7 +4,7 @@
 use crate::{
 	Format,
 	ast::{
-		delimited::Parenthesized,
+		delimited::{Delimited, Parenthesized},
 		expr::{BlockExpression, LiteralExpression, StringLiteral},
 		ident::Identifier,
 		lifetime::Lifetime,
@@ -204,12 +204,7 @@ pub struct FunctionReturnType {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 #[parse(name = "generic parameters")]
-pub struct GenericParams {
-	open:   token::Lt,
-	#[parse(fatal)]
-	params: Option<PunctuatedTrailing<GenericParam, token::Comma>>,
-	close:  token::Gt,
-}
+pub struct GenericParams(pub Delimited<Option<PunctuatedTrailing<GenericParam, token::Comma>>, token::Lt, token::Gt>);
 
 /// `GenericParam`
 #[derive(PartialEq, Eq, Clone, Debug)]

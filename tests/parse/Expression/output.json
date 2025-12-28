@@ -321,14 +321,14 @@
 																												[86, 88]
 																											],
 																											"generic": {
-																												"open": [
+																												"prefix": [
 																													{
 																														"first": [88, 88],
 																														"rest": []
 																													},
 																													[88, 89]
 																												],
-																												"inner": {
+																												"value": {
 																													"args": {
 																														"punctuated": {
 																															"first": {
@@ -361,7 +361,7 @@
 																														"trailing": null
 																													}
 																												},
-																												"close": [
+																												"suffix": [
 																													{
 																														"first": [90, 90],
 																														"rest": []
@@ -502,93 +502,95 @@
 																				"Path": {
 																					"Qualified": {
 																						"qualified": {
-																							"open": [
+																							"prefix": [
 																								{
 																									"first": [120, 121],
 																									"rest": []
 																								},
 																								[121, 122]
 																							],
-																							"ty": {
-																								"TraitObject": {
-																									"dyn_": null,
-																									"bound": {
-																										"punctuated": {
-																											"first": {
-																												"Trait": {
-																													"Normal": {
-																														"prefix": null,
-																														"path": {
+																							"value": {
+																								"ty": {
+																									"TraitObject": {
+																										"dyn_": null,
+																										"bound": {
+																											"punctuated": {
+																												"first": {
+																													"Trait": {
+																														"Normal": {
 																															"prefix": null,
-																															"segments": {
-																																"first": {
-																																	"path": {
-																																		"Ident": {
-																																			"NonKw": {
-																																				"ident": [
-																																					{
-																																						"first": [
+																															"path": {
+																																"prefix": null,
+																																"segments": {
+																																	"first": {
+																																		"path": {
+																																			"Ident": {
+																																				"NonKw": {
+																																					"ident": [
+																																						{
+																																							"first": [
+																																								122,
+																																								122
+																																							],
+																																							"rest": []
+																																						},
+																																						[
 																																							122,
-																																							122
-																																						],
-																																						"rest": []
-																																					},
-																																					[
-																																						122,
-																																						123
+																																							123
+																																						]
 																																					]
-																																				]
+																																				}
 																																			}
-																																		}
+																																		},
+																																		"generics": null
 																																	},
-																																	"generics": null
-																																},
-																																"rest": []
+																																	"rest": []
+																																}
 																															}
 																														}
 																													}
-																												}
+																												},
+																												"rest": []
 																											},
+																											"trailing": null
+																										}
+																									}
+																								},
+																								"as_": {
+																									"as_": [
+																										{
+																											"first": [123, 124],
 																											"rest": []
 																										},
-																										"trailing": null
-																									}
-																								}
-																							},
-																							"as_": {
-																								"as_": [
-																									{
-																										"first": [123, 124],
-																										"rest": []
-																									},
-																									[124, 126]
-																								],
-																								"ty": {
-																									"prefix": null,
-																									"segments": {
-																										"first": {
-																											"path": {
-																												"Ident": {
-																													"NonKw": {
-																														"ident": [
-																															{
-																																"first": [
-																																	126, 127
-																																],
-																																"rest": []
-																															},
-																															[127, 128]
-																														]
+																										[124, 126]
+																									],
+																									"ty": {
+																										"prefix": null,
+																										"segments": {
+																											"first": {
+																												"path": {
+																													"Ident": {
+																														"NonKw": {
+																															"ident": [
+																																{
+																																	"first": [
+																																		126, 127
+																																	],
+																																	"rest": []
+																																},
+																																[127, 128]
+																															]
+																														}
 																													}
-																												}
+																												},
+																												"generics": null
 																											},
-																											"generics": null
-																										},
-																										"rest": []
+																											"rest": []
+																										}
 																									}
 																								}
 																							},
-																							"close": [
+																							"suffix": [
 																								{
 																									"first": [128, 128],
 																									"rest": []
@@ -9999,15 +10001,15 @@
 																					"async_": null,
 																					"move_": null,
 																					"params": {
-																						"WithParams": [
-																							[
+																						"WithParams": {
+																							"prefix": [
 																								{
 																									"first": [1668, 1669],
 																									"rest": []
 																								},
 																								[1669, 1670]
 																							],
-																							{
+																							"value": {
 																								"params": {
 																									"punctuated": {
 																										"first": {
@@ -10055,14 +10057,14 @@
 																									"trailing": null
 																								}
 																							},
-																							[
+																							"suffix": [
 																								{
 																									"first": [1671, 1671],
 																									"rest": []
 																								},
 																								[1671, 1672]
 																							]
-																						]
+																						}
 																					},
 																					"ret": null,
 																					"expr": {
@@ -10142,15 +10144,15 @@
 																					"async_": null,
 																					"move_": null,
 																					"params": {
-																						"WithParams": [
-																							[
+																						"WithParams": {
+																							"prefix": [
 																								{
 																									"first": [1684, 1685],
 																									"rest": []
 																								},
 																								[1685, 1686]
 																							],
-																							{
+																							"value": {
 																								"params": {
 																									"punctuated": {
 																										"first": {
@@ -10266,14 +10268,14 @@
 																									"trailing": null
 																								}
 																							},
-																							[
+																							"suffix": [
 																								{
 																									"first": [1690, 1690],
 																									"rest": []
 																								},
 																								[1690, 1691]
 																							]
-																						]
+																						}
 																					},
 																					"ret": null,
 																					"expr": {
@@ -10353,15 +10355,15 @@
 																					"async_": null,
 																					"move_": null,
 																					"params": {
-																						"WithParams": [
-																							[
+																						"WithParams": {
+																							"prefix": [
 																								{
 																									"first": [1703, 1704],
 																									"rest": []
 																								},
 																								[1704, 1705]
 																							],
-																							{
+																							"value": {
 																								"params": {
 																									"punctuated": {
 																										"first": {
@@ -10471,14 +10473,14 @@
 																									"trailing": null
 																								}
 																							},
-																							[
+																							"suffix": [
 																								{
 																									"first": [1711, 1711],
 																									"rest": []
 																								},
 																								[1711, 1712]
 																							]
-																						]
+																						}
 																					},
 																					"ret": null,
 																					"expr": {
@@ -10558,15 +10560,15 @@
 																					"async_": null,
 																					"move_": null,
 																					"params": {
-																						"WithParams": [
-																							[
+																						"WithParams": {
+																							"prefix": [
 																								{
 																									"first": [1724, 1725],
 																									"rest": []
 																								},
 																								[1725, 1726]
 																							],
-																							{
+																							"value": {
 																								"params": {
 																									"punctuated": {
 																										"first": {
@@ -10620,14 +10622,14 @@
 																									]
 																								}
 																							},
-																							[
+																							"suffix": [
 																								{
 																									"first": [1728, 1728],
 																									"rest": []
 																								},
 																								[1728, 1729]
 																							]
-																						]
+																						}
 																					},
 																					"ret": null,
 																					"expr": {
@@ -10707,15 +10709,15 @@
 																					"async_": null,
 																					"move_": null,
 																					"params": {
-																						"WithParams": [
-																							[
+																						"WithParams": {
+																							"prefix": [
 																								{
 																									"first": [1741, 1742],
 																									"rest": []
 																								},
 																								[1742, 1743]
 																							],
-																							{
+																							"value": {
 																								"params": {
 																									"punctuated": {
 																										"first": {
@@ -10815,14 +10817,14 @@
 																									"trailing": null
 																								}
 																							},
-																							[
+																							"suffix": [
 																								{
 																									"first": [1747, 1747],
 																									"rest": []
 																								},
 																								[1747, 1748]
 																							]
-																						]
+																						}
 																					},
 																					"ret": null,
 																					"expr": {
@@ -10902,15 +10904,15 @@
 																					"async_": null,
 																					"move_": null,
 																					"params": {
-																						"WithParams": [
-																							[
+																						"WithParams": {
+																							"prefix": [
 																								{
 																									"first": [1760, 1761],
 																									"rest": []
 																								},
 																								[1761, 1762]
 																							],
-																							{
+																							"value": {
 																								"params": {
 																									"punctuated": {
 																										"first": {
@@ -11016,14 +11018,14 @@
 																									]
 																								}
 																							},
-																							[
+																							"suffix": [
 																								{
 																									"first": [1767, 1767],
 																									"rest": []
 																								},
 																								[1767, 1768]
 																							]
-																						]
+																						}
 																					},
 																					"ret": null,
 																					"expr": {
@@ -11103,15 +11105,15 @@
 																					"async_": null,
 																					"move_": null,
 																					"params": {
-																						"WithParams": [
-																							[
+																						"WithParams": {
+																							"prefix": [
 																								{
 																									"first": [1780, 1781],
 																									"rest": []
 																								},
 																								[1781, 1782]
 																							],
-																							{
+																							"value": {
 																								"params": {
 																									"punctuated": {
 																										"first": {
@@ -11215,14 +11217,14 @@
 																									"trailing": null
 																								}
 																							},
-																							[
+																							"suffix": [
 																								{
 																									"first": [1788, 1788],
 																									"rest": []
 																								},
 																								[1788, 1789]
 																							]
-																						]
+																						}
 																					},
 																					"ret": null,
 																					"expr": {
@@ -11302,15 +11304,15 @@
 																					"async_": null,
 																					"move_": null,
 																					"params": {
-																						"WithParams": [
-																							[
+																						"WithParams": {
+																							"prefix": [
 																								{
 																									"first": [1801, 1802],
 																									"rest": []
 																								},
 																								[1802, 1803]
 																							],
-																							{
+																							"value": {
 																								"params": {
 																									"punctuated": {
 																										"first": {
@@ -11482,14 +11484,14 @@
 																									"trailing": null
 																								}
 																							},
-																							[
+																							"suffix": [
 																								{
 																									"first": [1810, 1810],
 																									"rest": []
 																								},
 																								[1810, 1811]
 																							]
-																						]
+																						}
 																					},
 																					"ret": null,
 																					"expr": {
@@ -11698,15 +11700,15 @@
 																						[1854, 1858]
 																					],
 																					"params": {
-																						"WithParams": [
-																							[
+																						"WithParams": {
+																							"prefix": [
 																								{
 																									"first": [1858, 1859],
 																									"rest": []
 																								},
 																								[1859, 1860]
 																							],
-																							{
+																							"value": {
 																								"params": {
 																									"punctuated": {
 																										"first": {
@@ -12181,14 +12183,14 @@
 																									]
 																								}
 																							},
-																							[
+																							"suffix": [
 																								{
 																									"first": [1889, 1889],
 																									"rest": []
 																								},
 																								[1889, 1890]
 																							]
-																						]
+																						}
 																					},
 																					"ret": {
 																						"arrow": [
