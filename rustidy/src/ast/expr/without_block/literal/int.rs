@@ -15,8 +15,6 @@ use {
 pub struct IntegerLiteral {
 	inner:  IntegerLiteralInner,
 	suffix: Option<SuffixNoE>,
-	#[format(whitespace)]
-	ws:     Whitespace,
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]
