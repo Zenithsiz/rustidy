@@ -57,9 +57,7 @@ pub struct ClosureRet {
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
-pub struct ClosureParameters {
-	pub params: PunctuatedTrailing<ClosureParameter, token::Comma>,
-}
+pub struct ClosureParameters(pub PunctuatedTrailing<ClosureParameter, token::Comma>);
 
 /// `ClosureParameter`
 #[derive(PartialEq, Eq, Clone, Debug)]

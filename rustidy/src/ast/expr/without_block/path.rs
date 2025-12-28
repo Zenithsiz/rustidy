@@ -80,9 +80,7 @@ pub struct GenericArgs(pub Delimited<Option<GenericArgsInner>, token::Lt, token:
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
-pub struct GenericArgsInner {
-	pub args: PunctuatedTrailing<GenericArg, token::Comma>,
-}
+pub struct GenericArgsInner(pub PunctuatedTrailing<GenericArg, token::Comma>);
 
 /// `GenericArg`
 #[derive(PartialEq, Eq, Clone, Debug)]

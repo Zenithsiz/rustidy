@@ -41,6 +41,4 @@ pub struct MethodCallExpression {
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
-pub struct CallParams {
-	pub params: PunctuatedTrailing<Box<Expression>, token::Comma>,
-}
+pub struct CallParams(pub PunctuatedTrailing<Box<Expression>, token::Comma>);

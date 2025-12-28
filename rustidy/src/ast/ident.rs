@@ -34,7 +34,7 @@ pub enum Identifier {
 impl AsRef<crate::AstStr> for Identifier {
 	fn as_ref(&self) -> &crate::AstStr {
 		match *self {
-			Self::NonKw(ref non_keyword_identifier) => &non_keyword_identifier.ident.1.0,
+			Self::NonKw(ref non_keyword_identifier) => &non_keyword_identifier.0.1.0,
 			Self::Raw(never) => never,
 		}
 	}
@@ -44,9 +44,7 @@ impl AsRef<crate::AstStr> for Identifier {
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Format, Print)]
-pub struct NonKeywordIdentifier {
-	pub ident: IdentifierOrKeyword,
-}
+pub struct NonKeywordIdentifier(pub IdentifierOrKeyword);
 
 impl Parse for NonKeywordIdentifier {
 	type Error = NonKeywordIdentifierError;
@@ -65,7 +63,7 @@ impl Parse for NonKeywordIdentifier {
 			return Err(NonKeywordIdentifierError::StrictOrReserved);
 		}
 
-		Ok(Self { ident })
+		Ok(Self(ident))
 	}
 }
 #[derive(Debug, crate::parser::ParseError)]
@@ -80,6 +78,6 @@ pub enum NonKeywordIdentifierError {
 
 impl AsRef<Whitespace> for NonKeywordIdentifier {
 	fn as_ref(&self) -> &Whitespace {
-		self.ident.as_ref()
+		self.0.as_ref()
 	}
 }

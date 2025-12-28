@@ -218,9 +218,7 @@ pub struct TupleStructPattern {
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
-pub struct TupleStructItems {
-	pub items: PunctuatedTrailing<Box<Pattern>, token::Comma>,
-}
+pub struct TupleStructItems(pub PunctuatedTrailing<Box<Pattern>, token::Comma>);
 
 /// `TuplePattern`
 #[derive(PartialEq, Eq, Clone, Debug)]
