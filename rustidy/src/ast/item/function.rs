@@ -90,6 +90,7 @@ pub enum ItemSafety {
 #[parse(name = "function parameters")]
 pub enum FunctionParameters {
 	Full(FunctionParametersFull),
+	#[parse(peek = (SelfParam, Option::<token::Comma>, token::ParenClose))]
 	OnlySelf(FunctionParametersOnlySelf),
 }
 

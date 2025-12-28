@@ -541,55 +541,21 @@
 							"params": {
 								"prefix": [{ "first": [152, 152], "rest": [] }, [152, 153]],
 								"value": {
-									"Full": {
-										"self_": null,
-										"rest": {
-											"punctuated": {
-												"first": {
-													"attrs": [],
-													"inner": {
-														"Type": {
-															"TraitObject": {
-																"dyn_": null,
-																"bound": {
-																	"punctuated": {
-																		"first": {
-																			"Trait": {
-																				"Normal": {
-																					"prefix": null,
-																					"path": {
-																						"prefix": null,
-																						"segments": {
-																							"first": {
-																								"path": {
-																									"SelfLower": [
-																										{
-																											"first": [153, 153],
-																											"rest": []
-																										},
-																										[153, 157]
-																									]
-																								},
-																								"generics": null
-																							},
-																							"rest": []
-																						}
-																					}
-																				}
-																			}
-																		},
-																		"rest": []
-																	},
-																	"trailing": null
-																}
-															}
-														}
-													}
-												},
-												"rest": []
-											},
-											"trailing": null
-										}
+									"OnlySelf": {
+										"self_": {
+											"attrs": [],
+											"inner": {
+												"Shorthand": {
+													"ref_": null,
+													"mut_": null,
+													"self_": [
+														{ "first": [153, 153], "rest": [] },
+														[153, 157]
+													]
+												}
+											}
+										},
+										"trailing_comma": null
 									}
 								},
 								"suffix": [{ "first": [157, 157], "rest": [] }, [157, 158]]
@@ -627,136 +593,96 @@
 							"params": {
 								"prefix": [{ "first": [164, 164], "rest": [] }, [164, 165]],
 								"value": {
-									"Full": {
-										"self_": null,
-										"rest": {
-											"punctuated": {
-												"first": {
-													"attrs": [
-														{
-															"Attr": {
-																"pound": [
-																	{ "first": [165, 165], "rest": [] },
-																	[165, 166]
-																],
-																"open": {
-																	"prefix": [
-																		{ "first": [166, 166], "rest": [] },
-																		[166, 167]
-																	],
-																	"value": {
-																		"path": {
-																			"prefix": null,
-																			"segments": {
-																				"first": {
-																					"Ident": {
-																						"NonKw": {
-																							"ident": [
-																								{
-																									"first": [167, 167],
-																									"rest": []
-																								},
-																								[167, 168]
-																							]
-																						}
-																					}
-																				},
-																				"rest": []
-																			}
-																		},
-																		"input": null
-																	},
-																	"suffix": [
-																		{ "first": [168, 168], "rest": [] },
-																		[168, 169]
-																	]
-																}
-															}
-														},
-														{
-															"Attr": {
-																"pound": [
-																	{ "first": [169, 170], "rest": [] },
-																	[170, 171]
-																],
-																"open": {
-																	"prefix": [
-																		{ "first": [171, 171], "rest": [] },
-																		[171, 172]
-																	],
-																	"value": {
-																		"path": {
-																			"prefix": null,
-																			"segments": {
-																				"first": {
-																					"Ident": {
-																						"NonKw": {
-																							"ident": [
-																								{
-																									"first": [172, 172],
-																									"rest": []
-																								},
-																								[172, 173]
-																							]
-																						}
-																					}
-																				},
-																				"rest": []
-																			}
-																		},
-																		"input": null
-																	},
-																	"suffix": [
-																		{ "first": [173, 173], "rest": [] },
-																		[173, 174]
-																	]
-																}
-															}
-														}
-													],
-													"inner": {
-														"Type": {
-															"TraitObject": {
-																"dyn_": null,
-																"bound": {
-																	"punctuated": {
+									"OnlySelf": {
+										"self_": {
+											"attrs": [
+												{
+													"Attr": {
+														"pound": [
+															{ "first": [165, 165], "rest": [] },
+															[165, 166]
+														],
+														"open": {
+															"prefix": [
+																{ "first": [166, 166], "rest": [] },
+																[166, 167]
+															],
+															"value": {
+																"path": {
+																	"prefix": null,
+																	"segments": {
 																		"first": {
-																			"Trait": {
-																				"Normal": {
-																					"prefix": null,
-																					"path": {
-																						"prefix": null,
-																						"segments": {
-																							"first": {
-																								"path": {
-																									"SelfLower": [
-																										{
-																											"first": [174, 175],
-																											"rest": []
-																										},
-																										[175, 179]
-																									]
-																								},
-																								"generics": null
-																							},
-																							"rest": []
-																						}
-																					}
+																			"Ident": {
+																				"NonKw": {
+																					"ident": [
+																						{ "first": [167, 167], "rest": [] },
+																						[167, 168]
+																					]
 																				}
 																			}
 																		},
 																		"rest": []
-																	},
-																	"trailing": null
-																}
-															}
+																	}
+																},
+																"input": null
+															},
+															"suffix": [
+																{ "first": [168, 168], "rest": [] },
+																[168, 169]
+															]
 														}
 													}
 												},
-												"rest": []
-											},
-											"trailing": null
-										}
+												{
+													"Attr": {
+														"pound": [
+															{ "first": [169, 170], "rest": [] },
+															[170, 171]
+														],
+														"open": {
+															"prefix": [
+																{ "first": [171, 171], "rest": [] },
+																[171, 172]
+															],
+															"value": {
+																"path": {
+																	"prefix": null,
+																	"segments": {
+																		"first": {
+																			"Ident": {
+																				"NonKw": {
+																					"ident": [
+																						{ "first": [172, 172], "rest": [] },
+																						[172, 173]
+																					]
+																				}
+																			}
+																		},
+																		"rest": []
+																	}
+																},
+																"input": null
+															},
+															"suffix": [
+																{ "first": [173, 173], "rest": [] },
+																[173, 174]
+															]
+														}
+													}
+												}
+											],
+											"inner": {
+												"Shorthand": {
+													"ref_": null,
+													"mut_": null,
+													"self_": [
+														{ "first": [174, 175], "rest": [] },
+														[175, 179]
+													]
+												}
+											}
+										},
+										"trailing_comma": null
 									}
 								},
 								"suffix": [{ "first": [179, 179], "rest": [] }, [179, 180]]
@@ -849,51 +775,27 @@
 							"params": {
 								"prefix": [{ "first": [200, 200], "rest": [] }, [200, 201]],
 								"value": {
-									"Full": {
-										"self_": null,
-										"rest": {
-											"punctuated": {
-												"first": {
-													"attrs": [],
-													"inner": {
-														"Type": {
-															"NoBounds": {
-																"Reference": {
-																	"ref_": [
-																		{ "first": [201, 201], "rest": [] },
-																		[201, 202]
-																	],
-																	"lifetime": null,
-																	"mut_": null,
-																	"ty": {
-																		"Path": {
-																			"prefix": null,
-																			"segments": {
-																				"first": {
-																					"path": {
-																						"SelfLower": [
-																							{
-																								"first": [202, 202],
-																								"rest": []
-																							},
-																							[202, 206]
-																						]
-																					},
-																					"generics": null
-																				},
-																				"rest": []
-																			}
-																		}
-																	}
-																}
-															}
-														}
-													}
-												},
-												"rest": []
-											},
-											"trailing": null
-										}
+									"OnlySelf": {
+										"self_": {
+											"attrs": [],
+											"inner": {
+												"Shorthand": {
+													"ref_": {
+														"ref_": [
+															{ "first": [201, 201], "rest": [] },
+															[201, 202]
+														],
+														"lifetime": null
+													},
+													"mut_": null,
+													"self_": [
+														{ "first": [202, 202], "rest": [] },
+														[202, 206]
+													]
+												}
+											}
+										},
+										"trailing_comma": null
 									}
 								},
 								"suffix": [{ "first": [206, 206], "rest": [] }, [206, 207]]
@@ -931,62 +833,38 @@
 							"params": {
 								"prefix": [{ "first": [213, 213], "rest": [] }, [213, 214]],
 								"value": {
-									"Full": {
-										"self_": null,
-										"rest": {
-											"punctuated": {
-												"first": {
-													"attrs": [],
-													"inner": {
-														"Type": {
-															"NoBounds": {
-																"Reference": {
-																	"ref_": [
-																		{ "first": [214, 214], "rest": [] },
-																		[214, 215]
-																	],
-																	"lifetime": {
-																		"IdentOrKeyword": {
-																			"quote": [
-																				{ "first": [215, 215], "rest": [] },
-																				[215, 216]
-																			],
-																			"value": [
-																				{ "first": [216, 216], "rest": [] },
-																				[216, 217]
-																			]
-																		}
-																	},
-																	"mut_": null,
-																	"ty": {
-																		"Path": {
-																			"prefix": null,
-																			"segments": {
-																				"first": {
-																					"path": {
-																						"SelfLower": [
-																							{
-																								"first": [217, 218],
-																								"rest": []
-																							},
-																							[218, 222]
-																						]
-																					},
-																					"generics": null
-																				},
-																				"rest": []
-																			}
-																		}
-																	}
-																}
+									"OnlySelf": {
+										"self_": {
+											"attrs": [],
+											"inner": {
+												"Shorthand": {
+													"ref_": {
+														"ref_": [
+															{ "first": [214, 214], "rest": [] },
+															[214, 215]
+														],
+														"lifetime": {
+															"IdentOrKeyword": {
+																"quote": [
+																	{ "first": [215, 215], "rest": [] },
+																	[215, 216]
+																],
+																"value": [
+																	{ "first": [216, 216], "rest": [] },
+																	[216, 217]
+																]
 															}
 														}
-													}
-												},
-												"rest": []
-											},
-											"trailing": null
-										}
+													},
+													"mut_": null,
+													"self_": [
+														{ "first": [217, 218], "rest": [] },
+														[218, 222]
+													]
+												}
+											}
+										},
+										"trailing_comma": null
 									}
 								},
 								"suffix": [{ "first": [222, 222], "rest": [] }, [222, 223]]
@@ -1024,54 +902,30 @@
 							"params": {
 								"prefix": [{ "first": [229, 229], "rest": [] }, [229, 230]],
 								"value": {
-									"Full": {
-										"self_": null,
-										"rest": {
-											"punctuated": {
-												"first": {
-													"attrs": [],
-													"inner": {
-														"Type": {
-															"NoBounds": {
-																"Reference": {
-																	"ref_": [
-																		{ "first": [230, 230], "rest": [] },
-																		[230, 231]
-																	],
-																	"lifetime": null,
-																	"mut_": [
-																		{ "first": [231, 231], "rest": [] },
-																		[231, 234]
-																	],
-																	"ty": {
-																		"Path": {
-																			"prefix": null,
-																			"segments": {
-																				"first": {
-																					"path": {
-																						"SelfLower": [
-																							{
-																								"first": [234, 235],
-																								"rest": []
-																							},
-																							[235, 239]
-																						]
-																					},
-																					"generics": null
-																				},
-																				"rest": []
-																			}
-																		}
-																	}
-																}
-															}
-														}
-													}
-												},
-												"rest": []
-											},
-											"trailing": null
-										}
+									"OnlySelf": {
+										"self_": {
+											"attrs": [],
+											"inner": {
+												"Shorthand": {
+													"ref_": {
+														"ref_": [
+															{ "first": [230, 230], "rest": [] },
+															[230, 231]
+														],
+														"lifetime": null
+													},
+													"mut_": [
+														{ "first": [231, 231], "rest": [] },
+														[231, 234]
+													],
+													"self_": [
+														{ "first": [234, 235], "rest": [] },
+														[235, 239]
+													]
+												}
+											}
+										},
+										"trailing_comma": null
 									}
 								},
 								"suffix": [{ "first": [239, 239], "rest": [] }, [239, 240]]
@@ -1109,65 +963,41 @@
 							"params": {
 								"prefix": [{ "first": [246, 246], "rest": [] }, [246, 247]],
 								"value": {
-									"Full": {
-										"self_": null,
-										"rest": {
-											"punctuated": {
-												"first": {
-													"attrs": [],
-													"inner": {
-														"Type": {
-															"NoBounds": {
-																"Reference": {
-																	"ref_": [
-																		{ "first": [247, 247], "rest": [] },
-																		[247, 248]
-																	],
-																	"lifetime": {
-																		"IdentOrKeyword": {
-																			"quote": [
-																				{ "first": [248, 248], "rest": [] },
-																				[248, 249]
-																			],
-																			"value": [
-																				{ "first": [249, 249], "rest": [] },
-																				[249, 250]
-																			]
-																		}
-																	},
-																	"mut_": [
-																		{ "first": [250, 251], "rest": [] },
-																		[251, 254]
-																	],
-																	"ty": {
-																		"Path": {
-																			"prefix": null,
-																			"segments": {
-																				"first": {
-																					"path": {
-																						"SelfLower": [
-																							{
-																								"first": [254, 255],
-																								"rest": []
-																							},
-																							[255, 259]
-																						]
-																					},
-																					"generics": null
-																				},
-																				"rest": []
-																			}
-																		}
-																	}
-																}
+									"OnlySelf": {
+										"self_": {
+											"attrs": [],
+											"inner": {
+												"Shorthand": {
+													"ref_": {
+														"ref_": [
+															{ "first": [247, 247], "rest": [] },
+															[247, 248]
+														],
+														"lifetime": {
+															"IdentOrKeyword": {
+																"quote": [
+																	{ "first": [248, 248], "rest": [] },
+																	[248, 249]
+																],
+																"value": [
+																	{ "first": [249, 249], "rest": [] },
+																	[249, 250]
+																]
 															}
 														}
-													}
-												},
-												"rest": []
-											},
-											"trailing": null
-										}
+													},
+													"mut_": [
+														{ "first": [250, 251], "rest": [] },
+														[251, 254]
+													],
+													"self_": [
+														{ "first": [254, 255], "rest": [] },
+														[255, 259]
+													]
+												}
+											}
+										},
+										"trailing_comma": null
 									}
 								},
 								"suffix": [{ "first": [259, 259], "rest": [] }, [259, 260]]
@@ -1205,89 +1035,64 @@
 							"params": {
 								"prefix": [{ "first": [267, 267], "rest": [] }, [267, 268]],
 								"value": {
-									"Full": {
-										"self_": null,
-										"rest": {
-											"punctuated": {
-												"first": {
-													"attrs": [],
-													"inner": {
-														"Pattern": {
-															"pat": {
-																"WithoutRange": {
-																	"Path": {
-																		"Normal": {
-																			"prefix": null,
-																			"segments": {
-																				"first": {
-																					"ident": {
-																						"SelfLower": [
-																							{
-																								"first": [268, 268],
-																								"rest": []
+									"OnlySelf": {
+										"self_": {
+											"attrs": [],
+											"inner": {
+												"Typed": {
+													"mut_": null,
+													"self_": [
+														{ "first": [268, 268], "rest": [] },
+														[268, 272]
+													],
+													"colon": [
+														{ "first": [272, 272], "rest": [] },
+														[272, 273]
+													],
+													"ty": {
+														"TraitObject": {
+															"dyn_": null,
+															"bound": {
+																"punctuated": {
+																	"first": {
+																		"Trait": {
+																			"Normal": {
+																				"prefix": null,
+																				"path": {
+																					"prefix": null,
+																					"segments": {
+																						"first": {
+																							"path": {
+																								"Ident": {
+																									"NonKw": {
+																										"ident": [
+																											{
+																												"first": [273, 274],
+																												"rest": []
+																											},
+																											[274, 277]
+																										]
+																									}
+																								}
 																							},
-																							[268, 272]
-																						]
-																					},
-																					"generic": null
-																				},
-																				"rest": []
-																			}
-																		}
-																	}
-																}
-															},
-															"colon": [
-																{ "first": [272, 272], "rest": [] },
-																[272, 273]
-															],
-															"ty": {
-																"TraitObject": {
-																	"dyn_": null,
-																	"bound": {
-																		"punctuated": {
-																			"first": {
-																				"Trait": {
-																					"Normal": {
-																						"prefix": null,
-																						"path": {
-																							"prefix": null,
-																							"segments": {
-																								"first": {
-																									"path": {
-																										"Ident": {
-																											"NonKw": {
-																												"ident": [
-																													{
-																														"first": [273, 274],
-																														"rest": []
-																													},
-																													[274, 277]
-																												]
-																											}
-																										}
-																									},
-																									"generics": null
-																								},
-																								"rest": []
-																							}
-																						}
+																							"generics": null
+																						},
+																						"rest": []
 																					}
 																				}
-																			},
-																			"rest": []
-																		},
-																		"trailing": null
-																	}
-																}
+																			}
+																		}
+																	},
+																	"rest": []
+																},
+																"trailing": null
 															}
 														}
 													}
-												},
-												"rest": []
-											},
-											"trailing": null
-										}
+												}
+											}
+										},
+										"trailing_comma": null
 									}
 								},
 								"suffix": [{ "first": [277, 277], "rest": [] }, [277, 278]]
