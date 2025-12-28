@@ -28,7 +28,7 @@ pub enum ArrayElements {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct ArrayElementsRepeat {
-	expr:  Box<Expression>,
-	semi:  token::Semi,
-	count: Box<Expression>,
+	pub expr:  Box<Expression>,
+	pub semi:  token::Semi,
+	pub count: Box<Expression>,
 }

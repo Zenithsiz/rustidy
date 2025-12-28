@@ -17,8 +17,8 @@ use crate::{
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct TypePath {
-	prefix:   Option<token::PathSep>,
-	segments: Punctuated<TypePathSegment, token::PathSep>,
+	pub prefix:   Option<token::PathSep>,
+	pub segments: Punctuated<TypePathSegment, token::PathSep>,
 }
 
 /// `TypePathSegment`
@@ -26,16 +26,16 @@ pub struct TypePath {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct TypePathSegment {
-	path:     PathIdentSegment,
-	generics: Option<TypePathSegmentGenerics>,
+	pub path:     PathIdentSegment,
+	pub generics: Option<TypePathSegmentGenerics>,
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct TypePathSegmentGenerics {
-	sep:   Option<token::PathSep>,
-	inner: GenericArgsOrTypePathFn,
+	pub sep:   Option<token::PathSep>,
+	pub inner: GenericArgsOrTypePathFn,
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]

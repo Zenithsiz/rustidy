@@ -23,10 +23,10 @@ use {
 #[derive(Parse, Format, Print)]
 #[parse(name = "a match expression")]
 pub struct MatchExpression {
-	match_:    token::Match,
+	pub match_:    token::Match,
 	#[parse(fatal)]
-	scrutinee: Box<Scrutinee>,
-	arms:      Braced<WithInnerAttributes<Option<MatchArms>>>,
+	pub scrutinee: Box<Scrutinee>,
+	pub arms:      Braced<WithInnerAttributes<Option<MatchArms>>>,
 }
 
 /// `Scrutinee`
@@ -40,8 +40,8 @@ pub struct Scrutinee(#[parse(with_tag = "skip:StructExpression")] Expression);
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct MatchArms {
-	arms: Vec<MatchArmWithExprNonLast>,
-	last: Option<MatchArmWithExpr<Expression, Option<token::Comma>>>,
+	pub arms: Vec<MatchArmWithExprNonLast>,
+	pub last: Option<MatchArmWithExpr<Expression, Option<token::Comma>>>,
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]
@@ -56,10 +56,10 @@ pub enum MatchArmWithExprNonLast {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct MatchArmWithExpr<E, C> {
-	arm:            MatchArm,
-	arrow:          token::FatArrow,
-	expr:           Box<E>,
-	trailing_comma: C,
+	pub arm:            MatchArm,
+	pub arrow:          token::FatArrow,
+	pub expr:           Box<E>,
+	pub trailing_comma: C,
 }
 
 /// `MatchArm`
@@ -73,8 +73,8 @@ pub struct MatchArm(pub WithOuterAttributes<MatchArmInner>);
 #[derive(Parse, Format, Print)]
 #[parse(name = "a match arm")]
 pub struct MatchArmInner {
-	pat:   Pattern,
-	guard: Option<MatchArmGuard>,
+	pub pat:   Pattern,
+	pub guard: Option<MatchArmGuard>,
 }
 
 /// `MatchArmGuard`
@@ -82,6 +82,6 @@ pub struct MatchArmInner {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct MatchArmGuard {
-	if_:  token::If,
-	expr: Box<Expression>,
+	pub if_:  token::If,
+	pub expr: Box<Expression>,
 }

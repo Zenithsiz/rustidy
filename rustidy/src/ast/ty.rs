@@ -84,10 +84,10 @@ pub struct NeverType(token::Not);
 #[derive(Parse, Format, Print)]
 #[parse(name = "a reference type")]
 pub struct ReferenceType {
-	ref_:     token::And,
-	lifetime: Option<Lifetime>,
-	mut_:     Option<token::Mut>,
-	ty:       Box<TypeNoBounds>,
+	pub ref_:     token::And,
+	pub lifetime: Option<Lifetime>,
+	pub mut_:     Option<token::Mut>,
+	pub ty:       Box<TypeNoBounds>,
 }
 
 /// `InferredType`
@@ -101,8 +101,8 @@ pub struct InferredType(token::Underscore);
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct ImplTraitTypeOneBound {
-	impl_: token::Impl,
-	bound: TraitBound,
+	pub impl_: token::Impl,
+	pub bound: TraitBound,
 }
 
 /// `TraitObjectTypeOneBound`
@@ -110,8 +110,8 @@ pub struct ImplTraitTypeOneBound {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct TraitObjectTypeOneBound {
-	dyn_:  Option<token::Dyn>,
-	bound: TraitBound,
+	pub dyn_:  Option<token::Dyn>,
+	pub bound: TraitBound,
 }
 
 /// `ImplTraitType`
@@ -119,8 +119,8 @@ pub struct TraitObjectTypeOneBound {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct ImplTraitType {
-	impl_: token::Impl,
-	bound: TypeParamBounds,
+	pub impl_: token::Impl,
+	pub bound: TypeParamBounds,
 }
 
 /// `TraitObjectType`
@@ -128,6 +128,6 @@ pub struct ImplTraitType {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct TraitObjectType {
-	dyn_:  Option<token::Dyn>,
-	bound: TypeParamBounds,
+	pub dyn_:  Option<token::Dyn>,
+	pub bound: TypeParamBounds,
 }

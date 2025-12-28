@@ -22,6 +22,6 @@ pub struct TupleType(Parenthesized<Option<TupleTypeInner>>);
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct TupleTypeInner {
-	tys: Vec<(Type, token::Comma)>,
-	end: Option<Box<Type>>,
+	pub tys: Vec<(Type, token::Comma)>,
+	pub end: Option<Box<Type>>,
 }

@@ -11,9 +11,9 @@ use {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct RawPointerType {
-	star: token::Star,
-	kind: RawPointerTypeKind,
-	ty:   Box<TypeNoBounds>,
+	pub star: token::Star,
+	pub kind: RawPointerTypeKind,
+	pub ty:   Box<TypeNoBounds>,
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]

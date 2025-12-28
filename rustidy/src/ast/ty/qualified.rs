@@ -16,6 +16,6 @@ use {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct QualifiedPathInType {
-	qualified: QualifiedPathType,
-	segments:  AtLeast1<(token::PathSep, TypePathSegment)>,
+	pub qualified: QualifiedPathType,
+	pub segments:  AtLeast1<(token::PathSep, TypePathSegment)>,
 }

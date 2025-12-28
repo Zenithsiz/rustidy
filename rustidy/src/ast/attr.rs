@@ -28,10 +28,10 @@ pub enum InnerAttrOrDocComment {
 #[derive(Parse, Format, Print)]
 #[parse(name = "an inner attribute")]
 pub struct InnerAttribute {
-	pound: token::Pound,
-	not:   token::Not,
+	pub pound: token::Pound,
+	pub not:   token::Not,
 	#[parse(fatal)]
-	attr:  Bracketed<Attr>,
+	pub attr:  Bracketed<Attr>,
 }
 
 /// Inner Doc comment
@@ -49,9 +49,9 @@ pub enum InnerDocComment {
 #[derive(Parse, Format, Print)]
 pub struct InnerLineDoc {
 	#[format(whitespace)]
-	whitespace: Whitespace,
-	prefix:     token::raw::InnerLineDoc,
-	comment:    RemainingLine,
+	pub whitespace: Whitespace,
+	pub prefix:     token::raw::InnerLineDoc,
+	pub comment:    RemainingLine,
 }
 
 /// Outer attribute or doc comment
@@ -68,8 +68,8 @@ pub enum OuterAttrOrDocComment {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct OuterAttribute {
-	pound: token::Pound,
-	open:  Bracketed<Attr>,
+	pub pound: token::Pound,
+	pub open:  Bracketed<Attr>,
 }
 
 /// Outer Doc comment
@@ -87,9 +87,9 @@ pub enum OuterDocComment {
 #[derive(Parse, Format, Print)]
 pub struct OuterLineDoc {
 	#[format(whitespace)]
-	whitespace: Whitespace,
-	prefix:     token::raw::OuterLineDoc,
-	comment:    RemainingLine,
+	pub whitespace: Whitespace,
+	pub prefix:     token::raw::OuterLineDoc,
+	pub comment:    RemainingLine,
 }
 
 /// `Attr`
@@ -98,8 +98,8 @@ pub struct OuterLineDoc {
 #[derive(Parse, Format, Print)]
 pub struct Attr {
 	// TODO: Unsafe attribute
-	path:  SimplePath,
-	input: Option<AttrInput>,
+	pub path:  SimplePath,
+	pub input: Option<AttrInput>,
 }
 
 /// `AttrInput`

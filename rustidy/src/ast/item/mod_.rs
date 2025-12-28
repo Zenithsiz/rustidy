@@ -17,11 +17,11 @@ use {
 #[derive(Parse, Format, Print)]
 #[parse(name = "module declaration")]
 pub struct Module {
-	unsafe_: Option<token::Unsafe>,
-	mod_:    token::Mod,
+	pub unsafe_: Option<token::Unsafe>,
+	pub mod_:    token::Mod,
 	#[parse(fatal)]
-	ident:   Identifier,
-	inner:   ModuleInner,
+	pub ident:   Identifier,
+	pub inner:   ModuleInner,
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]

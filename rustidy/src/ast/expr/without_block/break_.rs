@@ -13,8 +13,8 @@ use crate::{
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct BreakExpression {
-	continue_: token::Break,
-	label:     Option<LifetimeOrLabel>,
+	pub continue_: token::Break,
+	pub label:     Option<LifetimeOrLabel>,
 	// TODO: Do we need to be parse-recursive here?
-	expr:      Option<Box<Expression>>,
+	pub expr:      Option<Box<Expression>>,
 }

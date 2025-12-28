@@ -21,7 +21,7 @@ pub struct ArrayType(Bracketed<ArrayTypeInner>);
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct ArrayTypeInner {
-	ty:   Box<Type>,
-	semi: token::Semi,
-	expr: Box<Expression>,
+	pub ty:   Box<Type>,
+	pub semi: token::Semi,
+	pub expr: Box<Expression>,
 }

@@ -13,13 +13,13 @@ use crate::{
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct ConstantItem {
-	const_: token::Const,
-	name:   ConstantItemName,
+	pub const_: token::Const,
+	pub name:   ConstantItemName,
 	#[parse(fatal)]
-	colon:  token::Colon,
-	ty:     Type,
-	value:  Option<ConstantItemValue>,
-	semi:   token::Semi,
+	pub colon:  token::Colon,
+	pub ty:     Type,
+	pub value:  Option<ConstantItemValue>,
+	pub semi:   token::Semi,
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]
@@ -34,6 +34,6 @@ pub enum ConstantItemName {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct ConstantItemValue {
-	eq:   token::Eq,
-	expr: Expression,
+	pub eq:   token::Eq,
+	pub expr: Expression,
 }

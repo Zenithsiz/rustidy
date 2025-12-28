@@ -21,6 +21,6 @@ pub struct BlockExpression(pub Braced<WithInnerAttributes<Statements>>);
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct Statements {
-	stmts:         Vec<Statement>,
-	trailing_expr: Option<ExpressionWithoutBlock>,
+	pub stmts:         Vec<Statement>,
+	pub trailing_expr: Option<ExpressionWithoutBlock>,
 }

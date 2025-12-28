@@ -27,27 +27,27 @@ pub enum MacroInvocationSemi {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct MacroInvocationSemiParens {
-	path:   SimplePath,
-	not:    token::Not,
-	tokens: Parenthesized<Vec<TokenTree>>,
-	semi:   token::Semi,
+	pub path:   SimplePath,
+	pub not:    token::Not,
+	pub tokens: Parenthesized<Vec<TokenTree>>,
+	pub semi:   token::Semi,
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct MacroInvocationSemiBrackets {
-	path:   SimplePath,
-	not:    token::Not,
-	tokens: Bracketed<Vec<TokenTree>>,
-	semi:   token::Semi,
+	pub path:   SimplePath,
+	pub not:    token::Not,
+	pub tokens: Bracketed<Vec<TokenTree>>,
+	pub semi:   token::Semi,
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct MacroInvocationSemiBraces {
-	path:   SimplePath,
-	not:    token::Not,
-	tokens: Braced<Vec<TokenTree>>,
+	pub path:   SimplePath,
+	pub not:    token::Not,
+	pub tokens: Braced<Vec<TokenTree>>,
 }

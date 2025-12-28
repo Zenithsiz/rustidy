@@ -13,7 +13,7 @@ use crate::{
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct ReturnExpression {
-	return_: token::Return,
+	pub return_: token::Return,
 	// TODO: This needs to be recursive...
-	expr:    Option<Box<Expression>>,
+	pub expr:    Option<Box<Expression>>,
 }

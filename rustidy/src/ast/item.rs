@@ -70,8 +70,8 @@ pub enum ItemInner {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct VisItem {
-	vis:   Option<Visibility>,
-	inner: VisItemInner,
+	pub vis:   Option<Visibility>,
+	pub inner: VisItemInner,
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]
@@ -109,10 +109,10 @@ pub enum MacroItem {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct DeclMacro {
-	macro_: token::Macro,
+	pub macro_: token::Macro,
 	#[parse(fatal)]
-	ident:  Identifier,
-	body:   DeclMacroBody,
+	pub ident:  Identifier,
+	pub body:   DeclMacroBody,
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]
@@ -127,8 +127,8 @@ pub enum DeclMacroBody {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct DeclMacroBodyInline {
-	args: Parenthesized<DelimTokenTreeInner>,
-	body: Braced<DelimTokenTreeInner>,
+	pub args: Parenthesized<DelimTokenTreeInner>,
+	pub body: Braced<DelimTokenTreeInner>,
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]
@@ -140,7 +140,7 @@ pub struct DeclMacroBodyBranches(Braced<PunctuatedTrailing<DeclMacroBranch, toke
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct DeclMacroBranch {
-	args:  DelimTokenTree,
-	arrow: token::FatArrow,
-	body:  DelimTokenTree,
+	pub args:  DelimTokenTree,
+	pub arrow: token::FatArrow,
+	pub body:  DelimTokenTree,
 }

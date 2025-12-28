@@ -16,20 +16,20 @@ use {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct StaticItem {
-	safety:  Option<ItemSafety>,
-	static_: token::Static,
-	mut_:    Option<token::Mut>,
-	ident:   Identifier,
-	colon:   token::Colon,
-	ty:      Type,
-	value:   Option<StaticItemValue>,
-	semi:    token::Semi,
+	pub safety:  Option<ItemSafety>,
+	pub static_: token::Static,
+	pub mut_:    Option<token::Mut>,
+	pub ident:   Identifier,
+	pub colon:   token::Colon,
+	pub ty:      Type,
+	pub value:   Option<StaticItemValue>,
+	pub semi:    token::Semi,
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct StaticItemValue {
-	eq:    token::Eq,
-	value: Expression,
+	pub eq:    token::Eq,
+	pub value: Expression,
 }

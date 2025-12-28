@@ -51,10 +51,10 @@ pub struct EnumVariant(pub WithOuterAttributes<EnumVariantInner>);
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct EnumVariantInner {
-	vis:          Option<Visibility>,
-	ident:        Identifier,
-	kind:         Option<EnumVariantKind>,
-	discriminant: Option<EnumVariantDiscriminant>,
+	pub vis:          Option<Visibility>,
+	pub ident:        Identifier,
+	pub kind:         Option<EnumVariantKind>,
+	pub discriminant: Option<EnumVariantDiscriminant>,
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]
@@ -82,6 +82,6 @@ pub struct EnumVariantStruct(pub Braced<StructFields>);
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct EnumVariantDiscriminant {
-	eq:   token::Eq,
-	expr: Expression,
+	pub eq:   token::Eq,
+	pub expr: Expression,
 }

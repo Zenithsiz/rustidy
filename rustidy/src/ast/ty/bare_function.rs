@@ -23,12 +23,12 @@ use {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct BareFunctionType {
-	for_lifetimes: Option<ForLifetimes>,
-	qualifiers:    Option<FunctionTypeQualifiers>,
-	fn_:           token::Fn,
+	pub for_lifetimes: Option<ForLifetimes>,
+	pub qualifiers:    Option<FunctionTypeQualifiers>,
+	pub fn_:           token::Fn,
 	#[parse(fatal)]
-	params:        Parenthesized<Option<FunctionParametersMaybeNamedVariadic>>,
-	ret:           Option<BareFunctionReturnType>,
+	pub params:        Parenthesized<Option<FunctionParametersMaybeNamedVariadic>>,
+	pub ret:           Option<BareFunctionReturnType>,
 }
 
 /// `FunctionTypeQualifiers`
@@ -36,8 +36,8 @@ pub struct BareFunctionType {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct FunctionTypeQualifiers {
-	unsafe_: Option<token::Unsafe>,
-	extern_: Option<ExternAbi>,
+	pub unsafe_: Option<token::Unsafe>,
+	pub extern_: Option<ExternAbi>,
 }
 
 /// `FunctionParametersMaybeNamedVariadic`
@@ -65,16 +65,16 @@ pub struct MaybeNamedParam(pub WithOuterAttributes<MaybeNamedParamInner>);
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct MaybeNamedParamInner {
-	name: Option<MaybeNamedParamInnerName>,
-	ty:   Box<Type>,
+	pub name: Option<MaybeNamedParamInnerName>,
+	pub ty:   Box<Type>,
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct MaybeNamedParamInnerName {
-	inner: MaybeNamedParamInnerNameInner,
-	colon: token::Colon,
+	pub inner: MaybeNamedParamInnerNameInner,
+	pub colon: token::Colon,
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]
@@ -93,9 +93,9 @@ pub struct MaybeNamedFunctionParametersVariadic {
 	// TODO: `fn(...)` is accepted by the rust compiler, but
 	//       the reference demands at least 1 argument, should
 	//       we allow it?
-	params:   Punctuated<MaybeNamedParam, token::Comma>,
-	comma:    token::Comma,
-	variadic: WithOuterAttributes<token::DotDotDot>,
+	pub params:   Punctuated<MaybeNamedParam, token::Comma>,
+	pub comma:    token::Comma,
+	pub variadic: WithOuterAttributes<token::DotDotDot>,
 }
 
 /// `BareFunctionReturnType`
@@ -103,6 +103,6 @@ pub struct MaybeNamedFunctionParametersVariadic {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct BareFunctionReturnType {
-	arrow: token::RArrow,
-	ty:    Box<TypeNoBounds>,
+	pub arrow: token::RArrow,
+	pub ty:    Box<TypeNoBounds>,
 }

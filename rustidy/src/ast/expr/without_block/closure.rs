@@ -27,13 +27,13 @@ use {
 #[parse_recursive(into_root = ExpressionWithoutBlockInner)]
 #[parse_recursive(kind = "right")]
 pub struct ClosureExpression {
-	async_: Option<token::Async>,
-	move_:  Option<token::Move>,
-	params: ClosureParams,
-	ret:    Option<ClosureRet>,
+	pub async_: Option<token::Async>,
+	pub move_:  Option<token::Move>,
+	pub params: ClosureParams,
+	pub ret:    Option<ClosureRet>,
 	// TODO: If we parsed a return type, we should error
 	//       if this isn't a block expression.
-	expr:   Box<Expression>,
+	pub expr:   Box<Expression>,
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]
@@ -48,9 +48,9 @@ pub enum ClosureParams {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct ClosureRet {
-	arrow: token::RArrow,
+	pub arrow: token::RArrow,
 	#[parse(fatal)]
-	ty:    TypeNoBounds,
+	pub ty:    TypeNoBounds,
 }
 
 /// `ClosureParameters`
@@ -58,7 +58,7 @@ pub struct ClosureRet {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct ClosureParameters {
-	params: PunctuatedTrailing<ClosureParameter, token::Comma>,
+	pub params: PunctuatedTrailing<ClosureParameter, token::Comma>,
 }
 
 /// `ClosureParameter`
@@ -71,14 +71,14 @@ pub struct ClosureParameter(pub WithOuterAttributes<ClosureParameterInner>);
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct ClosureParameterInner {
-	pat: PatternNoTopAlt,
-	ty:  Option<ClosureParameterInnerTy>,
+	pub pat: PatternNoTopAlt,
+	pub ty:  Option<ClosureParameterInnerTy>,
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct ClosureParameterInnerTy {
-	colon: token::Colon,
-	ty:    Type,
+	pub colon: token::Colon,
+	pub ty:    Type,
 }

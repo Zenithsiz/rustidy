@@ -13,6 +13,6 @@ use crate::{
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct ContinueExpression {
-	continue_: token::Continue,
-	label:     Option<LifetimeOrLabel>,
+	pub continue_: token::Continue,
+	pub label:     Option<LifetimeOrLabel>,
 }

@@ -36,21 +36,21 @@ pub struct LetStatement(pub WithOuterAttributes<LetStatementInner>);
 #[derive(Parse, Format, Print)]
 #[parse(name = "a let statement")]
 pub struct LetStatementInner {
-	let_: token::Let,
+	pub let_: token::Let,
 	#[parse(fatal)]
-	pat:  PatternNoTopAlt,
-	ty:   Option<LetStatementTy>,
-	eq:   Option<LetStatementEq>,
-	semi: token::Semi,
+	pub pat:  PatternNoTopAlt,
+	pub ty:   Option<LetStatementTy>,
+	pub eq:   Option<LetStatementEq>,
+	pub semi: token::Semi,
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct LetStatementTy {
-	colon: token::Colon,
+	pub colon: token::Colon,
 	#[parse(fatal)]
-	ty:    Type,
+	pub ty:    Type,
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]
@@ -65,21 +65,21 @@ pub enum LetStatementEq {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct LetStatementEqNormal {
-	eq:   token::Eq,
+	pub eq:   token::Eq,
 	#[parse(fatal)]
-	expr: Expression,
+	pub expr: Expression,
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct LetStatementEqElse {
-	eq:        token::Eq,
+	pub eq:        token::Eq,
 	// TODO: Except `LazyBooleanExpression` and ending with `}`.
-	expr:      Expression,
-	else_:     token::Else,
+	pub expr:      Expression,
+	pub else_:     token::Else,
 	#[parse(fatal)]
-	else_expr: BlockExpression,
+	pub else_expr: BlockExpression,
 }
 
 /// `ExpressionStatement`
@@ -95,14 +95,14 @@ pub enum ExpressionStatement {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct ExpressionStatementWithoutBlock {
-	expr: ExpressionWithoutBlock,
-	semi: token::Semi,
+	pub expr: ExpressionWithoutBlock,
+	pub semi: token::Semi,
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct ExpressionStatementWithBlock {
-	expr: ExpressionWithBlock,
-	semi: Option<token::Semi>,
+	pub expr: ExpressionWithBlock,
+	pub semi: Option<token::Semi>,
 }

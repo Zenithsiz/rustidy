@@ -16,30 +16,30 @@ use {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct TypeAlias {
-	type_:    token::Type,
+	pub type_:    token::Type,
 	#[parse(fatal)]
-	ident:    Identifier,
-	generics: Option<GenericParams>,
-	bounds:   Option<TypeAliasBounds>,
-	where_:   Option<WhereClause>,
-	eq:       Option<TypeAliasEq>,
-	semi:     token::Semi,
+	pub ident:    Identifier,
+	pub generics: Option<GenericParams>,
+	pub bounds:   Option<TypeAliasBounds>,
+	pub where_:   Option<WhereClause>,
+	pub eq:       Option<TypeAliasEq>,
+	pub semi:     token::Semi,
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct TypeAliasBounds {
-	colon:  token::Colon,
-	bounds: TypeParamBounds,
+	pub colon:  token::Colon,
+	pub bounds: TypeParamBounds,
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct TypeAliasEq {
-	eq:     token::Eq,
+	pub eq:     token::Eq,
 	#[parse(fatal)]
-	ty:     Type,
-	where_: Option<WhereClause>,
+	pub ty:     Type,
+	pub where_: Option<WhereClause>,
 }

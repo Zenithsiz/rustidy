@@ -46,14 +46,14 @@ pub enum ExternalItemInner {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct ExternalItemStatic {
-	vis:     Option<Visibility>,
-	static_: StaticItem,
+	pub vis:     Option<Visibility>,
+	pub static_: StaticItem,
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct ExternalItemFunction {
-	vis:      Option<Visibility>,
-	function: Function,
+	pub vis:      Option<Visibility>,
+	pub function: Function,
 }

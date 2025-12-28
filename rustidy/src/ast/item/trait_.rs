@@ -29,20 +29,20 @@ use {
 #[derive(Parse, Format, Print)]
 #[parse(name = "a trait")]
 pub struct Trait {
-	trait_:   token::Trait,
+	pub trait_:   token::Trait,
 	#[parse(fatal)]
-	ident:    Identifier,
-	generics: Option<GenericParams>,
-	bounds:   Option<TraitColonBounds>,
-	body:     Braced<WithInnerAttributes<Vec<AssociatedItem>>>,
+	pub ident:    Identifier,
+	pub generics: Option<GenericParams>,
+	pub bounds:   Option<TraitColonBounds>,
+	pub body:     Braced<WithInnerAttributes<Vec<AssociatedItem>>>,
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct TraitColonBounds {
-	colon:  token::Colon,
-	bounds: Option<TypeParamBounds>,
+	pub colon:  token::Colon,
+	pub bounds: Option<TypeParamBounds>,
 }
 
 /// `AssociatedItem`
@@ -63,8 +63,8 @@ pub enum AssociatedItemInner {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct AssociatedItemVis {
-	vis:   Option<Visibility>,
-	inner: AssociatedItemVisInner,
+	pub vis:   Option<Visibility>,
+	pub inner: AssociatedItemVisInner,
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]

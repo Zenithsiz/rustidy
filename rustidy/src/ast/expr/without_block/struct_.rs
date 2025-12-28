@@ -25,8 +25,8 @@ use {
 #[parse(name = "a struct expression")]
 #[parse(skip_if_tag = "skip:StructExpression")]
 pub struct StructExpression {
-	path:  PathInExpression,
-	inner: Braced<Option<StructExpressionInner>>,
+	pub path:  PathInExpression,
+	pub inner: Braced<Option<StructExpressionInner>>,
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]
@@ -42,8 +42,8 @@ pub enum StructExpressionInner {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct StructExprFields {
-	fields: Punctuated<StructExprField, token::Comma>,
-	end:    Option<StructExprFieldsEnd>,
+	pub fields: Punctuated<StructExprField, token::Comma>,
+	pub end:    Option<StructExprFieldsEnd>,
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]
@@ -58,8 +58,8 @@ pub enum StructExprFieldsEnd {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct StructExprFieldsEndBase {
-	comma: token::Comma,
-	base:  StructBase,
+	pub comma: token::Comma,
+	pub base:  StructBase,
 }
 
 /// `StructExprField`
@@ -77,9 +77,9 @@ pub enum StructExprFieldInner {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct StructExprFieldInnerWithExpr {
-	start: StructExprFieldInnerWithExprStart,
-	colon: token::Colon,
-	expr:  Box<Expression>,
+	pub start: StructExprFieldInnerWithExprStart,
+	pub colon: token::Colon,
+	pub expr:  Box<Expression>,
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]
@@ -95,6 +95,6 @@ pub enum StructExprFieldInnerWithExprStart {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct StructBase {
-	dot_dot: token::DotDot,
-	expr:    Box<Expression>,
+	pub dot_dot: token::DotDot,
+	pub expr:    Box<Expression>,
 }

@@ -36,8 +36,8 @@ pub enum PathExpression {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct PathInExpression {
-	prefix:   Option<token::PathSep>,
-	segments: Punctuated<PathExprSegment, token::PathSep>,
+	pub prefix:   Option<token::PathSep>,
+	pub segments: Punctuated<PathExprSegment, token::PathSep>,
 }
 
 /// `PathExprSegment`
@@ -45,16 +45,16 @@ pub struct PathInExpression {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct PathExprSegment {
-	ident:   PathIdentSegment,
-	generic: Option<PathExprSegmentGenericArgs>,
+	pub ident:   PathIdentSegment,
+	pub generic: Option<PathExprSegmentGenericArgs>,
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct PathExprSegmentGenericArgs {
-	sep:     token::PathSep,
-	generic: GenericArgs,
+	pub sep:     token::PathSep,
+	pub generic: GenericArgs,
 }
 
 /// `PathIdentSegment`
@@ -81,7 +81,7 @@ pub struct GenericArgs(pub Delimited<Option<GenericArgsInner>, token::Lt, token:
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct GenericArgsInner {
-	args: PunctuatedTrailing<GenericArg, token::Comma>,
+	pub args: PunctuatedTrailing<GenericArg, token::Comma>,
 }
 
 /// `GenericArg`
@@ -114,11 +114,11 @@ pub enum GenericArgsConst {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct GenericArgsBinding {
-	ident:    Identifier,
-	generics: Option<Box<GenericArgs>>,
-	eq:       token::Eq,
+	pub ident:    Identifier,
+	pub generics: Option<Box<GenericArgs>>,
+	pub eq:       token::Eq,
 	#[parse(fatal)]
-	ty:       Box<Type>,
+	pub ty:       Box<Type>,
 }
 
 /// `GenericArgsBounds`
@@ -126,11 +126,11 @@ pub struct GenericArgsBinding {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct GenericArgsBounds {
-	ident:    Identifier,
-	generics: Option<Box<GenericArgs>>,
-	colon:    token::Colon,
+	pub ident:    Identifier,
+	pub generics: Option<Box<GenericArgs>>,
+	pub colon:    token::Colon,
 	#[parse(fatal)]
-	ty:       Box<TypeParamBounds>,
+	pub ty:       Box<TypeParamBounds>,
 }
 
 /// `TypePathFn`
@@ -138,8 +138,8 @@ pub struct GenericArgsBounds {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct TypePathFn {
-	inputs: Parenthesized<Option<TypePathFnInputs>>,
-	ret:    Option<TypePathFnRet>,
+	pub inputs: Parenthesized<Option<TypePathFnInputs>>,
+	pub ret:    Option<TypePathFnRet>,
 }
 
 /// `TypePathFnInputs`
@@ -152,8 +152,8 @@ pub struct TypePathFnInputs(PunctuatedTrailing<Box<Type>, token::Comma>);
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct TypePathFnRet {
-	arrow: token::RArrow,
-	ty:    Box<TypeNoBounds>,
+	pub arrow: token::RArrow,
+	pub ty:    Box<TypeNoBounds>,
 }
 
 /// `QualifiedPathInExpression`
@@ -161,8 +161,8 @@ pub struct TypePathFnRet {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct QualifiedPathInExpression {
-	qualified: QualifiedPathType,
-	segments:  AtLeast1<(token::PathSep, PathExprSegment)>,
+	pub qualified: QualifiedPathType,
+	pub segments:  AtLeast1<(token::PathSep, PathExprSegment)>,
 }
 
 /// `QualifiedPathType`
@@ -175,22 +175,22 @@ pub struct QualifiedPathType(Delimited<QualifiedPathTypeInner, token::Lt, token:
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct QualifiedPathTypeInner {
-	ty:  Box<Type>,
-	as_: Option<QualifiedPathTypeAs>,
+	pub ty:  Box<Type>,
+	pub as_: Option<QualifiedPathTypeAs>,
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct QualifiedPathTypeAs {
-	as_: token::As,
-	ty:  TypePath,
+	pub as_: token::As,
+	pub ty:  TypePath,
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct QualifiedPathInTypeSegment {
-	sep:     token::PathSep,
-	segment: TypePathSegment,
+	pub sep:     token::PathSep,
+	pub segment: TypePathSegment,
 }

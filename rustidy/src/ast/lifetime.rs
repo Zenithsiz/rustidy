@@ -41,8 +41,8 @@ pub enum LifetimeOrLabel {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Format, Print)]
 pub struct QuoteNotQuote<T> {
-	quote: token::Quote,
-	value: T,
+	pub quote: token::Quote,
+	pub value: T,
 }
 
 #[derive(derive_more::Debug, ParseError)]

@@ -19,6 +19,6 @@ pub struct TupleExpression(Parenthesized<Option<TupleElements>>);
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct TupleElements {
-	exprs: AtLeast1<(Box<Expression>, token::Comma)>,
-	last:  Option<Box<Expression>>,
+	pub exprs: AtLeast1<(Box<Expression>, token::Comma)>,
+	pub last:  Option<Box<Expression>>,
 }

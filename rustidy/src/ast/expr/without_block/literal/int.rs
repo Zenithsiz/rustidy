@@ -13,8 +13,8 @@ use {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct IntegerLiteral {
-	inner:  IntegerLiteralInner,
-	suffix: Option<SuffixNoE>,
+	pub inner:  IntegerLiteralInner,
+	pub suffix: Option<SuffixNoE>,
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]

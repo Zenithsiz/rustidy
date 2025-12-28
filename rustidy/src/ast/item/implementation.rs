@@ -34,11 +34,11 @@ pub enum Implementation {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct InherentImpl {
-	impl_:    token::Impl,
-	generics: Option<GenericParams>,
-	ty:       Type,
-	where_:   Option<WhereClause>,
-	body:     Braced<WithInnerAttributes<Vec<AssociatedItem>>>,
+	pub impl_:    token::Impl,
+	pub generics: Option<GenericParams>,
+	pub ty:       Type,
+	pub where_:   Option<WhereClause>,
+	pub body:     Braced<WithInnerAttributes<Vec<AssociatedItem>>>,
 }
 
 /// `TraitImpl`
@@ -46,14 +46,14 @@ pub struct InherentImpl {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct TraitImpl {
-	unsafe_:  Option<token::Unsafe>,
-	impl_:    token::Impl,
-	generics: Option<GenericParams>,
-	not:      Option<token::Not>,
-	trait_:   TypePath,
+	pub unsafe_:  Option<token::Unsafe>,
+	pub impl_:    token::Impl,
+	pub generics: Option<GenericParams>,
+	pub not:      Option<token::Not>,
+	pub trait_:   TypePath,
 	#[parse(fatal)]
-	for_:     token::For,
-	ty:       Type,
-	where_:   Option<WhereClause>,
-	body:     Braced<WithInnerAttributes<Vec<AssociatedItem>>>,
+	pub for_:     token::For,
+	pub ty:       Type,
+	pub where_:   Option<WhereClause>,
+	pub body:     Braced<WithInnerAttributes<Vec<AssociatedItem>>>,
 }

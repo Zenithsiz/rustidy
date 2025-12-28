@@ -26,8 +26,8 @@ use {
 #[derive(Parse, Format, Print)]
 #[parse(name = "a pattern")]
 pub struct Pattern {
-	top_alt: Option<token::Or>,
-	inner:   Punctuated<PatternNoTopAlt, token::Or>,
+	pub top_alt: Option<token::Or>,
+	pub inner:   Punctuated<PatternNoTopAlt, token::Or>,
 }
 
 /// `PatternNoTopAlt`
@@ -104,9 +104,9 @@ pub struct PathPattern(PathExpression);
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct ReferencePattern {
-	ref_: ReferencePatternRef,
-	mut_: Option<token::Mut>,
-	pat:  Box<PatternWithoutRange>,
+	pub ref_: ReferencePatternRef,
+	pub mut_: Option<token::Mut>,
+	pub pat:  Box<PatternWithoutRange>,
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]
@@ -122,8 +122,8 @@ pub enum ReferencePatternRef {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct StructPattern {
-	top:   PathInExpression,
-	items: Braced<Option<StructPatternElements>>,
+	pub top:   PathInExpression,
+	pub items: Braced<Option<StructPatternElements>>,
 }
 
 /// `StructPatternElements`
@@ -176,27 +176,27 @@ pub enum StructPatternFieldInner {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct StructPatternFieldTuplePat {
-	idx: TupleIndex,
-	dot: token::Colon,
-	pat: Box<Pattern>,
+	pub idx: TupleIndex,
+	pub dot: token::Colon,
+	pub pat: Box<Pattern>,
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct StructPatternFieldIdentPat {
-	ident: Identifier,
-	dot:   token::Colon,
-	pat:   Box<Pattern>,
+	pub ident: Identifier,
+	pub dot:   token::Colon,
+	pub pat:   Box<Pattern>,
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct StructPatternFieldIdent {
-	ref_:  Option<token::Ref>,
-	mut_:  Option<token::Mut>,
-	ident: Identifier,
+	pub ref_:  Option<token::Ref>,
+	pub mut_:  Option<token::Mut>,
+	pub ident: Identifier,
 }
 
 /// `StructPatternEtCetera`
@@ -210,8 +210,8 @@ pub struct StructPatternEtCetera(token::DotDot);
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct TupleStructPattern {
-	top:   PathInExpression,
-	items: Parenthesized<Option<TupleStructItems>>,
+	pub top:   PathInExpression,
+	pub items: Parenthesized<Option<TupleStructItems>>,
 }
 
 /// `TupleStructItems`
@@ -219,7 +219,7 @@ pub struct TupleStructPattern {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct TupleStructItems {
-	items: PunctuatedTrailing<Box<Pattern>, token::Comma>,
+	pub items: PunctuatedTrailing<Box<Pattern>, token::Comma>,
 }
 
 /// `TuplePattern`
@@ -242,17 +242,17 @@ pub enum TuplePatternItems {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct TupleItemsPat {
-	pat:   Box<Pattern>,
-	comma: token::Comma,
+	pub pat:   Box<Pattern>,
+	pub comma: token::Comma,
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct TupleItemsPats {
-	first:          Box<Pattern>,
-	rest:           AtLeast1<(token::Comma, Box<Pattern>)>,
-	trailing_comma: Option<token::Comma>,
+	pub first:          Box<Pattern>,
+	pub rest:           AtLeast1<(token::Comma, Box<Pattern>)>,
+	pub trailing_comma: Option<token::Comma>,
 }
 
 /// `LiteralPattern`
@@ -260,8 +260,8 @@ pub struct TupleItemsPats {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct LiteralPattern {
-	minus:   Option<token::Minus>,
-	literal: LiteralExpression,
+	pub minus:   Option<token::Minus>,
+	pub literal: LiteralExpression,
 }
 
 /// `IdentifierPattern`
@@ -269,16 +269,16 @@ pub struct LiteralPattern {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct IdentifierPattern {
-	ref_:  Option<token::Ref>,
-	mut_:  Option<token::Mut>,
-	ident: Identifier,
-	rest:  Option<IdentifierPatternRest>,
+	pub ref_:  Option<token::Ref>,
+	pub mut_:  Option<token::Mut>,
+	pub ident: Identifier,
+	pub rest:  Option<IdentifierPatternRest>,
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct IdentifierPatternRest {
-	at:  token::At,
-	pat: Box<PatternNoTopAlt>,
+	pub at:  token::At,
+	pub pat: Box<PatternNoTopAlt>,
 }

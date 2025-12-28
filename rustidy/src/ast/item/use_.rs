@@ -14,10 +14,10 @@ use crate::{
 #[derive(Parse, Format, Print)]
 #[parse(name = "use declaration")]
 pub struct UseDeclaration {
-	use_: token::Use,
+	pub use_: token::Use,
 	#[parse(fatal)]
-	tree: UseTree,
-	semi: token::Semi,
+	pub tree: UseTree,
+	pub semi: token::Semi,
 }
 
 /// `UseTree`
@@ -35,49 +35,49 @@ pub enum UseTree {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct UseTreeGlob {
-	prefix: Option<UseTreeGlobPrefix>,
-	glob:   token::Star,
+	pub prefix: Option<UseTreeGlobPrefix>,
+	pub glob:   token::Star,
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct UseTreeGlobPrefix {
-	path: Option<SimplePath>,
-	sep:  token::PathSep,
+	pub path: Option<SimplePath>,
+	pub sep:  token::PathSep,
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct UseTreeGroup {
-	prefix: Option<UseTreeGroupPrefix>,
-	tree:   Braced<Option<PunctuatedTrailing<Box<UseTree>, token::Comma>>>,
+	pub prefix: Option<UseTreeGroupPrefix>,
+	pub tree:   Braced<Option<PunctuatedTrailing<Box<UseTree>, token::Comma>>>,
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct UseTreeGroupPrefix {
-	path: Option<SimplePath>,
-	sep:  token::PathSep,
+	pub path: Option<SimplePath>,
+	pub sep:  token::PathSep,
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct UseTreeSimple {
-	path: SimplePath,
-	as_:  Option<UseTreeSimpleAs>,
+	pub path: SimplePath,
+	pub as_:  Option<UseTreeSimpleAs>,
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct UseTreeSimpleAs {
-	as_:   token::As,
+	pub as_:   token::As,
 	#[parse(fatal)]
-	value: UseTreeSimpleAsValue,
+	pub value: UseTreeSimpleAsValue,
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]

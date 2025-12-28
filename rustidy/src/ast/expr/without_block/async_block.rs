@@ -13,7 +13,7 @@ use crate::{
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct AsyncBlockExpression {
-	async_: token::Async,
-	move_:  Option<token::Move>,
-	block:  Box<BlockExpression>,
+	pub async_: token::Async,
+	pub move_:  Option<token::Move>,
+	pub block:  Box<BlockExpression>,
 }

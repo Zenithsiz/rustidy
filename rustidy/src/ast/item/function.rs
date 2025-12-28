@@ -24,15 +24,15 @@ use crate::{
 #[derive(Parse, Format, Print)]
 #[parse(name = "a function")]
 pub struct Function {
-	qualifiers: FunctionQualifiers,
-	fn_:        token::Fn,
+	pub qualifiers: FunctionQualifiers,
+	pub fn_:        token::Fn,
 	#[parse(fatal)]
-	ident:      Identifier,
-	generics:   Option<GenericParams>,
-	params:     Parenthesized<Option<FunctionParameters>>,
-	ret:        Option<FunctionReturnType>,
-	where_:     Option<WhereClause>,
-	body:       FunctionBody,
+	pub ident:      Identifier,
+	pub generics:   Option<GenericParams>,
+	pub params:     Parenthesized<Option<FunctionParameters>>,
+	pub ret:        Option<FunctionReturnType>,
+	pub where_:     Option<WhereClause>,
+	pub body:       FunctionBody,
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]
@@ -51,18 +51,18 @@ pub enum FunctionBody {
 #[derive(Parse, Format, Print)]
 #[parse(name = "function qualifiers")]
 pub struct FunctionQualifiers {
-	const_:  Option<token::Const>,
-	async_:  Option<token::Async>,
-	safety:  Option<ItemSafety>,
-	extern_: Option<ExternAbi>,
+	pub const_:  Option<token::Const>,
+	pub async_:  Option<token::Async>,
+	pub safety:  Option<ItemSafety>,
+	pub extern_: Option<ExternAbi>,
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct ExternAbi {
-	extern_: token::Extern,
-	abi:     Option<Abi>,
+	pub extern_: token::Extern,
+	pub abi:     Option<Abi>,
 }
 
 /// `Abi`
@@ -98,24 +98,24 @@ pub enum FunctionParameters {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct FunctionParametersOnlySelf {
-	self_:          SelfParam,
-	trailing_comma: Option<token::Comma>,
+	pub self_:          SelfParam,
+	pub trailing_comma: Option<token::Comma>,
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct FunctionParametersFull {
-	self_: Option<FunctionParametersFullSelf>,
-	rest:  PunctuatedTrailing<FunctionParam, token::Comma>,
+	pub self_: Option<FunctionParametersFullSelf>,
+	pub rest:  PunctuatedTrailing<FunctionParam, token::Comma>,
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct FunctionParametersFullSelf {
-	self_: SelfParam,
-	comma: token::Comma,
+	pub self_: SelfParam,
+	pub comma: token::Comma,
 }
 
 /// `FunctionParam`
@@ -138,10 +138,10 @@ pub enum FunctionParamInner {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct FunctionParamPattern {
-	pat:   PatternNoTopAlt,
-	colon: token::Colon,
+	pub pat:   PatternNoTopAlt,
+	pub colon: token::Colon,
 	#[parse(fatal)]
-	ty:    Type,
+	pub ty:    Type,
 }
 
 /// `SelfParam`
@@ -163,18 +163,18 @@ pub enum ShorthandOrTypedSelf {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct ShorthandSelf {
-	ref_:  Option<ShorthandSelfRef>,
-	mut_:  Option<token::Mut>,
-	self_: token::SelfLower,
+	pub ref_:  Option<ShorthandSelfRef>,
+	pub mut_:  Option<token::Mut>,
+	pub self_: token::SelfLower,
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct ShorthandSelfRef {
-	ref_:     token::And,
+	pub ref_:     token::And,
 	#[parse(fatal)]
-	lifetime: Option<Lifetime>,
+	pub lifetime: Option<Lifetime>,
 }
 
 /// `TypedSelf`
@@ -182,10 +182,10 @@ pub struct ShorthandSelfRef {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct TypedSelf {
-	mut_:  Option<token::Mut>,
-	self_: token::SelfLower,
-	colon: token::Colon,
-	ty:    Type,
+	pub mut_:  Option<token::Mut>,
+	pub self_: token::SelfLower,
+	pub colon: token::Colon,
+	pub ty:    Type,
 }
 
 /// `FunctionReturnType`
@@ -194,9 +194,9 @@ pub struct TypedSelf {
 #[derive(Parse, Format, Print)]
 #[parse(name = "function return type")]
 pub struct FunctionReturnType {
-	arrow: token::RArrow,
+	pub arrow: token::RArrow,
 	#[parse(fatal)]
-	ty:    Type,
+	pub ty:    Type,
 }
 
 /// `GenericParams`
@@ -227,16 +227,16 @@ pub enum GenericParamInner {
 #[derive(Parse, Format, Print)]
 #[parse(name = "a lifetime parameter")]
 pub struct LifetimeParam {
-	lifetime: Lifetime,
-	bounds:   Option<LifetimeParamBounds>,
+	pub lifetime: Lifetime,
+	pub bounds:   Option<LifetimeParamBounds>,
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct LifetimeParamBounds {
-	colon:  token::Colon,
-	bounds: Option<LifetimeBounds>,
+	pub colon:  token::Colon,
+	pub bounds: Option<LifetimeBounds>,
 }
 
 /// `LifetimeBounds`
@@ -251,25 +251,25 @@ pub struct LifetimeBounds(PunctuatedTrailing<Lifetime, token::Plus>);
 #[derive(Parse, Format, Print)]
 #[parse(name = "a type parameter")]
 pub struct TypeParam {
-	ident:  Identifier,
-	bounds: Option<TypeParamColonBounds>,
-	eq_ty:  Option<TypeParamEqType>,
+	pub ident:  Identifier,
+	pub bounds: Option<TypeParamColonBounds>,
+	pub eq_ty:  Option<TypeParamEqType>,
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct TypeParamColonBounds {
-	colon:  token::Colon,
-	bounds: Option<TypeParamBounds>,
+	pub colon:  token::Colon,
+	pub bounds: Option<TypeParamBounds>,
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct TypeParamEqType {
-	eq: token::Eq,
-	ty: Box<Type>,
+	pub eq: token::Eq,
+	pub ty: Box<Type>,
 }
 
 /// `TypeParamBounds`
@@ -301,8 +301,8 @@ pub enum TraitBound {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct TraitBoundInner {
-	prefix: Option<TraitBoundInnerPrefix>,
-	path:   TypePath,
+	pub prefix: Option<TraitBoundInnerPrefix>,
+	pub path:   TypePath,
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]
@@ -318,10 +318,10 @@ pub enum TraitBoundInnerPrefix {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct WhereClause {
-	where_: token::Where,
+	pub where_: token::Where,
 	// TODO: The reference says that this can't have a trailing comma,
 	//       but the compiler accepts it, so we do to.
-	items:  Option<PunctuatedTrailing<WhereClauseItem, token::Comma>>,
+	pub items:  Option<PunctuatedTrailing<WhereClauseItem, token::Comma>>,
 }
 
 /// `WhereClauseItem`
@@ -338,10 +338,10 @@ pub enum WhereClauseItem {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct LifetimeWhereClauseItem {
-	lifetime: Lifetime,
-	colon:    token::Colon,
+	pub lifetime: Lifetime,
+	pub colon:    token::Colon,
 	#[parse(fatal)]
-	bounds:   LifetimeBounds,
+	pub bounds:   LifetimeBounds,
 }
 
 /// `TypeBoundWhereClauseItem`
@@ -349,11 +349,11 @@ pub struct LifetimeWhereClauseItem {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct TypeBoundWhereClauseItem {
-	for_lifetimes: Option<ForLifetimes>,
-	ty:            Type,
-	colon:         token::Colon,
+	pub for_lifetimes: Option<ForLifetimes>,
+	pub ty:            Type,
+	pub colon:         token::Colon,
 	#[parse(fatal)]
-	bounds:        Option<TypeParamBounds>,
+	pub bounds:        Option<TypeParamBounds>,
 }
 
 /// `ForLifetimes`
@@ -361,8 +361,8 @@ pub struct TypeBoundWhereClauseItem {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct ForLifetimes {
-	for_:   token::For,
-	params: GenericParams,
+	pub for_:   token::For,
+	pub params: GenericParams,
 }
 
 /// `ConstParam`
@@ -370,11 +370,11 @@ pub struct ForLifetimes {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct ConstParam {
-	const_: token::Const,
-	ident:  Identifier,
-	colon:  token::Colon,
-	ty:     Box<Type>,
-	rest:   Option<ConstParamRest>,
+	pub const_: token::Const,
+	pub ident:  Identifier,
+	pub colon:  token::Colon,
+	pub ty:     Box<Type>,
+	pub rest:   Option<ConstParamRest>,
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]

@@ -33,11 +33,11 @@ pub enum Struct {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct StructStruct {
-	struct_:  token::Struct,
-	ident:    Identifier,
-	generics: Option<GenericParams>,
-	where_:   Option<WhereClause>,
-	inner:    StructStructInner,
+	pub struct_:  token::Struct,
+	pub ident:    Identifier,
+	pub generics: Option<GenericParams>,
+	pub where_:   Option<WhereClause>,
+	pub inner:    StructStructInner,
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]
@@ -64,10 +64,10 @@ pub struct StructField(pub WithOuterAttributes<StructFieldInner>);
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct StructFieldInner {
-	vis:   Option<Visibility>,
-	ident: Identifier,
-	colon: token::Colon,
-	ty:    Type,
+	pub vis:   Option<Visibility>,
+	pub ident: Identifier,
+	pub colon: token::Colon,
+	pub ty:    Type,
 }
 
 /// `TupleStruct`
@@ -75,13 +75,13 @@ pub struct StructFieldInner {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct TupleStruct {
-	struct_:  token::Struct,
-	ident:    Identifier,
-	generics: Option<GenericParams>,
-	fields:   Parenthesized<Option<TupleFields>>,
+	pub struct_:  token::Struct,
+	pub ident:    Identifier,
+	pub generics: Option<GenericParams>,
+	pub fields:   Parenthesized<Option<TupleFields>>,
 	#[parse(fatal)]
-	where_:   Option<WhereClause>,
-	semi:     token::Semi,
+	pub where_:   Option<WhereClause>,
+	pub semi:     token::Semi,
 }
 
 /// `TupleFields`
@@ -101,6 +101,6 @@ pub struct TupleField(pub WithOuterAttributes<TupleFieldInner>);
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct TupleFieldInner {
-	vis: Option<Visibility>,
-	ty:  Type,
+	pub vis: Option<Visibility>,
+	pub ty:  Type,
 }

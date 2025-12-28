@@ -19,10 +19,10 @@ use {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct Union {
-	union:    token::Union,
+	pub union:    token::Union,
 	#[parse(fatal)]
-	ident:    Identifier,
-	generics: Option<GenericParams>,
-	where_:   Option<WhereClause>,
-	fields:   Braced<Option<StructFields>>,
+	pub ident:    Identifier,
+	pub generics: Option<GenericParams>,
+	pub where_:   Option<WhereClause>,
+	pub fields:   Braced<Option<StructFields>>,
 }

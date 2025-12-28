@@ -20,11 +20,11 @@ use crate::{
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct MacroRulesDefinition {
-	macro_rules: token::MacroRules,
+	pub macro_rules: token::MacroRules,
 	#[parse(fatal)]
-	not:         token::Not,
-	ident:       Identifier,
-	def:         MacroRulesDef,
+	pub not:         token::Not,
+	pub ident:       Identifier,
+	pub def:         MacroRulesDef,
 }
 
 /// `MacroRulesDef`
@@ -41,23 +41,23 @@ pub enum MacroRulesDef {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct MacroRulesDefParens {
-	rules: Parenthesized<MacroRules>,
-	semi:  token::Semi,
+	pub rules: Parenthesized<MacroRules>,
+	pub semi:  token::Semi,
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct MacroRulesDefBrackets {
-	rules: Bracketed<MacroRules>,
-	semi:  token::Semi,
+	pub rules: Bracketed<MacroRules>,
+	pub semi:  token::Semi,
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct MacroRulesDefBraces {
-	rules: Braced<MacroRules>,
+	pub rules: Braced<MacroRules>,
 }
 
 /// `MacroRules`
@@ -71,10 +71,10 @@ pub struct MacroRules(PunctuatedTrailing<MacroRule, token::Semi>);
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct MacroRule {
-	matcher:     MacroMatcher,
+	pub matcher:     MacroMatcher,
 	#[parse(fatal)]
-	arrow:       token::FatArrow,
-	transcriber: MacroTranscriber,
+	pub arrow:       token::FatArrow,
+	pub transcriber: MacroTranscriber,
 }
 
 /// `MacroMatcher`
@@ -106,11 +106,11 @@ pub enum MacroMatch {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct MacroMatchDollarIdent {
-	dollar: token::Dollar,
-	ident:  MacroMatchDollarIdentInner,
+	pub dollar: token::Dollar,
+	pub ident:  MacroMatchDollarIdentInner,
 	#[parse(fatal)]
-	colon:  token::Colon,
-	spec:   MacroFragSpec,
+	pub colon:  token::Colon,
+	pub spec:   MacroFragSpec,
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]
@@ -149,11 +149,11 @@ pub enum MacroFragSpec {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct MacroMatchDollarRep {
-	dollar:  token::Dollar,
-	matches: Parenthesized<AtLeast1<Box<MacroMatch>>>,
+	pub dollar:  token::Dollar,
+	pub matches: Parenthesized<AtLeast1<Box<MacroMatch>>>,
 	#[parse(fatal)]
-	rep_sep: Option<MacroRepSep>,
-	rep_op:  MacroRepOp,
+	pub rep_sep: Option<MacroRepSep>,
+	pub rep_op:  MacroRepOp,
 }
 
 /// `MacroRepSep`

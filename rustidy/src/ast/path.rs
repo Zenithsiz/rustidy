@@ -13,8 +13,8 @@ use {
 #[derive(Parse, Format, Print)]
 #[parse(name = "a simple path")]
 pub struct SimplePath {
-	prefix:   Option<token::PathSep>,
-	segments: Punctuated<SimplePathSegment, token::PathSep>,
+	pub prefix:   Option<token::PathSep>,
+	pub segments: Punctuated<SimplePathSegment, token::PathSep>,
 }
 
 /// `SimplePathSegment`

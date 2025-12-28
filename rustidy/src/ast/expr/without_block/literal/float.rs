@@ -18,8 +18,8 @@ use {
 #[derive(Parse, Format, Print)]
 #[parse(name = "a floating point literal")]
 pub struct FloatLiteral {
-	int:    DecLiteral,
-	dot:    token::Dot,
-	frac:   DecLiteral,
-	suffix: Option<IdentifierOrKeyword>,
+	pub int:    DecLiteral,
+	pub dot:    token::Dot,
+	pub frac:   DecLiteral,
+	pub suffix: Option<IdentifierOrKeyword>,
 }

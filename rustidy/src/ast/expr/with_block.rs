@@ -45,9 +45,9 @@ pub enum ExpressionWithBlockInner {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct ConstBlockExpression {
-	const_: token::Const,
+	pub const_: token::Const,
 	#[parse(fatal)]
-	expr:   BlockExpression,
+	pub expr:   BlockExpression,
 }
 
 /// `UnsafeBlockExpression`
@@ -55,9 +55,9 @@ pub struct ConstBlockExpression {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct UnsafeBlockExpression {
-	unsafe_: token::Unsafe,
+	pub unsafe_: token::Unsafe,
 	#[parse(fatal)]
-	expr:    BlockExpression,
+	pub expr:    BlockExpression,
 }
 
 // TODO: The specification doesn't have this, so we need to refine it
@@ -65,9 +65,9 @@ pub struct UnsafeBlockExpression {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct TryBlockExpression {
-	unsafe_: token::Try,
+	pub unsafe_: token::Try,
 	#[parse(fatal)]
-	expr:    BlockExpression,
+	pub expr:    BlockExpression,
 }
 
 /// `IfExpression`
@@ -76,20 +76,20 @@ pub struct TryBlockExpression {
 #[derive(Parse, Format, Print)]
 #[parse(name = "an if expression")]
 pub struct IfExpression {
-	if_:        token::If,
+	pub if_:        token::If,
 	#[parse(fatal)]
-	conditions: Conditions,
-	expr:       BlockExpression,
-	else_:      Option<IfExpressionElse>,
+	pub conditions: Conditions,
+	pub expr:       BlockExpression,
+	pub else_:      Option<IfExpressionElse>,
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct IfExpressionElse {
-	else_: token::Else,
+	pub else_: token::Else,
 	#[parse(fatal)]
-	inner: IfExpressionElseInner,
+	pub inner: IfExpressionElseInner,
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]
@@ -141,10 +141,10 @@ pub enum LetChainCondition {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct LetChainConditionLet {
-	let_:      token::Let,
+	pub let_:      token::Let,
 	#[parse(fatal)]
-	pat:       Pattern,
-	eq:        token::Eq,
+	pub pat:       Pattern,
+	pub eq:        token::Eq,
 	#[parse(with_tag = "skip:BlockExpression")]
 	#[parse(with_tag = "skip:StructExpression")]
 	#[parse(with_tag = "skip:LazyBooleanExpression")]
@@ -153,7 +153,7 @@ pub struct LetChainConditionLet {
 	#[parse(with_tag = "skip:RangeInclusiveExpr")]
 	#[parse(with_tag = "skip:AssignmentExpression")]
 	#[parse(with_tag = "skip:CompoundAssignmentExpression")]
-	scrutinee: Box<Scrutinee>,
+	pub scrutinee: Box<Scrutinee>,
 }
 
 /// `LoopExpression`
@@ -161,8 +161,8 @@ pub struct LetChainConditionLet {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct LoopExpression {
-	label: Option<LoopLabel>,
-	inner: LoopExpressionInner,
+	pub label: Option<LoopLabel>,
+	pub inner: LoopExpressionInner,
 }
 
 /// `LoopLabel`
@@ -170,8 +170,8 @@ pub struct LoopExpression {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct LoopLabel {
-	lifetime: LifetimeOrLabel,
-	colon:    token::Colon,
+	pub lifetime: LifetimeOrLabel,
+	pub colon:    token::Colon,
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]
@@ -189,12 +189,12 @@ pub enum LoopExpressionInner {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct IteratorLoopExpression {
-	for_: token::For,
-	pat:  Pattern,
-	in_:  token::In,
+	pub for_: token::For,
+	pub pat:  Pattern,
+	pub in_:  token::In,
 	#[parse(with_tag = "skip:StructExpression")]
-	expr: Box<Expression>,
-	body: BlockExpression,
+	pub expr: Box<Expression>,
+	pub body: BlockExpression,
 }
 
 /// `PredicateLoopExpression`
@@ -202,9 +202,9 @@ pub struct IteratorLoopExpression {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct PredicateLoopExpression {
-	for_: token::While,
-	cond: Conditions,
-	body: BlockExpression,
+	pub for_: token::While,
+	pub cond: Conditions,
+	pub body: BlockExpression,
 }
 
 /// `InfiniteLoopExpression`
@@ -212,8 +212,8 @@ pub struct PredicateLoopExpression {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct InfiniteLoopExpression {
-	loop_: token::Loop,
-	body:  BlockExpression,
+	pub loop_: token::Loop,
+	pub body:  BlockExpression,
 }
 
 /// `LabelBlockExpression`
