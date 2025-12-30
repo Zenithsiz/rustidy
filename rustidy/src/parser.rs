@@ -440,9 +440,6 @@ impl<'input> Parser<'input> {
 pub struct ParserRange(Range<ParserPos>);
 
 impl ParserRange {
-	/// An empty range, used for missing ranges
-	pub const EMPTY: Self = Self(ParserPos(0)..ParserPos(0));
-
 	/// Creates a parser range from a start and end position
 	#[must_use]
 	pub const fn new(start: ParserPos, end: ParserPos) -> Self {

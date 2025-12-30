@@ -39,11 +39,11 @@ impl AstStr {
 		}))
 	}
 
-	/// Creates a new ast string from a string
-	pub fn from_string(s: impl Into<Cow<'static, str>>) -> Self {
+	/// Creates a new ast string with a replacement
+	pub fn from_string(range: ParserRange, replacement: impl Into<Cow<'static, str>>) -> Self {
 		Self(Box::new(Inner {
-			range:       ParserRange::EMPTY,
-			replacement: Some(s.into()),
+			range,
+			replacement: Some(replacement.into()),
 		}))
 	}
 
