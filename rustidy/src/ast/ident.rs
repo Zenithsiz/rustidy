@@ -11,14 +11,11 @@ pub use self::{
 };
 
 // Imports
-use {
-	super::whitespace::Whitespace,
-	crate::{
-		Format,
-		Parse,
-		Print,
-		parser::{Parser, ParserError},
-	},
+use crate::{
+	Format,
+	Parse,
+	Print,
+	parser::{Parser, ParserError},
 };
 
 /// `IDENTIFIER`
@@ -74,12 +71,6 @@ pub enum NonKeywordIdentifierError {
 
 	#[parse_error(fmt = "Identifier was a strict or reserved keyword")]
 	StrictOrReserved,
-}
-
-impl AsRef<Whitespace> for NonKeywordIdentifier {
-	fn as_ref(&self) -> &Whitespace {
-		self.0.as_ref()
-	}
 }
 
 /// `NON_KEYWORD_IDENTIFIER` (without whitespace)

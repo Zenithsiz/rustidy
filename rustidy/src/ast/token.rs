@@ -103,12 +103,6 @@ pub macro decl_tokens(
 
 			pub raw::$TokenName,
 		);
-
-		impl AsRef<Whitespace> for $TokenName {
-			fn as_ref(&self) -> &Whitespace {
-				&self.0
-			}
-		}
 	)*
 }
 

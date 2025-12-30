@@ -9,13 +9,6 @@ use crate::{AstStr, Format, Parse, ParseError, Parser, Print, ast::whitespace::W
 #[derive(Parse, Format, Print)]
 pub struct IdentifierOrKeyword(#[format(whitespace)] pub Whitespace, pub IdentifierOrKeywordRaw);
 
-
-impl AsRef<Whitespace> for IdentifierOrKeyword {
-	fn as_ref(&self) -> &Whitespace {
-		&self.0
-	}
-}
-
 /// `IDENTIFIER_OR_KEYWORD` (without whitespace)
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
