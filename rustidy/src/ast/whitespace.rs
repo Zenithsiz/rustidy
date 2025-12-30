@@ -7,7 +7,7 @@ use {
 		AstStr,
 		Format,
 		format,
-		parser::{Parse, ParseError, Parser},
+		parser::{Parse, ParseError, Parser, ParserError, ParserRange},
 		print::Print,
 	},
 	itertools::Itertools,
@@ -17,16 +17,14 @@ use {
 /// Whitespace
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
-pub struct Whitespace(Option<WhitespaceInner>);
+#[derive(Format, Print)]
+pub struct Whitespace(Box<Punctuated<PureWhitespace, Comment>>);
 
 impl Whitespace {
 	/// Returns the length of this whitespace
 	#[must_use]
 	pub fn len(&self) -> usize {
-		let Some(inner) = &self.0 else { return 0 };
-		inner
-			.0
+		self.0
 			.iter()
 			.map(|value| match value {
 				either::Either::Left(ws) => ws.0.len(),
@@ -47,10 +45,9 @@ impl Whitespace {
 	/// Returns the suffix pure whitespace in this
 	#[must_use]
 	pub fn suffix_pure(&self) -> Option<&PureWhitespace> {
-		let inner = self.0.as_ref()?;
-		match inner.0.rest.last() {
+		match self.0.rest.last() {
 			Some((_, pure)) => Some(pure),
-			None => Some(&inner.0.first),
+			None => Some(&self.0.first),
 		}
 	}
 
@@ -73,8 +70,7 @@ impl Whitespace {
 	}
 
 	fn format(&mut self, ctx: &mut format::Context, kind: FormatKind) {
-		let Some(inner) = &mut self.0 else { return };
-		let (prefix, rest) = inner.0.split_first_mut();
+		let (prefix, rest) = self.0.split_first_mut();
 
 		prefix.0.replace(kind.prefix_str(ctx, &prefix.0, rest.is_empty()));
 		for (pos, (comment, ws)) in rest.with_position() {
@@ -85,6 +81,36 @@ impl Whitespace {
 			}
 		}
 	}
+}
+
+impl Parse for Whitespace {
+	type Error = WhitespaceError;
+
+	fn name() -> Option<impl std::fmt::Display> {
+		None::<!>
+	}
+
+	#[coverage(on)]
+	fn parse_from(parser: &mut crate::parser::Parser) -> Result<Self, Self::Error> {
+		if parser.has_tag("skip:Whitespace") {
+			let pos = parser.cur_pos();
+			let range = ParserRange::new(pos, pos);
+			let inner = Punctuated {
+				first: PureWhitespace(AstStr::new(range)),
+				rest:  vec![],
+			};
+
+			return Ok(Self(Box::new(inner)));
+		}
+
+		let inner = parser.parse().map_err(WhitespaceError::Inner)?;
+		Ok(Self(inner))
+	}
+}
+#[derive(ParseError, Debug)]
+pub enum WhitespaceError {
+	#[parse_error(transparent)]
+	Inner(ParserError<Box<Punctuated<PureWhitespace, Comment>>>),
 }
 
 #[derive(Clone, Copy, Debug)]
@@ -166,12 +192,6 @@ impl FormatKind {
 		}
 	}
 }
-
-#[derive(PartialEq, Eq, Clone, Debug)]
-#[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
-#[parse(skip_if_tag = "skip:Whitespace")]
-pub struct WhitespaceInner(Box<Punctuated<PureWhitespace, Comment>>);
 
 /// Pure whitespace
 #[derive(PartialEq, Eq, Clone, Debug)]
@@ -392,8 +412,7 @@ mod tests {
 			.context("Unable to print output")?;
 
 		let whitespace_debug = |parser: &Parser, whitespace: &Whitespace| {
-			let Some(inner) = &whitespace.0 else { return vec![] };
-			inner
+			whitespace
 				.0
 				.iter()
 				.map(|comment| match comment {
