@@ -62,7 +62,7 @@ impl AstStr {
 	/// Returns the range of this string
 	#[must_use]
 	pub fn range(&self) -> ParserRange {
-		self.0.range.clone()
+		self.0.range
 	}
 
 	/// Sets the replacement of this string
