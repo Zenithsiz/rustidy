@@ -50,7 +50,8 @@ pub enum InnerDocComment {
 pub struct InnerLineDoc {
 	#[format(whitespace)]
 	pub whitespace: Whitespace,
-	pub prefix:     token::raw::InnerLineDoc,
+	#[parse(with_tag = "skip:Whitespace")]
+	pub prefix:     token::InnerLineDoc,
 	pub comment:    RemainingLine,
 }
 
@@ -88,7 +89,8 @@ pub enum OuterDocComment {
 pub struct OuterLineDoc {
 	#[format(whitespace)]
 	pub whitespace: Whitespace,
-	pub prefix:     token::raw::OuterLineDoc,
+	#[parse(with_tag = "skip:Whitespace")]
+	pub prefix:     token::OuterLineDoc,
 	pub comment:    RemainingLine,
 }
 

@@ -18,13 +18,15 @@ use {
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
-pub struct Whitespace(Box<Punctuated<PureWhitespace, Comment>>);
+pub struct Whitespace(Option<WhitespaceInner>);
 
 impl Whitespace {
 	/// Returns the length of this whitespace
 	#[must_use]
 	pub fn len(&self) -> usize {
-		self.0
+		let Some(inner) = &self.0 else { return 0 };
+		inner
+			.0
 			.iter()
 			.map(|value| match value {
 				either::Either::Left(ws) => ws.0.len(),
@@ -44,10 +46,11 @@ impl Whitespace {
 
 	/// Returns the suffix pure whitespace in this
 	#[must_use]
-	pub fn suffix_pure(&self) -> &PureWhitespace {
-		match self.0.rest.last() {
-			Some((_, pure)) => pure,
-			None => &self.0.first,
+	pub fn suffix_pure(&self) -> Option<&PureWhitespace> {
+		let inner = self.0.as_ref()?;
+		match inner.0.rest.last() {
+			Some((_, pure)) => Some(pure),
+			None => Some(&inner.0.first),
 		}
 	}
 
@@ -70,7 +73,8 @@ impl Whitespace {
 	}
 
 	fn format(&mut self, ctx: &mut format::Context, kind: FormatKind) {
-		let (prefix, rest) = self.0.split_first_mut();
+		let Some(inner) = &mut self.0 else { return };
+		let (prefix, rest) = inner.0.split_first_mut();
 
 		prefix.0.replace(kind.prefix_str(ctx, &prefix.0, rest.is_empty()));
 		for (pos, (comment, ws)) in rest.with_position() {
@@ -162,6 +166,12 @@ impl FormatKind {
 		}
 	}
 }
+
+#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(serde::Serialize, serde::Deserialize)]
+#[derive(Parse, Format, Print)]
+#[parse(skip_if_tag = "skip:Whitespace")]
+pub struct WhitespaceInner(Box<Punctuated<PureWhitespace, Comment>>);
 
 /// Pure whitespace
 #[derive(PartialEq, Eq, Clone, Debug)]
@@ -382,7 +392,8 @@ mod tests {
 			.context("Unable to print output")?;
 
 		let whitespace_debug = |parser: &Parser, whitespace: &Whitespace| {
-			whitespace
+			let Some(inner) = &whitespace.0 else { return vec![] };
+			inner
 				.0
 				.iter()
 				.map(|comment| match comment {

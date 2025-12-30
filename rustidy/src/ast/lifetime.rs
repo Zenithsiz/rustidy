@@ -3,7 +3,7 @@
 // Imports
 use {
 	super::{
-		ident::{IdentifierOrKeywordRaw, NonKeywordIdentifierRaw},
+		ident::{IdentifierOrKeyword, NonKeywordIdentifier},
 		token,
 	},
 	crate::{Format, Parse, ParseError, Parser, Print, parser::ParserError},
@@ -21,8 +21,8 @@ pub struct Lifetime(LifetimeToken);
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub enum LifetimeToken {
-	IdentOrKeyword(QuoteNotQuote<IdentifierOrKeywordRaw>),
-	Underscore(QuoteNotQuote<token::raw::Underscore>),
+	IdentOrKeyword(QuoteNotQuote<IdentifierOrKeyword>),
+	Underscore(QuoteNotQuote<token::Underscore>),
 	// TODO: `r#'ident`
 }
 
@@ -31,8 +31,8 @@ pub enum LifetimeToken {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub enum LifetimeOrLabel {
-	IdentOrKeyword(QuoteNotQuote<NonKeywordIdentifierRaw>),
-	Underscore(QuoteNotQuote<token::raw::Underscore>),
+	IdentOrKeyword(QuoteNotQuote<NonKeywordIdentifier>),
+	Underscore(QuoteNotQuote<token::Underscore>),
 	// TODO: `r#'ident`
 }
 
@@ -65,7 +65,9 @@ impl<T: Parse> Parse for QuoteNotQuote<T> {
 
 	fn parse_from(parser: &mut Parser) -> Result<Self, Self::Error> {
 		let quote = parser.parse().map_err(Self::Error::Quote)?;
-		let value = parser.parse().map_err(Self::Error::Name)?;
+		let value = parser
+			.with_tag("skip:Whitespace", Parser::parse::<T>)
+			.map_err(Self::Error::Name)?;
 
 		// If we parse a `'` right after the value, then this is actually a character literal
 		// and so we reject it.

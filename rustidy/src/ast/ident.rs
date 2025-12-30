@@ -5,10 +5,7 @@ pub mod ident_or_keyword;
 pub mod keyword;
 
 // Exports
-pub use self::{
-	ident_or_keyword::{IdentifierOrKeyword, IdentifierOrKeywordRaw},
-	keyword::STRICT_OR_RESERVED_KEYWORDS,
-};
+pub use self::{ident_or_keyword::IdentifierOrKeyword, keyword::STRICT_OR_RESERVED_KEYWORDS};
 
 // Imports
 use crate::{
@@ -31,13 +28,13 @@ pub enum Identifier {
 impl AsRef<crate::AstStr> for Identifier {
 	fn as_ref(&self) -> &crate::AstStr {
 		match *self {
-			Self::NonKw(ref non_keyword_identifier) => &non_keyword_identifier.0.1.0,
+			Self::NonKw(ref non_keyword_identifier) => &non_keyword_identifier.0.1,
 			Self::Raw(never) => never,
 		}
 	}
 }
 
-/// `NON_KEYWORD_IDENTIFIER` (with whitespace)
+/// `NON_KEYWORD_IDENTIFIER`
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Format, Print)]
@@ -56,7 +53,7 @@ impl Parse for NonKeywordIdentifier {
 			.parse::<IdentifierOrKeyword>()
 			.map_err(NonKeywordIdentifierError::Ident)?;
 
-		if STRICT_OR_RESERVED_KEYWORDS.contains(&parser.str(&ident.1.0)) {
+		if STRICT_OR_RESERVED_KEYWORDS.contains(&parser.str(&ident.1)) {
 			return Err(NonKeywordIdentifierError::StrictOrReserved);
 		}
 
@@ -68,42 +65,6 @@ impl Parse for NonKeywordIdentifier {
 pub enum NonKeywordIdentifierError {
 	#[parse_error(transparent)]
 	Ident(ParserError<IdentifierOrKeyword>),
-
-	#[parse_error(fmt = "Identifier was a strict or reserved keyword")]
-	StrictOrReserved,
-}
-
-/// `NON_KEYWORD_IDENTIFIER` (without whitespace)
-#[derive(PartialEq, Eq, Clone, Debug)]
-#[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Format, Print)]
-pub struct NonKeywordIdentifierRaw(pub IdentifierOrKeywordRaw);
-
-impl Parse for NonKeywordIdentifierRaw {
-	type Error = NonKeywordIdentifierRawError;
-
-	#[coverage(off)]
-	fn name() -> Option<impl std::fmt::Display> {
-		None::<!>
-	}
-
-	fn parse_from(parser: &mut Parser) -> Result<Self, Self::Error> {
-		let ident = parser
-			.parse::<IdentifierOrKeywordRaw>()
-			.map_err(NonKeywordIdentifierRawError::Ident)?;
-
-		if STRICT_OR_RESERVED_KEYWORDS.contains(&parser.str(&ident.0)) {
-			return Err(NonKeywordIdentifierRawError::StrictOrReserved);
-		}
-
-		Ok(Self(ident))
-	}
-}
-
-#[derive(Debug, crate::parser::ParseError)]
-pub enum NonKeywordIdentifierRawError {
-	#[parse_error(transparent)]
-	Ident(ParserError<IdentifierOrKeywordRaw>),
 
 	#[parse_error(fmt = "Identifier was a strict or reserved keyword")]
 	StrictOrReserved,

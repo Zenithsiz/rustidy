@@ -3,20 +3,14 @@
 // Imports
 use crate::{AstStr, Format, Parse, ParseError, Parser, Print, ast::whitespace::Whitespace, parser::ParserError};
 
-/// `IDENTIFIER_OR_KEYWORD` (with whitespace)
-#[derive(PartialEq, Eq, Clone, Debug)]
-#[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
-pub struct IdentifierOrKeyword(#[format(whitespace)] pub Whitespace, pub IdentifierOrKeywordRaw);
-
-/// `IDENTIFIER_OR_KEYWORD` (without whitespace)
+/// `IDENTIFIER_OR_KEYWORD`
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Format, Print)]
-pub struct IdentifierOrKeywordRaw(#[format(str)] pub AstStr);
+pub struct IdentifierOrKeyword(#[format(whitespace)] pub Whitespace, #[format(str)] pub AstStr);
 
 #[derive(Debug, ParseError)]
-pub enum IdentOrKeywordRawError {
+pub enum IdentOrKeywordError {
 	#[parse_error(fmt = "Expected `XID_START`")]
 	XidStart,
 
@@ -27,8 +21,8 @@ pub enum IdentOrKeywordRawError {
 	Whitespace(ParserError<Whitespace>),
 }
 
-impl Parse for IdentifierOrKeywordRaw {
-	type Error = IdentOrKeywordRawError;
+impl Parse for IdentifierOrKeyword {
+	type Error = IdentOrKeywordError;
 
 	#[coverage(off)]
 	fn name() -> Option<impl std::fmt::Display> {
@@ -36,19 +30,20 @@ impl Parse for IdentifierOrKeywordRaw {
 	}
 
 	fn parse_from(parser: &mut Parser) -> Result<Self, Self::Error> {
+		let ws = parser.parse::<Whitespace>().map_err(IdentOrKeywordError::Whitespace)?;
 		let ident = parser.try_update_with(|s| {
 			*s = s
 				.strip_prefix(unicode_ident::is_xid_start)
 				.or_else(|| s.strip_prefix('_'))
-				.ok_or(IdentOrKeywordRawError::XidStart)?;
+				.ok_or(IdentOrKeywordError::XidStart)?;
 			*s = s.trim_start_matches(unicode_ident::is_xid_continue);
 
 			Ok(())
 		})?;
 		if ident.as_str(parser) == "_" {
-			return Err(IdentOrKeywordRawError::SingleUnderscore);
+			return Err(IdentOrKeywordError::SingleUnderscore);
 		}
 
-		Ok(Self(ident))
+		Ok(Self(ws, ident))
 	}
 }
