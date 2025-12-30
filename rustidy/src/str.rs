@@ -93,12 +93,9 @@ impl serde::Serialize for AstStr {
 		S: serde::Serializer,
 	{
 		let repr = match &self.0.replacement {
-			Some(replacement) => SerdeRepr::WithReplacement(
-				self.0.range.start().to_usize(),
-				self.0.range.end().to_usize(),
-				replacement,
-			),
-			None => SerdeRepr::Basic(self.0.range.start().to_usize(), self.0.range.end().to_usize()),
+			Some(replacement) =>
+				SerdeRepr::WithReplacement(self.0.range.start.to_usize(), self.0.range.end.to_usize(), replacement),
+			None => SerdeRepr::Basic(self.0.range.start.to_usize(), self.0.range.end.to_usize()),
 		};
 
 		repr.serialize(serializer)

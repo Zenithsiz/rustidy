@@ -22,7 +22,7 @@ use {
 	core::{
 		marker::PhantomData,
 		mem,
-		ops::{Index, Range, Residual, Try},
+		ops::{Index, Residual, Try},
 	},
 	std::{fmt, str::pattern::Pattern},
 };
@@ -285,13 +285,13 @@ impl<'input> Parser<'input> {
 	/// Returns everything after a range.
 	#[must_use]
 	pub fn str_after(&self, s: &AstStr) -> &'input str {
-		&self.input[s.range().0.end.0..]
+		&self.input[s.range().end.0..]
 	}
 
 	/// Returns everything before a range.
 	#[must_use]
 	pub fn str_before(&self, s: &AstStr) -> &'input str {
-		&self.input[..s.range().0.start.0]
+		&self.input[..s.range().start.0]
 	}
 
 	/// Returns if the parser is finished
@@ -353,7 +353,10 @@ impl<'input> Parser<'input> {
 			.substr_range(output)
 			.expect("Output was not a substring of the input");
 
-		let output_range = ParserRange(ParserPos(output_range.start)..ParserPos(output_range.end));
+		let output_range = ParserRange {
+			start: ParserPos(output_range.start),
+			end:   ParserPos(output_range.end),
+		};
 
 		<_>::from_output(AstStr::new(output_range))
 	}
@@ -435,33 +438,22 @@ impl<'input> Parser<'input> {
 /// Parser range
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(derive_more::From)]
-#[serde(transparent)]
-pub struct ParserRange(Range<ParserPos>);
+pub struct ParserRange {
+	pub start: ParserPos,
+	pub end:   ParserPos,
+}
 
 impl ParserRange {
 	/// Creates a parser range from a start and end position
 	#[must_use]
 	pub const fn new(start: ParserPos, end: ParserPos) -> Self {
-		Self(start..end)
-	}
-
-	/// Returns the start of this range
-	#[must_use]
-	pub const fn start(&self) -> ParserPos {
-		self.0.start
-	}
-
-	/// Returns the end of this range
-	#[must_use]
-	pub const fn end(&self) -> ParserPos {
-		self.0.end
+		Self { start, end }
 	}
 
 	/// Returns the length of this range
 	#[must_use]
 	pub const fn len(&self) -> usize {
-		self.0.end.0 - self.0.start.0
+		self.end.0 - self.start.0
 	}
 
 	/// Returns if this range is empty
@@ -475,7 +467,7 @@ impl Index<ParserRange> for str {
 	type Output = Self;
 
 	fn index(&self, index: ParserRange) -> &Self::Output {
-		&self[index.0.start.0..index.0.end.0]
+		&self[index.start.0..index.end.0]
 	}
 }
 

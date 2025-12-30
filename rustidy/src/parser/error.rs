@@ -104,8 +104,8 @@ impl<T: Parse> ParseError for ParserError<T> {
 		// Note: We prefer deeper positions since they contain the
 		//       nearest position to the error.
 		let pos = match self.source.pos() {
-			Some(pos) => ParserPos::max(pos, self.range.end()),
-			None => self.range.end(),
+			Some(pos) => ParserPos::max(pos, self.range.end),
+			None => self.range.end,
 		};
 
 		Some(pos)
@@ -114,7 +114,7 @@ impl<T: Parse> ParseError for ParserError<T> {
 	fn to_app_error(&self, parser: &Parser) -> AppError {
 		let err = self.source.to_app_error(parser).flatten();
 		match self::name_of::<T>() {
-			Some(name) => err.with_context(|| format!("Expected {name} at {}", parser.loc(self.range.start()))),
+			Some(name) => err.with_context(|| format!("Expected {name} at {}", parser.loc(self.range.start))),
 			None => err,
 		}
 	}
