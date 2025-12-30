@@ -3,9 +3,8 @@
 // Imports
 use {
 	super::{
-		ident::{IdentifierOrKeyword, NonKeywordIdentifier},
+		ident::{IdentifierOrKeywordRaw, NonKeywordIdentifierRaw},
 		token,
-		whitespace::Whitespace,
 	},
 	crate::{Format, Parse, ParseError, Parser, Print, parser::ParserError},
 	std::fmt,
@@ -22,8 +21,8 @@ pub struct Lifetime(LifetimeToken);
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub enum LifetimeToken {
-	IdentOrKeyword(QuoteNotQuote<IdentifierOrKeyword>),
-	Underscore(QuoteNotQuote<token::Underscore>),
+	IdentOrKeyword(QuoteNotQuote<IdentifierOrKeywordRaw>),
+	Underscore(QuoteNotQuote<token::raw::Underscore>),
 	// TODO: `r#'ident`
 }
 
@@ -32,8 +31,8 @@ pub enum LifetimeToken {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub enum LifetimeOrLabel {
-	IdentOrKeyword(QuoteNotQuote<NonKeywordIdentifier>),
-	Underscore(QuoteNotQuote<token::Underscore>),
+	IdentOrKeyword(QuoteNotQuote<NonKeywordIdentifierRaw>),
+	Underscore(QuoteNotQuote<token::raw::Underscore>),
 	// TODO: `r#'ident`
 }
 
@@ -57,7 +56,7 @@ pub enum LifetimeIdentOrKeywordError<T: Parse> {
 	SuffixQuote,
 }
 
-impl<T: Parse + AsRef<Whitespace>> Parse for QuoteNotQuote<T> {
+impl<T: Parse> Parse for QuoteNotQuote<T> {
 	type Error = LifetimeIdentOrKeywordError<T>;
 
 	fn name() -> Option<impl fmt::Display> {
@@ -65,13 +64,12 @@ impl<T: Parse + AsRef<Whitespace>> Parse for QuoteNotQuote<T> {
 	}
 
 	fn parse_from(parser: &mut Parser) -> Result<Self, Self::Error> {
-		// TODO: Should we allow whitespace *after* the first token?
 		let quote = parser.parse().map_err(Self::Error::Quote)?;
 		let value = parser.parse().map_err(Self::Error::Name)?;
 
-		// If we have no whitespace, and the next token is a `'`, we reject this lifetime, since
-		// it's actually a character literal
-		if value.as_ref().is_empty() && parser.try_parse::<token::Quote>().map_err(Self::Error::Quote)?.is_ok() {
+		// If we parse a `'` right after the value, then this is actually a character literal
+		// and so we reject it.
+		if parser.try_parse::<token::Quote>().map_err(Self::Error::Quote)?.is_ok() {
 			return Err(Self::Error::SuffixQuote);
 		}
 
