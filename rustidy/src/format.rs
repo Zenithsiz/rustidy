@@ -8,13 +8,16 @@ pub use {self::config::Config, rustidy_macros::Format};
 
 // Imports
 use {
-	crate::{Parser, ast::whitespace::Whitespace},
+	crate::{AstStr, Parser, ast::whitespace::Whitespace, parser::ParserRange},
 	core::marker::PhantomData,
 };
 
 /// Formattable type
 pub trait Format {
 	// TODO: Separate part of these onto a super-trait so some methods can take `&self`
+
+	/// Returns the range of this type
+	fn range(&mut self, ctx: &mut Context) -> Option<ParserRange>;
 
 	/// Returns the length of this type
 	fn len(&mut self, ctx: &mut Context) -> usize;
@@ -53,6 +56,10 @@ pub trait Format {
 }
 
 impl<T: Format> Format for &'_ mut T {
+	fn range(&mut self, ctx: &mut Context) -> Option<ParserRange> {
+		(**self).range(ctx)
+	}
+
 	fn len(&mut self, ctx: &mut Context) -> usize {
 		(**self).len(ctx)
 	}
@@ -67,6 +74,10 @@ impl<T: Format> Format for &'_ mut T {
 }
 
 impl<T: Format> Format for Box<T> {
+	fn range(&mut self, ctx: &mut Context) -> Option<ParserRange> {
+		(**self).range(ctx)
+	}
+
 	fn len(&mut self, ctx: &mut Context) -> usize {
 		(**self).len(ctx)
 	}
@@ -81,6 +92,10 @@ impl<T: Format> Format for Box<T> {
 }
 
 impl<T: Format> Format for Option<T> {
+	fn range(&mut self, _ctx: &mut Context) -> Option<ParserRange> {
+		None
+	}
+
 	fn len(&mut self, ctx: &mut Context) -> usize {
 		match self {
 			Some(value) => value.len(ctx),
@@ -100,6 +115,12 @@ impl<T: Format> Format for Option<T> {
 }
 
 impl<T: Format> Format for Vec<T> {
+	fn range(&mut self, ctx: &mut Context) -> Option<ParserRange> {
+		let mut compute_range = ComputeRange::default();
+		compute_range.extend(self, ctx);
+		compute_range.finish()
+	}
+
 	fn len(&mut self, ctx: &mut Context) -> usize {
 		self.iter_mut().map(|value| value.len(ctx)).sum()
 	}
@@ -116,6 +137,10 @@ impl<T: Format> Format for Vec<T> {
 }
 
 impl Format for ! {
+	fn range(&mut self, _ctx: &mut Context) -> Option<ParserRange> {
+		*self
+	}
+
 	fn len(&mut self, _ctx: &mut Context) -> usize {
 		*self
 	}
@@ -130,6 +155,10 @@ impl Format for ! {
 }
 
 impl<T> Format for PhantomData<T> {
+	fn range(&mut self, _ctx: &mut Context) -> Option<ParserRange> {
+		None
+	}
+
 	fn len(&mut self, _ctx: &mut Context) -> usize {
 		0
 	}
@@ -142,6 +171,10 @@ impl<T> Format for PhantomData<T> {
 }
 
 impl Format for () {
+	fn range(&mut self, _ctx: &mut Context) -> Option<ParserRange> {
+		None
+	}
+
 	fn len(&mut self, _ctx: &mut Context) -> usize {
 		0
 	}
@@ -163,6 +196,14 @@ macro tuple_impl ($N:literal, $($T:ident),* $(,)?) {
 	#[automatically_derived]
 	#[expect(non_snake_case)]
 	impl< $($T: Format,)* > Format for ( $($T,)* ) {
+		fn range(&mut self, ctx: &mut Context) -> Option<ParserRange> {
+			let ( $($T,)* ) = self;
+
+			let mut compute_range = ComputeRange::default();
+			$( compute_range.add($T, ctx); )*
+			compute_range.finish()
+		}
+
 		fn len(&mut self, ctx: &mut Context) -> usize {
 			let ( $($T,)* ) = self;
 			${concat( Tuple, $N )} { $( $T, )* }.len(ctx)
@@ -294,5 +335,48 @@ pub fn format_vec_each_with<T>(f: impl FormatFn<T>) -> impl FormatFn<Vec<T>> {
 		for value in values {
 			f(value, ctx);
 		}
+	}
+}
+
+/// Item range computer
+#[derive(Clone, Copy, Default, Debug)]
+pub struct ComputeRange {
+	cur: Option<ParserRange>,
+}
+
+impl ComputeRange {
+	/// Adds a parser range to this
+	pub const fn add_range(&mut self, range: ParserRange) {
+		match &mut self.cur {
+			Some(cur) => cur.end = range.end,
+			None => self.cur = Some(range),
+		}
+	}
+
+	/// Adds a string to this
+	pub fn add_str(&mut self, s: &mut AstStr) {
+		self.add_range(s.range());
+	}
+
+	/// Adds the next item to this
+	pub fn add<T: Format>(&mut self, mut item: T, ctx: &mut Context) {
+		let Some(range) = item.range(ctx) else { return };
+		self.add_range(range);
+	}
+
+	/// Adds several items to this
+	pub fn extend<I>(&mut self, items: I, ctx: &mut Context)
+	where
+		I: IntoIterator<Item: Format>,
+	{
+		for item in items {
+			self.add(item, ctx);
+		}
+	}
+
+	/// Returns the computed range
+	#[must_use]
+	pub const fn finish(&mut self) -> Option<ParserRange> {
+		self.cur
 	}
 }
