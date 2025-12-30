@@ -8,7 +8,6 @@ use {
 		line::RemainingLine,
 		path::SimplePath,
 		token,
-		whitespace::Whitespace,
 	},
 	crate::{Format, parser::Parse, print::Print},
 	core::fmt::Debug,
@@ -48,11 +47,8 @@ pub enum InnerDocComment {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct InnerLineDoc {
-	#[format(whitespace)]
-	pub whitespace: Whitespace,
-	#[parse(with_tag = "skip:Whitespace")]
-	pub prefix:     token::InnerLineDoc,
-	pub comment:    RemainingLine,
+	pub prefix:  token::InnerLineDoc,
+	pub comment: RemainingLine,
 }
 
 /// Outer attribute or doc comment
@@ -87,11 +83,8 @@ pub enum OuterDocComment {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct OuterLineDoc {
-	#[format(whitespace)]
-	pub whitespace: Whitespace,
-	#[parse(with_tag = "skip:Whitespace")]
-	pub prefix:     token::OuterLineDoc,
-	pub comment:    RemainingLine,
+	pub prefix:  token::OuterLineDoc,
+	pub comment: RemainingLine,
 }
 
 /// `Attr`
