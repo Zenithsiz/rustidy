@@ -25,8 +25,8 @@ pub enum Identifier {
 	Raw(!),
 }
 
-impl AsRef<crate::AstStr> for Identifier {
-	fn as_ref(&self) -> &crate::AstStr {
+impl AsRef<crate::ParserStr> for Identifier {
+	fn as_ref(&self) -> &crate::ParserStr {
 		match *self {
 			Self::NonKw(ref non_keyword_identifier) => &non_keyword_identifier.0.1,
 			Self::Raw(never) => never,

@@ -2,7 +2,7 @@
 
 // Imports
 use {
-	crate::{AstStr, Parser, parser::ParserRange},
+	crate::{Parser, ParserStr, parser::ParserRange},
 	std::collections::HashMap,
 };
 
@@ -21,18 +21,18 @@ impl Replacements {
 	}
 
 	/// Adds a replacement
-	pub fn add(&mut self, parser: &Parser, s: &AstStr, replacement: impl Into<Replacement>) {
+	pub fn add(&mut self, parser: &Parser, s: &ParserStr, replacement: impl Into<Replacement>) {
 		let replacement = replacement.into();
 		match replacement.is(parser.str(s)) {
-			true => _ = self.replacements.remove(&s.range()),
-			false => _ = self.replacements.insert(s.range(), replacement),
+			true => _ = self.replacements.remove(&parser.str_range(s)),
+			false => _ = self.replacements.insert(parser.str_range(s), replacement),
 		}
 	}
 
 	/// Returns the replacement of a string
 	#[must_use]
-	pub fn get(&self, _parser: &Parser, s: &AstStr) -> Option<&Replacement> {
-		self.replacements.get(&s.range())
+	pub fn get(&self, parser: &Parser, s: &ParserStr) -> Option<&Replacement> {
+		self.replacements.get(&parser.str_range(s))
 	}
 }
 

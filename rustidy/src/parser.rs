@@ -3,21 +3,20 @@
 // Modules
 mod error;
 mod recursive;
-
-// TODO: Replace all usages of `AstStr` with `ParserRange`?
+mod str;
 
 // Exports
 pub use {
 	self::{
 		error::{ParseError, ParserError},
 		recursive::{ParsableRecursive, ParseRecursive, RecursiveWrapper},
+		str::ParserStr,
 	},
 	rustidy_macros::Parse,
 };
 
 // Imports
 use {
-	crate::AstStr,
 	app_error::AppError,
 	core::{
 		marker::PhantomData,
@@ -274,24 +273,36 @@ impl<'input> Parser<'input> {
 		self.loc(self.cur_pos)
 	}
 
-	/// Returns the string of an `AstStr`.
+	/// Returns the string of a range.
 	///
 	/// Ignores any replacement on the string
 	#[must_use]
-	pub fn str(&self, s: &AstStr) -> &'input str {
-		&self.input[s.range()]
+	pub fn range_str(&self, range: ParserRange) -> &'input str {
+		&self.input[range]
 	}
 
-	/// Returns everything after a range.
+	/// Returns the string of an range
 	#[must_use]
-	pub fn str_after(&self, s: &AstStr) -> &'input str {
-		&self.input[s.range().end.0..]
+	pub fn str(&self, s: &ParserStr) -> &'input str {
+		&self.input[s.0]
 	}
 
-	/// Returns everything before a range.
+	/// Returns everything after a string.
 	#[must_use]
-	pub fn str_before(&self, s: &AstStr) -> &'input str {
-		&self.input[..s.range().start.0]
+	pub fn str_after(&self, s: &ParserStr) -> &'input str {
+		&self.input[s.0.end.0..]
+	}
+
+	/// Returns everything before a string.
+	#[must_use]
+	pub fn str_before(&self, s: &ParserStr) -> &'input str {
+		&self.input[..s.0.start.0]
+	}
+
+	/// Returns the range of a string
+	#[must_use]
+	pub const fn str_range(&self, s: &ParserStr) -> ParserRange {
+		s.0
 	}
 
 	/// Returns if the parser is finished
@@ -303,7 +314,7 @@ impl<'input> Parser<'input> {
 	/// Updates this parser from a string.
 	///
 	/// See [`Self::try_update_with`] for more details.
-	pub fn update_with<F>(&mut self, f: F) -> AstStr
+	pub fn update_with<F>(&mut self, f: F) -> ParserStr
 	where
 		F: FnOnce(&mut &'input str),
 	{
@@ -327,10 +338,10 @@ impl<'input> Parser<'input> {
 	/// # Failure
 	/// If `f` returns unsuccessfully, an error will be returned
 	/// with the latest change to the string as it's position.
-	pub fn try_update_with<F, T>(&mut self, f: F) -> <T::Residual as Residual<AstStr>>::TryType
+	pub fn try_update_with<F, T>(&mut self, f: F) -> <T::Residual as Residual<ParserStr>>::TryType
 	where
 		F: FnOnce(&mut &'input str) -> T,
-		T: Try<Output = (), Residual: Residual<AstStr>>,
+		T: Try<Output = (), Residual: Residual<ParserStr>>,
 	{
 		let mut remaining = self.remaining();
 		let res = f(&mut remaining);
@@ -358,12 +369,12 @@ impl<'input> Parser<'input> {
 			end:   ParserPos(output_range.end),
 		};
 
-		<_>::from_output(AstStr::new(output_range))
+		<_>::from_output(ParserStr(output_range))
 	}
 
 	/// Strips a prefix `s` from the parser
 	#[expect(clippy::needless_pass_by_value, reason = "It's more ergonomic")]
-	pub fn strip_prefix<S>(&mut self, s: S) -> Option<AstStr>
+	pub fn strip_prefix<S>(&mut self, s: S) -> Option<ParserStr>
 	where
 		S: Pattern + Clone + Into<String>,
 	{

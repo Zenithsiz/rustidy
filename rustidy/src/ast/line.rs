@@ -1,13 +1,13 @@
 //! Line remainder
 
 // Imports
-use crate::{AstStr, Format, Parse, ParseError, Parser, Print};
+use crate::{Format, Parse, ParseError, Parser, ParserStr, Print};
 
 /// Characters remaining until the end of the line (including the newline if it exists)
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Format, Print)]
-pub struct RemainingLine(#[format(str)] pub AstStr);
+pub struct RemainingLine(#[format(str)] pub ParserStr);
 
 #[derive(Debug, ParseError)]
 #[parse_error(fmt = "Expected a line or EOF")]

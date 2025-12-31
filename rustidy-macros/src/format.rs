@@ -309,11 +309,11 @@ fn derive_struct_field(field_idx: usize, field: &FieldAttrs) -> Impls<syn::Expr,
 	let field_ident = util::field_member_access(field_idx, field);
 
 	let range = match field.str {
-		true => parse_quote! { compute_range.add_str(&mut self.#field_ident) },
+		true => parse_quote! { compute_range.add_str(&mut self.#field_ident, ctx) },
 		false => parse_quote! { compute_range.add(&mut self.#field_ident, ctx) },
 	};
-	let len = match field.str || field.whitespace {
-		true => parse_quote! { self.#field_ident.len() },
+	let len = match field.str {
+		true => parse_quote! { ctx.parser().str(&self.#field_ident).len() },
 		false => parse_quote! { crate::format::Format::len(&mut self.#field_ident, ctx) },
 	};
 

@@ -1,13 +1,13 @@
 //! Shebang
 
 // Imports
-use crate::{AstStr, Format, Parse, ParseError, Parser, Print};
+use crate::{Format, Parse, ParseError, Parser, ParserStr, Print};
 
 /// Shebang
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Format, Print)]
-pub struct Shebang(#[format(str)] pub AstStr);
+pub struct Shebang(#[format(str)] pub ParserStr);
 
 #[derive(Debug, ParseError)]
 #[parse_error(fmt = "Expected a `#!`")]

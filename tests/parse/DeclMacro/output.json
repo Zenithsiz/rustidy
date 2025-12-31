@@ -9,19 +9,39 @@
 					"vis": null,
 					"inner": {
 						"DeclMacro": {
-							"macro_": [{ "first": [0, 0], "rest": [] }, [0, 5]],
-							"ident": { "NonKw": [{ "first": [5, 6], "rest": [] }, [6, 7]] },
+							"macro_": [
+								{ "first": { "start": 0, "end": 0 }, "rest": [] },
+								{ "start": 0, "end": 5 }
+							],
+							"ident": {
+								"NonKw": [
+									{ "first": { "start": 5, "end": 6 }, "rest": [] },
+									{ "start": 6, "end": 7 }
+								]
+							},
 							"body": {
 								"Inline": {
 									"args": {
-										"prefix": [{ "first": [7, 7], "rest": [] }, [7, 8]],
+										"prefix": [
+											{ "first": { "start": 7, "end": 7 }, "rest": [] },
+											{ "start": 7, "end": 8 }
+										],
 										"value": [],
-										"suffix": [{ "first": [8, 8], "rest": [] }, [8, 9]]
+										"suffix": [
+											{ "first": { "start": 8, "end": 8 }, "rest": [] },
+											{ "start": 8, "end": 9 }
+										]
 									},
 									"body": {
-										"prefix": [{ "first": [9, 10], "rest": [] }, [10, 11]],
+										"prefix": [
+											{ "first": { "start": 9, "end": 10 }, "rest": [] },
+											{ "start": 10, "end": 11 }
+										],
 										"value": [],
-										"suffix": [{ "first": [11, 11], "rest": [] }, [11, 12]]
+										"suffix": [
+											{ "first": { "start": 11, "end": 11 }, "rest": [] },
+											{ "start": 11, "end": 12 }
+										]
 									}
 								}
 							}
@@ -37,40 +57,64 @@
 					"vis": null,
 					"inner": {
 						"DeclMacro": {
-							"macro_": [{ "first": [12, 13], "rest": [] }, [13, 18]],
+							"macro_": [
+								{ "first": { "start": 12, "end": 13 }, "rest": [] },
+								{ "start": 13, "end": 18 }
+							],
 							"ident": {
-								"NonKw": [{ "first": [18, 19], "rest": [] }, [19, 20]]
+								"NonKw": [
+									{ "first": { "start": 18, "end": 19 }, "rest": [] },
+									{ "start": 19, "end": 20 }
+								]
 							},
 							"body": {
 								"Branches": {
-									"prefix": [{ "first": [20, 21], "rest": [] }, [21, 22]],
+									"prefix": [
+										{ "first": { "start": 20, "end": 21 }, "rest": [] },
+										{ "start": 21, "end": 22 }
+									],
 									"value": {
 										"punctuated": {
 											"first": {
 												"args": {
 													"Parens": {
 														"prefix": [
-															{ "first": [22, 23], "rest": [] },
-															[23, 24]
+															{
+																"first": { "start": 22, "end": 23 },
+																"rest": []
+															},
+															{ "start": 23, "end": 24 }
 														],
 														"value": [],
 														"suffix": [
-															{ "first": [24, 24], "rest": [] },
-															[24, 25]
+															{
+																"first": { "start": 24, "end": 24 },
+																"rest": []
+															},
+															{ "start": 24, "end": 25 }
 														]
 													}
 												},
-												"arrow": [{ "first": [25, 26], "rest": [] }, [26, 28]],
+												"arrow": [
+													{ "first": { "start": 25, "end": 26 }, "rest": [] },
+													{ "start": 26, "end": 28 }
+												],
 												"body": {
 													"Braces": {
 														"prefix": [
-															{ "first": [28, 29], "rest": [] },
-															[29, 30]
+															{
+																"first": { "start": 28, "end": 29 },
+																"rest": []
+															},
+															{ "start": 29, "end": 30 }
 														],
 														"value": [],
 														"suffix": [
-															{ "first": [30, 30], "rest": [] },
-															[30, 31]
+															{
+																"first": { "start": 30, "end": 30 },
+																"rest": []
+															},
+															{ "start": 30, "end": 31 }
 														]
 													}
 												}
@@ -79,7 +123,10 @@
 										},
 										"trailing": null
 									},
-									"suffix": [{ "first": [31, 32], "rest": [] }, [32, 33]]
+									"suffix": [
+										{ "first": { "start": 31, "end": 32 }, "rest": [] },
+										{ "start": 32, "end": 33 }
+									]
 								}
 							}
 						}
@@ -94,75 +141,117 @@
 					"vis": null,
 					"inner": {
 						"DeclMacro": {
-							"macro_": [{ "first": [33, 34], "rest": [] }, [34, 39]],
+							"macro_": [
+								{ "first": { "start": 33, "end": 34 }, "rest": [] },
+								{ "start": 34, "end": 39 }
+							],
 							"ident": {
-								"NonKw": [{ "first": [39, 40], "rest": [] }, [40, 41]]
+								"NonKw": [
+									{ "first": { "start": 39, "end": 40 }, "rest": [] },
+									{ "start": 40, "end": 41 }
+								]
 							},
 							"body": {
 								"Branches": {
-									"prefix": [{ "first": [41, 42], "rest": [] }, [42, 43]],
+									"prefix": [
+										{ "first": { "start": 41, "end": 42 }, "rest": [] },
+										{ "start": 42, "end": 43 }
+									],
 									"value": {
 										"punctuated": {
 											"first": {
 												"args": {
 													"Parens": {
 														"prefix": [
-															{ "first": [43, 44], "rest": [] },
-															[44, 45]
+															{
+																"first": { "start": 43, "end": 44 },
+																"rest": []
+															},
+															{ "start": 44, "end": 45 }
 														],
 														"value": [],
 														"suffix": [
-															{ "first": [45, 45], "rest": [] },
-															[45, 46]
+															{
+																"first": { "start": 45, "end": 45 },
+																"rest": []
+															},
+															{ "start": 45, "end": 46 }
 														]
 													}
 												},
-												"arrow": [{ "first": [46, 47], "rest": [] }, [47, 49]],
+												"arrow": [
+													{ "first": { "start": 46, "end": 47 }, "rest": [] },
+													{ "start": 47, "end": 49 }
+												],
 												"body": {
 													"Braces": {
 														"prefix": [
-															{ "first": [49, 50], "rest": [] },
-															[50, 51]
+															{
+																"first": { "start": 49, "end": 50 },
+																"rest": []
+															},
+															{ "start": 50, "end": 51 }
 														],
 														"value": [],
 														"suffix": [
-															{ "first": [51, 51], "rest": [] },
-															[51, 52]
+															{
+																"first": { "start": 51, "end": 51 },
+																"rest": []
+															},
+															{ "start": 51, "end": 52 }
 														]
 													}
 												}
 											},
 											"rest": [
 												[
-													[{ "first": [52, 52], "rest": [] }, [52, 53]],
+													[
+														{ "first": { "start": 52, "end": 52 }, "rest": [] },
+														{ "start": 52, "end": 53 }
+													],
 													{
 														"args": {
 															"Parens": {
 																"prefix": [
-																	{ "first": [53, 54], "rest": [] },
-																	[54, 55]
+																	{
+																		"first": { "start": 53, "end": 54 },
+																		"rest": []
+																	},
+																	{ "start": 54, "end": 55 }
 																],
 																"value": [],
 																"suffix": [
-																	{ "first": [55, 55], "rest": [] },
-																	[55, 56]
+																	{
+																		"first": { "start": 55, "end": 55 },
+																		"rest": []
+																	},
+																	{ "start": 55, "end": 56 }
 																]
 															}
 														},
 														"arrow": [
-															{ "first": [56, 57], "rest": [] },
-															[57, 59]
+															{
+																"first": { "start": 56, "end": 57 },
+																"rest": []
+															},
+															{ "start": 57, "end": 59 }
 														],
 														"body": {
 															"Braces": {
 																"prefix": [
-																	{ "first": [59, 60], "rest": [] },
-																	[60, 61]
+																	{
+																		"first": { "start": 59, "end": 60 },
+																		"rest": []
+																	},
+																	{ "start": 60, "end": 61 }
 																],
 																"value": [],
 																"suffix": [
-																	{ "first": [61, 61], "rest": [] },
-																	[61, 62]
+																	{
+																		"first": { "start": 61, "end": 61 },
+																		"rest": []
+																	},
+																	{ "start": 61, "end": 62 }
 																]
 															}
 														}
@@ -172,7 +261,10 @@
 										},
 										"trailing": null
 									},
-									"suffix": [{ "first": [62, 63], "rest": [] }, [63, 64]]
+									"suffix": [
+										{ "first": { "start": 62, "end": 63 }, "rest": [] },
+										{ "start": 63, "end": 64 }
+									]
 								}
 							}
 						}
@@ -187,75 +279,117 @@
 					"vis": null,
 					"inner": {
 						"DeclMacro": {
-							"macro_": [{ "first": [64, 65], "rest": [] }, [65, 70]],
+							"macro_": [
+								{ "first": { "start": 64, "end": 65 }, "rest": [] },
+								{ "start": 65, "end": 70 }
+							],
 							"ident": {
-								"NonKw": [{ "first": [70, 71], "rest": [] }, [71, 72]]
+								"NonKw": [
+									{ "first": { "start": 70, "end": 71 }, "rest": [] },
+									{ "start": 71, "end": 72 }
+								]
 							},
 							"body": {
 								"Branches": {
-									"prefix": [{ "first": [72, 73], "rest": [] }, [73, 74]],
+									"prefix": [
+										{ "first": { "start": 72, "end": 73 }, "rest": [] },
+										{ "start": 73, "end": 74 }
+									],
 									"value": {
 										"punctuated": {
 											"first": {
 												"args": {
 													"Parens": {
 														"prefix": [
-															{ "first": [74, 75], "rest": [] },
-															[75, 76]
+															{
+																"first": { "start": 74, "end": 75 },
+																"rest": []
+															},
+															{ "start": 75, "end": 76 }
 														],
 														"value": [],
 														"suffix": [
-															{ "first": [76, 76], "rest": [] },
-															[76, 77]
+															{
+																"first": { "start": 76, "end": 76 },
+																"rest": []
+															},
+															{ "start": 76, "end": 77 }
 														]
 													}
 												},
-												"arrow": [{ "first": [77, 78], "rest": [] }, [78, 80]],
+												"arrow": [
+													{ "first": { "start": 77, "end": 78 }, "rest": [] },
+													{ "start": 78, "end": 80 }
+												],
 												"body": {
 													"Braces": {
 														"prefix": [
-															{ "first": [80, 81], "rest": [] },
-															[81, 82]
+															{
+																"first": { "start": 80, "end": 81 },
+																"rest": []
+															},
+															{ "start": 81, "end": 82 }
 														],
 														"value": [],
 														"suffix": [
-															{ "first": [82, 82], "rest": [] },
-															[82, 83]
+															{
+																"first": { "start": 82, "end": 82 },
+																"rest": []
+															},
+															{ "start": 82, "end": 83 }
 														]
 													}
 												}
 											},
 											"rest": [
 												[
-													[{ "first": [83, 83], "rest": [] }, [83, 84]],
+													[
+														{ "first": { "start": 83, "end": 83 }, "rest": [] },
+														{ "start": 83, "end": 84 }
+													],
 													{
 														"args": {
 															"Parens": {
 																"prefix": [
-																	{ "first": [84, 85], "rest": [] },
-																	[85, 86]
+																	{
+																		"first": { "start": 84, "end": 85 },
+																		"rest": []
+																	},
+																	{ "start": 85, "end": 86 }
 																],
 																"value": [],
 																"suffix": [
-																	{ "first": [86, 86], "rest": [] },
-																	[86, 87]
+																	{
+																		"first": { "start": 86, "end": 86 },
+																		"rest": []
+																	},
+																	{ "start": 86, "end": 87 }
 																]
 															}
 														},
 														"arrow": [
-															{ "first": [87, 88], "rest": [] },
-															[88, 90]
+															{
+																"first": { "start": 87, "end": 88 },
+																"rest": []
+															},
+															{ "start": 88, "end": 90 }
 														],
 														"body": {
 															"Braces": {
 																"prefix": [
-																	{ "first": [90, 91], "rest": [] },
-																	[91, 92]
+																	{
+																		"first": { "start": 90, "end": 91 },
+																		"rest": []
+																	},
+																	{ "start": 91, "end": 92 }
 																],
 																"value": [],
 																"suffix": [
-																	{ "first": [92, 92], "rest": [] },
-																	[92, 93]
+																	{
+																		"first": { "start": 92, "end": 92 },
+																		"rest": []
+																	},
+																	{ "start": 92, "end": 93 }
 																]
 															}
 														}
@@ -263,9 +397,15 @@
 												]
 											]
 										},
-										"trailing": [{ "first": [93, 93], "rest": [] }, [93, 94]]
+										"trailing": [
+											{ "first": { "start": 93, "end": 93 }, "rest": [] },
+											{ "start": 93, "end": 94 }
+										]
 									},
-									"suffix": [{ "first": [94, 95], "rest": [] }, [95, 96]]
+									"suffix": [
+										{ "first": { "start": 94, "end": 95 }, "rest": [] },
+										{ "start": 95, "end": 96 }
+									]
 								}
 							}
 						}
@@ -274,6 +414,6 @@
 			}
 		}
 	],
-	"suffix_ws": { "first": [96, 97], "rest": [] },
+	"suffix_ws": { "first": { "start": 96, "end": 97 }, "rest": [] },
 	"trailing_line_comment": null
 }

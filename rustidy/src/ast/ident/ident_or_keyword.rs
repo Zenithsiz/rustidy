@@ -1,13 +1,13 @@
 //! Identifier or keyword
 
 // Imports
-use crate::{AstStr, Format, Parse, ParseError, Parser, Print, ast::whitespace::Whitespace, parser::ParserError};
+use crate::{Format, Parse, ParseError, Parser, ParserStr, Print, ast::whitespace::Whitespace, parser::ParserError};
 
 /// `IDENTIFIER_OR_KEYWORD`
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Format, Print)]
-pub struct IdentifierOrKeyword(#[format(whitespace)] pub Whitespace, #[format(str)] pub AstStr);
+pub struct IdentifierOrKeyword(#[format(whitespace)] pub Whitespace, #[format(str)] pub ParserStr);
 
 #[derive(Debug, ParseError)]
 pub enum IdentOrKeywordError {
@@ -40,7 +40,7 @@ impl Parse for IdentifierOrKeyword {
 
 			Ok(())
 		})?;
-		if ident.as_str(parser) == "_" {
+		if parser.str(&ident) == "_" {
 			return Err(IdentOrKeywordError::SingleUnderscore);
 		}
 

@@ -4,12 +4,12 @@
 use {
 	super::punct::Punctuated,
 	crate::{
-		AstStr,
 		Format,
+		ParserStr,
 		Print,
 		Replacement,
 		format,
-		parser::{Parse, ParseError, Parser, ParserError, ParserRange},
+		parser::{Parse, ParseError, Parser, ParserError},
 	},
 	itertools::Itertools,
 	std::fmt,
@@ -22,27 +22,6 @@ use {
 pub struct Whitespace(Box<Punctuated<PureWhitespace, Comment>>);
 
 impl Whitespace {
-	/// Returns the length of this whitespace
-	#[must_use]
-	pub fn len(&self) -> usize {
-		self.0
-			.iter()
-			.map(|value| match value {
-				either::Either::Left(ws) => ws.0.len(),
-				either::Either::Right(comment) => match comment {
-					Comment::Line(comment) => comment.0.len(),
-					Comment::Block(comment) => comment.0.len(),
-				},
-			})
-			.sum()
-	}
-
-	/// Returns if this whitespace is empty
-	#[must_use]
-	pub fn is_empty(&self) -> bool {
-		self.len() == 0
-	}
-
 	/// Returns the suffix pure whitespace in this
 	#[must_use]
 	pub fn suffix_pure(&self) -> Option<&PureWhitespace> {
@@ -96,10 +75,9 @@ impl Parse for Whitespace {
 	#[coverage(on)]
 	fn parse_from(parser: &mut crate::parser::Parser) -> Result<Self, Self::Error> {
 		if parser.has_tag("skip:Whitespace") {
-			let pos = parser.cur_pos();
-			let range = ParserRange::new(pos, pos);
+			let s = parser.update_with(|_| ());
 			let inner = Punctuated {
-				first: PureWhitespace(AstStr::new(range)),
+				first: PureWhitespace(s),
 				rest:  vec![],
 			};
 
@@ -137,7 +115,7 @@ impl FormatKind {
 	}
 
 	/// Returns the indentation string, with a newline *before*
-	fn indent_str_nl(ctx: &format::Context, cur_str: &AstStr) -> String {
+	fn indent_str_nl(ctx: &format::Context, cur_str: &ParserStr) -> String {
 		// TODO: Should we be checking for multiple newlines?
 		let after_newline = ctx.parser().str_before(cur_str).ends_with('\n');
 
@@ -147,14 +125,14 @@ impl FormatKind {
 			true => (min_newlines, max_newlines),
 			false => (min_newlines + 1, max_newlines + 1),
 		};
-		let newlines = cur_str.as_str(ctx.parser()).chars().filter(|&ch| ch == '\n').count();
+		let newlines = ctx.parser().str(cur_str).chars().filter(|&ch| ch == '\n').count();
 		let newlines = newlines.clamp(min_newlines, max_newlines);
 
 		"\n".repeat(newlines) + &Self::indent_str(ctx)
 	}
 
 	/// Returns the prefix string
-	fn prefix_str(self, ctx: &mut format::Context, cur_str: &AstStr, is_last: bool) -> Replacement {
+	fn prefix_str(self, ctx: &mut format::Context, cur_str: &ParserStr, is_last: bool) -> Replacement {
 		match self {
 			Self::Remove => "".into(),
 			Self::Single => " ".into(),
@@ -171,7 +149,7 @@ impl FormatKind {
 	}
 
 	/// Returns the string after a newline
-	fn after_newline_str(self, ctx: &mut format::Context, cur_str: &AstStr, is_last: bool) -> Replacement {
+	fn after_newline_str(self, ctx: &mut format::Context, cur_str: &ParserStr, is_last: bool) -> Replacement {
 		match self {
 			Self::Remove | Self::Single => "".into(),
 			Self::Indent { offset, .. } => match is_last {
@@ -183,7 +161,7 @@ impl FormatKind {
 	}
 
 	/// Returns the normal string
-	fn normal_str(self, ctx: &mut format::Context, cur_str: &AstStr, is_last: bool) -> Replacement {
+	fn normal_str(self, ctx: &mut format::Context, cur_str: &ParserStr, is_last: bool) -> Replacement {
 		match self {
 			Self::Remove => "".into(),
 			Self::Single => " ".into(),
@@ -200,7 +178,7 @@ impl FormatKind {
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Format, Print)]
-pub struct PureWhitespace(#[format(str)] pub AstStr);
+pub struct PureWhitespace(#[format(str)] pub ParserStr);
 
 impl Parse for PureWhitespace {
 	type Error = !;
@@ -234,7 +212,7 @@ pub enum Comment {
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Format, Print)]
-pub struct BlockComment(#[format(str)] pub AstStr);
+pub struct BlockComment(#[format(str)] pub ParserStr);
 
 /// Comment error
 #[derive(Debug, ParseError)]
@@ -287,7 +265,7 @@ impl Parse for BlockComment {
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Format, Print)]
-pub struct LineComment(#[format(str)] pub AstStr);
+pub struct LineComment(#[format(str)] pub ParserStr);
 
 /// Comment error
 #[derive(Debug, ParseError)]
@@ -328,7 +306,7 @@ impl Parse for LineComment {
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Format, Print)]
-pub struct TrailingLineComment(#[format(str)] pub AstStr);
+pub struct TrailingLineComment(#[format(str)] pub ParserStr);
 
 /// Trailing line comment error
 #[derive(Debug, ParseError)]
@@ -418,10 +396,10 @@ mod tests {
 				.0
 				.iter()
 				.map(|comment| match comment {
-					either::Either::Left(ws) => ws.0.as_str(parser).replace(' ', "·").replace('\t', "⭾"),
+					either::Either::Left(ws) => parser.str(&ws.0).replace(' ', "·").replace('\t', "⭾"),
 					either::Either::Right(comment) => match comment {
-						Comment::Line(comment) => comment.0.as_str(parser).replace(' ', "·").replace('\t', "⭾"),
-						Comment::Block(comment) => comment.0.as_str(parser).replace(' ', "·").replace('\t', "⭾"),
+						Comment::Line(comment) => parser.str(&comment.0).replace(' ', "·").replace('\t', "⭾"),
+						Comment::Block(comment) => parser.str(&comment.0).replace(' ', "·").replace('\t', "⭾"),
 					},
 				})
 				.collect::<Vec<_>>()

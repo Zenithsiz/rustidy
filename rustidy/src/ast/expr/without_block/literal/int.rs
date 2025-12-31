@@ -3,7 +3,7 @@
 // Imports
 use {
 	super::SuffixNoE,
-	crate::{AstStr, Format, Parse, ParseError, Parser, Print, ast::whitespace::Whitespace, parser::ParserError},
+	crate::{Format, Parse, ParseError, Parser, ParserStr, Print, ast::whitespace::Whitespace, parser::ParserError},
 	std::fmt,
 };
 
@@ -31,7 +31,7 @@ pub enum IntegerLiteralInner {
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Format, Print)]
-pub struct DecLiteral(#[format(whitespace)] pub Whitespace, #[format(str)] pub AstStr);
+pub struct DecLiteral(#[format(whitespace)] pub Whitespace, #[format(str)] pub ParserStr);
 
 #[derive(Debug, ParseError)]
 pub enum DecLiteralError {

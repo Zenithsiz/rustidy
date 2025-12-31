@@ -10,9 +10,22 @@
 					"inner": {
 						"Module": {
 							"unsafe_": null,
-							"mod_": [{ "first": [0, 0], "rest": [] }, [0, 3]],
-							"ident": { "NonKw": [{ "first": [3, 4], "rest": [] }, [4, 5]] },
-							"inner": { "None": [{ "first": [5, 5], "rest": [] }, [5, 6]] }
+							"mod_": [
+								{ "first": { "start": 0, "end": 0 }, "rest": [] },
+								{ "start": 0, "end": 3 }
+							],
+							"ident": {
+								"NonKw": [
+									{ "first": { "start": 3, "end": 4 }, "rest": [] },
+									{ "start": 4, "end": 5 }
+								]
+							},
+							"inner": {
+								"None": [
+									{ "first": { "start": 5, "end": 5 }, "rest": [] },
+									{ "start": 5, "end": 6 }
+								]
+							}
 						}
 					}
 				}
@@ -25,12 +38,26 @@
 					"vis": null,
 					"inner": {
 						"Module": {
-							"unsafe_": [{ "first": [6, 7], "rest": [] }, [7, 13]],
-							"mod_": [{ "first": [13, 14], "rest": [] }, [14, 17]],
+							"unsafe_": [
+								{ "first": { "start": 6, "end": 7 }, "rest": [] },
+								{ "start": 7, "end": 13 }
+							],
+							"mod_": [
+								{ "first": { "start": 13, "end": 14 }, "rest": [] },
+								{ "start": 14, "end": 17 }
+							],
 							"ident": {
-								"NonKw": [{ "first": [17, 18], "rest": [] }, [18, 19]]
+								"NonKw": [
+									{ "first": { "start": 17, "end": 18 }, "rest": [] },
+									{ "start": 18, "end": 19 }
+								]
 							},
-							"inner": { "None": [{ "first": [19, 19], "rest": [] }, [19, 20]] }
+							"inner": {
+								"None": [
+									{ "first": { "start": 19, "end": 19 }, "rest": [] },
+									{ "start": 19, "end": 20 }
+								]
+							}
 						}
 					}
 				}
@@ -44,13 +71,22 @@
 					"inner": {
 						"Module": {
 							"unsafe_": null,
-							"mod_": [{ "first": [20, 22], "rest": [] }, [22, 25]],
+							"mod_": [
+								{ "first": { "start": 20, "end": 22 }, "rest": [] },
+								{ "start": 22, "end": 25 }
+							],
 							"ident": {
-								"NonKw": [{ "first": [25, 26], "rest": [] }, [26, 27]]
+								"NonKw": [
+									{ "first": { "start": 25, "end": 26 }, "rest": [] },
+									{ "start": 26, "end": 27 }
+								]
 							},
 							"inner": {
 								"Def": {
-									"prefix": [{ "first": [27, 28], "rest": [] }, [28, 29]],
+									"prefix": [
+										{ "first": { "start": 27, "end": 28 }, "rest": [] },
+										{ "start": 28, "end": 29 }
+									],
 									"value": {
 										"attrs": [],
 										"inner": [
@@ -63,19 +99,28 @@
 															"Module": {
 																"unsafe_": null,
 																"mod_": [
-																	{ "first": [29, 31], "rest": [] },
-																	[31, 34]
+																	{
+																		"first": { "start": 29, "end": 31 },
+																		"rest": []
+																	},
+																	{ "start": 31, "end": 34 }
 																],
 																"ident": {
 																	"NonKw": [
-																		{ "first": [34, 35], "rest": [] },
-																		[35, 36]
+																		{
+																			"first": { "start": 34, "end": 35 },
+																			"rest": []
+																		},
+																		{ "start": 35, "end": 36 }
 																	]
 																},
 																"inner": {
 																	"None": [
-																		{ "first": [36, 36], "rest": [] },
-																		[36, 37]
+																		{
+																			"first": { "start": 36, "end": 36 },
+																			"rest": []
+																		},
+																		{ "start": 36, "end": 37 }
 																	]
 																}
 															}
@@ -85,7 +130,10 @@
 											}
 										]
 									},
-									"suffix": [{ "first": [37, 38], "rest": [] }, [38, 39]]
+									"suffix": [
+										{ "first": { "start": 37, "end": 38 }, "rest": [] },
+										{ "start": 38, "end": 39 }
+									]
 								}
 							}
 						}
@@ -100,27 +148,45 @@
 					"vis": null,
 					"inner": {
 						"Module": {
-							"unsafe_": [{ "first": [39, 41], "rest": [] }, [41, 47]],
-							"mod_": [{ "first": [47, 48], "rest": [] }, [48, 51]],
+							"unsafe_": [
+								{ "first": { "start": 39, "end": 41 }, "rest": [] },
+								{ "start": 41, "end": 47 }
+							],
+							"mod_": [
+								{ "first": { "start": 47, "end": 48 }, "rest": [] },
+								{ "start": 48, "end": 51 }
+							],
 							"ident": {
-								"NonKw": [{ "first": [51, 52], "rest": [] }, [52, 53]]
+								"NonKw": [
+									{ "first": { "start": 51, "end": 52 }, "rest": [] },
+									{ "start": 52, "end": 53 }
+								]
 							},
 							"inner": {
 								"Def": {
-									"prefix": [{ "first": [53, 54], "rest": [] }, [54, 55]],
+									"prefix": [
+										{ "first": { "start": 53, "end": 54 }, "rest": [] },
+										{ "start": 54, "end": 55 }
+									],
 									"value": {
 										"attrs": [
 											{
 												"Attr": {
 													"pound": [
-														{ "first": [55, 57], "rest": [] },
-														[57, 58]
+														{ "first": { "start": 55, "end": 57 }, "rest": [] },
+														{ "start": 57, "end": 58 }
 													],
-													"not": [{ "first": [58, 58], "rest": [] }, [58, 59]],
+													"not": [
+														{ "first": { "start": 58, "end": 58 }, "rest": [] },
+														{ "start": 58, "end": 59 }
+													],
 													"attr": {
 														"prefix": [
-															{ "first": [59, 59], "rest": [] },
-															[59, 60]
+															{
+																"first": { "start": 59, "end": 59 },
+																"rest": []
+															},
+															{ "start": 59, "end": 60 }
 														],
 														"value": {
 															"path": {
@@ -129,8 +195,11 @@
 																	"first": {
 																		"Ident": {
 																			"NonKw": [
-																				{ "first": [60, 60], "rest": [] },
-																				[60, 61]
+																				{
+																					"first": { "start": 60, "end": 60 },
+																					"rest": []
+																				},
+																				{ "start": 60, "end": 61 }
 																			]
 																		}
 																	},
@@ -140,8 +209,11 @@
 															"input": null
 														},
 														"suffix": [
-															{ "first": [61, 61], "rest": [] },
-															[61, 62]
+															{
+																"first": { "start": 61, "end": 61 },
+																"rest": []
+															},
+															{ "start": 61, "end": 62 }
 														]
 													}
 												}
@@ -149,14 +221,20 @@
 											{
 												"Attr": {
 													"pound": [
-														{ "first": [62, 64], "rest": [] },
-														[64, 65]
+														{ "first": { "start": 62, "end": 64 }, "rest": [] },
+														{ "start": 64, "end": 65 }
 													],
-													"not": [{ "first": [65, 65], "rest": [] }, [65, 66]],
+													"not": [
+														{ "first": { "start": 65, "end": 65 }, "rest": [] },
+														{ "start": 65, "end": 66 }
+													],
 													"attr": {
 														"prefix": [
-															{ "first": [66, 66], "rest": [] },
-															[66, 67]
+															{
+																"first": { "start": 66, "end": 66 },
+																"rest": []
+															},
+															{ "start": 66, "end": 67 }
 														],
 														"value": {
 															"path": {
@@ -165,8 +243,11 @@
 																	"first": {
 																		"Ident": {
 																			"NonKw": [
-																				{ "first": [67, 67], "rest": [] },
-																				[67, 68]
+																				{
+																					"first": { "start": 67, "end": 67 },
+																					"rest": []
+																				},
+																				{ "start": 67, "end": 68 }
 																			]
 																		}
 																	},
@@ -176,8 +257,11 @@
 															"input": null
 														},
 														"suffix": [
-															{ "first": [68, 68], "rest": [] },
-															[68, 69]
+															{
+																"first": { "start": 68, "end": 68 },
+																"rest": []
+															},
+															{ "start": 68, "end": 69 }
 														]
 													}
 												}
@@ -193,19 +277,28 @@
 															"Module": {
 																"unsafe_": null,
 																"mod_": [
-																	{ "first": [69, 71], "rest": [] },
-																	[71, 74]
+																	{
+																		"first": { "start": 69, "end": 71 },
+																		"rest": []
+																	},
+																	{ "start": 71, "end": 74 }
 																],
 																"ident": {
 																	"NonKw": [
-																		{ "first": [74, 75], "rest": [] },
-																		[75, 76]
+																		{
+																			"first": { "start": 74, "end": 75 },
+																			"rest": []
+																		},
+																		{ "start": 75, "end": 76 }
 																	]
 																},
 																"inner": {
 																	"None": [
-																		{ "first": [76, 76], "rest": [] },
-																		[76, 77]
+																		{
+																			"first": { "start": 76, "end": 76 },
+																			"rest": []
+																		},
+																		{ "start": 76, "end": 77 }
 																	]
 																}
 															}
@@ -215,7 +308,10 @@
 											}
 										]
 									},
-									"suffix": [{ "first": [77, 78], "rest": [] }, [78, 79]]
+									"suffix": [
+										{ "first": { "start": 77, "end": 78 }, "rest": [] },
+										{ "start": 78, "end": 79 }
+									]
 								}
 							}
 						}
@@ -231,26 +327,41 @@
 					"inner": {
 						"Module": {
 							"unsafe_": null,
-							"mod_": [{ "first": [79, 81], "rest": [] }, [81, 84]],
+							"mod_": [
+								{ "first": { "start": 79, "end": 81 }, "rest": [] },
+								{ "start": 81, "end": 84 }
+							],
 							"ident": {
-								"NonKw": [{ "first": [84, 85], "rest": [] }, [85, 86]]
+								"NonKw": [
+									{ "first": { "start": 84, "end": 85 }, "rest": [] },
+									{ "start": 85, "end": 86 }
+								]
 							},
 							"inner": {
 								"Def": {
-									"prefix": [{ "first": [86, 87], "rest": [] }, [87, 88]],
+									"prefix": [
+										{ "first": { "start": 86, "end": 87 }, "rest": [] },
+										{ "start": 87, "end": 88 }
+									],
 									"value": {
 										"attrs": [
 											{
 												"Attr": {
 													"pound": [
-														{ "first": [88, 90], "rest": [] },
-														[90, 91]
+														{ "first": { "start": 88, "end": 90 }, "rest": [] },
+														{ "start": 90, "end": 91 }
 													],
-													"not": [{ "first": [91, 91], "rest": [] }, [91, 92]],
+													"not": [
+														{ "first": { "start": 91, "end": 91 }, "rest": [] },
+														{ "start": 91, "end": 92 }
+													],
 													"attr": {
 														"prefix": [
-															{ "first": [92, 92], "rest": [] },
-															[92, 93]
+															{
+																"first": { "start": 92, "end": 92 },
+																"rest": []
+															},
+															{ "start": 92, "end": 93 }
 														],
 														"value": {
 															"path": {
@@ -259,8 +370,11 @@
 																	"first": {
 																		"Ident": {
 																			"NonKw": [
-																				{ "first": [93, 93], "rest": [] },
-																				[93, 94]
+																				{
+																					"first": { "start": 93, "end": 93 },
+																					"rest": []
+																				},
+																				{ "start": 93, "end": 94 }
 																			]
 																		}
 																	},
@@ -270,8 +384,11 @@
 															"input": null
 														},
 														"suffix": [
-															{ "first": [94, 94], "rest": [] },
-															[94, 95]
+															{
+																"first": { "start": 94, "end": 94 },
+																"rest": []
+															},
+															{ "start": 94, "end": 95 }
 														]
 													}
 												}
@@ -279,14 +396,20 @@
 											{
 												"Attr": {
 													"pound": [
-														{ "first": [95, 97], "rest": [] },
-														[97, 98]
+														{ "first": { "start": 95, "end": 97 }, "rest": [] },
+														{ "start": 97, "end": 98 }
 													],
-													"not": [{ "first": [98, 98], "rest": [] }, [98, 99]],
+													"not": [
+														{ "first": { "start": 98, "end": 98 }, "rest": [] },
+														{ "start": 98, "end": 99 }
+													],
 													"attr": {
 														"prefix": [
-															{ "first": [99, 99], "rest": [] },
-															[99, 100]
+															{
+																"first": { "start": 99, "end": 99 },
+																"rest": []
+															},
+															{ "start": 99, "end": 100 }
 														],
 														"value": {
 															"path": {
@@ -295,8 +418,11 @@
 																	"first": {
 																		"Ident": {
 																			"NonKw": [
-																				{ "first": [100, 100], "rest": [] },
-																				[100, 101]
+																				{
+																					"first": { "start": 100, "end": 100 },
+																					"rest": []
+																				},
+																				{ "start": 100, "end": 101 }
 																			]
 																		}
 																	},
@@ -306,8 +432,11 @@
 															"input": null
 														},
 														"suffix": [
-															{ "first": [101, 101], "rest": [] },
-															[101, 102]
+															{
+																"first": { "start": 101, "end": 101 },
+																"rest": []
+															},
+															{ "start": 101, "end": 102 }
 														]
 													}
 												}
@@ -323,20 +452,29 @@
 															"Module": {
 																"unsafe_": null,
 																"mod_": [
-																	{ "first": [102, 104], "rest": [] },
-																	[104, 107]
+																	{
+																		"first": { "start": 102, "end": 104 },
+																		"rest": []
+																	},
+																	{ "start": 104, "end": 107 }
 																],
 																"ident": {
 																	"NonKw": [
-																		{ "first": [107, 108], "rest": [] },
-																		[108, 109]
+																		{
+																			"first": { "start": 107, "end": 108 },
+																			"rest": []
+																		},
+																		{ "start": 108, "end": 109 }
 																	]
 																},
 																"inner": {
 																	"Def": {
 																		"prefix": [
-																			{ "first": [109, 110], "rest": [] },
-																			[110, 111]
+																			{
+																				"first": { "start": 109, "end": 110 },
+																				"rest": []
+																			},
+																			{ "start": 110, "end": 111 }
 																		],
 																		"value": {
 																			"attrs": [
@@ -344,25 +482,34 @@
 																					"Attr": {
 																						"pound": [
 																							{
-																								"first": [111, 114],
+																								"first": {
+																									"start": 111,
+																									"end": 114
+																								},
 																								"rest": []
 																							},
-																							[114, 115]
+																							{ "start": 114, "end": 115 }
 																						],
 																						"not": [
 																							{
-																								"first": [115, 115],
+																								"first": {
+																									"start": 115,
+																									"end": 115
+																								},
 																								"rest": []
 																							},
-																							[115, 116]
+																							{ "start": 115, "end": 116 }
 																						],
 																						"attr": {
 																							"prefix": [
 																								{
-																									"first": [116, 116],
+																									"first": {
+																										"start": 116,
+																										"end": 116
+																									},
 																									"rest": []
 																								},
-																								[116, 117]
+																								{ "start": 116, "end": 117 }
 																							],
 																							"value": {
 																								"path": {
@@ -372,10 +519,16 @@
 																											"Ident": {
 																												"NonKw": [
 																													{
-																														"first": [117, 117],
+																														"first": {
+																															"start": 117,
+																															"end": 117
+																														},
 																														"rest": []
 																													},
-																													[117, 118]
+																													{
+																														"start": 117,
+																														"end": 118
+																													}
 																												]
 																											}
 																										},
@@ -386,10 +539,13 @@
 																							},
 																							"suffix": [
 																								{
-																									"first": [118, 118],
+																									"first": {
+																										"start": 118,
+																										"end": 118
+																									},
 																									"rest": []
 																								},
-																								[118, 119]
+																								{ "start": 118, "end": 119 }
 																							]
 																						}
 																					}
@@ -398,25 +554,34 @@
 																					"Attr": {
 																						"pound": [
 																							{
-																								"first": [119, 122],
+																								"first": {
+																									"start": 119,
+																									"end": 122
+																								},
 																								"rest": []
 																							},
-																							[122, 123]
+																							{ "start": 122, "end": 123 }
 																						],
 																						"not": [
 																							{
-																								"first": [123, 123],
+																								"first": {
+																									"start": 123,
+																									"end": 123
+																								},
 																								"rest": []
 																							},
-																							[123, 124]
+																							{ "start": 123, "end": 124 }
 																						],
 																						"attr": {
 																							"prefix": [
 																								{
-																									"first": [124, 124],
+																									"first": {
+																										"start": 124,
+																										"end": 124
+																									},
 																									"rest": []
 																								},
-																								[124, 125]
+																								{ "start": 124, "end": 125 }
 																							],
 																							"value": {
 																								"path": {
@@ -426,10 +591,16 @@
 																											"Ident": {
 																												"NonKw": [
 																													{
-																														"first": [125, 125],
+																														"first": {
+																															"start": 125,
+																															"end": 125
+																														},
 																														"rest": []
 																													},
-																													[125, 126]
+																													{
+																														"start": 125,
+																														"end": 126
+																													}
 																												]
 																											}
 																										},
@@ -440,10 +611,13 @@
 																							},
 																							"suffix": [
 																								{
-																									"first": [126, 126],
+																									"first": {
+																										"start": 126,
+																										"end": 126
+																									},
 																									"rest": []
 																								},
-																								[126, 127]
+																								{ "start": 126, "end": 127 }
 																							]
 																						}
 																					}
@@ -452,8 +626,11 @@
 																			"inner": []
 																		},
 																		"suffix": [
-																			{ "first": [127, 129], "rest": [] },
-																			[129, 130]
+																			{
+																				"first": { "start": 127, "end": 129 },
+																				"rest": []
+																			},
+																			{ "start": 129, "end": 130 }
 																		]
 																	}
 																}
@@ -464,7 +641,10 @@
 											}
 										]
 									},
-									"suffix": [{ "first": [130, 131], "rest": [] }, [131, 132]]
+									"suffix": [
+										{ "first": { "start": 130, "end": 131 }, "rest": [] },
+										{ "start": 131, "end": 132 }
+									]
 								}
 							}
 						}
@@ -473,6 +653,6 @@
 			}
 		}
 	],
-	"suffix_ws": { "first": [132, 133], "rest": [] },
+	"suffix_ws": { "first": { "start": 132, "end": 133 }, "rest": [] },
 	"trailing_line_comment": null
 }

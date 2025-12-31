@@ -9,8 +9,8 @@ use {
 		whitespace::Whitespace,
 	},
 	crate::{
-		AstStr,
 		Format,
+		ParserStr,
 		parser::{Parse, ParseError, Parser, ParserError},
 		print::Print,
 	},
@@ -34,7 +34,7 @@ pub macro decl_tokens(
 			pub Whitespace,
 
 			#[format(str)]
-			pub AstStr,
+			pub ParserStr,
 		);
 
 		#[derive(Debug, ParseError)]

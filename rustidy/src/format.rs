@@ -8,7 +8,7 @@ pub use {self::config::Config, rustidy_macros::Format};
 
 // Imports
 use {
-	crate::{AstStr, Parser, Replacement, Replacements, ast::whitespace::Whitespace, parser::ParserRange},
+	crate::{Parser, ParserStr, Replacement, Replacements, ast::whitespace::Whitespace, parser::ParserRange},
 	core::marker::PhantomData,
 };
 
@@ -268,7 +268,7 @@ impl<'a, 'input> Context<'a, 'input> {
 	}
 
 	/// Replaces a string
-	pub fn replace(&mut self, s: &AstStr, replacement: impl Into<Replacement>) {
+	pub fn replace(&mut self, s: &ParserStr, replacement: impl Into<Replacement>) {
 		self.replacements.add(self.parser, s, replacement);
 	}
 
@@ -361,8 +361,8 @@ impl ComputeRange {
 	}
 
 	/// Adds a string to this
-	pub const fn add_str(&mut self, s: &mut AstStr) {
-		self.add_range(s.range());
+	pub const fn add_str(&mut self, s: &ParserStr, ctx: &mut Context) {
+		self.add_range(ctx.parser().str_range(s));
 	}
 
 	/// Adds the next item to this

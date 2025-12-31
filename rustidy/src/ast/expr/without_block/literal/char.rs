@@ -2,7 +2,7 @@
 
 // Imports
 use {
-	crate::{AstStr, Format, Parse, ParseError, Parser, Print, ast::whitespace::Whitespace, parser::ParserError},
+	crate::{Format, Parse, ParseError, Parser, ParserStr, Print, ast::whitespace::Whitespace, parser::ParserError},
 	std::fmt,
 };
 
@@ -11,7 +11,7 @@ use {
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Format, Print)]
-pub struct CharLiteral(#[format(whitespace)] pub Whitespace, #[format(str)] pub AstStr);
+pub struct CharLiteral(#[format(whitespace)] pub Whitespace, #[format(str)] pub ParserStr);
 
 #[derive(Debug, ParseError)]
 pub enum CharLiteralError {

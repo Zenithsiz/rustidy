@@ -3,7 +3,7 @@
 // Imports
 use {
 	super::Suffix,
-	crate::{AstStr, Format, Parse, ParseError, Parser, Print, ast::whitespace::Whitespace, parser::ParserError},
+	crate::{Format, Parse, ParseError, Parser, ParserStr, Print, ast::whitespace::Whitespace, parser::ParserError},
 	std::fmt,
 };
 
@@ -16,7 +16,7 @@ pub struct StringLiteral {
 	#[format(whitespace)]
 	pub ws:     Whitespace,
 	#[format(str)]
-	pub s:      AstStr,
+	pub s:      ParserStr,
 	pub suffix: Option<Suffix>,
 }
 
