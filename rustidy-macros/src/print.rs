@@ -55,7 +55,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 				.iter()
 				.map(|variant| {
 					let variant_ident = &variant.ident;
-					quote! { Self::#variant_ident(ref value) => value.print(f), }
+					quote! { Self::#variant_ident(ref value) => crate::print::Print::print(value, f), }
 				})
 				.collect::<Vec<_>>();
 
@@ -75,7 +75,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 				.enumerate()
 				.map(|(field_idx, field)| {
 					let field_ident = util::field_member_access(field_idx, field);
-					quote! { self.#field_ident.print(f); }
+					quote! { crate::print::Print::print(&self.#field_ident, f); }
 				})
 				.collect::<Vec<_>>();
 
