@@ -178,25 +178,25 @@ fn parse<R: ParsableRecursive<R>>(
 		let base = parser.peek::<R::Base>().map_err(RecursiveWrapperError::Base)?;
 
 		let parsed = match (prefix, base) {
-			(Ok((prefix, prefix_pos)), Ok((base, base_pos))) => {
-				parser.set_pos(base_pos);
+			(Ok((prefix, prefix_state)), Ok((base, base_state))) => {
+				parser.set_peeked(base_state);
 				match parser.peek::<R::Base>().map_err(RecursiveWrapperError::Base)?.is_ok() {
-					true => Either::Left((prefix, prefix_pos)),
-					false => Either::Right((base, base_pos)),
+					true => Either::Left((prefix, prefix_state)),
+					false => Either::Right((base, base_state)),
 				}
 			},
-			(Ok((prefix, prefix_pos)), Err(_)) => Either::Left((prefix, prefix_pos)),
-			(Err(_), Ok((base, base_pos))) => Either::Right((base, base_pos)),
+			(Ok((prefix, prefix_state)), Err(_)) => Either::Left((prefix, prefix_state)),
+			(Err(_), Ok((base, base_state))) => Either::Right((base, base_state)),
 			(Err(prefix), Err(base)) => return Err(RecursiveWrapperError::PrefixOrBase { prefix, base }),
 		};
 
 		match parsed {
-			Either::Left((prefix, prefix_pos)) => {
-				parser.set_pos(prefix_pos);
+			Either::Left((prefix, prefix_state)) => {
+				parser.set_peeked(prefix_state);
 				cur_prefixes.push(prefix);
 			},
-			Either::Right((base, base_pos)) => {
-				parser.set_pos(base_pos);
+			Either::Right((base, base_state)) => {
+				parser.set_peeked(base_state);
 
 				let mut cur_suffixes = vec![];
 				let infix = loop {
@@ -204,29 +204,29 @@ fn parse<R: ParsableRecursive<R>>(
 					let infix = parser.peek::<R::Infix>().map_err(RecursiveWrapperError::Infix)?;
 
 					let parsed = match (suffix, infix) {
-						(Ok((suffix, suffix_pos)), Ok((infix, infix_pos))) => {
-							parser.set_pos(infix_pos);
+						(Ok((suffix, suffix_state)), Ok((infix, infix_state))) => {
+							parser.set_peeked(infix_state);
 							match parser
 								.peek::<R::Prefix>()
 								.map_err(RecursiveWrapperError::Prefix)?
 								.is_ok() || parser.peek::<R::Base>().map_err(RecursiveWrapperError::Base)?.is_ok()
 							{
-								true => Either::Right((infix, infix_pos)),
-								false => Either::Left((suffix, suffix_pos)),
+								true => Either::Right((infix, infix_state)),
+								false => Either::Left((suffix, suffix_state)),
 							}
 						},
-						(Ok((suffix, suffix_pos)), Err(_)) => Either::Left((suffix, suffix_pos)),
-						(Err(_), Ok((infix, infix_pos))) => Either::Right((infix, infix_pos)),
+						(Ok((suffix, suffix_state)), Err(_)) => Either::Left((suffix, suffix_state)),
+						(Err(_), Ok((infix, infix_state))) => Either::Right((infix, infix_state)),
 						(Err(_), Err(_)) => break None,
 					};
 
 					match parsed {
-						Either::Left((suffix, suffix_pos)) => {
-							parser.set_pos(suffix_pos);
+						Either::Left((suffix, suffix_state)) => {
+							parser.set_peeked(suffix_state);
 							cur_suffixes.push(suffix);
 						},
-						Either::Right((infix, infix_pos)) => {
-							parser.set_pos(infix_pos);
+						Either::Right((infix, infix_state)) => {
+							parser.set_peeked(infix_state);
 							break Some(infix);
 						},
 					}

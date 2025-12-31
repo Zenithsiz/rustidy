@@ -409,16 +409,25 @@ impl<'input> Parser<'input> {
 	///
 	/// Parser is only advanced is a fatal error occurs
 	#[expect(clippy::type_complexity, reason = "TODO")]
-	pub fn peek<T: Parse>(&mut self) -> Result<Result<(T, ParserPos), ParserError<T>>, ParserError<T>> {
+	pub fn peek<T: Parse>(&mut self) -> Result<Result<(T, PeekState), ParserError<T>>, ParserError<T>> {
 		let start_pos = self.cur_pos;
 		let output = match self.parse::<T>() {
-			Ok(value) => Ok((value, self.cur_pos)),
+			Ok(value) => Ok(value),
 			Err(err) if err.is_fatal() => return Err(err),
 			Err(err) => Err(err),
 		};
+
+		let peek_state = PeekState { cur_pos: self.cur_pos };
 		self.cur_pos = start_pos;
 
+		let output = output.map(|value| (value, peek_state));
 		Ok(output)
+	}
+
+	/// Accepts a peeked state.
+	// TODO: We should validate that the user doesn't use a previous peek
+	pub const fn set_peeked(&mut self, peek_state: PeekState) {
+		self.cur_pos = peek_state.cur_pos;
 	}
 
 	/// Returns if this parser has a tag
@@ -443,6 +452,20 @@ impl<'input> Parser<'input> {
 		self.tags = tags;
 
 		output
+	}
+}
+
+/// Peek state
+#[derive(Clone, Copy, Debug)]
+pub struct PeekState {
+	cur_pos: ParserPos,
+}
+
+impl PeekState {
+	/// Returns if this peek state is further ahead than another
+	#[must_use]
+	pub fn ahead_of(&self, other: &Self) -> bool {
+		self.cur_pos > other.cur_pos
 	}
 }
 
