@@ -84,15 +84,19 @@ tuple_impl! { 2, T0, T1 }
 tuple_impl! { 3, T0, T1, T2 }
 
 /// Print formatter
-pub struct PrintFmt<'a, 'input, 'output> {
+pub struct PrintFmt<'a, 'input> {
+	output: String,
 	parser: &'a Parser<'input>,
-	output: &'output mut String,
 }
 
-impl<'a, 'input, 'output> PrintFmt<'a, 'input, 'output> {
-	/// Creates a new formatter from a parser and output string
-	pub const fn new(parser: &'a Parser<'input>, output: &'output mut String) -> Self {
-		Self { parser, output }
+impl<'a, 'input> PrintFmt<'a, 'input> {
+	/// Creates a new formatter
+	#[must_use]
+	pub const fn new(parser: &'a Parser<'input>) -> Self {
+		Self {
+			output: String::new(),
+			parser,
+		}
 	}
 
 	/// Returns the parser of this formatter
@@ -101,14 +105,14 @@ impl<'a, 'input, 'output> PrintFmt<'a, 'input, 'output> {
 		self.parser
 	}
 
-	/// Splits this formatter into a parser and writer
+	/// Returns the output
 	#[must_use]
-	pub fn split(&mut self) -> (&'a Parser<'input>, &mut impl fmt::Write) {
-		(self.parser, self.output)
+	pub fn output(&self) -> &str {
+		&self.output
 	}
 }
 
-impl fmt::Write for PrintFmt<'_, '_, '_> {
+impl fmt::Write for PrintFmt<'_, '_> {
 	fn write_str(&mut self, s: &str) -> fmt::Result {
 		self.output.write_str(s)
 	}

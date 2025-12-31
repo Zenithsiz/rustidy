@@ -26,9 +26,9 @@ pub fn parse() {
 
 		let input = rustidy::parse(&input_path, &mut parser).expect("Unable to parse input");
 
-		let mut input_printed = String::new();
-		let mut print_fmt = print::PrintFmt::new(&parser, &mut input_printed);
+		let mut print_fmt = print::PrintFmt::new(&parser);
 		input.print(&mut print_fmt).expect("Unable to print input");
+		let input_printed = print_fmt.output();
 		assert_eq!(input_file, input_printed);
 
 		let output_path = test_dir.join("output.json");

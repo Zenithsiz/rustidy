@@ -82,8 +82,11 @@ impl AstStr {
 
 impl Print for AstStr {
 	fn print(&self, f: &mut crate::PrintFmt) -> Result<(), std::fmt::Error> {
-		let (parser, f) = f.split();
-		f.write_str(self.as_str(parser))
+		let s = match &self.0.replacement {
+			Some(replacement) => &**replacement,
+			None => f.parser().str(self),
+		};
+		f.write_str(s)
 	}
 }
 

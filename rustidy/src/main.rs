@@ -69,11 +69,9 @@ fn run() -> Result<(), AppError> {
 		crate_.format(&mut ctx);
 
 		// Then output it to file
-		let mut output = String::new();
-		crate_
-			.print(&mut PrintFmt::new(&parser, &mut output))
-			.context("Unable to format crate")?;
-		fs::write(file_path, output).context("Unable to write file")?;
+		let mut print_fmt = PrintFmt::new(&parser);
+		crate_.print(&mut print_fmt).context("Unable to format crate")?;
+		fs::write(file_path, print_fmt.output()).context("Unable to write file")?;
 	}
 
 	Ok(())

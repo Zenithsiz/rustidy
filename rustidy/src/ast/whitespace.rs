@@ -405,11 +405,11 @@ mod tests {
 		let mut whitespace_output = whitespace.clone();
 		whitespace_output.format(&mut fmt_ctx, kind);
 
-		let mut output = String::new();
-		let mut print_fmt = print::PrintFmt::new(&parser, &mut output);
+		let mut print_fmt = print::PrintFmt::new(&parser);
 		whitespace_output
 			.print(&mut print_fmt)
 			.context("Unable to print output")?;
+		let output = print_fmt.output();
 
 		let whitespace_debug = |parser: &Parser, whitespace: &Whitespace| {
 			whitespace
