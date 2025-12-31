@@ -29,6 +29,7 @@ pub mod ast;
 pub mod format;
 pub mod parser;
 pub mod print;
+pub mod replacement;
 pub mod str;
 
 // Exports
@@ -36,6 +37,7 @@ pub use self::{
 	format::Format,
 	parser::{Parse, ParseError, ParseRecursive, Parser},
 	print::{Print, PrintFmt},
+	replacement::{Replacement, Replacements},
 	str::AstStr,
 };
 

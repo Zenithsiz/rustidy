@@ -21,12 +21,7 @@ use {
 	self::args::Args,
 	app_error::{AppError, Context},
 	clap::Parser as _,
-	rustidy::{
-		Format,
-		Parser,
-		format,
-		print::{Print, PrintFmt},
-	},
+	rustidy::{Format, Parser, Print, PrintFmt, Replacements, format},
 	std::{fs, process::ExitCode},
 	zutil_logger::Logger,
 };
@@ -64,12 +59,13 @@ fn run() -> Result<(), AppError> {
 		let mut crate_ = rustidy::parse(file_path, &mut parser).context("Unable to parse file")?;
 
 		// Format
+		let mut replacements = Replacements::new();
 		let config = format::Config::default();
-		let mut ctx = format::Context::new(&parser, &config);
+		let mut ctx = format::Context::new(&parser, &mut replacements, &config);
 		crate_.format(&mut ctx);
 
 		// Then output it to file
-		let mut print_fmt = PrintFmt::new(&parser);
+		let mut print_fmt = PrintFmt::new(&parser, &replacements);
 		crate_.print(&mut print_fmt);
 		fs::write(file_path, print_fmt.output()).context("Unable to write file")?;
 	}

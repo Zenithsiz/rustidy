@@ -8,7 +8,7 @@ pub use {self::config::Config, rustidy_macros::Format};
 
 // Imports
 use {
-	crate::{AstStr, Parser, ast::whitespace::Whitespace, parser::ParserRange},
+	crate::{AstStr, Parser, Replacement, Replacements, ast::whitespace::Whitespace, parser::ParserRange},
 	core::marker::PhantomData,
 };
 
@@ -234,16 +234,18 @@ pub struct Context<'a, 'input> {
 	parser:       &'a Parser<'input>,
 	config:       &'a Config,
 	indent_depth: usize,
+	replacements: &'a mut Replacements,
 }
 
 impl<'a, 'input> Context<'a, 'input> {
 	/// Creates a new context
 	#[must_use]
-	pub const fn new(parser: &'a Parser<'input>, config: &'a Config) -> Self {
+	pub const fn new(parser: &'a Parser<'input>, replacements: &'a mut Replacements, config: &'a Config) -> Self {
 		Self {
 			parser,
 			config,
 			indent_depth: 0,
+			replacements,
 		}
 	}
 
@@ -263,6 +265,11 @@ impl<'a, 'input> Context<'a, 'input> {
 	#[must_use]
 	pub const fn indent(&self) -> usize {
 		self.indent_depth
+	}
+
+	/// Replaces a string
+	pub fn replace(&mut self, s: &AstStr, replacement: impl Into<Replacement>) {
+		self.replacements.add(self.parser, s, replacement);
 	}
 
 	/// Runs `f` with a further indentation level
@@ -354,7 +361,7 @@ impl ComputeRange {
 	}
 
 	/// Adds a string to this
-	pub fn add_str(&mut self, s: &mut AstStr) {
+	pub const fn add_str(&mut self, s: &mut AstStr) {
 		self.add_range(s.range());
 	}
 

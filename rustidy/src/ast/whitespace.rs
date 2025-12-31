@@ -6,12 +6,13 @@ use {
 	crate::{
 		AstStr,
 		Format,
+		Print,
+		Replacement,
 		format,
 		parser::{Parse, ParseError, Parser, ParserError, ParserRange},
-		print::Print,
 	},
 	itertools::Itertools,
-	std::{borrow::Cow, fmt},
+	std::fmt,
 };
 
 /// Whitespace
@@ -72,13 +73,15 @@ impl Whitespace {
 	fn format(&mut self, ctx: &mut format::Context, kind: FormatKind) {
 		let (prefix, rest) = self.0.split_first_mut();
 
-		prefix.0.replace(kind.prefix_str(ctx, &prefix.0, rest.is_empty()));
+		let prefix_str = kind.prefix_str(ctx, &prefix.0, rest.is_empty());
+		ctx.replace(&prefix.0, prefix_str);
 		for (pos, (comment, ws)) in rest.with_position() {
 			let is_last = matches!(pos, itertools::Position::Last | itertools::Position::Only);
-			match comment.is_line() {
-				true => ws.0.replace(kind.after_newline_str(ctx, &ws.0, is_last)),
-				false => ws.0.replace(kind.normal_str(ctx, &ws.0, is_last)),
-			}
+			let ws_str = match comment.is_line() {
+				true => kind.after_newline_str(ctx, &ws.0, is_last),
+				false => kind.normal_str(ctx, &ws.0, is_last),
+			};
+			ctx.replace(&ws.0, ws_str);
 		}
 	}
 }
@@ -151,7 +154,7 @@ impl FormatKind {
 	}
 
 	/// Returns the prefix string
-	fn prefix_str(self, ctx: &mut format::Context, cur_str: &AstStr, is_last: bool) -> Cow<'static, str> {
+	fn prefix_str(self, ctx: &mut format::Context, cur_str: &AstStr, is_last: bool) -> Replacement {
 		match self {
 			Self::Remove => "".into(),
 			Self::Single => " ".into(),
@@ -168,7 +171,7 @@ impl FormatKind {
 	}
 
 	/// Returns the string after a newline
-	fn after_newline_str(self, ctx: &mut format::Context, cur_str: &AstStr, is_last: bool) -> Cow<'static, str> {
+	fn after_newline_str(self, ctx: &mut format::Context, cur_str: &AstStr, is_last: bool) -> Replacement {
 		match self {
 			Self::Remove | Self::Single => "".into(),
 			Self::Indent { offset, .. } => match is_last {
@@ -180,7 +183,7 @@ impl FormatKind {
 	}
 
 	/// Returns the normal string
-	fn normal_str(self, ctx: &mut format::Context, cur_str: &AstStr, is_last: bool) -> Cow<'static, str> {
+	fn normal_str(self, ctx: &mut format::Context, cur_str: &AstStr, is_last: bool) -> Replacement {
 		match self {
 			Self::Remove => "".into(),
 			Self::Single => " ".into(),
@@ -363,7 +366,7 @@ impl Parse for TrailingLineComment {
 mod tests {
 	use {
 		super::*,
-		crate::print,
+		crate::{Replacements, print},
 		app_error::{AppError, Context, ensure},
 	};
 
@@ -400,12 +403,13 @@ mod tests {
 		);
 
 
-		let mut fmt_ctx = format::Context::new(&parser, fmt_config);
+		let mut replacements = Replacements::new();
+		let mut fmt_ctx = format::Context::new(&parser, &mut replacements, fmt_config);
 		fmt_ctx.set_indent_depth(config.indent_depth);
 		let mut whitespace_output = whitespace.clone();
 		whitespace_output.format(&mut fmt_ctx, kind);
 
-		let mut print_fmt = print::PrintFmt::new(&parser);
+		let mut print_fmt = print::PrintFmt::new(&parser, &replacements);
 		whitespace_output.print(&mut print_fmt);
 		let output = print_fmt.output();
 

@@ -436,7 +436,7 @@ impl<'input> Parser<'input> {
 }
 
 /// Parser range
-#[derive(PartialEq, Eq, Clone, Copy, Debug)]
+#[derive(PartialEq, Eq, Clone, Copy, Hash, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 pub struct ParserRange {
 	pub start: ParserPos,
@@ -472,7 +472,7 @@ impl Index<ParserRange> for str {
 }
 
 /// Parser position
-#[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Copy, Debug)]
+#[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Copy, Hash, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(derive_more::From)]
 #[serde(transparent)]

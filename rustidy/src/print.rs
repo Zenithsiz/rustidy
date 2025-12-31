@@ -4,7 +4,10 @@
 pub use rustidy_macros::Print;
 
 // Imports
-use {crate::Parser, core::marker::PhantomData};
+use {
+	crate::{AstStr, Parser, Replacements},
+	core::marker::PhantomData,
+};
 
 /// Printable types
 pub trait Print: Sized {
@@ -77,17 +80,19 @@ tuple_impl! { 3, T0, T1, T2 }
 
 /// Print formatter
 pub struct PrintFmt<'a, 'input> {
-	output: String,
-	parser: &'a Parser<'input>,
+	output:       String,
+	parser:       &'a Parser<'input>,
+	replacements: &'a Replacements,
 }
 
 impl<'a, 'input> PrintFmt<'a, 'input> {
 	/// Creates a new formatter
 	#[must_use]
-	pub const fn new(parser: &'a Parser<'input>) -> Self {
+	pub const fn new(parser: &'a Parser<'input>, replacements: &'a Replacements) -> Self {
 		Self {
 			output: String::new(),
 			parser,
+			replacements,
 		}
 	}
 
@@ -97,9 +102,12 @@ impl<'a, 'input> PrintFmt<'a, 'input> {
 		self.parser
 	}
 
-	/// Writes a string
-	pub fn write_str(&mut self, s: &str) {
-		self.output.push_str(s);
+	/// Writes an ast string
+	pub fn write_str(&mut self, s: &AstStr) {
+		match self.replacements.get(self.parser, s) {
+			Some(replacement) => replacement.write(&mut self.output),
+			None => self.output.push_str(self.parser.str(s)),
+		}
 	}
 
 	/// Returns the output
