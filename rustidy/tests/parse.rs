@@ -27,7 +27,7 @@ pub fn parse() {
 		let input = rustidy::parse(&input_path, &mut parser).expect("Unable to parse input");
 
 		let mut print_fmt = print::PrintFmt::new(&parser);
-		input.print(&mut print_fmt).expect("Unable to print input");
+		input.print(&mut print_fmt);
 		let input_printed = print_fmt.output();
 		assert_eq!(input_file, input_printed);
 

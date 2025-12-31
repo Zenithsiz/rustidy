@@ -75,14 +75,12 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 				.enumerate()
 				.map(|(field_idx, field)| {
 					let field_ident = util::field_member_access(field_idx, field);
-					quote! { self.#field_ident.print(f)?; }
+					quote! { self.#field_ident.print(f); }
 				})
 				.collect::<Vec<_>>();
 
 			let body = quote! {
 				#( #fmt_fields )*
-
-				Ok(())
 			};
 
 			body
@@ -94,7 +92,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 	let output = quote! {
 		impl #impl_generics crate::print::Print for #item_ident #ty_generics #fmt_where_clause {
 			#[coverage(on)]
-			fn print(&self, f: &mut crate::print::PrintFmt) -> Result<(), std::fmt::Error> {
+			fn print(&self, f: &mut crate::print::PrintFmt) {
 				#fmt_body
 			}
 		}

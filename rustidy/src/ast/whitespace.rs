@@ -406,9 +406,7 @@ mod tests {
 		whitespace_output.format(&mut fmt_ctx, kind);
 
 		let mut print_fmt = print::PrintFmt::new(&parser);
-		whitespace_output
-			.print(&mut print_fmt)
-			.context("Unable to print output")?;
+		whitespace_output.print(&mut print_fmt);
 		let output = print_fmt.output();
 
 		let whitespace_debug = |parser: &Parser, whitespace: &Whitespace| {

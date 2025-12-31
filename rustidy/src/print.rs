@@ -4,62 +4,54 @@
 pub use rustidy_macros::Print;
 
 // Imports
-use {crate::Parser, core::marker::PhantomData, std::fmt};
+use {crate::Parser, core::marker::PhantomData};
 
 /// Printable types
 pub trait Print: Sized {
 	/// Prints this type onto a writer
-	fn print(&self, f: &mut PrintFmt) -> Result<(), fmt::Error>;
+	fn print(&self, f: &mut PrintFmt);
 }
 
 impl<T: Print> Print for &'_ T {
-	fn print(&self, f: &mut PrintFmt) -> Result<(), fmt::Error> {
-		(**self).print(f)
+	fn print(&self, f: &mut PrintFmt) {
+		(**self).print(f);
 	}
 }
 
 impl<T: Print> Print for Box<T> {
-	fn print(&self, f: &mut PrintFmt) -> Result<(), fmt::Error> {
-		(**self).print(f)
+	fn print(&self, f: &mut PrintFmt) {
+		(**self).print(f);
 	}
 }
 
 impl<T: Print> Print for Option<T> {
-	fn print(&self, f: &mut PrintFmt) -> Result<(), fmt::Error> {
+	fn print(&self, f: &mut PrintFmt) {
 		if let Some(value) = self {
-			value.print(f)?;
+			value.print(f);
 		}
-
-		Ok(())
 	}
 }
 
 impl<T: Print> Print for Vec<T> {
-	fn print(&self, f: &mut PrintFmt) -> Result<(), fmt::Error> {
+	fn print(&self, f: &mut PrintFmt) {
 		for value in self {
-			value.print(f)?;
+			value.print(f);
 		}
-
-		Ok(())
 	}
 }
 
 impl Print for ! {
-	fn print(&self, _f: &mut PrintFmt) -> Result<(), fmt::Error> {
+	fn print(&self, _f: &mut PrintFmt) {
 		*self
 	}
 }
 
 impl<T> Print for PhantomData<T> {
-	fn print(&self, _f: &mut PrintFmt) -> Result<(), fmt::Error> {
-		Ok(())
-	}
+	fn print(&self, _f: &mut PrintFmt) {}
 }
 
 impl Print for () {
-	fn print(&self, _f: &mut PrintFmt) -> Result<(), fmt::Error> {
-		Ok(())
-	}
+	fn print(&self, _f: &mut PrintFmt) {}
 }
 
 macro tuple_impl($N:literal, $($T:ident),* $(,)?) {
@@ -72,9 +64,9 @@ macro tuple_impl($N:literal, $($T:ident),* $(,)?) {
 	#[automatically_derived]
 	impl< $($T: Print,)* > Print for ( $($T,)* ) {
 		#[expect(non_snake_case)]
-		fn print(&self, f: &mut PrintFmt) -> Result<(), fmt::Error> {
+		fn print(&self, f: &mut PrintFmt) {
 			let ( $($T,)* ) = self;
-			${concat( Tuple, $N )} { $( $T, )* }.print(f)
+			${concat( Tuple, $N )} { $( $T, )* }.print(f);
 		}
 	}
 }
@@ -105,23 +97,14 @@ impl<'a, 'input> PrintFmt<'a, 'input> {
 		self.parser
 	}
 
+	/// Writes a string
+	pub fn write_str(&mut self, s: &str) {
+		self.output.push_str(s);
+	}
+
 	/// Returns the output
 	#[must_use]
 	pub fn output(&self) -> &str {
 		&self.output
-	}
-}
-
-impl fmt::Write for PrintFmt<'_, '_> {
-	fn write_str(&mut self, s: &str) -> fmt::Result {
-		self.output.write_str(s)
-	}
-
-	fn write_char(&mut self, c: char) -> fmt::Result {
-		self.output.write_char(c)
-	}
-
-	fn write_fmt(&mut self, args: fmt::Arguments<'_>) -> fmt::Result {
-		self.output.write_fmt(args)
 	}
 }

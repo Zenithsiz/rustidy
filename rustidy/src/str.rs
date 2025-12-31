@@ -12,7 +12,6 @@ use {
 		Print,
 		parser::{ParserPos, ParserRange},
 	},
-	core::fmt::Write,
 	std::borrow::Cow,
 };
 
@@ -81,12 +80,12 @@ impl AstStr {
 }
 
 impl Print for AstStr {
-	fn print(&self, f: &mut crate::PrintFmt) -> Result<(), std::fmt::Error> {
+	fn print(&self, f: &mut crate::PrintFmt) {
 		let s = match &self.0.replacement {
 			Some(replacement) => &**replacement,
 			None => f.parser().str(self),
 		};
-		f.write_str(s)
+		f.write_str(s);
 	}
 }
 

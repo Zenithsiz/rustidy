@@ -70,7 +70,7 @@ fn run() -> Result<(), AppError> {
 
 		// Then output it to file
 		let mut print_fmt = PrintFmt::new(&parser);
-		crate_.print(&mut print_fmt).context("Unable to format crate")?;
+		crate_.print(&mut print_fmt);
 		fs::write(file_path, print_fmt.output()).context("Unable to write file")?;
 	}
 
