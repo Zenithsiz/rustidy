@@ -9,22 +9,9 @@
 					"vis": null,
 					"inner": {
 						"Constant": {
-							"const_": [
-								{ "first": { "start": 0, "end": 0 }, "rest": [] },
-								{ "start": 0, "end": 5 }
-							],
-							"name": {
-								"Ident": {
-									"NonKw": [
-										{ "first": { "start": 5, "end": 6 }, "rest": [] },
-										{ "start": 6, "end": 7 }
-									]
-								}
-							},
-							"colon": [
-								{ "first": { "start": 7, "end": 7 }, "rest": [] },
-								{ "start": 7, "end": 8 }
-							],
+							"const_": [{ "first": 0, "rest": [] }, 1],
+							"name": { "Ident": { "NonKw": [{ "first": 2, "rest": [] }, 3] } },
+							"colon": [{ "first": 4, "rest": [] }, 5],
 							"ty": {
 								"TraitObject": {
 									"dyn_": null,
@@ -40,13 +27,7 @@
 																"first": {
 																	"path": {
 																		"Ident": {
-																			"NonKw": [
-																				{
-																					"first": { "start": 8, "end": 9 },
-																					"rest": []
-																				},
-																				{ "start": 9, "end": 12 }
-																			]
+																			"NonKw": [{ "first": 6, "rest": [] }, 7]
 																		}
 																	},
 																	"generics": null
@@ -64,10 +45,7 @@
 								}
 							},
 							"value": null,
-							"semi": [
-								{ "first": { "start": 12, "end": 12 }, "rest": [] },
-								{ "start": 12, "end": 13 }
-							]
+							"semi": [{ "first": 8, "rest": [] }, 9]
 						}
 					}
 				}
@@ -80,20 +58,9 @@
 					"vis": null,
 					"inner": {
 						"Constant": {
-							"const_": [
-								{ "first": { "start": 13, "end": 14 }, "rest": [] },
-								{ "start": 14, "end": 19 }
-							],
-							"name": {
-								"Underscore": [
-									{ "first": { "start": 19, "end": 20 }, "rest": [] },
-									{ "start": 20, "end": 21 }
-								]
-							},
-							"colon": [
-								{ "first": { "start": 21, "end": 21 }, "rest": [] },
-								{ "start": 21, "end": 22 }
-							],
+							"const_": [{ "first": 10, "rest": [] }, 11],
+							"name": { "Underscore": [{ "first": 12, "rest": [] }, 13] },
+							"colon": [{ "first": 14, "rest": [] }, 15],
 							"ty": {
 								"TraitObject": {
 									"dyn_": null,
@@ -109,13 +76,7 @@
 																"first": {
 																	"path": {
 																		"Ident": {
-																			"NonKw": [
-																				{
-																					"first": { "start": 22, "end": 23 },
-																					"rest": []
-																				},
-																				{ "start": 23, "end": 26 }
-																			]
+																			"NonKw": [{ "first": 16, "rest": [] }, 17]
 																		}
 																	},
 																	"generics": null
@@ -133,10 +94,7 @@
 								}
 							},
 							"value": null,
-							"semi": [
-								{ "first": { "start": 26, "end": 26 }, "rest": [] },
-								{ "start": 26, "end": 27 }
-							]
+							"semi": [{ "first": 18, "rest": [] }, 19]
 						}
 					}
 				}
@@ -149,22 +107,11 @@
 					"vis": null,
 					"inner": {
 						"Constant": {
-							"const_": [
-								{ "first": { "start": 27, "end": 29 }, "rest": [] },
-								{ "start": 29, "end": 34 }
-							],
+							"const_": [{ "first": 20, "rest": [] }, 21],
 							"name": {
-								"Ident": {
-									"NonKw": [
-										{ "first": { "start": 34, "end": 35 }, "rest": [] },
-										{ "start": 35, "end": 36 }
-									]
-								}
+								"Ident": { "NonKw": [{ "first": 22, "rest": [] }, 23] }
 							},
-							"colon": [
-								{ "first": { "start": 36, "end": 36 }, "rest": [] },
-								{ "start": 36, "end": 37 }
-							],
+							"colon": [{ "first": 24, "rest": [] }, 25],
 							"ty": {
 								"TraitObject": {
 									"dyn_": null,
@@ -180,13 +127,7 @@
 																"first": {
 																	"path": {
 																		"Ident": {
-																			"NonKw": [
-																				{
-																					"first": { "start": 37, "end": 38 },
-																					"rest": []
-																				},
-																				{ "start": 38, "end": 41 }
-																			]
+																			"NonKw": [{ "first": 26, "rest": [] }, 27]
 																		}
 																	},
 																	"generics": null
@@ -204,10 +145,7 @@
 								}
 							},
 							"value": {
-								"eq": [
-									{ "first": { "start": 41, "end": 42 }, "rest": [] },
-									{ "start": 42, "end": 43 }
-								],
+								"eq": [{ "first": 28, "rest": [] }, 29],
 								"expr": {
 									"WithoutBlock": {
 										"attrs": [],
@@ -215,13 +153,7 @@
 											"Literal": {
 												"Integer": {
 													"inner": {
-														"Decimal": [
-															{
-																"first": { "start": 43, "end": 44 },
-																"rest": []
-															},
-															{ "start": 44, "end": 45 }
-														]
+														"Decimal": [{ "first": 30, "rest": [] }, 31]
 													},
 													"suffix": null
 												}
@@ -230,16 +162,13 @@
 									}
 								}
 							},
-							"semi": [
-								{ "first": { "start": 45, "end": 45 }, "rest": [] },
-								{ "start": 45, "end": 46 }
-							]
+							"semi": [{ "first": 32, "rest": [] }, 33]
 						}
 					}
 				}
 			}
 		}
 	],
-	"suffix_ws": { "first": { "start": 46, "end": 47 }, "rest": [] },
+	"suffix_ws": { "first": 34, "rest": [] },
 	"trailing_line_comment": null
 }

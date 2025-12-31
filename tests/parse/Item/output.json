@@ -10,22 +10,9 @@
 					"inner": {
 						"Module": {
 							"unsafe_": null,
-							"mod_": [
-								{ "first": { "start": 0, "end": 0 }, "rest": [] },
-								{ "start": 0, "end": 3 }
-							],
-							"ident": {
-								"NonKw": [
-									{ "first": { "start": 3, "end": 4 }, "rest": [] },
-									{ "start": 4, "end": 5 }
-								]
-							},
-							"inner": {
-								"None": [
-									{ "first": { "start": 5, "end": 5 }, "rest": [] },
-									{ "start": 5, "end": 6 }
-								]
-							}
+							"mod_": [{ "first": 0, "rest": [] }, 1],
+							"ident": { "NonKw": [{ "first": 2, "rest": [] }, 3] },
+							"inner": { "None": [{ "first": 4, "rest": [] }, 5] }
 						}
 					}
 				}
@@ -38,27 +25,13 @@
 					"vis": null,
 					"inner": {
 						"ExternCrate": {
-							"extern_": [
-								{ "first": { "start": 6, "end": 7 }, "rest": [] },
-								{ "start": 7, "end": 13 }
-							],
-							"crate_": [
-								{ "first": { "start": 13, "end": 14 }, "rest": [] },
-								{ "start": 14, "end": 19 }
-							],
+							"extern_": [{ "first": 6, "rest": [] }, 7],
+							"crate_": [{ "first": 8, "rest": [] }, 9],
 							"crate_ref": {
-								"Ident": {
-									"NonKw": [
-										{ "first": { "start": 19, "end": 20 }, "rest": [] },
-										{ "start": 20, "end": 21 }
-									]
-								}
+								"Ident": { "NonKw": [{ "first": 10, "rest": [] }, 11] }
 							},
 							"as_clause": null,
-							"semi": [
-								{ "first": { "start": 21, "end": 21 }, "rest": [] },
-								{ "start": 21, "end": 22 }
-							]
+							"semi": [{ "first": 12, "rest": [] }, 13]
 						}
 					}
 				}
@@ -71,22 +44,14 @@
 					"vis": null,
 					"inner": {
 						"Use": {
-							"use_": [
-								{ "first": { "start": 22, "end": 23 }, "rest": [] },
-								{ "start": 23, "end": 26 }
-							],
+							"use_": [{ "first": 14, "rest": [] }, 15],
 							"tree": {
 								"Simple": {
 									"path": {
 										"prefix": null,
 										"segments": {
 											"first": {
-												"Ident": {
-													"NonKw": [
-														{ "first": { "start": 26, "end": 27 }, "rest": [] },
-														{ "start": 27, "end": 28 }
-													]
-												}
+												"Ident": { "NonKw": [{ "first": 16, "rest": [] }, 17] }
 											},
 											"rest": []
 										}
@@ -94,10 +59,7 @@
 									"as_": null
 								}
 							},
-							"semi": [
-								{ "first": { "start": 28, "end": 28 }, "rest": [] },
-								{ "start": 28, "end": 29 }
-							]
+							"semi": [{ "first": 18, "rest": [] }, 19]
 						}
 					}
 				}
@@ -116,36 +78,17 @@
 								"safety": null,
 								"extern_": null
 							},
-							"fn_": [
-								{ "first": { "start": 29, "end": 30 }, "rest": [] },
-								{ "start": 30, "end": 32 }
-							],
-							"ident": {
-								"NonKw": [
-									{ "first": { "start": 32, "end": 33 }, "rest": [] },
-									{ "start": 33, "end": 34 }
-								]
-							},
+							"fn_": [{ "first": 20, "rest": [] }, 21],
+							"ident": { "NonKw": [{ "first": 22, "rest": [] }, 23] },
 							"generics": null,
 							"params": {
-								"prefix": [
-									{ "first": { "start": 34, "end": 34 }, "rest": [] },
-									{ "start": 34, "end": 35 }
-								],
+								"prefix": [{ "first": 24, "rest": [] }, 25],
 								"value": null,
-								"suffix": [
-									{ "first": { "start": 35, "end": 35 }, "rest": [] },
-									{ "start": 35, "end": 36 }
-								]
+								"suffix": [{ "first": 26, "rest": [] }, 27]
 							},
 							"ret": null,
 							"where_": null,
-							"body": {
-								"Semi": [
-									{ "first": { "start": 36, "end": 36 }, "rest": [] },
-									{ "start": 36, "end": 37 }
-								]
-							}
+							"body": { "Semi": [{ "first": 28, "rest": [] }, 29] }
 						}
 					}
 				}
@@ -158,24 +101,13 @@
 					"vis": null,
 					"inner": {
 						"TypeAlias": {
-							"type_": [
-								{ "first": { "start": 37, "end": 38 }, "rest": [] },
-								{ "start": 38, "end": 42 }
-							],
-							"ident": {
-								"NonKw": [
-									{ "first": { "start": 42, "end": 43 }, "rest": [] },
-									{ "start": 43, "end": 44 }
-								]
-							},
+							"type_": [{ "first": 30, "rest": [] }, 31],
+							"ident": { "NonKw": [{ "first": 32, "rest": [] }, 33] },
 							"generics": null,
 							"bounds": null,
 							"where_": null,
 							"eq": null,
-							"semi": [
-								{ "first": { "start": 44, "end": 44 }, "rest": [] },
-								{ "start": 44, "end": 45 }
-							]
+							"semi": [{ "first": 34, "rest": [] }, 35]
 						}
 					}
 				}
@@ -189,24 +121,11 @@
 					"inner": {
 						"Struct": {
 							"Struct": {
-								"struct_": [
-									{ "first": { "start": 45, "end": 46 }, "rest": [] },
-									{ "start": 46, "end": 52 }
-								],
-								"ident": {
-									"NonKw": [
-										{ "first": { "start": 52, "end": 53 }, "rest": [] },
-										{ "start": 53, "end": 54 }
-									]
-								},
+								"struct_": [{ "first": 36, "rest": [] }, 37],
+								"ident": { "NonKw": [{ "first": 38, "rest": [] }, 39] },
 								"generics": null,
 								"where_": null,
-								"inner": {
-									"Semi": [
-										{ "first": { "start": 54, "end": 54 }, "rest": [] },
-										{ "start": 54, "end": 55 }
-									]
-								}
+								"inner": { "Semi": [{ "first": 40, "rest": [] }, 41] }
 							}
 						}
 					}
@@ -220,28 +139,14 @@
 					"vis": null,
 					"inner": {
 						"Enum": {
-							"enum_": [
-								{ "first": { "start": 55, "end": 56 }, "rest": [] },
-								{ "start": 56, "end": 60 }
-							],
-							"ident": {
-								"NonKw": [
-									{ "first": { "start": 60, "end": 61 }, "rest": [] },
-									{ "start": 61, "end": 62 }
-								]
-							},
+							"enum_": [{ "first": 42, "rest": [] }, 43],
+							"ident": { "NonKw": [{ "first": 44, "rest": [] }, 45] },
 							"generic": null,
 							"where_": null,
 							"variants": {
-								"prefix": [
-									{ "first": { "start": 62, "end": 63 }, "rest": [] },
-									{ "start": 63, "end": 64 }
-								],
+								"prefix": [{ "first": 46, "rest": [] }, 47],
 								"value": null,
-								"suffix": [
-									{ "first": { "start": 64, "end": 64 }, "rest": [] },
-									{ "start": 64, "end": 65 }
-								]
+								"suffix": [{ "first": 48, "rest": [] }, 49]
 							}
 						}
 					}
@@ -255,28 +160,14 @@
 					"vis": null,
 					"inner": {
 						"Union": {
-							"union": [
-								{ "first": { "start": 65, "end": 66 }, "rest": [] },
-								{ "start": 66, "end": 71 }
-							],
-							"ident": {
-								"NonKw": [
-									{ "first": { "start": 71, "end": 72 }, "rest": [] },
-									{ "start": 72, "end": 73 }
-								]
-							},
+							"union": [{ "first": 50, "rest": [] }, 51],
+							"ident": { "NonKw": [{ "first": 52, "rest": [] }, 53] },
 							"generics": null,
 							"where_": null,
 							"fields": {
-								"prefix": [
-									{ "first": { "start": 73, "end": 74 }, "rest": [] },
-									{ "start": 74, "end": 75 }
-								],
+								"prefix": [{ "first": 54, "rest": [] }, 55],
 								"value": null,
-								"suffix": [
-									{ "first": { "start": 75, "end": 75 }, "rest": [] },
-									{ "start": 75, "end": 76 }
-								]
+								"suffix": [{ "first": 56, "rest": [] }, 57]
 							}
 						}
 					}
@@ -290,22 +181,11 @@
 					"vis": null,
 					"inner": {
 						"Constant": {
-							"const_": [
-								{ "first": { "start": 76, "end": 77 }, "rest": [] },
-								{ "start": 77, "end": 82 }
-							],
+							"const_": [{ "first": 58, "rest": [] }, 59],
 							"name": {
-								"Ident": {
-									"NonKw": [
-										{ "first": { "start": 82, "end": 83 }, "rest": [] },
-										{ "start": 83, "end": 84 }
-									]
-								}
+								"Ident": { "NonKw": [{ "first": 60, "rest": [] }, 61] }
 							},
-							"colon": [
-								{ "first": { "start": 84, "end": 84 }, "rest": [] },
-								{ "start": 84, "end": 85 }
-							],
+							"colon": [{ "first": 62, "rest": [] }, 63],
 							"ty": {
 								"TraitObject": {
 									"dyn_": null,
@@ -321,13 +201,7 @@
 																"first": {
 																	"path": {
 																		"Ident": {
-																			"NonKw": [
-																				{
-																					"first": { "start": 85, "end": 86 },
-																					"rest": []
-																				},
-																				{ "start": 86, "end": 89 }
-																			]
+																			"NonKw": [{ "first": 64, "rest": [] }, 65]
 																		}
 																	},
 																	"generics": null
@@ -345,10 +219,7 @@
 								}
 							},
 							"value": null,
-							"semi": [
-								{ "first": { "start": 89, "end": 89 }, "rest": [] },
-								{ "start": 89, "end": 90 }
-							]
+							"semi": [{ "first": 66, "rest": [] }, 67]
 						}
 					}
 				}
@@ -362,21 +233,10 @@
 					"inner": {
 						"Static": {
 							"safety": null,
-							"static_": [
-								{ "first": { "start": 90, "end": 91 }, "rest": [] },
-								{ "start": 91, "end": 97 }
-							],
+							"static_": [{ "first": 68, "rest": [] }, 69],
 							"mut_": null,
-							"ident": {
-								"NonKw": [
-									{ "first": { "start": 97, "end": 98 }, "rest": [] },
-									{ "start": 98, "end": 99 }
-								]
-							},
-							"colon": [
-								{ "first": { "start": 99, "end": 99 }, "rest": [] },
-								{ "start": 99, "end": 100 }
-							],
+							"ident": { "NonKw": [{ "first": 70, "rest": [] }, 71] },
+							"colon": [{ "first": 72, "rest": [] }, 73],
 							"ty": {
 								"TraitObject": {
 									"dyn_": null,
@@ -392,13 +252,7 @@
 																"first": {
 																	"path": {
 																		"Ident": {
-																			"NonKw": [
-																				{
-																					"first": { "start": 100, "end": 101 },
-																					"rest": []
-																				},
-																				{ "start": 101, "end": 104 }
-																			]
+																			"NonKw": [{ "first": 74, "rest": [] }, 75]
 																		}
 																	},
 																	"generics": null
@@ -416,10 +270,7 @@
 								}
 							},
 							"value": null,
-							"semi": [
-								{ "first": { "start": 104, "end": 104 }, "rest": [] },
-								{ "start": 104, "end": 105 }
-							]
+							"semi": [{ "first": 76, "rest": [] }, 77]
 						}
 					}
 				}
@@ -432,28 +283,14 @@
 					"vis": null,
 					"inner": {
 						"Trait": {
-							"trait_": [
-								{ "first": { "start": 105, "end": 106 }, "rest": [] },
-								{ "start": 106, "end": 111 }
-							],
-							"ident": {
-								"NonKw": [
-									{ "first": { "start": 111, "end": 112 }, "rest": [] },
-									{ "start": 112, "end": 113 }
-								]
-							},
+							"trait_": [{ "first": 78, "rest": [] }, 79],
+							"ident": { "NonKw": [{ "first": 80, "rest": [] }, 81] },
 							"generics": null,
 							"bounds": null,
 							"body": {
-								"prefix": [
-									{ "first": { "start": 113, "end": 114 }, "rest": [] },
-									{ "start": 114, "end": 115 }
-								],
+								"prefix": [{ "first": 82, "rest": [] }, 83],
 								"value": { "attrs": [], "inner": [] },
-								"suffix": [
-									{ "first": { "start": 115, "end": 115 }, "rest": [] },
-									{ "start": 115, "end": 116 }
-								]
+								"suffix": [{ "first": 84, "rest": [] }, 85]
 							}
 						}
 					}
@@ -468,10 +305,7 @@
 					"inner": {
 						"Implementation": {
 							"Inherent": {
-								"impl_": [
-									{ "first": { "start": 116, "end": 117 }, "rest": [] },
-									{ "start": 117, "end": 121 }
-								],
+								"impl_": [{ "first": 86, "rest": [] }, 87],
 								"generics": null,
 								"ty": {
 									"TraitObject": {
@@ -489,14 +323,8 @@
 																		"path": {
 																			"Ident": {
 																				"NonKw": [
-																					{
-																						"first": {
-																							"start": 121,
-																							"end": 122
-																						},
-																						"rest": []
-																					},
-																					{ "start": 122, "end": 123 }
+																					{ "first": 88, "rest": [] },
+																					89
 																				]
 																			}
 																		},
@@ -516,15 +344,9 @@
 								},
 								"where_": null,
 								"body": {
-									"prefix": [
-										{ "first": { "start": 123, "end": 124 }, "rest": [] },
-										{ "start": 124, "end": 125 }
-									],
+									"prefix": [{ "first": 90, "rest": [] }, 91],
 									"value": { "attrs": [], "inner": [] },
-									"suffix": [
-										{ "first": { "start": 125, "end": 125 }, "rest": [] },
-										{ "start": 125, "end": 126 }
-									]
+									"suffix": [{ "first": 92, "rest": [] }, 93]
 								}
 							}
 						}
@@ -540,21 +362,12 @@
 					"inner": {
 						"ExternBlock": {
 							"unsafe_": null,
-							"extern_": [
-								{ "first": { "start": 126, "end": 127 }, "rest": [] },
-								{ "start": 127, "end": 133 }
-							],
+							"extern_": [{ "first": 94, "rest": [] }, 95],
 							"abi": null,
 							"inner": {
-								"prefix": [
-									{ "first": { "start": 133, "end": 134 }, "rest": [] },
-									{ "start": 134, "end": 135 }
-								],
+								"prefix": [{ "first": 96, "rest": [] }, 97],
 								"value": { "attrs": [], "inner": [] },
-								"suffix": [
-									{ "first": { "start": 135, "end": 135 }, "rest": [] },
-									{ "start": 135, "end": 136 }
-								]
+								"suffix": [{ "first": 98, "rest": [] }, 99]
 							}
 						}
 					}
@@ -571,30 +384,16 @@
 								"prefix": null,
 								"segments": {
 									"first": {
-										"Ident": {
-											"NonKw": [
-												{ "first": { "start": 136, "end": 138 }, "rest": [] },
-												{ "start": 138, "end": 139 }
-											]
-										}
+										"Ident": { "NonKw": [{ "first": 100, "rest": [] }, 101] }
 									},
 									"rest": []
 								}
 							},
-							"not": [
-								{ "first": { "start": 139, "end": 139 }, "rest": [] },
-								{ "start": 139, "end": 140 }
-							],
+							"not": [{ "first": 102, "rest": [] }, 103],
 							"tokens": {
-								"prefix": [
-									{ "first": { "start": 140, "end": 141 }, "rest": [] },
-									{ "start": 141, "end": 142 }
-								],
+								"prefix": [{ "first": 104, "rest": [] }, 105],
 								"value": [],
-								"suffix": [
-									{ "first": { "start": 142, "end": 142 }, "rest": [] },
-									{ "start": 142, "end": 143 }
-								]
+								"suffix": [{ "first": 106, "rest": [] }, 107]
 							}
 						}
 					}
@@ -606,70 +405,29 @@
 			"inner": {
 				"Macro": {
 					"Definition": {
-						"macro_rules": [
-							{ "first": { "start": 143, "end": 144 }, "rest": [] },
-							{ "start": 144, "end": 155 }
-						],
-						"not": [
-							{ "first": { "start": 155, "end": 155 }, "rest": [] },
-							{ "start": 155, "end": 156 }
-						],
-						"ident": {
-							"NonKw": [
-								{ "first": { "start": 156, "end": 157 }, "rest": [] },
-								{ "start": 157, "end": 158 }
-							]
-						},
+						"macro_rules": [{ "first": 108, "rest": [] }, 109],
+						"not": [{ "first": 110, "rest": [] }, 111],
+						"ident": { "NonKw": [{ "first": 112, "rest": [] }, 113] },
 						"def": {
 							"Braces": {
 								"rules": {
-									"prefix": [
-										{ "first": { "start": 158, "end": 159 }, "rest": [] },
-										{ "start": 159, "end": 160 }
-									],
+									"prefix": [{ "first": 114, "rest": [] }, 115],
 									"value": {
 										"punctuated": {
 											"first": {
 												"matcher": {
 													"Parens": {
-														"prefix": [
-															{
-																"first": { "start": 160, "end": 161 },
-																"rest": []
-															},
-															{ "start": 161, "end": 162 }
-														],
+														"prefix": [{ "first": 116, "rest": [] }, 117],
 														"value": [],
-														"suffix": [
-															{
-																"first": { "start": 162, "end": 162 },
-																"rest": []
-															},
-															{ "start": 162, "end": 163 }
-														]
+														"suffix": [{ "first": 118, "rest": [] }, 119]
 													}
 												},
-												"arrow": [
-													{ "first": { "start": 163, "end": 164 }, "rest": [] },
-													{ "start": 164, "end": 166 }
-												],
+												"arrow": [{ "first": 120, "rest": [] }, 121],
 												"transcriber": {
 													"Parens": {
-														"prefix": [
-															{
-																"first": { "start": 166, "end": 167 },
-																"rest": []
-															},
-															{ "start": 167, "end": 168 }
-														],
+														"prefix": [{ "first": 122, "rest": [] }, 123],
 														"value": [],
-														"suffix": [
-															{
-																"first": { "start": 168, "end": 168 },
-																"rest": []
-															},
-															{ "start": 168, "end": 169 }
-														]
+														"suffix": [{ "first": 124, "rest": [] }, 125]
 													}
 												}
 											},
@@ -677,10 +435,7 @@
 										},
 										"trailing": null
 									},
-									"suffix": [
-										{ "first": { "start": 169, "end": 170 }, "rest": [] },
-										{ "start": 170, "end": 171 }
-									]
+									"suffix": [{ "first": 126, "rest": [] }, 127]
 								}
 							}
 						}
@@ -689,6 +444,6 @@
 			}
 		}
 	],
-	"suffix_ws": { "first": { "start": 171, "end": 171 }, "rest": [] },
+	"suffix_ws": { "first": 128, "rest": [] },
 	"trailing_line_comment": null
 }

@@ -2,13 +2,13 @@
 
 // Imports
 use {
-	crate::{Parser, ParserStr, parser::ParserRange},
+	crate::{Parser, ParserStr},
 	std::collections::HashMap,
 };
 
 /// String replacements
 pub struct Replacements {
-	replacements: HashMap<ParserRange, Replacement>,
+	replacements: HashMap<ParserStr, Replacement>,
 }
 
 impl Replacements {
@@ -21,18 +21,18 @@ impl Replacements {
 	}
 
 	/// Adds a replacement
-	pub fn add(&mut self, parser: &Parser, s: &ParserStr, replacement: impl Into<Replacement>) {
+	pub fn add(&mut self, parser: &Parser, s: ParserStr, replacement: impl Into<Replacement>) {
 		let replacement = replacement.into();
 		match replacement.is(parser.str(s)) {
-			true => _ = self.replacements.remove(&parser.str_range(s)),
-			false => _ = self.replacements.insert(parser.str_range(s), replacement),
+			true => _ = self.replacements.remove(&s),
+			false => _ = self.replacements.insert(s, replacement),
 		}
 	}
 
 	/// Returns the replacement of a string
 	#[must_use]
-	pub fn get(&self, parser: &Parser, s: &ParserStr) -> Option<&Replacement> {
-		self.replacements.get(&parser.str_range(s))
+	pub fn get(&self, s: ParserStr) -> Option<&Replacement> {
+		self.replacements.get(&s)
 	}
 }
 

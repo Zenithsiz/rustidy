@@ -74,7 +74,7 @@ pub macro decl_tokens(
 
 				// Note: This checks prevents matching `match` on `matches`
 				{
-					let token = parser.str(&token);
+					let token = parser.str(token);
 					let remaining = parser.remaining();
 
 					if token.ends_with(unicode_ident::is_xid_continue) &&

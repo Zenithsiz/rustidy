@@ -103,8 +103,8 @@ impl<'a, 'input> PrintFmt<'a, 'input> {
 	}
 
 	/// Writes an ast string
-	pub fn write_str(&mut self, s: &ParserStr) {
-		match self.replacements.get(self.parser, s) {
+	pub fn write_str(&mut self, s: ParserStr) {
+		match self.replacements.get(s) {
 			Some(replacement) => replacement.write(&mut self.output),
 			None => self.output.push_str(self.parser.str(s)),
 		}

@@ -17,6 +17,7 @@ pub use {
 
 // Imports
 use {
+	self::str::ParserStrIdx,
 	app_error::AppError,
 	core::{
 		marker::PhantomData,
@@ -196,6 +197,9 @@ pub struct Parser<'input> {
 
 	/// Tags
 	tags: Vec<ParserTag>,
+
+	/// String ranges
+	string_ranges: Vec<ParserRange>,
 }
 
 impl<'input> Parser<'input> {
@@ -206,6 +210,7 @@ impl<'input> Parser<'input> {
 			input,
 			cur_pos: ParserPos(0),
 			tags: vec![],
+			string_ranges: vec![],
 		}
 	}
 
@@ -283,26 +288,29 @@ impl<'input> Parser<'input> {
 
 	/// Returns the string of an range
 	#[must_use]
-	pub fn str(&self, s: &ParserStr) -> &'input str {
-		&self.input[s.0]
+	pub fn str(&self, s: ParserStr) -> &'input str {
+		let range = self.str_range(s);
+		&self.input[range]
 	}
 
 	/// Returns everything after a string.
 	#[must_use]
-	pub fn str_after(&self, s: &ParserStr) -> &'input str {
-		&self.input[s.0.end.0..]
+	pub fn str_after(&self, s: ParserStr) -> &'input str {
+		let range = self.str_range(s);
+		&self.input[range.end.0..]
 	}
 
 	/// Returns everything before a string.
 	#[must_use]
-	pub fn str_before(&self, s: &ParserStr) -> &'input str {
-		&self.input[..s.0.start.0]
+	pub fn str_before(&self, s: ParserStr) -> &'input str {
+		let range = self.str_range(s);
+		&self.input[..range.start.0]
 	}
 
 	/// Returns the range of a string
 	#[must_use]
-	pub const fn str_range(&self, s: &ParserStr) -> ParserRange {
-		s.0
+	pub fn str_range(&self, s: ParserStr) -> ParserRange {
+		self.string_ranges[s.0.0 as usize]
 	}
 
 	/// Returns if the parser is finished
@@ -368,8 +376,10 @@ impl<'input> Parser<'input> {
 			start: ParserPos(output_range.start),
 			end:   ParserPos(output_range.end),
 		};
+		let idx = self.string_ranges.len().try_into().expect("Too many string ranges");
+		self.string_ranges.push(output_range);
 
-		<_>::from_output(ParserStr(output_range))
+		<_>::from_output(ParserStr(ParserStrIdx(idx)))
 	}
 
 	/// Strips a prefix `s` from the parser
@@ -395,11 +405,13 @@ impl<'input> Parser<'input> {
 	/// On error, nothing is modified.
 	pub fn try_parse<T: Parse>(&mut self) -> Result<Result<T, ParserError<T>>, ParserError<T>> {
 		let prev_pos = self.cur_pos;
+		let prev_string_ranges_len = self.string_ranges.len();
 		match self.parse::<T>() {
 			Ok(value) => Ok(Ok(value)),
 			Err(err) if err.is_fatal() => Err(err),
 			Err(err) => {
 				self.cur_pos = prev_pos;
+				self.string_ranges.truncate(prev_string_ranges_len);
 				Ok(Err(err))
 			},
 		}
@@ -411,13 +423,20 @@ impl<'input> Parser<'input> {
 	#[expect(clippy::type_complexity, reason = "TODO")]
 	pub fn peek<T: Parse>(&mut self) -> Result<Result<(T, PeekState), ParserError<T>>, ParserError<T>> {
 		let start_pos = self.cur_pos;
+		let prev_string_ranges_len = self.string_ranges.len();
+
 		let output = match self.parse::<T>() {
 			Ok(value) => Ok(value),
 			Err(err) if err.is_fatal() => return Err(err),
 			Err(err) => Err(err),
 		};
 
-		let peek_state = PeekState { cur_pos: self.cur_pos };
+		let peek_state = PeekState {
+			cur_pos:       self.cur_pos,
+			// TODO: Ideally here we wouldn't allocate and maybe just move
+			//       the new ranges somewhere else temporarily.
+			string_ranges: self.string_ranges.drain(prev_string_ranges_len..).collect(),
+		};
 		self.cur_pos = start_pos;
 
 		let output = output.map(|value| (value, peek_state));
@@ -426,8 +445,9 @@ impl<'input> Parser<'input> {
 
 	/// Accepts a peeked state.
 	// TODO: We should validate that the user doesn't use a previous peek
-	pub const fn set_peeked(&mut self, peek_state: PeekState) {
+	pub fn set_peeked(&mut self, peek_state: PeekState) {
 		self.cur_pos = peek_state.cur_pos;
+		self.string_ranges.extend(peek_state.string_ranges);
 	}
 
 	/// Returns if this parser has a tag
@@ -456,9 +476,10 @@ impl<'input> Parser<'input> {
 }
 
 /// Peek state
-#[derive(Clone, Copy, Debug)]
+#[derive(Clone, Debug)]
 pub struct PeekState {
-	cur_pos: ParserPos,
+	cur_pos:       ParserPos,
+	string_ranges: Vec<ParserRange>,
 }
 
 impl PeekState {

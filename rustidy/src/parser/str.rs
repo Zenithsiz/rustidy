@@ -1,16 +1,21 @@
 //! Parse string
 
 // Imports
-use crate::{parser::ParserRange, print::Print};
+use crate::Print;
+
+/// Parser string index
+#[derive(PartialEq, Eq, Clone, Copy, Hash, Debug)]
+#[derive(serde::Serialize, serde::Deserialize)]
+pub(super) struct ParserStrIdx(pub u32);
 
 /// Parser string
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Clone, Copy, Hash, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[must_use = "Parser output must not be discarded"]
-pub struct ParserStr(pub(super) ParserRange);
+pub struct ParserStr(pub(super) ParserStrIdx);
 
 impl Print for ParserStr {
 	fn print(&self, f: &mut crate::PrintFmt) {
-		f.write_str(self);
+		f.write_str(*self);
 	}
 }

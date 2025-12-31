@@ -167,6 +167,7 @@ struct RecursiveWrapperInner<R: ParsableRecursive<R>> {
 	suffixes: Vec<R::Suffix>,
 }
 
+// Todo: Not clone parser states here
 fn parse<R: ParsableRecursive<R>>(
 	parser: &mut Parser,
 ) -> Result<Punctuated<RecursiveWrapperInner<R>, R::Infix>, RecursiveWrapperError<R>> {
@@ -179,7 +180,7 @@ fn parse<R: ParsableRecursive<R>>(
 
 		let parsed = match (prefix, base) {
 			(Ok((prefix, prefix_state)), Ok((base, base_state))) => {
-				parser.set_peeked(base_state);
+				parser.set_peeked(base_state.clone());
 				match parser.peek::<R::Base>().map_err(RecursiveWrapperError::Base)?.is_ok() {
 					true => Either::Left((prefix, prefix_state)),
 					false => Either::Right((base, base_state)),
@@ -205,7 +206,7 @@ fn parse<R: ParsableRecursive<R>>(
 
 					let parsed = match (suffix, infix) {
 						(Ok((suffix, suffix_state)), Ok((infix, infix_state))) => {
-							parser.set_peeked(infix_state);
+							parser.set_peeked(infix_state.clone());
 							match parser
 								.peek::<R::Prefix>()
 								.map_err(RecursiveWrapperError::Prefix)?

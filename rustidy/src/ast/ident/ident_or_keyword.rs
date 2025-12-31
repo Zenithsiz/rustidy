@@ -40,7 +40,7 @@ impl Parse for IdentifierOrKeyword {
 
 			Ok(())
 		})?;
-		if parser.str(&ident) == "_" {
+		if parser.str(ident) == "_" {
 			return Err(IdentOrKeywordError::SingleUnderscore);
 		}
 

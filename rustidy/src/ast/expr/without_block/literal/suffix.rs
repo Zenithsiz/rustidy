@@ -36,7 +36,7 @@ impl Parse for SuffixNoE {
 		let ident = parser
 			.with_tag("skip:Whitespace", Parser::parse::<IdentifierOrKeyword>)
 			.map_err(SuffixNoEError::IdentOrKeyword)?;
-		if parser.str(&ident.1).starts_with(['e', 'E']) {
+		if parser.str(ident.1).starts_with(['e', 'E']) {
 			return Err(SuffixNoEError::StartedWithE);
 		}
 

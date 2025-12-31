@@ -3,140 +3,70 @@
 	"inner_attrs": [
 		{
 			"Attr": {
-				"pound": [
-					{ "first": { "start": 0, "end": 0 }, "rest": [] },
-					{ "start": 0, "end": 1 }
-				],
-				"not": [
-					{ "first": { "start": 1, "end": 1 }, "rest": [] },
-					{ "start": 1, "end": 2 }
-				],
+				"pound": [{ "first": 0, "rest": [] }, 1],
+				"not": [{ "first": 2, "rest": [] }, 3],
 				"attr": {
-					"prefix": [
-						{ "first": { "start": 2, "end": 2 }, "rest": [] },
-						{ "start": 2, "end": 3 }
-					],
+					"prefix": [{ "first": 4, "rest": [] }, 5],
 					"value": {
 						"path": {
 							"prefix": null,
 							"segments": {
 								"first": {
-									"Ident": {
-										"NonKw": [
-											{ "first": { "start": 3, "end": 3 }, "rest": [] },
-											{ "start": 3, "end": 4 }
-										]
-									}
+									"Ident": { "NonKw": [{ "first": 6, "rest": [] }, 7] }
 								},
 								"rest": [
 									[
-										[
-											{ "first": { "start": 4, "end": 4 }, "rest": [] },
-											{ "start": 4, "end": 6 }
-										],
-										{
-											"Ident": {
-												"NonKw": [
-													{ "first": { "start": 6, "end": 6 }, "rest": [] },
-													{ "start": 6, "end": 7 }
-												]
-											}
-										}
+										[{ "first": 8, "rest": [] }, 9],
+										{ "Ident": { "NonKw": [{ "first": 10, "rest": [] }, 11] } }
 									],
 									[
-										[
-											{ "first": { "start": 7, "end": 7 }, "rest": [] },
-											{ "start": 7, "end": 9 }
-										],
-										{
-											"Ident": {
-												"NonKw": [
-													{ "first": { "start": 9, "end": 9 }, "rest": [] },
-													{ "start": 9, "end": 10 }
-												]
-											}
-										}
+										[{ "first": 12, "rest": [] }, 13],
+										{ "Ident": { "NonKw": [{ "first": 14, "rest": [] }, 15] } }
 									]
 								]
 							}
 						},
 						"input": null
 					},
-					"suffix": [
-						{ "first": { "start": 10, "end": 10 }, "rest": [] },
-						{ "start": 10, "end": 11 }
-					]
+					"suffix": [{ "first": 16, "rest": [] }, 17]
 				}
 			}
 		},
 		{
 			"Attr": {
-				"pound": [
-					{ "first": { "start": 11, "end": 12 }, "rest": [] },
-					{ "start": 12, "end": 13 }
-				],
-				"not": [
-					{ "first": { "start": 13, "end": 13 }, "rest": [] },
-					{ "start": 13, "end": 14 }
-				],
+				"pound": [{ "first": 18, "rest": [] }, 19],
+				"not": [{ "first": 20, "rest": [] }, 21],
 				"attr": {
-					"prefix": [
-						{ "first": { "start": 14, "end": 14 }, "rest": [] },
-						{ "start": 14, "end": 15 }
-					],
+					"prefix": [{ "first": 22, "rest": [] }, 23],
 					"value": {
 						"path": {
-							"prefix": [
-								{ "first": { "start": 15, "end": 15 }, "rest": [] },
-								{ "start": 15, "end": 17 }
-							],
+							"prefix": [{ "first": 24, "rest": [] }, 25],
 							"segments": {
-								"first": {
-									"DollarCrate": [
-										{ "first": { "start": 17, "end": 17 }, "rest": [] },
-										{ "start": 17, "end": 23 }
-									]
-								},
+								"first": { "DollarCrate": [{ "first": 26, "rest": [] }, 27] },
 								"rest": [
 									[
-										[
-											{ "first": { "start": 23, "end": 23 }, "rest": [] },
-											{ "start": 23, "end": 25 }
-										],
-										{
-											"Ident": {
-												"NonKw": [
-													{ "first": { "start": 25, "end": 25 }, "rest": [] },
-													{ "start": 25, "end": 26 }
-												]
-											}
-										}
+										[{ "first": 28, "rest": [] }, 29],
+										{ "Ident": { "NonKw": [{ "first": 30, "rest": [] }, 31] } }
 									]
 								]
 							}
 						},
 						"input": null
 					},
-					"suffix": [
-						{ "first": { "start": 26, "end": 26 }, "rest": [] },
-						{ "start": 26, "end": 27 }
-					]
+					"suffix": [{ "first": 32, "rest": [] }, 33]
 				}
 			}
 		},
 		{
 			"DocComment": {
 				"InnerLine": {
-					"prefix": [
-						{ "first": { "start": 27, "end": 28 }, "rest": [] },
-						{ "start": 28, "end": 31 }
-					],
-					"comment": { "start": 31, "end": 33 }
+					"prefix": [{ "first": 34, "rest": [] }, 35],
+					"comment": 36
 				}
 			}
 		}
 	],
 	"items": [],
-	"suffix_ws": { "first": { "start": 33, "end": 33 }, "rest": [] },
+	"suffix_ws": { "first": 37, "rest": [] },
 	"trailing_line_comment": null
 }

@@ -53,7 +53,7 @@ impl Parse for NonKeywordIdentifier {
 			.parse::<IdentifierOrKeyword>()
 			.map_err(NonKeywordIdentifierError::Ident)?;
 
-		if STRICT_OR_RESERVED_KEYWORDS.contains(&parser.str(&ident.1)) {
+		if STRICT_OR_RESERVED_KEYWORDS.contains(&parser.str(ident.1)) {
 			return Err(NonKeywordIdentifierError::StrictOrReserved);
 		}
 

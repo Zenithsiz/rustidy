@@ -9,27 +9,13 @@
 					"vis": null,
 					"inner": {
 						"ExternCrate": {
-							"extern_": [
-								{ "first": { "start": 0, "end": 0 }, "rest": [] },
-								{ "start": 0, "end": 6 }
-							],
-							"crate_": [
-								{ "first": { "start": 6, "end": 7 }, "rest": [] },
-								{ "start": 7, "end": 12 }
-							],
+							"extern_": [{ "first": 0, "rest": [] }, 1],
+							"crate_": [{ "first": 2, "rest": [] }, 3],
 							"crate_ref": {
-								"Ident": {
-									"NonKw": [
-										{ "first": { "start": 12, "end": 13 }, "rest": [] },
-										{ "start": 13, "end": 14 }
-									]
-								}
+								"Ident": { "NonKw": [{ "first": 4, "rest": [] }, 5] }
 							},
 							"as_clause": null,
-							"semi": [
-								{ "first": { "start": 14, "end": 14 }, "rest": [] },
-								{ "start": 14, "end": 15 }
-							]
+							"semi": [{ "first": 6, "rest": [] }, 7]
 						}
 					}
 				}
@@ -42,25 +28,11 @@
 					"vis": null,
 					"inner": {
 						"ExternCrate": {
-							"extern_": [
-								{ "first": { "start": 15, "end": 16 }, "rest": [] },
-								{ "start": 16, "end": 22 }
-							],
-							"crate_": [
-								{ "first": { "start": 22, "end": 23 }, "rest": [] },
-								{ "start": 23, "end": 28 }
-							],
-							"crate_ref": {
-								"Self_": [
-									{ "first": { "start": 28, "end": 29 }, "rest": [] },
-									{ "start": 29, "end": 33 }
-								]
-							},
+							"extern_": [{ "first": 8, "rest": [] }, 9],
+							"crate_": [{ "first": 10, "rest": [] }, 11],
+							"crate_ref": { "Self_": [{ "first": 12, "rest": [] }, 13] },
 							"as_clause": null,
-							"semi": [
-								{ "first": { "start": 33, "end": 33 }, "rest": [] },
-								{ "start": 33, "end": 34 }
-							]
+							"semi": [{ "first": 14, "rest": [] }, 15]
 						}
 					}
 				}
@@ -73,36 +45,14 @@
 					"vis": null,
 					"inner": {
 						"ExternCrate": {
-							"extern_": [
-								{ "first": { "start": 34, "end": 35 }, "rest": [] },
-								{ "start": 35, "end": 41 }
-							],
-							"crate_": [
-								{ "first": { "start": 41, "end": 42 }, "rest": [] },
-								{ "start": 42, "end": 47 }
-							],
-							"crate_ref": {
-								"Self_": [
-									{ "first": { "start": 47, "end": 48 }, "rest": [] },
-									{ "start": 48, "end": 52 }
-								]
-							},
+							"extern_": [{ "first": 16, "rest": [] }, 17],
+							"crate_": [{ "first": 18, "rest": [] }, 19],
+							"crate_ref": { "Self_": [{ "first": 20, "rest": [] }, 21] },
 							"as_clause": {
-								"as_": [
-									{ "first": { "start": 52, "end": 53 }, "rest": [] },
-									{ "start": 53, "end": 55 }
-								],
-								"name": {
-									"Underscore": [
-										{ "first": { "start": 55, "end": 56 }, "rest": [] },
-										{ "start": 56, "end": 57 }
-									]
-								}
+								"as_": [{ "first": 22, "rest": [] }, 23],
+								"name": { "Underscore": [{ "first": 24, "rest": [] }, 25] }
 							},
-							"semi": [
-								{ "first": { "start": 57, "end": 57 }, "rest": [] },
-								{ "start": 57, "end": 58 }
-							]
+							"semi": [{ "first": 26, "rest": [] }, 27]
 						}
 					}
 				}
@@ -115,44 +65,22 @@
 					"vis": null,
 					"inner": {
 						"ExternCrate": {
-							"extern_": [
-								{ "first": { "start": 58, "end": 59 }, "rest": [] },
-								{ "start": 59, "end": 65 }
-							],
-							"crate_": [
-								{ "first": { "start": 65, "end": 66 }, "rest": [] },
-								{ "start": 66, "end": 71 }
-							],
-							"crate_ref": {
-								"Self_": [
-									{ "first": { "start": 71, "end": 72 }, "rest": [] },
-									{ "start": 72, "end": 76 }
-								]
-							},
+							"extern_": [{ "first": 28, "rest": [] }, 29],
+							"crate_": [{ "first": 30, "rest": [] }, 31],
+							"crate_ref": { "Self_": [{ "first": 32, "rest": [] }, 33] },
 							"as_clause": {
-								"as_": [
-									{ "first": { "start": 76, "end": 77 }, "rest": [] },
-									{ "start": 77, "end": 79 }
-								],
+								"as_": [{ "first": 34, "rest": [] }, 35],
 								"name": {
-									"Ident": {
-										"NonKw": [
-											{ "first": { "start": 79, "end": 80 }, "rest": [] },
-											{ "start": 80, "end": 85 }
-										]
-									}
+									"Ident": { "NonKw": [{ "first": 36, "rest": [] }, 37] }
 								}
 							},
-							"semi": [
-								{ "first": { "start": 85, "end": 85 }, "rest": [] },
-								{ "start": 85, "end": 86 }
-							]
+							"semi": [{ "first": 38, "rest": [] }, 39]
 						}
 					}
 				}
 			}
 		}
 	],
-	"suffix_ws": { "first": { "start": 86, "end": 87 }, "rest": [] },
+	"suffix_ws": { "first": 40, "rest": [] },
 	"trailing_line_comment": null
 }

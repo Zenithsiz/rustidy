@@ -268,7 +268,7 @@ impl<'a, 'input> Context<'a, 'input> {
 	}
 
 	/// Replaces a string
-	pub fn replace(&mut self, s: &ParserStr, replacement: impl Into<Replacement>) {
+	pub fn replace(&mut self, s: ParserStr, replacement: impl Into<Replacement>) {
 		self.replacements.add(self.parser, s, replacement);
 	}
 
@@ -361,7 +361,7 @@ impl ComputeRange {
 	}
 
 	/// Adds a string to this
-	pub const fn add_str(&mut self, s: &ParserStr, ctx: &mut Context) {
+	pub fn add_str(&mut self, s: ParserStr, ctx: &mut Context) {
 		self.add_range(ctx.parser().str_range(s));
 	}
 
