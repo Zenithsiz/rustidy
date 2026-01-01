@@ -2,7 +2,7 @@
 
 // Imports
 use {
-	super::{Expression, ExpressionWithBlock},
+	super::{Conditions, Expression, ExpressionWithBlock},
 	crate::{
 		Format,
 		Parse,
@@ -83,5 +83,8 @@ pub struct MatchArmInner {
 #[derive(Parse, Format, Print)]
 pub struct MatchArmGuard {
 	pub if_:  token::If,
-	pub expr: Box<Expression>,
+	// TODO: The reference says this is just an expression, but
+	//       that means we don't parse `Some(...) if let ...`, so
+	//       instead we allow any conditions.
+	pub cond: Conditions,
 }
