@@ -69,13 +69,13 @@ pub enum EnumVariantKind {
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
-pub struct EnumVariantTuple(pub Parenthesized<TupleFields>);
+pub struct EnumVariantTuple(pub Parenthesized<Option<TupleFields>>);
 
 /// `EnumVariantStruct`
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
-pub struct EnumVariantStruct(pub Braced<StructFields>);
+pub struct EnumVariantStruct(pub Braced<Option<StructFields>>);
 
 /// `EnumVariantDiscriminant`
 #[derive(PartialEq, Eq, Clone, Debug)]

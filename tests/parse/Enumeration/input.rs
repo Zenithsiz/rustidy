@@ -5,7 +5,9 @@ enum A where T: B {}
 
 enum A { A }
 enum A { A(u32) }
+enum A { A() }
 enum A { A { a: u32 } }
+enum A { A {} }
 
 enum A { #[a] A }
 enum A { pub A }
