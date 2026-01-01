@@ -1,6 +1,8 @@
 //! Literal expression
 
 // Modules
+// TODO: Merge some of these together
+pub mod byte;
 pub mod char;
 pub mod float;
 pub mod int;
@@ -10,6 +12,7 @@ pub mod suffix;
 
 // Exports
 pub use self::{
+	byte::ByteLiteral,
 	char::CharLiteral,
 	float::FloatLiteral,
 	int::IntegerLiteral,
@@ -30,7 +33,7 @@ pub enum LiteralExpression {
 	Char(CharLiteral),
 	String(StringLiteral),
 	RawString(RawStringLiteral),
-	Byte(!),
+	Byte(ByteLiteral),
 	ByteString(!),
 	RawByteString(!),
 	CString(!),
