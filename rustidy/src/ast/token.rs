@@ -3,7 +3,11 @@
 // Imports
 use {
 	super::{
-		expr::{IntegerLiteral, StringLiteral, without_block::literal::CharLiteral},
+		expr::{
+			IntegerLiteral,
+			StringLiteral,
+			without_block::literal::{ByteLiteral, CharLiteral, FloatLiteral, RawStringLiteral},
+		},
 		ident::IdentifierOrKeyword,
 		lifetime::LifetimeToken,
 		whitespace::Whitespace,
@@ -237,21 +241,22 @@ decl_tokens! {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub enum Token {
-	IdentOrKeyword(IdentifierOrKeyword),
 	RawIdent(!),
 	CharLiteral(CharLiteral),
 	StringLiteral(StringLiteral),
-	RawStringLiteral(!),
-	ByteLiteral(!),
+	RawStringLiteral(RawStringLiteral),
+	ByteLiteral(ByteLiteral),
 	RawByteLiteral(!),
 	RawByteStringLiteral(!),
 	CStringLiteral(!),
 	RawCStringLiteral(!),
 	IntegerLiteral(IntegerLiteral),
-	FloatLiteral(!),
+	FloatLiteral(FloatLiteral),
 	LifetimeToken(LifetimeToken),
 	Punctuation(Punctuation),
 	Reserved(!),
+
+	IdentOrKeyword(IdentifierOrKeyword),
 }
 
 /// `Punctuation`
