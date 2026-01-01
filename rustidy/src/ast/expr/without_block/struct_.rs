@@ -63,7 +63,10 @@ pub struct StructExprFieldsEndBase {
 }
 
 /// `StructExprField`
-type StructExprField = WithOuterAttributes<StructExprFieldInner>;
+#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(serde::Serialize, serde::Deserialize)]
+#[derive(Parse, Format, Print)]
+pub struct StructExprField(pub WithOuterAttributes<StructExprFieldInner>);
 
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
