@@ -19,7 +19,11 @@ use {
 #[parse(name = "a floating point literal")]
 pub struct FloatLiteral {
 	pub int:    DecLiteral,
+	#[parse(with_tag = "skip:Whitespace")]
 	pub dot:    token::Dot,
+	#[parse(with_tag = "skip:Whitespace")]
 	pub frac:   DecLiteral,
+	// TODO: This should just be `Suffix`.
+	#[parse(with_tag = "skip:Whitespace")]
 	pub suffix: Option<IdentifierOrKeyword>,
 }
