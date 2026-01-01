@@ -13,7 +13,7 @@ pub struct Suffix(#[parse(with_tag = "skip:Whitespace")] IdentifierOrKeyword);
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Format, Print)]
-pub struct SuffixNoE(IdentifierOrKeyword);
+pub struct SuffixNoE(Suffix);
 
 #[derive(Debug, ParseError)]
 pub enum SuffixNoEError {
@@ -21,7 +21,7 @@ pub enum SuffixNoEError {
 	StartedWithE,
 
 	#[parse_error(transparent)]
-	IdentOrKeyword(ParserError<IdentifierOrKeyword>),
+	Suffix(ParserError<Suffix>),
 }
 
 impl Parse for SuffixNoE {
@@ -33,13 +33,11 @@ impl Parse for SuffixNoE {
 	}
 
 	fn parse_from(parser: &mut Parser) -> Result<Self, Self::Error> {
-		let ident = parser
-			.with_tag("skip:Whitespace", Parser::parse::<IdentifierOrKeyword>)
-			.map_err(SuffixNoEError::IdentOrKeyword)?;
-		if parser.str(ident.1).starts_with(['e', 'E']) {
+		let suffix = parser.parse::<Suffix>().map_err(SuffixNoEError::Suffix)?;
+		if parser.str(suffix.0.1).starts_with(['e', 'E']) {
 			return Err(SuffixNoEError::StartedWithE);
 		}
 
-		Ok(Self(ident))
+		Ok(Self(suffix))
 	}
 }
