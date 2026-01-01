@@ -374,14 +374,30 @@ pub struct ConstParam {
 	pub ident:  Identifier,
 	pub colon:  token::Colon,
 	pub ty:     Box<Type>,
-	pub rest:   Option<ConstParamRest>,
+	pub eq:     Option<ConstParamEq>,
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
-pub enum ConstParamRest {
-	Eq((token::Eq, Box<BlockExpression>)),
+pub struct ConstParamEq {
+	eq:   token::Eq,
+	rest: ConstParamEqRest,
+}
+
+#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(serde::Serialize, serde::Deserialize)]
+#[derive(Parse, Format, Print)]
+pub enum ConstParamEqRest {
+	Eq(Box<BlockExpression>),
 	Ident(Identifier),
-	Literal((Option<token::Minus>, Box<LiteralExpression>)),
+	Literal(ConstParamEqRestLiteral),
+}
+
+#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(serde::Serialize, serde::Deserialize)]
+#[derive(Parse, Format, Print)]
+pub struct ConstParamEqRestLiteral {
+	neg:  Option<token::Minus>,
+	expr: Box<LiteralExpression>,
 }
