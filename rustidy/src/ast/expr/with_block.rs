@@ -17,7 +17,14 @@ use {
 		Format,
 		Parse,
 		Print,
-		ast::{lifetime::LifetimeOrLabel, pat::Pattern, punct::Punctuated, token, with_attrs::WithOuterAttributes},
+		ast::{
+			lifetime::LifetimeOrLabel,
+			longest::Longest,
+			pat::Pattern,
+			punct::Punctuated,
+			token,
+			with_attrs::WithOuterAttributes,
+		},
 	},
 };
 
@@ -107,12 +114,16 @@ pub enum IfExpressionElseInner {
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
-pub enum Conditions {
-	LetChain(LetChain),
+pub struct Conditions(Longest<LetChain, ConditionsExpr>);
+
+#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(serde::Serialize, serde::Deserialize)]
+#[derive(Parse, Format, Print)]
+struct ConditionsExpr(
 	#[parse(with_tag = "skip:StructExpression")]
 	#[parse(with_tag = "skip:BlockExpression")]
-	Expr(Box<Expression>),
-}
+	Box<Expression>,
+);
 
 /// `LetChain`
 #[derive(PartialEq, Eq, Clone, Debug)]

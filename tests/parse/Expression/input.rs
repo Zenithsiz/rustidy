@@ -220,6 +220,7 @@ fn if_() {
 	let _ = if let a = b && c {};
 	let _ = if let a = b && c && let d = e {};
 	let _ = if let a = (b && c) && let d = e {};
+	let _ = if a || b {};
 
 	let _ = if a {} else {};
 	let _ = if a {} else if b {};
