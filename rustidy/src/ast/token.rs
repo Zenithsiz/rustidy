@@ -111,11 +111,13 @@ decl_tokens! {
 
 	As = "as";
 	Async = "async";
+	Attr = "attr";
 	Auto = "auto";
 	Await = "await";
 	Break = "break";
 	Const = "const";
 	Continue = "continue";
+	Derive = "derive";
 	Do = "do";
 	Dyn = "dyn";
 	Else = "else";

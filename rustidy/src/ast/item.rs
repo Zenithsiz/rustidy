@@ -140,7 +140,32 @@ pub struct DeclMacroBodyBranches(Braced<PunctuatedTrailing<DeclMacroBranch, toke
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct DeclMacroBranch {
+	pub extra: Option<DeclMacroBranchExtra>,
 	pub args:  DelimTokenTree,
 	pub arrow: token::FatArrow,
 	pub body:  DelimTokenTree,
+}
+
+#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(serde::Serialize, serde::Deserialize)]
+#[derive(Parse, Format, Print)]
+pub enum DeclMacroBranchExtra {
+	Attr(DeclMacroBranchAttr),
+	Derive(DeclMacroBranchDerive),
+}
+
+#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(serde::Serialize, serde::Deserialize)]
+#[derive(Parse, Format, Print)]
+pub struct DeclMacroBranchAttr {
+	pub attr: token::Attr,
+	pub args: Parenthesized<DelimTokenTreeInner>,
+}
+
+#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(serde::Serialize, serde::Deserialize)]
+#[derive(Parse, Format, Print)]
+pub struct DeclMacroBranchDerive {
+	pub derive: token::Derive,
+	pub args:   Parenthesized<()>,
 }
