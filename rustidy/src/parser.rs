@@ -488,6 +488,12 @@ impl PeekState {
 	pub fn ahead_of(&self, other: &Self) -> bool {
 		self.cur_pos > other.cur_pos
 	}
+
+	/// Returns if this peek state is further ahead or equal to another
+	#[must_use]
+	pub fn ahead_of_or_equal(&self, other: &Self) -> bool {
+		self.cur_pos >= other.cur_pos
+	}
 }
 
 /// Parser range

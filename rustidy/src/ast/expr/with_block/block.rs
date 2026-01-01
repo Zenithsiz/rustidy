@@ -42,22 +42,30 @@ impl Parse for Statements {
 	fn parse_from(parser: &mut Parser) -> Result<Self, Self::Error> {
 		let mut stmts = vec![];
 		let trailing_expr = loop {
-			match parser
-				.try_parse::<ExpressionWithoutBlock>()
-				.map_err(Self::Error::ExpressionWithoutBlock)?
-			{
-				Ok(expr) => match parser.try_parse::<token::Semi>().map_err(Self::Error::Semi)? {
-					Ok(semi) => {
+			match parser.peek::<(ExpressionWithoutBlock, Option<token::Semi>)>()? {
+				Ok(((expr, semi), peek_expr_state)) => match semi {
+					Some(semi) => {
+						parser.set_peeked(peek_expr_state);
 						stmts.push(Statement::Expression(ExpressionStatement::WithoutBlock(
 							ExpressionStatementWithoutBlock { expr, semi },
 						)));
 					},
-					Err(_) => break Some(expr),
+					None => match parser.with_tag("skip:ExpressionWithoutBlock", Parser::peek::<Statement>)? {
+						// Note: On macros, we want to ensure we parse a statement macro instead of expression macro,
+						//       since braced statement macros don't need a semi-colon, while expression ones do.
+						//       Since both have the same length, we prefer statements to expressions if they have
+						//       the same length here.
+						Ok((stmt, peek_stmt_state)) if peek_stmt_state.ahead_of_or_equal(&peek_expr_state) => {
+							parser.set_peeked(peek_stmt_state);
+							stmts.push(stmt);
+						},
+						_ => {
+							parser.set_peeked(peek_expr_state);
+							break Some(expr);
+						},
+					},
 				},
-				Err(_) => match parser
-					.with_tag("skip:ExpressionWithoutBlock", Parser::try_parse::<Statement>)
-					.map_err(Self::Error::Statement)?
-				{
+				Err(_) => match parser.with_tag("skip:ExpressionWithoutBlock", Parser::try_parse::<Statement>)? {
 					Ok(stmt) => stmts.push(stmt),
 					Err(_) => break None,
 				},
@@ -68,13 +76,10 @@ impl Parse for Statements {
 	}
 }
 
-#[derive(derive_more::Debug, ParseError)]
+#[derive(derive_more::Debug, derive_more::From, ParseError)]
 pub enum StatementsError {
 	#[parse_error(transparent)]
-	ExpressionWithoutBlock(ParserError<ExpressionWithoutBlock>),
-
-	#[parse_error(transparent)]
-	Semi(ParserError<token::Semi>),
+	ExpressionWithoutBlock(ParserError<(ExpressionWithoutBlock, Option<token::Semi>)>),
 
 	#[parse_error(transparent)]
 	Statement(ParserError<Statement>),

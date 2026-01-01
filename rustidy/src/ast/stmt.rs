@@ -36,12 +36,13 @@ pub struct LetStatement(pub WithOuterAttributes<LetStatementInner>);
 #[derive(Parse, Format, Print)]
 #[parse(name = "a let statement")]
 pub struct LetStatementInner {
-	pub let_: token::Let,
+	pub super_: Option<token::Super>,
+	pub let_:   token::Let,
 	#[parse(fatal)]
-	pub pat:  PatternNoTopAlt,
-	pub ty:   Option<LetStatementTy>,
-	pub eq:   Option<LetStatementEq>,
-	pub semi: token::Semi,
+	pub pat:    PatternNoTopAlt,
+	pub ty:     Option<LetStatementTy>,
+	pub eq:     Option<LetStatementEq>,
+	pub semi:   token::Semi,
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]
