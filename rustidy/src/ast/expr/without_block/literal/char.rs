@@ -50,7 +50,7 @@ impl Parse for CharLiteral {
 
 				// If this includes more than 1 character, we can quit
 				// TODO: This needs to work for escapes
-				if s[..end].len() > 1 && !s[..end].contains('\\') {
+				if s[..end].chars().count() > 1 && !s[..end].contains('\\') {
 					return Err(CharLiteralError::MoreThanOneChar);
 				}
 
