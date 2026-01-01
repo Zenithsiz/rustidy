@@ -18,6 +18,9 @@ pub enum CharLiteralError {
 	#[parse_error(fmt = "Expected `'`")]
 	StartQuote,
 
+	#[parse_error(fmt = "More than one character")]
+	MoreThanOneChar,
+
 	#[parse_error(fmt = "Expected `'` after `'`")]
 	// Note: Not fatal because of lifetimes
 	ExpectedEndQuote,
@@ -42,9 +45,15 @@ impl Parse for CharLiteral {
 			*s = &s[1..];
 
 			// TODO: Parse escapes better?
-			// TODO: We should limit this to a single token / escape
 			loop {
 				let end = s.find('\'').ok_or(CharLiteralError::ExpectedEndQuote)?;
+
+				// If this includes more than 1 character, we can quit
+				// TODO: This needs to work for escapes
+				if s[..end].len() > 1 && !s[..end].contains('\\') {
+					return Err(CharLiteralError::MoreThanOneChar);
+				}
+
 				let is_escape = s[..end].ends_with('\\') && !s[..end].ends_with("\\\\");
 				*s = &s[end + 1..];
 				if !is_escape {
