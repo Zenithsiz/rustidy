@@ -9,6 +9,7 @@ use {
 		Print,
 		ast::{
 			delimited::{Braced, Parenthesized},
+			expr::Expression,
 			ident::Identifier,
 			punct::PunctuatedTrailing,
 			token,
@@ -68,6 +69,16 @@ pub struct StructFieldInner {
 	pub ident: Identifier,
 	pub colon: token::Colon,
 	pub ty:    Type,
+	// Note: Nightly-only
+	pub eq:    Option<StructFieldEq>,
+}
+
+#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(serde::Serialize, serde::Deserialize)]
+#[derive(Parse, Format, Print)]
+pub struct StructFieldEq {
+	pub eq:   token::Eq,
+	pub expr: Expression,
 }
 
 /// `TupleStruct`
