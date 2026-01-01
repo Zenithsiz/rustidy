@@ -65,6 +65,7 @@ use {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, ParseRecursive, Format, Print)]
 #[parse(from = RecursiveWrapper::<ExpressionWithoutBlock, Expression>)]
+#[parse(skip_if_tag = "skip:ExpressionWithoutBlock")]
 #[parse_recursive(root = Expression)]
 #[parse_recursive(transparent)]
 pub struct ExpressionWithoutBlock(pub WithOuterAttributes<ExpressionWithoutBlockInner, Self>);
