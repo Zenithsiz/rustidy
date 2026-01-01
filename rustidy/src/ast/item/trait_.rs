@@ -36,8 +36,31 @@ pub struct Trait {
 	pub ident:    Identifier,
 	pub generics: Option<GenericParams>,
 	pub bounds:   Option<TraitColonBounds>,
-	pub body:     Braced<WithInnerAttributes<Vec<AssociatedItem>>>,
+	pub body:     TraitBody,
 }
+
+#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(serde::Serialize, serde::Deserialize)]
+#[derive(Parse, Format, Print)]
+pub enum TraitBody {
+	// Note: Nightly-only
+	Eq(TraitBodyEq),
+	Full(Braced<WithInnerAttributes<TraitBodyFull>>),
+}
+
+#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(serde::Serialize, serde::Deserialize)]
+#[derive(Parse, Format, Print)]
+pub struct TraitBodyEq {
+	pub eq:     token::Eq,
+	pub bounds: Option<TypeParamBounds>,
+	pub semi:   token::Semi,
+}
+
+#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(serde::Serialize, serde::Deserialize)]
+#[derive(Parse, Format, Print)]
+pub struct TraitBodyFull(pub Vec<AssociatedItem>);
 
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
