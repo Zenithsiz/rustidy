@@ -2,7 +2,7 @@
 
 // Imports
 use {
-	super::{Function, MacroInvocationSemi, StaticItem, function::Abi},
+	super::{Function, MacroInvocationSemi, StaticItem, TypeAlias, function::Abi},
 	crate::{
 		Format,
 		Parse,
@@ -40,6 +40,8 @@ pub enum ExternalItemInner {
 	Macro(MacroInvocationSemi),
 	Static(ExternalItemStatic),
 	Function(ExternalItemFunction),
+	// TODO: Nightly-only
+	TypeAlias(ExternalItemTypeAlias),
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]
@@ -56,4 +58,12 @@ pub struct ExternalItemStatic {
 pub struct ExternalItemFunction {
 	pub vis:      Option<Visibility>,
 	pub function: Function,
+}
+
+#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(serde::Serialize, serde::Deserialize)]
+#[derive(Parse, Format, Print)]
+pub struct ExternalItemTypeAlias {
+	pub vis:   Option<Visibility>,
+	pub alias: TypeAlias,
 }
