@@ -8,7 +8,7 @@ use {
 		MacroInvocationSemi,
 		TypeAlias,
 		Visibility,
-		function::{GenericParams, TypeParamBounds},
+		function::{GenericParams, TypeParamBounds, WhereClause},
 	},
 	crate::{
 		Format,
@@ -36,6 +36,7 @@ pub struct Trait {
 	pub ident:    Identifier,
 	pub generics: Option<GenericParams>,
 	pub bounds:   Option<TraitColonBounds>,
+	pub where_:   Option<WhereClause>,
 	pub body:     TraitBody,
 }
 
