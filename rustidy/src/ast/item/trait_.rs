@@ -29,6 +29,8 @@ use {
 #[derive(Parse, Format, Print)]
 #[parse(name = "a trait")]
 pub struct Trait {
+	// Note: Nightly-only
+	pub auto:     Option<token::Auto>,
 	pub trait_:   token::Trait,
 	#[parse(fatal)]
 	pub ident:    Identifier,

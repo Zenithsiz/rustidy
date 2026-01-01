@@ -111,6 +111,7 @@ decl_tokens! {
 
 	As = "as";
 	Async = "async";
+	Auto = "auto";
 	Await = "await";
 	Break = "break";
 	Const = "const";
