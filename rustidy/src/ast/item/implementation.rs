@@ -49,6 +49,7 @@ pub struct TraitImpl {
 	pub unsafe_:  Option<token::Unsafe>,
 	pub impl_:    token::Impl,
 	pub generics: Option<GenericParams>,
+	pub const_:   Option<token::Const>,
 	pub not:      Option<token::Not>,
 	pub trait_:   TypePath,
 	#[parse(fatal)]
