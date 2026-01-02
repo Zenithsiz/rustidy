@@ -201,6 +201,7 @@ pub struct IteratorLoopExpression {
 	pub pat:  Pattern,
 	pub in_:  token::In,
 	#[parse(with_tag = "skip:StructExpression")]
+	#[parse(with_tag = "skip:OptionalTrailingBlockExpression")]
 	pub expr: Box<Expression>,
 	pub body: BlockExpression,
 }

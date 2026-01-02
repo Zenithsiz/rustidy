@@ -172,6 +172,7 @@ fn range() {
 	let _ = ..=b;
 	let _ = .. .. ..;
 	let _ = .. ..= ..;
+	let _ = a..{};
 }
 
 fn return_() {
@@ -209,6 +210,8 @@ fn loop_() {
 	let _ = while a {};
 	let _ = for A(a) in b {};
 	let _ = 'a: {};
+
+	let _ = for a in 0.. {};
 }
 
 fn if_() {
@@ -237,6 +240,8 @@ fn if_() {
 	//let _ = if break break {};
 	let _ = if {} {};
 	let _ = if !{} {};
+
+	let _ = if 0 + {} + 0 {};
 }
 
 fn match_() {

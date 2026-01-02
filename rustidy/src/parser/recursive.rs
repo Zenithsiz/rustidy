@@ -6,7 +6,10 @@ pub use rustidy_macros::ParseRecursive;
 // Imports
 use {
 	super::{ParsableFrom, Parse, ParseError, Parser, ParserError, ParserTag},
-	crate::{ast::punct::Punctuated, parser::PeekState},
+	crate::{
+		ast::{expr::BlockExpression, punct::Punctuated},
+		parser::PeekState,
+	},
 	core::{marker::PhantomData, mem},
 	either::Either,
 };
@@ -133,6 +136,9 @@ pub enum RecursiveWrapperError<R: ParsableRecursive<R>> {
 	#[parse_error(transparent)]
 	Base(ParserError<R::Base>),
 
+	#[parse_error(transparent)]
+	BlockExpression(ParserError<BlockExpression>),
+
 	#[parse_error(fmt = "Expected a prefix or base")]
 	#[parse_error(multiple)]
 	PrefixOrBase {
@@ -221,8 +227,27 @@ fn parse<R: ParsableRecursive<R>>(
 					let infix = peek::<R::Infix>(parser, &tags).map_err(RecursiveWrapperError::Infix)?;
 
 					let parsed = match (suffix, infix) {
-						(Ok((suffix, suffix_state)), Ok((infix, infix_state))) => {
+						(Ok((suffix, suffix_state)), Ok((infix, infix_state))) => 'parsed: {
 							parser.set_peeked(infix_state.clone());
+							// TODO: This is a semi-hack to ensure that we parse `for _ in 0.. {}` correctly.
+							//       Technically this should be always correct, since the only suffix that can
+							//       be equal to an infix is `..`, and it can't be chained, so the only time
+							//       we'd ever find a block expression after `..` would be when it shouldn't
+							//       be parsed.
+							//       Despite that, this is a very inelegant way to perform this check, and we
+							//       should instead just make optional suffixes / base expressions aware of the
+							//       `skip:OptionalTrailingBlockExpression` tag and skip themselves or something
+							//       similar that doesn't involve us doing anything.
+							if tags
+								.iter()
+								.any(|tag| tag.name == "skip:OptionalTrailingBlockExpression") &&
+								peek::<BlockExpression>(parser, &tags)
+									.map_err(RecursiveWrapperError::BlockExpression)?
+									.is_ok()
+							{
+								break 'parsed Either::Left((suffix, suffix_state));
+							}
+
 							match peek::<R::Prefix>(parser, &tags)
 								.map_err(RecursiveWrapperError::Prefix)?
 								.is_ok() || peek::<R::Base>(parser, &tags)
