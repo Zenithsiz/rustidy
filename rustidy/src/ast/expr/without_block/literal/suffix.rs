@@ -13,7 +13,7 @@ pub struct Suffix(#[parse(with_tag = "skip:Whitespace")] IdentifierOrKeyword);
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Format, Print)]
-pub struct SuffixNoE(Suffix);
+pub struct SuffixNoE(pub Suffix);
 
 #[derive(Debug, ParseError)]
 pub enum SuffixNoEError {

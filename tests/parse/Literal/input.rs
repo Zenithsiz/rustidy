@@ -62,3 +62,48 @@ fn byte() {
 	b'\u{12345}';
 	b'\u{__1__2__3__4__5__}';
 }
+
+fn byte_string() {
+	// TODO:
+}
+
+fn raw_byte_string() {
+	// TODO:
+}
+
+fn c_string() {
+	// TODO:
+}
+
+fn raw_c_string() {
+	// TODO:
+}
+
+fn integer() {
+	0;
+	00;
+	1234567890;
+	0__1__2__3__4__5__;
+	1abc;
+	1_abc;
+	// TODO: binary/octal/hex
+}
+
+fn float() {
+	0.;
+	0.0;
+	0_1_2_3.0_1_2_3;
+	0.0abc;
+	0e1;
+	0E1;
+	0e+1;
+	0e-1;
+	0e_1_2_3_;
+	0e_1_2_3_abc;
+	0e_1_2_3e_1_2_3;
+}
+
+fn bool() {
+	true;
+	false;
+}
