@@ -96,7 +96,6 @@ impl TryFrom<Expression> for ExpressionWithoutBlock {
 pub enum ExpressionWithoutBlockInner {
 	Underscore(UnderscoreExpression),
 
-	#[parse_recursive(recursive)]
 	DoYeet(DoYeetExpression),
 
 	Literal(LiteralExpression),
@@ -135,12 +134,10 @@ pub enum ExpressionWithoutBlockInner {
 // TODO: The specification doesn't have this, so we need to refine it
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(ParseRecursive, Format, Print)]
-#[parse_recursive(root = Expression)]
-#[parse_recursive(into_root = ExpressionWithoutBlockInner)]
-#[parse_recursive(kind = "right")]
+#[derive(Parse, Format, Print)]
 pub struct DoYeetExpression {
 	pub do_:   token::Do,
 	pub yeet_: token::Yeet,
-	pub expr:  Box<Expression>,
+	// TODO: This should be recursive
+	pub expr:  Option<Box<Expression>>,
 }
