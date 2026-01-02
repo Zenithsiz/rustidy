@@ -53,7 +53,6 @@ pub enum ExpressionWithBlockInner {
 #[derive(Parse, Format, Print)]
 pub struct ConstBlockExpression {
 	pub const_: token::Const,
-	#[parse(fatal)]
 	pub expr:   BlockExpression,
 }
 
