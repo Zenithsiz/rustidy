@@ -451,13 +451,11 @@ impl<'input> Parser<'input> {
 	}
 
 	/// Returns all current tags
-	#[must_use]
-	pub fn tags(&self) -> Vec<ParserTag> {
+	pub fn tags(&self) -> impl Iterator<Item = ParserTag> {
 		self.tags
 			.iter()
 			.filter(|tag| tag.defined_at == self.cur_pos)
 			.map(|tag| ParserTag { name: tag.name })
-			.collect()
 	}
 
 	/// Returns if this parser has a tag

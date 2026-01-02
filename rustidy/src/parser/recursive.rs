@@ -182,7 +182,7 @@ fn parse<R: ParsableRecursive<R>>(
 	) -> Result<Result<(T, PeekState), ParserError<T>>, ParserError<T>> {
 		parser.with_tags(tags.iter().copied(), Parser::peek::<T>)
 	}
-	let tags = parser.tags();
+	let tags = parser.tags().collect::<Vec<_>>();
 
 	let mut inners = vec![];
 
