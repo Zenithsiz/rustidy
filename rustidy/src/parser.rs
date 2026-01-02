@@ -456,7 +456,7 @@ impl<'input> Parser<'input> {
 		self.tags
 			.iter()
 			.filter(|tag| tag.defined_at == self.cur_pos)
-			.map(|tag| ParserTag(tag.name))
+			.map(|tag| ParserTag { name: tag.name })
 			.collect()
 	}
 
@@ -474,7 +474,7 @@ impl<'input> Parser<'input> {
 
 		for tag in tags {
 			let tag = ParserActiveTag {
-				name:       tag.0,
+				name:       tag.name,
 				defined_at: self.cur_pos,
 			};
 			self.tags.push(tag);
@@ -584,8 +584,15 @@ impl ParserPos {
 
 /// Parser tag
 #[derive(PartialEq, Eq, Clone, Copy, Debug)]
-#[derive(derive_more::From)]
-pub struct ParserTag(pub &'static str);
+pub struct ParserTag {
+	pub name: &'static str,
+}
+
+impl From<&'static str> for ParserTag {
+	fn from(name: &'static str) -> Self {
+		Self { name }
+	}
+}
 
 /// Parser active tag
 #[derive(PartialEq, Eq, Clone, Copy, Debug)]
