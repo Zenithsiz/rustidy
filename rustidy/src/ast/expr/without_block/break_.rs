@@ -16,5 +16,6 @@ pub struct BreakExpression {
 	pub continue_: token::Break,
 	pub label:     Option<LifetimeOrLabel>,
 	// TODO: Do we need to be parse-recursive here?
+	#[parse(skip_if_tag = "skip:OptionalTrailingBlockExpression")]
 	pub expr:      Option<Box<Expression>>,
 }

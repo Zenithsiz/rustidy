@@ -9,6 +9,7 @@ use {
 	itertools::Itertools,
 	proc_macro2::Span,
 	quote::quote,
+	std::collections::HashMap,
 	syn::{parse_quote, punctuated::Punctuated},
 };
 
@@ -49,7 +50,8 @@ struct VariantAttrs {
 	box_error: bool,
 
 	#[darling(multiple)]
-	with_tag: Vec<syn::LitStr>,
+	#[darling(with = "darling::util::parse_expr::preserve_str_literal")]
+	with_tag: Vec<syn::Expr>,
 }
 
 #[derive(Debug, darling::FromField, derive_more::AsRef)]
@@ -64,13 +66,17 @@ struct FieldAttrs {
 	without_tags: bool,
 
 	#[darling(multiple)]
-	with_tag: Vec<syn::LitStr>,
+	#[darling(with = "darling::util::parse_expr::preserve_str_literal")]
+	with_tag: Vec<syn::Expr>,
 
 	#[darling(default)]
 	box_error: bool,
 
 	#[darling(default)]
 	fatal: bool,
+
+	// TODO: We should allow multiple here
+	skip_if_tag: Option<syn::LitStr>,
 }
 
 #[derive(Debug, darling::FromDeriveInput, derive_more::AsRef)]
@@ -85,6 +91,7 @@ struct Attrs {
 
 	name:        Option<syn::LitStr>,
 	from:        Option<syn::Path>,
+	// TODO: We should allow multiple here
 	skip_if_tag: Option<syn::LitStr>,
 }
 
@@ -357,11 +364,42 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 					})
 					.collect::<Vec<_>>();
 
+				let skip_if_tag_exists_name = itertools::izip!(&fields.fields, &field_idents)
+					.filter_map(|(field, field_ident)| {
+						let tag = field.skip_if_tag.as_ref()?;
+						let error_ident = syn::Ident::new(&format!("tag_exists_{field_ident}"), field_ident.span());
+
+						Some((tag, error_ident))
+					})
+					.collect::<HashMap<_, _>>();
+
 				let field_tys = fields.fields.iter().map(|field| &field.ty).collect::<Vec<_>>();
+
+				let get_tag_exists = fields
+					.fields
+					.iter()
+					.filter_map(|field| {
+						let tag = field.skip_if_tag.as_ref()?;
+						let exists_name = &skip_if_tag_exists_name[tag];
+						Some(quote! {
+							let #exists_name = parser.has_tag(#tag);
+						})
+					})
+					.collect::<Vec<_>>();
 
 				let parse_fields = itertools::izip!(&fields.fields, &error_names, &field_idents)
 					.map(|(field, error_name, field_ident)| {
 						let mut expr = quote! { parser.parse() };
+						if let Some(tag) = &field.skip_if_tag {
+							let exists_name = &skip_if_tag_exists_name[tag];
+							expr = quote! {
+								match #exists_name {
+									true => Ok(Default::default()),
+									false => #expr,
+								}
+							};
+						}
+
 						if field.without_tags {
 							expr = quote! { parser.without_tags(|parser| #expr) };
 						}
@@ -386,6 +424,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 				};
 				let body = quote! {
 					#skip_if_tag_expr
+					#( #get_tag_exists )*
 
 					#( #parse_fields )*
 
@@ -421,7 +460,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 						};
 
 						quote! {
-														#[parse_error(transparent)]
+							#[parse_error(transparent)]
 							#fatal
 							#error_name(#ty),
 						}

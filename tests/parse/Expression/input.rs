@@ -226,7 +226,15 @@ fn if_() {
 	let _ = if a {} else if b {};
 	let _ = if a {} else if b {} else {};
 
+	let _ = if if true {} {};
+
 	let _ = if break {};
+	let _ = if ({}) {};
+	let _ = if (break {}) {};
+	let _ = if 1 + break {};
+	// Note: Although we can't parse the following case, the
+	//       compiler *also* can't parse it, so we ought to be fine.
+	//let _ = if break break {};
 }
 
 fn match_() {

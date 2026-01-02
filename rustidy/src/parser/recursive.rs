@@ -5,8 +5,8 @@ pub use rustidy_macros::ParseRecursive;
 
 // Imports
 use {
-	super::{ParsableFrom, Parse, ParseError, Parser, ParserError},
-	crate::ast::punct::Punctuated,
+	super::{ParsableFrom, Parse, ParseError, Parser, ParserError, ParserTag},
+	crate::{ast::punct::Punctuated, parser::PeekState},
 	core::{marker::PhantomData, mem},
 	either::Either,
 };
@@ -171,17 +171,39 @@ struct RecursiveWrapperInner<R: ParsableRecursive<R>> {
 fn parse<R: ParsableRecursive<R>>(
 	parser: &mut Parser,
 ) -> Result<Punctuated<RecursiveWrapperInner<R>, R::Infix>, RecursiveWrapperError<R>> {
+	// Note: We want to ensure that any tags that are active at the beginning
+	//       stay active throughout the whole parsing, so we manually set them
+	//       on each parse.
+	// TODO: This is not a very good solution, ideally we'd instead just define some
+	//       sort of "level" and tell the parser to stay on the same level throughout
+	//       everything here.
+	#[expect(clippy::type_complexity, reason = "TODO")]
+	fn peek<T: Parse>(
+		parser: &mut Parser,
+		tags: &[ParserTag],
+	) -> Result<Result<(T, PeekState), ParserError<T>>, ParserError<T>> {
+		parser.with_tags(tags.iter().copied(), Parser::peek::<T>)
+	}
+
+	// Get all non-recursive tags so we can apply them to each
+	// part of the recursive parse.
+	let mut tags = parser.tags();
+	tags.retain(|tag| !tag.recursive);
+
 	let mut inners = vec![];
 
 	let mut cur_prefixes = vec![];
 	let last_inner = loop {
-		let prefix = parser.peek::<R::Prefix>().map_err(RecursiveWrapperError::Prefix)?;
-		let base = parser.peek::<R::Base>().map_err(RecursiveWrapperError::Base)?;
+		let prefix = peek::<R::Prefix>(parser, &tags).map_err(RecursiveWrapperError::Prefix)?;
+		let base = peek::<R::Base>(parser, &tags).map_err(RecursiveWrapperError::Base)?;
 
 		let parsed = match (prefix, base) {
 			(Ok((prefix, prefix_state)), Ok((base, base_state))) => {
 				parser.set_peeked(base_state.clone());
-				match parser.peek::<R::Base>().map_err(RecursiveWrapperError::Base)?.is_ok() {
+				match peek::<R::Base>(parser, &tags)
+					.map_err(RecursiveWrapperError::Base)?
+					.is_ok()
+				{
 					true => Either::Left((prefix, prefix_state)),
 					false => Either::Right((base, base_state)),
 				}
@@ -201,16 +223,17 @@ fn parse<R: ParsableRecursive<R>>(
 
 				let mut cur_suffixes = vec![];
 				let infix = loop {
-					let suffix = parser.peek::<R::Suffix>().map_err(RecursiveWrapperError::Suffix)?;
-					let infix = parser.peek::<R::Infix>().map_err(RecursiveWrapperError::Infix)?;
+					let suffix = peek::<R::Suffix>(parser, &tags).map_err(RecursiveWrapperError::Suffix)?;
+					let infix = peek::<R::Infix>(parser, &tags).map_err(RecursiveWrapperError::Infix)?;
 
 					let parsed = match (suffix, infix) {
 						(Ok((suffix, suffix_state)), Ok((infix, infix_state))) => {
 							parser.set_peeked(infix_state.clone());
-							match parser
-								.peek::<R::Prefix>()
+							match peek::<R::Prefix>(parser, &tags)
 								.map_err(RecursiveWrapperError::Prefix)?
-								.is_ok() || parser.peek::<R::Base>().map_err(RecursiveWrapperError::Base)?.is_ok()
+								.is_ok() || peek::<R::Base>(parser, &tags)
+								.map_err(RecursiveWrapperError::Base)?
+								.is_ok()
 							{
 								true => Either::Right((infix, infix_state)),
 								false => Either::Left((suffix, suffix_state)),

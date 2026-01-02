@@ -122,6 +122,7 @@ pub struct Conditions(Longest<LetChain, ConditionsExpr>);
 struct ConditionsExpr(
 	#[parse(with_tag = "skip:StructExpression")]
 	#[parse(with_tag = "skip:BlockExpression")]
+	#[parse(with_tag = "skip:OptionalTrailingBlockExpression")]
 	Box<Expression>,
 );
 
@@ -145,6 +146,7 @@ pub enum LetChainCondition {
 	#[parse(with_tag = "skip:RangeInclusiveExpr")]
 	#[parse(with_tag = "skip:AssignmentExpression")]
 	#[parse(with_tag = "skip:CompoundAssignmentExpression")]
+	#[parse(with_tag = "skip:OptionalTrailingBlockExpression")]
 	Expr(Box<Expression>),
 }
 
@@ -164,6 +166,7 @@ pub struct LetChainConditionLet {
 	#[parse(with_tag = "skip:RangeInclusiveExpr")]
 	#[parse(with_tag = "skip:AssignmentExpression")]
 	#[parse(with_tag = "skip:CompoundAssignmentExpression")]
+	#[parse(with_tag = "skip:OptionalTrailingBlockExpression")]
 	pub scrutinee: Box<Scrutinee>,
 }
 
