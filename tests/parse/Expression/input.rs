@@ -235,6 +235,8 @@ fn if_() {
 	// Note: Although we can't parse the following case, the
 	//       compiler *also* can't parse it, so we ought to be fine.
 	//let _ = if break break {};
+	let _ = if {} {};
+	let _ = if !{} {};
 }
 
 fn match_() {

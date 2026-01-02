@@ -108,9 +108,6 @@ pub enum IfExpressionElseInner {
 }
 
 /// `Conditions`
-// TODO: The reference only mentions struct expression (and others for let chains),
-//       but we also cannot parse anything that ends in a block
-//       expression, so we block that too.
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
@@ -121,7 +118,6 @@ pub struct Conditions(Longest<LetChain, ConditionsExpr>);
 #[derive(Parse, Format, Print)]
 struct ConditionsExpr(
 	#[parse(with_tag = "skip:StructExpression")]
-	#[parse(with_tag = "skip:BlockExpression")]
 	#[parse(with_tag = "skip:OptionalTrailingBlockExpression")]
 	Box<Expression>,
 );
@@ -138,7 +134,6 @@ pub struct LetChain(pub Punctuated<LetChainCondition, token::AndAnd>);
 #[derive(Parse, Format, Print)]
 pub enum LetChainCondition {
 	Let(WithOuterAttributes<LetChainConditionLet>),
-	#[parse(with_tag = "skip:BlockExpression")]
 	#[parse(with_tag = "skip:StructExpression")]
 	#[parse(with_tag = "skip:LazyBooleanExpression")]
 	#[parse(with_tag = "skip:RangeExpr")]
