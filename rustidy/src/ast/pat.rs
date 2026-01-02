@@ -9,7 +9,10 @@ use {
 			LiteralExpression,
 			MacroInvocation,
 			PathExpression,
-			without_block::{literal::TupleIndex, path::PathInExpression},
+			without_block::{
+				literal::{ByteLiteral, TupleIndex},
+				path::PathInExpression,
+			},
 		},
 		ident::Identifier,
 		punct::{Punctuated, PunctuatedTrailing},
@@ -48,6 +51,7 @@ pub enum PatternWithoutRange {
 	TupleStruct(TupleStructPattern),
 	Path(PathPattern),
 
+	#[parse(peek = ByteLiteral)]
 	Literal(LiteralPattern),
 	// TODO: Parse this for single identifiers too?
 	#[parse(peek = (Option::<token::Ref>, Option::<token::Mut>, Identifier, token::At))]

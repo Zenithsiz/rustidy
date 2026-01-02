@@ -5,6 +5,7 @@ const _: () = match () {
 	// Literal
 	1 => (),
 	-1 => (),
+	b'_' => (),
 
 	// Identifier
 	a => (),
