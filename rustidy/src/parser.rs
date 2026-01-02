@@ -196,7 +196,8 @@ pub struct Parser<'input> {
 	cur_pos: ParserPos,
 
 	/// Tags
-	tags: Vec<ParserActiveTag>,
+	// Note: Always sorted by parser position.
+	tags: Vec<(ParserPos, ParserTag)>,
 
 	/// String ranges
 	string_ranges: Vec<ParserRange>,
@@ -454,16 +455,15 @@ impl<'input> Parser<'input> {
 	pub fn tags(&self) -> impl Iterator<Item = ParserTag> {
 		self.tags
 			.iter()
-			.filter(|tag| tag.defined_at == self.cur_pos)
-			.map(|tag| ParserTag { name: tag.name })
+			.rev()
+			.take_while(|&&(pos, _)| pos == self.cur_pos)
+			.map(|&(_, tag)| tag)
 	}
 
 	/// Returns if this parser has a tag
 	#[must_use]
 	pub fn has_tag(&self, tag_name: &'static str) -> bool {
-		self.tags
-			.iter()
-			.any(|tag| tag.name == tag_name && tag.defined_at == self.cur_pos)
+		self.tags().any(|tag| tag.name == tag_name)
 	}
 
 	/// Calls `f` with tags `tags` added to this parser
@@ -471,11 +471,7 @@ impl<'input> Parser<'input> {
 		let tags_len = self.tags.len();
 
 		for tag in tags {
-			let tag = ParserActiveTag {
-				name:       tag.name,
-				defined_at: self.cur_pos,
-			};
-			self.tags.push(tag);
+			self.tags.push((self.cur_pos, tag));
 		}
 		let output = f(self);
 		self.tags.truncate(tags_len);
@@ -590,13 +586,6 @@ impl From<&'static str> for ParserTag {
 	fn from(name: &'static str) -> Self {
 		Self { name }
 	}
-}
-
-/// Parser active tag
-#[derive(PartialEq, Eq, Clone, Copy, Debug)]
-struct ParserActiveTag {
-	name:       &'static str,
-	defined_at: ParserPos,
 }
 
 /// Parser location (0-indexed).
