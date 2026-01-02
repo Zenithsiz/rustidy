@@ -3,7 +3,7 @@
 // Imports
 use {
 	super::SuffixNoE,
-	crate::{Format, Parse, ParseError, Parser, ParserStr, Print, ast::whitespace::Whitespace, parser::ParserError},
+	crate::{Format, Parse, ParseError, Parser, ParserStr, Print, ast::whitespace::Whitespace},
 	std::fmt,
 };
 
@@ -13,6 +13,8 @@ use {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct IntegerLiteral {
+	#[format(whitespace)]
+	pub ws:     Whitespace,
 	pub inner:  IntegerLiteralInner,
 	pub suffix: Option<SuffixNoE>,
 }
@@ -31,15 +33,12 @@ pub enum IntegerLiteralInner {
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Format, Print)]
-pub struct DecLiteral(#[format(whitespace)] pub Whitespace, #[format(str)] pub ParserStr);
+pub struct DecLiteral(#[format(str)] pub ParserStr);
 
 #[derive(Debug, ParseError)]
 pub enum DecLiteralError {
 	#[parse_error(fmt = "Expected 0-9")]
 	StartDigit,
-
-	#[parse_error(transparent)]
-	Whitespace(ParserError<Whitespace>),
 }
 
 impl Parse for DecLiteral {
@@ -50,7 +49,6 @@ impl Parse for DecLiteral {
 	}
 
 	fn parse_from(parser: &mut Parser) -> Result<Self, Self::Error> {
-		let whitespace = parser.parse::<Whitespace>().map_err(DecLiteralError::Whitespace)?;
 		let literal = parser.try_update_with(|s| {
 			if !s.starts_with(|ch: char| ch.is_ascii_digit()) {
 				return Err(DecLiteralError::StartDigit);
@@ -66,6 +64,6 @@ impl Parse for DecLiteral {
 			Ok(())
 		})?;
 
-		Ok(Self(whitespace, literal))
+		Ok(Self(literal))
 	}
 }

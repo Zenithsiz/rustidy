@@ -8,7 +8,7 @@ use {
 		Parse,
 		ParserStr,
 		Print,
-		ast::{expr::without_block::literal::SuffixNoE, token},
+		ast::{expr::without_block::literal::SuffixNoE, token, whitespace::Whitespace},
 		parser::{Parser, ParserError},
 	},
 	rustidy_macros::ParseError,
@@ -21,6 +21,8 @@ use {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Format, Print)]
 pub struct FloatLiteral {
+	#[format(whitespace)]
+	pub ws:       Whitespace,
 	pub int:      DecLiteral,
 	pub dot:      Option<token::Dot>,
 	pub frac:     Option<DecLiteral>,
@@ -38,6 +40,7 @@ impl Parse for FloatLiteral {
 
 	#[coverage(on)]
 	fn parse_from(parser: &mut Parser) -> Result<Self, Self::Error> {
+		let ws = parser.parse::<Whitespace>()?;
 		let int = parser.parse::<DecLiteral>()?;
 
 		let (dot, frac) = match parser.try_parse::<token::Dot>()? {
@@ -69,6 +72,7 @@ impl Parse for FloatLiteral {
 		};
 
 		Ok(Self {
+			ws,
 			int,
 			dot,
 			frac,
@@ -80,6 +84,8 @@ impl Parse for FloatLiteral {
 
 #[derive(Debug, derive_more::From, ParseError)]
 pub enum FloatLiteralError {
+	#[parse_error(transparent)]
+	Whitespace(ParserError<Whitespace>),
 	#[parse_error(transparent)]
 	DecLiteral(ParserError<DecLiteral>),
 	#[parse_error(transparent)]

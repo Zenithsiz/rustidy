@@ -130,19 +130,14 @@
 																									"minus": null,
 																									"literal": {
 																										"Integer": {
-																											"inner": {
-																												"Decimal": [
-																													{
-																														"first": 34,
-																														"rest": [
-																															[
-																																{ "Line": 35 },
-																																36
-																															]
-																														]
-																													},
-																													37
+																											"ws": {
+																												"first": 34,
+																												"rest": [
+																													[{ "Line": 35 }, 36]
 																												]
+																											},
+																											"inner": {
+																												"Decimal": 37
 																											},
 																											"suffix": null
 																										}
@@ -196,14 +191,12 @@
 																									],
 																									"literal": {
 																										"Integer": {
+																											"ws": {
+																												"first": 48,
+																												"rest": []
+																											},
 																											"inner": {
-																												"Decimal": [
-																													{
-																														"first": 48,
-																														"rest": []
-																													},
-																													49
-																												]
+																												"Decimal": 49
 																											},
 																											"suffix": null
 																										}
@@ -1622,14 +1615,12 @@
 																														"inner": {
 																															"TuplePat": {
 																																"idx": {
+																																	"ws": {
+																																		"first": 292,
+																																		"rest": []
+																																	},
 																																	"inner": {
-																																		"Decimal": [
-																																			{
-																																				"first": 292,
-																																				"rest": []
-																																			},
-																																			293
-																																		]
+																																		"Decimal": 293
 																																	},
 																																	"suffix": null
 																																},
