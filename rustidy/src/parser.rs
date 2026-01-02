@@ -455,33 +455,17 @@ impl<'input> Parser<'input> {
 	pub fn tags(&self) -> Vec<ParserTag> {
 		self.tags
 			.iter()
-			.filter_map(|tag| {
-				if !tag.recursive && tag.defined_at != self.cur_pos {
-					return None;
-				}
-
-				Some(ParserTag {
-					name:      tag.name,
-					recursive: tag.recursive,
-				})
-			})
+			.filter(|tag| tag.defined_at == self.cur_pos)
+			.map(|tag| ParserTag(tag.name))
 			.collect()
 	}
 
 	/// Returns if this parser has a tag
 	#[must_use]
 	pub fn has_tag(&self, tag_name: &'static str) -> bool {
-		self.tags.iter().any(|tag| {
-			if tag.name != tag_name {
-				return false;
-			}
-
-			if !tag.recursive && tag.defined_at != self.cur_pos {
-				return false;
-			}
-
-			true
-		})
+		self.tags
+			.iter()
+			.any(|tag| tag.name == tag_name && tag.defined_at == self.cur_pos)
 	}
 
 	/// Calls `f` with tags `tags` added to this parser
@@ -490,9 +474,8 @@ impl<'input> Parser<'input> {
 
 		for tag in tags {
 			let tag = ParserActiveTag {
-				name:       tag.name,
+				name:       tag.0,
 				defined_at: self.cur_pos,
-				recursive:  tag.recursive,
 			};
 			self.tags.push(tag);
 		}
@@ -601,26 +584,14 @@ impl ParserPos {
 
 /// Parser tag
 #[derive(PartialEq, Eq, Clone, Copy, Debug)]
-pub struct ParserTag {
-	pub name:      &'static str,
-	pub recursive: bool,
-}
-
-impl From<&'static str> for ParserTag {
-	fn from(name: &'static str) -> Self {
-		Self { name, recursive: false }
-	}
-}
+#[derive(derive_more::From)]
+pub struct ParserTag(pub &'static str);
 
 /// Parser active tag
 #[derive(PartialEq, Eq, Clone, Copy, Debug)]
 struct ParserActiveTag {
-	pub name:       &'static str,
-	// TODO: Instead of only allowing at a certain
-	//       position, maybe we should define "levels"
-	//       that get incremented on each call to parse?
-	pub defined_at: ParserPos,
-	pub recursive:  bool,
+	name:       &'static str,
+	defined_at: ParserPos,
 }
 
 /// Parser location (0-indexed).

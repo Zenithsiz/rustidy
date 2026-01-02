@@ -174,9 +174,7 @@ fn parse<R: ParsableRecursive<R>>(
 	// Note: We want to ensure that any tags that are active at the beginning
 	//       stay active throughout the whole parsing, so we manually set them
 	//       on each parse.
-	// TODO: This is not a very good solution, ideally we'd instead just define some
-	//       sort of "level" and tell the parser to stay on the same level throughout
-	//       everything here.
+	// TODO: This is not a very good solution.
 	#[expect(clippy::type_complexity, reason = "TODO")]
 	fn peek<T: Parse>(
 		parser: &mut Parser,
@@ -184,11 +182,7 @@ fn parse<R: ParsableRecursive<R>>(
 	) -> Result<Result<(T, PeekState), ParserError<T>>, ParserError<T>> {
 		parser.with_tags(tags.iter().copied(), Parser::peek::<T>)
 	}
-
-	// Get all non-recursive tags so we can apply them to each
-	// part of the recursive parse.
-	let mut tags = parser.tags();
-	tags.retain(|tag| !tag.recursive);
+	let tags = parser.tags();
 
 	let mut inners = vec![];
 
