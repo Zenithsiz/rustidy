@@ -48,9 +48,9 @@ impl Parse for CharLiteral {
 			loop {
 				let end = s.find('\'').ok_or(CharLiteralError::ExpectedEndQuote)?;
 
-				// If this includes more than 1 character, we can quit
+				// If this includes more than 1 character (or a newline), we can quit
 				// TODO: This needs to work for escapes
-				if s[..end].chars().count() > 1 && !s[..end].contains('\\') {
+				if s[..end].contains('\n') || (s[..end].chars().count() > 1 && !s[..end].contains('\\')) {
 					return Err(CharLiteralError::MoreThanOneChar);
 				}
 
