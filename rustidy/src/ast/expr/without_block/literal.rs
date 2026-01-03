@@ -7,6 +7,7 @@ pub mod char;
 pub mod escape;
 pub mod float;
 pub mod int;
+pub mod raw_byte_string;
 pub mod raw_string;
 pub mod string;
 pub mod suffix;
@@ -19,6 +20,7 @@ pub use self::{
 	escape::{AsciiEscape, ByteEscape, QuoteEscape, StringContinue, UnicodeEscape},
 	float::FloatLiteral,
 	int::IntegerLiteral,
+	raw_byte_string::RawByteStringLiteral,
 	raw_string::RawStringLiteral,
 	string::StringLiteral,
 	suffix::{Suffix, SuffixNoE},
@@ -38,7 +40,7 @@ pub enum LiteralExpression {
 	RawString(RawStringLiteral),
 	Byte(ByteLiteral),
 	ByteString(ByteStringLiteral),
-	RawByteString(!),
+	RawByteString(RawByteStringLiteral),
 	CString(!),
 	RawCString(!),
 	Integer(IntegerLiteral),
