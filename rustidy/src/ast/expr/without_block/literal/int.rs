@@ -54,12 +54,7 @@ impl Parse for DecLiteral {
 				return Err(DecLiteralError::StartDigit);
 			}
 			*s = &s[1..];
-
-			// TODO: Allow escapes
-			let end = s
-				.find(|ch: char| !char::is_ascii_digit(&ch) && ch != '_')
-				.unwrap_or(s.len());
-			*s = &s[end..];
+			*s = s.trim_start_matches(|ch: char| ch.is_ascii_digit() || ch == '_');
 
 			Ok(())
 		})?;
