@@ -114,6 +114,9 @@ struct Attrs {
 	#[as_ref]
 	data:     darling::ast::Data<VariantAttrs, FieldAttrs>,
 
+	#[darling(multiple)]
+	try_with: Vec<syn::Expr>,
+
 	name:        Option<syn::LitStr>,
 	from:        Option<syn::Path>,
 	#[darling(multiple)]
@@ -558,6 +561,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 	let parse_impl = {
 		let generics = util::with_bounds(&attrs, |ty| parse_quote! { #ty: crate::parser::Parse });
 		let (impl_generics, ty_generics, where_clause) = generics.split_for_impl();
+		let try_with = attrs.try_with;
 		quote! {
 			#[automatically_derived]
 			impl #impl_generics crate::parser::Parse for #item_ident #ty_generics #where_clause {
@@ -570,6 +574,12 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 
 				#[coverage(on)]
 				fn parse_from(parser: &mut crate::parser::Parser) -> Result<Self, Self::Error> {
+					#(
+						if let Some(value) = (#try_with)(parser)? {
+							return Ok(value)
+						}
+					)*
+
 					#parse_body
 				}
 			}

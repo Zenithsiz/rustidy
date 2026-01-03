@@ -3,24 +3,31 @@
 // Imports
 use {
 	super::punct::Punctuated,
-	crate::{
-		Format,
-		ParserStr,
-		Print,
-		Replacement,
-		format,
-		parser::{Parse, ParseError, ParserError},
-	},
+	crate::{Format, Parser, ParserStr, Print, Replacement, format, parser::Parse},
 	itertools::Itertools,
 };
 
 /// Whitespace
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Format, Print)]
+#[derive(Parse, Format, Print)]
+#[parse(try_with = Self::parse_skip)]
 pub struct Whitespace(Box<Punctuated<PureWhitespace, Comment>>);
 
 impl Whitespace {
+	#[expect(clippy::unnecessary_wraps, reason = "Necessary for type signature")]
+	fn parse_skip(parser: &mut Parser) -> Result<Option<Self>, WhitespaceError> {
+		Ok(parser.has_tag("skip:Whitespace").then(|| {
+			let s = parser.update_with(|_| ());
+			let inner = Punctuated {
+				first: PureWhitespace(s),
+				rest:  vec![],
+			};
+
+			Self(Box::new(inner))
+		}))
+	}
+
 	/// Returns the suffix pure whitespace in this
 	#[must_use]
 	pub fn suffix_pure(&self) -> Option<&PureWhitespace> {
@@ -62,36 +69,6 @@ impl Whitespace {
 			ctx.replace(ws.0, ws_str);
 		}
 	}
-}
-
-// TODO: Replace this impl once we add some `parse(try_with = ...)`
-impl Parse for Whitespace {
-	type Error = WhitespaceError;
-
-	fn name() -> Option<impl std::fmt::Display> {
-		None::<!>
-	}
-
-	#[coverage(on)]
-	fn parse_from(parser: &mut crate::parser::Parser) -> Result<Self, Self::Error> {
-		if parser.has_tag("skip:Whitespace") {
-			let s = parser.update_with(|_| ());
-			let inner = Punctuated {
-				first: PureWhitespace(s),
-				rest:  vec![],
-			};
-
-			return Ok(Self(Box::new(inner)));
-		}
-
-		let inner = parser.parse().map_err(WhitespaceError::Inner)?;
-		Ok(Self(inner))
-	}
-}
-#[derive(ParseError, Debug)]
-pub enum WhitespaceError {
-	#[parse_error(transparent)]
-	Inner(ParserError<Box<Punctuated<PureWhitespace, Comment>>>),
 }
 
 #[derive(Clone, Copy, Debug)]
@@ -293,7 +270,7 @@ impl TrailingLineComment {
 mod tests {
 	use {
 		super::*,
-		crate::{Parser, Replacements, print},
+		crate::{ParseError, Replacements, print},
 		app_error::{AppError, Context, ensure},
 	};
 
