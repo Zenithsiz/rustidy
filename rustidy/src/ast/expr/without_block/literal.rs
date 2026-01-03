@@ -1,9 +1,9 @@
 //! Literal expression
 
 // Modules
-// TODO: Merge some of these together
 pub mod byte;
 pub mod char;
+pub mod escape;
 pub mod float;
 pub mod int;
 pub mod raw_string;
@@ -14,6 +14,7 @@ pub mod suffix;
 pub use self::{
 	byte::ByteLiteral,
 	char::CharLiteral,
+	escape::{AsciiEscape, ByteEscape, QuoteEscape, UnicodeEscape},
 	float::FloatLiteral,
 	int::IntegerLiteral,
 	raw_string::RawStringLiteral,

@@ -22,6 +22,7 @@
 	anonymous_lifetime_in_impl_trait,
 	exact_size_is_empty,
 	coverage_attribute,
+	is_ascii_octdigit,
 	trim_prefix_suffix
 )]
 

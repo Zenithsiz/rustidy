@@ -3,7 +3,16 @@
 // Imports
 use {
 	super::Suffix,
-	crate::{Format, Parse, ParserStr, Print, ast::whitespace::Whitespace},
+	crate::{
+		Format,
+		Parse,
+		ParserStr,
+		Print,
+		ast::{
+			expr::without_block::literal::{AsciiEscape, QuoteEscape, UnicodeEscape},
+			whitespace::Whitespace,
+		},
+	},
 };
 
 
@@ -27,15 +36,24 @@ impl StringLiteral {
 	fn parse(s: &mut &str) -> Result<(), StringLiteralError> {
 		*s = s.strip_prefix('"').ok_or(StringLiteralError::StartQuote)?;
 
-		// TODO: Parse escapes better?
 		loop {
-			let end = s.find('"').ok_or(StringLiteralError::ExpectedEndQuote)?;
-			let is_escape = s[..end].ends_with('\\') && !s[..end].ends_with("\\\\");
-			*s = &s[end + 1..];
-			if !is_escape {
-				break;
+			match s.strip_prefix(|ch| !matches!(ch, '"' | '\\' | '\r')) {
+				Some(rest) => *s = rest,
+				// TODO: We should report fatal errors from here
+				None =>
+					if QuoteEscape::parse(s)
+						.ok()
+						.or_else(|| AsciiEscape::parse(s).ok())
+						.or_else(|| UnicodeEscape::parse(s).ok())
+						.or_else(|| s.strip_prefix("\\\n").map(|rest| *s = rest))
+						.is_none()
+					{
+						break;
+					},
 			}
 		}
+
+		*s = s.strip_prefix('"').ok_or(StringLiteralError::ExpectedEndQuote)?;
 
 		Ok(())
 	}

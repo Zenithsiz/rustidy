@@ -1,7 +1,13 @@
 //! Byte literal
 
 // Imports
-use crate::{Format, Parse, ParserStr, Print, ast::whitespace::Whitespace};
+use crate::{
+	Format,
+	Parse,
+	ParserStr,
+	Print,
+	ast::{expr::without_block::literal::ByteEscape, whitespace::Whitespace},
+};
 
 /// `BYTE_LITERAL`
 #[derive(PartialEq, Eq, Clone, Debug)]
@@ -9,8 +15,8 @@ use crate::{Format, Parse, ParserStr, Print, ast::whitespace::Whitespace};
 #[derive(Parse, Format, Print)]
 #[parse(name = "a byte literal")]
 #[parse(error(name = StartQuote, fmt = "Expected `b'`"))]
-#[parse(error(name = MoreThanOneByte, fmt = "More than one byte"))]
-#[parse(error(name = ExpectedEndQuote, fmt = "Expected `'` after `b'`", fatal))]
+#[parse(error(name = CharOrEscape, fmt = "Expected character or escape", fatal))]
+#[parse(error(name = EndQuote, fmt = "Expected `'` after `b'`", fatal))]
 pub struct ByteLiteral(
 	#[format(whitespace)] pub Whitespace,
 	#[parse(try_update_with = Self::parse)]
@@ -20,24 +26,13 @@ pub struct ByteLiteral(
 
 impl ByteLiteral {
 	fn parse(s: &mut &str) -> Result<(), ByteLiteralError> {
-		*s = s.strip_prefix("b'").ok_or(ByteLiteralError::StartQuote)?;
-
-		// TODO: Parse escapes better?
-		loop {
-			let end = s.find('\'').ok_or(ByteLiteralError::ExpectedEndQuote)?;
-
-			// If this includes more than 1 byte, we can quit
-			// TODO: This needs to work for escapes
-			if s[..end].len() > 1 && !s[..end].contains('\\') {
-				return Err(ByteLiteralError::MoreThanOneByte);
-			}
-
-			let is_escape = s[..end].ends_with('\\') && !s[..end].ends_with("\\\\");
-			*s = &s[end + 1..];
-			if !is_escape {
-				break;
-			}
+		*s = s.strip_prefix("b\'").ok_or(ByteLiteralError::StartQuote)?;
+		match s.strip_prefix(|ch: char| ch.is_ascii() && !matches!(ch, '\'' | '\\' | '\n' | '\r' | '\t')) {
+			Some(rest) => *s = rest,
+			// TODO: We should report fatal errors from here
+			None => ByteEscape::parse(s).ok().ok_or(ByteLiteralError::CharOrEscape)?,
 		}
+		*s = s.strip_prefix('\'').ok_or(ByteLiteralError::EndQuote)?;
 
 		Ok(())
 	}
