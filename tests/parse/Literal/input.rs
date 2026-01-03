@@ -60,7 +60,21 @@ fn byte() {
 }
 
 fn byte_string() {
-	// TODO:
+	b"";
+	b""e;
+	b""abc;
+	b"a";
+	b"\'";
+	b"\"";
+	b"\\";
+	b"\x7f";
+	b"\xff";
+	b"\n";
+	b"\r";
+	b"\t";
+	b"\0";
+	b"\
+";
 }
 
 fn raw_byte_string() {

@@ -6,7 +6,7 @@ use {
 		expr::{
 			IntegerLiteral,
 			StringLiteral,
-			without_block::literal::{ByteLiteral, CharLiteral, FloatLiteral, RawStringLiteral},
+			without_block::literal::{ByteLiteral, ByteStringLiteral, CharLiteral, FloatLiteral, RawStringLiteral},
 		},
 		ident::IdentifierOrKeyword,
 		lifetime::LifetimeToken,
@@ -246,7 +246,7 @@ pub enum Token {
 	StringLiteral(StringLiteral),
 	RawStringLiteral(RawStringLiteral),
 	ByteLiteral(ByteLiteral),
-	RawByteLiteral(!),
+	ByteStringLiteral(ByteStringLiteral),
 	RawByteStringLiteral(!),
 	CStringLiteral(!),
 	RawCStringLiteral(!),
