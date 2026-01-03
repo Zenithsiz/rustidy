@@ -9,10 +9,9 @@ use {
 		Print,
 		Replacement,
 		format,
-		parser::{Parse, ParseError, Parser, ParserError},
+		parser::{Parse, ParseError, ParserError},
 	},
 	itertools::Itertools,
-	std::fmt,
 };
 
 /// Whitespace
@@ -65,6 +64,7 @@ impl Whitespace {
 	}
 }
 
+// TODO: Replace this impl once we add some `parse(try_with = ...)`
 impl Parse for Whitespace {
 	type Error = WhitespaceError;
 
@@ -177,24 +177,16 @@ impl FormatKind {
 /// Pure whitespace
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Format, Print)]
-pub struct PureWhitespace(#[format(str)] pub ParserStr);
+#[derive(Parse, Format, Print)]
+pub struct PureWhitespace(
+	#[parse(update_with = Self::parse)]
+	#[format(str)]
+	pub ParserStr,
+);
 
-impl Parse for PureWhitespace {
-	type Error = !;
-
-	#[coverage(off)]
-	fn name() -> Option<impl fmt::Display> {
-		None::<!>
-	}
-
-	fn parse_from(parser: &mut Parser) -> Result<Self, Self::Error> {
-		parser
-			.try_update_with(|s| {
-				*s = s.trim_start();
-				Ok(())
-			})
-			.map(Self)
+impl PureWhitespace {
+	fn parse(s: &mut &str) {
+		*s = s.trim_start();
 	}
 }
 
@@ -211,140 +203,97 @@ pub enum Comment {
 /// Block Comment
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Format, Print)]
-pub struct BlockComment(#[format(str)] pub ParserStr);
+#[derive(Parse, Format, Print)]
+#[parse(error(name = NoComment, fmt = "Expected `/*`"))]
+#[parse(error(name = MissingCommentEnd, fmt = "Expected `*/` after `/*`", fatal))]
+pub struct BlockComment(
+	#[parse(try_update_with = Self::parse)]
+	#[format(str)]
+	pub ParserStr,
+);
 
-/// Comment error
-#[derive(Debug, ParseError)]
-pub enum BlockCommentError {
-	#[parse_error(fmt = "Expected `/*`")]
-	NoComment,
+impl BlockComment {
+	fn parse(s: &mut &str) -> Result<(), BlockCommentError> {
+		match s.starts_with("/*") {
+			true => {
+				*s = &s[2..];
+				let mut depth = 1;
+				while depth != 0 {
+					let close_idx = s.find("*/").ok_or(BlockCommentError::MissingCommentEnd)?;
 
-	#[parse_error(fmt = "Expected `*/` after `/*`")]
-	#[parse_error(fatal)]
-	MissingCommentEnd,
-}
-
-impl Parse for BlockComment {
-	type Error = BlockCommentError;
-
-	#[coverage(off)]
-	fn name() -> Option<impl fmt::Display> {
-		None::<!>
-	}
-
-	fn parse_from(parser: &mut Parser) -> Result<Self, Self::Error> {
-		parser
-			.try_update_with(|s| match s.starts_with("/*") {
-				true => {
-					*s = &s[2..];
-					let mut depth = 1;
-					while depth != 0 {
-						let close_idx = s.find("*/").ok_or(BlockCommentError::MissingCommentEnd)?;
-
-						match s[..close_idx].find("/*") {
-							Some(open_idx) => {
-								*s = &s[open_idx + 2..];
-								depth += 1;
-							},
-							None => {
-								*s = &s[close_idx + 2..];
-								depth -= 1;
-							},
-						}
+					match s[..close_idx].find("/*") {
+						Some(open_idx) => {
+							*s = &s[open_idx + 2..];
+							depth += 1;
+						},
+						None => {
+							*s = &s[close_idx + 2..];
+							depth -= 1;
+						},
 					}
-					Ok(())
-				},
-				false => Err(BlockCommentError::NoComment),
-			})
-			.map(Self)
+				}
+				Ok(())
+			},
+			false => Err(BlockCommentError::NoComment),
+		}
 	}
 }
 
 /// Line comment
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Format, Print)]
-pub struct LineComment(#[format(str)] pub ParserStr);
+#[derive(Parse, Format, Print)]
+#[parse(error(name = NoComment, fmt = "Expected `//` (except `///` or `//!`)"))]
+#[parse(error(name = Newline, fmt = "Expected newline after `//`"))]
+pub struct LineComment(
+	#[parse(try_update_with = Self::parse)]
+	#[format(str)]
+	pub ParserStr,
+);
 
-/// Comment error
-#[derive(Debug, ParseError)]
-pub enum LineCommentError {
-	#[parse_error(fmt = "Expected `//` (except `///` or `//!`)")]
-	NoComment,
-
-	#[parse_error(fmt = "Expected newline after `//`")]
-	Newline,
-}
-
-impl Parse for LineComment {
-	type Error = LineCommentError;
-
-	#[coverage(off)]
-	fn name() -> Option<impl fmt::Display> {
-		None::<!>
-	}
-
-	fn parse_from(parser: &mut Parser) -> Result<Self, Self::Error> {
-		parser
-			.try_update_with(|s| {
-				let is_doc_comment = (s.starts_with("///") && !s.starts_with("////")) || s.starts_with("//!");
-				match s.starts_with("//") && !is_doc_comment {
-					true => {
-						let nl_idx = s.find('\n').ok_or(LineCommentError::Newline)?;
-						*s = &s[nl_idx + 1..];
-						Ok(())
-					},
-					false => Err(LineCommentError::NoComment),
-				}
-			})
-			.map(Self)
+impl LineComment {
+	fn parse(s: &mut &str) -> Result<(), LineCommentError> {
+		let is_doc_comment = (s.starts_with("///") && !s.starts_with("////")) || s.starts_with("//!");
+		match s.starts_with("//") && !is_doc_comment {
+			true => {
+				let nl_idx = s.find('\n').ok_or(LineCommentError::Newline)?;
+				*s = &s[nl_idx + 1..];
+				Ok(())
+			},
+			false => Err(LineCommentError::NoComment),
+		}
 	}
 }
 
 /// Trailing line comment ([`LineComment`] without a newline)
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Format, Print)]
-pub struct TrailingLineComment(#[format(str)] pub ParserStr);
+#[derive(Parse, Format, Print)]
+#[parse(error(name = NoComment, fmt = "Expected `//` (except `///` or `//!`)"))]
+pub struct TrailingLineComment(
+	#[parse(try_update_with = Self::parse)]
+	#[format(str)]
+	pub ParserStr,
+);
 
-/// Trailing line comment error
-#[derive(Debug, ParseError)]
-pub enum TrailingLineCommentError {
-	#[parse_error(fmt = "Expected `//` (except `///` or `//!`)")]
-	NoComment,
-}
-
-impl Parse for TrailingLineComment {
-	type Error = TrailingLineCommentError;
-
-	#[coverage(off)]
-	fn name() -> Option<impl fmt::Display> {
-		None::<!>
-	}
-
-	fn parse_from(parser: &mut Parser) -> Result<Self, Self::Error> {
-		parser
-			.try_update_with(|s| {
-				let is_doc_comment = (s.starts_with("///") && !s.starts_with("////")) || s.starts_with("//!");
-				match s.starts_with("//") && !is_doc_comment {
-					true => {
-						*s = &s[s.len()..];
-						Ok(())
-					},
-					false => Err(TrailingLineCommentError::NoComment),
-				}
-			})
-			.map(Self)
+impl TrailingLineComment {
+	fn parse(s: &mut &str) -> Result<(), TrailingLineCommentError> {
+		let is_doc_comment = (s.starts_with("///") && !s.starts_with("////")) || s.starts_with("//!");
+		match s.starts_with("//") && !is_doc_comment {
+			true => {
+				*s = &s[s.len()..];
+				Ok(())
+			},
+			false => Err(TrailingLineCommentError::NoComment),
+		}
 	}
 }
-
 
 #[cfg(test)]
 mod tests {
 	use {
 		super::*,
-		crate::{Replacements, print},
+		crate::{Parser, Replacements, print},
 		app_error::{AppError, Context, ensure},
 	};
 

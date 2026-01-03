@@ -13,6 +13,7 @@ use {
 	syn::parse_quote,
 };
 
+// TODO: Just use `#[darling(with = "darling::util::parse_expr::preserve_str_literal")]` instead of this.
 #[derive(Debug)]
 struct Fmt(syn::Expr);
 

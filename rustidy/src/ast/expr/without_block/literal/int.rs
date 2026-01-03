@@ -3,8 +3,7 @@
 // Imports
 use {
 	super::SuffixNoE,
-	crate::{Format, Parse, ParseError, Parser, ParserStr, Print, ast::whitespace::Whitespace},
-	std::fmt,
+	crate::{Format, Parse, ParserStr, Print, ast::whitespace::Whitespace},
 };
 
 
@@ -32,33 +31,23 @@ pub enum IntegerLiteralInner {
 /// `DEC_LITERAL`
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Format, Print)]
-pub struct DecLiteral(#[format(str)] pub ParserStr);
+#[derive(Parse, Format, Print)]
+#[parse(name = "an integer literal")]
+#[parse(error(name = StartDigit, fmt = "Expected 0-9"))]
+pub struct DecLiteral(
+	#[parse(try_update_with = Self::parse)]
+	#[format(str)]
+	pub ParserStr,
+);
 
-#[derive(Debug, ParseError)]
-pub enum DecLiteralError {
-	#[parse_error(fmt = "Expected 0-9")]
-	StartDigit,
-}
+impl DecLiteral {
+	fn parse(s: &mut &str) -> Result<(), DecLiteralError> {
+		if !s.starts_with(|ch: char| ch.is_ascii_digit()) {
+			return Err(DecLiteralError::StartDigit);
+		}
+		*s = &s[1..];
+		*s = s.trim_start_matches(|ch: char| ch.is_ascii_digit() || ch == '_');
 
-impl Parse for DecLiteral {
-	type Error = DecLiteralError;
-
-	fn name() -> Option<impl fmt::Display> {
-		Some("an integer literal")
-	}
-
-	fn parse_from(parser: &mut Parser) -> Result<Self, Self::Error> {
-		let literal = parser.try_update_with(|s| {
-			if !s.starts_with(|ch: char| ch.is_ascii_digit()) {
-				return Err(DecLiteralError::StartDigit);
-			}
-			*s = &s[1..];
-			*s = s.trim_start_matches(|ch: char| ch.is_ascii_digit() || ch == '_');
-
-			Ok(())
-		})?;
-
-		Ok(Self(literal))
+		Ok(())
 	}
 }

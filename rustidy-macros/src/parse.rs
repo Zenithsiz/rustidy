@@ -13,6 +13,28 @@ use {
 	syn::{parse_quote, punctuated::Punctuated},
 };
 
+#[derive(Debug, darling::FromMeta)]
+struct ExtraErrorVariant {
+	name:  syn::Ident,
+	#[darling(with = "darling::util::parse_expr::preserve_str_literal")]
+	fmt:   syn::Expr,
+	#[darling(default)]
+	fatal: bool,
+}
+
+impl quote::ToTokens for ExtraErrorVariant {
+	fn to_tokens(&self, tokens: &mut proc_macro2::TokenStream) {
+		let Self { name, fmt, fatal } = self;
+		let fatal = fatal.then(|| quote! { #[parse_error(fatal)] });
+		quote! {
+			#[parse_error(fmt = #fmt)]
+			#fatal
+			#name,
+		}
+		.to_tokens(tokens);
+	}
+}
+
 #[derive(Debug)]
 struct PeekAttrs(syn::Type);
 
@@ -69,6 +91,9 @@ struct FieldAttrs {
 	#[darling(with = "darling::util::parse_expr::preserve_str_literal")]
 	with_tag: Vec<syn::Expr>,
 
+	update_with:     Option<syn::Expr>,
+	try_update_with: Option<syn::Expr>,
+
 	#[darling(default)]
 	box_error: bool,
 
@@ -91,6 +116,8 @@ struct Attrs {
 
 	name:        Option<syn::LitStr>,
 	from:        Option<syn::Path>,
+	#[darling(multiple)]
+	error:       Vec<ExtraErrorVariant>,
 	// TODO: We should allow multiple here
 	skip_if_tag: Option<syn::LitStr>,
 }
@@ -123,12 +150,15 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 	let skip_if_tag_err_variant = attrs.skip_if_tag.as_ref().map(|tag| {
 		let fmt_msg = format!("Tag `{}` was present", tag.value());
 		quote! {
-						#[parse_error(fmt = #fmt_msg)]
+			#[parse_error(fmt = #fmt_msg)]
 			#skip_if_tag_err_variant_ident,
 		}
 	});
 
 	// Parse body, parsable impl and error enum (with it's impls)
+	// TODO: Instead of getting the whole error enum here, we should just
+	//       get the variants so we can reduce duplication in adding skip tag/
+	//       extra error variants.
 	let (parse_body, error_enum) = match &attrs.from {
 		Some(from) => {
 			// TODO: Support tags
@@ -143,6 +173,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 			};
 
 			let generics = &attrs.generics;
+			let extra_variants = &attrs.error;
 			let error_enum = quote! {
 				#[derive(derive_more::Debug, crate::parser::ParseError)]
 				pub enum #error_ident #generics {
@@ -150,6 +181,8 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 					From(crate::parser::ParserError<#from>),
 
 					#skip_if_tag_err_variant
+
+					#( #extra_variants )*
 				}
 			};
 
@@ -320,6 +353,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 
 				// TODO: Figure out why using just `#error_generics` doesn't work here
 				let (impl_generics, _, where_clause) = error_generics.split_for_impl();
+				let extra_variants = &attrs.error;
 				let error_enum = quote! {
 					#[derive(derive_more::Debug, crate::parser::ParseError)]
 					pub enum #error_ident #impl_generics #where_clause {
@@ -330,6 +364,8 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 						#unknown_error_name { #( #unknown_errs_decl )* },
 
 						#skip_if_tag_err_variant
+
+						#( #extra_variants )*
 					}
 				};
 
@@ -349,9 +385,12 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 					})
 					.collect::<Punctuated<_, syn::Token![,]>>();
 
-				let error_names = field_idents
-					.iter()
-					.map(|field_ident| {
+				let error_names = itertools::izip!(&fields.fields, &field_idents)
+					.map(|(field, field_ident)| {
+						if field.update_with.is_some() || field.try_update_with.is_some() {
+							return None;
+						}
+
 						let mut name = field_ident.to_string().to_case(convert_case::Case::Pascal);
 						if matches!(name.as_str(), "Self") {
 							name.push('_');
@@ -360,7 +399,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 							name.insert(0, '_');
 						}
 
-						syn::Ident::new(&name, field_ident.span())
+						Some(syn::Ident::new(&name, field_ident.span()))
 					})
 					.collect::<Vec<_>>();
 
@@ -389,7 +428,21 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 
 				let parse_fields = itertools::izip!(&fields.fields, &error_names, &field_idents)
 					.map(|(field, error_name, field_ident)| {
-						let mut expr = quote! { parser.parse() };
+						let mut expr = match &field.try_update_with {
+							Some(expr) => {
+								assert!(
+									field.update_with.is_none(),
+									"Cannot specify both `update_with` and `try_update_with`."
+								);
+								quote! { parser.try_update_with(#expr) }
+							},
+							None => match &field.update_with {
+								Some(expr) => quote! { parser.update_with(#expr) },
+								None => quote! { parser.parse() },
+							},
+						};
+
+
 						if let Some(tag) = &field.skip_if_tag {
 							let exists_name = &skip_if_tag_exists_name[tag];
 							expr = quote! {
@@ -408,12 +461,21 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 							expr = quote! { parser.with_tag(#tag, |parser| #expr) };
 						}
 
-						let box_error = match field.box_error {
-							true => quote! { .map_err(Box::new) },
-							false => quote! {},
+						let map_err = error_name.as_ref().map(|error_name| {
+							let box_error = match field.box_error {
+								true => Some(quote! { .map_err(Box::new) }),
+								false => None,
+							};
+
+							quote! { #box_error .map_err(#error_ident::#error_name) }
+						});
+
+						let propagate_error = match field.update_with.is_some() {
+							true => None,
+							false => Some(quote! { ? }),
 						};
 
-						quote! { let #field_ident = #expr #box_error .map_err(#error_ident::#error_name) ?; }
+						quote! { let #field_ident = #expr #map_err #propagate_error; }
 					})
 					.collect::<Vec<_>>();
 
@@ -447,7 +509,9 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 					.collect::<Vec<_>>();
 
 				let error_enum_variants = itertools::izip!(&fields.fields, &error_names, &field_tys, &fatal_fields)
-					.map(|(field, error_name, field_ty, is_fatal)| {
+					.filter_map(|(field, error_name, field_ty, is_fatal)| {
+						let Some(error_name) = error_name else { return None };
+
 						let fatal = match is_fatal {
 							true => quote! { #[parse_error(fatal)] },
 							false => quote! {},
@@ -459,11 +523,11 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 							false => ty,
 						};
 
-						quote! {
+						Some(quote! {
 							#[parse_error(transparent)]
 							#fatal
 							#error_name(#ty),
-						}
+						})
 					})
 					.collect::<Vec<_>>();
 
@@ -474,12 +538,15 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 					|ty| parse_quote! { #ty: crate::parser::Parse },
 				);
 				let (impl_generics, _, where_clause) = error_generics.split_for_impl();
+				let extra_variants = &attrs.error;
 				let error_enum = quote! {
 					#[derive(derive_more::Debug, crate::parser::ParseError)]
 					pub enum #error_ident #impl_generics #where_clause {
 						#( #error_enum_variants )*
 
 						#skip_if_tag_err_variant
+
+						#( #extra_variants )*
 					}
 				};
 

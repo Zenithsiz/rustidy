@@ -104,46 +104,32 @@ pub enum FloatLiteralError {
 /// `FLOAT_EXPONENT`
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Format, Print)]
-pub struct FloatExponent(#[format(str)] pub ParserStr);
+#[derive(Parse, Format, Print)]
+#[parse(error(name = E, fmt = "Expected `e` or `E`"))]
+#[parse(error(name = Digit, fmt = "Expected a digit"))]
+pub struct FloatExponent(
+	#[parse(try_update_with = Self::parse)]
+	#[format(str)]
+	pub ParserStr,
+);
 
-impl Parse for FloatExponent {
-	type Error = FloatExponentError;
+impl FloatExponent {
+	fn parse(s: &mut &str) -> Result<(), FloatExponentError> {
+		if !s.starts_with(['e', 'E']) {
+			return Err(FloatExponentError::E);
+		}
+		*s = &s[1..];
 
-	fn name() -> Option<impl std::fmt::Display> {
-		None::<!>
-	}
-
-	#[coverage(on)]
-	fn parse_from(parser: &mut Parser) -> Result<Self, Self::Error> {
-		let exponent = parser.try_update_with(|s| {
-			if !s.starts_with(['e', 'E']) {
-				return Err(Self::Error::E);
-			}
+		if s.starts_with(['+', '-']) {
 			*s = &s[1..];
+		}
 
-			if s.starts_with(['+', '-']) {
-				*s = &s[1..];
-			}
+		*s = s.trim_start_matches('_');
+		*s = s
+			.strip_prefix(|ch: char| ch.is_ascii_digit())
+			.ok_or(FloatExponentError::Digit)?;
+		*s = s.trim_start_matches(|ch: char| ch.is_ascii_digit() || ch == '_');
 
-			*s = s.trim_start_matches('_');
-			*s = s
-				.strip_prefix(|ch: char| ch.is_ascii_digit())
-				.ok_or(Self::Error::Digit)?;
-			*s = s.trim_start_matches(|ch: char| ch.is_ascii_digit() || ch == '_');
-
-			Ok(())
-		})?;
-
-		Ok(Self(exponent))
+		Ok(())
 	}
-}
-
-#[derive(Debug, derive_more::From, ParseError)]
-pub enum FloatExponentError {
-	#[parse_error(fmt = "Expected `e` or `E`")]
-	E,
-
-	#[parse_error(fmt = "Expected a digit")]
-	Digit,
 }
