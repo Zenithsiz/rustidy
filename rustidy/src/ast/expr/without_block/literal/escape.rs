@@ -130,3 +130,21 @@ impl UnicodeEscape {
 		Ok(())
 	}
 }
+
+/// `STRING_CONTINUE`
+#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(serde::Serialize, serde::Deserialize)]
+#[derive(Parse, Format, Print)]
+#[parse(error(name = Escape, fmt = "Expected `\\` and a newline"))]
+pub struct StringContinue(
+	#[parse(try_update_with = Self::parse)]
+	#[format(str)]
+	pub ParserStr,
+);
+
+impl StringContinue {
+	pub fn parse(s: &mut &str) -> Result<(), StringContinueError> {
+		*s = s.strip_prefix("\\\n").ok_or(StringContinueError::Escape)?;
+		Ok(())
+	}
+}

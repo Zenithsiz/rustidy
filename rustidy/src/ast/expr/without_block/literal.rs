@@ -14,7 +14,7 @@ pub mod suffix;
 pub use self::{
 	byte::ByteLiteral,
 	char::CharLiteral,
-	escape::{AsciiEscape, ByteEscape, QuoteEscape, UnicodeEscape},
+	escape::{AsciiEscape, ByteEscape, QuoteEscape, StringContinue, UnicodeEscape},
 	float::FloatLiteral,
 	int::IntegerLiteral,
 	raw_string::RawStringLiteral,

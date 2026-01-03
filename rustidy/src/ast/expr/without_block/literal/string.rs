@@ -9,7 +9,7 @@ use {
 		ParserStr,
 		Print,
 		ast::{
-			expr::without_block::literal::{AsciiEscape, QuoteEscape, UnicodeEscape},
+			expr::without_block::literal::{AsciiEscape, QuoteEscape, StringContinue, UnicodeEscape},
 			whitespace::Whitespace,
 		},
 	},
@@ -45,7 +45,7 @@ impl StringLiteral {
 						.ok()
 						.or_else(|| AsciiEscape::parse(s).ok())
 						.or_else(|| UnicodeEscape::parse(s).ok())
-						.or_else(|| s.strip_prefix("\\\n").map(|rest| *s = rest))
+						.or_else(|| StringContinue::parse(s).ok())
 						.is_none()
 					{
 						break;
