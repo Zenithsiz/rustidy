@@ -1,7 +1,7 @@
 //! Identifier or keyword
 
 // Imports
-use crate::{Format, Parse, ParserStr, Print, ast::whitespace::Whitespace};
+use crate::{Format, Parse, ParserStr, Print, ast::whitespace::Whitespace, parser};
 
 /// `IDENTIFIER_OR_KEYWORD`
 #[derive(PartialEq, Eq, Clone, Debug)]
@@ -30,6 +30,33 @@ impl IdentifierOrKeyword {
 			},
 		}
 		*s = s.trim_start_matches(unicode_ident::is_xid_continue);
+
+		Ok(())
+	}
+}
+
+/// `RAW_IDENTIFIER`
+#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(serde::Serialize, serde::Deserialize)]
+#[derive(Parse, Format, Print)]
+#[parse(error(name = Raw, fmt = "Expected `r#`"))]
+#[parse(error(name = IdentOrKeyword(IdentifierOrKeywordError), transparent))]
+#[parse(error(name = ForbiddenKeyword, fmt = "Raw identifier cannot be `crate`, `self`, `super` or `Self`"))]
+pub struct RawIdentifier(
+	#[format(whitespace)] pub Whitespace,
+	#[parse(try_update_with = Self::parse)]
+	#[format(str)]
+	pub ParserStr,
+);
+
+impl RawIdentifier {
+	fn parse(s: &mut &str) -> Result<(), RawIdentifierError> {
+		*s = s.strip_prefix("r#").ok_or(RawIdentifierError::Raw)?;
+		let ident =
+			parser::parse_from_str(s, IdentifierOrKeyword::parse).map_err(RawIdentifierError::IdentOrKeyword)?;
+		if ["crate", "self", "super", "Self"].contains(&ident) {
+			return Err(RawIdentifierError::ForbiddenKeyword);
+		}
 
 		Ok(())
 	}

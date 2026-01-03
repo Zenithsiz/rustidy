@@ -18,7 +18,9 @@ Unable to parse ast
           ├─Expected `crate`
           ├─Expected `$crate`
           ├─Expected an identifier at 1:9
-          │ └─Expected `XID_START` or `_`
+          │ └─Multiple errors:
+          │   ├─Expected `r#`
+          │   └─Expected `XID_START` or `_`
           ├─Expected a macro invocation at 1:9
           │ └─Expected a simple path at 1:9
           │   └─Multiple errors:
@@ -27,14 +29,18 @@ Unable to parse ast
           │     ├─Expected `crate`
           │     ├─Expected `$crate`
           │     └─Expected an identifier at 1:9
-          │       └─Expected `XID_START` or `_`
+          │       └─Multiple errors:
+          │         ├─Expected `r#`
+          │         └─Expected `XID_START` or `_`
           ├─Expected `super`
           ├─Expected `self`
           ├─Expected `Self`
           ├─Expected `crate`
           ├─Expected `$crate`
           ├─Expected an identifier at 1:9
-          │ └─Expected `XID_START` or `_`
+          │ └─Multiple errors:
+          │   ├─Expected `r#`
+          │   └─Expected `XID_START` or `_`
           ├─Expected `(`
           ├─Expected `impl`
           ├─Expected `(`
@@ -44,7 +50,9 @@ Unable to parse ast
           ├─Expected `crate`
           ├─Expected `$crate`
           ├─Expected an identifier at 1:9
-          │ └─Expected `XID_START` or `_`
+          │ └─Multiple errors:
+          │   ├─Expected `r#`
+          │   └─Expected `XID_START` or `_`
           ├─Expected a tuple type at 1:9
           │ └─Expected `(`
           ├─Expected `!`
@@ -59,14 +67,18 @@ Unable to parse ast
           │   │     ├─Expected `crate`
           │   │     ├─Expected `$crate`
           │   │     └─Expected an identifier at 1:11
-          │   │       └─Expected `XID_START` or `_`
+          │   │       └─Multiple errors:
+          │   │         ├─Expected `r#`
+          │   │         └─Expected `XID_START` or `_`
           │   ├─Expected `super`
           │   ├─Expected `self`
           │   ├─Expected `Self`
           │   ├─Expected `crate`
           │   ├─Expected `$crate`
           │   ├─Expected an identifier at 1:11
-          │   │ └─Expected `XID_START` or `_`
+          │   │ └─Multiple errors:
+          │   │   ├─Expected `r#`
+          │   │   └─Expected `XID_START` or `_`
           │   ├─Expected `(`
           │   ├─Expected `impl`
           │   ├─Expected `(`
@@ -76,7 +88,9 @@ Unable to parse ast
           │   ├─Expected `crate`
           │   ├─Expected `$crate`
           │   ├─Expected an identifier at 1:11
-          │   │ └─Expected `XID_START` or `_`
+          │   │ └─Multiple errors:
+          │   │   ├─Expected `r#`
+          │   │   └─Expected `XID_START` or `_`
           │   ├─Expected a tuple type at 1:11
           │   │ └─Expected `(`
           │   ├─Expected `!`

@@ -9,7 +9,7 @@ use crate::{
 		at_least::AtLeast1,
 		attr::DelimTokenTree,
 		delimited::{Braced, Bracketed, Parenthesized},
-		ident::{Identifier, IdentifierOrKeyword},
+		ident::{Identifier, IdentifierOrKeyword, ident_or_keyword::RawIdentifier},
 		punct::PunctuatedTrailing,
 		token::{self, Token},
 	},
@@ -117,9 +117,9 @@ pub struct MacroMatchDollarIdent {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub enum MacroMatchDollarIdentInner {
+	Raw(RawIdentifier),
 	#[parse(with_tag = "skip:`crate`")]
 	IdentOrKw(IdentifierOrKeyword),
-	Raw(!),
 	Underscore(token::Underscore),
 }
 

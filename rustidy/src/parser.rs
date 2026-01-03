@@ -604,3 +604,29 @@ pub struct ParserLoc {
 pub trait ParsableFrom<T> {
 	fn from_parsable(value: T) -> Self;
 }
+
+/// `[Parser::parse]` for strings
+pub fn parse_from_str<'a, F, E>(s: &mut &'a str, parse: F) -> Result<&'a str, E>
+where
+	F: FnOnce(&mut &'a str) -> Result<(), E>,
+	E: ParseError,
+{
+	let start = *s;
+	parse(s)?;
+	let range = start.substr_range(s).expect("Output was not a substring of the input");
+	let parsed = &start[..range.start];
+	Ok(parsed)
+}
+
+/// `[Parser::try_parse]` for strings
+pub fn try_parse_from_str<'a, F, E>(s: &mut &'a str, parse: F) -> Result<Result<&'a str, E>, E>
+where
+	F: FnOnce(&mut &'a str) -> Result<(), E>,
+	E: ParseError,
+{
+	match self::parse_from_str(s, parse) {
+		Ok(value) => Ok(Ok(value)),
+		Err(err) if err.is_fatal() => Err(err),
+		Err(err) => Ok(Err(err)),
+	}
+}

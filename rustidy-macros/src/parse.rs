@@ -15,19 +15,37 @@ use {
 
 #[derive(Debug, darling::FromMeta)]
 struct ExtraErrorVariant {
-	name:  syn::Ident,
-	#[darling(with = "darling::util::parse_expr::preserve_str_literal")]
-	fmt:   syn::Expr,
+	// Note: This would ideally be `syn::Variant`, but darling doesn't support that
+	name:        syn::Expr,
+	#[darling(with = "darling::util::parse_expr::preserve_str_literal", map = "Some")]
+	fmt:         Option<syn::Expr>,
 	#[darling(default)]
-	fatal: bool,
+	transparent: bool,
+	#[darling(default)]
+	fatal:       bool,
 }
 
 impl quote::ToTokens for ExtraErrorVariant {
 	fn to_tokens(&self, tokens: &mut proc_macro2::TokenStream) {
-		let Self { name, fmt, fatal } = self;
+		let &Self {
+			ref name,
+			ref fmt,
+			transparent,
+			fatal,
+		} = self;
+
+		assert!(
+			transparent || fmt.is_some(),
+			"Must specify exactly one of `fmt` or `transparent`"
+		);
+		let attr = match fmt {
+			Some(fmt) => quote! { #[parse_error(fmt = #fmt)] },
+			None => quote! { #[parse_error(transparent)] },
+		};
+
 		let fatal = fatal.then(|| quote! { #[parse_error(fatal)] });
 		quote! {
-			#[parse_error(fmt = #fmt)]
+			#attr
 			#fatal
 			#name,
 		}

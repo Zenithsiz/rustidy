@@ -8,7 +8,10 @@ pub mod keyword;
 pub use self::{ident_or_keyword::IdentifierOrKeyword, keyword::STRICT_OR_RESERVED_KEYWORDS};
 
 // Imports
-use crate::{Format, Parse, Print, parser::Parser};
+use {
+	self::ident_or_keyword::RawIdentifier,
+	crate::{Format, Parse, Print, parser::Parser},
+};
 
 /// `IDENTIFIER`
 #[derive(PartialEq, Eq, Clone, Debug)]
@@ -16,8 +19,8 @@ use crate::{Format, Parse, Print, parser::Parser};
 #[derive(Parse, Format, Print)]
 #[parse(name = "an identifier")]
 pub enum Identifier {
+	Raw(RawIdentifier),
 	NonKw(NonKeywordIdentifier),
-	Raw(!),
 }
 
 /// `NON_KEYWORD_IDENTIFIER`
