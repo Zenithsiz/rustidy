@@ -20,10 +20,7 @@ pub struct ByteLiteral(
 
 impl ByteLiteral {
 	fn parse(s: &mut &str) -> Result<(), ByteLiteralError> {
-		if !s.starts_with("b\'") {
-			return Err(ByteLiteralError::StartQuote);
-		}
-		*s = &s[2..];
+		*s = s.strip_prefix("b'").ok_or(ByteLiteralError::StartQuote)?;
 
 		// TODO: Parse escapes better?
 		loop {

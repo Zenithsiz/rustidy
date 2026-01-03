@@ -26,18 +26,12 @@ pub struct RawStringLiteral {
 
 impl RawStringLiteral {
 	fn parse(s: &mut &str) -> Result<(), RawStringLiteralError> {
-		if !s.starts_with('r') {
-			return Err(RawStringLiteralError::StartR);
-		}
-		*s = &s[1..];
+		*s = s.strip_prefix('r').ok_or(RawStringLiteralError::StartR)?;
 
 		let prefix_hash_len = s.find(|ch| ch != '#').ok_or(RawStringLiteralError::StartQuote)?;
 		*s = &s[prefix_hash_len..];
 
-		if !s.starts_with('"') {
-			return Err(RawStringLiteralError::StartQuote);
-		}
-		*s = &s[1..];
+		*s = s.strip_prefix('"').ok_or(RawStringLiteralError::StartQuote)?;
 
 		let mut end_match = String::with_capacity(1 + prefix_hash_len);
 		end_match.push('"');

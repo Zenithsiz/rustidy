@@ -21,10 +21,7 @@ pub struct CharLiteral(
 
 impl CharLiteral {
 	fn parse(s: &mut &str) -> Result<(), CharLiteralError> {
-		if !s.starts_with('\'') {
-			return Err(CharLiteralError::StartQuote);
-		}
-		*s = &s[1..];
+		*s = s.strip_prefix('\'').ok_or(CharLiteralError::StartQuote)?;
 
 		// TODO: Parse escapes better?
 		loop {

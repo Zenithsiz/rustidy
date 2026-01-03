@@ -191,9 +191,9 @@ pub struct BlockComment(
 
 impl BlockComment {
 	fn parse(s: &mut &str) -> Result<(), BlockCommentError> {
-		match s.starts_with("/*") {
-			true => {
-				*s = &s[2..];
+		match s.strip_prefix("/*") {
+			Some(rest) => {
+				*s = rest;
 				let mut depth = 1;
 				while depth != 0 {
 					let close_idx = s.find("*/").ok_or(BlockCommentError::MissingCommentEnd)?;
@@ -211,7 +211,7 @@ impl BlockComment {
 				}
 				Ok(())
 			},
-			false => Err(BlockCommentError::NoComment),
+			None => Err(BlockCommentError::NoComment),
 		}
 	}
 }

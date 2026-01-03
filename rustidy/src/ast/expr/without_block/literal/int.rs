@@ -42,10 +42,9 @@ pub struct DecLiteral(
 
 impl DecLiteral {
 	fn parse(s: &mut &str) -> Result<(), DecLiteralError> {
-		if !s.starts_with(|ch: char| ch.is_ascii_digit()) {
-			return Err(DecLiteralError::StartDigit);
-		}
-		*s = &s[1..];
+		*s = s
+			.strip_prefix(|ch: char| ch.is_ascii_digit())
+			.ok_or(DecLiteralError::StartDigit)?;
 		*s = s.trim_start_matches(|ch: char| ch.is_ascii_digit() || ch == '_');
 
 		Ok(())

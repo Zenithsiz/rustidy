@@ -25,10 +25,7 @@ pub struct StringLiteral {
 
 impl StringLiteral {
 	fn parse(s: &mut &str) -> Result<(), StringLiteralError> {
-		if !s.starts_with('"') {
-			return Err(StringLiteralError::StartQuote);
-		}
-		*s = &s[1..];
+		*s = s.strip_prefix('"').ok_or(StringLiteralError::StartQuote)?;
 
 		// TODO: Parse escapes better?
 		loop {

@@ -115,15 +115,8 @@ pub struct FloatExponent(
 
 impl FloatExponent {
 	fn parse(s: &mut &str) -> Result<(), FloatExponentError> {
-		if !s.starts_with(['e', 'E']) {
-			return Err(FloatExponentError::E);
-		}
-		*s = &s[1..];
-
-		if s.starts_with(['+', '-']) {
-			*s = &s[1..];
-		}
-
+		*s = s.strip_prefix(['e', 'E']).ok_or(FloatExponentError::E)?;
+		*s = s.trim_prefix(['+', '-']);
 		*s = s.trim_start_matches('_');
 		*s = s
 			.strip_prefix(|ch: char| ch.is_ascii_digit())
