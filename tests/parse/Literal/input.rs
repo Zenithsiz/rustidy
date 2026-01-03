@@ -103,7 +103,13 @@ fn integer() {
 	0__1__2__3__4__5__;
 	1abc;
 	1_abc;
-	// TODO: binary/octal/hex
+
+	0b0;
+	0b______0;
+	0b_0_1_0_1_0;
+
+	0o_0_7_;
+	0x_0_9_a_f_;
 }
 
 fn float() {
