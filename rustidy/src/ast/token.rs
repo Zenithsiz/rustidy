@@ -15,7 +15,7 @@ use {
 				RawStringLiteral,
 			},
 		},
-		ident::IdentifierOrKeyword,
+		ident::{IdentifierOrKeyword, ident_or_keyword::RawIdentifier},
 		lifetime::LifetimeToken,
 		whitespace::Whitespace,
 	},
@@ -223,7 +223,7 @@ decl_tokens! {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub enum Token {
-	RawIdent(!),
+	RawIdent(RawIdentifier),
 	CharLiteral(CharLiteral),
 	StringLiteral(StringLiteral),
 	RawStringLiteral(RawStringLiteral),
