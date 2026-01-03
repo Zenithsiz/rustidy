@@ -5,7 +5,7 @@ use crate::{
 	Format,
 	ast::{
 		delimited::{Delimited, Parenthesized},
-		expr::{BlockExpression, LiteralExpression, StringLiteral},
+		expr::{BlockExpression, LiteralExpression, StringLiteral, without_block::literal::RawStringLiteral},
 		ident::Identifier,
 		lifetime::Lifetime,
 		pat::PatternNoTopAlt,
@@ -71,7 +71,7 @@ pub struct ExternAbi {
 #[derive(Parse, Format, Print)]
 pub enum Abi {
 	String(StringLiteral),
-	RawString(!),
+	RawString(RawStringLiteral),
 }
 
 /// `ItemSafety`
