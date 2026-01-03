@@ -8,12 +8,7 @@ pub mod keyword;
 pub use self::{ident_or_keyword::IdentifierOrKeyword, keyword::STRICT_OR_RESERVED_KEYWORDS};
 
 // Imports
-use crate::{
-	Format,
-	Parse,
-	Print,
-	parser::{Parser, ParserError},
-};
+use crate::{Format, Parse, Print, parser::Parser};
 
 /// `IDENTIFIER`
 #[derive(PartialEq, Eq, Clone, Debug)]
@@ -37,35 +32,17 @@ impl AsRef<crate::ParserStr> for Identifier {
 /// `NON_KEYWORD_IDENTIFIER`
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Format, Print)]
+#[derive(Parse, Format, Print)]
+#[parse(error(name = StrictOrReserved, fmt = "Identifier was a strict or reserved keyword"))]
+#[parse(and_try_with = Self::check_strict_reserved)]
 pub struct NonKeywordIdentifier(pub IdentifierOrKeyword);
 
-impl Parse for NonKeywordIdentifier {
-	type Error = NonKeywordIdentifierError;
-
-	#[coverage(off)]
-	fn name() -> Option<impl std::fmt::Display> {
-		None::<!>
-	}
-
-	fn parse_from(parser: &mut Parser) -> Result<Self, Self::Error> {
-		let ident = parser
-			.parse::<IdentifierOrKeyword>()
-			.map_err(NonKeywordIdentifierError::Ident)?;
-
-		if STRICT_OR_RESERVED_KEYWORDS.contains(&parser.str(ident.1)) {
+impl NonKeywordIdentifier {
+	pub fn check_strict_reserved(&mut self, parser: &mut Parser) -> Result<(), NonKeywordIdentifierError> {
+		if STRICT_OR_RESERVED_KEYWORDS.contains(&parser.str(self.0.1)) {
 			return Err(NonKeywordIdentifierError::StrictOrReserved);
 		}
 
-		Ok(Self(ident))
+		Ok(())
 	}
-}
-
-#[derive(Debug, crate::parser::ParseError)]
-pub enum NonKeywordIdentifierError {
-	#[parse_error(transparent)]
-	Ident(ParserError<IdentifierOrKeyword>),
-
-	#[parse_error(fmt = "Identifier was a strict or reserved keyword")]
-	StrictOrReserved,
 }

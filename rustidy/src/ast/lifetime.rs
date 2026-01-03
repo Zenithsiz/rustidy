@@ -6,8 +6,7 @@ use {
 		ident::{IdentifierOrKeyword, NonKeywordIdentifier},
 		token,
 	},
-	crate::{Format, Parse, ParseError, Parser, Print, parser::ParserError},
-	std::fmt,
+	crate::{Format, Parse, Parser, Print},
 };
 
 /// `Lifetime`
@@ -38,43 +37,28 @@ pub enum LifetimeOrLabel {
 
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Format, Print)]
+#[derive(Parse, Format, Print)]
+#[parse(name = "a lifetime token")]
+#[parse(error(name = SuffixQuote, fmt = "Unexpected `'`"))]
+#[parse(and_try_with = Self::check_suffix_quote)]
 pub struct QuoteNotQuote<T> {
 	pub quote: token::Quote,
+	#[parse(with_tag = "skip:Whitespace")]
 	pub value: T,
 }
 
-#[derive(derive_more::Debug, ParseError)]
-pub enum LifetimeIdentOrKeywordError<T: Parse> {
-	#[parse_error(transparent)]
-	Quote(ParserError<token::Quote>),
-
-	#[parse_error(transparent)]
-	Name(ParserError<T>),
-
-	#[parse_error(fmt = "Unexpected `'`")]
-	SuffixQuote,
-}
-
-impl<T: Parse> Parse for QuoteNotQuote<T> {
-	type Error = LifetimeIdentOrKeywordError<T>;
-
-	fn name() -> Option<impl fmt::Display> {
-		Some("a lifetime token")
-	}
-
-	fn parse_from(parser: &mut Parser) -> Result<Self, Self::Error> {
-		let quote = parser.parse().map_err(Self::Error::Quote)?;
-		let value = parser
-			.with_tag("skip:Whitespace", Parser::parse::<T>)
-			.map_err(Self::Error::Name)?;
-
+impl<T: Parse> QuoteNotQuote<T> {
+	pub fn check_suffix_quote(&mut self, parser: &mut Parser) -> Result<(), QuoteNotQuoteError<T>> {
 		// If we parse a `'` right after the value, then this is actually a character literal
 		// and so we reject it.
-		if parser.try_parse::<token::Quote>().map_err(Self::Error::Quote)?.is_ok() {
-			return Err(Self::Error::SuffixQuote);
+		if parser
+			.try_parse::<token::Quote>()
+			.map_err(QuoteNotQuoteError::Quote)?
+			.is_ok()
+		{
+			return Err(QuoteNotQuoteError::SuffixQuote);
 		}
 
-		Ok(Self { quote, value })
+		Ok(())
 	}
 }
