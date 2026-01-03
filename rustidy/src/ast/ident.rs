@@ -20,15 +20,6 @@ pub enum Identifier {
 	Raw(!),
 }
 
-impl AsRef<crate::ParserStr> for Identifier {
-	fn as_ref(&self) -> &crate::ParserStr {
-		match *self {
-			Self::NonKw(ref non_keyword_identifier) => &non_keyword_identifier.0.1,
-			Self::Raw(never) => never,
-		}
-	}
-}
-
 /// `NON_KEYWORD_IDENTIFIER`
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
