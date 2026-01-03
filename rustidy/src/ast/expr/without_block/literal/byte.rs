@@ -1,12 +1,16 @@
 //! Byte literal
 
 // Imports
-use crate::{
-	Format,
-	Parse,
-	ParserStr,
-	Print,
-	ast::{expr::without_block::literal::ByteEscape, whitespace::Whitespace},
+use {
+	super::escape::ByteEscapeError,
+	crate::{
+		Format,
+		Parse,
+		ParserStr,
+		Print,
+		ast::{expr::without_block::literal::ByteEscape, whitespace::Whitespace},
+		parser,
+	},
 };
 
 /// `BYTE_LITERAL`
@@ -15,6 +19,7 @@ use crate::{
 #[derive(Parse, Format, Print)]
 #[parse(name = "a byte literal")]
 #[parse(error(name = StartQuote, fmt = "Expected `b'`"))]
+#[parse(error(name = ByteEscape(ByteEscapeError), transparent))]
 #[parse(error(name = CharOrEscape, fmt = "Expected character or escape", fatal))]
 #[parse(error(name = EndQuote, fmt = "Expected `'` after `b'`", fatal))]
 pub struct ByteLiteral(
@@ -29,8 +34,11 @@ impl ByteLiteral {
 		*s = s.strip_prefix("b\'").ok_or(ByteLiteralError::StartQuote)?;
 		match s.strip_prefix(|ch: char| ch.is_ascii() && !matches!(ch, '\'' | '\\' | '\n' | '\r' | '\t')) {
 			Some(rest) => *s = rest,
-			// TODO: We should report fatal errors from here
-			None => ByteEscape::parse(s).ok().ok_or(ByteLiteralError::CharOrEscape)?,
+			None =>
+				_ = parser::try_parse_from_str(s, ByteEscape::parse)
+					.map_err(ByteLiteralError::ByteEscape)?
+					.ok()
+					.ok_or(ByteLiteralError::CharOrEscape)?,
 		}
 		*s = s.strip_prefix('\'').ok_or(ByteLiteralError::EndQuote)?;
 

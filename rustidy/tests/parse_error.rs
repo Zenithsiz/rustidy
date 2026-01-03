@@ -27,7 +27,9 @@ pub fn parse_error() {
 
 		assert!(
 			err == output,
-			"Test {test_dir:?} output differed\n\nExpected:\n---\n{output}\n---\n\nFound:\n---\n{err}\n---"
+			"Test {test_dir:?} output differed\n\nExpected:\n---\n{}\n---\n\nFound:\n---\n{}\n---",
+			output.replace(' ', "·").replace('\t', "⭾").replace('\n', "␤\n"),
+			err.replace(' ', "·").replace('\t', "⭾").replace('\n', "␤\n")
 		);
 	}
 }

@@ -28,8 +28,8 @@ impl QuoteEscape {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 #[parse(error(name = Escape, fmt = "Expected `\\xXX`, `\\n`, `\\r`, `\\t`, `\\\\` or `\\0`"))]
-#[parse(error(name = Octal, fmt = "Expected octal digit"))]
-#[parse(error(name = Hex, fmt = "Expected hex digit"))]
+#[parse(error(name = Octal, fmt = "Expected octal digit", fatal))]
+#[parse(error(name = Hex, fmt = "Expected hex digit", fatal))]
 pub struct AsciiEscape(
 	#[parse(try_update_with = Self::parse)]
 	#[format(str)]

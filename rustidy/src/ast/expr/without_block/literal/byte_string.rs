@@ -2,7 +2,10 @@
 
 // Imports
 use {
-	super::Suffix,
+	super::{
+		Suffix,
+		escape::{ByteEscapeError, StringContinueError},
+	},
 	crate::{
 		Format,
 		Parse,
@@ -12,6 +15,7 @@ use {
 			expr::without_block::literal::{ByteEscape, StringContinue},
 			whitespace::Whitespace,
 		},
+		parser,
 	},
 };
 
@@ -22,6 +26,8 @@ use {
 #[derive(Parse, Format, Print)]
 #[parse(name = "a byte string literal")]
 #[parse(error(name = StartQuote, fmt = "Expected `b\"`"))]
+#[parse(error(name = ByteEscape(ByteEscapeError), transparent))]
+#[parse(error(name = StringContinue(StringContinueError), transparent))]
 #[parse(error(name = ExpectedEndQuote, fmt = "Expected `\"` after `b\"`", fatal))]
 pub struct ByteStringLiteral {
 	#[format(whitespace)]
@@ -40,14 +46,20 @@ impl ByteStringLiteral {
 			match s.strip_prefix(|ch: char| ch.is_ascii() && !matches!(ch, '"' | '\\' | '\r')) {
 				Some(rest) => *s = rest,
 				// TODO: We should report fatal errors from here
-				None =>
-					if ByteEscape::parse(s)
-						.ok()
-						.or_else(|| StringContinue::parse(s).ok())
-						.is_none()
-					{
-						break;
-					},
+				None => {
+					macro try_parse($Escape:ident) {
+						parser::try_parse_from_str(s, $Escape::parse)
+							.map_err(ByteStringLiteralError::$Escape)?
+							.is_ok()
+					}
+
+					match () {
+						() if try_parse!(ByteEscape) => (),
+						() if try_parse!(StringContinue) => (),
+
+						() => break,
+					}
+				},
 			}
 		}
 

@@ -1,14 +1,18 @@
 //! Character literal
 
 // Imports
-use crate::{
-	Format,
-	Parse,
-	ParserStr,
-	Print,
-	ast::{
-		expr::without_block::literal::{AsciiEscape, QuoteEscape, UnicodeEscape},
-		whitespace::Whitespace,
+use {
+	super::escape::{AsciiEscapeError, QuoteEscapeError, UnicodeEscapeError},
+	crate::{
+		Format,
+		Parse,
+		ParserStr,
+		Print,
+		ast::{
+			expr::without_block::literal::{AsciiEscape, QuoteEscape, UnicodeEscape},
+			whitespace::Whitespace,
+		},
+		parser,
 	},
 };
 
@@ -18,6 +22,9 @@ use crate::{
 #[derive(Parse, Format, Print)]
 #[parse(name = "a character literal")]
 #[parse(error(name = StartQuote, fmt = "Expected `'`"))]
+#[parse(error(name = QuoteEscape(QuoteEscapeError), transparent))]
+#[parse(error(name = AsciiEscape(AsciiEscapeError), transparent))]
+#[parse(error(name = UnicodeEscape(UnicodeEscapeError), transparent))]
 #[parse(error(name = CharOrEscape, fmt = "Expected character or escape", fatal))]
 // Note: Not fatal because of lifetimes
 #[parse(error(name = EndQuote, fmt = "Expected `'` after `'`"))]
@@ -33,12 +40,22 @@ impl CharLiteral {
 		*s = s.strip_prefix('\'').ok_or(CharLiteralError::StartQuote)?;
 		match s.strip_prefix(|ch| !matches!(ch, '\'' | '\\' | '\n' | '\r' | '\t')) {
 			Some(rest) => *s = rest,
-			// TODO: We should report fatal errors from here
-			None => QuoteEscape::parse(s)
-				.ok()
-				.or_else(|| AsciiEscape::parse(s).ok())
-				.or_else(|| UnicodeEscape::parse(s).ok())
-				.ok_or(CharLiteralError::CharOrEscape)?,
+			None => {
+				// TODO: Better way to express this
+				macro try_parse($Escape:ident) {
+					parser::try_parse_from_str(s, $Escape::parse)
+						.map_err(CharLiteralError::$Escape)?
+						.is_ok()
+				}
+
+				match () {
+					() if try_parse!(QuoteEscape) => (),
+					() if try_parse!(AsciiEscape) => (),
+					() if try_parse!(UnicodeEscape) => (),
+
+					() => return Err(CharLiteralError::CharOrEscape),
+				}
+			},
 		}
 		*s = s.strip_prefix('\'').ok_or(CharLiteralError::EndQuote)?;
 
