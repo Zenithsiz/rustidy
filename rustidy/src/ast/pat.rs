@@ -1,5 +1,11 @@
 //! Patterns
 
+// Modules
+pub mod range;
+
+// Exports
+pub use self::range::RangePattern;
+
 // Imports
 use {
 	super::{
@@ -38,8 +44,8 @@ pub struct Pattern {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub enum PatternNoTopAlt {
+	Range(RangePattern),
 	WithoutRange(PatternWithoutRange),
-	Range(!),
 }
 
 /// `PatternWithoutRange`
