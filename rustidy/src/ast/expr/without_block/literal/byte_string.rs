@@ -45,7 +45,6 @@ impl ByteStringLiteral {
 		loop {
 			match s.strip_prefix(|ch: char| ch.is_ascii() && !matches!(ch, '"' | '\\' | '\r')) {
 				Some(rest) => *s = rest,
-				// TODO: We should report fatal errors from here
 				None => {
 					macro try_parse($Escape:ident) {
 						parser::try_parse_from_str(s, $Escape::parse)
