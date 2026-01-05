@@ -106,7 +106,14 @@ fn c_string() {
 }
 
 fn raw_c_string() {
-	// TODO:
+	cr"";
+	cr""e;
+	cr""abc;
+	cr"a";
+	cr#""#;
+	cr#""#a;
+	cr#"""#;
+	cr##""#"##;
 }
 
 fn integer() {
