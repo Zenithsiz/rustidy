@@ -240,9 +240,9 @@ pub enum Token {
 	FloatLiteral(FloatLiteral),
 	LifetimeToken(LifetimeToken),
 	Punctuation(Punctuation),
-	Reserved(!),
 
 	IdentOrKeyword(IdentifierOrKeyword),
+	// TODO: Reserved tokens? Should we care as a formatter?
 }
 
 /// `Punctuation`

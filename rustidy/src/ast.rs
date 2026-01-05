@@ -1,8 +1,6 @@
 //! Syntax tree
 
 // Lints
-// TODO: Once we remove all stubs, remove this.
-#![expect(unreachable_code, reason = "We have many stub types of `!`")]
 #![expect(clippy::large_stack_frames, reason = "We'll make everything smaller eventually")]
 
 // Modules
