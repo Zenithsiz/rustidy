@@ -12,6 +12,13 @@ fn a<A>();
 fn a<A, B>();
 fn a<A, B,>();
 
+fn a<A: T>();
+fn a<A: 'a>();
+fn a<A: use<T>>();
+fn a<A: use<'a>>();
+fn a<A: use<Self>>();
+fn a<A: use<T, 'a, Self,>>();
+
 fn a(self);
 fn a(#[a] #[b] self);
 fn a(self,);
@@ -42,4 +49,4 @@ fn a() where T: A, {}
 
 fn a() where T: A + B +, 'a: 'b + 'c + {}
 
-const async unsafe extern "C" fn a<A, B,>(&'a mut self, a: u32, b: u32,) -> u32 {}
+const async unsafe extern "C" fn a<A: T, B: 'a, C: use<T, 'a, Self,>,>(&'a mut self, a: u32, b: u32,) -> u32 {}

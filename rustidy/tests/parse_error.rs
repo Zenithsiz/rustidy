@@ -3,7 +3,7 @@
 // Imports
 use {
 	rustidy::Parser,
-	std::{fs, path::Path},
+	std::{env, fs, path::Path},
 };
 
 #[test]
@@ -22,14 +22,22 @@ pub fn parse_error() {
 		let err = err.pretty().to_string();
 
 		let output_path = test_dir.join("output.txt");
-		let output = fs::read_to_string(output_path).expect("Unable to read output path");
-		let output = output.strip_suffix('\n').expect("Missing newline at the end of output");
+		match env::var("UPDATE_ERROR_OUTPUT").is_ok_and(|value| !value.trim().is_empty()) {
+			true => {
+				let err = err + "\n";
+				fs::write(output_path, err).expect("Unable to update output");
+			},
+			false => {
+				let output = fs::read_to_string(output_path).expect("Unable to read output path");
+				let output = output.strip_suffix('\n').expect("Missing newline at the end of output");
 
-		assert!(
-			err == output,
-			"Test {test_dir:?} output differed\n\nExpected:\n---\n{}\n---\n\nFound:\n---\n{}\n---",
-			output.replace(' ', "·").replace('\t', "⭾").replace('\n', "␤\n"),
-			err.replace(' ', "·").replace('\t', "⭾").replace('\n', "␤\n")
-		);
+				assert!(
+					err == output,
+					"Test {test_dir:?} output differed\n\nExpected:\n---\n{}\n---\n\nFound:\n---\n{}\n---",
+					output.replace(' ', "·").replace('\t', "⭾").replace('\n', "␤\n"),
+					err.replace(' ', "·").replace('\t', "⭾").replace('\n', "␤\n")
+				);
+			},
+		}
 	}
 }

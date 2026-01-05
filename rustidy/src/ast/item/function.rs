@@ -285,7 +285,7 @@ pub struct TypeParamBounds(pub PunctuatedTrailing<TypeParamBound, token::Plus>);
 pub enum TypeParamBound {
 	Lifetime(Lifetime),
 	Trait(TraitBound),
-	UseBound(!),
+	UseBound(UseBound),
 }
 
 /// `TraitBound`
@@ -400,4 +400,35 @@ pub enum ConstParamEqRest {
 pub struct ConstParamEqRestLiteral {
 	neg:  Option<token::Minus>,
 	expr: Box<LiteralExpression>,
+}
+
+/// `UseBound`
+#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(serde::Serialize, serde::Deserialize)]
+#[derive(Parse, Format, Print)]
+pub struct UseBound {
+	pub use_: token::Use,
+	#[parse(fatal)]
+	pub args: UseBoundGenericArgs,
+}
+
+/// `UseBoundGenericArgs`
+#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(serde::Serialize, serde::Deserialize)]
+#[derive(Parse, Format, Print)]
+pub struct UseBoundGenericArgs(pub Delimited<UseBoundGenericArgsInner, token::Lt, token::Gt>);
+
+#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(serde::Serialize, serde::Deserialize)]
+#[derive(Parse, Format, Print)]
+pub struct UseBoundGenericArgsInner(pub PunctuatedTrailing<UseBoundGenericArg, token::Comma>);
+
+/// `UseBoundGenericArg`
+#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(serde::Serialize, serde::Deserialize)]
+#[derive(Parse, Format, Print)]
+pub enum UseBoundGenericArg {
+	Lifetime(Lifetime),
+	Identifier(Identifier),
+	SelfUpper(token::SelfUpper),
 }
