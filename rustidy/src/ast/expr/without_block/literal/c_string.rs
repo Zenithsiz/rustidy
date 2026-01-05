@@ -1,0 +1,71 @@
+//! C string literal
+
+// Imports
+use {
+	super::{
+		Suffix,
+		escape::{NonNulByteEscapeError, NonNulUnicodeEscapeError, StringContinueError},
+	},
+	crate::{
+		Format,
+		Parse,
+		ParserStr,
+		Print,
+		ast::{
+			expr::without_block::literal::{NonNulByteEscape, NonNulUnicodeEscape, StringContinue},
+			whitespace::Whitespace,
+		},
+		parser,
+	},
+};
+
+
+/// `C_STRING_LITERAL`
+#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(serde::Serialize, serde::Deserialize)]
+#[derive(Parse, Format, Print)]
+#[parse(name = "a C string literal")]
+#[parse(error(name = StartQuote, fmt = "Expected `c\"`"))]
+#[parse(error(name = NonNulByteEscape(NonNulByteEscapeError), transparent))]
+#[parse(error(name = NonNulUnicodeEscape(NonNulUnicodeEscapeError), transparent))]
+#[parse(error(name = StringContinue(StringContinueError), transparent))]
+#[parse(error(name = ExpectedEndQuote, fmt = "Expected `\"` after `c\"`", fatal))]
+pub struct CStringLiteral {
+	#[format(whitespace)]
+	pub ws:     Whitespace,
+	#[parse(try_update_with = Self::parse)]
+	#[format(str)]
+	pub s:      ParserStr,
+	pub suffix: Option<Suffix>,
+}
+
+impl CStringLiteral {
+	fn parse(s: &mut &str) -> Result<(), CStringLiteralError> {
+		*s = s.strip_prefix("c\"").ok_or(CStringLiteralError::StartQuote)?;
+
+		loop {
+			match s.strip_prefix(|ch: char| ch.is_ascii() && !matches!(ch, '"' | '\\' | '\r' | '\0')) {
+				Some(rest) => *s = rest,
+				None => {
+					macro try_parse($Escape:ident) {
+						parser::try_parse_from_str(s, $Escape::parse)
+							.map_err(CStringLiteralError::$Escape)?
+							.is_ok()
+					}
+
+					match () {
+						() if try_parse!(NonNulByteEscape) => (),
+						() if try_parse!(NonNulUnicodeEscape) => (),
+						() if try_parse!(StringContinue) => (),
+
+						() => break,
+					}
+				},
+			}
+		}
+
+		*s = s.strip_prefix('"').ok_or(CStringLiteralError::ExpectedEndQuote)?;
+
+		Ok(())
+	}
+}

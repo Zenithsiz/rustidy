@@ -1554,88 +1554,6 @@
 									"prefix": [{ "first": 380, "rest": [] }, 381],
 									"value": {
 										"attrs": [],
-										"inner": { "stmts": [], "trailing_expr": null }
-									},
-									"suffix": [
-										{ "first": 382, "rest": [[{ "Line": 383 }, 384]] },
-										385
-									]
-								}
-							}
-						}
-					}
-				}
-			}
-		},
-		{
-			"attrs": [],
-			"inner": {
-				"Vis": {
-					"vis": null,
-					"inner": {
-						"Function": {
-							"qualifiers": {
-								"const_": null,
-								"async_": null,
-								"safety": null,
-								"extern_": null
-							},
-							"fn_": [{ "first": 386, "rest": [] }, 387],
-							"ident": { "NonKw": [{ "first": 388, "rest": [] }, 389] },
-							"generics": null,
-							"params": {
-								"prefix": [{ "first": 390, "rest": [] }, 391],
-								"value": null,
-								"suffix": [{ "first": 392, "rest": [] }, 393]
-							},
-							"ret": null,
-							"where_": null,
-							"body": {
-								"Expr": {
-									"prefix": [{ "first": 394, "rest": [] }, 395],
-									"value": {
-										"attrs": [],
-										"inner": { "stmts": [], "trailing_expr": null }
-									},
-									"suffix": [
-										{ "first": 396, "rest": [[{ "Line": 397 }, 398]] },
-										399
-									]
-								}
-							}
-						}
-					}
-				}
-			}
-		},
-		{
-			"attrs": [],
-			"inner": {
-				"Vis": {
-					"vis": null,
-					"inner": {
-						"Function": {
-							"qualifiers": {
-								"const_": null,
-								"async_": null,
-								"safety": null,
-								"extern_": null
-							},
-							"fn_": [{ "first": 400, "rest": [] }, 401],
-							"ident": { "NonKw": [{ "first": 402, "rest": [] }, 403] },
-							"generics": null,
-							"params": {
-								"prefix": [{ "first": 404, "rest": [] }, 405],
-								"value": null,
-								"suffix": [{ "first": 406, "rest": [] }, 407]
-							},
-							"ret": null,
-							"where_": null,
-							"body": {
-								"Expr": {
-									"prefix": [{ "first": 408, "rest": [] }, 409],
-									"value": {
-										"attrs": [],
 										"inner": {
 											"stmts": [
 												{
@@ -1645,9 +1563,129 @@
 																"attrs": [],
 																"inner": {
 																	"Literal": {
-																		"Integer": {
+																		"CString": {
+																			"ws": { "first": 382, "rest": [] },
+																			"s": 383,
+																			"suffix": null
+																		}
+																	}
+																}
+															},
+															"semi": [{ "first": 384, "rest": [] }, 385]
+														}
+													}
+												},
+												{
+													"Expression": {
+														"WithoutBlock": {
+															"expr": {
+																"attrs": [],
+																"inner": {
+																	"Literal": {
+																		"CString": {
+																			"ws": { "first": 386, "rest": [] },
+																			"s": 387,
+																			"suffix": [
+																				{ "first": 388, "rest": [] },
+																				389
+																			]
+																		}
+																	}
+																}
+															},
+															"semi": [{ "first": 390, "rest": [] }, 391]
+														}
+													}
+												},
+												{
+													"Expression": {
+														"WithoutBlock": {
+															"expr": {
+																"attrs": [],
+																"inner": {
+																	"Literal": {
+																		"CString": {
+																			"ws": { "first": 392, "rest": [] },
+																			"s": 393,
+																			"suffix": [
+																				{ "first": 394, "rest": [] },
+																				395
+																			]
+																		}
+																	}
+																}
+															},
+															"semi": [{ "first": 396, "rest": [] }, 397]
+														}
+													}
+												},
+												{
+													"Expression": {
+														"WithoutBlock": {
+															"expr": {
+																"attrs": [],
+																"inner": {
+																	"Literal": {
+																		"CString": {
+																			"ws": { "first": 398, "rest": [] },
+																			"s": 399,
+																			"suffix": null
+																		}
+																	}
+																}
+															},
+															"semi": [{ "first": 400, "rest": [] }, 401]
+														}
+													}
+												},
+												{
+													"Expression": {
+														"WithoutBlock": {
+															"expr": {
+																"attrs": [],
+																"inner": {
+																	"Literal": {
+																		"CString": {
+																			"ws": { "first": 402, "rest": [] },
+																			"s": 403,
+																			"suffix": null
+																		}
+																	}
+																}
+															},
+															"semi": [{ "first": 404, "rest": [] }, 405]
+														}
+													}
+												},
+												{
+													"Expression": {
+														"WithoutBlock": {
+															"expr": {
+																"attrs": [],
+																"inner": {
+																	"Literal": {
+																		"CString": {
+																			"ws": { "first": 406, "rest": [] },
+																			"s": 407,
+																			"suffix": null
+																		}
+																	}
+																}
+															},
+															"semi": [{ "first": 408, "rest": [] }, 409]
+														}
+													}
+												},
+												{
+													"Expression": {
+														"WithoutBlock": {
+															"expr": {
+																"attrs": [],
+																"inner": {
+																	"Literal": {
+																		"CString": {
 																			"ws": { "first": 410, "rest": [] },
-																			"inner": { "Decimal": 411 },
+																			"s": 411,
 																			"suffix": null
 																		}
 																	}
@@ -1664,9 +1702,9 @@
 																"attrs": [],
 																"inner": {
 																	"Literal": {
-																		"Integer": {
+																		"CString": {
 																			"ws": { "first": 414, "rest": [] },
-																			"inner": { "Decimal": 415 },
+																			"s": 415,
 																			"suffix": null
 																		}
 																	}
@@ -1683,9 +1721,9 @@
 																"attrs": [],
 																"inner": {
 																	"Literal": {
-																		"Integer": {
+																		"CString": {
 																			"ws": { "first": 418, "rest": [] },
-																			"inner": { "Decimal": 419 },
+																			"s": 419,
 																			"suffix": null
 																		}
 																	}
@@ -1702,9 +1740,9 @@
 																"attrs": [],
 																"inner": {
 																	"Literal": {
-																		"Integer": {
+																		"CString": {
 																			"ws": { "first": 422, "rest": [] },
-																			"inner": { "Decimal": 423 },
+																			"s": 423,
 																			"suffix": null
 																		}
 																	}
@@ -1721,18 +1759,15 @@
 																"attrs": [],
 																"inner": {
 																	"Literal": {
-																		"Integer": {
+																		"CString": {
 																			"ws": { "first": 426, "rest": [] },
-																			"inner": { "Decimal": 427 },
-																			"suffix": [
-																				{ "first": 428, "rest": [] },
-																				429
-																			]
+																			"s": 427,
+																			"suffix": null
 																		}
 																	}
 																}
 															},
-															"semi": [{ "first": 430, "rest": [] }, 431]
+															"semi": [{ "first": 428, "rest": [] }, 429]
 														}
 													}
 												},
@@ -1743,13 +1778,29 @@
 																"attrs": [],
 																"inner": {
 																	"Literal": {
-																		"Integer": {
-																			"ws": { "first": 432, "rest": [] },
-																			"inner": { "Decimal": 433 },
-																			"suffix": [
-																				{ "first": 434, "rest": [] },
-																				435
-																			]
+																		"CString": {
+																			"ws": { "first": 430, "rest": [] },
+																			"s": 431,
+																			"suffix": null
+																		}
+																	}
+																}
+															},
+															"semi": [{ "first": 432, "rest": [] }, 433]
+														}
+													}
+												},
+												{
+													"Expression": {
+														"WithoutBlock": {
+															"expr": {
+																"attrs": [],
+																"inner": {
+																	"Literal": {
+																		"CString": {
+																			"ws": { "first": 434, "rest": [] },
+																			"s": 435,
+																			"suffix": null
 																		}
 																	}
 																}
@@ -1757,122 +1808,12 @@
 															"semi": [{ "first": 436, "rest": [] }, 437]
 														}
 													}
-												},
-												{
-													"Expression": {
-														"WithoutBlock": {
-															"expr": {
-																"attrs": [],
-																"inner": {
-																	"Literal": {
-																		"Integer": {
-																			"ws": { "first": 438, "rest": [] },
-																			"inner": { "Decimal": 439 },
-																			"suffix": [
-																				{ "first": 440, "rest": [] },
-																				441
-																			]
-																		}
-																	}
-																}
-															},
-															"semi": [{ "first": 442, "rest": [] }, 443]
-														}
-													}
-												},
-												{
-													"Expression": {
-														"WithoutBlock": {
-															"expr": {
-																"attrs": [],
-																"inner": {
-																	"Literal": {
-																		"Integer": {
-																			"ws": { "first": 444, "rest": [] },
-																			"inner": { "Decimal": 445 },
-																			"suffix": [
-																				{ "first": 446, "rest": [] },
-																				447
-																			]
-																		}
-																	}
-																}
-															},
-															"semi": [{ "first": 448, "rest": [] }, 449]
-														}
-													}
-												},
-												{
-													"Expression": {
-														"WithoutBlock": {
-															"expr": {
-																"attrs": [],
-																"inner": {
-																	"Literal": {
-																		"Integer": {
-																			"ws": { "first": 450, "rest": [] },
-																			"inner": { "Decimal": 451 },
-																			"suffix": [
-																				{ "first": 452, "rest": [] },
-																				453
-																			]
-																		}
-																	}
-																}
-															},
-															"semi": [{ "first": 454, "rest": [] }, 455]
-														}
-													}
-												},
-												{
-													"Expression": {
-														"WithoutBlock": {
-															"expr": {
-																"attrs": [],
-																"inner": {
-																	"Literal": {
-																		"Integer": {
-																			"ws": { "first": 456, "rest": [] },
-																			"inner": { "Decimal": 457 },
-																			"suffix": [
-																				{ "first": 458, "rest": [] },
-																				459
-																			]
-																		}
-																	}
-																}
-															},
-															"semi": [{ "first": 460, "rest": [] }, 461]
-														}
-													}
-												},
-												{
-													"Expression": {
-														"WithoutBlock": {
-															"expr": {
-																"attrs": [],
-																"inner": {
-																	"Literal": {
-																		"Integer": {
-																			"ws": { "first": 462, "rest": [] },
-																			"inner": { "Decimal": 463 },
-																			"suffix": [
-																				{ "first": 464, "rest": [] },
-																				465
-																			]
-																		}
-																	}
-																}
-															},
-															"semi": [{ "first": 466, "rest": [] }, 467]
-														}
-													}
 												}
 											],
 											"trailing_expr": null
 										}
 									},
-									"suffix": [{ "first": 468, "rest": [] }, 469]
+									"suffix": [{ "first": 438, "rest": [] }, 439]
 								}
 							}
 						}
@@ -1893,19 +1834,60 @@
 								"safety": null,
 								"extern_": null
 							},
-							"fn_": [{ "first": 470, "rest": [] }, 471],
-							"ident": { "NonKw": [{ "first": 472, "rest": [] }, 473] },
+							"fn_": [{ "first": 440, "rest": [] }, 441],
+							"ident": { "NonKw": [{ "first": 442, "rest": [] }, 443] },
 							"generics": null,
 							"params": {
-								"prefix": [{ "first": 474, "rest": [] }, 475],
+								"prefix": [{ "first": 444, "rest": [] }, 445],
 								"value": null,
-								"suffix": [{ "first": 476, "rest": [] }, 477]
+								"suffix": [{ "first": 446, "rest": [] }, 447]
 							},
 							"ret": null,
 							"where_": null,
 							"body": {
 								"Expr": {
-									"prefix": [{ "first": 478, "rest": [] }, 479],
+									"prefix": [{ "first": 448, "rest": [] }, 449],
+									"value": {
+										"attrs": [],
+										"inner": { "stmts": [], "trailing_expr": null }
+									},
+									"suffix": [
+										{ "first": 450, "rest": [[{ "Line": 451 }, 452]] },
+										453
+									]
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		{
+			"attrs": [],
+			"inner": {
+				"Vis": {
+					"vis": null,
+					"inner": {
+						"Function": {
+							"qualifiers": {
+								"const_": null,
+								"async_": null,
+								"safety": null,
+								"extern_": null
+							},
+							"fn_": [{ "first": 454, "rest": [] }, 455],
+							"ident": { "NonKw": [{ "first": 456, "rest": [] }, 457] },
+							"generics": null,
+							"params": {
+								"prefix": [{ "first": 458, "rest": [] }, 459],
+								"value": null,
+								"suffix": [{ "first": 460, "rest": [] }, 461]
+							},
+							"ret": null,
+							"where_": null,
+							"body": {
+								"Expr": {
+									"prefix": [{ "first": 462, "rest": [] }, 463],
 									"value": {
 										"attrs": [],
 										"inner": {
@@ -1917,16 +1899,89 @@
 																"attrs": [],
 																"inner": {
 																	"Literal": {
-																		"Float": {
+																		"Integer": {
+																			"ws": { "first": 464, "rest": [] },
+																			"inner": { "Decimal": 465 },
+																			"suffix": null
+																		}
+																	}
+																}
+															},
+															"semi": [{ "first": 466, "rest": [] }, 467]
+														}
+													}
+												},
+												{
+													"Expression": {
+														"WithoutBlock": {
+															"expr": {
+																"attrs": [],
+																"inner": {
+																	"Literal": {
+																		"Integer": {
+																			"ws": { "first": 468, "rest": [] },
+																			"inner": { "Decimal": 469 },
+																			"suffix": null
+																		}
+																	}
+																}
+															},
+															"semi": [{ "first": 470, "rest": [] }, 471]
+														}
+													}
+												},
+												{
+													"Expression": {
+														"WithoutBlock": {
+															"expr": {
+																"attrs": [],
+																"inner": {
+																	"Literal": {
+																		"Integer": {
+																			"ws": { "first": 472, "rest": [] },
+																			"inner": { "Decimal": 473 },
+																			"suffix": null
+																		}
+																	}
+																}
+															},
+															"semi": [{ "first": 474, "rest": [] }, 475]
+														}
+													}
+												},
+												{
+													"Expression": {
+														"WithoutBlock": {
+															"expr": {
+																"attrs": [],
+																"inner": {
+																	"Literal": {
+																		"Integer": {
+																			"ws": { "first": 476, "rest": [] },
+																			"inner": { "Decimal": 477 },
+																			"suffix": null
+																		}
+																	}
+																}
+															},
+															"semi": [{ "first": 478, "rest": [] }, 479]
+														}
+													}
+												},
+												{
+													"Expression": {
+														"WithoutBlock": {
+															"expr": {
+																"attrs": [],
+																"inner": {
+																	"Literal": {
+																		"Integer": {
 																			"ws": { "first": 480, "rest": [] },
-																			"int": 481,
-																			"dot": [
+																			"inner": { "Decimal": 481 },
+																			"suffix": [
 																				{ "first": 482, "rest": [] },
 																				483
-																			],
-																			"frac": null,
-																			"exponent": null,
-																			"suffix": null
+																			]
 																		}
 																	}
 																}
@@ -1942,74 +1997,18 @@
 																"attrs": [],
 																"inner": {
 																	"Literal": {
-																		"Float": {
+																		"Integer": {
 																			"ws": { "first": 486, "rest": [] },
-																			"int": 487,
-																			"dot": [
+																			"inner": { "Decimal": 487 },
+																			"suffix": [
 																				{ "first": 488, "rest": [] },
 																				489
-																			],
-																			"frac": 490,
-																			"exponent": null,
-																			"suffix": null
-																		}
-																	}
-																}
-															},
-															"semi": [{ "first": 491, "rest": [] }, 492]
-														}
-													}
-												},
-												{
-													"Expression": {
-														"WithoutBlock": {
-															"expr": {
-																"attrs": [],
-																"inner": {
-																	"Literal": {
-																		"Float": {
-																			"ws": { "first": 493, "rest": [] },
-																			"int": 494,
-																			"dot": [
-																				{ "first": 495, "rest": [] },
-																				496
-																			],
-																			"frac": 497,
-																			"exponent": null,
-																			"suffix": null
-																		}
-																	}
-																}
-															},
-															"semi": [{ "first": 498, "rest": [] }, 499]
-														}
-													}
-												},
-												{
-													"Expression": {
-														"WithoutBlock": {
-															"expr": {
-																"attrs": [],
-																"inner": {
-																	"Literal": {
-																		"Float": {
-																			"ws": { "first": 500, "rest": [] },
-																			"int": 501,
-																			"dot": [
-																				{ "first": 502, "rest": [] },
-																				503
-																			],
-																			"frac": 504,
-																			"exponent": null,
-																			"suffix": [
-																				{ "first": 505, "rest": [] },
-																				506
 																			]
 																		}
 																	}
 																}
 															},
-															"semi": [{ "first": 507, "rest": [] }, 508]
+															"semi": [{ "first": 490, "rest": [] }, 491]
 														}
 													}
 												},
@@ -2020,131 +2019,18 @@
 																"attrs": [],
 																"inner": {
 																	"Literal": {
-																		"Float": {
-																			"ws": { "first": 509, "rest": [] },
-																			"int": 510,
-																			"dot": null,
-																			"frac": null,
-																			"exponent": 511,
-																			"suffix": null
-																		}
-																	}
-																}
-															},
-															"semi": [{ "first": 512, "rest": [] }, 513]
-														}
-													}
-												},
-												{
-													"Expression": {
-														"WithoutBlock": {
-															"expr": {
-																"attrs": [],
-																"inner": {
-																	"Literal": {
-																		"Float": {
-																			"ws": { "first": 514, "rest": [] },
-																			"int": 515,
-																			"dot": null,
-																			"frac": null,
-																			"exponent": 516,
-																			"suffix": null
-																		}
-																	}
-																}
-															},
-															"semi": [{ "first": 517, "rest": [] }, 518]
-														}
-													}
-												},
-												{
-													"Expression": {
-														"WithoutBlock": {
-															"expr": {
-																"attrs": [],
-																"inner": {
-																	"Literal": {
-																		"Float": {
-																			"ws": { "first": 519, "rest": [] },
-																			"int": 520,
-																			"dot": null,
-																			"frac": null,
-																			"exponent": 521,
-																			"suffix": null
-																		}
-																	}
-																}
-															},
-															"semi": [{ "first": 522, "rest": [] }, 523]
-														}
-													}
-												},
-												{
-													"Expression": {
-														"WithoutBlock": {
-															"expr": {
-																"attrs": [],
-																"inner": {
-																	"Literal": {
-																		"Float": {
-																			"ws": { "first": 524, "rest": [] },
-																			"int": 525,
-																			"dot": null,
-																			"frac": null,
-																			"exponent": 526,
-																			"suffix": null
-																		}
-																	}
-																}
-															},
-															"semi": [{ "first": 527, "rest": [] }, 528]
-														}
-													}
-												},
-												{
-													"Expression": {
-														"WithoutBlock": {
-															"expr": {
-																"attrs": [],
-																"inner": {
-																	"Literal": {
-																		"Float": {
-																			"ws": { "first": 529, "rest": [] },
-																			"int": 530,
-																			"dot": null,
-																			"frac": null,
-																			"exponent": 531,
-																			"suffix": null
-																		}
-																	}
-																}
-															},
-															"semi": [{ "first": 532, "rest": [] }, 533]
-														}
-													}
-												},
-												{
-													"Expression": {
-														"WithoutBlock": {
-															"expr": {
-																"attrs": [],
-																"inner": {
-																	"Literal": {
-																		"Float": {
-																			"ws": { "first": 534, "rest": [] },
-																			"int": 535,
-																			"dot": null,
-																			"frac": null,
-																			"exponent": 536,
+																		"Integer": {
+																			"ws": { "first": 492, "rest": [] },
+																			"inner": { "Decimal": 493 },
 																			"suffix": [
-																				{ "first": 537, "rest": [] },
-																				538
+																				{ "first": 494, "rest": [] },
+																				495
 																			]
 																		}
 																	}
 																}
 															},
-															"semi": [{ "first": 539, "rest": [] }, 540]
+															"semi": [{ "first": 496, "rest": [] }, 497]
 														}
 													}
 												},
@@ -2155,21 +2041,84 @@
 																"attrs": [],
 																"inner": {
 																	"Literal": {
-																		"Float": {
-																			"ws": { "first": 541, "rest": [] },
-																			"int": 542,
-																			"dot": null,
-																			"frac": null,
-																			"exponent": 543,
+																		"Integer": {
+																			"ws": { "first": 498, "rest": [] },
+																			"inner": { "Decimal": 499 },
 																			"suffix": [
-																				{ "first": 544, "rest": [] },
-																				545
+																				{ "first": 500, "rest": [] },
+																				501
 																			]
 																		}
 																	}
 																}
 															},
-															"semi": [{ "first": 546, "rest": [] }, 547]
+															"semi": [{ "first": 502, "rest": [] }, 503]
+														}
+													}
+												},
+												{
+													"Expression": {
+														"WithoutBlock": {
+															"expr": {
+																"attrs": [],
+																"inner": {
+																	"Literal": {
+																		"Integer": {
+																			"ws": { "first": 504, "rest": [] },
+																			"inner": { "Decimal": 505 },
+																			"suffix": [
+																				{ "first": 506, "rest": [] },
+																				507
+																			]
+																		}
+																	}
+																}
+															},
+															"semi": [{ "first": 508, "rest": [] }, 509]
+														}
+													}
+												},
+												{
+													"Expression": {
+														"WithoutBlock": {
+															"expr": {
+																"attrs": [],
+																"inner": {
+																	"Literal": {
+																		"Integer": {
+																			"ws": { "first": 510, "rest": [] },
+																			"inner": { "Decimal": 511 },
+																			"suffix": [
+																				{ "first": 512, "rest": [] },
+																				513
+																			]
+																		}
+																	}
+																}
+															},
+															"semi": [{ "first": 514, "rest": [] }, 515]
+														}
+													}
+												},
+												{
+													"Expression": {
+														"WithoutBlock": {
+															"expr": {
+																"attrs": [],
+																"inner": {
+																	"Literal": {
+																		"Integer": {
+																			"ws": { "first": 516, "rest": [] },
+																			"inner": { "Decimal": 517 },
+																			"suffix": [
+																				{ "first": 518, "rest": [] },
+																				519
+																			]
+																		}
+																	}
+																}
+															},
+															"semi": [{ "first": 520, "rest": [] }, 521]
 														}
 													}
 												}
@@ -2177,7 +2126,7 @@
 											"trailing_expr": null
 										}
 									},
-									"suffix": [{ "first": 548, "rest": [] }, 549]
+									"suffix": [{ "first": 522, "rest": [] }, 523]
 								}
 							}
 						}
@@ -2198,19 +2147,19 @@
 								"safety": null,
 								"extern_": null
 							},
-							"fn_": [{ "first": 550, "rest": [] }, 551],
-							"ident": { "NonKw": [{ "first": 552, "rest": [] }, 553] },
+							"fn_": [{ "first": 524, "rest": [] }, 525],
+							"ident": { "NonKw": [{ "first": 526, "rest": [] }, 527] },
 							"generics": null,
 							"params": {
-								"prefix": [{ "first": 554, "rest": [] }, 555],
+								"prefix": [{ "first": 528, "rest": [] }, 529],
 								"value": null,
-								"suffix": [{ "first": 556, "rest": [] }, 557]
+								"suffix": [{ "first": 530, "rest": [] }, 531]
 							},
 							"ret": null,
 							"where_": null,
 							"body": {
 								"Expr": {
-									"prefix": [{ "first": 558, "rest": [] }, 559],
+									"prefix": [{ "first": 532, "rest": [] }, 533],
 									"value": {
 										"attrs": [],
 										"inner": {
@@ -2222,11 +2171,21 @@
 																"attrs": [],
 																"inner": {
 																	"Literal": {
-																		"True": [{ "first": 560, "rest": [] }, 561]
+																		"Float": {
+																			"ws": { "first": 534, "rest": [] },
+																			"int": 535,
+																			"dot": [
+																				{ "first": 536, "rest": [] },
+																				537
+																			],
+																			"frac": null,
+																			"exponent": null,
+																			"suffix": null
+																		}
 																	}
 																}
 															},
-															"semi": [{ "first": 562, "rest": [] }, 563]
+															"semi": [{ "first": 538, "rest": [] }, 539]
 														}
 													}
 												},
@@ -2237,11 +2196,234 @@
 																"attrs": [],
 																"inner": {
 																	"Literal": {
-																		"False": [{ "first": 564, "rest": [] }, 565]
+																		"Float": {
+																			"ws": { "first": 540, "rest": [] },
+																			"int": 541,
+																			"dot": [
+																				{ "first": 542, "rest": [] },
+																				543
+																			],
+																			"frac": 544,
+																			"exponent": null,
+																			"suffix": null
+																		}
+																	}
+																}
+															},
+															"semi": [{ "first": 545, "rest": [] }, 546]
+														}
+													}
+												},
+												{
+													"Expression": {
+														"WithoutBlock": {
+															"expr": {
+																"attrs": [],
+																"inner": {
+																	"Literal": {
+																		"Float": {
+																			"ws": { "first": 547, "rest": [] },
+																			"int": 548,
+																			"dot": [
+																				{ "first": 549, "rest": [] },
+																				550
+																			],
+																			"frac": 551,
+																			"exponent": null,
+																			"suffix": null
+																		}
+																	}
+																}
+															},
+															"semi": [{ "first": 552, "rest": [] }, 553]
+														}
+													}
+												},
+												{
+													"Expression": {
+														"WithoutBlock": {
+															"expr": {
+																"attrs": [],
+																"inner": {
+																	"Literal": {
+																		"Float": {
+																			"ws": { "first": 554, "rest": [] },
+																			"int": 555,
+																			"dot": [
+																				{ "first": 556, "rest": [] },
+																				557
+																			],
+																			"frac": 558,
+																			"exponent": null,
+																			"suffix": [
+																				{ "first": 559, "rest": [] },
+																				560
+																			]
+																		}
+																	}
+																}
+															},
+															"semi": [{ "first": 561, "rest": [] }, 562]
+														}
+													}
+												},
+												{
+													"Expression": {
+														"WithoutBlock": {
+															"expr": {
+																"attrs": [],
+																"inner": {
+																	"Literal": {
+																		"Float": {
+																			"ws": { "first": 563, "rest": [] },
+																			"int": 564,
+																			"dot": null,
+																			"frac": null,
+																			"exponent": 565,
+																			"suffix": null
+																		}
 																	}
 																}
 															},
 															"semi": [{ "first": 566, "rest": [] }, 567]
+														}
+													}
+												},
+												{
+													"Expression": {
+														"WithoutBlock": {
+															"expr": {
+																"attrs": [],
+																"inner": {
+																	"Literal": {
+																		"Float": {
+																			"ws": { "first": 568, "rest": [] },
+																			"int": 569,
+																			"dot": null,
+																			"frac": null,
+																			"exponent": 570,
+																			"suffix": null
+																		}
+																	}
+																}
+															},
+															"semi": [{ "first": 571, "rest": [] }, 572]
+														}
+													}
+												},
+												{
+													"Expression": {
+														"WithoutBlock": {
+															"expr": {
+																"attrs": [],
+																"inner": {
+																	"Literal": {
+																		"Float": {
+																			"ws": { "first": 573, "rest": [] },
+																			"int": 574,
+																			"dot": null,
+																			"frac": null,
+																			"exponent": 575,
+																			"suffix": null
+																		}
+																	}
+																}
+															},
+															"semi": [{ "first": 576, "rest": [] }, 577]
+														}
+													}
+												},
+												{
+													"Expression": {
+														"WithoutBlock": {
+															"expr": {
+																"attrs": [],
+																"inner": {
+																	"Literal": {
+																		"Float": {
+																			"ws": { "first": 578, "rest": [] },
+																			"int": 579,
+																			"dot": null,
+																			"frac": null,
+																			"exponent": 580,
+																			"suffix": null
+																		}
+																	}
+																}
+															},
+															"semi": [{ "first": 581, "rest": [] }, 582]
+														}
+													}
+												},
+												{
+													"Expression": {
+														"WithoutBlock": {
+															"expr": {
+																"attrs": [],
+																"inner": {
+																	"Literal": {
+																		"Float": {
+																			"ws": { "first": 583, "rest": [] },
+																			"int": 584,
+																			"dot": null,
+																			"frac": null,
+																			"exponent": 585,
+																			"suffix": null
+																		}
+																	}
+																}
+															},
+															"semi": [{ "first": 586, "rest": [] }, 587]
+														}
+													}
+												},
+												{
+													"Expression": {
+														"WithoutBlock": {
+															"expr": {
+																"attrs": [],
+																"inner": {
+																	"Literal": {
+																		"Float": {
+																			"ws": { "first": 588, "rest": [] },
+																			"int": 589,
+																			"dot": null,
+																			"frac": null,
+																			"exponent": 590,
+																			"suffix": [
+																				{ "first": 591, "rest": [] },
+																				592
+																			]
+																		}
+																	}
+																}
+															},
+															"semi": [{ "first": 593, "rest": [] }, 594]
+														}
+													}
+												},
+												{
+													"Expression": {
+														"WithoutBlock": {
+															"expr": {
+																"attrs": [],
+																"inner": {
+																	"Literal": {
+																		"Float": {
+																			"ws": { "first": 595, "rest": [] },
+																			"int": 596,
+																			"dot": null,
+																			"frac": null,
+																			"exponent": 597,
+																			"suffix": [
+																				{ "first": 598, "rest": [] },
+																				599
+																			]
+																		}
+																	}
+																}
+															},
+															"semi": [{ "first": 600, "rest": [] }, 601]
 														}
 													}
 												}
@@ -2249,7 +2431,79 @@
 											"trailing_expr": null
 										}
 									},
-									"suffix": [{ "first": 568, "rest": [] }, 569]
+									"suffix": [{ "first": 602, "rest": [] }, 603]
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		{
+			"attrs": [],
+			"inner": {
+				"Vis": {
+					"vis": null,
+					"inner": {
+						"Function": {
+							"qualifiers": {
+								"const_": null,
+								"async_": null,
+								"safety": null,
+								"extern_": null
+							},
+							"fn_": [{ "first": 604, "rest": [] }, 605],
+							"ident": { "NonKw": [{ "first": 606, "rest": [] }, 607] },
+							"generics": null,
+							"params": {
+								"prefix": [{ "first": 608, "rest": [] }, 609],
+								"value": null,
+								"suffix": [{ "first": 610, "rest": [] }, 611]
+							},
+							"ret": null,
+							"where_": null,
+							"body": {
+								"Expr": {
+									"prefix": [{ "first": 612, "rest": [] }, 613],
+									"value": {
+										"attrs": [],
+										"inner": {
+											"stmts": [
+												{
+													"Expression": {
+														"WithoutBlock": {
+															"expr": {
+																"attrs": [],
+																"inner": {
+																	"Literal": {
+																		"True": [{ "first": 614, "rest": [] }, 615]
+																	}
+																}
+															},
+															"semi": [{ "first": 616, "rest": [] }, 617]
+														}
+													}
+												},
+												{
+													"Expression": {
+														"WithoutBlock": {
+															"expr": {
+																"attrs": [],
+																"inner": {
+																	"Literal": {
+																		"False": [{ "first": 618, "rest": [] }, 619]
+																	}
+																}
+															},
+															"semi": [{ "first": 620, "rest": [] }, 621]
+														}
+													}
+												}
+											],
+											"trailing_expr": null
+										}
+									},
+									"suffix": [{ "first": 622, "rest": [] }, 623]
 								}
 							}
 						}
@@ -2258,6 +2512,6 @@
 			}
 		}
 	],
-	"suffix_ws": { "first": 570, "rest": [] },
+	"suffix_ws": { "first": 624, "rest": [] },
 	"trailing_line_comment": null
 }

@@ -9,6 +9,7 @@ use {
 			without_block::literal::{
 				ByteLiteral,
 				ByteStringLiteral,
+				CStringLiteral,
 				CharLiteral,
 				FloatLiteral,
 				RawByteStringLiteral,
@@ -230,7 +231,7 @@ pub enum Token {
 	ByteLiteral(ByteLiteral),
 	ByteStringLiteral(ByteStringLiteral),
 	RawByteStringLiteral(RawByteStringLiteral),
-	CStringLiteral(!),
+	CStringLiteral(CStringLiteral),
 	RawCStringLiteral(!),
 	IntegerLiteral(IntegerLiteral),
 	FloatLiteral(FloatLiteral),

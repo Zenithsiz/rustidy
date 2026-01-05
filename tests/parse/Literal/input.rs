@@ -89,7 +89,20 @@ fn raw_byte_string() {
 }
 
 fn c_string() {
-	// TODO:
+	c"";
+	c""e;
+	c""abc;
+	c"a";
+	c"\'";
+	c"\"";
+	c"\\";
+	c"\x7f";
+	c"\xff";
+	c"\n";
+	c"\r";
+	c"\t";
+	c"\
+";
 }
 
 fn raw_c_string() {

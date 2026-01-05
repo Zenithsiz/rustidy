@@ -3,6 +3,7 @@
 // Modules
 pub mod byte;
 pub mod byte_string;
+pub mod c_string;
 pub mod char;
 pub mod escape;
 pub mod float;
@@ -16,8 +17,17 @@ pub mod suffix;
 pub use self::{
 	byte::ByteLiteral,
 	byte_string::ByteStringLiteral,
+	c_string::CStringLiteral,
 	char::CharLiteral,
-	escape::{AsciiEscape, ByteEscape, QuoteEscape, StringContinue, UnicodeEscape},
+	escape::{
+		AsciiEscape,
+		ByteEscape,
+		NonNulByteEscape,
+		NonNulUnicodeEscape,
+		QuoteEscape,
+		StringContinue,
+		UnicodeEscape,
+	},
 	float::FloatLiteral,
 	int::IntegerLiteral,
 	raw_byte_string::RawByteStringLiteral,
@@ -41,7 +51,7 @@ pub enum LiteralExpression {
 	Byte(ByteLiteral),
 	ByteString(ByteStringLiteral),
 	RawByteString(RawByteStringLiteral),
-	CString(!),
+	CString(CStringLiteral),
 	RawCString(!),
 	Integer(IntegerLiteral),
 	True(token::True),

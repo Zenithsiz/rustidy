@@ -1,7 +1,7 @@
 //! Escapes
 
 // Imports
-use crate::{Format, Parse, ParserStr, Print};
+use crate::{Format, Parse, ParserStr, Print, parser};
 
 /// `QUOTE_ESCAPE`
 #[derive(PartialEq, Eq, Clone, Debug)]
@@ -96,6 +96,29 @@ impl ByteEscape {
 	}
 }
 
+/// `BYTE_ESCAPE` except `\0`
+#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(serde::Serialize, serde::Deserialize)]
+#[derive(Parse, Format, Print)]
+#[parse(error(name = ByteEscape(ByteEscapeError), transparent))]
+#[parse(error(name = Nul, fmt = "Nul escape isn't allowed", fatal))]
+pub struct NonNulByteEscape(
+	#[parse(try_update_with = Self::parse)]
+	#[format(str)]
+	pub ParserStr,
+);
+
+impl NonNulByteEscape {
+	pub fn parse(s: &mut &str) -> Result<(), NonNulByteEscapeError> {
+		let s = parser::parse_from_str(s, ByteEscape::parse).map_err(NonNulByteEscapeError::ByteEscape)?;
+		if s == "\\0" {
+			return Err(NonNulByteEscapeError::Nul);
+		}
+
+		Ok(())
+	}
+}
+
 /// `UNICODE_ESCAPE`
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
@@ -126,6 +149,30 @@ impl UnicodeEscape {
 		}
 
 		*s = s.strip_prefix('}').ok_or(UnicodeEscapeError::Escape)?;
+
+		Ok(())
+	}
+}
+
+/// `UNICODE_ESCAPE` except `\u{0}` (and variants)
+#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(serde::Serialize, serde::Deserialize)]
+#[derive(Parse, Format, Print)]
+#[parse(error(name = UnicodeEscape(UnicodeEscapeError), transparent))]
+#[parse(error(name = Nul, fmt = "Nul escape isn't allowed", fatal))]
+pub struct NonNulUnicodeEscape(
+	#[parse(try_update_with = Self::parse)]
+	#[format(str)]
+	pub ParserStr,
+);
+
+impl NonNulUnicodeEscape {
+	pub fn parse(s: &mut &str) -> Result<(), NonNulUnicodeEscapeError> {
+		let s = parser::parse_from_str(s, UnicodeEscape::parse).map_err(NonNulUnicodeEscapeError::UnicodeEscape)?;
+		// TODO: This check should be done better
+		if s.chars().all(|ch| !ch.is_ascii_digit() || ch == '0') {
+			return Err(NonNulUnicodeEscapeError::Nul);
+		}
 
 		Ok(())
 	}
