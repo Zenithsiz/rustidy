@@ -5,7 +5,7 @@ use {
 	super::{
 		delimited::{Braced, Bracketed, Parenthesized},
 		expr::Expression,
-		line::RemainingLine,
+		line::{RemainingBlockComment, RemainingLine},
 		path::SimplePath,
 		token,
 	},
@@ -38,8 +38,8 @@ pub struct InnerAttribute {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub enum InnerDocComment {
-	InnerLine(InnerLineDoc),
-	InnerBlock(!),
+	Line(InnerLineDoc),
+	Block(InnerBlockDoc),
 }
 
 /// `INNER_LINE_DOC`
@@ -49,6 +49,15 @@ pub enum InnerDocComment {
 pub struct InnerLineDoc {
 	pub prefix:  token::InnerLineDoc,
 	pub comment: RemainingLine,
+}
+
+/// `INNER_BLOCK_DOC`
+#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(serde::Serialize, serde::Deserialize)]
+#[derive(Parse, Format, Print)]
+pub struct InnerBlockDoc {
+	pub prefix:  token::InnerBlockDoc,
+	pub comment: RemainingBlockComment,
 }
 
 /// Outer attribute or doc comment
@@ -74,8 +83,8 @@ pub struct OuterAttribute {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub enum OuterDocComment {
-	OuterLine(OuterLineDoc),
-	OuterBlock(!),
+	Line(OuterLineDoc),
+	Block(OuterBlockDoc),
 }
 
 /// `OUTER_LINE_DOC`
@@ -85,6 +94,17 @@ pub enum OuterDocComment {
 pub struct OuterLineDoc {
 	pub prefix:  token::OuterLineDoc,
 	pub comment: RemainingLine,
+}
+
+/// `OUTER_BLOCK_DOC`
+#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(serde::Serialize, serde::Deserialize)]
+#[derive(Parse, Format, Print)]
+pub struct OuterBlockDoc {
+	pub prefix:  token::OuterBlockDoc,
+	// TODO: This should technically need whitespace before if we find `/**/**/*/`,
+	//       but the reference doesn't seem to mention this, so we allow it.
+	pub comment: RemainingBlockComment,
 }
 
 /// `Attr`

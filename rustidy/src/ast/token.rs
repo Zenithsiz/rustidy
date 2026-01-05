@@ -90,6 +90,8 @@ pub macro decl_tokens(
 decl_tokens! {
 	InnerLineDoc = "//!";
 	OuterLineDoc = "///";
+	InnerBlockDoc = "/*!";
+	OuterBlockDoc = "/**";
 
 	Super = "super";
 	SelfLower = "self";

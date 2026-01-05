@@ -22,3 +22,40 @@ impl RemainingLine {
 		};
 	}
 }
+
+/// Characters remaining until the end of block comment
+// TODO: This should not be in this file, or maybe this file should
+//       just be merged with `attr.rs`.
+#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(serde::Serialize, serde::Deserialize)]
+#[derive(Parse, Format, Print)]
+#[parse(name = "remaining characters in block comment")]
+#[parse(error(name = MissingCommentEnd, fmt = "Expected `*/` after `/*`", fatal))]
+pub struct RemainingBlockComment(
+	#[parse(try_update_with = Self::parse)]
+	#[format(str)]
+	pub ParserStr,
+);
+
+impl RemainingBlockComment {
+	// TODO: Deduplicate this with `whitespace::BlockComment::parse`
+	fn parse(s: &mut &str) -> Result<(), RemainingBlockCommentError> {
+		let mut depth = 1;
+		while depth != 0 {
+			let close_idx = s.find("*/").ok_or(RemainingBlockCommentError::MissingCommentEnd)?;
+
+			match s[..close_idx].find("/*") {
+				Some(open_idx) => {
+					*s = &s[open_idx + 2..];
+					depth += 1;
+				},
+				None => {
+					*s = &s[close_idx + 2..];
+					depth -= 1;
+				},
+			}
+		}
+
+		Ok(())
+	}
+}

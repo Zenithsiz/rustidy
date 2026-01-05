@@ -181,7 +181,7 @@ pub enum Comment {
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
-#[parse(error(name = NoComment, fmt = "Expected `/*`"))]
+#[parse(error(name = NoComment, fmt = "Expected `/*` (except `/*!` or `/**`)"))]
 #[parse(error(name = MissingCommentEnd, fmt = "Expected `*/` after `/*`", fatal))]
 pub struct BlockComment(
 	#[parse(try_update_with = Self::parse)]
@@ -191,8 +191,10 @@ pub struct BlockComment(
 
 impl BlockComment {
 	fn parse(s: &mut &str) -> Result<(), BlockCommentError> {
+		let is_doc_comment = (s.starts_with("/**") && !s.starts_with("/***")) || s.starts_with("/*!");
+
 		match s.strip_prefix("/*") {
-			Some(rest) => {
+			Some(rest) if !is_doc_comment => {
 				*s = rest;
 				let mut depth = 1;
 				while depth != 0 {
@@ -211,7 +213,7 @@ impl BlockComment {
 				}
 				Ok(())
 			},
-			None => Err(BlockCommentError::NoComment),
+			_ => Err(BlockCommentError::NoComment),
 		}
 	}
 }
