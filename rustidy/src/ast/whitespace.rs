@@ -298,18 +298,8 @@ mod tests {
 		config: &Config,
 		kind: FormatKind,
 	) -> Result<(), AppError> {
-		let mut parser_expected = Parser::new(expected);
-		let whitespace_expected = parser_expected
-			.parse::<Whitespace>()
-			.map_err(|err| err.to_app_error(&parser_expected))
-			.with_context(|| format!("Unable to parse expected whitespace: {expected:?}"))?;
-		ensure!(
-			parser_expected.is_finished(),
-			"Parser didn't parse all the expected whitespace: {expected:?}"
-		);
-
 		let mut parser = Parser::new(source);
-		let whitespace = parser
+		let mut whitespace = parser
 			.parse::<Whitespace>()
 			.map_err(|err| err.to_app_error(&parser))
 			.with_context(|| format!("Unable to parse whitespace: {source:?}"))?;
@@ -322,55 +312,20 @@ mod tests {
 		let mut replacements = Replacements::new();
 		let mut fmt_ctx = format::Context::new(&parser, &mut replacements, fmt_config);
 		fmt_ctx.set_indent_depth(config.indent_depth);
-		let mut whitespace_output = whitespace.clone();
-		whitespace_output.format(&mut fmt_ctx, kind);
+		whitespace.format(&mut fmt_ctx, kind);
 
 		let mut print_fmt = print::PrintFmt::new(&parser, &replacements);
-		whitespace_output.print(&mut print_fmt);
+		whitespace.print(&mut print_fmt);
 		let output = print_fmt.output();
-
-		let whitespace_debug = |parser: &Parser, whitespace: &Whitespace| {
-			whitespace
-				.0
-				.iter()
-				.map(|comment| match comment {
-					either::Either::Left(ws) => parser.str(ws.0).replace(' ', "·").replace('\t', "⭾"),
-					either::Either::Right(comment) => match comment {
-						Comment::Line(comment) => parser.str(comment.0).replace(' ', "·").replace('\t', "⭾"),
-						Comment::Block(comment) => parser.str(comment.0).replace(' ', "·").replace('\t', "⭾"),
-					},
-				})
-				.collect::<Vec<_>>()
-		};
 
 		let source = source.replace(' ', "·").replace('\t', "⭾");
 		let expected = expected.replace(' ', "·").replace('\t', "⭾");
 		let output = output.replace(' ', "·").replace('\t', "⭾");
 
-		// TODO: We only have ascii in the tests, but this breaks on non-ascii,
-		//       we should use a proper table to represent the errors.
-		let source_debug_len = source.chars().map(|ch| ch.escape_debug().len()).sum::<usize>();
-		let expected_debug_len = expected.chars().map(|ch| ch.escape_debug().len()).sum::<usize>();
-		let output_debug_len = output.chars().map(|ch| ch.escape_debug().len()).sum::<usize>();
-		let max_input_len = [source_debug_len, expected_debug_len, output_debug_len]
-			.into_iter()
-			.max()
-			.expect("Exists");
-		let source_debug_padding = " ".repeat(max_input_len - source_debug_len);
-		let expected_debug_padding = " ".repeat(max_input_len - expected_debug_len);
-		let output_debug_padding = " ".repeat(max_input_len - output_debug_len);
-
 		ensure!(
 			output == expected,
-			"Found wrong output.\nKind    : {:?}\nInput   : {:?}{source_debug_padding} {:?}\nExpected: \
-			 {:?}{expected_debug_padding} {:?}\nFound   : {:?}{output_debug_padding} {:?}",
-			kind,
-			source,
-			whitespace_debug(&parser, &whitespace),
-			expected,
-			whitespace_debug(&parser_expected, &whitespace_expected),
-			output,
-			whitespace_debug(&parser, &whitespace_output),
+			"Found wrong output.\nKind    : {kind:?}\nInput   : {source:?}\nExpected: {expected:?}\nFound   : \
+			 {output:?}"
 		);
 
 		Ok(())
