@@ -90,12 +90,6 @@ struct FieldAttrs {
 	#[darling(default)]
 	indent: bool,
 
-	#[darling(default)]
-	str: bool,
-
-	#[darling(default)]
-	whitespace: bool,
-
 	with: Option<syn::Expr>,
 
 	#[darling(multiple)]
@@ -267,14 +261,6 @@ fn derive_struct(fields: &darling::ast::Fields<FieldAttrs>) -> Impls<syn::Expr, 
 	let prefix_ws_fields = fields.iter().enumerate().map(|(field_idx, field)| -> syn::Expr {
 		let field_ident = util::field_member_access(field_idx, field);
 
-		if field.str {
-			return parse_quote! { return None };
-		}
-
-		if field.whitespace {
-			return parse_quote! { return Some(&mut self.#field_ident) };
-		}
-
 		parse_quote! {{
 			// TODO: Once polonius comes around, move this down
 			let is_empty = crate::format::Format::is_empty(&mut self.#field_ident, ctx);
@@ -308,22 +294,13 @@ fn derive_struct(fields: &darling::ast::Fields<FieldAttrs>) -> Impls<syn::Expr, 
 fn derive_struct_field(field_idx: usize, field: &FieldAttrs) -> Impls<syn::Expr, syn::Expr, syn::Expr, ()> {
 	let field_ident = util::field_member_access(field_idx, field);
 
-	let range = match field.str {
-		true => parse_quote! { compute_range.add_str(self.#field_ident, ctx) },
-		false => parse_quote! { compute_range.add(&mut self.#field_ident, ctx) },
-	};
-	let len = match field.str {
-		true => parse_quote! { ctx.parser().str(self.#field_ident).len() },
-		false => parse_quote! { crate::format::Format::len(&mut self.#field_ident, ctx) },
-	};
+	let range = parse_quote! { compute_range.add(&mut self.#field_ident, ctx) };
+	let len = parse_quote! { crate::format::Format::len(&mut self.#field_ident, ctx) };
 
 	let format = self::derive_format(
 		parse_quote! { &mut self.#field_ident },
 		&field.with,
-		match field.str || field.whitespace {
-			true => parse_quote! { () },
-			false => parse_quote! { crate::format::Format::format(&mut self.#field_ident, ctx) },
-		},
+		parse_quote! { crate::format::Format::format(&mut self.#field_ident, ctx) },
 		&field.and_with,
 		field.indent,
 	);

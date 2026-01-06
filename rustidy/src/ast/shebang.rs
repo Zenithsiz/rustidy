@@ -9,11 +9,7 @@ use crate::{Format, Parse, ParserStr, Print};
 #[derive(Parse, Format, Print)]
 #[parse(name = "a shebang")]
 #[parse(error(name = Shebang, fmt = "Expected a `#!`"))]
-pub struct Shebang(
-	#[parse(try_update_with = Self::parse)]
-	#[format(str)]
-	pub ParserStr,
-);
+pub struct Shebang(#[parse(try_update_with = Self::parse)] pub ParserStr);
 
 impl Shebang {
 	fn parse(s: &mut &str) -> Result<(), ShebangError> {

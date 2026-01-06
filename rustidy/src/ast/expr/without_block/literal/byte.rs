@@ -22,12 +22,7 @@ use {
 #[parse(error(name = ByteEscape(ByteEscapeError), transparent))]
 #[parse(error(name = CharOrEscape, fmt = "Expected character or escape", fatal))]
 #[parse(error(name = EndQuote, fmt = "Expected `'` after `b'`", fatal))]
-pub struct ByteLiteral(
-	#[format(whitespace)] pub Whitespace,
-	#[parse(try_update_with = Self::parse)]
-	#[format(str)]
-	pub ParserStr,
-);
+pub struct ByteLiteral(pub Whitespace, #[parse(try_update_with = Self::parse)] pub ParserStr);
 
 impl ByteLiteral {
 	fn parse(s: &mut &str) -> Result<(), ByteLiteralError> {

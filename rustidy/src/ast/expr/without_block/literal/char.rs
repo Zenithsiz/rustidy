@@ -28,12 +28,7 @@ use {
 #[parse(error(name = CharOrEscape, fmt = "Expected character or escape", fatal))]
 // Note: Not fatal because of lifetimes
 #[parse(error(name = EndQuote, fmt = "Expected `'` after `'`"))]
-pub struct CharLiteral(
-	#[format(whitespace)] pub Whitespace,
-	#[parse(try_update_with = Self::parse)]
-	#[format(str)]
-	pub ParserStr,
-);
+pub struct CharLiteral(pub Whitespace, #[parse(try_update_with = Self::parse)] pub ParserStr);
 
 impl CharLiteral {
 	fn parse(s: &mut &str) -> Result<(), CharLiteralError> {

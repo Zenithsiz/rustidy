@@ -48,11 +48,9 @@ pub macro decl_tokens(
 		)?
 		#[parse(and_try_with = Self::check)]
 		pub struct $TokenName(
-			#[format(whitespace)]
 			pub Whitespace,
 
 			#[parse(try_update_with = Self::parse)]
-			#[format(str)]
 			pub ParserStr,
 		);
 

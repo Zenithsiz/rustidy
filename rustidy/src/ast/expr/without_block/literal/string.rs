@@ -24,10 +24,8 @@ use {
 #[parse(error(name = StartQuote, fmt = "Expected `\"`"))]
 #[parse(error(name = ExpectedEndQuote, fmt = "Expected `\"` after `\"`", fatal))]
 pub struct StringLiteral {
-	#[format(whitespace)]
 	pub ws:     Whitespace,
 	#[parse(try_update_with = Self::parse)]
-	#[format(str)]
 	pub s:      ParserStr,
 	pub suffix: Option<Suffix>,
 }

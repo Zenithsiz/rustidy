@@ -3,14 +3,22 @@
 // Imports
 use {
 	super::punct::Punctuated,
-	crate::{Format, Parser, ParserStr, Print, Replacement, format, parser::Parse},
+	crate::{
+		Format,
+		Parser,
+		ParserStr,
+		Print,
+		Replacement,
+		format,
+		parser::{Parse, ParserRange},
+	},
 	itertools::Itertools,
 };
 
 /// Whitespace
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Print)]
 #[parse(try_with = Self::parse_skip)]
 pub struct Whitespace(Box<Punctuated<PureWhitespace, Comment>>);
 
@@ -68,6 +76,24 @@ impl Whitespace {
 			};
 			ctx.replace(ws.0, ws_str);
 		}
+	}
+}
+
+impl Format for Whitespace {
+	fn range(&mut self, ctx: &mut format::Context) -> Option<ParserRange> {
+		self.0.range(ctx)
+	}
+
+	fn len(&mut self, ctx: &mut format::Context) -> usize {
+		self.0.len(ctx)
+	}
+
+	fn format(&mut self, _ctx: &mut format::Context) {
+		// Note: By default no formatting is done
+	}
+
+	fn prefix_ws(&mut self, _ctx: &mut format::Context) -> Option<&mut Self> {
+		Some(self)
 	}
 }
 
@@ -155,11 +181,7 @@ impl FormatKind {
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
-pub struct PureWhitespace(
-	#[parse(update_with = Self::parse)]
-	#[format(str)]
-	pub ParserStr,
-);
+pub struct PureWhitespace(#[parse(update_with = Self::parse)] pub ParserStr);
 
 impl PureWhitespace {
 	fn parse(s: &mut &str) {
@@ -183,11 +205,7 @@ pub enum Comment {
 #[derive(Parse, Format, Print)]
 #[parse(error(name = NoComment, fmt = "Expected `/*` (except `/*!` or `/**`)"))]
 #[parse(error(name = MissingCommentEnd, fmt = "Expected `*/` after `/*`", fatal))]
-pub struct BlockComment(
-	#[parse(try_update_with = Self::parse)]
-	#[format(str)]
-	pub ParserStr,
-);
+pub struct BlockComment(#[parse(try_update_with = Self::parse)] pub ParserStr);
 
 impl BlockComment {
 	fn parse(s: &mut &str) -> Result<(), BlockCommentError> {
@@ -224,11 +242,7 @@ impl BlockComment {
 #[derive(Parse, Format, Print)]
 #[parse(error(name = NoComment, fmt = "Expected `//` (except `///` or `//!`)"))]
 #[parse(error(name = Newline, fmt = "Expected newline after `//`"))]
-pub struct LineComment(
-	#[parse(try_update_with = Self::parse)]
-	#[format(str)]
-	pub ParserStr,
-);
+pub struct LineComment(#[parse(try_update_with = Self::parse)] pub ParserStr);
 
 impl LineComment {
 	fn parse(s: &mut &str) -> Result<(), LineCommentError> {
@@ -249,11 +263,7 @@ impl LineComment {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 #[parse(error(name = NoComment, fmt = "Expected `//` (except `///` or `//!`)"))]
-pub struct TrailingLineComment(
-	#[parse(try_update_with = Self::parse)]
-	#[format(str)]
-	pub ParserStr,
-);
+pub struct TrailingLineComment(#[parse(try_update_with = Self::parse)] pub ParserStr);
 
 impl TrailingLineComment {
 	fn parse(s: &mut &str) -> Result<(), TrailingLineCommentError> {

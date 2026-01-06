@@ -30,10 +30,8 @@ use {
 #[parse(error(name = StringContinue(StringContinueError), transparent))]
 #[parse(error(name = ExpectedEndQuote, fmt = "Expected `\"` after `b\"`", fatal))]
 pub struct ByteStringLiteral {
-	#[format(whitespace)]
 	pub ws:     Whitespace,
 	#[parse(try_update_with = Self::parse)]
-	#[format(str)]
 	pub s:      ParserStr,
 	pub suffix: Option<Suffix>,
 }

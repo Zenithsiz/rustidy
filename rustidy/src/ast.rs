@@ -45,7 +45,6 @@ pub struct Crate {
 	pub shebang:               Option<Shebang>,
 	pub inner_attrs:           Vec<InnerAttrOrDocComment>,
 	pub items:                 Vec<Item>,
-	#[format(whitespace)]
 	pub suffix_ws:             Whitespace,
 	pub trailing_line_comment: Option<TrailingLineComment>,
 }
