@@ -6,6 +6,7 @@ use {
 	crate::{
 		Arenas,
 		Format,
+		FormatRef,
 		Print,
 		arena::{ArenaData, ArenaIdx},
 		ast::whitespace::Whitespace,
@@ -31,15 +32,17 @@ impl ArenaData for ParserStr {
 	type Data = ParserRange;
 }
 
-impl Format for ParserStr {
-	fn range(&mut self, ctx: &mut format::Context) -> Option<super::ParserRange> {
+impl FormatRef for ParserStr {
+	fn range(&self, ctx: &mut format::Context) -> Option<super::ParserRange> {
 		Some(Self::range(self, ctx.arenas()))
 	}
 
-	fn len(&mut self, ctx: &mut format::Context) -> usize {
+	fn len(&self, ctx: &mut format::Context) -> usize {
 		Self::range(self, ctx.arenas()).len()
 	}
+}
 
+impl Format for ParserStr {
 	fn format(&mut self, _ctx: &mut format::Context) {}
 
 	fn prefix_ws(&mut self, _ctx: &mut format::Context) -> Option<&mut Whitespace> {

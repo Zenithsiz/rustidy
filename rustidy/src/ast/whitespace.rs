@@ -5,6 +5,7 @@ use {
 	super::punct::Punctuated,
 	crate::{
 		Format,
+		FormatRef,
 		Parser,
 		ParserStr,
 		Print,
@@ -79,15 +80,17 @@ impl Whitespace {
 	}
 }
 
-impl Format for Whitespace {
-	fn range(&mut self, ctx: &mut format::Context) -> Option<ParserRange> {
+impl FormatRef for Whitespace {
+	fn range(&self, ctx: &mut format::Context) -> Option<ParserRange> {
 		self.0.range(ctx)
 	}
 
-	fn len(&mut self, ctx: &mut format::Context) -> usize {
+	fn len(&self, ctx: &mut format::Context) -> usize {
 		self.0.len(ctx)
 	}
+}
 
+impl Format for Whitespace {
 	fn format(&mut self, _ctx: &mut format::Context) {
 		// Note: By default no formatting is done
 	}

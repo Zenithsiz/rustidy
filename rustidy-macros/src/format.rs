@@ -130,8 +130,11 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 		darling::ast::Data::Struct(fields) => self::derive_struct(fields),
 	};
 
+	let impl_ref_generics = util::with_bounds(&attrs, |ty| parse_quote! { #ty: crate::format::FormatRef });
+	let (impl_ref_generics, ty_ref_generics, impl_ref_where_clause) = impl_ref_generics.split_for_impl();
+
 	let impl_generics = util::with_bounds(&attrs, |ty| parse_quote! { #ty: crate::format::Format });
-	let (impl_generics, ty_generics, fmt_where_clause) = impl_generics.split_for_impl();
+	let (impl_generics, ty_generics, impl_where_clause) = impl_generics.split_for_impl();
 
 	let Impls {
 		range,
@@ -163,15 +166,18 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 
 	let output = quote! {
 		#[automatically_derived]
-		impl #impl_generics crate::format::Format for #item_ident #ty_generics #fmt_where_clause {
-			fn range(&mut self, ctx: &mut crate::format::Context) -> Option<crate::parser::ParserRange> {
+		impl #impl_ref_generics crate::format::FormatRef for #item_ident #ty_ref_generics #impl_ref_where_clause {
+			fn range(&self, ctx: &mut crate::format::Context) -> Option<crate::parser::ParserRange> {
 				#range
 			}
 
-			fn len(&mut self, ctx: &mut crate::format::Context) -> usize {
+			fn len(&self, ctx: &mut crate::format::Context) -> usize {
 				#len
 			}
+		}
 
+		#[automatically_derived]
+		impl #impl_generics crate::format::Format for #item_ident #ty_generics #impl_where_clause {
 			#[coverage(on)]
 			fn format(&mut self, ctx: &mut crate::format::Context) {
 				#format;
@@ -193,8 +199,8 @@ fn derive_enum(variants: &[VariantAttrs]) -> Impls<syn::Expr, syn::Expr, syn::Ex
 		.map(|variant| {
 			let variant_ident = &variant.ident;
 			let range =
-				parse_quote! { Self::#variant_ident(ref mut value) => crate::format::Format::range(value, ctx), };
-			let len = parse_quote! { Self::#variant_ident(ref mut value) => crate::format::Format::len(value, ctx), };
+				parse_quote! { Self::#variant_ident(ref value) => crate::format::FormatRef::range(value, ctx), };
+			let len = parse_quote! { Self::#variant_ident(ref value) => crate::format::FormatRef::len(value, ctx), };
 
 			let format = self::derive_format(
 				parse_quote! { value },
@@ -263,7 +269,7 @@ fn derive_struct(fields: &darling::ast::Fields<FieldAttrs>) -> Impls<syn::Expr, 
 
 		parse_quote! {{
 			// TODO: Once polonius comes around, move this down
-			let is_empty = crate::format::Format::is_empty(&mut self.#field_ident, ctx);
+			let is_empty = crate::format::FormatRef::is_empty(&self.#field_ident, ctx);
 
 			// If we got the whitespace, return it
 			if let Some(whitespace) = crate::format::Format::prefix_ws(&mut self.#field_ident, ctx) {
@@ -294,8 +300,8 @@ fn derive_struct(fields: &darling::ast::Fields<FieldAttrs>) -> Impls<syn::Expr, 
 fn derive_struct_field(field_idx: usize, field: &FieldAttrs) -> Impls<syn::Expr, syn::Expr, syn::Expr, ()> {
 	let field_ident = util::field_member_access(field_idx, field);
 
-	let range = parse_quote! { compute_range.add(&mut self.#field_ident, ctx) };
-	let len = parse_quote! { crate::format::Format::len(&mut self.#field_ident, ctx) };
+	let range = parse_quote! { compute_range.add(&self.#field_ident, ctx) };
+	let len = parse_quote! { crate::format::FormatRef::len(&self.#field_ident, ctx) };
 
 	let format = self::derive_format(
 		parse_quote! { &mut self.#field_ident },
