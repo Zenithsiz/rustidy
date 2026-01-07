@@ -167,11 +167,11 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 	let output = quote! {
 		#[automatically_derived]
 		impl #impl_ref_generics crate::format::FormatRef for #item_ident #ty_ref_generics #impl_ref_where_clause {
-			fn range(&self, ctx: &mut crate::format::Context) -> Option<crate::parser::ParserRange> {
+			fn range(&self, ctx: &crate::format::Context) -> Option<crate::parser::ParserRange> {
 				#range
 			}
 
-			fn len(&self, ctx: &mut crate::format::Context) -> usize {
+			fn len(&self, ctx: &crate::format::Context) -> usize {
 				#len
 			}
 		}

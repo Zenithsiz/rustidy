@@ -79,11 +79,11 @@ impl Whitespace {
 }
 
 impl FormatRef for Whitespace {
-	fn range(&self, ctx: &mut format::Context) -> Option<ParserRange> {
+	fn range(&self, ctx: &format::Context) -> Option<ParserRange> {
 		self.0.range(ctx)
 	}
 
-	fn len(&self, ctx: &mut format::Context) -> usize {
+	fn len(&self, ctx: &format::Context) -> usize {
 		self.0.len(ctx)
 	}
 }

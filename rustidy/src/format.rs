@@ -16,13 +16,13 @@ use {
 // TODO: Better name?
 pub trait FormatRef {
 	/// Returns the range of this type
-	fn range(&self, ctx: &mut Context) -> Option<ParserRange>;
+	fn range(&self, ctx: &Context) -> Option<ParserRange>;
 
 	/// Returns the length of this type
-	fn len(&self, ctx: &mut Context) -> usize;
+	fn len(&self, ctx: &Context) -> usize;
 
 	/// Returns if this type is empty
-	fn is_empty(&self, ctx: &mut Context) -> bool {
+	fn is_empty(&self, ctx: &Context) -> bool {
 		self.len(ctx) == 0
 	}
 }
@@ -58,21 +58,21 @@ pub trait Format: FormatRef {
 }
 
 impl<T: FormatRef> FormatRef for &'_ T {
-	fn range(&self, ctx: &mut Context) -> Option<ParserRange> {
+	fn range(&self, ctx: &Context) -> Option<ParserRange> {
 		(**self).range(ctx)
 	}
 
-	fn len(&self, ctx: &mut Context) -> usize {
+	fn len(&self, ctx: &Context) -> usize {
 		(**self).len(ctx)
 	}
 }
 
 impl<T: FormatRef> FormatRef for &'_ mut T {
-	fn range(&self, ctx: &mut Context) -> Option<ParserRange> {
+	fn range(&self, ctx: &Context) -> Option<ParserRange> {
 		(**self).range(ctx)
 	}
 
-	fn len(&self, ctx: &mut Context) -> usize {
+	fn len(&self, ctx: &Context) -> usize {
 		(**self).len(ctx)
 	}
 }
@@ -88,11 +88,11 @@ impl<T: Format> Format for &'_ mut T {
 }
 
 impl<T: FormatRef> FormatRef for Box<T> {
-	fn range(&self, ctx: &mut Context) -> Option<ParserRange> {
+	fn range(&self, ctx: &Context) -> Option<ParserRange> {
 		(**self).range(ctx)
 	}
 
-	fn len(&self, ctx: &mut Context) -> usize {
+	fn len(&self, ctx: &Context) -> usize {
 		(**self).len(ctx)
 	}
 }
@@ -108,11 +108,11 @@ impl<T: Format> Format for Box<T> {
 }
 
 impl<T: FormatRef> FormatRef for Option<T> {
-	fn range(&self, _ctx: &mut Context) -> Option<ParserRange> {
+	fn range(&self, _ctx: &Context) -> Option<ParserRange> {
 		None
 	}
 
-	fn len(&self, ctx: &mut Context) -> usize {
+	fn len(&self, ctx: &Context) -> usize {
 		match self {
 			Some(value) => value.len(ctx),
 			None => 0,
@@ -133,13 +133,13 @@ impl<T: Format> Format for Option<T> {
 }
 
 impl<T: FormatRef> FormatRef for Vec<T> {
-	fn range(&self, ctx: &mut Context) -> Option<ParserRange> {
+	fn range(&self, ctx: &Context) -> Option<ParserRange> {
 		let mut compute_range = ComputeRange::default();
 		compute_range.extend(self, ctx);
 		compute_range.finish()
 	}
 
-	fn len(&self, ctx: &mut Context) -> usize {
+	fn len(&self, ctx: &Context) -> usize {
 		self.iter().map(|value| value.len(ctx)).sum()
 	}
 }
@@ -157,11 +157,11 @@ impl<T: Format> Format for Vec<T> {
 }
 
 impl FormatRef for ! {
-	fn range(&self, _ctx: &mut Context) -> Option<ParserRange> {
+	fn range(&self, _ctx: &Context) -> Option<ParserRange> {
 		*self
 	}
 
-	fn len(&self, _ctx: &mut Context) -> usize {
+	fn len(&self, _ctx: &Context) -> usize {
 		*self
 	}
 }
@@ -177,11 +177,11 @@ impl Format for ! {
 }
 
 impl<T> FormatRef for PhantomData<T> {
-	fn range(&self, _ctx: &mut Context) -> Option<ParserRange> {
+	fn range(&self, _ctx: &Context) -> Option<ParserRange> {
 		None
 	}
 
-	fn len(&self, _ctx: &mut Context) -> usize {
+	fn len(&self, _ctx: &Context) -> usize {
 		0
 	}
 }
@@ -195,11 +195,11 @@ impl<T> Format for PhantomData<T> {
 }
 
 impl FormatRef for () {
-	fn range(&self, _ctx: &mut Context) -> Option<ParserRange> {
+	fn range(&self, _ctx: &Context) -> Option<ParserRange> {
 		None
 	}
 
-	fn len(&self, _ctx: &mut Context) -> usize {
+	fn len(&self, _ctx: &Context) -> usize {
 		0
 	}
 }
@@ -222,7 +222,7 @@ macro tuple_impl ($N:literal, $($T:ident),* $(,)?) {
 	#[automatically_derived]
 	#[expect(non_snake_case)]
 	impl< $($T: FormatRef,)* > FormatRef for ( $($T,)* ) {
-		fn range(&self, ctx: &mut Context) -> Option<ParserRange> {
+		fn range(&self, ctx: &Context) -> Option<ParserRange> {
 			let ( $($T,)* ) = self;
 
 			let mut compute_range = ComputeRange::default();
@@ -230,7 +230,7 @@ macro tuple_impl ($N:literal, $($T:ident),* $(,)?) {
 			compute_range.finish()
 		}
 
-		fn len(&self, ctx: &mut Context) -> usize {
+		fn len(&self, ctx: &Context) -> usize {
 			let ( $($T,)* ) = self;
 			${concat( Tuple, $N )} { $( $T, )* }.len(ctx)
 		}
@@ -311,7 +311,14 @@ impl<'a, 'input> Context<'a, 'input> {
 	}
 
 	/// Returns the arenas
-	pub const fn arenas(&mut self) -> &mut Arenas {
+	#[must_use]
+	pub const fn arenas(&self) -> &Arenas {
+		self.arenas
+	}
+
+	/// Returns the arenas mutably
+	#[must_use]
+	pub const fn arenas_mut(&mut self) -> &mut Arenas {
 		self.arenas
 	}
 
@@ -410,13 +417,13 @@ impl ComputeRange {
 	}
 
 	/// Adds the next item to this
-	pub fn add<T: FormatRef>(&mut self, item: T, ctx: &mut Context) {
+	pub fn add<T: FormatRef>(&mut self, item: T, ctx: &Context) {
 		let Some(range) = item.range(ctx) else { return };
 		self.add_range(range);
 	}
 
 	/// Adds several items to this
-	pub fn extend<I>(&mut self, items: I, ctx: &mut Context)
+	pub fn extend<I>(&mut self, items: I, ctx: &Context)
 	where
 		I: IntoIterator<Item: FormatRef>,
 	{
