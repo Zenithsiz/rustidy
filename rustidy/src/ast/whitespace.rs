@@ -65,11 +65,9 @@ impl Whitespace {
 	}
 
 	fn format(&mut self, ctx: &mut format::Context, kind: FormatKind) {
-		let (prefix, rest) = self.0.split_first_mut();
-
-		let prefix_str = kind.prefix_str(ctx, prefix.0, rest.is_empty());
-		ctx.replace(prefix.0, prefix_str);
-		for (pos, (comment, ws)) in rest.with_position() {
+		let prefix_str = kind.prefix_str(ctx, self.0.first.0, self.0.rest.is_empty());
+		ctx.replace(self.0.first.0, prefix_str);
+		for (pos, (comment, ws)) in self.0.rest.iter_mut().with_position() {
 			let is_last = matches!(pos, itertools::Position::Last | itertools::Position::Only);
 			let ws_str = match comment.is_line() {
 				true => kind.after_newline_str(ctx, ws.0, is_last),
