@@ -1,6 +1,6 @@
 [workspace]
 
-members  = ["rustidy", "rustidy-macros"]
+members  = ["rustidy", "rustidy-macros", "rustidy-util"]
 resolver = "2"
 
 [workspace.package]
@@ -16,6 +16,7 @@ version     = "0.1.10"
 # Workspace
 rustidy        = { path = "rustidy" }
 rustidy-macros = { path = "rustidy-macros" }
+rustidy-util   = { path = "rustidy-util" }
 
 app-error        = { git = "https://github.com/Zenithsiz/app-error", rev = "e21d2eab03d97a675c4b44ccfa4df00e18d56ba7" }
 assert-json-diff = "2.0.2"

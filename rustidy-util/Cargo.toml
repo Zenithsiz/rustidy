@@ -1,0 +1,14 @@
+[package]
+name    = "rustidy-util"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+
+app-error    = { workspace = true }
+convert_case = { workspace = true }
+derive_more  = { features = ["full"], workspace = true }
+itertools    = { workspace = true }
+
+[lints]
+workspace = true
