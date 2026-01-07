@@ -8,7 +8,7 @@ pub use {self::config::Config, rustidy_macros::Format};
 
 // Imports
 use {
-	crate::{Parser, ParserStr, Replacement, Replacements, ast::whitespace::Whitespace, parser::ParserRange},
+	crate::{Arenas, ParserStr, Replacement, Replacements, ast::whitespace::Whitespace, parser::ParserRange},
 	core::marker::PhantomData,
 };
 
@@ -231,28 +231,41 @@ tuple_impl! { 3, T0, T1, T2 }
 
 /// Format context
 pub struct Context<'a, 'input> {
-	parser:       &'a Parser<'input>,
+	input:        &'input str,
 	config:       &'a Config,
 	indent_depth: usize,
 	replacements: &'a mut Replacements,
+	arenas:       &'a mut Arenas,
 }
 
 impl<'a, 'input> Context<'a, 'input> {
 	/// Creates a new context
 	#[must_use]
-	pub const fn new(parser: &'a Parser<'input>, replacements: &'a mut Replacements, config: &'a Config) -> Self {
+	pub const fn new(
+		input: &'input str,
+		replacements: &'a mut Replacements,
+		arenas: &'a mut Arenas,
+		config: &'a Config,
+	) -> Self {
 		Self {
-			parser,
+			input,
 			config,
 			indent_depth: 0,
 			replacements,
+			arenas,
 		}
 	}
 
-	/// Returns the parser
+	/// Returns the input
 	#[must_use]
-	pub const fn parser(&self) -> &'a Parser<'input> {
-		self.parser
+	pub const fn input(&self) -> &'input str {
+		self.input
+	}
+
+	/// Returns the string of a string
+	#[must_use]
+	pub fn str(&mut self, s: ParserStr) -> &'input str {
+		s.range(self.arenas).str(self.input)
 	}
 
 	/// Returns the config
@@ -267,9 +280,15 @@ impl<'a, 'input> Context<'a, 'input> {
 		self.indent_depth
 	}
 
+	/// Returns the arenas
+	pub const fn arenas(&mut self) -> &mut Arenas {
+		self.arenas
+	}
+
 	/// Replaces a string
 	pub fn replace(&mut self, s: ParserStr, replacement: impl Into<Replacement>) {
-		self.replacements.add(self.parser, s, replacement);
+		self.replacements
+			.add(s, s.range(self.arenas).str(self.input), replacement);
 	}
 
 	/// Runs `f` with a further indentation level
@@ -358,11 +377,6 @@ impl ComputeRange {
 			Some(cur) => cur.end = range.end,
 			None => self.cur = Some(range),
 		}
-	}
-
-	/// Adds a string to this
-	pub fn add_str(&mut self, s: ParserStr, ctx: &mut Context) {
-		self.add_range(ctx.parser().str_range(s));
 	}
 
 	/// Adds the next item to this

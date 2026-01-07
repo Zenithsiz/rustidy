@@ -6,7 +6,7 @@
 // Imports
 use {
 	assert_json_diff::assert_json_eq,
-	rustidy::{Parser, Print, Replacements, ast, print},
+	rustidy::{Arenas, Parser, Print, Replacements, ast, print},
 	std::{env, fs, path::Path, process, thread},
 };
 
@@ -22,12 +22,13 @@ pub fn parse() {
 
 		let input_path = test_dir.join("input.rs");
 		let input_file = fs::read_to_string(&input_path).expect("Unable to read file");
-		let mut parser = Parser::new(&input_file);
+		let mut arenas = Arenas::new();
+		let mut parser = Parser::new(&input_file, &mut arenas);
 
 		let input = rustidy::parse(&input_path, &mut parser).expect("Unable to parse input");
 
 		let replacements = Replacements::new();
-		let mut print_fmt = print::PrintFmt::new(&parser, &replacements);
+		let mut print_fmt = print::PrintFmt::new(&input_file, &replacements, &mut arenas);
 		input.print(&mut print_fmt);
 		let input_printed = print_fmt.output();
 		assert_eq!(input_file, input_printed);

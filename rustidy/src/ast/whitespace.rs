@@ -118,9 +118,9 @@ impl FormatKind {
 	}
 
 	/// Returns the indentation string, with a newline *before*
-	fn indent_str_nl(ctx: &format::Context, cur_str: ParserStr) -> String {
+	fn indent_str_nl(ctx: &mut format::Context, cur_str: ParserStr) -> String {
 		// TODO: Should we be checking for multiple newlines?
-		let after_newline = ctx.parser().str_before(cur_str).ends_with('\n');
+		let after_newline = cur_str.range(ctx.arenas()).str_before(ctx.input()).ends_with('\n');
 
 		let min_newlines = ctx.config().empty_line_spacing.min;
 		let max_newlines = ctx.config().empty_line_spacing.max;
@@ -128,7 +128,7 @@ impl FormatKind {
 			true => (min_newlines, max_newlines),
 			false => (min_newlines + 1, max_newlines + 1),
 		};
-		let newlines = ctx.parser().str(cur_str).chars().filter(|&ch| ch == '\n').count();
+		let newlines = ctx.str(cur_str).chars().filter(|&ch| ch == '\n').count();
 		let newlines = newlines.clamp(min_newlines, max_newlines);
 
 		"\n".repeat(newlines) + &Self::indent_str(ctx)
@@ -282,7 +282,7 @@ impl TrailingLineComment {
 mod tests {
 	use {
 		super::*,
-		crate::{ParseError, Replacements, print},
+		crate::{Arenas, ParseError, Replacements, print},
 		app_error::{AppError, Context, ensure},
 	};
 
@@ -298,7 +298,8 @@ mod tests {
 		config: &Config,
 		kind: FormatKind,
 	) -> Result<(), AppError> {
-		let mut parser = Parser::new(source);
+		let mut arenas = Arenas::new();
+		let mut parser = Parser::new(source, &mut arenas);
 		let mut whitespace = parser
 			.parse::<Whitespace>()
 			.map_err(|err| err.to_app_error(&parser))
@@ -310,11 +311,11 @@ mod tests {
 
 
 		let mut replacements = Replacements::new();
-		let mut fmt_ctx = format::Context::new(&parser, &mut replacements, fmt_config);
+		let mut fmt_ctx = format::Context::new(source, &mut replacements, &mut arenas, fmt_config);
 		fmt_ctx.set_indent_depth(config.indent_depth);
 		whitespace.format(&mut fmt_ctx, kind);
 
-		let mut print_fmt = print::PrintFmt::new(&parser, &replacements);
+		let mut print_fmt = print::PrintFmt::new(source, &replacements, &mut arenas);
 		whitespace.print(&mut print_fmt);
 		let output = print_fmt.output();
 

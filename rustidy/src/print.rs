@@ -5,7 +5,12 @@ pub use rustidy_macros::Print;
 
 // Imports
 use {
-	crate::{Parser, ParserStr, Replacements},
+	crate::{
+		Arenas,
+		ParserStr,
+		Replacements,
+		arena::{ArenaData, ArenaIdx, WithArena},
+	},
 	core::marker::PhantomData,
 };
 
@@ -78,35 +83,38 @@ tuple_impl! { 1, T0 }
 tuple_impl! { 2, T0, T1 }
 tuple_impl! { 3, T0, T1, T2 }
 
+impl<T: ArenaData<Data: Print> + WithArena> Print for ArenaIdx<T> {
+	fn print(&self, f: &mut PrintFmt) {
+		let value = f.arenas.get::<T>().get(*self);
+		value.print(f);
+	}
+}
+
 /// Print formatter
 pub struct PrintFmt<'a, 'input> {
+	input:        &'input str,
 	output:       String,
-	parser:       &'a Parser<'input>,
 	replacements: &'a Replacements,
+	arenas:       &'a Arenas,
 }
 
 impl<'a, 'input> PrintFmt<'a, 'input> {
 	/// Creates a new formatter
 	#[must_use]
-	pub const fn new(parser: &'a Parser<'input>, replacements: &'a Replacements) -> Self {
+	pub const fn new(input: &'input str, replacements: &'a Replacements, arenas: &'a mut Arenas) -> Self {
 		Self {
+			input,
 			output: String::new(),
-			parser,
 			replacements,
+			arenas,
 		}
-	}
-
-	/// Returns the parser of this formatter
-	#[must_use]
-	pub const fn parser(&self) -> &'a Parser<'input> {
-		self.parser
 	}
 
 	/// Writes an ast string
 	pub fn write_str(&mut self, s: ParserStr) {
 		match self.replacements.get(s) {
 			Some(replacement) => replacement.write(&mut self.output),
-			None => self.output.push_str(self.parser.str(s)),
+			None => self.output.push_str(s.range(self.arenas).str(self.input)),
 		}
 	}
 

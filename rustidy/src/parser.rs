@@ -17,12 +17,15 @@ pub use {
 
 // Imports
 use {
-	self::str::ParserStrIdx,
+	crate::{
+		Arenas,
+		arena::{ArenaData, ArenaIdx, WithArena},
+	},
 	app_error::AppError,
 	core::{
 		marker::PhantomData,
 		mem,
-		ops::{Index, Residual, Try},
+		ops::{Residual, Try},
 	},
 	std::{fmt, str::pattern::Pattern},
 };
@@ -186,9 +189,23 @@ tuple_impl! { 2, T0, T1 }
 tuple_impl! { 3, T0, T1, T2 }
 tuple_impl! { 4, T0, T1, T2, T3 }
 
+impl<T: ArenaData<Data: Parse> + WithArena> Parse for ArenaIdx<T> {
+	type Error = ParserError<T::Data>;
+
+	fn name() -> Option<impl fmt::Display> {
+		T::Data::name()
+	}
+
+	fn parse_from(parser: &mut Parser) -> Result<Self, Self::Error> {
+		let value = parser.parse::<T::Data>()?;
+		let idx = parser.arenas.get_mut::<T>().push(value);
+		Ok(idx)
+	}
+}
+
 /// Parser
 #[derive(Debug)]
-pub struct Parser<'input> {
+pub struct Parser<'a, 'input> {
 	/// Input
 	input: &'input str,
 
@@ -199,19 +216,19 @@ pub struct Parser<'input> {
 	// Note: Always sorted by parser position.
 	tags: Vec<(ParserPos, ParserTag)>,
 
-	/// String ranges
-	string_ranges: Vec<ParserRange>,
+	/// Arenas
+	arenas: &'a mut Arenas,
 }
 
-impl<'input> Parser<'input> {
+impl<'a, 'input> Parser<'a, 'input> {
 	/// Creates a new parser
 	#[must_use]
-	pub const fn new(input: &'input str) -> Self {
+	pub const fn new(input: &'input str, arenas: &'a mut Arenas) -> Self {
 		Self {
 			input,
 			cur_pos: ParserPos(0),
 			tags: vec![],
-			string_ranges: vec![],
+			arenas,
 		}
 	}
 
@@ -219,6 +236,11 @@ impl<'input> Parser<'input> {
 	#[must_use]
 	pub const fn input(&self) -> &'input str {
 		self.input
+	}
+
+	/// Returns the arenas
+	pub const fn arenas(&mut self) -> &mut Arenas {
+		self.arenas
 	}
 
 	/// Returns the remaining string for the parser
@@ -279,39 +301,10 @@ impl<'input> Parser<'input> {
 		self.loc(self.cur_pos)
 	}
 
-	/// Returns the string of a range.
-	///
-	/// Ignores any replacement on the string
-	#[must_use]
-	pub fn range_str(&self, range: ParserRange) -> &'input str {
-		&self.input[range]
-	}
-
 	/// Returns the string of an range
 	#[must_use]
-	pub fn str(&self, s: ParserStr) -> &'input str {
-		let range = self.str_range(s);
-		&self.input[range]
-	}
-
-	/// Returns everything after a string.
-	#[must_use]
-	pub fn str_after(&self, s: ParserStr) -> &'input str {
-		let range = self.str_range(s);
-		&self.input[range.end.0..]
-	}
-
-	/// Returns everything before a string.
-	#[must_use]
-	pub fn str_before(&self, s: ParserStr) -> &'input str {
-		let range = self.str_range(s);
-		&self.input[..range.start.0]
-	}
-
-	/// Returns the range of a string
-	#[must_use]
-	pub fn str_range(&self, s: ParserStr) -> ParserRange {
-		self.string_ranges[s.0.0 as usize]
+	pub fn str(&mut self, s: ParserStr) -> &'input str {
+		s.range(self.arenas).str(self.input)
 	}
 
 	/// Returns if the parser is finished
@@ -377,10 +370,9 @@ impl<'input> Parser<'input> {
 			start: ParserPos(output_range.start),
 			end:   ParserPos(output_range.end),
 		};
-		let idx = self.string_ranges.len().try_into().expect("Too many string ranges");
-		self.string_ranges.push(output_range);
+		let idx = self.arenas.get_mut::<ParserStr>().push(output_range);
 
-		<_>::from_output(ParserStr(ParserStrIdx(idx)))
+		<_>::from_output(ParserStr(idx))
 	}
 
 	/// Strips a prefix `s` from the parser
@@ -406,13 +398,13 @@ impl<'input> Parser<'input> {
 	/// On error, nothing is modified.
 	pub fn try_parse<T: Parse>(&mut self) -> Result<Result<T, ParserError<T>>, ParserError<T>> {
 		let prev_pos = self.cur_pos;
-		let prev_string_ranges_len = self.string_ranges.len();
+		let prev_string_ranges_len = self.arenas.get::<ParserStr>().len();
 		match self.parse::<T>() {
 			Ok(value) => Ok(Ok(value)),
 			Err(err) if err.is_fatal() => Err(err),
 			Err(err) => {
 				self.cur_pos = prev_pos;
-				self.string_ranges.truncate(prev_string_ranges_len);
+				_ = self.arenas.get_mut::<ParserStr>().truncate(prev_string_ranges_len);
 				Ok(Err(err))
 			},
 		}
@@ -424,7 +416,7 @@ impl<'input> Parser<'input> {
 	#[expect(clippy::type_complexity, reason = "TODO")]
 	pub fn peek<T: Parse>(&mut self) -> Result<Result<(T, PeekState), ParserError<T>>, ParserError<T>> {
 		let start_pos = self.cur_pos;
-		let prev_string_ranges_len = self.string_ranges.len();
+		let prev_string_ranges_len = self.arenas.get::<ParserStr>().len();
 
 		let output = match self.parse::<T>() {
 			Ok(value) => Ok(value),
@@ -436,7 +428,11 @@ impl<'input> Parser<'input> {
 			cur_pos:       self.cur_pos,
 			// TODO: Ideally here we wouldn't allocate and maybe just move
 			//       the new ranges somewhere else temporarily.
-			string_ranges: self.string_ranges.drain(prev_string_ranges_len..).collect(),
+			string_ranges: self
+				.arenas
+				.get_mut::<ParserStr>()
+				.truncate(prev_string_ranges_len)
+				.collect(),
 		};
 		self.cur_pos = start_pos;
 
@@ -448,7 +444,7 @@ impl<'input> Parser<'input> {
 	// TODO: We should validate that the user doesn't use a previous peek
 	pub fn set_peeked(&mut self, peek_state: PeekState) {
 		self.cur_pos = peek_state.cur_pos;
-		self.string_ranges.extend(peek_state.string_ranges);
+		self.arenas.get_mut::<ParserStr>().extend(peek_state.string_ranges);
 	}
 
 	/// Returns all current tags
@@ -543,13 +539,17 @@ impl ParserRange {
 	pub const fn is_empty(&self) -> bool {
 		self.len() == 0
 	}
-}
 
-impl Index<ParserRange> for str {
-	type Output = Self;
+	/// Slices the input string with this range
+	#[must_use]
+	pub fn str<'input>(&self, input: &'input str) -> &'input str {
+		&input[self.start.0..self.end.0]
+	}
 
-	fn index(&self, index: ParserRange) -> &Self::Output {
-		&self[index.start.0..index.end.0]
+	/// Slices the input string before this range
+	#[must_use]
+	pub fn str_before(self, s: &str) -> &str {
+		&s[..self.start.0]
 	}
 }
 

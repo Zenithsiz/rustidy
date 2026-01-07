@@ -27,6 +27,7 @@
 )]
 
 // Modules
+pub mod arena;
 pub mod ast;
 pub mod format;
 pub mod parser;
@@ -35,6 +36,7 @@ pub mod replacement;
 
 // Exports
 pub use self::{
+	arena::Arenas,
 	format::Format,
 	parser::{Parse, ParseError, ParseRecursive, Parser, ParserStr},
 	print::{Print, PrintFmt},

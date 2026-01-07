@@ -1,10 +1,7 @@
 //! String replacements
 
 // Imports
-use {
-	crate::{Parser, ParserStr},
-	std::collections::HashMap,
-};
+use {crate::ParserStr, std::collections::HashMap};
 
 /// String replacements
 pub struct Replacements {
@@ -21,9 +18,9 @@ impl Replacements {
 	}
 
 	/// Adds a replacement
-	pub fn add(&mut self, parser: &Parser, s: ParserStr, replacement: impl Into<Replacement>) {
+	pub fn add(&mut self, s: ParserStr, s_str: &str, replacement: impl Into<Replacement>) {
 		let replacement = replacement.into();
-		match replacement.is(parser.str(s)) {
+		match replacement.is(s_str) {
 			true => _ = self.replacements.remove(&s),
 			false => _ = self.replacements.insert(s, replacement),
 		}
