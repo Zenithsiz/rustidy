@@ -47,27 +47,27 @@ impl Whitespace {
 	}
 
 	/// Removes this whitespace
-	pub fn remove(&mut self, ctx: &mut format::Context) {
+	pub fn remove(&self, ctx: &mut format::Context) {
 		self.format(ctx, FormatKind::Remove);
 	}
 
 	/// Sets this whitespace to a single space
-	pub fn set_single(&mut self, ctx: &mut format::Context) {
+	pub fn set_single(&self, ctx: &mut format::Context) {
 		self.format(ctx, FormatKind::Single);
 	}
 
 	/// Sets this whitespace to a newline + indentation
-	pub fn set_indent(&mut self, ctx: &mut format::Context, offset: isize, remove_if_empty: bool) {
+	pub fn set_indent(&self, ctx: &mut format::Context, offset: isize, remove_if_empty: bool) {
 		self.format(ctx, FormatKind::Indent {
 			offset,
 			remove_if_empty,
 		});
 	}
 
-	fn format(&mut self, ctx: &mut format::Context, kind: FormatKind) {
+	fn format(&self, ctx: &mut format::Context, kind: FormatKind) {
 		let prefix_str = kind.prefix_str(ctx, self.0.first.0, self.0.rest.is_empty());
 		ctx.replace(self.0.first.0, prefix_str);
-		for (pos, (comment, ws)) in self.0.rest.iter_mut().with_position() {
+		for (pos, (comment, ws)) in self.0.rest.iter().with_position() {
 			let is_last = matches!(pos, itertools::Position::Last | itertools::Position::Only);
 			let ws_str = match comment.is_line() {
 				true => kind.after_newline_str(ctx, ws.0, is_last),
@@ -301,7 +301,7 @@ mod tests {
 	) -> Result<(), AppError> {
 		let mut arenas = Arenas::new();
 		let mut parser = Parser::new(source, &mut arenas);
-		let mut whitespace = parser
+		let whitespace = parser
 			.parse::<Whitespace>()
 			.map_err(|err| err.to_app_error(&parser))
 			.with_context(|| format!("Unable to parse whitespace: {source:?}"))?;
