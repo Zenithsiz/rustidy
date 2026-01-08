@@ -45,8 +45,12 @@ impl FormatRef for ParserStr {
 impl Format for ParserStr {
 	fn format(&mut self, _ctx: &mut format::Context) {}
 
-	fn prefix_ws(&mut self, _ctx: &mut format::Context) -> Option<&mut Whitespace> {
-		None
+	fn with_prefix_ws(
+		&mut self,
+		_ctx: &mut format::Context,
+		_f: impl Fn(&mut Whitespace, &mut format::Context),
+	) -> bool {
+		false
 	}
 }
 

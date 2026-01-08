@@ -140,7 +140,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 		range,
 		len,
 		format,
-		prefix_ws,
+		with_prefix_ws,
 	} = impls;
 
 	let format = self::derive_format(
@@ -184,8 +184,8 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 			}
 
 			#[allow(unreachable_code)]
-			fn prefix_ws(&mut self, ctx: &mut crate::format::Context) -> Option<&mut crate::ast::whitespace::Whitespace> {
-				#prefix_ws
+			fn with_prefix_ws(&mut self, ctx: &mut crate::format::Context, f: impl std::ops::Fn(&mut crate::ast::whitespace::Whitespace, &mut crate::format::Context)) -> bool {
+				#with_prefix_ws
 			}
 		}
 	};
@@ -213,13 +213,13 @@ fn derive_enum(variants: &[VariantAttrs]) -> Impls<syn::Expr, syn::Expr, syn::Ex
 				Self::#variant_ident(ref mut value) => #format,
 			};
 
-			let prefix_ws = parse_quote! { Self::#variant_ident(ref mut value) => value.prefix_ws(ctx), };
+			let with_prefix_ws = parse_quote! { Self::#variant_ident(ref mut value) => value.with_prefix_ws(ctx, f), };
 
 			Impls {
 				range,
 				len,
 				format,
-				prefix_ws,
+				with_prefix_ws,
 			}
 		})
 		.collect::<Impls<Vec<syn::Arm>, Vec<syn::Arm>, Vec<syn::Arm>, Vec<syn::Arm>>>();
@@ -229,18 +229,18 @@ fn derive_enum(variants: &[VariantAttrs]) -> Impls<syn::Expr, syn::Expr, syn::Ex
 		range,
 		len,
 		format,
-		prefix_ws,
+		with_prefix_ws,
 	} = variant_impls;
 	let range = parse_quote! { match *self { #( #range )* } };
 	let len = parse_quote! { match *self { #( #len )* } };
 	let format = parse_quote! { match *self { #( #format )* } };
-	let prefix_ws = parse_quote! { match *self { #( #prefix_ws )* } };
+	let with_prefix_ws = parse_quote! { match *self { #( #with_prefix_ws )* } };
 
 	Impls {
 		range,
 		len,
 		format,
-		prefix_ws,
+		with_prefix_ws,
 	}
 }
 
@@ -249,7 +249,7 @@ fn derive_struct(fields: &darling::ast::Fields<FieldAttrs>) -> Impls<syn::Expr, 
 		range,
 		len,
 		format,
-		prefix_ws: (),
+		with_prefix_ws: (),
 	} = fields
 		.iter()
 		.enumerate()
@@ -264,36 +264,36 @@ fn derive_struct(fields: &darling::ast::Fields<FieldAttrs>) -> Impls<syn::Expr, 
 	let len = parse_quote! { 0 #( + #len )* };
 	let format = parse_quote! {{ #( #format; )* }};
 
-	let prefix_ws_fields = fields.iter().enumerate().map(|(field_idx, field)| -> syn::Expr {
+	let with_prefix_ws_fields = fields.iter().enumerate().map(|(field_idx, field)| -> syn::Expr {
 		let field_ident = util::field_member_access(field_idx, field);
 
 		parse_quote! {{
 			// TODO: Once polonius comes around, move this down
 			let is_empty = crate::format::FormatRef::is_empty(&self.#field_ident, ctx);
 
-			// If we got the whitespace, return it
-			if let Some(whitespace) = crate::format::Format::prefix_ws(&mut self.#field_ident, ctx) {
-				return Some(whitespace);
+			// If we used the whitespace, return
+			if crate::format::Format::with_prefix_ws(&mut self.#field_ident, ctx, |whitespace, ctx| f(whitespace, ctx)) {
+				return true;
 			}
 
 			// Otherwise, if this field had any length, we have no more fields
 			// to check and we can return
 			if !is_empty {
-				return None;
+				return false;
 			}
 		}}
 	});
-	let prefix_ws = parse_quote! {{
-		#( #prefix_ws_fields; )*
+	let with_prefix_ws = parse_quote! {{
+		#( #with_prefix_ws_fields; )*
 
-		None
+		false
 	}};
 
 	Impls {
 		range,
 		len,
 		format,
-		prefix_ws,
+		with_prefix_ws,
 	}
 }
 
@@ -315,7 +315,7 @@ fn derive_struct_field(field_idx: usize, field: &FieldAttrs) -> Impls<syn::Expr,
 		range,
 		len,
 		format,
-		prefix_ws: (),
+		with_prefix_ws: (),
 	}
 }
 
@@ -462,10 +462,10 @@ fn derive_and_with_wrapper(fields: &darling::ast::Fields<FieldAttrs>, and_with_w
 
 #[derive(Default, Debug)]
 struct Impls<Range, Len, Format, PrefixWs> {
-	range:     Range,
-	len:       Len,
-	format:    Format,
-	prefix_ws: PrefixWs,
+	range:          Range,
+	len:            Len,
+	format:         Format,
+	with_prefix_ws: PrefixWs,
 }
 
 impl<T0, T1, T2, T3, A0, A1, A2, A3> FromIterator<Impls<A0, A1, A2, A3>> for Impls<T0, T1, T2, T3>
@@ -481,7 +481,7 @@ where
 			output.range.extend_one(impls.range);
 			output.len.extend_one(impls.len);
 			output.format.extend_one(impls.format);
-			output.prefix_ws.extend_one(impls.prefix_ws);
+			output.with_prefix_ws.extend_one(impls.with_prefix_ws);
 		}
 
 		output

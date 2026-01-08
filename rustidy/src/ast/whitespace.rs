@@ -93,8 +93,9 @@ impl Format for Whitespace {
 		// Note: By default no formatting is done
 	}
 
-	fn prefix_ws(&mut self, _ctx: &mut format::Context) -> Option<&mut Self> {
-		Some(self)
+	fn with_prefix_ws(&mut self, ctx: &mut format::Context, f: impl Fn(&mut Self, &mut format::Context)) -> bool {
+		f(self, ctx);
+		true
 	}
 }
 

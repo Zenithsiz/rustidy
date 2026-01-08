@@ -32,28 +32,28 @@ pub trait Format: FormatRef {
 	/// Formats this type
 	fn format(&mut self, ctx: &mut Context);
 
-	/// Returns the first whitespace of this type, if any
-	fn prefix_ws(&mut self, ctx: &mut Context) -> Option<&mut Whitespace>;
+	/// Uses the first whitespace of this type, if any.
+	///
+	/// Returns if successfully used.
+	// TODO: Ideally this would be `F: FnOnce()` and we'd return `Result<(), F>`, but
+	//       is the complexity worth it? Would we ever need an `FnOnce` here?
+	fn with_prefix_ws(&mut self, ctx: &mut Context, f: impl Fn(&mut Whitespace, &mut Context)) -> bool;
 
 	/// Remove the prefix whitespace, if any
 	fn prefix_ws_remove(&mut self, ctx: &mut Context) {
-		if let Some(whitespace) = self.prefix_ws(ctx) {
-			whitespace.remove(ctx);
-		}
+		self.with_prefix_ws(ctx, |whitespace, ctx| whitespace.remove(ctx));
 	}
 
 	/// Sets the prefix whitespace to a single space
 	fn prefix_ws_set_single(&mut self, ctx: &mut Context) {
-		if let Some(whitespace) = self.prefix_ws(ctx) {
-			whitespace.set_single(ctx);
-		}
+		self.with_prefix_ws(ctx, |whitespace, ctx| whitespace.set_single(ctx));
 	}
 
 	/// Sets the prefix whitespace to the current indentation
 	fn prefix_ws_set_indent(&mut self, ctx: &mut Context, offset: isize, remove_if_empty: bool) {
-		if let Some(whitespace) = self.prefix_ws(ctx) {
+		self.with_prefix_ws(ctx, |whitespace, ctx| {
 			whitespace.set_indent(ctx, offset, remove_if_empty);
-		}
+		});
 	}
 }
 
@@ -82,8 +82,8 @@ impl<T: Format> Format for &'_ mut T {
 		(**self).format(ctx);
 	}
 
-	fn prefix_ws(&mut self, ctx: &mut Context) -> Option<&mut Whitespace> {
-		(**self).prefix_ws(ctx)
+	fn with_prefix_ws(&mut self, ctx: &mut Context, f: impl Fn(&mut Whitespace, &mut Context)) -> bool {
+		(**self).with_prefix_ws(ctx, f)
 	}
 }
 
@@ -102,8 +102,8 @@ impl<T: Format> Format for Box<T> {
 		(**self).format(ctx);
 	}
 
-	fn prefix_ws(&mut self, ctx: &mut Context) -> Option<&mut Whitespace> {
-		(**self).prefix_ws(ctx)
+	fn with_prefix_ws(&mut self, ctx: &mut Context, f: impl Fn(&mut Whitespace, &mut Context)) -> bool {
+		(**self).with_prefix_ws(ctx, f)
 	}
 }
 
@@ -127,8 +127,14 @@ impl<T: Format> Format for Option<T> {
 		}
 	}
 
-	fn prefix_ws(&mut self, ctx: &mut Context) -> Option<&mut Whitespace> {
-		self.as_mut().and_then(|value| value.prefix_ws(ctx))
+	fn with_prefix_ws(&mut self, ctx: &mut Context, f: impl Fn(&mut Whitespace, &mut Context)) -> bool {
+		match self {
+			Some(value) => {
+				value.with_prefix_ws(ctx, f);
+				true
+			},
+			_ => false,
+		}
 	}
 }
 
@@ -151,8 +157,14 @@ impl<T: Format> Format for Vec<T> {
 		}
 	}
 
-	fn prefix_ws(&mut self, ctx: &mut Context) -> Option<&mut Whitespace> {
-		self.first_mut().and_then(|value| value.prefix_ws(ctx))
+	fn with_prefix_ws(&mut self, ctx: &mut Context, f: impl Fn(&mut Whitespace, &mut Context)) -> bool {
+		match self.first_mut() {
+			Some(value) => {
+				value.with_prefix_ws(ctx, f);
+				true
+			},
+			None => false,
+		}
 	}
 }
 
@@ -171,7 +183,7 @@ impl Format for ! {
 		*self
 	}
 
-	fn prefix_ws(&mut self, _ctx: &mut Context) -> Option<&mut Whitespace> {
+	fn with_prefix_ws(&mut self, _ctx: &mut Context, _f: impl Fn(&mut Whitespace, &mut Context)) -> bool {
 		*self
 	}
 }
@@ -189,8 +201,8 @@ impl<T> FormatRef for PhantomData<T> {
 impl<T> Format for PhantomData<T> {
 	fn format(&mut self, _ctx: &mut Context) {}
 
-	fn prefix_ws(&mut self, _ctx: &mut Context) -> Option<&mut Whitespace> {
-		None
+	fn with_prefix_ws(&mut self, _ctx: &mut Context, _f: impl Fn(&mut Whitespace, &mut Context)) -> bool {
+		false
 	}
 }
 
@@ -207,8 +219,8 @@ impl FormatRef for () {
 impl Format for () {
 	fn format(&mut self, _ctx: &mut Context) {}
 
-	fn prefix_ws(&mut self, _ctx: &mut Context) -> Option<&mut Whitespace> {
-		None
+	fn with_prefix_ws(&mut self, _ctx: &mut Context, _f: impl Fn(&mut Whitespace, &mut Context)) -> bool {
+		false
 	}
 }
 
@@ -244,12 +256,9 @@ macro tuple_impl ($N:literal, $($T:ident),* $(,)?) {
 			${concat( Tuple, $N )} { $( $T, )* }.format(ctx)
 		}
 
-		fn prefix_ws(&mut self, ctx: &mut Context) -> Option<&mut Whitespace> {
+		fn with_prefix_ws(&mut self, ctx: &mut Context, f: impl Fn(&mut Whitespace, &mut Context)) -> bool {
 			let ( $($T,)* ) = self;
-			let whitespace = &raw mut *${concat( Tuple, $N )} { $( $T, )* }.prefix_ws(ctx)?;
-
-			// SAFETY: `whitespace` is borrowed from `self`
-			Some(unsafe { &mut *whitespace })
+			${concat( Tuple, $N )} { $( $T, )* }.with_prefix_ws(ctx, f)
 		}
 	}
 }
