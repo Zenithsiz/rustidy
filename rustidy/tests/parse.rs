@@ -7,7 +7,8 @@
 use {
 	assert_json_diff::assert_json_eq,
 	rustidy::{Arenas, Parser, Print, Replacements, ast, print},
-	std::{env, fs, path::Path, process, thread},
+	serde::Deserialize,
+	std::{env, fs, path::Path, process},
 };
 
 #[test]
@@ -50,17 +51,14 @@ pub fn parse() {
 			},
 			false => {
 				let output = fs::read_to_string(output_path).expect("Unable to read output path");
-				// TODO: Don't spawn a new thread due to the stack being too small
-				let output = thread::scope(|s| {
-					thread::Builder::new()
-						.stack_size(8 * 1024 * 1024)
-						.spawn_scoped(s, || {
-							serde_json::from_str::<ast::Crate>(&output).expect("Unable to deserialize output")
-						})
-						.expect("Unable to spawn thread")
-						.join()
-						.expect("Unable to join thread")
-				});
+				let output = {
+					let mut deserializer = serde_json::Deserializer::from_str(&output);
+					deserializer.disable_recursion_limit();
+					let mut deserializer = serde_stacker::Deserializer::new(&mut deserializer);
+					deserializer.red_zone = 512 * 1024;
+					deserializer.stack_size = 8 * 1024 * 1024;
+					ast::Crate::deserialize(deserializer).expect("Unable to deserialize output")
+				};
 
 				assert_json_eq!(input, output);
 			},
