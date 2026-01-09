@@ -116,7 +116,8 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 	let into_root_ty = &attrs.into_root;
 	let into_root_body = match into_root_ty {
 		Some(root_ty) => quote! { <#root_ty>::from(self).into_root(parser) },
-		None => quote! { self.into() },
+		None =>
+			quote! { <#item_ident as crate::parser::IntoRecursiveRoot<#root_ty>>::into_recursive_root(self, parser) },
 	};
 
 	let skip_if_tag = attrs.skip_if_tag.as_ref();
@@ -332,13 +333,14 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 					let join = match &fields.style {
 						darling::ast::Style::Struct => {
 							let field_ident = field.ident.as_ref().expect("Should have an ident");
+							let field_ty = &field.ty;
 							let suffix_fields_ident = suffix_fields
 								.iter()
 								.map(|field| field.ident.as_ref().expect("Should have an ident"));
 
 							quote! {
 								Self {
-									#field_ident: lhs.into(),
+									#field_ident: <#field_ty as crate::parser::FromRecursiveRoot<#root_ty>>::from_recursive_root(lhs, parser),
 									#( #suffix_fields_ident: suffix.#suffix_fields_ident, )*
 								}
 							}
@@ -385,13 +387,14 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 					let join = match &fields.style {
 						darling::ast::Style::Struct => {
 							let field_ident = field.ident.as_ref().expect("Should have an ident");
+							let field_ty = &field.ty;
 							let prefix_fields_ident = prefix_fields
 								.iter()
 								.map(|field| field.ident.as_ref().expect("Should have an ident"));
 
 							quote! {
 								Self {
-									#field_ident: lhs.into(),
+									#field_ident: <#field_ty as crate::parser::FromRecursiveRoot<#root_ty>>::from_recursive_root(lhs, parser),
 									#( #prefix_fields_ident: prefix.#prefix_fields_ident, )*
 								}
 							}
@@ -442,14 +445,16 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 						darling::ast::Style::Struct => {
 							let lhs_field_ident = lhs_field.ident.as_ref().expect("Should have an ident");
 							let rhs_field_ident = rhs_field.ident.as_ref().expect("Should have an ident");
+							let lhs_field_ty = &lhs_field.ty;
+							let rhs_field_ty = &rhs_field.ty;
 							let infix_fields_ident = infix_fields
 								.iter()
 								.map(|field| field.ident.as_ref().expect("Should have an ident"));
 
 							quote! {
 								Self {
-									#lhs_field_ident: lhs.into(),
-									#rhs_field_ident: rhs.into(),
+									#lhs_field_ident: <#lhs_field_ty as crate::parser::FromRecursiveRoot<#root_ty>>::from_recursive_root(lhs, parser),
+									#rhs_field_ident: <#rhs_field_ty as crate::parser::FromRecursiveRoot<#root_ty>>::from_recursive_root(rhs, parser),
 									#( #infix_fields_ident: infix.#infix_fields_ident, )*
 								}
 							}

@@ -44,6 +44,32 @@ pub trait ParsableRecursive<R> {
 	fn join_infix(lhs: R, infix: Self::Infix, rhs: R, parser: &mut Parser) -> Self;
 }
 
+pub trait FromRecursiveRoot<R> {
+	fn from_recursive_root(root: R, parser: &mut Parser) -> Self;
+}
+
+impl<R, T> FromRecursiveRoot<R> for T
+where
+	T: From<R>,
+{
+	fn from_recursive_root(root: R, _parser: &mut Parser) -> T {
+		T::from(root)
+	}
+}
+
+pub trait IntoRecursiveRoot<R> {
+	fn into_recursive_root(self, parser: &mut Parser) -> R;
+}
+
+impl<R, T> IntoRecursiveRoot<R> for T
+where
+	R: From<T>,
+{
+	fn into_recursive_root(self, _parser: &mut Parser) -> R {
+		R::from(self)
+	}
+}
+
 impl<R> ParsableRecursive<R> for ! {
 	type Base = !;
 	type Infix = !;
