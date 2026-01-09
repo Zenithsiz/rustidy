@@ -37,7 +37,8 @@ pub fn parse() {
 		let output_path = test_dir.join("output.json");
 		match env::var("UPDATE_AST_OUTPUT").is_ok_and(|value| !value.trim().is_empty()) {
 			true => {
-				let output = serde_json::to_string(&input).expect("Unable to serialize input");
+				let output = TestOutput { ast: input, arenas };
+				let output = serde_json::to_string(&output).expect("Unable to serialize input");
 				fs::write(&output_path, &output).expect("Unable to update output");
 
 				// TODO: Better solution than shelling out to `prettier`?
@@ -57,10 +58,11 @@ pub fn parse() {
 					let mut deserializer = serde_stacker::Deserializer::new(&mut deserializer);
 					deserializer.red_zone = 512 * 1024;
 					deserializer.stack_size = 8 * 1024 * 1024;
-					ast::Crate::deserialize(deserializer).expect("Unable to deserialize output")
+					TestOutput::deserialize(deserializer).expect("Unable to deserialize output")
 				};
 
-				assert_json_eq!(input, output);
+				assert_json_eq!(input, output.ast);
+				assert_json_eq!(arenas, output.arenas);
 			},
 		}
 	}
@@ -71,4 +73,11 @@ pub fn parse() {
 			.exit_ok()
 			.expect("`prettier` failed");
 	}
+}
+
+#[derive(Debug)]
+#[derive(serde::Serialize, serde::Deserialize)]
+struct TestOutput {
+	ast:    ast::Crate,
+	arenas: Arenas,
 }

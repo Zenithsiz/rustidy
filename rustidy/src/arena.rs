@@ -9,6 +9,7 @@ use {
 
 /// Arenas
 #[derive(Debug)]
+#[derive(serde::Serialize, serde::Deserialize)]
 pub struct Arenas {
 	parser_str: Arena<ParserStr>,
 	whitespace: Arena<Whitespace>,
@@ -39,6 +40,9 @@ impl Default for Arenas {
 
 /// Arena for `T`'s Data
 #[derive(Debug)]
+#[derive(serde::Serialize, serde::Deserialize)]
+#[serde(bound(serialize = "T::Data: serde::Serialize"))]
+#[serde(bound(deserialize = "T::Data: serde::Deserialize<'de>"))]
 pub struct Arena<T: ?Sized + ArenaData> {
 	// TODO: Track the borrows separately to not wrap each
 	//       data within an `Option`?

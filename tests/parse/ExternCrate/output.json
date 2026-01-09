@@ -1,82 +1,242 @@
 {
-	"shebang": null,
-	"inner_attrs": [],
-	"items": [
-		{
-			"attrs": [],
-			"inner": {
-				"Vis": {
-					"vis": null,
-					"inner": {
-						"ExternCrate": {
-							"extern_": [9, 1],
-							"crate_": [10, 3],
-							"crate_ref": { "Ident": { "NonKw": [13, 5] } },
-							"as_clause": null,
-							"semi": [15, 7]
+	"ast": {
+		"shebang": null,
+		"inner_attrs": [],
+		"items": [
+			{
+				"attrs": [],
+				"inner": {
+					"Vis": {
+						"vis": null,
+						"inner": {
+							"ExternCrate": {
+								"extern_": [9, 1],
+								"crate_": [10, 3],
+								"crate_ref": { "Ident": { "NonKw": [13, 5] } },
+								"as_clause": null,
+								"semi": [15, 7]
+							}
+						}
+					}
+				}
+			},
+			{
+				"attrs": [],
+				"inner": {
+					"Vis": {
+						"vis": null,
+						"inner": {
+							"ExternCrate": {
+								"extern_": [22, 9],
+								"crate_": [23, 11],
+								"crate_ref": { "Self_": [24, 13] },
+								"as_clause": null,
+								"semi": [26, 15]
+							}
+						}
+					}
+				}
+			},
+			{
+				"attrs": [],
+				"inner": {
+					"Vis": {
+						"vis": null,
+						"inner": {
+							"ExternCrate": {
+								"extern_": [33, 17],
+								"crate_": [34, 19],
+								"crate_ref": { "Self_": [35, 21] },
+								"as_clause": {
+									"as_": [36, 23],
+									"name": { "Underscore": [37, 25] }
+								},
+								"semi": [38, 27]
+							}
+						}
+					}
+				}
+			},
+			{
+				"attrs": [],
+				"inner": {
+					"Vis": {
+						"vis": null,
+						"inner": {
+							"ExternCrate": {
+								"extern_": [45, 29],
+								"crate_": [46, 31],
+								"crate_ref": { "Self_": [47, 33] },
+								"as_clause": {
+									"as_": [48, 35],
+									"name": { "Ident": { "NonKw": [51, 37] } }
+								},
+								"semi": [52, 39]
+							}
 						}
 					}
 				}
 			}
+		],
+		"suffix_ws": 106,
+		"trailing_line_comment": null
+	},
+	"arenas": {
+		"parser_str": {
+			"data": [
+				{ "start": 0, "end": 0 },
+				{ "start": 0, "end": 6 },
+				{ "start": 6, "end": 7 },
+				{ "start": 7, "end": 12 },
+				{ "start": 12, "end": 13 },
+				{ "start": 13, "end": 14 },
+				{ "start": 14, "end": 14 },
+				{ "start": 14, "end": 15 },
+				{ "start": 15, "end": 16 },
+				{ "start": 16, "end": 22 },
+				{ "start": 22, "end": 23 },
+				{ "start": 23, "end": 28 },
+				{ "start": 28, "end": 29 },
+				{ "start": 29, "end": 33 },
+				{ "start": 33, "end": 33 },
+				{ "start": 33, "end": 34 },
+				{ "start": 34, "end": 35 },
+				{ "start": 35, "end": 41 },
+				{ "start": 41, "end": 42 },
+				{ "start": 42, "end": 47 },
+				{ "start": 47, "end": 48 },
+				{ "start": 48, "end": 52 },
+				{ "start": 52, "end": 53 },
+				{ "start": 53, "end": 55 },
+				{ "start": 55, "end": 56 },
+				{ "start": 56, "end": 57 },
+				{ "start": 57, "end": 57 },
+				{ "start": 57, "end": 58 },
+				{ "start": 58, "end": 59 },
+				{ "start": 59, "end": 65 },
+				{ "start": 65, "end": 66 },
+				{ "start": 66, "end": 71 },
+				{ "start": 71, "end": 72 },
+				{ "start": 72, "end": 76 },
+				{ "start": 76, "end": 77 },
+				{ "start": 77, "end": 79 },
+				{ "start": 79, "end": 80 },
+				{ "start": 80, "end": 85 },
+				{ "start": 85, "end": 85 },
+				{ "start": 85, "end": 86 },
+				{ "start": 86, "end": 87 }
+			]
 		},
-		{
-			"attrs": [],
-			"inner": {
-				"Vis": {
-					"vis": null,
-					"inner": {
-						"ExternCrate": {
-							"extern_": [22, 9],
-							"crate_": [23, 11],
-							"crate_ref": { "Self_": [24, 13] },
-							"as_clause": null,
-							"semi": [26, 15]
-						}
-					}
-				}
-			}
-		},
-		{
-			"attrs": [],
-			"inner": {
-				"Vis": {
-					"vis": null,
-					"inner": {
-						"ExternCrate": {
-							"extern_": [33, 17],
-							"crate_": [34, 19],
-							"crate_ref": { "Self_": [35, 21] },
-							"as_clause": {
-								"as_": [36, 23],
-								"name": { "Underscore": [37, 25] }
-							},
-							"semi": [38, 27]
-						}
-					}
-				}
-			}
-		},
-		{
-			"attrs": [],
-			"inner": {
-				"Vis": {
-					"vis": null,
-					"inner": {
-						"ExternCrate": {
-							"extern_": [45, 29],
-							"crate_": [46, 31],
-							"crate_ref": { "Self_": [47, 33] },
-							"as_clause": {
-								"as_": [48, 35],
-								"name": { "Ident": { "NonKw": [51, 37] } }
-							},
-							"semi": [52, 39]
-						}
-					}
-				}
-			}
+		"whitespace": {
+			"data": [
+				{ "first": 0, "rest": [] },
+				{ "first": 0, "rest": [] },
+				{ "first": 0, "rest": [] },
+				{ "first": 0, "rest": [] },
+				{ "first": 0, "rest": [] },
+				{ "first": 0, "rest": [] },
+				{ "first": 0, "rest": [] },
+				{ "first": 0, "rest": [] },
+				{ "first": 0, "rest": [] },
+				{ "first": 0, "rest": [] },
+				{ "first": 2, "rest": [] },
+				{ "first": 4, "rest": [] },
+				{ "first": 4, "rest": [] },
+				{ "first": 4, "rest": [] },
+				{ "first": 6, "rest": [] },
+				{ "first": 6, "rest": [] },
+				{ "first": 8, "rest": [] },
+				{ "first": 8, "rest": [] },
+				{ "first": 8, "rest": [] },
+				{ "first": 8, "rest": [] },
+				{ "first": 8, "rest": [] },
+				{ "first": 8, "rest": [] },
+				{ "first": 8, "rest": [] },
+				{ "first": 10, "rest": [] },
+				{ "first": 12, "rest": [] },
+				{ "first": 14, "rest": [] },
+				{ "first": 14, "rest": [] },
+				{ "first": 16, "rest": [] },
+				{ "first": 16, "rest": [] },
+				{ "first": 16, "rest": [] },
+				{ "first": 16, "rest": [] },
+				{ "first": 16, "rest": [] },
+				{ "first": 16, "rest": [] },
+				{ "first": 16, "rest": [] },
+				{ "first": 18, "rest": [] },
+				{ "first": 20, "rest": [] },
+				{ "first": 22, "rest": [] },
+				{ "first": 24, "rest": [] },
+				{ "first": 26, "rest": [] },
+				{ "first": 28, "rest": [] },
+				{ "first": 28, "rest": [] },
+				{ "first": 28, "rest": [] },
+				{ "first": 28, "rest": [] },
+				{ "first": 28, "rest": [] },
+				{ "first": 28, "rest": [] },
+				{ "first": 28, "rest": [] },
+				{ "first": 30, "rest": [] },
+				{ "first": 32, "rest": [] },
+				{ "first": 34, "rest": [] },
+				{ "first": 36, "rest": [] },
+				{ "first": 36, "rest": [] },
+				{ "first": 36, "rest": [] },
+				{ "first": 38, "rest": [] },
+				{ "first": 40, "rest": [] },
+				{ "first": 40, "rest": [] },
+				{ "first": 40, "rest": [] },
+				{ "first": 40, "rest": [] },
+				{ "first": 40, "rest": [] },
+				{ "first": 40, "rest": [] },
+				{ "first": 40, "rest": [] },
+				{ "first": 40, "rest": [] },
+				{ "first": 40, "rest": [] },
+				{ "first": 40, "rest": [] },
+				{ "first": 40, "rest": [] },
+				{ "first": 40, "rest": [] },
+				{ "first": 40, "rest": [] },
+				{ "first": 40, "rest": [] },
+				{ "first": 40, "rest": [] },
+				{ "first": 40, "rest": [] },
+				{ "first": 40, "rest": [] },
+				{ "first": 40, "rest": [] },
+				{ "first": 40, "rest": [] },
+				{ "first": 40, "rest": [] },
+				{ "first": 40, "rest": [] },
+				{ "first": 40, "rest": [] },
+				{ "first": 40, "rest": [] },
+				{ "first": 40, "rest": [] },
+				{ "first": 40, "rest": [] },
+				{ "first": 40, "rest": [] },
+				{ "first": 40, "rest": [] },
+				{ "first": 40, "rest": [] },
+				{ "first": 40, "rest": [] },
+				{ "first": 40, "rest": [] },
+				{ "first": 40, "rest": [] },
+				{ "first": 40, "rest": [] },
+				{ "first": 40, "rest": [] },
+				{ "first": 40, "rest": [] },
+				{ "first": 40, "rest": [] },
+				{ "first": 40, "rest": [] },
+				{ "first": 40, "rest": [] },
+				{ "first": 40, "rest": [] },
+				{ "first": 40, "rest": [] },
+				{ "first": 40, "rest": [] },
+				{ "first": 40, "rest": [] },
+				{ "first": 40, "rest": [] },
+				{ "first": 40, "rest": [] },
+				{ "first": 40, "rest": [] },
+				{ "first": 40, "rest": [] },
+				{ "first": 40, "rest": [] },
+				{ "first": 40, "rest": [] },
+				{ "first": 40, "rest": [] },
+				{ "first": 40, "rest": [] },
+				{ "first": 40, "rest": [] },
+				{ "first": 40, "rest": [] },
+				{ "first": 40, "rest": [] },
+				{ "first": 40, "rest": [] },
+				{ "first": 40, "rest": [] }
+			]
 		}
-	],
-	"suffix_ws": 106,
-	"trailing_line_comment": null
+	}
 }
