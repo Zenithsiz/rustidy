@@ -29,19 +29,19 @@ pub trait ParsableRecursive<R> {
 	type Infix: Parse;
 
 	/// Converts this type into the root
-	fn into_root(self) -> R;
+	fn into_root(self, parser: &mut Parser) -> R;
 
 	/// Creates this type from it's parts
-	fn join_prefix(prefix: Self::Prefix, root: R) -> Self;
+	fn join_prefix(prefix: Self::Prefix, root: R, parser: &mut Parser) -> Self;
 
 	/// Converts the base to this type
-	fn from_base(base: Self::Base) -> Self;
+	fn from_base(base: Self::Base, parser: &mut Parser) -> Self;
 
 	/// Creates this type from it's parts
-	fn join_suffix(root: R, suffix: Self::Suffix) -> Self;
+	fn join_suffix(root: R, suffix: Self::Suffix, parser: &mut Parser) -> Self;
 
 	/// Creates this type from it's parts
-	fn join_infix(lhs: R, infix: Self::Infix, rhs: R) -> Self;
+	fn join_infix(lhs: R, infix: Self::Infix, rhs: R, parser: &mut Parser) -> Self;
 }
 
 impl<R> ParsableRecursive<R> for ! {
@@ -50,23 +50,23 @@ impl<R> ParsableRecursive<R> for ! {
 	type Prefix = !;
 	type Suffix = !;
 
-	fn into_root(self) -> R {
+	fn into_root(self, _parser: &mut Parser) -> R {
 		self
 	}
 
-	fn join_prefix(prefix: Self::Prefix, _: R) -> Self {
+	fn join_prefix(prefix: Self::Prefix, _: R, _parser: &mut Parser) -> Self {
 		prefix
 	}
 
-	fn from_base(base: Self::Base) -> Self {
+	fn from_base(base: Self::Base, _parser: &mut Parser) -> Self {
 		base
 	}
 
-	fn join_suffix(_: R, suffix: Self::Suffix) -> Self {
+	fn join_suffix(_: R, suffix: Self::Suffix, _parser: &mut Parser) -> Self {
 		suffix
 	}
 
-	fn join_infix(_: R, infix: Self::Infix, _: R) -> Self {
+	fn join_infix(_: R, infix: Self::Infix, _: R, _parser: &mut Parser) -> Self {
 		infix
 	}
 }
@@ -97,13 +97,13 @@ where
 
 	// TODO: Account for precedence
 	fn parse_from(parser: &mut Parser) -> Result<Self, Self::Error> {
-		let convert_inner = |inner: RecursiveWrapperInner<R>| {
-			let mut base = R::from_base(inner.base);
+		let convert_inner = |parser: &mut Parser, inner: RecursiveWrapperInner<R>| {
+			let mut base = R::from_base(inner.base, parser);
 			for prefix in inner.prefixes.into_iter().rev() {
-				base = R::join_prefix(prefix, R::into_root(base));
+				base = R::join_prefix(prefix, R::into_root(base, parser), parser);
 			}
 			for suffix in inner.suffixes {
-				base = R::join_suffix(R::into_root(base), suffix);
+				base = R::join_suffix(R::into_root(base, parser), suffix, parser);
 			}
 
 			base
@@ -111,9 +111,14 @@ where
 
 		let raw = self::parse(parser)?;
 
-		let mut base = convert_inner(raw.first);
+		let mut base = convert_inner(parser, raw.first);
 		for (infix, rhs) in raw.rest {
-			base = R::join_infix(R::into_root(base), infix, R::into_root(convert_inner(rhs)));
+			base = R::join_infix(
+				R::into_root(base, parser),
+				infix,
+				R::into_root(convert_inner(parser, rhs), parser),
+				parser,
+			);
 		}
 
 		let base = T::try_from(base).map_err(|_| Self::Error::FromRoot)?;

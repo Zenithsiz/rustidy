@@ -115,7 +115,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 
 	let into_root_ty = &attrs.into_root;
 	let into_root_body = match into_root_ty {
-		Some(root_ty) => quote! { <#root_ty>::from(self).into_root() },
+		Some(root_ty) => quote! { <#root_ty>::from(self).into_root(parser) },
 		None => quote! { self.into() },
 	};
 
@@ -140,7 +140,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 					let ty = &field.ty;
 					let variant_ident = &variant.ident;
 
-					quote! { #ident_suffix::#variant_ident(suffix) => Self::#variant_ident(<#ty as crate::parser::ParsableRecursive<#root_ty>>::join_suffix(root, suffix)), }
+					quote! { #ident_suffix::#variant_ident(suffix) => Self::#variant_ident(<#ty as crate::parser::ParsableRecursive<#root_ty>>::join_suffix(root, suffix, parser)), }
 				})
 				.collect::<Vec<_>>();
 			for variant in &mut suffix_variants {
@@ -154,7 +154,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 				type Suffix = #ident_suffix;
 
 				#[allow(unreachable_code)]
-				fn join_suffix(root: #root_ty, suffix: Self::Suffix) -> Self {
+				fn join_suffix(root: #root_ty, suffix: Self::Suffix, parser: &mut crate::parser::Parser) -> Self {
 					match suffix {
 						#( #suffix_match_arms )*
 					}
@@ -179,7 +179,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 					let ty = &field.ty;
 					let variant_ident = &variant.ident;
 
-					quote! { #ident_prefix::#variant_ident(prefix) => Self::#variant_ident(<#ty as crate::parser::ParsableRecursive<#root_ty>>::join_prefix(prefix, root)), }
+					quote! { #ident_prefix::#variant_ident(prefix) => Self::#variant_ident(<#ty as crate::parser::ParsableRecursive<#root_ty>>::join_prefix(prefix, root, parser)), }
 				})
 				.collect::<Vec<_>>();
 			for variant in &mut prefix_variants {
@@ -193,7 +193,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 				type Prefix = #ident_prefix;
 
 				#[allow(unreachable_code)]
-				fn join_prefix(prefix: Self::Prefix, root: #root_ty) -> Self {
+				fn join_prefix(prefix: Self::Prefix, root: #root_ty, parser: &mut crate::parser::Parser) -> Self {
 					match prefix {
 						#( #prefix_match_arms )*
 					}
@@ -217,7 +217,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 					let ty = &field.ty;
 					let variant_ident = &variant.ident;
 
-					quote! { #ident_infix::#variant_ident(infix) => Self::#variant_ident(<#ty as crate::parser::ParsableRecursive<#root_ty>>::join_infix(lhs, infix, rhs)), }
+					quote! { #ident_infix::#variant_ident(infix) => Self::#variant_ident(<#ty as crate::parser::ParsableRecursive<#root_ty>>::join_infix(lhs, infix, rhs, parser)), }
 				})
 				.collect::<Vec<_>>();
 			for variant in &mut infix_variants {
@@ -231,7 +231,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 				type Infix = #ident_infix;
 
 				#[allow(unreachable_code)]
-				fn join_infix(lhs: #root_ty, infix: Self::Infix, rhs: #root_ty) -> Self {
+				fn join_infix(lhs: #root_ty, infix: Self::Infix, rhs: #root_ty, parser: &mut crate::parser::Parser) -> Self {
 					match infix {
 						#( #infix_match_arms )*
 					}
@@ -256,7 +256,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 					let ty = &field.ty;
 					let variant_ident = &variant.ident;
 
-					quote! { #ident_base::#variant_ident(base) => Self::#variant_ident(<#ty as crate::parser::ParsableRecursive<#root_ty>>::from_base(base)), }
+					quote! { #ident_base::#variant_ident(base) => Self::#variant_ident(<#ty as crate::parser::ParsableRecursive<#root_ty>>::from_base(base, parser)), }
 				})
 				.collect::<Vec<_>>();
 			for variant in &mut base_variants {
@@ -286,7 +286,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 				type Base = #ident_base;
 
 				#[allow(unreachable_code)]
-				fn from_base(base: Self::Base) -> Self {
+				fn from_base(base: Self::Base, parser: &mut crate::parser::Parser) -> Self {
 					match base {
 						#( #base_match_arms )*
 					}
@@ -303,7 +303,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 			quote! {
 				#[automatically_derived]
 				impl crate::parser::ParsableRecursive<#root_ty> for #item_ident {
-					fn into_root(self) -> #root_ty {
+					fn into_root(self, parser: &mut crate::parser::Parser) -> #root_ty {
 						#into_root_body
 					}
 
@@ -350,7 +350,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 					let impl_ = quote! {
 						type Suffix = #ident_suffix;
 
-						fn join_suffix(lhs: #root_ty, suffix: Self::Suffix) -> Self {
+						fn join_suffix(lhs: #root_ty, suffix: Self::Suffix, parser: &mut crate::parser::Parser) -> Self {
 							#join
 						}
 					};
@@ -369,7 +369,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 					quote! {
 						type Suffix = !;
 
-						fn join_suffix(lhs: #root_ty, suffix: Self::Suffix) -> Self {
+						fn join_suffix(lhs: #root_ty, suffix: Self::Suffix, parser: &mut crate::parser::Parser) -> Self {
 							suffix
 						}
 					},
@@ -403,7 +403,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 					let impl_ = quote! {
 						type Prefix = #ident_prefix;
 
-						fn join_prefix(prefix: Self::Prefix, lhs: #root_ty) -> Self {
+						fn join_prefix(prefix: Self::Prefix, lhs: #root_ty, parser: &mut crate::parser::Parser) -> Self {
 							#join
 						}
 					};
@@ -422,7 +422,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 					quote! {
 						type Prefix = !;
 
-						fn join_prefix(prefix: Self::Prefix, _: #root_ty) -> Self {
+						fn join_prefix(prefix: Self::Prefix, _: #root_ty, parser: &mut crate::parser::Parser) -> Self {
 							prefix
 						}
 					},
@@ -461,7 +461,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 					let impl_ = quote! {
 						type Infix = #ident_infix;
 
-						fn join_infix(lhs: #root_ty, infix: Self::Infix, rhs: #root_ty) -> Self {
+						fn join_infix(lhs: #root_ty, infix: Self::Infix, rhs: #root_ty, parser: &mut crate::parser::Parser) -> Self {
 							#join
 						}
 					};
@@ -480,7 +480,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 					quote! {
 						type Infix = !;
 
-						fn join_infix(_: #root_ty, infix: Self::Infix, _: #root_ty) -> Self {
+						fn join_infix(_: #root_ty, infix: Self::Infix, _: #root_ty, parser: &mut crate::parser::Parser) -> Self {
 							infix
 						}
 					},
@@ -491,13 +491,13 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 			quote! {
 				#[automatically_derived]
 				impl crate::parser::ParsableRecursive<#root_ty> for #item_ident {
-					fn into_root(self) -> #root_ty {
+					fn into_root(self, parser: &mut crate::parser::Parser) -> #root_ty {
 						#into_root_body
 					}
 
 					type Base = !;
 
-					fn from_base(base: Self::Base) -> Self {
+					fn from_base(base: Self::Base, parser: &mut crate::parser::Parser) -> Self {
 						base
 					}
 
@@ -545,20 +545,20 @@ fn emit_transparent(attrs: &Attrs) -> Result<proc_macro::TokenStream, AppError> 
 			type Suffix = <#field_ty as crate::parser::ParsableRecursive<#root_ty>>::Suffix;
 			type Infix  = <#field_ty as crate::parser::ParsableRecursive<#root_ty>>::Infix;
 
-			fn into_root(self) -> #root_ty {
-				self.#field_member.into_root()
+			fn into_root(self, parser: &mut crate::parser::Parser) -> #root_ty {
+				self.#field_member.into_root(parser)
 			}
-			fn join_prefix(prefix: Self::Prefix, root: #root_ty) -> Self {
-				Self(<#field_ty as crate::parser::ParsableRecursive<#root_ty>>::join_prefix(prefix, root))
+			fn join_prefix(prefix: Self::Prefix, root: #root_ty, parser: &mut crate::parser::Parser) -> Self {
+				Self(<#field_ty as crate::parser::ParsableRecursive<#root_ty>>::join_prefix(prefix, root, parser))
 			}
-			fn from_base(base: Self::Base) -> Self {
-				Self(<#field_ty as crate::parser::ParsableRecursive<#root_ty>>::from_base(base))
+			fn from_base(base: Self::Base, parser: &mut crate::parser::Parser) -> Self {
+				Self(<#field_ty as crate::parser::ParsableRecursive<#root_ty>>::from_base(base, parser))
 			}
-			fn join_suffix(root: #root_ty, suffix: Self::Suffix) -> Self {
-				Self(<#field_ty as crate::parser::ParsableRecursive<#root_ty>>::join_suffix(root, suffix))
+			fn join_suffix(root: #root_ty, suffix: Self::Suffix, parser: &mut crate::parser::Parser) -> Self {
+				Self(<#field_ty as crate::parser::ParsableRecursive<#root_ty>>::join_suffix(root, suffix, parser))
 			}
-			fn join_infix(lhs: #root_ty, infix: Self::Infix, rhs: #root_ty) -> Self {
-				Self(<#field_ty as crate::parser::ParsableRecursive<#root_ty>>::join_infix(lhs, infix, rhs))
+			fn join_infix(lhs: #root_ty, infix: Self::Infix, rhs: #root_ty, parser: &mut crate::parser::Parser) -> Self {
+				Self(<#field_ty as crate::parser::ParsableRecursive<#root_ty>>::join_infix(lhs, infix, rhs, parser))
 			}
 		}
 	};

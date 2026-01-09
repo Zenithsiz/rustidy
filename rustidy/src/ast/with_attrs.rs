@@ -3,7 +3,7 @@
 // Imports
 use {
 	super::attr::{InnerAttrOrDocComment, OuterAttrOrDocComment},
-	crate::{Format, Parse, Print, parser::ParsableRecursive},
+	crate::{Format, Parse, Parser, Print, parser::ParsableRecursive},
 	core::marker::PhantomData,
 };
 
@@ -58,38 +58,38 @@ where
 	type Prefix = WithOuterAttributes<T::Prefix>;
 	type Suffix = T::Suffix;
 
-	fn into_root(self) -> R {
-		RecursiveParent::from(self).into_root()
+	fn into_root(self, parser: &mut Parser) -> R {
+		RecursiveParent::from(self).into_root(parser)
 	}
 
-	fn from_base(base: Self::Base) -> Self {
+	fn from_base(base: Self::Base, parser: &mut Parser) -> Self {
 		Self {
 			attrs:    base.attrs,
-			inner:    T::from_base(base.inner),
+			inner:    T::from_base(base.inner, parser),
 			_phantom: PhantomData,
 		}
 	}
 
-	fn join_suffix(root: R, suffix: Self::Suffix) -> Self {
+	fn join_suffix(root: R, suffix: Self::Suffix, parser: &mut Parser) -> Self {
 		Self {
 			attrs:    vec![],
-			inner:    T::join_suffix(root, suffix),
+			inner:    T::join_suffix(root, suffix, parser),
 			_phantom: PhantomData,
 		}
 	}
 
-	fn join_prefix(prefix: Self::Prefix, root: R) -> Self {
+	fn join_prefix(prefix: Self::Prefix, root: R, parser: &mut Parser) -> Self {
 		Self {
 			attrs:    prefix.attrs,
-			inner:    T::join_prefix(prefix.inner, root),
+			inner:    T::join_prefix(prefix.inner, root, parser),
 			_phantom: PhantomData,
 		}
 	}
 
-	fn join_infix(lhs: R, infix: Self::Infix, rhs: R) -> Self {
+	fn join_infix(lhs: R, infix: Self::Infix, rhs: R, parser: &mut Parser) -> Self {
 		Self {
 			attrs:    vec![],
-			inner:    T::join_infix(lhs, infix, rhs),
+			inner:    T::join_infix(lhs, infix, rhs, parser),
 			_phantom: PhantomData,
 		}
 	}
