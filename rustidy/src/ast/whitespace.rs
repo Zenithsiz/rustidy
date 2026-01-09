@@ -22,7 +22,7 @@ use {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Print)]
 #[parse(try_with = Self::parse_skip)]
-#[expect(clippy::use_self, reason = "We need it due to `Parse` generating other types where `Self` is wrong")]
+#[expect(clippy::use_self, reason = "`Parse` derive macro doesn't support `Self`")]
 pub struct Whitespace(ArenaIdx<Whitespace>);
 
 impl Whitespace {
