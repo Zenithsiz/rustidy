@@ -23,13 +23,13 @@ pub fn parse() {
 
 		let input_path = test_dir.join("input.rs");
 		let input_file = fs::read_to_string(&input_path).expect("Unable to read file");
-		let mut arenas = Arenas::new();
-		let mut parser = Parser::new(&input_file, &mut arenas);
+		let arenas = Arenas::new();
+		let mut parser = Parser::new(&input_file, &arenas);
 
 		let input = rustidy::parse(&input_path, &mut parser).expect("Unable to parse input");
 
 		let replacements = Replacements::new();
-		let mut print_fmt = print::PrintFmt::new(&input_file, &replacements, &mut arenas);
+		let mut print_fmt = print::PrintFmt::new(&input_file, &replacements, &arenas);
 		input.print(&mut print_fmt);
 		let input_printed = print_fmt.output();
 		assert_eq!(input_file, input_printed);

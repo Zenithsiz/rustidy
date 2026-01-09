@@ -198,7 +198,7 @@ impl<T: ArenaData<Data: Parse> + WithArena> Parse for ArenaIdx<T> {
 
 	fn parse_from(parser: &mut Parser) -> Result<Self, Self::Error> {
 		let value = parser.parse::<T::Data>()?;
-		let idx = parser.arenas.get_mut::<T>().push(value);
+		let idx = parser.arenas.get::<T>().push(value);
 		Ok(idx)
 	}
 }
@@ -217,13 +217,13 @@ pub struct Parser<'a, 'input> {
 	tags: Vec<(ParserPos, ParserTag)>,
 
 	/// Arenas
-	arenas: &'a mut Arenas,
+	arenas: &'a Arenas,
 }
 
 impl<'a, 'input> Parser<'a, 'input> {
 	/// Creates a new parser
 	#[must_use]
-	pub const fn new(input: &'input str, arenas: &'a mut Arenas) -> Self {
+	pub const fn new(input: &'input str, arenas: &'a Arenas) -> Self {
 		Self {
 			input,
 			cur_pos: ParserPos(0),
@@ -239,7 +239,8 @@ impl<'a, 'input> Parser<'a, 'input> {
 	}
 
 	/// Returns the arenas
-	pub const fn arenas(&mut self) -> &mut Arenas {
+	#[must_use]
+	pub const fn arenas(&self) -> &Arenas {
 		self.arenas
 	}
 
@@ -370,7 +371,7 @@ impl<'a, 'input> Parser<'a, 'input> {
 			start: ParserPos(output_range.start),
 			end:   ParserPos(output_range.end),
 		};
-		let idx = self.arenas.get_mut::<ParserStr>().push(output_range);
+		let idx = self.arenas.get::<ParserStr>().push(output_range);
 
 		<_>::from_output(ParserStr(idx))
 	}
@@ -404,7 +405,7 @@ impl<'a, 'input> Parser<'a, 'input> {
 			Err(err) if err.is_fatal() => Err(err),
 			Err(err) => {
 				self.cur_pos = prev_pos;
-				_ = self.arenas.get_mut::<ParserStr>().truncate(prev_string_ranges_len);
+				self.arenas.get::<ParserStr>().truncate(prev_string_ranges_len);
 				Ok(Err(err))
 			},
 		}
@@ -428,11 +429,7 @@ impl<'a, 'input> Parser<'a, 'input> {
 			cur_pos:       self.cur_pos,
 			// TODO: Ideally here we wouldn't allocate and maybe just move
 			//       the new ranges somewhere else temporarily.
-			string_ranges: self
-				.arenas
-				.get_mut::<ParserStr>()
-				.truncate(prev_string_ranges_len)
-				.collect(),
+			string_ranges: self.arenas.get::<ParserStr>().truncate_drain(prev_string_ranges_len),
 		};
 		self.cur_pos = start_pos;
 
@@ -444,7 +441,7 @@ impl<'a, 'input> Parser<'a, 'input> {
 	// TODO: We should validate that the user doesn't use a previous peek
 	pub fn set_peeked(&mut self, peek_state: PeekState) {
 		self.cur_pos = peek_state.cur_pos;
-		self.arenas.get_mut::<ParserStr>().extend(peek_state.string_ranges);
+		self.arenas.get::<ParserStr>().extend(peek_state.string_ranges);
 	}
 
 	/// Returns all current tags

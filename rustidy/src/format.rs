@@ -8,7 +8,15 @@ pub use {self::config::Config, rustidy_macros::Format};
 
 // Imports
 use {
-	crate::{Arenas, ParserStr, Replacement, Replacements, ast::whitespace::Whitespace, parser::ParserRange},
+	crate::{
+		Arenas,
+		ParserStr,
+		Replacement,
+		Replacements,
+		arena::{ArenaData, ArenaIdx, WithArena},
+		ast::whitespace::Whitespace,
+		parser::ParserRange,
+	},
 	core::marker::PhantomData,
 };
 
@@ -267,6 +275,27 @@ tuple_impl! { 1, T0 }
 tuple_impl! { 2, T0, T1 }
 tuple_impl! { 3, T0, T1, T2 }
 
+impl<T: ArenaData<Data: FormatRef> + WithArena> FormatRef for ArenaIdx<T> {
+	fn range(&self, ctx: &Context) -> Option<ParserRange> {
+		ctx.arenas.get::<T>().with_value(*self, |value| value.range(ctx))
+	}
+
+	fn len(&self, ctx: &Context) -> usize {
+		ctx.arenas.get::<T>().with_value(*self, |value| value.len(ctx))
+	}
+}
+
+impl<T: ArenaData<Data: Format> + WithArena> Format for ArenaIdx<T> {
+	fn format(&mut self, ctx: &mut Context) {
+		ctx.arenas.get::<T>().with_value(*self, |value| value.format(ctx));
+	}
+
+	fn with_prefix_ws(&mut self, ctx: &mut Context, f: impl Fn(&mut Whitespace, &mut Context)) -> bool {
+		ctx.arenas
+			.get::<T>()
+			.with_value(*self, |value| value.with_prefix_ws(ctx, f))
+	}
+}
 
 /// Format context
 pub struct Context<'a, 'input> {
@@ -274,7 +303,7 @@ pub struct Context<'a, 'input> {
 	config:       &'a Config,
 	indent_depth: usize,
 	replacements: &'a mut Replacements,
-	arenas:       &'a mut Arenas,
+	arenas:       &'a Arenas,
 }
 
 impl<'a, 'input> Context<'a, 'input> {
@@ -283,7 +312,7 @@ impl<'a, 'input> Context<'a, 'input> {
 	pub const fn new(
 		input: &'input str,
 		replacements: &'a mut Replacements,
-		arenas: &'a mut Arenas,
+		arenas: &'a Arenas,
 		config: &'a Config,
 	) -> Self {
 		Self {
@@ -322,12 +351,6 @@ impl<'a, 'input> Context<'a, 'input> {
 	/// Returns the arenas
 	#[must_use]
 	pub const fn arenas(&self) -> &Arenas {
-		self.arenas
-	}
-
-	/// Returns the arenas mutably
-	#[must_use]
-	pub const fn arenas_mut(&mut self) -> &mut Arenas {
 		self.arenas
 	}
 

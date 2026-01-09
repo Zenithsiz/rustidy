@@ -300,8 +300,8 @@ mod tests {
 		config: &Config,
 		kind: FormatKind,
 	) -> Result<(), AppError> {
-		let mut arenas = Arenas::new();
-		let mut parser = Parser::new(source, &mut arenas);
+		let arenas = Arenas::new();
+		let mut parser = Parser::new(source, &arenas);
 		let whitespace = parser
 			.parse::<Whitespace>()
 			.map_err(|err| err.to_app_error(&parser))
@@ -313,11 +313,11 @@ mod tests {
 
 
 		let mut replacements = Replacements::new();
-		let mut fmt_ctx = format::Context::new(source, &mut replacements, &mut arenas, fmt_config);
+		let mut fmt_ctx = format::Context::new(source, &mut replacements, &arenas, fmt_config);
 		fmt_ctx.set_indent_depth(config.indent_depth);
 		whitespace.format(&mut fmt_ctx, kind);
 
-		let mut print_fmt = print::PrintFmt::new(source, &replacements, &mut arenas);
+		let mut print_fmt = print::PrintFmt::new(source, &replacements, &arenas);
 		whitespace.print(&mut print_fmt);
 		let output = print_fmt.output();
 

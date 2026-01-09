@@ -85,8 +85,7 @@ tuple_impl! { 3, T0, T1, T2 }
 
 impl<T: ArenaData<Data: Print> + WithArena> Print for ArenaIdx<T> {
 	fn print(&self, f: &mut PrintFmt) {
-		let value = f.arenas.get::<T>().get(*self);
-		value.print(f);
+		f.arenas.get::<T>().with_value(*self, |value| value.print(f));
 	}
 }
 
@@ -101,7 +100,7 @@ pub struct PrintFmt<'a, 'input> {
 impl<'a, 'input> PrintFmt<'a, 'input> {
 	/// Creates a new formatter
 	#[must_use]
-	pub const fn new(input: &'input str, replacements: &'a Replacements, arenas: &'a mut Arenas) -> Self {
+	pub const fn new(input: &'input str, replacements: &'a Replacements, arenas: &'a Arenas) -> Self {
 		Self {
 			input,
 			output: String::new(),

@@ -3,7 +3,7 @@
 // Imports
 use {
 	crate::ParserStr,
-	core::{fmt, hash::Hash, marker::PhantomData},
+	core::{cell::RefCell, fmt, hash::Hash, marker::PhantomData},
 	std::hash::Hasher,
 };
 
@@ -27,12 +27,6 @@ impl Arenas {
 	pub fn get<T: WithArena>(&self) -> &Arena<T> {
 		T::get_arena(self)
 	}
-
-	/// Returns the arena for `T` mutably
-	#[must_use]
-	pub fn get_mut<T: WithArena>(&mut self) -> &mut Arena<T> {
-		T::get_arena_mut(self)
-	}
 }
 
 impl Default for Arenas {
@@ -44,58 +38,106 @@ impl Default for Arenas {
 /// Arena for `T`'s Data
 #[derive(Debug)]
 pub struct Arena<T: ?Sized + ArenaData> {
-	data: Vec<T::Data>,
+	// TODO: Track the borrows separately to not wrap each
+	//       data within an `Option`?
+	data: RefCell<Vec<Option<T::Data>>>,
 }
 
-impl<T: ArenaData> Arena<T> {
+impl<T: ?Sized + ArenaData> Arena<T> {
 	/// Creates a new, empty, arena
 	#[must_use]
 	const fn new() -> Self {
-		Self { data: vec![] }
+		Self {
+			data: RefCell::new(vec![]),
+		}
 	}
 
 	/// Pushes a value onto the arena, returning it's index
-	pub fn push(&mut self, value: T::Data) -> ArenaIdx<T> {
-		let idx = self.data.len();
-		self.data.push(value);
+	pub fn push(&self, value: T::Data) -> ArenaIdx<T> {
+		let mut data = self.data.borrow_mut();
+		let idx = data.len();
+		data.push(Some(value));
 		ArenaIdx {
 			inner:   idx.try_into().expect("Too many indices"),
 			phantom: PhantomData,
 		}
 	}
 
-	/// Returns the value at an index
-	#[must_use]
-	pub fn get(&self, idx: ArenaIdx<T>) -> &T::Data {
-		&self.data[idx.inner as usize]
-	}
+	/// Uses the value at an index
+	pub fn with_value<R>(&self, idx: ArenaIdx<T>, f: impl FnOnce(&mut T::Data) -> R) -> R {
+		let mut value = self
+			.data
+			.borrow_mut()
+			.get_mut(idx.inner as usize)
+			.expect("Invalid arena index")
+			.take()
+			.expect("Attempted to borrow arena value twice");
 
-	/// Returns the value at an index mutably
-	#[must_use]
-	pub fn get_mut(&mut self, idx: ArenaIdx<T>) -> &mut T::Data {
-		&mut self.data[idx.inner as usize]
+		let output = f(&mut value);
+
+		*self
+			.data
+			.borrow_mut()
+			.get_mut(idx.inner as usize)
+			.expect("Arena was truncated during borrow") = Some(value);
+
+		output
 	}
 
 	/// Returns the number of values in this arena
 	#[must_use]
-	pub const fn len(&self) -> usize {
-		self.data.len()
+	pub fn len(&self) -> usize {
+		self.data.borrow().len()
 	}
 
 	/// Returns if the arena is empty
 	#[must_use]
-	pub const fn is_empty(&self) -> bool {
-		self.data.is_empty()
+	pub fn is_empty(&self) -> bool {
+		self.data.borrow().is_empty()
 	}
 
 	/// Truncates the arena to hold `len` elements, returning the rest
-	pub fn truncate(&mut self, len: usize) -> impl Iterator<Item = T::Data> {
-		self.data.drain(len..)
+	///
+	/// # Panics
+	/// Panics if any of the drained values are borrowed
+	pub fn truncate(&self, len: usize) {
+		let mut data = self.data.borrow_mut();
+		for (idx, data) in data.iter().enumerate().skip(len) {
+			if data.is_none() {
+				Self::panic_on_borrowed_truncate(idx);
+			}
+		}
+
+		data.truncate(len);
+	}
+
+	/// Drains the arena to hold `len` elements, returning the rest.
+	///
+	/// # Panics
+	/// Panics if any of the drained values are borrowed
+	pub fn truncate_drain(&self, len: usize) -> Vec<T::Data> {
+		self.data
+			.borrow_mut()
+			.drain(len..)
+			.enumerate()
+			.map(|(idx, data)| match data {
+				Some(data) => data,
+				None => Self::panic_on_borrowed_truncate(len + idx),
+			})
+			.collect()
+	}
+
+	#[cold]
+	fn panic_on_borrowed_truncate(idx: usize) -> ! {
+		panic!(
+			"Attempted to truncate borrowed value at index {idx} in arena {:?}",
+			std::any::type_name::<T>(),
+		);
 	}
 
 	/// Extends the arena with elements
-	pub fn extend(&mut self, values: impl IntoIterator<Item = T::Data>) {
-		self.data.extend(values);
+	pub fn extend(&self, values: impl IntoIterator<Item = T::Data>) {
+		self.data.borrow_mut().extend(values.into_iter().map(Some));
 	}
 }
 
@@ -108,34 +150,34 @@ impl<T: ArenaData> Default for Arena<T> {
 /// Arena index for `T`
 #[derive(serde::Serialize, serde::Deserialize)]
 #[serde(transparent)]
-pub struct ArenaIdx<T> {
+pub struct ArenaIdx<T: ?Sized> {
 	inner:   u32,
 	phantom: PhantomData<T>,
 }
 
-impl<T> PartialEq for ArenaIdx<T> {
+impl<T: ?Sized> PartialEq for ArenaIdx<T> {
 	fn eq(&self, other: &Self) -> bool {
 		self.inner == other.inner
 	}
 }
 
-impl<T> Eq for ArenaIdx<T> {}
+impl<T: ?Sized> Eq for ArenaIdx<T> {}
 
-impl<T> Clone for ArenaIdx<T> {
+impl<T: ?Sized> Clone for ArenaIdx<T> {
 	fn clone(&self) -> Self {
 		*self
 	}
 }
 
-impl<T> Copy for ArenaIdx<T> {}
+impl<T: ?Sized> Copy for ArenaIdx<T> {}
 
-impl<T> Hash for ArenaIdx<T> {
+impl<T: ?Sized> Hash for ArenaIdx<T> {
 	fn hash<H: Hasher>(&self, state: &mut H) {
 		self.inner.hash(state);
 	}
 }
 
-impl<T> fmt::Debug for ArenaIdx<T> {
+impl<T: ?Sized> fmt::Debug for ArenaIdx<T> {
 	fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
 		f.debug_tuple("ArenaIdx").field(&self.inner).finish()
 	}
@@ -149,7 +191,6 @@ pub trait ArenaData {
 // TODO: This should be sealed
 pub trait WithArena: ArenaData {
 	fn get_arena(arenas: &Arenas) -> &Arena<Self>;
-	fn get_arena_mut(arenas: &mut Arenas) -> &mut Arena<Self>;
 }
 
 macro impl_with_arena( $($Ty:ty => $field:ident),* $(,)? ) {
@@ -157,10 +198,6 @@ macro impl_with_arena( $($Ty:ty => $field:ident),* $(,)? ) {
 		impl WithArena for $Ty {
 			fn get_arena(arenas: &Arenas) -> &Arena<Self> {
 				&arenas.$field
-			}
-
-			fn get_arena_mut(arenas: &mut Arenas) -> &mut Arena<Self> {
-				&mut arenas.$field
 			}
 		}
 	)*
