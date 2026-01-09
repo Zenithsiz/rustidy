@@ -9,14 +9,9 @@
 					"vis": null,
 					"inner": {
 						"Use": {
-							"use_": [{ "first": 0, "rest": [] }, 1],
-							"tree": {
-								"Glob": {
-									"prefix": null,
-									"glob": [{ "first": 2, "rest": [] }, 3]
-								}
-							},
-							"semi": [{ "first": 4, "rest": [] }, 5]
+							"use_": [10, 1],
+							"tree": { "Glob": { "prefix": null, "glob": [19, 3] } },
+							"semi": [20, 5]
 						}
 					}
 				}
@@ -29,17 +24,14 @@
 					"vis": null,
 					"inner": {
 						"Use": {
-							"use_": [{ "first": 6, "rest": [] }, 7],
+							"use_": [28, 7],
 							"tree": {
 								"Glob": {
-									"prefix": {
-										"path": null,
-										"sep": [{ "first": 8, "rest": [] }, 9]
-									},
-									"glob": [{ "first": 10, "rest": [] }, 11]
+									"prefix": { "path": null, "sep": [36, 9] },
+									"glob": [37, 11]
 								}
 							},
-							"semi": [{ "first": 12, "rest": [] }, 13]
+							"semi": [38, 13]
 						}
 					}
 				}
@@ -52,27 +44,23 @@
 					"vis": null,
 					"inner": {
 						"Use": {
-							"use_": [{ "first": 14, "rest": [] }, 15],
+							"use_": [46, 15],
 							"tree": {
 								"Glob": {
 									"prefix": {
 										"path": {
 											"prefix": null,
 											"segments": {
-												"first": {
-													"Ident": {
-														"NonKw": [{ "first": 16, "rest": [] }, 17]
-													}
-												},
+												"first": { "Ident": { "NonKw": [53, 17] } },
 												"rest": []
 											}
 										},
-										"sep": [{ "first": 18, "rest": [] }, 19]
+										"sep": [61, 19]
 									},
-									"glob": [{ "first": 20, "rest": [] }, 21]
+									"glob": [62, 21]
 								}
 							},
-							"semi": [{ "first": 22, "rest": [] }, 23]
+							"semi": [63, 23]
 						}
 					}
 				}
@@ -85,18 +73,18 @@
 					"vis": null,
 					"inner": {
 						"Use": {
-							"use_": [{ "first": 24, "rest": [] }, 25],
+							"use_": [71, 25],
 							"tree": {
 								"Group": {
 									"prefix": null,
 									"tree": {
-										"prefix": [{ "first": 26, "rest": [] }, 27],
+										"prefix": [89, 27],
 										"value": null,
-										"suffix": [{ "first": 28, "rest": [] }, 29]
+										"suffix": [115, 29]
 									}
 								}
 							},
-							"semi": [{ "first": 30, "rest": [] }, 31]
+							"semi": [116, 31]
 						}
 					}
 				}
@@ -109,29 +97,26 @@
 					"vis": null,
 					"inner": {
 						"Use": {
-							"use_": [{ "first": 32, "rest": [] }, 33],
+							"use_": [124, 33],
 							"tree": {
 								"Group": {
 									"prefix": null,
 									"tree": {
-										"prefix": [{ "first": 34, "rest": [] }, 35],
+										"prefix": [142, 35],
 										"value": {
 											"punctuated": {
 												"first": {
-													"Glob": {
-														"prefix": null,
-														"glob": [{ "first": 36, "rest": [] }, 37]
-													}
+													"Glob": { "prefix": null, "glob": [151, 37] }
 												},
 												"rest": []
 											},
 											"trailing": null
 										},
-										"suffix": [{ "first": 38, "rest": [] }, 39]
+										"suffix": [154, 39]
 									}
 								}
 							},
-							"semi": [{ "first": 40, "rest": [] }, 41]
+							"semi": [155, 41]
 						}
 					}
 				}
@@ -144,29 +129,26 @@
 					"vis": null,
 					"inner": {
 						"Use": {
-							"use_": [{ "first": 42, "rest": [] }, 43],
+							"use_": [163, 43],
 							"tree": {
 								"Group": {
 									"prefix": null,
 									"tree": {
-										"prefix": [{ "first": 44, "rest": [] }, 45],
+										"prefix": [181, 45],
 										"value": {
 											"punctuated": {
 												"first": {
-													"Glob": {
-														"prefix": null,
-														"glob": [{ "first": 46, "rest": [] }, 47]
-													}
+													"Glob": { "prefix": null, "glob": [190, 47] }
 												},
 												"rest": []
 											},
-											"trailing": [{ "first": 48, "rest": [] }, 49]
+											"trailing": [217, 49]
 										},
-										"suffix": [{ "first": 50, "rest": [] }, 51]
+										"suffix": [218, 51]
 									}
 								}
 							},
-							"semi": [{ "first": 52, "rest": [] }, 53]
+							"semi": [219, 53]
 						}
 					}
 				}
@@ -179,48 +161,40 @@
 					"vis": null,
 					"inner": {
 						"Use": {
-							"use_": [{ "first": 54, "rest": [] }, 55],
+							"use_": [227, 55],
 							"tree": {
 								"Group": {
 									"prefix": null,
 									"tree": {
-										"prefix": [{ "first": 56, "rest": [] }, 57],
+										"prefix": [245, 57],
 										"value": {
 											"punctuated": {
 												"first": {
-													"Glob": {
-														"prefix": null,
-														"glob": [{ "first": 58, "rest": [] }, 59]
-													}
+													"Glob": { "prefix": null, "glob": [254, 59] }
 												},
 												"rest": [
 													[
-														[{ "first": 60, "rest": [] }, 61],
+														[255, 61],
 														{
 															"Group": {
 																"prefix": null,
 																"tree": {
-																	"prefix": [{ "first": 62, "rest": [] }, 63],
+																	"prefix": [273, 63],
 																	"value": null,
-																	"suffix": [{ "first": 64, "rest": [] }, 65]
+																	"suffix": [299, 65]
 																}
 															}
 														}
 													],
 													[
-														[{ "first": 66, "rest": [] }, 67],
+														[300, 67],
 														{
 															"Simple": {
 																"path": {
 																	"prefix": null,
 																	"segments": {
 																		"first": {
-																			"Ident": {
-																				"NonKw": [
-																					{ "first": 68, "rest": [] },
-																					69
-																				]
-																			}
+																			"Ident": { "NonKw": [327, 69] }
 																		},
 																		"rest": []
 																	}
@@ -233,11 +207,11 @@
 											},
 											"trailing": null
 										},
-										"suffix": [{ "first": 70, "rest": [] }, 71]
+										"suffix": [332, 71]
 									}
 								}
 							},
-							"semi": [{ "first": 72, "rest": [] }, 73]
+							"semi": [333, 73]
 						}
 					}
 				}
@@ -250,28 +224,25 @@
 					"vis": null,
 					"inner": {
 						"Use": {
-							"use_": [{ "first": 74, "rest": [] }, 75],
+							"use_": [341, 75],
 							"tree": {
 								"Group": {
 									"prefix": null,
 									"tree": {
-										"prefix": [{ "first": 76, "rest": [] }, 77],
+										"prefix": [359, 77],
 										"value": {
 											"punctuated": {
 												"first": {
-													"Glob": {
-														"prefix": null,
-														"glob": [{ "first": 78, "rest": [] }, 79]
-													}
+													"Glob": { "prefix": null, "glob": [368, 79] }
 												},
 												"rest": [
 													[
-														[{ "first": 80, "rest": [] }, 81],
+														[369, 81],
 														{
 															"Group": {
 																"prefix": null,
 																"tree": {
-																	"prefix": [{ "first": 82, "rest": [] }, 83],
+																	"prefix": [387, 83],
 																	"value": {
 																		"punctuated": {
 																			"first": {
@@ -280,12 +251,7 @@
 																						"prefix": null,
 																						"segments": {
 																							"first": {
-																								"Ident": {
-																									"NonKw": [
-																										{ "first": 84, "rest": [] },
-																										85
-																									]
-																								}
+																								"Ident": { "NonKw": [414, 85] }
 																							},
 																							"rest": []
 																						}
@@ -295,7 +261,7 @@
 																			},
 																			"rest": [
 																				[
-																					[{ "first": 86, "rest": [] }, 87],
+																					[417, 87],
 																					{
 																						"Simple": {
 																							"path": {
@@ -303,13 +269,7 @@
 																								"segments": {
 																									"first": {
 																										"Ident": {
-																											"NonKw": [
-																												{
-																													"first": 88,
-																													"rest": []
-																												},
-																												89
-																											]
+																											"NonKw": [444, 89]
 																										}
 																									},
 																									"rest": []
@@ -323,25 +283,20 @@
 																		},
 																		"trailing": null
 																	},
-																	"suffix": [{ "first": 90, "rest": [] }, 91]
+																	"suffix": [449, 91]
 																}
 															}
 														}
 													],
 													[
-														[{ "first": 92, "rest": [] }, 93],
+														[450, 93],
 														{
 															"Simple": {
 																"path": {
 																	"prefix": null,
 																	"segments": {
 																		"first": {
-																			"Ident": {
-																				"NonKw": [
-																					{ "first": 94, "rest": [] },
-																					95
-																				]
-																			}
+																			"Ident": { "NonKw": [477, 95] }
 																		},
 																		"rest": []
 																	}
@@ -354,11 +309,11 @@
 											},
 											"trailing": null
 										},
-										"suffix": [{ "first": 96, "rest": [] }, 97]
+										"suffix": [482, 97]
 									}
 								}
 							},
-							"semi": [{ "first": 98, "rest": [] }, 99]
+							"semi": [483, 99]
 						}
 					}
 				}
@@ -371,24 +326,20 @@
 					"vis": null,
 					"inner": {
 						"Use": {
-							"use_": [{ "first": 100, "rest": [] }, 101],
+							"use_": [491, 101],
 							"tree": {
 								"Simple": {
 									"path": {
 										"prefix": null,
 										"segments": {
-											"first": {
-												"Ident": {
-													"NonKw": [{ "first": 102, "rest": [] }, 103]
-												}
-											},
+											"first": { "Ident": { "NonKw": [518, 103] } },
 											"rest": []
 										}
 									},
 									"as_": null
 								}
 							},
-							"semi": [{ "first": 104, "rest": [] }, 105]
+							"semi": [521, 105]
 						}
 					}
 				}
@@ -401,29 +352,23 @@
 					"vis": null,
 					"inner": {
 						"Use": {
-							"use_": [{ "first": 106, "rest": [] }, 107],
+							"use_": [529, 107],
 							"tree": {
 								"Simple": {
 									"path": {
 										"prefix": null,
 										"segments": {
-											"first": {
-												"Ident": {
-													"NonKw": [{ "first": 108, "rest": [] }, 109]
-												}
-											},
+											"first": { "Ident": { "NonKw": [556, 109] } },
 											"rest": []
 										}
 									},
 									"as_": {
-										"as_": [{ "first": 110, "rest": [] }, 111],
-										"value": {
-											"Ident": { "NonKw": [{ "first": 112, "rest": [] }, 113] }
-										}
+										"as_": [558, 111],
+										"value": { "Ident": { "NonKw": [560, 113] } }
 									}
 								}
 							},
-							"semi": [{ "first": 114, "rest": [] }, 115]
+							"semi": [561, 115]
 						}
 					}
 				}
@@ -436,35 +381,29 @@
 					"vis": null,
 					"inner": {
 						"Use": {
-							"use_": [{ "first": 116, "rest": [] }, 117],
+							"use_": [569, 117],
 							"tree": {
 								"Simple": {
 									"path": {
 										"prefix": null,
 										"segments": {
-											"first": {
-												"Ident": {
-													"NonKw": [{ "first": 118, "rest": [] }, 119]
-												}
-											},
+											"first": { "Ident": { "NonKw": [596, 119] } },
 											"rest": []
 										}
 									},
 									"as_": {
-										"as_": [{ "first": 120, "rest": [] }, 121],
-										"value": {
-											"Underscore": [{ "first": 122, "rest": [] }, 123]
-										}
+										"as_": [598, 121],
+										"value": { "Underscore": [601, 123] }
 									}
 								}
 							},
-							"semi": [{ "first": 124, "rest": [] }, 125]
+							"semi": [602, 125]
 						}
 					}
 				}
 			}
 		}
 	],
-	"suffix_ws": { "first": 126, "rest": [] },
+	"suffix_ws": 656,
 	"trailing_line_comment": null
 }

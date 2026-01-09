@@ -3,77 +3,52 @@
 	"inner_attrs": [
 		{
 			"Attr": {
-				"pound": [{ "first": 0, "rest": [] }, 1],
-				"not": [{ "first": 2, "rest": [] }, 3],
+				"pound": [0, 1],
+				"not": [1, 3],
 				"attr": {
-					"prefix": [{ "first": 4, "rest": [] }, 5],
+					"prefix": [2, 5],
 					"value": {
 						"path": {
 							"prefix": null,
 							"segments": {
-								"first": {
-									"Ident": { "NonKw": [{ "first": 6, "rest": [] }, 7] }
-								},
+								"first": { "Ident": { "NonKw": [9, 7] } },
 								"rest": [
-									[
-										[{ "first": 8, "rest": [] }, 9],
-										{ "Ident": { "NonKw": [{ "first": 10, "rest": [] }, 11] } }
-									],
-									[
-										[{ "first": 12, "rest": [] }, 13],
-										{ "Ident": { "NonKw": [{ "first": 14, "rest": [] }, 15] } }
-									]
+									[[10, 9], { "Ident": { "NonKw": [16, 11] } }],
+									[[17, 13], { "Ident": { "NonKw": [23, 15] } }]
 								]
 							}
 						},
 						"input": null
 					},
-					"suffix": [{ "first": 16, "rest": [] }, 17]
+					"suffix": [29, 17]
 				}
 			}
 		},
 		{
 			"Attr": {
-				"pound": [{ "first": 18, "rest": [] }, 19],
-				"not": [{ "first": 20, "rest": [] }, 21],
+				"pound": [30, 19],
+				"not": [31, 21],
 				"attr": {
-					"prefix": [{ "first": 22, "rest": [] }, 23],
+					"prefix": [32, 23],
 					"value": {
 						"path": {
-							"prefix": [{ "first": 24, "rest": [] }, 25],
+							"prefix": [33, 25],
 							"segments": {
-								"first": { "DollarCrate": [{ "first": 26, "rest": [] }, 27] },
-								"rest": [
-									[
-										[{ "first": 28, "rest": [] }, 29],
-										{ "Ident": { "NonKw": [{ "first": 30, "rest": [] }, 31] } }
-									]
-								]
+								"first": { "DollarCrate": [37, 27] },
+								"rest": [[[38, 29], { "Ident": { "NonKw": [44, 31] } }]]
 							}
 						},
 						"input": null
 					},
-					"suffix": [{ "first": 32, "rest": [] }, 33]
+					"suffix": [50, 33]
 				}
 			}
 		},
-		{
-			"DocComment": {
-				"Line": { "prefix": [{ "first": 34, "rest": [] }, 35], "comment": 36 }
-			}
-		},
-		{
-			"DocComment": {
-				"Block": { "prefix": [{ "first": 37, "rest": [] }, 38], "comment": 39 }
-			}
-		},
-		{
-			"DocComment": {
-				"Block": { "prefix": [{ "first": 40, "rest": [] }, 41], "comment": 42 }
-			}
-		}
+		{ "DocComment": { "Line": { "prefix": [52, 35], "comment": 36 } } },
+		{ "DocComment": { "Block": { "prefix": [55, 38], "comment": 39 } } },
+		{ "DocComment": { "Block": { "prefix": [58, 41], "comment": 42 } } }
 	],
 	"items": [],
-	"suffix_ws": { "first": 43, "rest": [] },
+	"suffix_ws": 115,
 	"trailing_line_comment": null
 }

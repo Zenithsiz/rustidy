@@ -10,6 +10,7 @@ use {
 		ParserStr,
 		Print,
 		Replacement,
+		arena::{ArenaData, ArenaIdx},
 		format,
 		parser::{Parse, ParserRange},
 	},
@@ -21,7 +22,8 @@ use {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Print)]
 #[parse(try_with = Self::parse_skip)]
-pub struct Whitespace(Box<Punctuated<PureWhitespace, Comment>>);
+#[expect(clippy::use_self, reason = "We need it due to `Parse` generating other types where `Self` is wrong")]
+pub struct Whitespace(ArenaIdx<Whitespace>);
 
 impl Whitespace {
 	#[expect(clippy::unnecessary_wraps, reason = "Necessary for type signature")]
@@ -32,18 +34,10 @@ impl Whitespace {
 				first: PureWhitespace(s),
 				rest:  vec![],
 			};
+			let idx = parser.arenas().get::<Self>().push(inner);
 
-			Self(Box::new(inner))
+			Self(idx)
 		}))
-	}
-
-	/// Returns the suffix pure whitespace in this
-	#[must_use]
-	pub fn suffix_pure(&self) -> Option<&PureWhitespace> {
-		match self.0.rest.last() {
-			Some((_, pure)) => Some(pure),
-			None => Some(&self.0.first),
-		}
 	}
 
 	/// Removes this whitespace
@@ -65,26 +59,33 @@ impl Whitespace {
 	}
 
 	fn format(&self, ctx: &mut format::Context, kind: FormatKind) {
-		let prefix_str = kind.prefix_str(ctx, self.0.first.0, self.0.rest.is_empty());
-		ctx.replace(self.0.first.0, prefix_str);
-		for (pos, (comment, ws)) in self.0.rest.iter().with_position() {
-			let is_last = matches!(pos, itertools::Position::Last | itertools::Position::Only);
-			let ws_str = match comment.is_line() {
-				true => kind.after_newline_str(ctx, ws.0, is_last),
-				false => kind.normal_str(ctx, ws.0, is_last),
-			};
-			ctx.replace(ws.0, ws_str);
-		}
+		ctx.arenas().get().with_value(self.0, |inner| {
+			let prefix_str = kind.prefix_str(ctx, inner.first.0, inner.rest.is_empty());
+			ctx.replace(inner.first.0, prefix_str);
+
+			for (pos, (comment, ws)) in inner.rest.iter_mut().with_position() {
+				let is_last = matches!(pos, itertools::Position::Last | itertools::Position::Only);
+				let ws_str = match comment.is_line() {
+					true => kind.after_newline_str(ctx, ws.0, is_last),
+					false => kind.normal_str(ctx, ws.0, is_last),
+				};
+				ctx.replace(ws.0, ws_str);
+			}
+		});
 	}
+}
+
+impl ArenaData for Whitespace {
+	type Data = Punctuated<PureWhitespace, Comment>;
 }
 
 impl FormatRef for Whitespace {
 	fn range(&self, ctx: &format::Context) -> Option<ParserRange> {
-		self.0.range(ctx)
+		ctx.arenas().get::<Self>().with_value(self.0, |inner| inner.range(ctx))
 	}
 
 	fn len(&self, ctx: &format::Context) -> usize {
-		self.0.len(ctx)
+		ctx.arenas().get::<Self>().with_value(self.0, |inner| inner.len(ctx))
 	}
 }
 

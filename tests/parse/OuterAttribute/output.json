@@ -6,94 +6,48 @@
 			"attrs": [
 				{
 					"Attr": {
-						"pound": [{ "first": 0, "rest": [] }, 1],
+						"pound": [4, 1],
 						"open": {
-							"prefix": [{ "first": 2, "rest": [] }, 3],
+							"prefix": [5, 3],
 							"value": {
 								"path": {
 									"prefix": null,
 									"segments": {
-										"first": {
-											"Ident": { "NonKw": [{ "first": 4, "rest": [] }, 5] }
-										},
+										"first": { "Ident": { "NonKw": [12, 5] } },
 										"rest": [
-											[
-												[{ "first": 6, "rest": [] }, 7],
-												{
-													"Ident": { "NonKw": [{ "first": 8, "rest": [] }, 9] }
-												}
-											],
-											[
-												[{ "first": 10, "rest": [] }, 11],
-												{
-													"Ident": {
-														"NonKw": [{ "first": 12, "rest": [] }, 13]
-													}
-												}
-											]
+											[[13, 7], { "Ident": { "NonKw": [19, 9] } }],
+											[[20, 11], { "Ident": { "NonKw": [26, 13] } }]
 										]
 									}
 								},
 								"input": null
 							},
-							"suffix": [{ "first": 14, "rest": [] }, 15]
+							"suffix": [32, 15]
 						}
 					}
 				},
 				{
 					"Attr": {
-						"pound": [{ "first": 16, "rest": [] }, 17],
+						"pound": [33, 17],
 						"open": {
-							"prefix": [{ "first": 18, "rest": [] }, 19],
+							"prefix": [34, 19],
 							"value": {
 								"path": {
-									"prefix": [{ "first": 20, "rest": [] }, 21],
+									"prefix": [35, 21],
 									"segments": {
-										"first": {
-											"DollarCrate": [{ "first": 22, "rest": [] }, 23]
-										},
-										"rest": [
-											[
-												[{ "first": 24, "rest": [] }, 25],
-												{
-													"Ident": {
-														"NonKw": [{ "first": 26, "rest": [] }, 27]
-													}
-												}
-											]
-										]
+										"first": { "DollarCrate": [39, 23] },
+										"rest": [[[40, 25], { "Ident": { "NonKw": [46, 27] } }]]
 									}
 								},
 								"input": null
 							},
-							"suffix": [{ "first": 28, "rest": [] }, 29]
+							"suffix": [52, 29]
 						}
 					}
 				},
-				{
-					"DocComment": {
-						"Line": {
-							"prefix": [{ "first": 30, "rest": [] }, 31],
-							"comment": 32
-						}
-					}
-				},
-				{
-					"DocComment": {
-						"Block": {
-							"prefix": [{ "first": 33, "rest": [] }, 34],
-							"comment": 35
-						}
-					}
-				},
-				{
-					"DocComment": {
-						"Block": {
-							"prefix": [{ "first": 36, "rest": [] }, 37],
-							"comment": 38
-						}
-					}
-				}
+				{ "DocComment": { "Line": { "prefix": [54, 31], "comment": 32 } } },
+				{ "DocComment": { "Block": { "prefix": [57, 34], "comment": 35 } } },
+				{ "DocComment": { "Block": { "prefix": [60, 37], "comment": 38 } } }
 			],
 			"inner": {
 				"Vis": {
@@ -106,24 +60,24 @@
 								"safety": null,
 								"extern_": null
 							},
-							"fn_": [{ "first": 39, "rest": [] }, 40],
-							"ident": { "NonKw": [{ "first": 41, "rest": [] }, 42] },
+							"fn_": [74, 40],
+							"ident": { "NonKw": [76, 42] },
 							"generics": null,
 							"params": {
-								"prefix": [{ "first": 43, "rest": [] }, 44],
+								"prefix": [78, 44],
 								"value": null,
-								"suffix": [{ "first": 45, "rest": [] }, 46]
+								"suffix": [329, 46]
 							},
 							"ret": null,
 							"where_": null,
 							"body": {
 								"Expr": {
-									"prefix": [{ "first": 47, "rest": [] }, 48],
+									"prefix": [332, 48],
 									"value": {
 										"attrs": [],
 										"inner": { "stmts": [], "trailing_expr": null }
 									},
-									"suffix": [{ "first": 49, "rest": [] }, 50]
+									"suffix": [488, 50]
 								}
 							}
 						}
@@ -132,6 +86,6 @@
 			}
 		}
 	],
-	"suffix_ws": { "first": 51, "rest": [] },
+	"suffix_ws": 542,
 	"trailing_line_comment": null
 }

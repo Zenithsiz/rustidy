@@ -2,7 +2,7 @@
 
 // Imports
 use {
-	crate::ParserStr,
+	crate::{ParserStr, ast::whitespace::Whitespace},
 	core::{cell::RefCell, fmt, hash::Hash, marker::PhantomData},
 	std::hash::Hasher,
 };
@@ -11,6 +11,7 @@ use {
 #[derive(Debug)]
 pub struct Arenas {
 	parser_str: Arena<ParserStr>,
+	whitespace: Arena<Whitespace>,
 }
 
 impl Arenas {
@@ -19,12 +20,13 @@ impl Arenas {
 	pub const fn new() -> Self {
 		Self {
 			parser_str: Arena::new(),
+			whitespace: Arena::new(),
 		}
 	}
 
 	/// Returns the arena for `T`
 	#[must_use]
-	pub fn get<T: WithArena>(&self) -> &Arena<T> {
+	pub fn get<T: ?Sized + WithArena>(&self) -> &Arena<T> {
 		T::get_arena(self)
 	}
 }
@@ -205,4 +207,5 @@ macro impl_with_arena( $($Ty:ty => $field:ident),* $(,)? ) {
 
 impl_with_arena! {
 	ParserStr => parser_str,
+	Whitespace => whitespace,
 }

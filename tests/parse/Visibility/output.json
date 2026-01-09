@@ -6,13 +6,13 @@
 			"attrs": [],
 			"inner": {
 				"Vis": {
-					"vis": { "pub_": [{ "first": 0, "rest": [] }, 1], "path": null },
+					"vis": { "pub_": [6, 1], "path": null },
 					"inner": {
 						"Module": {
 							"unsafe_": null,
-							"mod_": [{ "first": 2, "rest": [] }, 3],
-							"ident": { "NonKw": [{ "first": 4, "rest": [] }, 5] },
-							"inner": { "None": [{ "first": 6, "rest": [] }, 7] }
+							"mod_": [9, 3],
+							"ident": { "NonKw": [11, 5] },
+							"inner": { "None": [12, 7] }
 						}
 					}
 				}
@@ -23,19 +23,19 @@
 			"inner": {
 				"Vis": {
 					"vis": {
-						"pub_": [{ "first": 8, "rest": [] }, 9],
+						"pub_": [16, 9],
 						"path": {
-							"prefix": [{ "first": 10, "rest": [] }, 11],
-							"value": { "Crate": [{ "first": 12, "rest": [] }, 13] },
-							"suffix": [{ "first": 14, "rest": [] }, 15]
+							"prefix": [17, 11],
+							"value": { "Crate": [18, 13] },
+							"suffix": [19, 15]
 						}
 					},
 					"inner": {
 						"Module": {
 							"unsafe_": null,
-							"mod_": [{ "first": 16, "rest": [] }, 17],
-							"ident": { "NonKw": [{ "first": 18, "rest": [] }, 19] },
-							"inner": { "None": [{ "first": 20, "rest": [] }, 21] }
+							"mod_": [21, 17],
+							"ident": { "NonKw": [23, 19] },
+							"inner": { "None": [24, 21] }
 						}
 					}
 				}
@@ -46,19 +46,19 @@
 			"inner": {
 				"Vis": {
 					"vis": {
-						"pub_": [{ "first": 22, "rest": [] }, 23],
+						"pub_": [28, 23],
 						"path": {
-							"prefix": [{ "first": 24, "rest": [] }, 25],
-							"value": { "Self_": [{ "first": 26, "rest": [] }, 27] },
-							"suffix": [{ "first": 28, "rest": [] }, 29]
+							"prefix": [29, 25],
+							"value": { "Self_": [31, 27] },
+							"suffix": [32, 29]
 						}
 					},
 					"inner": {
 						"Module": {
 							"unsafe_": null,
-							"mod_": [{ "first": 30, "rest": [] }, 31],
-							"ident": { "NonKw": [{ "first": 32, "rest": [] }, 33] },
-							"inner": { "None": [{ "first": 34, "rest": [] }, 35] }
+							"mod_": [34, 31],
+							"ident": { "NonKw": [36, 33] },
+							"inner": { "None": [37, 35] }
 						}
 					}
 				}
@@ -69,19 +69,19 @@
 			"inner": {
 				"Vis": {
 					"vis": {
-						"pub_": [{ "first": 36, "rest": [] }, 37],
+						"pub_": [41, 37],
 						"path": {
-							"prefix": [{ "first": 38, "rest": [] }, 39],
-							"value": { "Super": [{ "first": 40, "rest": [] }, 41] },
-							"suffix": [{ "first": 42, "rest": [] }, 43]
+							"prefix": [42, 39],
+							"value": { "Super": [45, 41] },
+							"suffix": [46, 43]
 						}
 					},
 					"inner": {
 						"Module": {
 							"unsafe_": null,
-							"mod_": [{ "first": 44, "rest": [] }, 45],
-							"ident": { "NonKw": [{ "first": 46, "rest": [] }, 47] },
-							"inner": { "None": [{ "first": 48, "rest": [] }, 49] }
+							"mod_": [48, 45],
+							"ident": { "NonKw": [50, 47] },
+							"inner": { "None": [51, 49] }
 						}
 					}
 				}
@@ -92,57 +92,41 @@
 			"inner": {
 				"Vis": {
 					"vis": {
-						"pub_": [{ "first": 50, "rest": [] }, 51],
+						"pub_": [55, 51],
 						"path": {
-							"prefix": [{ "first": 52, "rest": [] }, 53],
+							"prefix": [56, 53],
 							"value": {
 								"In": {
-									"in_": [{ "first": 54, "rest": [] }, 55],
+									"in_": [60, 55],
 									"path": {
-										"prefix": [{ "first": 56, "rest": [] }, 57],
+										"prefix": [61, 57],
 										"segments": {
-											"first": { "Crate": [{ "first": 58, "rest": [] }, 59] },
+											"first": { "Crate": [64, 59] },
 											"rest": [
-												[
-													[{ "first": 60, "rest": [] }, 61],
-													{ "SelfLower": [{ "first": 62, "rest": [] }, 63] }
-												],
-												[
-													[{ "first": 64, "rest": [] }, 65],
-													{ "Super": [{ "first": 66, "rest": [] }, 67] }
-												],
-												[
-													[{ "first": 68, "rest": [] }, 69],
-													{
-														"Ident": {
-															"NonKw": [{ "first": 70, "rest": [] }, 71]
-														}
-													}
-												],
-												[
-													[{ "first": 72, "rest": [] }, 73],
-													{ "DollarCrate": [{ "first": 74, "rest": [] }, 75] }
-												]
+												[[65, 61], { "SelfLower": [67, 63] }],
+												[[68, 65], { "Super": [69, 67] }],
+												[[70, 69], { "Ident": { "NonKw": [76, 71] } }],
+												[[77, 73], { "DollarCrate": [81, 75] }]
 											]
 										}
 									}
 								}
 							},
-							"suffix": [{ "first": 76, "rest": [] }, 77]
+							"suffix": [83, 77]
 						}
 					},
 					"inner": {
 						"Module": {
 							"unsafe_": null,
-							"mod_": [{ "first": 78, "rest": [] }, 79],
-							"ident": { "NonKw": [{ "first": 80, "rest": [] }, 81] },
-							"inner": { "None": [{ "first": 82, "rest": [] }, 83] }
+							"mod_": [85, 79],
+							"ident": { "NonKw": [87, 81] },
+							"inner": { "None": [88, 83] }
 						}
 					}
 				}
 			}
 		}
 	],
-	"suffix_ws": { "first": 84, "rest": [] },
+	"suffix_ws": 142,
 	"trailing_line_comment": null
 }
