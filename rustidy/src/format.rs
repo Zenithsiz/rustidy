@@ -277,21 +277,21 @@ tuple_impl! { 3, T0, T1, T2 }
 
 impl<T: ArenaData<Data: FormatRef> + WithArena> FormatRef for ArenaIdx<T> {
 	fn range(&self, ctx: &Context) -> Option<ParserRange> {
-		ctx.arenas.get::<T>().with_value(*self, |value| value.range(ctx))
+		ctx.arenas().get::<T>().with_value(*self, |value| value.range(ctx))
 	}
 
 	fn len(&self, ctx: &Context) -> usize {
-		ctx.arenas.get::<T>().with_value(*self, |value| value.len(ctx))
+		ctx.arenas().get::<T>().with_value(*self, |value| value.len(ctx))
 	}
 }
 
 impl<T: ArenaData<Data: Format> + WithArena> Format for ArenaIdx<T> {
 	fn format(&mut self, ctx: &mut Context) {
-		ctx.arenas.get::<T>().with_value(*self, |value| value.format(ctx));
+		ctx.arenas().get::<T>().with_value(*self, |value| value.format(ctx));
 	}
 
 	fn with_prefix_ws(&mut self, ctx: &mut Context, f: impl Fn(&mut Whitespace, &mut Context)) -> bool {
-		ctx.arenas
+		ctx.arenas()
 			.get::<T>()
 			.with_value(*self, |value| value.with_prefix_ws(ctx, f))
 	}
@@ -350,7 +350,7 @@ impl<'a, 'input> Context<'a, 'input> {
 
 	/// Returns the arenas
 	#[must_use]
-	pub const fn arenas(&self) -> &Arenas {
+	pub const fn arenas(&self) -> &'a Arenas {
 		self.arenas
 	}
 
