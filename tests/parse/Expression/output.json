@@ -14669,12 +14669,168 @@
 																"semi": [1608, 3223]
 															}
 														}
+													},
+													{
+														"Expression": {
+															"WithoutBlock": {
+																"expr": {
+																	"attrs": [],
+																	"inner": {
+																		"Operator": {
+																			"Assignment": {
+																				"lhs": {
+																					"WithoutBlock": {
+																						"attrs": [],
+																						"inner": {
+																							"Operator": {
+																								"Dereference": {
+																									"star": [1609, 3225],
+																									"expr": {
+																										"WithoutBlock": {
+																											"attrs": [],
+																											"inner": {
+																												"Path": {
+																													"Normal": {
+																														"prefix": null,
+																														"segments": {
+																															"first": {
+																																"ident": {
+																																	"SelfLower": [
+																																		1610, 3227
+																																	]
+																																},
+																																"generic": null
+																															},
+																															"rest": []
+																														}
+																													}
+																												}
+																											}
+																										}
+																									}
+																								}
+																							}
+																						}
+																					}
+																				},
+																				"eq": [1611, 3229],
+																				"rhs": {
+																					"WithBlock": {
+																						"attrs": [],
+																						"inner": {
+																							"Match": {
+																								"match_": [1612, 3231],
+																								"scrutinee": {
+																									"WithoutBlock": {
+																										"attrs": [],
+																										"inner": {
+																											"Tuple": {
+																												"prefix": [1613, 3233],
+																												"value": null,
+																												"suffix": [1614, 3235]
+																											}
+																										}
+																									}
+																								},
+																								"arms": {
+																									"prefix": [1615, 3237],
+																									"value": {
+																										"attrs": [],
+																										"inner": {
+																											"arms": [],
+																											"last": null
+																										}
+																									},
+																									"suffix": [1616, 3239]
+																								}
+																							}
+																						}
+																					}
+																				}
+																			}
+																		}
+																	}
+																},
+																"semi": [1617, 3241]
+															}
+														}
+													},
+													{
+														"Expression": {
+															"WithoutBlock": {
+																"expr": {
+																	"attrs": [],
+																	"inner": {
+																		"Operator": {
+																			"ArithmeticOrLogical": {
+																				"lhs": {
+																					"WithBlock": {
+																						"attrs": [],
+																						"inner": {
+																							"Match": {
+																								"match_": [1618, 3243],
+																								"scrutinee": {
+																									"WithoutBlock": {
+																										"attrs": [],
+																										"inner": {
+																											"Tuple": {
+																												"prefix": [1619, 3245],
+																												"value": null,
+																												"suffix": [1620, 3247]
+																											}
+																										}
+																									}
+																								},
+																								"arms": {
+																									"prefix": [1621, 3249],
+																									"value": {
+																										"attrs": [],
+																										"inner": {
+																											"arms": [],
+																											"last": null
+																										}
+																									},
+																									"suffix": [1622, 3251]
+																								}
+																							}
+																						}
+																					}
+																				},
+																				"op": { "Plus": [1623, 3253] },
+																				"rhs": {
+																					"WithBlock": {
+																						"attrs": [],
+																						"inner": {
+																							"ConstBlock": {
+																								"const_": [1624, 3255],
+																								"expr": {
+																									"prefix": [1625, 3257],
+																									"value": {
+																										"attrs": [],
+																										"inner": {
+																											"stmts": [],
+																											"trailing_expr": null
+																										}
+																									},
+																									"suffix": [1626, 3259]
+																								}
+																							}
+																						}
+																					}
+																				}
+																			}
+																		}
+																	}
+																},
+																"semi": [1627, 3261]
+															}
+														}
 													}
 												],
 												"trailing_expr": null
 											}
 										},
-										"suffix": [1609, 3225]
+										"suffix": [1628, 3263]
 									}
 								}
 							}
@@ -14695,19 +14851,19 @@
 									"safety": null,
 									"extern_": null
 								},
-								"fn_": [1610, 3227],
-								"ident": { "NonKw": [1611, 3229] },
+								"fn_": [1629, 3265],
+								"ident": { "NonKw": [1630, 3267] },
 								"generics": null,
 								"params": {
-									"prefix": [1612, 3231],
+									"prefix": [1631, 3269],
 									"value": null,
-									"suffix": [1613, 3233]
+									"suffix": [1632, 3271]
 								},
 								"ret": null,
 								"where_": null,
 								"body": {
 									"Expr": {
-										"prefix": [1614, 3235],
+										"prefix": [1633, 3273],
 										"value": {
 											"attrs": [],
 											"inner": {
@@ -14719,16 +14875,16 @@
 																	"attrs": [],
 																	"inner": {
 																		"DoYeet": {
-																			"do_": [1615, 3237],
-																			"yeet_": [1616, 3239],
+																			"do_": [1634, 3275],
+																			"yeet_": [1635, 3277],
 																			"expr": {
 																				"WithoutBlock": {
 																					"attrs": [],
 																					"inner": {
 																						"Literal": {
 																							"Integer": {
-																								"ws": 1617,
-																								"inner": { "Decimal": 3241 },
+																								"ws": 1636,
+																								"inner": { "Decimal": 3279 },
 																								"suffix": null
 																							}
 																						}
@@ -14738,7 +14894,7 @@
 																		}
 																	}
 																},
-																"semi": [1618, 3243]
+																"semi": [1637, 3281]
 															}
 														}
 													},
@@ -14749,23 +14905,23 @@
 																	"attrs": [],
 																	"inner": {
 																		"DoYeet": {
-																			"do_": [1619, 3245],
-																			"yeet_": [1620, 3247],
+																			"do_": [1638, 3283],
+																			"yeet_": [1639, 3285],
 																			"expr": {
 																				"WithoutBlock": {
 																					"attrs": [],
 																					"inner": {
 																						"Return": {
-																							"return_": [1621, 3249],
+																							"return_": [1640, 3287],
 																							"expr": {
 																								"WithoutBlock": {
 																									"attrs": [],
 																									"inner": {
 																										"Literal": {
 																											"Integer": {
-																												"ws": 1622,
+																												"ws": 1641,
 																												"inner": {
-																													"Decimal": 3251
+																													"Decimal": 3289
 																												},
 																												"suffix": null
 																											}
@@ -14780,7 +14936,7 @@
 																		}
 																	}
 																},
-																"semi": [1623, 3253]
+																"semi": [1642, 3291]
 															}
 														}
 													}
@@ -14788,7 +14944,7 @@
 												"trailing_expr": null
 											}
 										},
-										"suffix": [1624, 3255]
+										"suffix": [1643, 3293]
 									}
 								}
 							}
@@ -14797,7 +14953,7 @@
 				}
 			}
 		],
-		"suffix_ws": 1625,
+		"suffix_ws": 1644,
 		"trailing_line_comment": null
 	},
 	"arenas": {
@@ -18027,39 +18183,77 @@
 				{ "start": 3857, "end": 3858 },
 				{ "start": 3858, "end": 3858 },
 				{ "start": 3858, "end": 3859 },
-				{ "start": 3859, "end": 3860 },
-				{ "start": 3860, "end": 3861 },
-				{ "start": 3861, "end": 3863 },
-				{ "start": 3863, "end": 3865 },
-				{ "start": 3865, "end": 3866 },
-				{ "start": 3866, "end": 3873 },
-				{ "start": 3873, "end": 3873 },
-				{ "start": 3873, "end": 3874 },
-				{ "start": 3874, "end": 3874 },
+				{ "start": 3859, "end": 3861 },
+				{ "start": 3861, "end": 3862 },
+				{ "start": 3862, "end": 3862 },
+				{ "start": 3862, "end": 3866 },
+				{ "start": 3866, "end": 3867 },
+				{ "start": 3867, "end": 3868 },
+				{ "start": 3868, "end": 3869 },
+				{ "start": 3869, "end": 3874 },
 				{ "start": 3874, "end": 3875 },
 				{ "start": 3875, "end": 3876 },
+				{ "start": 3876, "end": 3876 },
 				{ "start": 3876, "end": 3877 },
-				{ "start": 3877, "end": 3879 },
-				{ "start": 3879, "end": 3881 },
-				{ "start": 3881, "end": 3882 },
-				{ "start": 3882, "end": 3886 },
-				{ "start": 3886, "end": 3887 },
-				{ "start": 3887, "end": 3888 },
-				{ "start": 3888, "end": 3888 },
+				{ "start": 3877, "end": 3878 },
+				{ "start": 3878, "end": 3879 },
+				{ "start": 3879, "end": 3879 },
+				{ "start": 3879, "end": 3880 },
+				{ "start": 3880, "end": 3880 },
+				{ "start": 3880, "end": 3881 },
+				{ "start": 3881, "end": 3883 },
+				{ "start": 3883, "end": 3888 },
 				{ "start": 3888, "end": 3889 },
-				{ "start": 3889, "end": 3891 },
-				{ "start": 3891, "end": 3893 },
+				{ "start": 3889, "end": 3890 },
+				{ "start": 3890, "end": 3890 },
+				{ "start": 3890, "end": 3891 },
+				{ "start": 3891, "end": 3892 },
+				{ "start": 3892, "end": 3893 },
+				{ "start": 3893, "end": 3893 },
 				{ "start": 3893, "end": 3894 },
-				{ "start": 3894, "end": 3898 },
-				{ "start": 3898, "end": 3899 },
-				{ "start": 3899, "end": 3905 },
+				{ "start": 3894, "end": 3895 },
+				{ "start": 3895, "end": 3896 },
+				{ "start": 3896, "end": 3897 },
+				{ "start": 3897, "end": 3902 },
+				{ "start": 3902, "end": 3903 },
+				{ "start": 3903, "end": 3904 },
+				{ "start": 3904, "end": 3904 },
+				{ "start": 3904, "end": 3905 },
+				{ "start": 3905, "end": 3905 },
 				{ "start": 3905, "end": 3906 },
 				{ "start": 3906, "end": 3907 },
-				{ "start": 3907, "end": 3907 },
 				{ "start": 3907, "end": 3908 },
-				{ "start": 3908, "end": 3909 },
-				{ "start": 3909, "end": 3910 },
-				{ "start": 3910, "end": 3911 }
+				{ "start": 3908, "end": 3910 },
+				{ "start": 3910, "end": 3912 },
+				{ "start": 3912, "end": 3913 },
+				{ "start": 3913, "end": 3920 },
+				{ "start": 3920, "end": 3920 },
+				{ "start": 3920, "end": 3921 },
+				{ "start": 3921, "end": 3921 },
+				{ "start": 3921, "end": 3922 },
+				{ "start": 3922, "end": 3923 },
+				{ "start": 3923, "end": 3924 },
+				{ "start": 3924, "end": 3926 },
+				{ "start": 3926, "end": 3928 },
+				{ "start": 3928, "end": 3929 },
+				{ "start": 3929, "end": 3933 },
+				{ "start": 3933, "end": 3934 },
+				{ "start": 3934, "end": 3935 },
+				{ "start": 3935, "end": 3935 },
+				{ "start": 3935, "end": 3936 },
+				{ "start": 3936, "end": 3938 },
+				{ "start": 3938, "end": 3940 },
+				{ "start": 3940, "end": 3941 },
+				{ "start": 3941, "end": 3945 },
+				{ "start": 3945, "end": 3946 },
+				{ "start": 3946, "end": 3952 },
+				{ "start": 3952, "end": 3953 },
+				{ "start": 3953, "end": 3954 },
+				{ "start": 3954, "end": 3954 },
+				{ "start": 3954, "end": 3955 },
+				{ "start": 3955, "end": 3956 },
+				{ "start": 3956, "end": 3957 },
+				{ "start": 3957, "end": 3958 }
 			]
 		},
 		"whitespace": {
@@ -19696,7 +19890,26 @@
 				{ "first": 3250, "rest": [] },
 				{ "first": 3252, "rest": [] },
 				{ "first": 3254, "rest": [] },
-				{ "first": 3256, "rest": [] }
+				{ "first": 3256, "rest": [] },
+				{ "first": 3258, "rest": [] },
+				{ "first": 3260, "rest": [] },
+				{ "first": 3262, "rest": [] },
+				{ "first": 3264, "rest": [] },
+				{ "first": 3266, "rest": [] },
+				{ "first": 3268, "rest": [] },
+				{ "first": 3270, "rest": [] },
+				{ "first": 3272, "rest": [] },
+				{ "first": 3274, "rest": [] },
+				{ "first": 3276, "rest": [] },
+				{ "first": 3278, "rest": [] },
+				{ "first": 3280, "rest": [] },
+				{ "first": 3282, "rest": [] },
+				{ "first": 3284, "rest": [] },
+				{ "first": 3286, "rest": [] },
+				{ "first": 3288, "rest": [] },
+				{ "first": 3290, "rest": [] },
+				{ "first": 3292, "rest": [] },
+				{ "first": 3294, "rest": [] }
 			]
 		}
 	}

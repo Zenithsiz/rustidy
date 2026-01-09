@@ -262,6 +262,8 @@ fn with_attr() {
 
 fn complex() {
 	&**a.b?.c + &**a.b?.c + &**a.b?.c;
+	*self = match () {};
+	match () {} + const {};
 }
 
 fn do_yeet() {
