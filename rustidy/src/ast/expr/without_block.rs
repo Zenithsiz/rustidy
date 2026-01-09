@@ -77,19 +77,19 @@ impl From<ExpressionWithoutBlockInner> for ExpressionWithoutBlock {
 	}
 }
 
-impl TryFrom<Expression> for ExpressionWithoutBlock {
+impl TryFrom<ExpressionWithoutBlock> for ExpressionWithoutBlockInner {
 	type Error = ();
 
-	fn try_from(expr: Expression) -> Result<Self, Self::Error> {
-		match expr {
-			Expression::WithoutBlock(inner) => Ok(inner),
-			Expression::WithBlock(_) => Err(()),
+	fn try_from(expr: ExpressionWithoutBlock) -> Result<Self, Self::Error> {
+		match expr.0.attrs.is_empty() {
+			true => Ok(expr.0.inner),
+			false => Err(()),
 		}
 	}
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]
-#[derive(derive_more::From)]
+#[derive(derive_more::From, derive_more::TryInto)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(ParseRecursive, Format, Print)]
 #[parse_recursive(root = Expression)]

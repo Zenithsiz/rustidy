@@ -108,7 +108,8 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 
 	let root_ty = &attrs.root;
 
-	let into_root_impl = attrs.into_root.as_ref().map(|into_root_ty| {
+	// TODO: Generics
+	let root_conversion_impls = attrs.into_root.as_ref().map(|into_root_ty| {
 		quote! {
 			#[automatically_derived]
 			impl crate::parser::IntoRecursiveRoot<#root_ty> for #item_ident {
@@ -119,11 +120,22 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 					)
 				}
 			}
+
+			#[automatically_derived]
+			impl crate::parser::TryFromRecursiveRoot<#root_ty> for #item_ident {
+				fn try_from_recursive_root(root: #root_ty, parser: &mut crate::parser::Parser) -> Option<Self> {
+					let into_root = <#into_root_ty as crate::parser::TryFromRecursiveRoot<#root_ty>>::try_from_recursive_root(
+						root,
+						parser
+					)?;
+					Self::try_from(into_root).ok()
+				}
+			}
 		}
 	});
 
 	if attrs.transparent {
-		return self::emit_transparent(&attrs, into_root_impl.as_ref());
+		return self::emit_transparent(&attrs, root_conversion_impls.as_ref());
 	}
 
 	let skip_if_tag = attrs.skip_if_tag.as_ref();
@@ -316,7 +328,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 					#impl_base
 				}
 
-				#into_root_impl
+				#root_conversion_impls
 
 				#suffix_ty
 				#prefix_ty
@@ -511,7 +523,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 					#infix_impl
 				}
 
-				#into_root_impl
+				#root_conversion_impls
 
 				#prefix_ty
 				#suffix_ty
@@ -530,7 +542,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 /// Emits a transparent derive
 fn emit_transparent(
 	attrs: &Attrs,
-	into_root_impl: Option<&proc_macro2::TokenStream>,
+	root_conversion_impls: Option<&proc_macro2::TokenStream>,
 ) -> Result<proc_macro::TokenStream, AppError> {
 	let darling::ast::Data::Struct(fields) = &attrs.data else {
 		app_error::bail!("`#[parse_recursive(transparent)]` is only supported on structs");
@@ -568,7 +580,7 @@ fn emit_transparent(
 			}
 		}
 
-		#into_root_impl
+		#root_conversion_impls
 	};
 
 	Ok(output.into())

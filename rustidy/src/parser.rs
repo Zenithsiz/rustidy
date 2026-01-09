@@ -9,7 +9,14 @@ mod str;
 pub use {
 	self::{
 		error::{ParseError, ParserError},
-		recursive::{FromRecursiveRoot, IntoRecursiveRoot, ParsableRecursive, ParseRecursive, RecursiveWrapper},
+		recursive::{
+			FromRecursiveRoot,
+			IntoRecursiveRoot,
+			ParsableRecursive,
+			ParseRecursive,
+			RecursiveWrapper,
+			TryFromRecursiveRoot,
+		},
 		str::ParserStr,
 	},
 	rustidy_macros::Parse,

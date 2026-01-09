@@ -35,7 +35,7 @@ pub use self::{
 use crate::{Format, Parse, ParseRecursive, Print, parser::RecursiveWrapper};
 
 #[derive(PartialEq, Eq, Clone, Debug)]
-#[derive(derive_more::From)]
+#[derive(derive_more::From, derive_more::TryInto)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, ParseRecursive, Format, Print)]
 #[parse(from = RecursiveWrapper::<Expression, Expression>)]

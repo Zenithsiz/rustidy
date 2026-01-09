@@ -54,6 +54,16 @@ where
 	}
 }
 
+pub trait TryFromRecursiveRoot<R>: Sized {
+	fn try_from_recursive_root(root: R, parser: &mut Parser) -> Option<Self>;
+}
+
+impl<R> TryFromRecursiveRoot<R> for R {
+	fn try_from_recursive_root(root: R, _parser: &mut Parser) -> Option<Self> {
+		Some(root)
+	}
+}
+
 pub trait IntoRecursiveRoot<R> {
 	fn into_recursive_root(self, parser: &mut Parser) -> R;
 }
@@ -103,7 +113,7 @@ impl<T, R> ParsableFrom<RecursiveWrapper<T, R>> for T {
 //       somehow parse the "top-level" with `T` and the bottom with `R`?
 impl<T, R> crate::Parse for RecursiveWrapper<T, R>
 where
-	T: ParsableRecursive<R> + TryFrom<R>,
+	T: TryFromRecursiveRoot<R>,
 	R: ParsableRecursive<R>,
 {
 	type Error = RecursiveWrapperError<R>;
@@ -134,7 +144,7 @@ where
 			base = R::join_infix(base, infix, convert_inner(parser, rhs), parser);
 		}
 
-		let base = T::try_from(base).map_err(|_| Self::Error::FromRoot)?;
+		let base = T::try_from_recursive_root(base, parser).ok_or(Self::Error::FromRoot)?;
 
 		Ok(Self(base, PhantomData))
 	}

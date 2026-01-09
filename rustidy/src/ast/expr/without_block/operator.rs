@@ -13,7 +13,7 @@ use {
 
 /// `OperatorExpression`
 #[derive(PartialEq, Eq, Clone, Debug)]
-#[derive(derive_more::From)]
+#[derive(derive_more::From, derive_more::TryInto)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(ParseRecursive, Format, Print)]
 #[parse_recursive(root = Expression)]
