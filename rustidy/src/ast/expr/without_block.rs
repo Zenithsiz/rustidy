@@ -68,7 +68,8 @@ use {
 #[parse(skip_if_tag = "skip:ExpressionWithoutBlock")]
 #[parse_recursive(root = Expression)]
 #[parse_recursive(transparent)]
-pub struct ExpressionWithoutBlock(pub WithOuterAttributes<ExpressionWithoutBlockInner, Self>);
+#[parse_recursive(into_root = Expression)]
+pub struct ExpressionWithoutBlock(pub WithOuterAttributes<ExpressionWithoutBlockInner>);
 
 impl From<ExpressionWithoutBlockInner> for ExpressionWithoutBlock {
 	fn from(expr: ExpressionWithoutBlockInner) -> Self {

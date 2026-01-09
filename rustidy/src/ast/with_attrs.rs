@@ -4,93 +4,72 @@
 use {
 	super::attr::{InnerAttrOrDocComment, OuterAttrOrDocComment},
 	crate::{Format, Parse, Parser, Print, parser::ParsableRecursive},
-	core::marker::PhantomData,
 };
 
 /// A type with outer attributes
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
-pub struct WithOuterAttributes<T, RecursiveParent = !> {
-	pub attrs:    Vec<OuterAttrOrDocComment>,
-	pub inner:    T,
-	#[serde(skip)]
-	pub _phantom: PhantomData<RecursiveParent>,
+pub struct WithOuterAttributes<T> {
+	pub attrs: Vec<OuterAttrOrDocComment>,
+	pub inner: T,
 }
 
-impl<T, RecursiveParent> WithOuterAttributes<T, RecursiveParent> {
+impl<T> WithOuterAttributes<T> {
 	/// Creates a new value without any attributes
 	pub const fn without_attributes(inner: T) -> Self {
-		Self {
-			attrs: vec![],
-			inner,
-			_phantom: PhantomData,
-		}
+		Self { attrs: vec![], inner }
 	}
 
 	/// Maps the inner type
 	pub fn map<U>(self, f: impl FnOnce(T) -> U) -> WithOuterAttributes<U> {
 		WithOuterAttributes {
-			attrs:    self.attrs,
-			inner:    f(self.inner),
-			_phantom: PhantomData,
+			attrs: self.attrs,
+			inner: f(self.inner),
 		}
 	}
 }
 
-impl<T, RecursiveParent> From<T> for WithOuterAttributes<T, RecursiveParent> {
+impl<T> From<T> for WithOuterAttributes<T> {
 	fn from(inner: T) -> Self {
-		Self {
-			attrs: vec![],
-			inner,
-			_phantom: PhantomData,
-		}
+		Self { attrs: vec![], inner }
 	}
 }
 
-impl<T, RecursiveParent, R> ParsableRecursive<R> for WithOuterAttributes<T, RecursiveParent>
+impl<T, R> ParsableRecursive<R> for WithOuterAttributes<T>
 where
 	T: ParsableRecursive<R>,
-	RecursiveParent: ParsableRecursive<R> + From<Self>,
 {
 	type Base = WithOuterAttributes<T::Base>;
 	type Infix = T::Infix;
 	type Prefix = WithOuterAttributes<T::Prefix>;
 	type Suffix = T::Suffix;
 
-	fn into_root(self, parser: &mut Parser) -> R {
-		RecursiveParent::from(self).into_root(parser)
-	}
-
 	fn from_base(base: Self::Base, parser: &mut Parser) -> Self {
 		Self {
-			attrs:    base.attrs,
-			inner:    T::from_base(base.inner, parser),
-			_phantom: PhantomData,
+			attrs: base.attrs,
+			inner: T::from_base(base.inner, parser),
 		}
 	}
 
 	fn join_suffix(root: R, suffix: Self::Suffix, parser: &mut Parser) -> Self {
 		Self {
-			attrs:    vec![],
-			inner:    T::join_suffix(root, suffix, parser),
-			_phantom: PhantomData,
+			attrs: vec![],
+			inner: T::join_suffix(root, suffix, parser),
 		}
 	}
 
 	fn join_prefix(prefix: Self::Prefix, root: R, parser: &mut Parser) -> Self {
 		Self {
-			attrs:    prefix.attrs,
-			inner:    T::join_prefix(prefix.inner, root, parser),
-			_phantom: PhantomData,
+			attrs: prefix.attrs,
+			inner: T::join_prefix(prefix.inner, root, parser),
 		}
 	}
 
 	fn join_infix(lhs: R, infix: Self::Infix, rhs: R, parser: &mut Parser) -> Self {
 		Self {
-			attrs:    vec![],
-			inner:    T::join_infix(lhs, infix, rhs, parser),
-			_phantom: PhantomData,
+			attrs: vec![],
+			inner: T::join_infix(lhs, infix, rhs, parser),
 		}
 	}
 }

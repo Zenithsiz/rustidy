@@ -2,7 +2,6 @@
 
 // Imports
 use {
-	crate::util,
 	app_error::{AppError, Context},
 	darling::FromDeriveInput,
 	itertools::Itertools,
@@ -102,10 +101,6 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 	let attrs = Attrs::from_derive_input(&input).context("Unable to parse attributes")?;
 	let item_ident = &attrs.ident;
 
-	if attrs.transparent {
-		return self::emit_transparent(&attrs);
-	}
-
 	let ident_base = syn::Ident::new(&format!("{item_ident}Base"), item_ident.span());
 	let ident_prefix = syn::Ident::new(&format!("{item_ident}Prefix"), item_ident.span());
 	let ident_infix = syn::Ident::new(&format!("{item_ident}Infix"), item_ident.span());
@@ -113,12 +108,23 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 
 	let root_ty = &attrs.root;
 
-	let into_root_ty = &attrs.into_root;
-	let into_root_body = match into_root_ty {
-		Some(root_ty) => quote! { <#root_ty>::from(self).into_root(parser) },
-		None =>
-			quote! { <#item_ident as crate::parser::IntoRecursiveRoot<#root_ty>>::into_recursive_root(self, parser) },
-	};
+	let into_root_impl = attrs.into_root.as_ref().map(|into_root_ty| {
+		quote! {
+			#[automatically_derived]
+			impl crate::parser::IntoRecursiveRoot<#root_ty> for #item_ident {
+				fn into_recursive_root(self, parser: &mut crate::parser::Parser) -> #root_ty {
+					<#into_root_ty as crate::parser::IntoRecursiveRoot<#root_ty>>::into_recursive_root(
+						<#into_root_ty>::from(self),
+						parser
+					)
+				}
+			}
+		}
+	});
+
+	if attrs.transparent {
+		return self::emit_transparent(&attrs, into_root_impl.as_ref());
+	}
 
 	let skip_if_tag = attrs.skip_if_tag.as_ref();
 	let skip_if_tag_attr = skip_if_tag.map(|tag| quote! { #[parse(skip_if_tag = #tag)] });
@@ -304,15 +310,13 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 			quote! {
 				#[automatically_derived]
 				impl crate::parser::ParsableRecursive<#root_ty> for #item_ident {
-					fn into_root(self, parser: &mut crate::parser::Parser) -> #root_ty {
-						#into_root_body
-					}
-
 					#suffix_impl
 					#prefix_impl
 					#infix_impl
 					#impl_base
 				}
+
+				#into_root_impl
 
 				#suffix_ty
 				#prefix_ty
@@ -496,10 +500,6 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 			quote! {
 				#[automatically_derived]
 				impl crate::parser::ParsableRecursive<#root_ty> for #item_ident {
-					fn into_root(self, parser: &mut crate::parser::Parser) -> #root_ty {
-						#into_root_body
-					}
-
 					type Base = !;
 
 					fn from_base(base: Self::Base, parser: &mut crate::parser::Parser) -> Self {
@@ -510,6 +510,8 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 					#suffix_impl
 					#infix_impl
 				}
+
+				#into_root_impl
 
 				#prefix_ty
 				#suffix_ty
@@ -526,7 +528,10 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 }
 
 /// Emits a transparent derive
-fn emit_transparent(attrs: &Attrs) -> Result<proc_macro::TokenStream, AppError> {
+fn emit_transparent(
+	attrs: &Attrs,
+	into_root_impl: Option<&proc_macro2::TokenStream>,
+) -> Result<proc_macro::TokenStream, AppError> {
 	let darling::ast::Data::Struct(fields) = &attrs.data else {
 		app_error::bail!("`#[parse_recursive(transparent)]` is only supported on structs");
 	};
@@ -540,7 +545,6 @@ fn emit_transparent(attrs: &Attrs) -> Result<proc_macro::TokenStream, AppError> 
 		.exactly_one()
 		.context("`#[parse_recursive(transparent)]` expects a single field")?;
 	let field_ty = &field.ty;
-	let field_member = util::field_member_access(0, field);
 
 	let output = quote! {
 		#[automatically_derived]
@@ -550,9 +554,6 @@ fn emit_transparent(attrs: &Attrs) -> Result<proc_macro::TokenStream, AppError> 
 			type Suffix = <#field_ty as crate::parser::ParsableRecursive<#root_ty>>::Suffix;
 			type Infix  = <#field_ty as crate::parser::ParsableRecursive<#root_ty>>::Infix;
 
-			fn into_root(self, parser: &mut crate::parser::Parser) -> #root_ty {
-				self.#field_member.into_root(parser)
-			}
 			fn join_prefix(prefix: Self::Prefix, root: #root_ty, parser: &mut crate::parser::Parser) -> Self {
 				Self(<#field_ty as crate::parser::ParsableRecursive<#root_ty>>::join_prefix(prefix, root, parser))
 			}
@@ -566,6 +567,8 @@ fn emit_transparent(attrs: &Attrs) -> Result<proc_macro::TokenStream, AppError> 
 				Self(<#field_ty as crate::parser::ParsableRecursive<#root_ty>>::join_infix(lhs, infix, rhs, parser))
 			}
 		}
+
+		#into_root_impl
 	};
 
 	Ok(output.into())
