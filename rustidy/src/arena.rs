@@ -30,12 +30,56 @@ impl Arenas {
 	pub fn get<T: ?Sized + WithArena>(&self) -> &Arena<T> {
 		T::get_arena(self)
 	}
+
+	/// Creates a checkpoint on all arenas
+	pub fn checkpoint(&self) -> ArenasCheckpoint {
+		ArenasCheckpoint {
+			parser_str: self.get::<ParserStr>().checkpoint(),
+			whitespace: self.get::<Whitespace>().checkpoint(),
+		}
+	}
+
+	/// Undoes a checkpoint on all arenas
+	pub fn undo_checkpoint(&self, checkpoint: ArenasCheckpoint) {
+		let ArenasCheckpoint { parser_str, whitespace } = checkpoint;
+		self.get::<ParserStr>().undo_checkpoint(parser_str);
+		self.get::<Whitespace>().undo_checkpoint(whitespace);
+	}
+
+	/// Stashes a checkpoint on all arenas
+	pub fn stash_checkpoint(&self, checkpoint: ArenasCheckpoint) -> ArenasCheckpointStash {
+		ArenasCheckpointStash {
+			parser_str: self.get::<ParserStr>().stash_checkpoint(checkpoint.parser_str),
+			whitespace: self.get::<Whitespace>().stash_checkpoint(checkpoint.whitespace),
+		}
+	}
+
+	/// Applies a checkpoint stash on all arenas
+	pub fn apply_checkpoint_stash(&self, stash: ArenasCheckpointStash) {
+		let ArenasCheckpointStash { parser_str, whitespace } = stash;
+		self.get::<ParserStr>().apply_checkpoint_stash(parser_str);
+		self.get::<Whitespace>().apply_checkpoint_stash(whitespace);
+	}
 }
 
 impl Default for Arenas {
 	fn default() -> Self {
 		Self::new()
 	}
+}
+
+/// Arenas checkpoint
+#[derive(Clone, Copy, Debug)]
+pub struct ArenasCheckpoint {
+	parser_str: ArenaCheckpoint,
+	whitespace: ArenaCheckpoint,
+}
+
+/// Arenas checkpoint stash
+#[derive(Clone, Debug)]
+pub struct ArenasCheckpointStash {
+	parser_str: ArenaCheckpointStash<ParserStr>,
+	whitespace: ArenaCheckpointStash<Whitespace>,
 }
 
 /// Arena for `T`'s Data
@@ -102,48 +146,50 @@ impl<T: ?Sized + ArenaData> Arena<T> {
 		self.data.borrow().is_empty()
 	}
 
-	/// Truncates the arena to hold `len` elements, returning the rest
-	///
-	/// # Panics
-	/// Panics if any of the drained values are borrowed
-	pub fn truncate(&self, len: usize) {
+	/// Creates a checkpoint
+	pub fn checkpoint(&self) -> ArenaCheckpoint {
+		ArenaCheckpoint { len: self.len() }
+	}
+
+	/// Undoes a checkpoint
+	pub fn undo_checkpoint(&self, checkpoint: ArenaCheckpoint) {
 		let mut data = self.data.borrow_mut();
-		for (idx, data) in data.iter().enumerate().skip(len) {
+		for (idx, data) in data.iter().enumerate().skip(checkpoint.len) {
 			if data.is_none() {
-				Self::panic_on_borrowed_truncate(idx);
+				Self::panic_on_borrowed_checkpoint_stash(idx);
 			}
 		}
 
-		data.truncate(len);
+		data.truncate(checkpoint.len);
 	}
 
-	/// Drains the arena to hold `len` elements, returning the rest.
-	///
-	/// # Panics
-	/// Panics if any of the drained values are borrowed
-	pub fn truncate_drain(&self, len: usize) -> Vec<T::Data> {
-		self.data
-			.borrow_mut()
-			.drain(len..)
-			.enumerate()
-			.map(|(idx, data)| match data {
-				Some(data) => data,
-				None => Self::panic_on_borrowed_truncate(len + idx),
-			})
-			.collect()
+	/// Stashes a checkpoint
+	pub fn stash_checkpoint(&self, checkpoint: ArenaCheckpoint) -> ArenaCheckpointStash<T> {
+		ArenaCheckpointStash {
+			values: self
+				.data
+				.borrow_mut()
+				.drain(checkpoint.len..)
+				.enumerate()
+				.map(|(idx, data)| match data {
+					Some(data) => data,
+					None => Self::panic_on_borrowed_checkpoint_stash(checkpoint.len + idx),
+				})
+				.collect(),
+		}
+	}
+
+	/// Applies a checkpoint stash
+	pub fn apply_checkpoint_stash(&self, stash: ArenaCheckpointStash<T>) {
+		self.data.borrow_mut().extend(stash.values.into_iter().map(Some));
 	}
 
 	#[cold]
-	fn panic_on_borrowed_truncate(idx: usize) -> ! {
+	fn panic_on_borrowed_checkpoint_stash(idx: usize) -> ! {
 		panic!(
-			"Attempted to truncate borrowed value at index {idx} in arena {:?}",
+			"Attempted to stash checkpoint with a borrowed value at index {idx} in arena {:?}",
 			std::any::type_name::<T>(),
 		);
-	}
-
-	/// Extends the arena with elements
-	pub fn extend(&self, values: impl IntoIterator<Item = T::Data>) {
-		self.data.borrow_mut().extend(values.into_iter().map(Some));
 	}
 }
 
@@ -151,6 +197,20 @@ impl<T: ArenaData> Default for Arena<T> {
 	fn default() -> Self {
 		Self::new()
 	}
+}
+
+/// Arena checkpoint
+#[derive(Clone, Copy, Debug)]
+pub struct ArenaCheckpoint {
+	len: usize,
+}
+
+/// Arena checkpoint stash
+#[derive(Clone, Debug)]
+pub struct ArenaCheckpointStash<T: ?Sized + ArenaData> {
+	// TODO: Ideally here we wouldn't allocate and maybe just move
+	//       the new ranges somewhere else temporarily.
+	values: Vec<T::Data>,
 }
 
 /// Arena index for `T`

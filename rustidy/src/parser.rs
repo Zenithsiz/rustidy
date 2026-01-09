@@ -19,7 +19,7 @@ pub use {
 use {
 	crate::{
 		Arenas,
-		arena::{ArenaData, ArenaIdx, WithArena},
+		arena::{ArenaData, ArenaIdx, ArenasCheckpointStash, WithArena},
 	},
 	app_error::AppError,
 	core::{
@@ -399,13 +399,13 @@ impl<'a, 'input> Parser<'a, 'input> {
 	/// On error, nothing is modified.
 	pub fn try_parse<T: Parse>(&mut self) -> Result<Result<T, ParserError<T>>, ParserError<T>> {
 		let prev_pos = self.cur_pos;
-		let prev_string_ranges_len = self.arenas.get::<ParserStr>().len();
+		let arenas_checkpoint = self.arenas.checkpoint();
 		match self.parse::<T>() {
 			Ok(value) => Ok(Ok(value)),
 			Err(err) if err.is_fatal() => Err(err),
 			Err(err) => {
 				self.cur_pos = prev_pos;
-				self.arenas.get::<ParserStr>().truncate(prev_string_ranges_len);
+				self.arenas.undo_checkpoint(arenas_checkpoint);
 				Ok(Err(err))
 			},
 		}
@@ -417,7 +417,7 @@ impl<'a, 'input> Parser<'a, 'input> {
 	#[expect(clippy::type_complexity, reason = "TODO")]
 	pub fn peek<T: Parse>(&mut self) -> Result<Result<(T, PeekState), ParserError<T>>, ParserError<T>> {
 		let start_pos = self.cur_pos;
-		let prev_string_ranges_len = self.arenas.get::<ParserStr>().len();
+		let arenas_checkpoint = self.arenas.checkpoint();
 
 		let output = match self.parse::<T>() {
 			Ok(value) => Ok(value),
@@ -426,10 +426,8 @@ impl<'a, 'input> Parser<'a, 'input> {
 		};
 
 		let peek_state = PeekState {
-			cur_pos:       self.cur_pos,
-			// TODO: Ideally here we wouldn't allocate and maybe just move
-			//       the new ranges somewhere else temporarily.
-			string_ranges: self.arenas.get::<ParserStr>().truncate_drain(prev_string_ranges_len),
+			cur_pos:      self.cur_pos,
+			arenas_stash: self.arenas.stash_checkpoint(arenas_checkpoint),
 		};
 		self.cur_pos = start_pos;
 
@@ -441,7 +439,7 @@ impl<'a, 'input> Parser<'a, 'input> {
 	// TODO: We should validate that the user doesn't use a previous peek
 	pub fn set_peeked(&mut self, peek_state: PeekState) {
 		self.cur_pos = peek_state.cur_pos;
-		self.arenas.get::<ParserStr>().extend(peek_state.string_ranges);
+		self.arenas.apply_checkpoint_stash(peek_state.arenas_stash);
 	}
 
 	/// Returns all current tags
@@ -492,8 +490,8 @@ impl<'a, 'input> Parser<'a, 'input> {
 /// Peek state
 #[derive(Clone, Debug)]
 pub struct PeekState {
-	cur_pos:       ParserPos,
-	string_ranges: Vec<ParserRange>,
+	cur_pos:      ParserPos,
+	arenas_stash: ArenasCheckpointStash,
 }
 
 impl PeekState {
