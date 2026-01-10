@@ -247,7 +247,7 @@ impl<'a, 'input> Parser<'a, 'input> {
 
 	/// Returns the arenas
 	#[must_use]
-	pub const fn arenas(&self) -> &Arenas {
+	pub const fn arenas(&self) -> &'a Arenas {
 		self.arenas
 	}
 

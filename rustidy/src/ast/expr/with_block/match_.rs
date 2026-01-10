@@ -2,20 +2,21 @@
 
 // Imports
 use {
-	super::{Conditions, ExpressionWithBlock},
+	super::Conditions,
 	crate::{
 		Format,
 		Parse,
 		Print,
 		ast::{
 			delimited::Braced,
-			expr::{Expression, ExpressionInner, ExpressionWithoutBlock},
+			expr::{Expression, ExpressionInner},
 			pat::Pattern,
 			token,
 			with_attrs::{WithInnerAttributes, WithOuterAttributes},
 		},
-		parser::{FromRecursiveRoot, ParseError, Parser, ParserError},
+		parser::{ParseError, Parser, ParserError},
 	},
+	core::ops::ControlFlow,
 	std::fmt,
 };
 
@@ -38,14 +39,11 @@ pub struct MatchExpression {
 pub struct Scrutinee(#[parse(with_tag = "skip:StructExpression")] Expression);
 
 /// `MatchArms`
-// TODO: Simplify this to just `Vec<MatchArmWithExpr<Expression, Option<token::Comma>>` and
-//       be careful parsing and formatting it?
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Format, Print)]
 pub struct MatchArms {
-	pub arms: Vec<MatchArmWithExprNonLast>,
-	pub last: Option<MatchArmWithExpr<Expression, Option<token::Comma>>>,
+	pub arms: Vec<MatchArmWithExpr>,
 }
 
 impl Parse for MatchArms {
@@ -57,57 +55,40 @@ impl Parse for MatchArms {
 
 	fn parse_from(parser: &mut Parser) -> Result<Self, Self::Error> {
 		let mut arms = vec![];
-		let mut last = loop {
+		loop {
 			let Ok(arm) = parser.try_parse::<MatchArm>()? else {
-				break None;
+				break;
 			};
 			let arrow = parser.parse::<token::FatArrow>()?;
-			let expr = parser.parse::<ExpressionInner>()?;
-			match expr {
-				ExpressionInner::WithoutBlock(expr) => match parser.try_parse::<token::Comma>()? {
-					Ok(trailing_comma) => arms.push(MatchArmWithExprNonLast::WithoutBlock(MatchArmWithExpr {
-						arm,
-						arrow,
-						expr,
-						trailing_comma,
-					})),
-					Err(_) =>
-						break Some(MatchArmWithExpr {
-							arm,
-							arrow,
-							expr: Expression::from_recursive_root(ExpressionInner::WithoutBlock(expr), parser),
-							trailing_comma: None,
-						}),
-				},
-				ExpressionInner::WithBlock(expr) => {
-					let trailing_comma = parser.try_parse::<token::Comma>()?.ok();
-					arms.push(MatchArmWithExprNonLast::WithBlock(MatchArmWithExpr {
-						arm,
-						arrow,
-						expr,
-						trailing_comma,
-					}));
-				},
-			}
-		};
+			let expr = parser.parse::<Expression>()?;
 
-		// Move the last arm to `last` if it's empty and it fits there.
-		if last.is_none() &&
-			let Some(arm) = arms.pop()
-		{
-			match arm {
-				MatchArmWithExprNonLast::WithoutBlock(_) => arms.push(arm),
-				MatchArmWithExprNonLast::WithBlock(arm) =>
-					last = Some(MatchArmWithExpr {
-						arm:            arm.arm,
-						arrow:          arm.arrow,
-						expr:           Expression::from_recursive_root(ExpressionInner::WithBlock(arm.expr), parser),
-						trailing_comma: arm.trailing_comma,
-					}),
+			let (trailing_comma, control_flow) = parser
+				.arenas()
+				.get::<Expression>()
+				.with_value::<Result<_, Self::Error>>(expr.0, |expr| match expr {
+					ExpressionInner::WithoutBlock(_) => match parser.try_parse::<token::Comma>()? {
+						Ok(trailing_comma) => Ok((Some(trailing_comma), ControlFlow::Continue(()))),
+						Err(_) => Ok((None, ControlFlow::Break(()))),
+					},
+					ExpressionInner::WithBlock(_) => {
+						let trailing_comma = parser.try_parse::<token::Comma>()?.ok();
+						Ok((trailing_comma, ControlFlow::Continue(())))
+					},
+				})?;
+
+			arms.push(MatchArmWithExpr {
+				arm,
+				arrow,
+				expr,
+				trailing_comma,
+			});
+
+			if control_flow.is_break() {
+				break;
 			}
 		}
 
-		Ok(Self { arms, last })
+		Ok(Self { arms })
 	}
 }
 
@@ -122,7 +103,7 @@ pub enum MatchArmsError {
 
 	#[parse_error(transparent)]
 	#[parse_error(fatal)]
-	Expression(ParserError<ExpressionInner>),
+	Expression(ParserError<Expression>),
 
 	#[parse_error(transparent)]
 	#[parse_error(fatal)]
@@ -132,19 +113,11 @@ pub enum MatchArmsError {
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
-pub enum MatchArmWithExprNonLast {
-	WithoutBlock(MatchArmWithExpr<ExpressionWithoutBlock, token::Comma>),
-	WithBlock(MatchArmWithExpr<ExpressionWithBlock, Option<token::Comma>>),
-}
-
-#[derive(PartialEq, Eq, Clone, Debug)]
-#[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
-pub struct MatchArmWithExpr<E, C> {
+pub struct MatchArmWithExpr {
 	pub arm:            MatchArm,
 	pub arrow:          token::FatArrow,
-	pub expr:           E,
-	pub trailing_comma: C,
+	pub expr:           Expression,
+	pub trailing_comma: Option<token::Comma>,
 }
 
 /// `MatchArm`

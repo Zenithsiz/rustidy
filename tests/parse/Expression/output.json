@@ -3648,7 +3648,7 @@
 																},
 																"ty": null,
 																"eq": {
-																	"Normal": { "eq": [1471, 2949], "expr": 345 }
+																	"Normal": { "eq": [1471, 2949], "expr": 346 }
 																},
 																"semi": [1480, 2967]
 															}
@@ -3665,7 +3665,7 @@
 																},
 																"ty": null,
 																"eq": {
-																	"Normal": { "eq": [1483, 2973], "expr": 348 }
+																	"Normal": { "eq": [1483, 2973], "expr": 349 }
 																},
 																"semi": [1495, 2997]
 															}
@@ -3682,7 +3682,7 @@
 																},
 																"ty": null,
 																"eq": {
-																	"Normal": { "eq": [1498, 3003], "expr": 350 }
+																	"Normal": { "eq": [1498, 3003], "expr": 353 }
 																},
 																"semi": [1511, 3029]
 															}
@@ -3699,7 +3699,7 @@
 																},
 																"ty": null,
 																"eq": {
-																	"Normal": { "eq": [1514, 3035], "expr": 352 }
+																	"Normal": { "eq": [1514, 3035], "expr": 357 }
 																},
 																"semi": [1527, 3061]
 															}
@@ -3716,7 +3716,7 @@
 																},
 																"ty": null,
 																"eq": {
-																	"Normal": { "eq": [1530, 3067], "expr": 354 }
+																	"Normal": { "eq": [1530, 3067], "expr": 361 }
 																},
 																"semi": [1544, 3095]
 															}
@@ -3733,7 +3733,7 @@
 																},
 																"ty": null,
 																"eq": {
-																	"Normal": { "eq": [1547, 3101], "expr": 358 }
+																	"Normal": { "eq": [1547, 3101], "expr": 365 }
 																},
 																"semi": [1557, 3121]
 															}
@@ -3792,7 +3792,7 @@
 																},
 																"ty": null,
 																"eq": {
-																	"Normal": { "eq": [1566, 3139], "expr": 359 }
+																	"Normal": { "eq": [1566, 3139], "expr": 366 }
 																},
 																"semi": [1572, 3151]
 															}
@@ -3848,9 +3848,9 @@
 																	"inner": {
 																		"Operator": {
 																			"ArithmeticOrLogical": {
-																				"lhs": 380,
+																				"lhs": 387,
 																				"op": { "Plus": [1598, 3203] },
-																				"rhs": 381
+																				"rhs": 388
 																			}
 																		}
 																	}
@@ -3867,9 +3867,9 @@
 																	"inner": {
 																		"Operator": {
 																			"Assignment": {
-																				"lhs": 384,
+																				"lhs": 391,
 																				"eq": [1611, 3229],
-																				"rhs": 385
+																				"rhs": 392
 																			}
 																		}
 																	}
@@ -3886,9 +3886,9 @@
 																	"inner": {
 																		"Operator": {
 																			"ArithmeticOrLogical": {
-																				"lhs": 387,
+																				"lhs": 394,
 																				"op": { "Plus": [1623, 3253] },
-																				"rhs": 388
+																				"rhs": 395
 																			}
 																		}
 																	}
@@ -3948,7 +3948,7 @@
 																		"DoYeet": {
 																			"do_": [1634, 3275],
 																			"yeet_": [1635, 3277],
-																			"expr": 389
+																			"expr": 396
 																		}
 																	}
 																},
@@ -3965,7 +3965,7 @@
 																		"DoYeet": {
 																			"do_": [1638, 3283],
 																			"yeet_": [1639, 3285],
-																			"expr": 391
+																			"expr": 398
 																		}
 																	}
 																},
@@ -16394,10 +16394,7 @@
 								"scrutinee": 337,
 								"arms": {
 									"prefix": [1442, 2891],
-									"value": {
-										"attrs": [],
-										"inner": { "arms": [], "last": null }
-									},
+									"value": { "attrs": [], "inner": { "arms": [] } },
 									"suffix": [1443, 2893]
 								}
 							}
@@ -16457,7 +16454,7 @@
 												}
 											}
 										],
-										"inner": { "arms": [], "last": null }
+										"inner": { "arms": [] }
 									},
 									"suffix": [1456, 2919]
 								}
@@ -16515,42 +16512,45 @@
 									"value": {
 										"attrs": [],
 										"inner": {
-											"arms": [],
-											"last": {
-												"arm": {
-													"attrs": [],
-													"inner": {
-														"pat": {
-															"top_alt": null,
-															"inner": {
-																"first": {
-																	"WithoutRange": {
-																		"Path": {
-																			"Normal": {
-																				"prefix": null,
-																				"segments": {
-																					"first": {
-																						"ident": {
-																							"Ident": { "NonKw": [1464, 2935] }
+											"arms": [
+												{
+													"arm": {
+														"attrs": [],
+														"inner": {
+															"pat": {
+																"top_alt": null,
+																"inner": {
+																	"first": {
+																		"WithoutRange": {
+																			"Path": {
+																				"Normal": {
+																					"prefix": null,
+																					"segments": {
+																						"first": {
+																							"ident": {
+																								"Ident": {
+																									"NonKw": [1464, 2935]
+																								}
+																							},
+																							"generic": null
 																						},
-																						"generic": null
-																					},
-																					"rest": []
+																						"rest": []
+																					}
 																				}
 																			}
 																		}
-																	}
-																},
-																"rest": []
-															}
-														},
-														"guard": null
-													}
-												},
-												"arrow": [1465, 2937],
-												"expr": 342,
-												"trailing_comma": null
-											}
+																	},
+																	"rest": []
+																}
+															},
+															"guard": null
+														}
+													},
+													"arrow": [1465, 2937],
+													"expr": 342,
+													"trailing_comma": null
+												}
+											]
 										}
 									},
 									"suffix": [1467, 2941]
@@ -16579,6 +16579,25 @@
 					}
 				},
 				{
+					"WithoutBlock": {
+						"attrs": [],
+						"inner": {
+							"Path": {
+								"Normal": {
+									"prefix": null,
+									"segments": {
+										"first": {
+											"ident": { "Ident": { "NonKw": [1477, 2961] } },
+											"generic": null
+										},
+										"rest": []
+									}
+								}
+							}
+						}
+					}
+				},
+				{
 					"WithBlock": {
 						"attrs": [],
 						"inner": {
@@ -16592,64 +16611,43 @@
 										"inner": {
 											"arms": [
 												{
-													"WithoutBlock": {
-														"arm": {
-															"attrs": [],
-															"inner": {
-																"pat": {
-																	"top_alt": null,
-																	"inner": {
-																		"first": {
-																			"WithoutRange": {
-																				"Path": {
-																					"Normal": {
-																						"prefix": null,
-																						"segments": {
-																							"first": {
-																								"ident": {
-																									"Ident": {
-																										"NonKw": [1475, 2957]
-																									}
-																								},
-																								"generic": null
+													"arm": {
+														"attrs": [],
+														"inner": {
+															"pat": {
+																"top_alt": null,
+																"inner": {
+																	"first": {
+																		"WithoutRange": {
+																			"Path": {
+																				"Normal": {
+																					"prefix": null,
+																					"segments": {
+																						"first": {
+																							"ident": {
+																								"Ident": {
+																									"NonKw": [1475, 2957]
+																								}
 																							},
-																							"rest": []
-																						}
+																							"generic": null
+																						},
+																						"rest": []
 																					}
 																				}
 																			}
-																		},
-																		"rest": []
-																	}
-																},
-																"guard": null
-															}
-														},
-														"arrow": [1476, 2959],
-														"expr": {
-															"attrs": [],
-															"inner": {
-																"Path": {
-																	"Normal": {
-																		"prefix": null,
-																		"segments": {
-																			"first": {
-																				"ident": {
-																					"Ident": { "NonKw": [1477, 2961] }
-																				},
-																				"generic": null
-																			},
-																			"rest": []
 																		}
-																	}
+																	},
+																	"rest": []
 																}
-															}
-														},
-														"trailing_comma": [1478, 2963]
-													}
+															},
+															"guard": null
+														}
+													},
+													"arrow": [1476, 2959],
+													"expr": 345,
+													"trailing_comma": [1478, 2963]
 												}
-											],
-											"last": null
+											]
 										}
 									},
 									"suffix": [1479, 2965]
@@ -16702,70 +16700,73 @@
 						"inner": {
 							"Match": {
 								"match_": [1484, 2975],
-								"scrutinee": 346,
+								"scrutinee": 347,
 								"arms": {
 									"prefix": [1486, 2979],
 									"value": {
 										"attrs": [],
 										"inner": {
-											"arms": [],
-											"last": {
-												"arm": {
-													"attrs": [
-														{
-															"Attr": {
-																"pound": [1487, 2981],
-																"open": {
-																	"prefix": [1488, 2983],
-																	"value": {
-																		"path": {
-																			"prefix": null,
-																			"segments": {
-																				"first": {
-																					"Ident": { "NonKw": [1489, 2985] }
-																				},
-																				"rest": []
-																			}
-																		},
-																		"input": null
-																	},
-																	"suffix": [1490, 2987]
-																}
-															}
-														}
-													],
-													"inner": {
-														"pat": {
-															"top_alt": null,
-															"inner": {
-																"first": {
-																	"WithoutRange": {
-																		"Path": {
-																			"Normal": {
+											"arms": [
+												{
+													"arm": {
+														"attrs": [
+															{
+																"Attr": {
+																	"pound": [1487, 2981],
+																	"open": {
+																		"prefix": [1488, 2983],
+																		"value": {
+																			"path": {
 																				"prefix": null,
 																				"segments": {
 																					"first": {
-																						"ident": {
-																							"Ident": { "NonKw": [1491, 2989] }
-																						},
-																						"generic": null
+																						"Ident": { "NonKw": [1489, 2985] }
 																					},
 																					"rest": []
 																				}
+																			},
+																			"input": null
+																		},
+																		"suffix": [1490, 2987]
+																	}
+																}
+															}
+														],
+														"inner": {
+															"pat": {
+																"top_alt": null,
+																"inner": {
+																	"first": {
+																		"WithoutRange": {
+																			"Path": {
+																				"Normal": {
+																					"prefix": null,
+																					"segments": {
+																						"first": {
+																							"ident": {
+																								"Ident": {
+																									"NonKw": [1491, 2989]
+																								}
+																							},
+																							"generic": null
+																						},
+																						"rest": []
+																					}
+																				}
 																			}
 																		}
-																	}
-																},
-																"rest": []
-															}
-														},
-														"guard": null
-													}
-												},
-												"arrow": [1492, 2991],
-												"expr": 347,
-												"trailing_comma": null
-											}
+																	},
+																	"rest": []
+																}
+															},
+															"guard": null
+														}
+													},
+													"arrow": [1492, 2991],
+													"expr": 348,
+													"trailing_comma": null
+												}
+											]
 										}
 									},
 									"suffix": [1494, 2995]
@@ -16794,12 +16795,50 @@
 					}
 				},
 				{
+					"WithoutBlock": {
+						"attrs": [],
+						"inner": {
+							"Path": {
+								"Normal": {
+									"prefix": null,
+									"segments": {
+										"first": {
+											"ident": { "Ident": { "NonKw": [1504, 3015] } },
+											"generic": null
+										},
+										"rest": []
+									}
+								}
+							}
+						}
+					}
+				},
+				{
+					"WithoutBlock": {
+						"attrs": [],
+						"inner": {
+							"Path": {
+								"Normal": {
+									"prefix": null,
+									"segments": {
+										"first": {
+											"ident": { "Ident": { "NonKw": [1508, 3023] } },
+											"generic": null
+										},
+										"rest": []
+									}
+								}
+							}
+						}
+					}
+				},
+				{
 					"WithBlock": {
 						"attrs": [],
 						"inner": {
 							"Match": {
 								"match_": [1499, 3005],
-								"scrutinee": 349,
+								"scrutinee": 350,
 								"arms": {
 									"prefix": [1501, 3009],
 									"value": {
@@ -16807,121 +16846,80 @@
 										"inner": {
 											"arms": [
 												{
-													"WithoutBlock": {
-														"arm": {
-															"attrs": [],
-															"inner": {
-																"pat": {
-																	"top_alt": null,
-																	"inner": {
-																		"first": {
-																			"WithoutRange": {
-																				"Path": {
-																					"Normal": {
-																						"prefix": null,
-																						"segments": {
-																							"first": {
-																								"ident": {
-																									"Ident": {
-																										"NonKw": [1502, 3011]
-																									}
-																								},
-																								"generic": null
+													"arm": {
+														"attrs": [],
+														"inner": {
+															"pat": {
+																"top_alt": null,
+																"inner": {
+																	"first": {
+																		"WithoutRange": {
+																			"Path": {
+																				"Normal": {
+																					"prefix": null,
+																					"segments": {
+																						"first": {
+																							"ident": {
+																								"Ident": {
+																									"NonKw": [1502, 3011]
+																								}
 																							},
-																							"rest": []
-																						}
+																							"generic": null
+																						},
+																						"rest": []
 																					}
 																				}
 																			}
-																		},
-																		"rest": []
-																	}
-																},
-																"guard": null
-															}
-														},
-														"arrow": [1503, 3013],
-														"expr": {
-															"attrs": [],
-															"inner": {
-																"Path": {
-																	"Normal": {
-																		"prefix": null,
-																		"segments": {
-																			"first": {
-																				"ident": {
-																					"Ident": { "NonKw": [1504, 3015] }
-																				},
-																				"generic": null
-																			},
-																			"rest": []
 																		}
-																	}
+																	},
+																	"rest": []
 																}
-															}
-														},
-														"trailing_comma": [1505, 3017]
-													}
+															},
+															"guard": null
+														}
+													},
+													"arrow": [1503, 3013],
+													"expr": 351,
+													"trailing_comma": [1505, 3017]
 												},
 												{
-													"WithoutBlock": {
-														"arm": {
-															"attrs": [],
-															"inner": {
-																"pat": {
-																	"top_alt": null,
-																	"inner": {
-																		"first": {
-																			"WithoutRange": {
-																				"Path": {
-																					"Normal": {
-																						"prefix": null,
-																						"segments": {
-																							"first": {
-																								"ident": {
-																									"Ident": {
-																										"NonKw": [1506, 3019]
-																									}
-																								},
-																								"generic": null
+													"arm": {
+														"attrs": [],
+														"inner": {
+															"pat": {
+																"top_alt": null,
+																"inner": {
+																	"first": {
+																		"WithoutRange": {
+																			"Path": {
+																				"Normal": {
+																					"prefix": null,
+																					"segments": {
+																						"first": {
+																							"ident": {
+																								"Ident": {
+																									"NonKw": [1506, 3019]
+																								}
 																							},
-																							"rest": []
-																						}
+																							"generic": null
+																						},
+																						"rest": []
 																					}
 																				}
 																			}
-																		},
-																		"rest": []
-																	}
-																},
-																"guard": null
-															}
-														},
-														"arrow": [1507, 3021],
-														"expr": {
-															"attrs": [],
-															"inner": {
-																"Path": {
-																	"Normal": {
-																		"prefix": null,
-																		"segments": {
-																			"first": {
-																				"ident": {
-																					"Ident": { "NonKw": [1508, 3023] }
-																				},
-																				"generic": null
-																			},
-																			"rest": []
 																		}
-																	}
+																	},
+																	"rest": []
 																}
-															}
-														},
-														"trailing_comma": [1509, 3025]
-													}
+															},
+															"guard": null
+														}
+													},
+													"arrow": [1507, 3021],
+													"expr": 352,
+													"trailing_comma": [1509, 3025]
 												}
-											],
-											"last": null
+											]
 										}
 									},
 									"suffix": [1510, 3027]
@@ -16953,9 +16951,43 @@
 					"WithBlock": {
 						"attrs": [],
 						"inner": {
+							"Block": {
+								"prefix": [1520, 3047],
+								"value": {
+									"attrs": [],
+									"inner": { "stmts": [], "trailing_expr": null }
+								},
+								"suffix": [1521, 3049]
+							}
+						}
+					}
+				},
+				{
+					"WithoutBlock": {
+						"attrs": [],
+						"inner": {
+							"Path": {
+								"Normal": {
+									"prefix": null,
+									"segments": {
+										"first": {
+											"ident": { "Ident": { "NonKw": [1524, 3055] } },
+											"generic": null
+										},
+										"rest": []
+									}
+								}
+							}
+						}
+					}
+				},
+				{
+					"WithBlock": {
+						"attrs": [],
+						"inner": {
 							"Match": {
 								"match_": [1515, 3037],
-								"scrutinee": 351,
+								"scrutinee": 354,
 								"arms": {
 									"prefix": [1517, 3041],
 									"value": {
@@ -16963,118 +16995,80 @@
 										"inner": {
 											"arms": [
 												{
-													"WithBlock": {
-														"arm": {
-															"attrs": [],
-															"inner": {
-																"pat": {
-																	"top_alt": null,
-																	"inner": {
-																		"first": {
-																			"WithoutRange": {
-																				"Path": {
-																					"Normal": {
-																						"prefix": null,
-																						"segments": {
-																							"first": {
-																								"ident": {
-																									"Ident": {
-																										"NonKw": [1518, 3043]
-																									}
-																								},
-																								"generic": null
+													"arm": {
+														"attrs": [],
+														"inner": {
+															"pat": {
+																"top_alt": null,
+																"inner": {
+																	"first": {
+																		"WithoutRange": {
+																			"Path": {
+																				"Normal": {
+																					"prefix": null,
+																					"segments": {
+																						"first": {
+																							"ident": {
+																								"Ident": {
+																									"NonKw": [1518, 3043]
+																								}
 																							},
-																							"rest": []
-																						}
+																							"generic": null
+																						},
+																						"rest": []
 																					}
 																				}
 																			}
-																		},
-																		"rest": []
-																	}
-																},
-																"guard": null
-															}
-														},
-														"arrow": [1519, 3045],
-														"expr": {
-															"attrs": [],
-															"inner": {
-																"Block": {
-																	"prefix": [1520, 3047],
-																	"value": {
-																		"attrs": [],
-																		"inner": {
-																			"stmts": [],
-																			"trailing_expr": null
 																		}
 																	},
-																	"suffix": [1521, 3049]
+																	"rest": []
 																}
-															}
-														},
-														"trailing_comma": null
-													}
+															},
+															"guard": null
+														}
+													},
+													"arrow": [1519, 3045],
+													"expr": 355,
+													"trailing_comma": null
 												},
 												{
-													"WithoutBlock": {
-														"arm": {
-															"attrs": [],
-															"inner": {
-																"pat": {
-																	"top_alt": null,
-																	"inner": {
-																		"first": {
-																			"WithoutRange": {
-																				"Path": {
-																					"Normal": {
-																						"prefix": null,
-																						"segments": {
-																							"first": {
-																								"ident": {
-																									"Ident": {
-																										"NonKw": [1522, 3051]
-																									}
-																								},
-																								"generic": null
+													"arm": {
+														"attrs": [],
+														"inner": {
+															"pat": {
+																"top_alt": null,
+																"inner": {
+																	"first": {
+																		"WithoutRange": {
+																			"Path": {
+																				"Normal": {
+																					"prefix": null,
+																					"segments": {
+																						"first": {
+																							"ident": {
+																								"Ident": {
+																									"NonKw": [1522, 3051]
+																								}
 																							},
-																							"rest": []
-																						}
+																							"generic": null
+																						},
+																						"rest": []
 																					}
 																				}
 																			}
-																		},
-																		"rest": []
-																	}
-																},
-																"guard": null
-															}
-														},
-														"arrow": [1523, 3053],
-														"expr": {
-															"attrs": [],
-															"inner": {
-																"Path": {
-																	"Normal": {
-																		"prefix": null,
-																		"segments": {
-																			"first": {
-																				"ident": {
-																					"Ident": { "NonKw": [1524, 3055] }
-																				},
-																				"generic": null
-																			},
-																			"rest": []
 																		}
-																	}
+																	},
+																	"rest": []
 																}
-															}
-														},
-														"trailing_comma": [1525, 3057]
-													}
+															},
+															"guard": null
+														}
+													},
+													"arrow": [1523, 3053],
+													"expr": 356,
+													"trailing_comma": [1525, 3057]
 												}
-											],
-											"last": null
+											]
 										}
 									},
 									"suffix": [1526, 3059]
@@ -17106,9 +17100,43 @@
 					"WithBlock": {
 						"attrs": [],
 						"inner": {
+							"Block": {
+								"prefix": [1536, 3079],
+								"value": {
+									"attrs": [],
+									"inner": { "stmts": [], "trailing_expr": null }
+								},
+								"suffix": [1537, 3081]
+							}
+						}
+					}
+				},
+				{
+					"WithoutBlock": {
+						"attrs": [],
+						"inner": {
+							"Path": {
+								"Normal": {
+									"prefix": null,
+									"segments": {
+										"first": {
+											"ident": { "Ident": { "NonKw": [1541, 3089] } },
+											"generic": null
+										},
+										"rest": []
+									}
+								}
+							}
+						}
+					}
+				},
+				{
+					"WithBlock": {
+						"attrs": [],
+						"inner": {
 							"Match": {
 								"match_": [1531, 3069],
-								"scrutinee": 353,
+								"scrutinee": 358,
 								"arms": {
 									"prefix": [1533, 3073],
 									"value": {
@@ -17116,118 +17144,80 @@
 										"inner": {
 											"arms": [
 												{
-													"WithBlock": {
-														"arm": {
-															"attrs": [],
-															"inner": {
-																"pat": {
-																	"top_alt": null,
-																	"inner": {
-																		"first": {
-																			"WithoutRange": {
-																				"Path": {
-																					"Normal": {
-																						"prefix": null,
-																						"segments": {
-																							"first": {
-																								"ident": {
-																									"Ident": {
-																										"NonKw": [1534, 3075]
-																									}
-																								},
-																								"generic": null
+													"arm": {
+														"attrs": [],
+														"inner": {
+															"pat": {
+																"top_alt": null,
+																"inner": {
+																	"first": {
+																		"WithoutRange": {
+																			"Path": {
+																				"Normal": {
+																					"prefix": null,
+																					"segments": {
+																						"first": {
+																							"ident": {
+																								"Ident": {
+																									"NonKw": [1534, 3075]
+																								}
 																							},
-																							"rest": []
-																						}
+																							"generic": null
+																						},
+																						"rest": []
 																					}
 																				}
 																			}
-																		},
-																		"rest": []
-																	}
-																},
-																"guard": null
-															}
-														},
-														"arrow": [1535, 3077],
-														"expr": {
-															"attrs": [],
-															"inner": {
-																"Block": {
-																	"prefix": [1536, 3079],
-																	"value": {
-																		"attrs": [],
-																		"inner": {
-																			"stmts": [],
-																			"trailing_expr": null
 																		}
 																	},
-																	"suffix": [1537, 3081]
+																	"rest": []
 																}
-															}
-														},
-														"trailing_comma": [1538, 3083]
-													}
+															},
+															"guard": null
+														}
+													},
+													"arrow": [1535, 3077],
+													"expr": 359,
+													"trailing_comma": [1538, 3083]
 												},
 												{
-													"WithoutBlock": {
-														"arm": {
-															"attrs": [],
-															"inner": {
-																"pat": {
-																	"top_alt": null,
-																	"inner": {
-																		"first": {
-																			"WithoutRange": {
-																				"Path": {
-																					"Normal": {
-																						"prefix": null,
-																						"segments": {
-																							"first": {
-																								"ident": {
-																									"Ident": {
-																										"NonKw": [1539, 3085]
-																									}
-																								},
-																								"generic": null
+													"arm": {
+														"attrs": [],
+														"inner": {
+															"pat": {
+																"top_alt": null,
+																"inner": {
+																	"first": {
+																		"WithoutRange": {
+																			"Path": {
+																				"Normal": {
+																					"prefix": null,
+																					"segments": {
+																						"first": {
+																							"ident": {
+																								"Ident": {
+																									"NonKw": [1539, 3085]
+																								}
 																							},
-																							"rest": []
-																						}
+																							"generic": null
+																						},
+																						"rest": []
 																					}
 																				}
 																			}
-																		},
-																		"rest": []
-																	}
-																},
-																"guard": null
-															}
-														},
-														"arrow": [1540, 3087],
-														"expr": {
-															"attrs": [],
-															"inner": {
-																"Path": {
-																	"Normal": {
-																		"prefix": null,
-																		"segments": {
-																			"first": {
-																				"ident": {
-																					"Ident": { "NonKw": [1541, 3089] }
-																				},
-																				"generic": null
-																			},
-																			"rest": []
 																		}
-																	}
+																	},
+																	"rest": []
 																}
-															}
-														},
-														"trailing_comma": [1542, 3091]
-													}
+															},
+															"guard": null
+														}
+													},
+													"arrow": [1540, 3087],
+													"expr": 360,
+													"trailing_comma": [1542, 3091]
 												}
-											],
-											"last": null
+											]
 										}
 									},
 									"suffix": [1543, 3093]
@@ -17299,51 +17289,54 @@
 						"inner": {
 							"Match": {
 								"match_": [1548, 3103],
-								"scrutinee": 355,
+								"scrutinee": 362,
 								"arms": {
 									"prefix": [1550, 3107],
 									"value": {
 										"attrs": [],
 										"inner": {
-											"arms": [],
-											"last": {
-												"arm": {
-													"attrs": [],
-													"inner": {
-														"pat": {
-															"top_alt": null,
-															"inner": {
-																"first": {
-																	"WithoutRange": {
-																		"Path": {
-																			"Normal": {
-																				"prefix": null,
-																				"segments": {
-																					"first": {
-																						"ident": {
-																							"Ident": { "NonKw": [1551, 3109] }
+											"arms": [
+												{
+													"arm": {
+														"attrs": [],
+														"inner": {
+															"pat": {
+																"top_alt": null,
+																"inner": {
+																	"first": {
+																		"WithoutRange": {
+																			"Path": {
+																				"Normal": {
+																					"prefix": null,
+																					"segments": {
+																						"first": {
+																							"ident": {
+																								"Ident": {
+																									"NonKw": [1551, 3109]
+																								}
+																							},
+																							"generic": null
 																						},
-																						"generic": null
-																					},
-																					"rest": []
+																						"rest": []
+																					}
 																				}
 																			}
 																		}
-																	}
-																},
-																"rest": []
+																	},
+																	"rest": []
+																}
+															},
+															"guard": {
+																"if_": [1552, 3111],
+																"cond": { "Right": 363 }
 															}
-														},
-														"guard": {
-															"if_": [1552, 3111],
-															"cond": { "Right": 356 }
 														}
-													}
-												},
-												"arrow": [1554, 3115],
-												"expr": 357,
-												"trailing_comma": null
-											}
+													},
+													"arrow": [1554, 3115],
+													"expr": 364,
+													"trailing_comma": null
+												}
+											]
 										}
 									},
 									"suffix": [1556, 3119]
@@ -17415,7 +17408,7 @@
 						"attrs": [],
 						"inner": {
 							"Operator": {
-								"Dereference": { "star": [1581, 3169], "expr": 360 }
+								"Dereference": { "star": [1581, 3169], "expr": 367 }
 							}
 						}
 					}
@@ -17425,7 +17418,7 @@
 						"attrs": [],
 						"inner": {
 							"Operator": {
-								"Dereference": { "star": [1580, 3167], "expr": 361 }
+								"Dereference": { "star": [1580, 3167], "expr": 368 }
 							}
 						}
 					}
@@ -17438,7 +17431,7 @@
 								"Borrow": {
 									"ref_": { "And": [1579, 3165] },
 									"rest": null,
-									"expr": 362
+									"expr": 369
 								}
 							}
 						}
@@ -17449,7 +17442,7 @@
 						"attrs": [],
 						"inner": {
 							"Field": {
-								"expr": 363,
+								"expr": 370,
 								"dot": [1583, 3173],
 								"ident": { "NonKw": [1584, 3175] }
 							}
@@ -17461,7 +17454,7 @@
 						"attrs": [],
 						"inner": {
 							"Operator": {
-								"TryPropagation": { "expr": 364, "question": [1585, 3177] }
+								"TryPropagation": { "expr": 371, "question": [1585, 3177] }
 							}
 						}
 					}
@@ -17490,7 +17483,7 @@
 						"attrs": [],
 						"inner": {
 							"Operator": {
-								"Dereference": { "star": [1591, 3189], "expr": 366 }
+								"Dereference": { "star": [1591, 3189], "expr": 373 }
 							}
 						}
 					}
@@ -17500,7 +17493,7 @@
 						"attrs": [],
 						"inner": {
 							"Operator": {
-								"Dereference": { "star": [1590, 3187], "expr": 367 }
+								"Dereference": { "star": [1590, 3187], "expr": 374 }
 							}
 						}
 					}
@@ -17513,7 +17506,7 @@
 								"Borrow": {
 									"ref_": { "And": [1589, 3185] },
 									"rest": null,
-									"expr": 368
+									"expr": 375
 								}
 							}
 						}
@@ -17524,7 +17517,7 @@
 						"attrs": [],
 						"inner": {
 							"Field": {
-								"expr": 369,
+								"expr": 376,
 								"dot": [1593, 3193],
 								"ident": { "NonKw": [1594, 3195] }
 							}
@@ -17536,7 +17529,7 @@
 						"attrs": [],
 						"inner": {
 							"Operator": {
-								"TryPropagation": { "expr": 370, "question": [1595, 3197] }
+								"TryPropagation": { "expr": 377, "question": [1595, 3197] }
 							}
 						}
 					}
@@ -17546,7 +17539,7 @@
 						"attrs": [],
 						"inner": {
 							"Field": {
-								"expr": 365,
+								"expr": 372,
 								"dot": [1586, 3179],
 								"ident": { "NonKw": [1587, 3181] }
 							}
@@ -17558,7 +17551,7 @@
 						"attrs": [],
 						"inner": {
 							"Field": {
-								"expr": 371,
+								"expr": 378,
 								"dot": [1596, 3199],
 								"ident": { "NonKw": [1597, 3201] }
 							}
@@ -17589,7 +17582,7 @@
 						"attrs": [],
 						"inner": {
 							"Operator": {
-								"Dereference": { "star": [1601, 3209], "expr": 374 }
+								"Dereference": { "star": [1601, 3209], "expr": 381 }
 							}
 						}
 					}
@@ -17599,7 +17592,7 @@
 						"attrs": [],
 						"inner": {
 							"Operator": {
-								"Dereference": { "star": [1600, 3207], "expr": 375 }
+								"Dereference": { "star": [1600, 3207], "expr": 382 }
 							}
 						}
 					}
@@ -17612,7 +17605,7 @@
 								"Borrow": {
 									"ref_": { "And": [1599, 3205] },
 									"rest": null,
-									"expr": 376
+									"expr": 383
 								}
 							}
 						}
@@ -17623,7 +17616,7 @@
 						"attrs": [],
 						"inner": {
 							"Field": {
-								"expr": 377,
+								"expr": 384,
 								"dot": [1603, 3213],
 								"ident": { "NonKw": [1604, 3215] }
 							}
@@ -17635,7 +17628,7 @@
 						"attrs": [],
 						"inner": {
 							"Operator": {
-								"TryPropagation": { "expr": 378, "question": [1605, 3217] }
+								"TryPropagation": { "expr": 385, "question": [1605, 3217] }
 							}
 						}
 					}
@@ -17646,9 +17639,9 @@
 						"inner": {
 							"Operator": {
 								"ArithmeticOrLogical": {
-									"lhs": 372,
+									"lhs": 379,
 									"op": { "Plus": [1588, 3183] },
-									"rhs": 373
+									"rhs": 380
 								}
 							}
 						}
@@ -17659,7 +17652,7 @@
 						"attrs": [],
 						"inner": {
 							"Field": {
-								"expr": 379,
+								"expr": 386,
 								"dot": [1606, 3219],
 								"ident": { "NonKw": [1607, 3221] }
 							}
@@ -17702,7 +17695,7 @@
 						"attrs": [],
 						"inner": {
 							"Operator": {
-								"Dereference": { "star": [1609, 3225], "expr": 383 }
+								"Dereference": { "star": [1609, 3225], "expr": 390 }
 							}
 						}
 					}
@@ -17713,13 +17706,10 @@
 						"inner": {
 							"Match": {
 								"match_": [1612, 3231],
-								"scrutinee": 382,
+								"scrutinee": 389,
 								"arms": {
 									"prefix": [1615, 3237],
-									"value": {
-										"attrs": [],
-										"inner": { "arms": [], "last": null }
-									},
+									"value": { "attrs": [], "inner": { "arms": [] } },
 									"suffix": [1616, 3239]
 								}
 							}
@@ -17744,13 +17734,10 @@
 						"inner": {
 							"Match": {
 								"match_": [1618, 3243],
-								"scrutinee": 386,
+								"scrutinee": 393,
 								"arms": {
 									"prefix": [1621, 3249],
-									"value": {
-										"attrs": [],
-										"inner": { "arms": [], "last": null }
-									},
+									"value": { "attrs": [], "inner": { "arms": [] } },
 									"suffix": [1622, 3251]
 								}
 							}
@@ -17806,7 +17793,7 @@
 				{
 					"WithoutBlock": {
 						"attrs": [],
-						"inner": { "Return": { "return_": [1640, 3287], "expr": 390 } }
+						"inner": { "Return": { "return_": [1640, 3287], "expr": 397 } }
 					}
 				}
 			]
