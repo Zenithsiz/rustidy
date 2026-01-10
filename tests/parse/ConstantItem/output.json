@@ -2,143 +2,7 @@
 	"ast": {
 		"shebang": null,
 		"inner_attrs": [],
-		"items": [
-			{
-				"attrs": [],
-				"inner": {
-					"Vis": {
-						"vis": null,
-						"inner": {
-							"Constant": {
-								"const_": [0, 1],
-								"name": { "Ident": { "NonKw": [1, 3] } },
-								"colon": [2, 5],
-								"ty": {
-									"TraitObject": {
-										"dyn_": null,
-										"bound": {
-											"punctuated": {
-												"first": {
-													"Trait": {
-														"Normal": {
-															"prefix": null,
-															"path": {
-																"prefix": null,
-																"segments": {
-																	"first": {
-																		"path": { "Ident": { "NonKw": [3, 7] } },
-																		"generics": null
-																	},
-																	"rest": []
-																}
-															}
-														}
-													}
-												},
-												"rest": []
-											},
-											"trailing": null
-										}
-									}
-								},
-								"value": null,
-								"semi": [4, 9]
-							}
-						}
-					}
-				}
-			},
-			{
-				"attrs": [],
-				"inner": {
-					"Vis": {
-						"vis": null,
-						"inner": {
-							"Constant": {
-								"const_": [5, 11],
-								"name": { "Underscore": [6, 13] },
-								"colon": [7, 15],
-								"ty": {
-									"TraitObject": {
-										"dyn_": null,
-										"bound": {
-											"punctuated": {
-												"first": {
-													"Trait": {
-														"Normal": {
-															"prefix": null,
-															"path": {
-																"prefix": null,
-																"segments": {
-																	"first": {
-																		"path": { "Ident": { "NonKw": [8, 17] } },
-																		"generics": null
-																	},
-																	"rest": []
-																}
-															}
-														}
-													}
-												},
-												"rest": []
-											},
-											"trailing": null
-										}
-									}
-								},
-								"value": null,
-								"semi": [9, 19]
-							}
-						}
-					}
-				}
-			},
-			{
-				"attrs": [],
-				"inner": {
-					"Vis": {
-						"vis": null,
-						"inner": {
-							"Constant": {
-								"const_": [10, 21],
-								"name": { "Ident": { "NonKw": [11, 23] } },
-								"colon": [12, 25],
-								"ty": {
-									"TraitObject": {
-										"dyn_": null,
-										"bound": {
-											"punctuated": {
-												"first": {
-													"Trait": {
-														"Normal": {
-															"prefix": null,
-															"path": {
-																"prefix": null,
-																"segments": {
-																	"first": {
-																		"path": { "Ident": { "NonKw": [13, 27] } },
-																		"generics": null
-																	},
-																	"rest": []
-																}
-															}
-														}
-													}
-												},
-												"rest": []
-											},
-											"trailing": null
-										}
-									}
-								},
-								"value": { "eq": [14, 29], "expr": 0 },
-								"semi": [16, 33]
-							}
-						}
-					}
-				}
-			}
-		],
+		"items": [0, 1, 2],
 		"suffix_ws": 17,
 		"trailing_line_comment": null
 	},
@@ -215,6 +79,147 @@
 									"ws": 15,
 									"inner": { "Decimal": 31 },
 									"suffix": null
+								}
+							}
+						}
+					}
+				}
+			]
+		},
+		"item": {
+			"data": [
+				{
+					"attrs": [],
+					"inner": {
+						"Vis": {
+							"vis": null,
+							"inner": {
+								"Constant": {
+									"const_": [0, 1],
+									"name": { "Ident": { "NonKw": [1, 3] } },
+									"colon": [2, 5],
+									"ty": {
+										"TraitObject": {
+											"dyn_": null,
+											"bound": {
+												"punctuated": {
+													"first": {
+														"Trait": {
+															"Normal": {
+																"prefix": null,
+																"path": {
+																	"prefix": null,
+																	"segments": {
+																		"first": {
+																			"path": { "Ident": { "NonKw": [3, 7] } },
+																			"generics": null
+																		},
+																		"rest": []
+																	}
+																}
+															}
+														}
+													},
+													"rest": []
+												},
+												"trailing": null
+											}
+										}
+									},
+									"value": null,
+									"semi": [4, 9]
+								}
+							}
+						}
+					}
+				},
+				{
+					"attrs": [],
+					"inner": {
+						"Vis": {
+							"vis": null,
+							"inner": {
+								"Constant": {
+									"const_": [5, 11],
+									"name": { "Underscore": [6, 13] },
+									"colon": [7, 15],
+									"ty": {
+										"TraitObject": {
+											"dyn_": null,
+											"bound": {
+												"punctuated": {
+													"first": {
+														"Trait": {
+															"Normal": {
+																"prefix": null,
+																"path": {
+																	"prefix": null,
+																	"segments": {
+																		"first": {
+																			"path": { "Ident": { "NonKw": [8, 17] } },
+																			"generics": null
+																		},
+																		"rest": []
+																	}
+																}
+															}
+														}
+													},
+													"rest": []
+												},
+												"trailing": null
+											}
+										}
+									},
+									"value": null,
+									"semi": [9, 19]
+								}
+							}
+						}
+					}
+				},
+				{
+					"attrs": [],
+					"inner": {
+						"Vis": {
+							"vis": null,
+							"inner": {
+								"Constant": {
+									"const_": [10, 21],
+									"name": { "Ident": { "NonKw": [11, 23] } },
+									"colon": [12, 25],
+									"ty": {
+										"TraitObject": {
+											"dyn_": null,
+											"bound": {
+												"punctuated": {
+													"first": {
+														"Trait": {
+															"Normal": {
+																"prefix": null,
+																"path": {
+																	"prefix": null,
+																	"segments": {
+																		"first": {
+																			"path": {
+																				"Ident": { "NonKw": [13, 27] }
+																			},
+																			"generics": null
+																		},
+																		"rest": []
+																	}
+																}
+															}
+														}
+													},
+													"rest": []
+												},
+												"trailing": null
+											}
+										}
+									},
+									"value": { "eq": [14, 29], "expr": 0 },
+									"semi": [16, 33]
 								}
 							}
 						}

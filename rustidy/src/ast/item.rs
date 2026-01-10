@@ -47,14 +47,24 @@ use {
 		vis::Visibility,
 		with_attrs::WithOuterAttributes,
 	},
-	crate::{Format, Parse, Print},
+	crate::{
+		Format,
+		Parse,
+		Print,
+		arena::{ArenaData, ArenaIdx},
+	},
 };
 
 /// `Item`
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
-pub struct Item(pub WithOuterAttributes<ItemInner>);
+#[expect(clippy::use_self, reason = "`Parse` derive macro doesn't support `Self`")]
+pub struct Item(pub ArenaIdx<Item>);
+
+impl ArenaData for Item {
+	type Data = WithOuterAttributes<ItemInner>;
+}
 
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]

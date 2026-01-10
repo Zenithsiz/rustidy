@@ -4,7 +4,7 @@
 use {
 	crate::{
 		ParserStr,
-		ast::{expr::Expression, whitespace::Whitespace},
+		ast::{expr::Expression, item::Item, whitespace::Whitespace},
 	},
 	core::{cell::RefCell, fmt, hash::Hash, marker::PhantomData},
 	std::hash::Hasher,
@@ -294,4 +294,5 @@ arenas! {
 	ParserStr => parser_str,
 	Whitespace => whitespace,
 	Expression => expression,
+	Item => item,
 }
