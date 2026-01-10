@@ -10,97 +10,6 @@ use {
 	std::hash::Hasher,
 };
 
-/// Arenas
-#[derive(Debug)]
-#[derive(serde::Serialize, serde::Deserialize)]
-pub struct Arenas {
-	parser_str: Arena<ParserStr>,
-	whitespace: Arena<Whitespace>,
-	expression: Arena<Expression>,
-}
-
-impl Arenas {
-	/// Creates all arenas as empty
-	#[must_use]
-	pub const fn new() -> Self {
-		Self {
-			parser_str: Arena::new(),
-			whitespace: Arena::new(),
-			expression: Arena::new(),
-		}
-	}
-
-	/// Returns the arena for `T`
-	#[must_use]
-	pub fn get<T: ?Sized + WithArena>(&self) -> &Arena<T> {
-		T::get_arena(self)
-	}
-
-	/// Creates a checkpoint on all arenas
-	pub fn checkpoint(&self) -> ArenasCheckpoint {
-		ArenasCheckpoint {
-			parser_str: self.get::<ParserStr>().checkpoint(),
-			whitespace: self.get::<Whitespace>().checkpoint(),
-			expression: self.get::<Expression>().checkpoint(),
-		}
-	}
-
-	/// Undoes a checkpoint on all arenas
-	pub fn undo_checkpoint(&self, checkpoint: ArenasCheckpoint) {
-		let ArenasCheckpoint {
-			parser_str,
-			whitespace,
-			expression,
-		} = checkpoint;
-		self.get::<ParserStr>().undo_checkpoint(parser_str);
-		self.get::<Whitespace>().undo_checkpoint(whitespace);
-		self.get::<Expression>().undo_checkpoint(expression);
-	}
-
-	/// Stashes a checkpoint on all arenas
-	pub fn stash_checkpoint(&self, checkpoint: ArenasCheckpoint) -> ArenasCheckpointStash {
-		ArenasCheckpointStash {
-			parser_str: self.get::<ParserStr>().stash_checkpoint(checkpoint.parser_str),
-			whitespace: self.get::<Whitespace>().stash_checkpoint(checkpoint.whitespace),
-			expression: self.get::<Expression>().stash_checkpoint(checkpoint.expression),
-		}
-	}
-
-	/// Applies a checkpoint stash on all arenas
-	pub fn apply_checkpoint_stash(&self, stash: ArenasCheckpointStash) {
-		let ArenasCheckpointStash {
-			parser_str,
-			whitespace,
-			expression,
-		} = stash;
-		self.get::<ParserStr>().apply_checkpoint_stash(parser_str);
-		self.get::<Whitespace>().apply_checkpoint_stash(whitespace);
-		self.get::<Expression>().apply_checkpoint_stash(expression);
-	}
-}
-
-impl Default for Arenas {
-	fn default() -> Self {
-		Self::new()
-	}
-}
-
-/// Arenas checkpoint
-#[derive(Clone, Copy, Debug)]
-pub struct ArenasCheckpoint {
-	parser_str: ArenaCheckpoint,
-	whitespace: ArenaCheckpoint,
-	expression: ArenaCheckpoint,
-}
-
-/// Arenas checkpoint stash
-#[derive(Clone, Debug)]
-pub struct ArenasCheckpointStash {
-	parser_str: ArenaCheckpointStash<ParserStr>,
-	whitespace: ArenaCheckpointStash<Whitespace>,
-	expression: ArenaCheckpointStash<Expression>,
-}
-
 /// Arena for `T`'s Data
 #[derive(Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
@@ -278,17 +187,110 @@ pub trait WithArena: ArenaData {
 	fn get_arena(arenas: &Arenas) -> &Arena<Self>;
 }
 
-macro impl_with_arena( $($Ty:ty => $field:ident),* $(,)? ) {
+macro arenas(
+	$Arenas:ident;
+	$ArenasCheckpoint:ident;
+	$ArenasCheckpointStash:ident;
+	$new:ident;
+	$get:ident;
+	$checkpoint:ident;
+	$undo_checkpoint:ident;
+	$stash_checkpoint:ident;
+	$apply_checkpoint_stash:ident;
+
+	$($Ty:ty => $field:ident),* $(,)?
+) {
+	/// Arenas
+	#[derive(Default, Debug)]
+	#[derive(serde::Serialize, serde::Deserialize)]
+	pub struct $Arenas {
+		$(
+			$field: Arena<$Ty>,
+		)*
+	}
+
+	impl $Arenas {
+		/// Creates all arenas as empty
+		#[must_use]
+		pub fn $new() -> Self {
+			Self::default()
+		}
+
+		/// Returns the arena for `T`
+		#[must_use]
+		pub fn $get<T: ?Sized + WithArena>(&self) -> &Arena<T> {
+			T::get_arena(self)
+		}
+
+		/// Creates a checkpoint on all arenas
+		pub fn $checkpoint(&self) -> $ArenasCheckpoint {
+			$ArenasCheckpoint {
+				$(
+					$field: self.$field.checkpoint(),
+				)*
+			}
+		}
+
+		/// Undoes a checkpoint on all arenas
+		pub fn $undo_checkpoint(&self, checkpoint: $ArenasCheckpoint) {
+			$(
+				self.$field.undo_checkpoint(checkpoint.$field);
+			)*
+		}
+
+		/// Stashes a checkpoint on all arenas
+		pub fn $stash_checkpoint(&self, checkpoint: $ArenasCheckpoint) -> $ArenasCheckpointStash {
+			$ArenasCheckpointStash {
+				$(
+					$field: self.$field.stash_checkpoint(checkpoint.$field),
+				)*
+			}
+		}
+
+		/// Applies a checkpoint stash on all arenas
+		pub fn $apply_checkpoint_stash(&self, stash: $ArenasCheckpointStash) {
+			$(
+				self.$field.apply_checkpoint_stash(stash.$field);
+			)*
+		}
+	}
+
+	/// Arenas checkpoint
+	#[derive(Clone, Copy, Debug)]
+	pub struct $ArenasCheckpoint {
+		$(
+			$field: ArenaCheckpoint,
+		)*
+	}
+
+	/// Arenas checkpoint stash
+	#[derive(Clone, Debug)]
+	pub struct $ArenasCheckpointStash {
+		$(
+			$field: ArenaCheckpointStash<$Ty>,
+		)*
+	}
+
 	$(
 		impl WithArena for $Ty {
-			fn get_arena(arenas: &Arenas) -> &Arena<Self> {
+			fn get_arena(arenas: &$Arenas) -> &Arena<Self> {
 				&arenas.$field
 			}
 		}
 	)*
 }
 
-impl_with_arena! {
+arenas! {
+	Arenas;
+	ArenasCheckpoint;
+	ArenasCheckpointStash;
+	new;
+	get;
+	checkpoint;
+	undo_checkpoint;
+	stash_checkpoint;
+	apply_checkpoint_stash;
+
 	ParserStr => parser_str,
 	Whitespace => whitespace,
 	Expression => expression,
