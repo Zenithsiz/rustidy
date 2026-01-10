@@ -555,23 +555,7 @@
 													"vis": null,
 													"ident": { "NonKw": [74, 149] },
 													"kind": null,
-													"discriminant": {
-														"eq": [75, 151],
-														"expr": {
-															"WithoutBlock": {
-																"attrs": [],
-																"inner": {
-																	"Literal": {
-																		"Integer": {
-																			"ws": 76,
-																			"inner": { "Decimal": 153 },
-																			"suffix": null
-																		}
-																	}
-																}
-															}
-														}
-													}
+													"discriminant": { "eq": [75, 151], "expr": 0 }
 												}
 											},
 											"rest": []
@@ -881,23 +865,7 @@
 													"vis": { "pub_": [110, 221], "path": null },
 													"ident": { "NonKw": [111, 223] },
 													"kind": null,
-													"discriminant": {
-														"eq": [112, 225],
-														"expr": {
-															"WithoutBlock": {
-																"attrs": [],
-																"inner": {
-																	"Literal": {
-																		"Integer": {
-																			"ws": 113,
-																			"inner": { "Decimal": 227 },
-																			"suffix": null
-																		}
-																	}
-																}
-															}
-														}
-													}
+													"discriminant": { "eq": [112, 225], "expr": 1 }
 												}
 											},
 											"rest": [
@@ -982,23 +950,7 @@
 																	"suffix": [123, 247]
 																}
 															},
-															"discriminant": {
-																"eq": [124, 249],
-																"expr": {
-																	"WithoutBlock": {
-																		"attrs": [],
-																		"inner": {
-																			"Literal": {
-																				"Integer": {
-																					"ws": 125,
-																					"inner": { "Decimal": 251 },
-																					"suffix": null
-																				}
-																			}
-																		}
-																	}
-																}
-															}
+															"discriminant": { "eq": [124, 249], "expr": 2 }
 														}
 													}
 												],
@@ -1086,23 +1038,7 @@
 																	"suffix": [137, 275]
 																}
 															},
-															"discriminant": {
-																"eq": [138, 277],
-																"expr": {
-																	"WithoutBlock": {
-																		"attrs": [],
-																		"inner": {
-																			"Literal": {
-																				"Integer": {
-																					"ws": 139,
-																					"inner": { "Decimal": 279 },
-																					"suffix": null
-																				}
-																			}
-																		}
-																	}
-																}
-															}
+															"discriminant": { "eq": [138, 277], "expr": 3 }
 														}
 													}
 												]
@@ -1556,6 +1492,66 @@
 				{ "first": 280, "rest": [] },
 				{ "first": 282, "rest": [] },
 				{ "first": 284, "rest": [] }
+			]
+		},
+		"expression": {
+			"data": [
+				{
+					"WithoutBlock": {
+						"attrs": [],
+						"inner": {
+							"Literal": {
+								"Integer": {
+									"ws": 76,
+									"inner": { "Decimal": 153 },
+									"suffix": null
+								}
+							}
+						}
+					}
+				},
+				{
+					"WithoutBlock": {
+						"attrs": [],
+						"inner": {
+							"Literal": {
+								"Integer": {
+									"ws": 113,
+									"inner": { "Decimal": 227 },
+									"suffix": null
+								}
+							}
+						}
+					}
+				},
+				{
+					"WithoutBlock": {
+						"attrs": [],
+						"inner": {
+							"Literal": {
+								"Integer": {
+									"ws": 125,
+									"inner": { "Decimal": 251 },
+									"suffix": null
+								}
+							}
+						}
+					}
+				},
+				{
+					"WithoutBlock": {
+						"attrs": [],
+						"inner": {
+							"Literal": {
+								"Integer": {
+									"ws": 139,
+									"inner": { "Decimal": 279 },
+									"suffix": null
+								}
+							}
+						}
+					}
+				}
 			]
 		}
 	}

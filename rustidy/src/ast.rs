@@ -1,8 +1,5 @@
 //! Syntax tree
 
-// Lints
-#![expect(clippy::large_stack_frames, reason = "We'll make everything smaller eventually")]
-
 // Modules
 pub mod at_least;
 pub mod attr;

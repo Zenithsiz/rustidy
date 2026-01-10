@@ -2,19 +2,19 @@
 
 // Imports
 use {
-	super::{Conditions, Expression, ExpressionWithBlock},
+	super::{Conditions, ExpressionWithBlock},
 	crate::{
 		Format,
 		Parse,
 		Print,
 		ast::{
 			delimited::Braced,
-			expr::ExpressionWithoutBlock,
+			expr::{Expression, ExpressionInner, ExpressionWithoutBlock},
 			pat::Pattern,
 			token,
 			with_attrs::{WithInnerAttributes, WithOuterAttributes},
 		},
-		parser::{ParseError, Parser, ParserError},
+		parser::{FromRecursiveRoot, ParseError, Parser, ParserError},
 	},
 	std::fmt,
 };
@@ -45,7 +45,7 @@ pub struct Scrutinee(#[parse(with_tag = "skip:StructExpression")] Expression);
 #[derive(Format, Print)]
 pub struct MatchArms {
 	pub arms: Vec<MatchArmWithExprNonLast>,
-	pub last: Option<MatchArmWithExpr<Box<Expression>, Option<token::Comma>>>,
+	pub last: Option<MatchArmWithExpr<Expression, Option<token::Comma>>>,
 }
 
 impl Parse for MatchArms {
@@ -62,9 +62,9 @@ impl Parse for MatchArms {
 				break None;
 			};
 			let arrow = parser.parse::<token::FatArrow>()?;
-			let expr = parser.parse::<Expression>()?;
+			let expr = parser.parse::<ExpressionInner>()?;
 			match expr {
-				Expression::WithoutBlock(expr) => match parser.try_parse::<token::Comma>()? {
+				ExpressionInner::WithoutBlock(expr) => match parser.try_parse::<token::Comma>()? {
 					Ok(trailing_comma) => arms.push(MatchArmWithExprNonLast::WithoutBlock(MatchArmWithExpr {
 						arm,
 						arrow,
@@ -75,11 +75,11 @@ impl Parse for MatchArms {
 						break Some(MatchArmWithExpr {
 							arm,
 							arrow,
-							expr: Box::new(Expression::WithoutBlock(expr)),
+							expr: Expression::from_recursive_root(ExpressionInner::WithoutBlock(expr), parser),
 							trailing_comma: None,
 						}),
 				},
-				Expression::WithBlock(expr) => {
+				ExpressionInner::WithBlock(expr) => {
 					let trailing_comma = parser.try_parse::<token::Comma>()?.ok();
 					arms.push(MatchArmWithExprNonLast::WithBlock(MatchArmWithExpr {
 						arm,
@@ -101,7 +101,7 @@ impl Parse for MatchArms {
 					last = Some(MatchArmWithExpr {
 						arm:            arm.arm,
 						arrow:          arm.arrow,
-						expr:           Box::new(Expression::WithBlock(arm.expr)),
+						expr:           Expression::from_recursive_root(ExpressionInner::WithBlock(arm.expr), parser),
 						trailing_comma: arm.trailing_comma,
 					}),
 			}
@@ -122,7 +122,7 @@ pub enum MatchArmsError {
 
 	#[parse_error(transparent)]
 	#[parse_error(fatal)]
-	Expression(ParserError<Expression>),
+	Expression(ParserError<ExpressionInner>),
 
 	#[parse_error(transparent)]
 	#[parse_error(fatal)]

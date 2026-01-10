@@ -7,7 +7,10 @@ use {
 		Format,
 		ParseRecursive,
 		Print,
-		ast::{expr::Expression, token},
+		ast::{
+			expr::{Expression, ExpressionInner},
+			token,
+		},
 	},
 };
 
@@ -15,11 +18,11 @@ use {
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(ParseRecursive, Format, Print)]
-#[parse_recursive(root = Expression)]
+#[parse_recursive(root = ExpressionInner)]
 #[parse_recursive(into_root = ExpressionWithoutBlockInner)]
 #[parse_recursive(kind = "left")]
 pub struct AwaitExpression {
-	pub expr:   Box<Expression>,
+	pub expr:   Expression,
 	pub dot:    token::Dot,
 	pub await_: token::Await,
 }

@@ -2,12 +2,16 @@
 
 // Imports
 use {
-	super::{Expression, ExpressionWithoutBlockInner, Parse},
+	super::{ExpressionWithoutBlockInner, Parse},
 	crate::{
 		Format,
 		ParseRecursive,
 		Print,
-		ast::{token, ty::TypeNoBounds},
+		ast::{
+			expr::{Expression, ExpressionInner},
+			token,
+			ty::TypeNoBounds,
+		},
 	},
 };
 
@@ -16,7 +20,7 @@ use {
 #[derive(derive_more::From, derive_more::TryInto)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(ParseRecursive, Format, Print)]
-#[parse_recursive(root = Expression)]
+#[parse_recursive(root = ExpressionInner)]
 #[parse_recursive(into_root = ExpressionWithoutBlockInner)]
 pub enum OperatorExpression {
 	#[parse_recursive(recursive)]
@@ -46,11 +50,11 @@ pub enum OperatorExpression {
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(ParseRecursive, Format, Print)]
-#[parse_recursive(root = Expression)]
+#[parse_recursive(root = ExpressionInner)]
 #[parse_recursive(into_root = OperatorExpression)]
 #[parse_recursive(kind = "left")]
 pub struct TryPropagationExpression {
-	pub expr:     Box<Expression>,
+	pub expr:     Expression,
 	pub question: token::Question,
 }
 
@@ -58,13 +62,13 @@ pub struct TryPropagationExpression {
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(ParseRecursive, Format, Print)]
-#[parse_recursive(root = Expression)]
+#[parse_recursive(root = ExpressionInner)]
 #[parse_recursive(into_root = OperatorExpression)]
 #[parse_recursive(kind = "right")]
 pub struct BorrowExpression {
 	pub ref_: BorrowExpressionKindRef,
 	pub rest: Option<BorrowExpressionKindRest>,
-	pub expr: Box<Expression>,
+	pub expr: Expression,
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]
@@ -88,24 +92,24 @@ pub enum BorrowExpressionKindRest {
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(ParseRecursive, Format, Print)]
-#[parse_recursive(root = Expression)]
+#[parse_recursive(root = ExpressionInner)]
 #[parse_recursive(into_root = OperatorExpression)]
 #[parse_recursive(kind = "right")]
 pub struct DereferenceExpression {
 	pub star: token::Star,
-	pub expr: Box<Expression>,
+	pub expr: Expression,
 }
 
 /// `NegationExpression`
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(ParseRecursive, Format, Print)]
-#[parse_recursive(root = Expression)]
+#[parse_recursive(root = ExpressionInner)]
 #[parse_recursive(into_root = OperatorExpression)]
 #[parse_recursive(kind = "right")]
 pub struct NegationExpression {
 	pub token: NegationExpressionToken,
-	pub expr:  Box<Expression>,
+	pub expr:  Expression,
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]
@@ -120,13 +124,13 @@ pub enum NegationExpressionToken {
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(ParseRecursive, Format, Print)]
-#[parse_recursive(root = Expression)]
+#[parse_recursive(root = ExpressionInner)]
 #[parse_recursive(into_root = OperatorExpression)]
 #[parse_recursive(kind = "fully")]
 pub struct ArithmeticOrLogicalExpression {
-	pub lhs: Box<Expression>,
+	pub lhs: Expression,
 	pub op:  ArithmeticOrLogicalExpressionOp,
-	pub rhs: Box<Expression>,
+	pub rhs: Expression,
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]
@@ -149,13 +153,13 @@ pub enum ArithmeticOrLogicalExpressionOp {
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(ParseRecursive, Format, Print)]
-#[parse_recursive(root = Expression)]
+#[parse_recursive(root = ExpressionInner)]
 #[parse_recursive(into_root = OperatorExpression)]
 #[parse_recursive(kind = "fully")]
 pub struct ComparisonExpression {
-	pub lhs: Box<Expression>,
+	pub lhs: Expression,
 	pub op:  ComparisonExpressionOp,
-	pub rhs: Box<Expression>,
+	pub rhs: Expression,
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]
@@ -174,14 +178,14 @@ pub enum ComparisonExpressionOp {
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(ParseRecursive, Format, Print)]
-#[parse_recursive(root = Expression)]
+#[parse_recursive(root = ExpressionInner)]
 #[parse_recursive(into_root = OperatorExpression)]
 #[parse_recursive(kind = "fully")]
 #[parse_recursive(skip_if_tag = "skip:LazyBooleanExpression")]
 pub struct LazyBooleanExpression {
-	pub lhs: Box<Expression>,
+	pub lhs: Expression,
 	pub op:  LazyBooleanExpressionOp,
-	pub rhs: Box<Expression>,
+	pub rhs: Expression,
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]
@@ -196,11 +200,11 @@ pub enum LazyBooleanExpressionOp {
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(ParseRecursive, Format, Print)]
-#[parse_recursive(root = Expression)]
+#[parse_recursive(root = ExpressionInner)]
 #[parse_recursive(into_root = OperatorExpression)]
 #[parse_recursive(kind = "left")]
 pub struct TypeCastExpression {
-	pub lhs: Box<Expression>,
+	pub lhs: Expression,
 	pub as_: token::As,
 	pub ty:  TypeNoBounds,
 }
@@ -209,28 +213,28 @@ pub struct TypeCastExpression {
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(ParseRecursive, Format, Print)]
-#[parse_recursive(root = Expression)]
+#[parse_recursive(root = ExpressionInner)]
 #[parse_recursive(into_root = OperatorExpression)]
 #[parse_recursive(kind = "fully")]
 #[parse_recursive(skip_if_tag = "skip:AssignmentExpression")]
 pub struct AssignmentExpression {
-	pub lhs: Box<Expression>,
+	pub lhs: Expression,
 	pub eq:  token::Eq,
-	pub rhs: Box<Expression>,
+	pub rhs: Expression,
 }
 
 /// `CompoundAssignmentExpression`
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(ParseRecursive, Format, Print)]
-#[parse_recursive(root = Expression)]
+#[parse_recursive(root = ExpressionInner)]
 #[parse_recursive(into_root = OperatorExpression)]
 #[parse_recursive(kind = "fully")]
 #[parse_recursive(skip_if_tag = "skip:CompoundAssignmentExpression")]
 pub struct CompoundAssignmentExpression {
-	pub lhs: Box<Expression>,
+	pub lhs: Expression,
 	pub op:  CompoundAssignmentExpressionOp,
-	pub rhs: Box<Expression>,
+	pub rhs: Expression,
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]

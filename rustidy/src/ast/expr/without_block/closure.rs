@@ -10,7 +10,7 @@ use {
 		Print,
 		ast::{
 			delimited::Delimited,
-			expr::Expression,
+			expr::{Expression, ExpressionInner},
 			pat::PatternNoTopAlt,
 			punct::PunctuatedTrailing,
 			token,
@@ -23,7 +23,7 @@ use {
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(ParseRecursive, Format, Print)]
-#[parse_recursive(root = Expression)]
+#[parse_recursive(root = ExpressionInner)]
 #[parse_recursive(into_root = ExpressionWithoutBlockInner)]
 #[parse_recursive(kind = "right")]
 pub struct ClosureExpression {
@@ -33,7 +33,7 @@ pub struct ClosureExpression {
 	pub ret:    Option<ClosureRet>,
 	// TODO: If we parsed a return type, we should error
 	//       if this isn't a block expression.
-	pub expr:   Box<Expression>,
+	pub expr:   Expression,
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]

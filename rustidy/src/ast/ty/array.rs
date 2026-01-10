@@ -23,5 +23,5 @@ pub struct ArrayType(Bracketed<ArrayTypeInner>);
 pub struct ArrayTypeInner {
 	pub ty:   Box<Type>,
 	pub semi: token::Semi,
-	pub expr: Box<Expression>,
+	pub expr: Expression,
 }

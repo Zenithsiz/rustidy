@@ -1,13 +1,18 @@
 //! Method call expression
 
 use {
-	super::{Expression, ExpressionWithoutBlockInner, path::PathExprSegment},
+	super::{ExpressionWithoutBlockInner, path::PathExprSegment},
 	crate::{
 		Format,
 		Parse,
 		ParseRecursive,
 		Print,
-		ast::{delimited::Parenthesized, punct::PunctuatedTrailing, token},
+		ast::{
+			delimited::Parenthesized,
+			expr::{Expression, ExpressionInner},
+			punct::PunctuatedTrailing,
+			token,
+		},
 	},
 };
 
@@ -15,11 +20,11 @@ use {
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(ParseRecursive, Format, Print)]
-#[parse_recursive(root = Expression)]
+#[parse_recursive(root = ExpressionInner)]
 #[parse_recursive(into_root = ExpressionWithoutBlockInner)]
 #[parse_recursive(kind = "left")]
 pub struct CallExpression {
-	pub expr:   Box<Expression>,
+	pub expr:   Expression,
 	pub params: Parenthesized<Option<CallParams>>,
 }
 
@@ -27,11 +32,11 @@ pub struct CallExpression {
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(ParseRecursive, Format, Print)]
-#[parse_recursive(root = Expression)]
+#[parse_recursive(root = ExpressionInner)]
 #[parse_recursive(into_root = ExpressionWithoutBlockInner)]
 #[parse_recursive(kind = "left")]
 pub struct MethodCallExpression {
-	pub expr:    Box<Expression>,
+	pub expr:    Expression,
 	pub dot:     token::Dot,
 	pub segment: PathExprSegment,
 	pub params:  Parenthesized<Option<CallParams>>,
@@ -41,4 +46,4 @@ pub struct MethodCallExpression {
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
-pub struct CallParams(pub PunctuatedTrailing<Box<Expression>, token::Comma>);
+pub struct CallParams(pub PunctuatedTrailing<Expression, token::Comma>);

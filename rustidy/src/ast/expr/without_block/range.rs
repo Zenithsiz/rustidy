@@ -9,7 +9,10 @@ use {
 		Parse,
 		ParseRecursive,
 		Print,
-		ast::{expr::Expression, token},
+		ast::{
+			expr::{Expression, ExpressionInner},
+			token,
+		},
 	},
 };
 
@@ -18,7 +21,7 @@ use {
 #[derive(derive_more::From, derive_more::TryInto)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(ParseRecursive, Format, Print)]
-#[parse_recursive(root = Expression)]
+#[parse_recursive(root = ExpressionInner)]
 #[parse_recursive(into_root = ExpressionWithoutBlockInner)]
 pub enum RangeExpression {
 	#[parse_recursive(recursive)]
@@ -39,26 +42,26 @@ pub enum RangeExpression {
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(ParseRecursive, Format, Print)]
-#[parse_recursive(root = Expression)]
+#[parse_recursive(root = ExpressionInner)]
 #[parse_recursive(into_root = RangeExpression)]
 #[parse_recursive(kind = "fully")]
 #[parse_recursive(skip_if_tag = "skip:RangeExpr")]
 pub struct RangeExpr {
-	pub lhs:     Box<Expression>,
+	pub lhs:     Expression,
 	pub dot_dot: token::DotDot,
-	pub rhs:     Box<Expression>,
+	pub rhs:     Expression,
 }
 
 /// `RangeFromExpr`
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(ParseRecursive, Format, Print)]
-#[parse_recursive(root = Expression)]
+#[parse_recursive(root = ExpressionInner)]
 #[parse_recursive(into_root = RangeExpression)]
 #[parse_recursive(kind = "left")]
 #[parse_recursive(skip_if_tag = "skip:RangeFromExpr")]
 pub struct RangeFromExpr {
-	pub lhs:     Box<Expression>,
+	pub lhs:     Expression,
 	pub dot_dot: token::DotDot,
 }
 
@@ -66,12 +69,12 @@ pub struct RangeFromExpr {
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(ParseRecursive, Format, Print)]
-#[parse_recursive(root = Expression)]
+#[parse_recursive(root = ExpressionInner)]
 #[parse_recursive(into_root = RangeExpression)]
 #[parse_recursive(kind = "right")]
 pub struct RangeToExpr {
 	pub dot_dot: token::DotDot,
-	pub rhs:     Box<Expression>,
+	pub rhs:     Expression,
 }
 
 /// `RangeFullExpr`
@@ -85,24 +88,24 @@ pub struct RangeFullExpr(token::DotDot);
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(ParseRecursive, Format, Print)]
-#[parse_recursive(root = Expression)]
+#[parse_recursive(root = ExpressionInner)]
 #[parse_recursive(into_root = RangeExpression)]
 #[parse_recursive(kind = "fully")]
 #[parse_recursive(skip_if_tag = "skip:RangeInclusiveExpr")]
 pub struct RangeInclusiveExpr {
-	pub lhs:        Box<Expression>,
+	pub lhs:        Expression,
 	pub dot_dot_eq: token::DotDotEq,
-	pub rhs:        Box<Expression>,
+	pub rhs:        Expression,
 }
 
 /// `RangeToInclusiveExpr`
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(ParseRecursive, Format, Print)]
-#[parse_recursive(root = Expression)]
+#[parse_recursive(root = ExpressionInner)]
 #[parse_recursive(into_root = RangeExpression)]
 #[parse_recursive(kind = "right")]
 pub struct RangeToInclusiveExpr {
 	pub dot_dot_eq: token::DotDotEq,
-	pub rhs:        Box<Expression>,
+	pub rhs:        Expression,
 }

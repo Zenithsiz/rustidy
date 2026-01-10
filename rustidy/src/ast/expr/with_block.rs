@@ -118,7 +118,7 @@ pub struct Conditions(Longest<LetChain, ConditionsExpr>);
 struct ConditionsExpr(
 	#[parse(with_tag = "skip:StructExpression")]
 	#[parse(with_tag = "skip:OptionalTrailingBlockExpression")]
-	Box<Expression>,
+	Expression,
 );
 
 /// `LetChain`
@@ -141,7 +141,7 @@ pub enum LetChainCondition {
 	#[parse(with_tag = "skip:AssignmentExpression")]
 	#[parse(with_tag = "skip:CompoundAssignmentExpression")]
 	#[parse(with_tag = "skip:OptionalTrailingBlockExpression")]
-	Expr(Box<Expression>),
+	Expr(Expression),
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]
@@ -202,7 +202,7 @@ pub struct IteratorLoopExpression {
 	pub in_:  token::In,
 	#[parse(with_tag = "skip:StructExpression")]
 	#[parse(with_tag = "skip:OptionalTrailingBlockExpression")]
-	pub expr: Box<Expression>,
+	pub expr: Expression,
 	pub body: BlockExpression,
 }
 

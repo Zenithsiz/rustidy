@@ -7,7 +7,10 @@ use {
 		Format,
 		ParseRecursive,
 		Print,
-		ast::{delimited::Bracketed, expr::Expression},
+		ast::{
+			delimited::Bracketed,
+			expr::{Expression, ExpressionInner},
+		},
 	},
 };
 
@@ -15,10 +18,10 @@ use {
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(ParseRecursive, Format, Print)]
-#[parse_recursive(root = Expression)]
+#[parse_recursive(root = ExpressionInner)]
 #[parse_recursive(into_root = ExpressionWithoutBlockInner)]
 #[parse_recursive(kind = "left")]
 pub struct IndexExpression {
-	pub expr:  Box<Expression>,
-	pub index: Bracketed<Box<Expression>>,
+	pub expr:  Expression,
+	pub index: Bracketed<Expression>,
 }

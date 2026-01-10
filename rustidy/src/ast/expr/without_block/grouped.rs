@@ -12,4 +12,4 @@ use crate::{
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
-pub struct GroupedExpression(Parenthesized<Box<Expression>>);
+pub struct GroupedExpression(Parenthesized<Expression>);

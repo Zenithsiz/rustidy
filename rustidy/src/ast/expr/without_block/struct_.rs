@@ -82,7 +82,7 @@ pub enum StructExprFieldInner {
 pub struct StructExprFieldInnerWithExpr {
 	pub start: StructExprFieldInnerWithExprStart,
 	pub colon: token::Colon,
-	pub expr:  Box<Expression>,
+	pub expr:  Expression,
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]
@@ -99,5 +99,5 @@ pub enum StructExprFieldInnerWithExprStart {
 #[derive(Parse, Format, Print)]
 pub struct StructBase {
 	pub dot_dot: token::DotDot,
-	pub expr:    Box<Expression>,
+	pub expr:    Expression,
 }

@@ -131,23 +131,7 @@
 										}
 									}
 								},
-								"value": {
-									"eq": [14, 29],
-									"expr": {
-										"WithoutBlock": {
-											"attrs": [],
-											"inner": {
-												"Literal": {
-													"Integer": {
-														"ws": 15,
-														"inner": { "Decimal": 31 },
-														"suffix": null
-													}
-												}
-											}
-										}
-									}
-								},
+								"value": { "eq": [14, 29], "expr": 0 },
 								"semi": [16, 33]
 							}
 						}
@@ -218,6 +202,24 @@
 				{ "first": 30, "rest": [] },
 				{ "first": 32, "rest": [] },
 				{ "first": 34, "rest": [] }
+			]
+		},
+		"expression": {
+			"data": [
+				{
+					"WithoutBlock": {
+						"attrs": [],
+						"inner": {
+							"Literal": {
+								"Integer": {
+									"ws": 15,
+									"inner": { "Decimal": 31 },
+									"suffix": null
+								}
+							}
+						}
+					}
+				}
 			]
 		}
 	}

@@ -21,14 +21,14 @@ pub struct ArrayExpression(Bracketed<Option<ArrayElements>>);
 #[derive(Parse, Format, Print)]
 pub enum ArrayElements {
 	Repeat(ArrayElementsRepeat),
-	Punctuated(PunctuatedTrailing<Box<Expression>, token::Comma>),
+	Punctuated(PunctuatedTrailing<Expression, token::Comma>),
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct ArrayElementsRepeat {
-	pub expr:  Box<Expression>,
+	pub expr:  Expression,
 	pub semi:  token::Semi,
-	pub count: Box<Expression>,
+	pub count: Expression,
 }

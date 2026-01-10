@@ -2,7 +2,10 @@
 
 // Imports
 use {
-	crate::{ParserStr, ast::whitespace::Whitespace},
+	crate::{
+		ParserStr,
+		ast::{expr::Expression, whitespace::Whitespace},
+	},
 	core::{cell::RefCell, fmt, hash::Hash, marker::PhantomData},
 	std::hash::Hasher,
 };
@@ -13,6 +16,7 @@ use {
 pub struct Arenas {
 	parser_str: Arena<ParserStr>,
 	whitespace: Arena<Whitespace>,
+	expression: Arena<Expression>,
 }
 
 impl Arenas {
@@ -22,6 +26,7 @@ impl Arenas {
 		Self {
 			parser_str: Arena::new(),
 			whitespace: Arena::new(),
+			expression: Arena::new(),
 		}
 	}
 
@@ -36,14 +41,20 @@ impl Arenas {
 		ArenasCheckpoint {
 			parser_str: self.get::<ParserStr>().checkpoint(),
 			whitespace: self.get::<Whitespace>().checkpoint(),
+			expression: self.get::<Expression>().checkpoint(),
 		}
 	}
 
 	/// Undoes a checkpoint on all arenas
 	pub fn undo_checkpoint(&self, checkpoint: ArenasCheckpoint) {
-		let ArenasCheckpoint { parser_str, whitespace } = checkpoint;
+		let ArenasCheckpoint {
+			parser_str,
+			whitespace,
+			expression,
+		} = checkpoint;
 		self.get::<ParserStr>().undo_checkpoint(parser_str);
 		self.get::<Whitespace>().undo_checkpoint(whitespace);
+		self.get::<Expression>().undo_checkpoint(expression);
 	}
 
 	/// Stashes a checkpoint on all arenas
@@ -51,14 +62,20 @@ impl Arenas {
 		ArenasCheckpointStash {
 			parser_str: self.get::<ParserStr>().stash_checkpoint(checkpoint.parser_str),
 			whitespace: self.get::<Whitespace>().stash_checkpoint(checkpoint.whitespace),
+			expression: self.get::<Expression>().stash_checkpoint(checkpoint.expression),
 		}
 	}
 
 	/// Applies a checkpoint stash on all arenas
 	pub fn apply_checkpoint_stash(&self, stash: ArenasCheckpointStash) {
-		let ArenasCheckpointStash { parser_str, whitespace } = stash;
+		let ArenasCheckpointStash {
+			parser_str,
+			whitespace,
+			expression,
+		} = stash;
 		self.get::<ParserStr>().apply_checkpoint_stash(parser_str);
 		self.get::<Whitespace>().apply_checkpoint_stash(whitespace);
+		self.get::<Expression>().apply_checkpoint_stash(expression);
 	}
 }
 
@@ -73,6 +90,7 @@ impl Default for Arenas {
 pub struct ArenasCheckpoint {
 	parser_str: ArenaCheckpoint,
 	whitespace: ArenaCheckpoint,
+	expression: ArenaCheckpoint,
 }
 
 /// Arenas checkpoint stash
@@ -80,6 +98,7 @@ pub struct ArenasCheckpoint {
 pub struct ArenasCheckpointStash {
 	parser_str: ArenaCheckpointStash<ParserStr>,
 	whitespace: ArenaCheckpointStash<Whitespace>,
+	expression: ArenaCheckpointStash<Expression>,
 }
 
 /// Arena for `T`'s Data
@@ -272,4 +291,5 @@ macro impl_with_arena( $($Ty:ty => $field:ident),* $(,)? ) {
 impl_with_arena! {
 	ParserStr => parser_str,
 	Whitespace => whitespace,
+	Expression => expression,
 }

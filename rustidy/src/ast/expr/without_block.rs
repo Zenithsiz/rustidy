@@ -48,7 +48,7 @@ pub use self::{
 
 // Imports
 use {
-	super::Expression,
+	super::{Expression, ExpressionInner},
 	crate::{
 		Format,
 		Parse,
@@ -64,11 +64,11 @@ use {
 #[derive(derive_more::From)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, ParseRecursive, Format, Print)]
-#[parse(from = RecursiveWrapper::<ExpressionWithoutBlock, Expression>)]
+#[parse(from = RecursiveWrapper::<ExpressionWithoutBlock, ExpressionInner>)]
 #[parse(skip_if_tag = "skip:ExpressionWithoutBlock")]
-#[parse_recursive(root = Expression)]
+#[parse_recursive(root = ExpressionInner)]
 #[parse_recursive(transparent)]
-#[parse_recursive(into_root = Expression)]
+#[parse_recursive(into_root = ExpressionInner)]
 pub struct ExpressionWithoutBlock(pub WithOuterAttributes<ExpressionWithoutBlockInner>);
 
 impl From<ExpressionWithoutBlockInner> for ExpressionWithoutBlock {
@@ -92,7 +92,7 @@ impl TryFrom<ExpressionWithoutBlock> for ExpressionWithoutBlockInner {
 #[derive(derive_more::From, derive_more::TryInto)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(ParseRecursive, Format, Print)]
-#[parse_recursive(root = Expression)]
+#[parse_recursive(root = ExpressionInner)]
 #[parse_recursive(into_root = ExpressionWithoutBlock)]
 pub enum ExpressionWithoutBlockInner {
 	Underscore(UnderscoreExpression),
@@ -140,5 +140,5 @@ pub struct DoYeetExpression {
 	pub do_:   token::Do,
 	pub yeet_: token::Yeet,
 	// TODO: This should be recursive
-	pub expr:  Option<Box<Expression>>,
+	pub expr:  Option<Expression>,
 }
