@@ -62,7 +62,6 @@ pub struct ConstBlockExpression {
 #[derive(Parse, Format, Print)]
 pub struct UnsafeBlockExpression {
 	pub unsafe_: token::Unsafe,
-	#[parse(fatal)]
 	pub expr:    BlockExpression,
 }
 
