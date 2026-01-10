@@ -164,6 +164,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 		#( #format_and_with_wrapper; )*
 	}};
 
+	let with_prefix_ws_r = syn::Ident::new("r", proc_macro2::Span::call_site());
 	let output = quote! {
 		#[automatically_derived]
 		impl #impl_ref_generics crate::format::FormatRef for #item_ident #ty_ref_generics #impl_ref_where_clause {
@@ -184,7 +185,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 			}
 
 			#[allow(unreachable_code)]
-			fn with_prefix_ws(&mut self, ctx: &mut crate::format::Context, f: impl std::ops::Fn(&mut crate::ast::whitespace::Whitespace, &mut crate::format::Context)) -> bool {
+			fn with_prefix_ws<#with_prefix_ws_r>(&mut self, ctx: &mut crate::format::Context, f: impl std::ops::Fn(&mut crate::ast::whitespace::Whitespace, &mut crate::format::Context) -> #with_prefix_ws_r) -> Option<#with_prefix_ws_r> {
 				#with_prefix_ws
 			}
 		}
@@ -272,21 +273,21 @@ fn derive_struct(fields: &darling::ast::Fields<FieldAttrs>) -> Impls<syn::Expr, 
 			let is_empty = crate::format::FormatRef::is_empty(&self.#field_ident, ctx);
 
 			// If we used the whitespace, return
-			if crate::format::Format::with_prefix_ws(&mut self.#field_ident, ctx, |whitespace, ctx| f(whitespace, ctx)) {
-				return true;
+			if let Some(value) = crate::format::Format::with_prefix_ws(&mut self.#field_ident, ctx, |whitespace, ctx| f(whitespace, ctx)) {
+				return Some(value);
 			}
 
 			// Otherwise, if this field had any length, we have no more fields
 			// to check and we can return
 			if !is_empty {
-				return false;
+				return None;
 			}
 		}}
 	});
 	let with_prefix_ws = parse_quote! {{
 		#( #with_prefix_ws_fields; )*
 
-		false
+		None
 	}};
 
 	Impls {
