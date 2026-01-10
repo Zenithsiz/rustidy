@@ -179,6 +179,7 @@ decl_tokens! {
 	Percent = '%' must_not_follow '=';
 	Caret = '^' must_not_follow '=';
 	And = '&' must_not_follow '&' must_not_follow '=';
+	AndTy = '&';
 	Or = '|' must_not_follow '|' must_not_follow '=';
 	Shl = "<<" must_not_follow '=';
 	Shr = ">>" must_not_follow '=';

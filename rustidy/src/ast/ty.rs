@@ -84,7 +84,7 @@ pub struct NeverType(token::Not);
 #[derive(Parse, Format, Print)]
 #[parse(name = "a reference type")]
 pub struct ReferenceType {
-	pub ref_:     token::And,
+	pub ref_:     token::AndTy,
 	pub lifetime: Option<Lifetime>,
 	pub mut_:     Option<token::Mut>,
 	pub ty:       Box<TypeNoBounds>,
