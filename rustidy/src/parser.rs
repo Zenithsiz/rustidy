@@ -205,7 +205,7 @@ impl<T: ArenaData<Data: Parse> + WithArena> Parse for ArenaIdx<T> {
 
 	fn parse_from(parser: &mut Parser) -> Result<Self, Self::Error> {
 		let value = parser.parse::<T::Data>()?;
-		let idx = parser.arenas.get::<T>().push(value);
+		let idx = parser.arenas.arena::<T>().push(value);
 		Ok(idx)
 	}
 }
@@ -378,7 +378,7 @@ impl<'a, 'input> Parser<'a, 'input> {
 			start: ParserPos(output_range.start),
 			end:   ParserPos(output_range.end),
 		};
-		let idx = self.arenas.get::<ParserStr>().push(output_range);
+		let idx = self.arenas.arena::<ParserStr>().push(output_range);
 
 		<_>::from_output(ParserStr(idx))
 	}

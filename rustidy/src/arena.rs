@@ -6,7 +6,7 @@ use {
 		ParserStr,
 		ast::{expr::Expression, item::Item, whitespace::Whitespace},
 	},
-	core::{cell::RefCell, fmt, hash::Hash, marker::PhantomData},
+	core::{cell::RefCell, fmt, hash::Hash, marker::PhantomData, ops},
 	std::hash::Hasher,
 };
 
@@ -41,25 +41,22 @@ impl<T: ?Sized + ArenaData> Arena<T> {
 		}
 	}
 
-	/// Uses the value at an index
-	pub fn with_value<R>(&self, idx: ArenaIdx<T>, f: impl FnOnce(&mut T::Data) -> R) -> R {
-		let mut value = self
+	/// Borrows a value at an index
+	pub fn get(&self, idx: ArenaIdx<T>) -> ArenaRef<'_, T> {
+		let idx = idx.inner as usize;
+		let value = self
 			.data
 			.borrow_mut()
-			.get_mut(idx.inner as usize)
+			.get_mut(idx)
 			.expect("Invalid arena index")
 			.take()
 			.expect("Attempted to borrow arena value twice");
 
-		let output = f(&mut value);
-
-		*self
-			.data
-			.borrow_mut()
-			.get_mut(idx.inner as usize)
-			.expect("Arena was truncated during borrow") = Some(value);
-
-		output
+		ArenaRef {
+			value: Some(value),
+			arena: self,
+			idx,
+		}
 	}
 
 	/// Returns the number of values in this arena
@@ -124,6 +121,37 @@ impl<T: ?Sized + ArenaData> Arena<T> {
 impl<T: ArenaData> Default for Arena<T> {
 	fn default() -> Self {
 		Self::new()
+	}
+}
+
+/// Arena reference
+pub struct ArenaRef<'a, T: ?Sized + ArenaData> {
+	value: Option<T::Data>,
+	arena: &'a Arena<T>,
+	idx:   usize,
+}
+
+impl<T: ?Sized + ArenaData> ops::Deref for ArenaRef<'_, T> {
+	type Target = T::Data;
+
+	fn deref(&self) -> &Self::Target {
+		self.value.as_ref().expect("Value should exist")
+	}
+}
+impl<T: ?Sized + ArenaData> ops::DerefMut for ArenaRef<'_, T> {
+	fn deref_mut(&mut self) -> &mut Self::Target {
+		self.value.as_mut().expect("Value should exist")
+	}
+}
+
+impl<T: ?Sized + ArenaData> Drop for ArenaRef<'_, T> {
+	fn drop(&mut self) {
+		*self
+			.arena
+			.data
+			.borrow_mut()
+			.get_mut(self.idx)
+			.expect("Arena was truncated during borrow") = Some(self.value.take().expect("Value should exist"));
 	}
 }
 
@@ -192,6 +220,7 @@ macro arenas(
 	$ArenasCheckpoint:ident;
 	$ArenasCheckpointStash:ident;
 	$new:ident;
+	$arena:ident;
 	$get:ident;
 	$checkpoint:ident;
 	$undo_checkpoint:ident;
@@ -218,8 +247,14 @@ macro arenas(
 
 		/// Returns the arena for `T`
 		#[must_use]
-		pub fn $get<T: ?Sized + WithArena>(&self) -> &Arena<T> {
+		pub fn $arena<T: ?Sized + WithArena>(&self) -> &Arena<T> {
 			T::get_arena(self)
+		}
+
+		/// Borrows a value of `T`
+		#[must_use]
+		pub fn $get<T: ?Sized + WithArena>(&self, idx: ArenaIdx<T>) -> ArenaRef<'_, T> {
+			self.$arena::<T>().get(idx)
 		}
 
 		/// Creates a checkpoint on all arenas
@@ -285,6 +320,7 @@ arenas! {
 	ArenasCheckpoint;
 	ArenasCheckpointStash;
 	new;
+	arena;
 	get;
 	checkpoint;
 	undo_checkpoint;

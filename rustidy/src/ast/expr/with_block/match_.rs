@@ -62,19 +62,16 @@ impl Parse for MatchArms {
 			let arrow = parser.parse::<token::FatArrow>()?;
 			let expr = parser.parse::<Expression>()?;
 
-			let (trailing_comma, control_flow) = parser
-				.arenas()
-				.get::<Expression>()
-				.with_value::<Result<_, Self::Error>>(expr.0, |expr| match expr {
-					ExpressionInner::WithoutBlock(_) => match parser.try_parse::<token::Comma>()? {
-						Ok(trailing_comma) => Ok((Some(trailing_comma), ControlFlow::Continue(()))),
-						Err(_) => Ok((None, ControlFlow::Break(()))),
-					},
-					ExpressionInner::WithBlock(_) => {
-						let trailing_comma = parser.try_parse::<token::Comma>()?.ok();
-						Ok((trailing_comma, ControlFlow::Continue(())))
-					},
-				})?;
+			let (trailing_comma, control_flow) = match *parser.arenas().get(expr.0) {
+				ExpressionInner::WithoutBlock(_) => match parser.try_parse::<token::Comma>()? {
+					Ok(trailing_comma) => (Some(trailing_comma), ControlFlow::Continue(())),
+					Err(_) => (None, ControlFlow::Break(())),
+				},
+				ExpressionInner::WithBlock(_) => {
+					let trailing_comma = parser.try_parse::<token::Comma>()?.ok();
+					(trailing_comma, ControlFlow::Continue(()))
+				},
+			};
 
 			arms.push(MatchArmWithExpr {
 				arm,

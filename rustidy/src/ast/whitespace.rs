@@ -34,7 +34,7 @@ impl Whitespace {
 				first: PureWhitespace(s),
 				rest:  vec![],
 			};
-			let idx = parser.arenas().get::<Self>().push(inner);
+			let idx = parser.arenas().arena::<Self>().push(inner);
 
 			Self(idx)
 		}))
@@ -59,19 +59,19 @@ impl Whitespace {
 	}
 
 	fn format(&self, ctx: &mut format::Context, kind: FormatKind) {
-		ctx.arenas().get().with_value(self.0, |inner| {
-			let prefix_str = kind.prefix_str(ctx, inner.first.0, inner.rest.is_empty());
-			ctx.replace(inner.first.0, prefix_str);
+		let mut inner = ctx.arenas().get(self.0);
 
-			for (pos, (comment, ws)) in inner.rest.iter_mut().with_position() {
-				let is_last = matches!(pos, itertools::Position::Last | itertools::Position::Only);
-				let ws_str = match comment.is_line() {
-					true => kind.after_newline_str(ctx, ws.0, is_last),
-					false => kind.normal_str(ctx, ws.0, is_last),
-				};
-				ctx.replace(ws.0, ws_str);
-			}
-		});
+		let prefix_str = kind.prefix_str(ctx, inner.first.0, inner.rest.is_empty());
+		ctx.replace(inner.first.0, prefix_str);
+
+		for (pos, (comment, ws)) in inner.rest.iter_mut().with_position() {
+			let is_last = matches!(pos, itertools::Position::Last | itertools::Position::Only);
+			let ws_str = match comment.is_line() {
+				true => kind.after_newline_str(ctx, ws.0, is_last),
+				false => kind.normal_str(ctx, ws.0, is_last),
+			};
+			ctx.replace(ws.0, ws_str);
+		}
 	}
 }
 
@@ -81,11 +81,11 @@ impl ArenaData for Whitespace {
 
 impl FormatRef for Whitespace {
 	fn range(&self, ctx: &format::Context) -> Option<ParserRange> {
-		ctx.arenas().get::<Self>().with_value(self.0, |inner| inner.range(ctx))
+		ctx.arenas().get(self.0).range(ctx)
 	}
 
 	fn len(&self, ctx: &format::Context) -> usize {
-		ctx.arenas().get::<Self>().with_value(self.0, |inner| inner.len(ctx))
+		ctx.arenas().get(self.0).len(ctx)
 	}
 }
 

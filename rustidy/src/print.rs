@@ -85,7 +85,7 @@ tuple_impl! { 3, T0, T1, T2 }
 
 impl<T: ArenaData<Data: Print> + WithArena> Print for ArenaIdx<T> {
 	fn print(&self, f: &mut PrintFmt) {
-		f.arenas.get::<T>().with_value(*self, |value| value.print(f));
+		f.arenas.get(*self).print(f);
 	}
 }
 

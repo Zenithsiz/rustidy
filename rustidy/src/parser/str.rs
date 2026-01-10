@@ -24,7 +24,7 @@ impl ParserStr {
 	/// Returns the parser range of this string
 	#[must_use]
 	pub fn range(&self, arenas: &Arenas) -> ParserRange {
-		arenas.get::<Self>().with_value(self.0, |range| *range)
+		*arenas.get(self.0)
 	}
 }
 

@@ -54,7 +54,7 @@ impl ArenaData for Expression {
 
 impl FromRecursiveRoot<ExpressionInner> for Expression {
 	fn from_recursive_root(expr: ExpressionInner, parser: &mut crate::Parser) -> Self {
-		let idx = parser.arenas().get::<Self>().push(expr);
+		let idx = parser.arenas().arena::<Self>().push(expr);
 		Self(idx)
 	}
 }

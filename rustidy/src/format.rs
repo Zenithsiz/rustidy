@@ -45,6 +45,7 @@ pub trait Format: FormatRef {
 	/// Returns if successfully used.
 	// TODO: Ideally this would be `F: FnOnce()` and we'd return `Result<(), F>`, but
 	//       is the complexity worth it? Would we ever need an `FnOnce` here?
+	// TODO: This should be a `fn (..., impl Fn(...) -> R) -> R`.
 	fn with_prefix_ws(&mut self, ctx: &mut Context, f: impl Fn(&mut Whitespace, &mut Context)) -> bool;
 
 	/// Remove the prefix whitespace, if any
@@ -277,23 +278,21 @@ tuple_impl! { 3, T0, T1, T2 }
 
 impl<T: ArenaData<Data: FormatRef> + WithArena> FormatRef for ArenaIdx<T> {
 	fn range(&self, ctx: &Context) -> Option<ParserRange> {
-		ctx.arenas().get::<T>().with_value(*self, |value| value.range(ctx))
+		ctx.arenas().get(*self).range(ctx)
 	}
 
 	fn len(&self, ctx: &Context) -> usize {
-		ctx.arenas().get::<T>().with_value(*self, |value| value.len(ctx))
+		ctx.arenas().get(*self).len(ctx)
 	}
 }
 
 impl<T: ArenaData<Data: Format> + WithArena> Format for ArenaIdx<T> {
 	fn format(&mut self, ctx: &mut Context) {
-		ctx.arenas().get::<T>().with_value(*self, |value| value.format(ctx));
+		ctx.arenas().get(*self).format(ctx);
 	}
 
 	fn with_prefix_ws(&mut self, ctx: &mut Context, f: impl Fn(&mut Whitespace, &mut Context)) -> bool {
-		ctx.arenas()
-			.get::<T>()
-			.with_value(*self, |value| value.with_prefix_ws(ctx, f))
+		ctx.arenas().get(*self).with_prefix_ws(ctx, f)
 	}
 }
 
