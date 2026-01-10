@@ -9,12 +9,12 @@ use {
 		Print,
 		ast::{
 			delimited::Braced,
-			expr::{Expression, ExpressionInner},
+			expr::{Expression, ExpressionInner, ExpressionWithBlock, ExpressionWithoutBlock},
 			pat::Pattern,
 			token,
 			with_attrs::{WithInnerAttributes, WithOuterAttributes},
 		},
-		parser::{ParseError, Parser, ParserError},
+		parser::{FromRecursiveRoot, ParseError, Parser, ParserError},
 	},
 	core::ops::ControlFlow,
 	std::fmt,
@@ -60,16 +60,20 @@ impl Parse for MatchArms {
 				break;
 			};
 			let arrow = parser.parse::<token::FatArrow>()?;
-			let expr = parser.parse::<Expression>()?;
 
-			let (trailing_comma, control_flow) = match *parser.arenas().get(expr.0) {
-				ExpressionInner::WithoutBlock(_) => match parser.try_parse::<token::Comma>()? {
-					Ok(trailing_comma) => (Some(trailing_comma), ControlFlow::Continue(())),
-					Err(_) => (None, ControlFlow::Break(())),
-				},
-				ExpressionInner::WithBlock(_) => {
+			let (expr, trailing_comma, control_flow) = match parser.try_parse::<ExpressionWithBlock>()? {
+				Ok(expr) => {
+					let expr = Expression::from_recursive_root(ExpressionInner::from(expr), parser);
 					let trailing_comma = parser.try_parse::<token::Comma>()?.ok();
-					(trailing_comma, ControlFlow::Continue(()))
+					(expr, trailing_comma, ControlFlow::Continue(()))
+				},
+				Err(_) => {
+					let expr = parser.parse::<ExpressionWithoutBlock>()?;
+					let expr = Expression::from_recursive_root(ExpressionInner::from(expr), parser);
+					match parser.try_parse::<token::Comma>()? {
+						Ok(trailing_comma) => (expr, Some(trailing_comma), ControlFlow::Continue(())),
+						Err(_) => (expr, None, ControlFlow::Break(())),
+					}
 				},
 			};
 
@@ -100,7 +104,11 @@ pub enum MatchArmsError {
 
 	#[parse_error(transparent)]
 	#[parse_error(fatal)]
-	Expression(ParserError<Expression>),
+	ExpressionWithBlock(ParserError<ExpressionWithBlock>),
+
+	#[parse_error(transparent)]
+	#[parse_error(fatal)]
+	ExpressionWithoutBlock(ParserError<ExpressionWithoutBlock>),
 
 	#[parse_error(transparent)]
 	#[parse_error(fatal)]
