@@ -151,7 +151,6 @@ pub struct LetChainConditionLet {
 	#[parse(fatal)]
 	pub pat:       Pattern,
 	pub eq:        token::Eq,
-	#[parse(with_tag = "skip:BlockExpression")]
 	#[parse(with_tag = "skip:StructExpression")]
 	#[parse(with_tag = "skip:LazyBooleanExpression")]
 	#[parse(with_tag = "skip:RangeExpr")]
