@@ -94,10 +94,10 @@ impl Format for Whitespace {
 		// Note: By default no formatting is done
 	}
 
-	fn with_prefix_ws<R>(
+	fn with_prefix_ws<R, F: Fn(&mut Self, &mut format::Context) -> R + Copy>(
 		&mut self,
 		ctx: &mut format::Context,
-		f: impl Fn(&mut Self, &mut format::Context) -> R,
+		f: F,
 	) -> Option<R> {
 		Some(f(self, ctx))
 	}

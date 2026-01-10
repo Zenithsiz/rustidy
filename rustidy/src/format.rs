@@ -43,7 +43,9 @@ pub trait Format: FormatRef {
 	/// Uses the first whitespace of this type, if any.
 	///
 	/// Returns if successfully used.
-	fn with_prefix_ws<R>(&mut self, ctx: &mut Context, f: impl Fn(&mut Whitespace, &mut Context) -> R) -> Option<R>;
+	fn with_prefix_ws<R, F>(&mut self, ctx: &mut Context, f: F) -> Option<R>
+	where
+		F: Fn(&mut Whitespace, &mut Context) -> R + Copy;
 
 	/// Remove the prefix whitespace, if any
 	fn prefix_ws_remove(&mut self, ctx: &mut Context) {
@@ -88,7 +90,10 @@ impl<T: Format> Format for &'_ mut T {
 		(**self).format(ctx);
 	}
 
-	fn with_prefix_ws<R>(&mut self, ctx: &mut Context, f: impl Fn(&mut Whitespace, &mut Context) -> R) -> Option<R> {
+	fn with_prefix_ws<R, F>(&mut self, ctx: &mut Context, f: F) -> Option<R>
+	where
+		F: Fn(&mut Whitespace, &mut Context) -> R + Copy,
+	{
 		(**self).with_prefix_ws(ctx, f)
 	}
 }
@@ -108,7 +113,10 @@ impl<T: Format> Format for Box<T> {
 		(**self).format(ctx);
 	}
 
-	fn with_prefix_ws<R>(&mut self, ctx: &mut Context, f: impl Fn(&mut Whitespace, &mut Context) -> R) -> Option<R> {
+	fn with_prefix_ws<R, F>(&mut self, ctx: &mut Context, f: F) -> Option<R>
+	where
+		F: Fn(&mut Whitespace, &mut Context) -> R + Copy,
+	{
 		(**self).with_prefix_ws(ctx, f)
 	}
 }
@@ -133,7 +141,10 @@ impl<T: Format> Format for Option<T> {
 		}
 	}
 
-	fn with_prefix_ws<R>(&mut self, ctx: &mut Context, f: impl Fn(&mut Whitespace, &mut Context) -> R) -> Option<R> {
+	fn with_prefix_ws<R, F>(&mut self, ctx: &mut Context, f: F) -> Option<R>
+	where
+		F: Fn(&mut Whitespace, &mut Context) -> R + Copy,
+	{
 		match self {
 			Some(value) => value.with_prefix_ws(ctx, f),
 			_ => None,
@@ -160,7 +171,10 @@ impl<T: Format> Format for Vec<T> {
 		}
 	}
 
-	fn with_prefix_ws<R>(&mut self, ctx: &mut Context, f: impl Fn(&mut Whitespace, &mut Context) -> R) -> Option<R> {
+	fn with_prefix_ws<R, F>(&mut self, ctx: &mut Context, f: F) -> Option<R>
+	where
+		F: Fn(&mut Whitespace, &mut Context) -> R + Copy,
+	{
 		match self.first_mut() {
 			Some(value) => value.with_prefix_ws(ctx, f),
 			None => None,
@@ -183,7 +197,10 @@ impl Format for ! {
 		*self
 	}
 
-	fn with_prefix_ws<R>(&mut self, _ctx: &mut Context, _f: impl Fn(&mut Whitespace, &mut Context) -> R) -> Option<R> {
+	fn with_prefix_ws<R, F>(&mut self, _ctx: &mut Context, _f: F) -> Option<R>
+	where
+		F: Fn(&mut Whitespace, &mut Context) -> R + Copy,
+	{
 		*self
 	}
 }
@@ -201,7 +218,10 @@ impl<T> FormatRef for PhantomData<T> {
 impl<T> Format for PhantomData<T> {
 	fn format(&mut self, _ctx: &mut Context) {}
 
-	fn with_prefix_ws<R>(&mut self, _ctx: &mut Context, _f: impl Fn(&mut Whitespace, &mut Context) -> R) -> Option<R> {
+	fn with_prefix_ws<R, F>(&mut self, _ctx: &mut Context, _f: F) -> Option<R>
+	where
+		F: Fn(&mut Whitespace, &mut Context) -> R + Copy,
+	{
 		None
 	}
 }
@@ -219,7 +239,10 @@ impl FormatRef for () {
 impl Format for () {
 	fn format(&mut self, _ctx: &mut Context) {}
 
-	fn with_prefix_ws<R>(&mut self, _ctx: &mut Context, _f: impl Fn(&mut Whitespace, &mut Context) -> R) -> Option<R> {
+	fn with_prefix_ws<R, F>(&mut self, _ctx: &mut Context, _f: F) -> Option<R>
+	where
+		F: Fn(&mut Whitespace, &mut Context) -> R + Copy,
+	{
 		None
 	}
 }
@@ -256,7 +279,10 @@ macro tuple_impl ($N:literal, $($T:ident),* $(,)?) {
 			${concat( Tuple, $N )} { $( $T, )* }.format(ctx)
 		}
 
-		fn with_prefix_ws<R>(&mut self, ctx: &mut Context, f: impl Fn(&mut Whitespace, &mut Context) -> R) -> Option<R> {
+		fn with_prefix_ws<R, F>(&mut self, ctx: &mut Context, f: F) -> Option<R>
+		where
+			F: Fn(&mut Whitespace, &mut Context) -> R + Copy,
+		{
 			let ( $($T,)* ) = self;
 			${concat( Tuple, $N )} { $( $T, )* }.with_prefix_ws(ctx, f)
 		}
@@ -282,7 +308,11 @@ impl<T: ArenaData<Data: Format> + WithArena> Format for ArenaIdx<T> {
 		ctx.arenas().get(*self).format(ctx);
 	}
 
-	fn with_prefix_ws<R>(&mut self, ctx: &mut Context, f: impl Fn(&mut Whitespace, &mut Context) -> R) -> Option<R> {
+	fn with_prefix_ws<R, F: Fn(&mut Whitespace, &mut Context) -> R + Copy>(
+		&mut self,
+		ctx: &mut Context,
+		f: F,
+	) -> Option<R> {
 		ctx.arenas().get(*self).with_prefix_ws(ctx, f)
 	}
 }
