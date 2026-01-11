@@ -42,7 +42,7 @@ impl Parse for FloatLiteral {
 		let ws = parser.parse::<Whitespace>()?;
 		let int = parser.parse::<DecLiteral>()?;
 
-		let (dot, frac) = match parser.try_parse::<token::Dot>()? {
+		let (dot, frac) = match parser.with_tag("skip:Whitespace", Parser::try_parse::<token::Dot>)? {
 			Ok(dot) => match parser.try_parse::<DecLiteral>()? {
 				Ok(frac) => (Some(dot), Some(frac)),
 				Err(_) => match parser
