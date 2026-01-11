@@ -99,7 +99,7 @@ impl UseTreeGroup {
 					punct.trailing = Some(token::Comma(ws, comma));
 				}
 
-				punct.format(ctx, Format::prefix_ws_set_single, Format::prefix_ws_set_cur_indent);
+				punct.format(ctx, Format::prefix_ws_set_cur_indent, Format::prefix_ws_remove);
 			}
 
 			tree.format_indent_if_non_empty(ctx);
