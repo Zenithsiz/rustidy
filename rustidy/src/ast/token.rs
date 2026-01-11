@@ -67,7 +67,8 @@ pub macro decl_tokens(
 					let remaining = parser.remaining();
 
 					if token.ends_with(unicode_ident::is_xid_continue) &&
-						remaining.starts_with(|ch: char| unicode_ident::is_xid_start(ch) || matches!(ch, '_')) {
+						remaining.starts_with(|ch: char| unicode_ident::is_xid_continue(ch))
+					{
 						return Err(<Self as Parse>::Error::FollowsXid);
 					}
 				}
