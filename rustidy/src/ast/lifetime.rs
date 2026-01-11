@@ -52,7 +52,7 @@ impl<T: Parse> QuoteNotQuote<T> {
 		// If we parse a `'` right after the value, then this is actually a character literal
 		// and so we reject it.
 		if parser
-			.try_parse::<token::Quote>()
+			.with_tag("skip:Whitespace", Parser::try_parse::<token::Quote>)
 			.map_err(QuoteNotQuoteError::Quote)?
 			.is_ok()
 		{

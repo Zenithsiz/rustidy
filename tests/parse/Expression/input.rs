@@ -160,7 +160,10 @@ fn continue_() {
 
 fn break_() {
 	let _ = break;
+	let _ = break b;
 	let _ = break 'a;
+	let _ = break 'a b;
+	let _ = break 'a 'c: {};
 }
 
 fn range() {
