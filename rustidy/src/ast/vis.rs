@@ -3,7 +3,7 @@
 // Imports
 use {
 	super::{delimited::Parenthesized, path::SimplePath, token},
-	crate::{Format, Parse, Print},
+	crate::{Format, Parse, Print, format},
 };
 
 /// `Visibility`
@@ -12,6 +12,8 @@ use {
 #[derive(Parse, Format, Print)]
 pub struct Visibility {
 	pub pub_: token::Pub,
+	#[format(and_with = Format::prefix_ws_remove)]
+	#[format(and_with = format::format_option_with(Parenthesized::format_remove))]
 	pub path: Option<Parenthesized<VisibilityPath>>,
 }
 
@@ -31,5 +33,6 @@ pub enum VisibilityPath {
 pub struct VisibilityPathIn {
 	pub in_:  token::In,
 	#[parse(fatal)]
+	#[format(and_with = Format::prefix_ws_set_single)]
 	pub path: SimplePath,
 }

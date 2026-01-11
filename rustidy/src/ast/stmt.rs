@@ -8,7 +8,7 @@ use {
 		pat::PatternNoTopAlt,
 		token,
 		ty::Type,
-		with_attrs::WithOuterAttributes,
+		with_attrs::{self, WithOuterAttributes},
 	},
 	crate::{Format, Parse, Print},
 };
@@ -29,7 +29,10 @@ pub enum Statement {
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
-pub struct LetStatement(pub WithOuterAttributes<LetStatementInner>);
+pub struct LetStatement(
+	#[format(and_with = with_attrs::format_outer_value_non_empty(Format::prefix_ws_set_cur_indent))]
+	pub  WithOuterAttributes<LetStatementInner>,
+);
 
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
@@ -37,11 +40,16 @@ pub struct LetStatement(pub WithOuterAttributes<LetStatementInner>);
 #[parse(name = "a let statement")]
 pub struct LetStatementInner {
 	pub super_: Option<token::Super>,
+	#[format(and_with(expr = Format::prefix_ws_set_single, if = self.super_.is_some()))]
 	pub let_:   token::Let,
 	#[parse(fatal)]
+	#[format(and_with = Format::prefix_ws_set_single)]
 	pub pat:    PatternNoTopAlt,
+	#[format(and_with = Format::prefix_ws_remove)]
 	pub ty:     Option<LetStatementTy>,
+	#[format(and_with = Format::prefix_ws_set_single)]
 	pub eq:     Option<LetStatementEq>,
+	#[format(and_with = Format::prefix_ws_remove)]
 	pub semi:   token::Semi,
 }
 
@@ -51,6 +59,7 @@ pub struct LetStatementInner {
 pub struct LetStatementTy {
 	pub colon: token::Colon,
 	#[parse(fatal)]
+	#[format(and_with = Format::prefix_ws_set_single)]
 	pub ty:    Type,
 }
 
@@ -68,6 +77,7 @@ pub enum LetStatementEq {
 pub struct LetStatementEqNormal {
 	pub eq:   token::Eq,
 	#[parse(fatal)]
+	#[format(and_with = Format::prefix_ws_set_single)]
 	pub expr: Expression,
 }
 
@@ -76,10 +86,13 @@ pub struct LetStatementEqNormal {
 #[derive(Parse, Format, Print)]
 pub struct LetStatementEqElse {
 	pub eq:        token::Eq,
+	#[format(and_with = Format::prefix_ws_set_single)]
 	// TODO: Except `LazyBooleanExpression` and ending with `}`.
-	pub expr:      Expression,
+	pub expr: Expression,
+	#[format(and_with = Format::prefix_ws_set_single)]
 	pub else_:     token::Else,
 	#[parse(fatal)]
+	#[format(and_with = Format::prefix_ws_set_single)]
 	pub else_expr: BlockExpression,
 }
 
@@ -97,6 +110,7 @@ pub enum ExpressionStatement {
 #[derive(Parse, Format, Print)]
 pub struct ExpressionStatementWithoutBlock {
 	pub expr: ExpressionWithoutBlock,
+	#[format(and_with = Format::prefix_ws_remove)]
 	pub semi: token::Semi,
 }
 
@@ -105,5 +119,6 @@ pub struct ExpressionStatementWithoutBlock {
 #[derive(Parse, Format, Print)]
 pub struct ExpressionStatementWithBlock {
 	pub expr: ExpressionWithBlock,
+	#[format(and_with = Format::prefix_ws_remove)]
 	pub semi: Option<token::Semi>,
 }

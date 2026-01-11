@@ -70,7 +70,7 @@ pub enum TypeNoBounds {
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
-pub struct ParenthesizedPath(Parenthesized<Box<Type>>);
+pub struct ParenthesizedPath(#[format(and_with = Parenthesized::format_single_if_non_empty)] Parenthesized<Box<Type>>);
 
 /// `NeverType`
 #[derive(PartialEq, Eq, Clone, Debug)]
@@ -85,8 +85,17 @@ pub struct NeverType(token::Not);
 #[parse(name = "a reference type")]
 pub struct ReferenceType {
 	pub ref_:     token::AndTy,
+	#[format(and_with = Format::prefix_ws_remove)]
 	pub lifetime: Option<Lifetime>,
+	#[format(and_with = match self.lifetime.is_some() {
+		true => Format::prefix_ws_set_single,
+		false => Format::prefix_ws_remove,
+	})]
 	pub mut_:     Option<token::Mut>,
+	#[format(and_with = match self.lifetime.is_some() || self.mut_.is_some() {
+		true => Format::prefix_ws_set_single,
+		false => Format::prefix_ws_remove,
+	})]
 	pub ty:       Box<TypeNoBounds>,
 }
 
@@ -102,6 +111,7 @@ pub struct InferredType(token::Underscore);
 #[derive(Parse, Format, Print)]
 pub struct ImplTraitTypeOneBound {
 	pub impl_: token::Impl,
+	#[format(and_with = Format::prefix_ws_set_single)]
 	pub bound: TraitBound,
 }
 
@@ -111,6 +121,7 @@ pub struct ImplTraitTypeOneBound {
 #[derive(Parse, Format, Print)]
 pub struct TraitObjectTypeOneBound {
 	pub dyn_:  Option<token::Dyn>,
+	#[format(and_with(expr = Format::prefix_ws_set_single, if = self.dyn_.is_some()))]
 	pub bound: TraitBound,
 }
 
@@ -120,6 +131,7 @@ pub struct TraitObjectTypeOneBound {
 #[derive(Parse, Format, Print)]
 pub struct ImplTraitType {
 	pub impl_: token::Impl,
+	#[format(and_with = Format::prefix_ws_set_single)]
 	pub bound: TypeParamBounds,
 }
 
@@ -129,5 +141,6 @@ pub struct ImplTraitType {
 #[derive(Parse, Format, Print)]
 pub struct TraitObjectType {
 	pub dyn_:  Option<token::Dyn>,
+	#[format(and_with(expr = Format::prefix_ws_set_single, if = self.dyn_.is_some()))]
 	pub bound: TypeParamBounds,
 }

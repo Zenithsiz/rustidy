@@ -18,7 +18,7 @@ use {
 #[derive(PartialEq, Eq, Clone, Copy, Hash, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[must_use = "Parser output must not be discarded"]
-pub struct ParserStr(pub(super) ArenaIdx<Self>);
+pub struct ParserStr(pub ArenaIdx<Self>);
 
 impl ParserStr {
 	/// Returns the parser range of this string

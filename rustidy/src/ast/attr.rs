@@ -28,8 +28,11 @@ pub enum InnerAttrOrDocComment {
 #[parse(name = "an inner attribute")]
 pub struct InnerAttribute {
 	pub pound: token::Pound,
+	#[format(and_with = Format::prefix_ws_remove)]
 	pub not:   token::Not,
 	#[parse(fatal)]
+	#[format(and_with = Format::prefix_ws_remove)]
+	#[format(and_with = Bracketed::format_remove)]
 	pub attr:  Bracketed<Attr>,
 }
 
@@ -75,6 +78,8 @@ pub enum OuterAttrOrDocComment {
 #[derive(Parse, Format, Print)]
 pub struct OuterAttribute {
 	pub pound: token::Pound,
+	#[format(and_with = Format::prefix_ws_remove)]
+	#[format(and_with = Bracketed::format_remove)]
 	pub open:  Bracketed<Attr>,
 }
 
@@ -122,8 +127,19 @@ pub struct Attr {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub enum AttrInput {
+	#[format(and_with = Format::prefix_ws_remove)]
 	DelimTokenTree(DelimTokenTree),
-	EqExpr((token::Eq, Expression)),
+	#[format(and_with = Format::prefix_ws_set_single)]
+	EqExpr(AttrInputEqExpr),
+}
+
+#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(serde::Serialize, serde::Deserialize)]
+#[derive(Parse, Format, Print)]
+pub struct AttrInputEqExpr {
+	eq:   token::Eq,
+	#[format(and_with = Format::prefix_ws_set_single)]
+	expr: Expression,
 }
 
 /// `DelimTokenTree`

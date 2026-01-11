@@ -9,7 +9,7 @@ pub use self::range::RangePattern;
 // Imports
 use {
 	super::{
-		at_least::AtLeast1,
+		at_least::{self, AtLeast1},
 		delimited::{Braced, Bracketed, Parenthesized},
 		expr::{
 			LiteralExpression,
@@ -21,7 +21,7 @@ use {
 			},
 		},
 		ident::Identifier,
-		punct::{Punctuated, PunctuatedTrailing},
+		punct::{self, Punctuated, PunctuatedTrailing},
 		token,
 		with_attrs::WithOuterAttributes,
 	},
@@ -36,6 +36,8 @@ use {
 #[parse(name = "a pattern")]
 pub struct Pattern {
 	pub top_alt: Option<token::Or>,
+	#[format(and_with(expr = Format::prefix_ws_set_single, if = self.top_alt.is_some()))]
+	#[format(and_with = punct::format(Format::prefix_ws_set_single, Format::prefix_ws_set_single))]
 	pub inner:   Punctuated<PatternNoTopAlt, token::Or>,
 }
 
@@ -89,19 +91,22 @@ pub struct RestPattern(token::DotDot);
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
-pub struct GroupedPattern(Parenthesized<Box<Pattern>>);
+pub struct GroupedPattern(#[format(and_with = Parenthesized::format_remove)] Parenthesized<Box<Pattern>>);
 
 /// `SlicePattern`
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
-pub struct SlicePattern(Bracketed<Option<SlicePatternItems>>);
+pub struct SlicePattern(#[format(and_with = Bracketed::format_remove)] Bracketed<Option<SlicePatternItems>>);
 
 /// `SlicePatternItems`
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
-pub struct SlicePatternItems(PunctuatedTrailing<Box<Pattern>, token::Comma>);
+pub struct SlicePatternItems(
+	#[format(and_with = punct::format_trailing(Format::prefix_ws_set_single, Format::prefix_ws_remove))]
+	PunctuatedTrailing<Box<Pattern>, token::Comma>,
+);
 
 /// `PathPattern`
 #[derive(PartialEq, Eq, Clone, Debug)]
@@ -115,7 +120,12 @@ pub struct PathPattern(PathExpression);
 #[derive(Parse, Format, Print)]
 pub struct ReferencePattern {
 	pub ref_: ReferencePatternRef,
+	#[format(and_with = Format::prefix_ws_remove)]
 	pub mut_: Option<token::Mut>,
+	#[format(and_with = match self.mut_.is_some() {
+		true => Format::prefix_ws_set_single,
+		false => Format::prefix_ws_remove,
+	})]
 	pub pat:  Box<PatternWithoutRange>,
 }
 
@@ -133,6 +143,9 @@ pub enum ReferencePatternRef {
 #[derive(Parse, Format, Print)]
 pub struct StructPattern {
 	pub top:   PathInExpression,
+	#[format(indent)]
+	#[format(and_with = Format::prefix_ws_set_single)]
+	#[format(and_with = Braced::format_indent_if_non_empty)]
 	pub items: Braced<Option<StructPatternElements>>,
 }
 
@@ -150,6 +163,7 @@ pub enum StructPatternElements {
 #[derive(Parse, Format, Print)]
 pub struct StructPatternElementsFields {
 	pub fields:    StructPatternFields,
+	#[format(and_with = Format::prefix_ws_remove)]
 	pub et_cetera: Option<StructPatternElementsFieldsEtCetera>,
 }
 
@@ -158,6 +172,7 @@ pub struct StructPatternElementsFields {
 #[derive(Parse, Format, Print)]
 pub struct StructPatternElementsFieldsEtCetera {
 	pub comma:     token::Comma,
+	#[format(and_with = Format::prefix_ws_set_cur_indent)]
 	pub et_cetera: Option<StructPatternEtCetera>,
 }
 
@@ -165,7 +180,10 @@ pub struct StructPatternElementsFieldsEtCetera {
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
-pub struct StructPatternFields(Punctuated<StructPatternField, token::Comma>);
+pub struct StructPatternFields(
+	#[format(and_with = punct::format(Format::prefix_ws_set_cur_indent, Format::prefix_ws_remove))]
+	Punctuated<StructPatternField, token::Comma>,
+);
 
 /// `StructPatternField`
 #[derive(PartialEq, Eq, Clone, Debug)]
@@ -187,7 +205,9 @@ pub enum StructPatternFieldInner {
 #[derive(Parse, Format, Print)]
 pub struct StructPatternFieldTuplePat {
 	pub idx: TupleIndex,
+	#[format(and_with = Format::prefix_ws_remove)]
 	pub dot: token::Colon,
+	#[format(and_with = Format::prefix_ws_set_single)]
 	pub pat: Box<Pattern>,
 }
 
@@ -196,7 +216,9 @@ pub struct StructPatternFieldTuplePat {
 #[derive(Parse, Format, Print)]
 pub struct StructPatternFieldIdentPat {
 	pub ident: Identifier,
+	#[format(and_with = Format::prefix_ws_remove)]
 	pub dot:   token::Colon,
+	#[format(and_with = Format::prefix_ws_set_single)]
 	pub pat:   Box<Pattern>,
 }
 
@@ -205,7 +227,9 @@ pub struct StructPatternFieldIdentPat {
 #[derive(Parse, Format, Print)]
 pub struct StructPatternFieldIdent {
 	pub ref_:  Option<token::Ref>,
+	#[format(and_with(expr = Format::prefix_ws_set_single, if = self.ref_.is_some()))]
 	pub mut_:  Option<token::Mut>,
+	#[format(and_with(expr = Format::prefix_ws_set_single, if = self.ref_.is_some() || self.mut_.is_some()))]
 	pub ident: Identifier,
 }
 
@@ -221,6 +245,8 @@ pub struct StructPatternEtCetera(token::DotDot);
 #[derive(Parse, Format, Print)]
 pub struct TupleStructPattern {
 	pub top:   PathInExpression,
+	#[format(and_with = Format::prefix_ws_remove)]
+	#[format(and_with = Parenthesized::format_remove)]
 	pub items: Parenthesized<Option<TupleStructItems>>,
 }
 
@@ -228,13 +254,16 @@ pub struct TupleStructPattern {
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
-pub struct TupleStructItems(pub PunctuatedTrailing<Box<Pattern>, token::Comma>);
+pub struct TupleStructItems(
+	#[format(and_with = punct::format_trailing(Format::prefix_ws_set_single, Format::prefix_ws_remove))]
+	pub  PunctuatedTrailing<Box<Pattern>, token::Comma>,
+);
 
 /// `TuplePattern`
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
-pub struct TuplePattern(Parenthesized<Option<TuplePatternItems>>);
+pub struct TuplePattern(#[format(and_with = Parenthesized::format_remove)] Parenthesized<Option<TuplePatternItems>>);
 
 /// `TuplePatternItems`
 #[derive(PartialEq, Eq, Clone, Debug)]
@@ -251,6 +280,7 @@ pub enum TuplePatternItems {
 #[derive(Parse, Format, Print)]
 pub struct TupleItemsPat {
 	pub pat:   Box<Pattern>,
+	#[format(and_with = Format::prefix_ws_remove)]
 	pub comma: token::Comma,
 }
 
@@ -259,8 +289,20 @@ pub struct TupleItemsPat {
 #[derive(Parse, Format, Print)]
 pub struct TupleItemsPats {
 	pub first:          Box<Pattern>,
-	pub rest:           AtLeast1<(token::Comma, Box<Pattern>)>,
+	#[format(and_with = Format::prefix_ws_remove)]
+	#[format(and_with = at_least::format(Format::prefix_ws_remove))]
+	pub rest:           AtLeast1<TupleItemsPatsPat>,
+	#[format(and_with = Format::prefix_ws_remove)]
 	pub trailing_comma: Option<token::Comma>,
+}
+
+#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(serde::Serialize, serde::Deserialize)]
+#[derive(Parse, Format, Print)]
+pub struct TupleItemsPatsPat {
+	pub comma: token::Comma,
+	#[format(and_with = Format::prefix_ws_set_single)]
+	pub pat:   Box<Pattern>,
 }
 
 /// `LiteralPattern`
@@ -278,8 +320,11 @@ pub struct LiteralPattern {
 #[derive(Parse, Format, Print)]
 pub struct IdentifierPattern {
 	pub ref_:  Option<token::Ref>,
+	#[format(and_with(expr = Format::prefix_ws_set_single, if = self.ref_.is_some()))]
 	pub mut_:  Option<token::Mut>,
+	#[format(and_with(expr = Format::prefix_ws_set_single, if = self.ref_.is_some() || self.mut_.is_some()))]
 	pub ident: Identifier,
+	#[format(and_with = Format::prefix_ws_set_single)]
 	pub rest:  Option<IdentifierPatternRest>,
 }
 
@@ -288,5 +333,6 @@ pub struct IdentifierPattern {
 #[derive(Parse, Format, Print)]
 pub struct IdentifierPatternRest {
 	pub at:  token::At,
+	#[format(and_with = Format::prefix_ws_set_single)]
 	pub pat: Box<PatternNoTopAlt>,
 }

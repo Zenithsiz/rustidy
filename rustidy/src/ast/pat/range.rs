@@ -29,7 +29,9 @@ pub enum RangePattern {
 #[derive(Parse, Format, Print)]
 pub struct RangeExclusivePattern {
 	lhs:     RangePatternBound,
+	#[format(and_with = Format::prefix_ws_remove)]
 	dot_dot: token::DotDot,
+	#[format(and_with = Format::prefix_ws_remove)]
 	rhs:     RangePatternBound,
 }
 
@@ -38,7 +40,9 @@ pub struct RangeExclusivePattern {
 #[derive(Parse, Format, Print)]
 pub struct RangeInclusivePattern {
 	lhs:        RangePatternBound,
+	#[format(and_with = Format::prefix_ws_remove)]
 	dot_dot_eq: token::DotDotEq,
+	#[format(and_with = Format::prefix_ws_remove)]
 	rhs:        RangePatternBound,
 }
 
@@ -47,6 +51,7 @@ pub struct RangeInclusivePattern {
 #[derive(Parse, Format, Print)]
 pub struct RangeFromPattern {
 	lhs:     RangePatternBound,
+	#[format(and_with = Format::prefix_ws_remove)]
 	dot_dot: token::DotDot,
 }
 
@@ -55,6 +60,7 @@ pub struct RangeFromPattern {
 #[derive(Parse, Format, Print)]
 pub struct RangeToExclusivePattern {
 	dot_dot: token::DotDot,
+	#[format(and_with = Format::prefix_ws_remove)]
 	rhs:     RangePatternBound,
 }
 
@@ -63,6 +69,7 @@ pub struct RangeToExclusivePattern {
 #[derive(Parse, Format, Print)]
 pub struct RangeToInclusivePattern {
 	dot_dot_eq: token::DotDotEq,
+	#[format(and_with = Format::prefix_ws_remove)]
 	rhs:        RangePatternBound,
 }
 
@@ -71,7 +78,9 @@ pub struct RangeToInclusivePattern {
 #[derive(Parse, Format, Print)]
 pub struct ObsoleteRangePattern {
 	lhs:         RangePatternBound,
+	#[format(and_with = Format::prefix_ws_remove)]
 	dot_dot_dot: token::DotDotDot,
+	#[format(and_with = Format::prefix_ws_remove)]
 	rhs:         RangePatternBound,
 }
 

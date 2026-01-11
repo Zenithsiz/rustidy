@@ -12,8 +12,9 @@ use {
 			expr::{Expression, ExpressionInner, ExpressionWithBlock, ExpressionWithoutBlock},
 			pat::Pattern,
 			token,
-			with_attrs::{WithInnerAttributes, WithOuterAttributes},
+			with_attrs::{self, WithInnerAttributes, WithOuterAttributes},
 		},
+		format,
 		parser::{FromRecursiveRoot, ParseError, Parser, ParserError},
 	},
 	core::ops::ControlFlow,
@@ -28,7 +29,11 @@ use {
 pub struct MatchExpression {
 	pub match_:    token::Match,
 	#[parse(fatal)]
+	#[format(and_with = Format::prefix_ws_set_single)]
 	pub scrutinee: Box<Scrutinee>,
+	#[format(indent)]
+	#[format(and_with = Format::prefix_ws_set_single)]
+	#[format(and_with = Braced::format_indent_if_non_empty)]
 	pub arms:      Braced<WithInnerAttributes<Option<MatchArms>>>,
 }
 
@@ -43,6 +48,7 @@ pub struct Scrutinee(#[parse(with_tag = "skip:StructExpression")] Expression);
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Format, Print)]
 pub struct MatchArms {
+	#[format(and_with = format::format_vec_each_with_all(Format::prefix_ws_set_cur_indent))]
 	pub arms: Vec<MatchArmWithExpr>,
 }
 
@@ -161,8 +167,11 @@ pub enum MatchArmsError {
 #[derive(Parse, Format, Print)]
 pub struct MatchArmWithExpr {
 	pub arm:            MatchArm,
+	#[format(and_with = Format::prefix_ws_set_single)]
 	pub arrow:          token::FatArrow,
+	#[format(and_with = Format::prefix_ws_set_single)]
 	pub expr:           Expression,
+	#[format(and_with = Format::prefix_ws_remove)]
 	pub trailing_comma: Option<token::Comma>,
 }
 
@@ -170,7 +179,10 @@ pub struct MatchArmWithExpr {
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
-pub struct MatchArm(pub WithOuterAttributes<MatchArmInner>);
+pub struct MatchArm(
+	#[format(and_with = with_attrs::format_outer_value_non_empty(Format::prefix_ws_set_cur_indent))]
+	pub  WithOuterAttributes<MatchArmInner>,
+);
 
 #[derive(PartialEq, Eq, Clone, derive_more::Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
@@ -178,6 +190,7 @@ pub struct MatchArm(pub WithOuterAttributes<MatchArmInner>);
 #[parse(name = "a match arm")]
 pub struct MatchArmInner {
 	pub pat:   Pattern,
+	#[format(and_with = Format::prefix_ws_set_single)]
 	pub guard: Option<MatchArmGuard>,
 }
 
@@ -190,5 +203,6 @@ pub struct MatchArmGuard {
 	// TODO: The reference says this is just an expression, but
 	//       that means we don't parse `Some(...) if let ...`, so
 	//       instead we allow any conditions.
+	#[format(and_with = Format::prefix_ws_set_single)]
 	pub cond: Conditions,
 }

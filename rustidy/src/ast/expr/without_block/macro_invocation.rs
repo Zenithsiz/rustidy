@@ -15,6 +15,8 @@ use crate::{
 #[parse(name = "a macro invocation")]
 pub struct MacroInvocation {
 	pub path: SimplePath,
+	#[format(and_with = Format::prefix_ws_remove)]
 	pub not:  token::Not,
+	#[format(and_with = Format::prefix_ws_remove)]
 	pub tree: DelimTokenTree,
 }

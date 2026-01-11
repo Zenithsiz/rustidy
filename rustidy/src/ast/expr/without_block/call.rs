@@ -10,7 +10,7 @@ use {
 		ast::{
 			delimited::Parenthesized,
 			expr::{Expression, ExpressionInner},
-			punct::PunctuatedTrailing,
+			punct::{self, PunctuatedTrailing},
 			token,
 		},
 	},
@@ -25,6 +25,8 @@ use {
 #[parse_recursive(kind = "left")]
 pub struct CallExpression {
 	pub expr:   Expression,
+	#[format(and_with = Format::prefix_ws_remove)]
+	#[format(and_with = Parenthesized::format_remove)]
 	pub params: Parenthesized<Option<CallParams>>,
 }
 
@@ -37,8 +39,12 @@ pub struct CallExpression {
 #[parse_recursive(kind = "left")]
 pub struct MethodCallExpression {
 	pub expr:    Expression,
+	#[format(and_with = Format::prefix_ws_remove)]
 	pub dot:     token::Dot,
+	#[format(and_with = Format::prefix_ws_remove)]
 	pub segment: PathExprSegment,
+	#[format(and_with = Format::prefix_ws_remove)]
+	#[format(and_with = Parenthesized::format_remove)]
 	pub params:  Parenthesized<Option<CallParams>>,
 }
 
@@ -46,4 +52,7 @@ pub struct MethodCallExpression {
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
-pub struct CallParams(pub PunctuatedTrailing<Expression, token::Comma>);
+pub struct CallParams(
+	#[format(and_with = punct::format_trailing(Format::prefix_ws_set_single, Format::prefix_ws_remove))]
+	pub  PunctuatedTrailing<Expression, token::Comma>,
+);

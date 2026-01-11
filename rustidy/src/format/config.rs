@@ -6,6 +6,7 @@ pub struct Config {
 	/// Indentation string
 	pub indent:             String,
 	pub empty_line_spacing: EmptyLineSpacing,
+	pub max_use_tree_len:   usize,
 }
 
 /// Empty line spacing.
@@ -25,6 +26,7 @@ impl Default for Config {
 		Self {
 			indent:             "\t".to_owned(),
 			empty_line_spacing: EmptyLineSpacing { min: 0, max: 2 },
+			max_use_tree_len:   75,
 		}
 	}
 }

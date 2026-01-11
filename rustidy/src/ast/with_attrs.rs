@@ -3,7 +3,14 @@
 // Imports
 use {
 	super::attr::{InnerAttrOrDocComment, OuterAttrOrDocComment},
-	crate::{Format, Parse, Parser, Print, parser::ParsableRecursive},
+	crate::{
+		Format,
+		Parse,
+		Parser,
+		Print,
+		format::{self, FormatFn},
+		parser::ParsableRecursive,
+	},
 };
 
 /// A type with outer attributes
@@ -11,6 +18,7 @@ use {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct WithOuterAttributes<T> {
+	#[format(and_with = format::format_vec_each_with(Format::prefix_ws_set_cur_indent))]
 	pub attrs: Vec<OuterAttrOrDocComment>,
 	pub inner: T,
 }
@@ -79,6 +87,25 @@ where
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct WithInnerAttributes<T> {
+	#[format(and_with = format::format_vec_each_with(Format::prefix_ws_set_cur_indent))]
 	pub attrs: Vec<InnerAttrOrDocComment>,
 	pub inner: T,
+}
+
+/// Formats the value of a `WithOuterAttributes<T, _>` if at least 1 attribute exists
+pub fn format_outer_value_non_empty<T>(f: impl FormatFn<T>) -> impl FormatFn<WithOuterAttributes<T>> {
+	move |with_attrs, ctx| {
+		if !with_attrs.attrs.is_empty() {
+			f(&mut with_attrs.inner, ctx);
+		}
+	}
+}
+
+/// Formats the value of a `WithInnerAttributes<T>` if at least 1 attribute exists
+pub fn format_inner_value_non_empty<T>(f: impl FormatFn<T>) -> impl FormatFn<WithInnerAttributes<T>> {
+	move |with_attrs, ctx| {
+		if !with_attrs.attrs.is_empty() {
+			f(&mut with_attrs.inner, ctx);
+		}
+	}
 }

@@ -10,6 +10,7 @@ use crate::{
 		token,
 		with_attrs::WithInnerAttributes,
 	},
+	format,
 	parser::{Parse, ParseError, Parser, ParserError},
 	print::Print,
 };
@@ -20,14 +21,20 @@ use crate::{
 #[derive(Parse, Format, Print)]
 #[parse(name = "a block expression")]
 #[parse(skip_if_tag = "skip:BlockExpression")]
-pub struct BlockExpression(pub Braced<WithInnerAttributes<Statements>>);
+pub struct BlockExpression(
+	#[format(indent)]
+	#[format(and_with = Braced::format_indent_if_non_empty)]
+	pub Braced<WithInnerAttributes<Statements>>,
+);
 
 /// `Statements`
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Format, Print)]
 pub struct Statements {
+	#[format(and_with = format::format_vec_each_with_all(Format::prefix_ws_set_cur_indent))]
 	pub stmts:         Vec<Statement>,
+	#[format(and_with(expr = Format::prefix_ws_set_cur_indent, if = !self.stmts.is_empty()))]
 	pub trailing_expr: Option<ExpressionWithoutBlock>,
 }
 

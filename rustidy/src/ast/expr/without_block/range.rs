@@ -48,7 +48,9 @@ pub enum RangeExpression {
 #[parse_recursive(skip_if_tag = "skip:RangeExpr")]
 pub struct RangeExpr {
 	pub lhs:     Expression,
+	#[format(and_with = Format::prefix_ws_remove)]
 	pub dot_dot: token::DotDot,
+	#[format(and_with = Format::prefix_ws_remove)]
 	pub rhs:     Expression,
 }
 
@@ -62,6 +64,7 @@ pub struct RangeExpr {
 #[parse_recursive(skip_if_tag = "skip:RangeFromExpr")]
 pub struct RangeFromExpr {
 	pub lhs:     Expression,
+	#[format(and_with = Format::prefix_ws_remove)]
 	pub dot_dot: token::DotDot,
 }
 
@@ -74,6 +77,7 @@ pub struct RangeFromExpr {
 #[parse_recursive(kind = "right")]
 pub struct RangeToExpr {
 	pub dot_dot: token::DotDot,
+	#[format(and_with = Format::prefix_ws_remove)]
 	pub rhs:     Expression,
 }
 
@@ -94,7 +98,9 @@ pub struct RangeFullExpr(token::DotDot);
 #[parse_recursive(skip_if_tag = "skip:RangeInclusiveExpr")]
 pub struct RangeInclusiveExpr {
 	pub lhs:        Expression,
+	#[format(and_with = Format::prefix_ws_remove)]
 	pub dot_dot_eq: token::DotDotEq,
+	#[format(and_with = Format::prefix_ws_remove)]
 	pub rhs:        Expression,
 }
 
@@ -107,5 +113,6 @@ pub struct RangeInclusiveExpr {
 #[parse_recursive(kind = "right")]
 pub struct RangeToInclusiveExpr {
 	pub dot_dot_eq: token::DotDotEq,
+	#[format(and_with = Format::prefix_ws_remove)]
 	pub rhs:        Expression,
 }

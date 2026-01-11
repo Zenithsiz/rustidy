@@ -3,7 +3,7 @@
 // Imports
 use {
 	super::token,
-	crate::{Format, Parse, Print},
+	crate::{Format, Parse, Print, format},
 };
 
 /// A value `T` delimited by prefix `L` and suffix `R`
@@ -16,6 +16,54 @@ pub struct Delimited<T, L, R> {
 	#[parse(without_tags)]
 	pub value:  T,
 	pub suffix: R,
+}
+
+impl<T, L, R> Delimited<T, L, R> {
+	/// Formats this delimited with a single space if non-empty, otherwise removes
+	pub fn format_single_if_non_empty(&mut self, ctx: &mut format::Context)
+	where
+		T: Format,
+		R: Format,
+	{
+		match self.value.is_empty(ctx) {
+			true => {
+				self.value.prefix_ws_set_single(ctx);
+				self.suffix.prefix_ws_remove(ctx);
+			},
+			false => {
+				self.value.prefix_ws_set_single(ctx);
+				self.suffix.prefix_ws_set_single(ctx);
+			},
+		}
+	}
+
+	/// Formats this delimited by indenting if non-empty, otherwise removing
+	pub fn format_indent_if_non_empty(&mut self, ctx: &mut format::Context)
+	where
+		T: Format,
+		R: Format,
+	{
+		match self.value.is_empty(ctx) {
+			true => {
+				self.value.prefix_ws_remove(ctx);
+				self.suffix.prefix_ws_set_indent(ctx, -1, true);
+			},
+			false => {
+				self.value.prefix_ws_set_indent(ctx, 0, false);
+				self.suffix.prefix_ws_set_indent(ctx, -1, false);
+			},
+		}
+	}
+
+	/// Formats this delimited by removing all inner whitespace
+	pub fn format_remove(&mut self, ctx: &mut format::Context)
+	where
+		T: Format,
+		R: Format,
+	{
+		self.value.prefix_ws_remove(ctx);
+		self.suffix.prefix_ws_remove(ctx);
+	}
 }
 
 /// A value delimited by parenthesis

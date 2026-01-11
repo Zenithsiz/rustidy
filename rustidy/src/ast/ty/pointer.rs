@@ -12,7 +12,9 @@ use {
 #[derive(Parse, Format, Print)]
 pub struct RawPointerType {
 	pub star: token::Star,
+	#[format(and_with = Format::prefix_ws_remove)]
 	pub kind: RawPointerTypeKind,
+	#[format(and_with = Format::prefix_ws_set_single)]
 	pub ty:   Box<TypeNoBounds>,
 }
 

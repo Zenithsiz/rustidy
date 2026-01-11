@@ -2,7 +2,12 @@
 
 // Imports
 use {
-	crate::{Format, parser::Parse, print::Print},
+	crate::{
+		Format,
+		format::{self, FormatFn},
+		parser::Parse,
+		print::Print,
+	},
 	either::Either,
 };
 
@@ -85,6 +90,18 @@ impl<T, P> Punctuated<T, P> {
 	pub fn punct_mut(&mut self) -> impl Iterator<Item = &mut P> {
 		self.rest.iter_mut().map(|(punct, _)| punct)
 	}
+
+	/// Formats this value
+	pub fn format(&mut self, ctx: &mut format::Context, format_value: impl FormatFn<T>, format_punct: impl FormatFn<P>)
+	where
+		T: Format,
+		P: Format,
+	{
+		for (punct, value) in &mut self.rest {
+			format_punct(punct, ctx);
+			format_value(value, ctx);
+		}
+	}
 }
 
 /// Punctuated type `T`, separated by `P` with an optional trailing `P`.
@@ -106,6 +123,18 @@ impl<T, P> PunctuatedTrailing<T, P> {
 	/// Returns an iterator over all elements
 	pub fn iter(&self) -> impl Iterator<Item = Either<&T, &P>> {
 		itertools::chain![self.punctuated.iter(), self.trailing.as_ref().map(Either::Right),]
+	}
+
+	/// Formats this value
+	pub fn format(&mut self, ctx: &mut format::Context, format_value: impl FormatFn<T>, format_punct: impl FormatFn<P>)
+	where
+		T: Format,
+		P: Format,
+	{
+		self.punctuated.format(ctx, &format_value, &format_punct);
+		if let Some(trailing) = &mut self.trailing {
+			format_punct(trailing, ctx);
+		}
 	}
 }
 
@@ -145,4 +174,20 @@ impl<'a, T, P> Iterator for SplitLastMut<'a, T, P> {
 
 		Some((value, punct))
 	}
+}
+
+/// Formats a punctuated
+pub fn format<T: Format, P: Format>(
+	format_value: impl FormatFn<T>,
+	format_punct: impl FormatFn<P>,
+) -> impl FormatFn<Punctuated<T, P>> {
+	move |punct, ctx| punct.format(ctx, &format_value, &format_punct)
+}
+
+/// Formats a punctuated trailing
+pub fn format_trailing<T: Format, P: Format>(
+	format_value: impl FormatFn<T>,
+	format_punct: impl FormatFn<P>,
+) -> impl FormatFn<PunctuatedTrailing<T, P>> {
+	move |punct, ctx| punct.format(ctx, &format_value, &format_punct)
 }

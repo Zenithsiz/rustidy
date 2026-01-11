@@ -163,6 +163,8 @@ decl_tokens! {
 
 	// Punctuation
 	Eq = '=' must_not_follow '=' must_not_follow '>';
+	// TODO: This means we can't parse `let _:A<>=B`, despite it being
+	//       accepted by the compiler.
 	Lt = '<' must_not_follow '=';
 	Le = "<=";
 	EqEq = "==";

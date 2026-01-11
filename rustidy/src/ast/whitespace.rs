@@ -12,7 +12,7 @@ use {
 		Replacement,
 		arena::{ArenaData, ArenaIdx},
 		format,
-		parser::{Parse, ParserRange},
+		parser::{Parse, ParserPos, ParserRange},
 	},
 	itertools::Itertools,
 };
@@ -26,6 +26,17 @@ use {
 pub struct Whitespace(ArenaIdx<Whitespace>);
 
 impl Whitespace {
+	/// Creates an empty whitespace at a position
+	pub fn empty(pos: ParserPos, ctx: &mut format::Context) -> Self {
+		let inner = Punctuated {
+			first: PureWhitespace(ctx.create_str_at(pos)),
+			rest:  vec![],
+		};
+		let idx = ctx.arenas().arena::<Self>().push(inner);
+
+		Self(idx)
+	}
+
 	#[expect(clippy::unnecessary_wraps, reason = "Necessary for type signature")]
 	fn parse_skip(parser: &mut Parser) -> Result<Option<Self>, WhitespaceError> {
 		Ok(parser.has_tag("skip:Whitespace").then(|| {
@@ -282,6 +293,11 @@ impl TrailingLineComment {
 			false => Err(TrailingLineCommentError::NoComment),
 		}
 	}
+}
+
+/// Sets the whitespace to the current indentation
+pub fn set_indent(offset: isize, remove_if_empty: bool) -> impl Fn(&mut Whitespace, &mut format::Context) {
+	move |ws, ctx| ws.set_indent(ctx, offset, remove_if_empty)
 }
 
 #[cfg(test)]

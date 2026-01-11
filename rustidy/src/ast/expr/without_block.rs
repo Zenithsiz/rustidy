@@ -54,7 +54,10 @@ use {
 		Parse,
 		ParseRecursive,
 		Print,
-		ast::{token, with_attrs::WithOuterAttributes},
+		ast::{
+			token,
+			with_attrs::{self, WithOuterAttributes},
+		},
 		parser::RecursiveWrapper,
 	},
 };
@@ -69,7 +72,10 @@ use {
 #[parse_recursive(root = ExpressionInner)]
 #[parse_recursive(transparent)]
 #[parse_recursive(into_root = ExpressionInner)]
-pub struct ExpressionWithoutBlock(pub WithOuterAttributes<ExpressionWithoutBlockInner>);
+pub struct ExpressionWithoutBlock(
+	#[format(and_with = with_attrs::format_outer_value_non_empty(Format::prefix_ws_set_cur_indent))]
+	pub  WithOuterAttributes<ExpressionWithoutBlockInner>,
+);
 
 impl From<ExpressionWithoutBlockInner> for ExpressionWithoutBlock {
 	fn from(expr: ExpressionWithoutBlockInner) -> Self {
@@ -138,7 +144,9 @@ pub enum ExpressionWithoutBlockInner {
 #[derive(Parse, Format, Print)]
 pub struct DoYeetExpression {
 	pub do_:   token::Do,
+	#[format(and_with = Format::prefix_ws_set_single)]
 	pub yeet_: token::Yeet,
 	// TODO: This should be recursive
+	#[format(and_with = Format::prefix_ws_set_single)]
 	pub expr:  Option<Expression>,
 }

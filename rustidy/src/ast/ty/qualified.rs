@@ -7,7 +7,11 @@ use {
 		Format,
 		Parse,
 		Print,
-		ast::{at_least::AtLeast1, expr::without_block::path::QualifiedPathType, token},
+		ast::{
+			at_least::{self, AtLeast1},
+			expr::without_block::path::QualifiedPathType,
+			token,
+		},
 	},
 };
 
@@ -17,5 +21,16 @@ use {
 #[derive(Parse, Format, Print)]
 pub struct QualifiedPathInType {
 	pub qualified: QualifiedPathType,
-	pub segments:  AtLeast1<(token::PathSep, TypePathSegment)>,
+	#[format(and_with = Format::prefix_ws_remove)]
+	#[format(and_with = at_least::format(Format::prefix_ws_remove))]
+	pub segments:  AtLeast1<QualifiedPathInTypeSegment>,
+}
+
+#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(serde::Serialize, serde::Deserialize)]
+#[derive(Parse, Format, Print)]
+pub struct QualifiedPathInTypeSegment {
+	pub sep:     token::PathSep,
+	#[format(and_with = Format::prefix_ws_remove)]
+	pub segment: TypePathSegment,
 }

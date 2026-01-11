@@ -23,6 +23,8 @@ use {
 #[parse_recursive(kind = "left")]
 pub struct FieldExpression {
 	pub expr:  Expression,
+	#[format(and_with = Format::prefix_ws_remove)]
 	pub dot:   token::Dot,
+	#[format(and_with = Format::prefix_ws_remove)]
 	pub ident: Identifier,
 }

@@ -15,9 +15,13 @@ use crate::{
 #[parse(name = "extern crate")]
 pub struct ExternCrate {
 	pub extern_:   token::Extern,
+	#[format(and_with = Format::prefix_ws_set_single)]
 	pub crate_:    token::Crate,
+	#[format(and_with = Format::prefix_ws_set_single)]
 	pub crate_ref: CrateRef,
+	#[format(and_with = Format::prefix_ws_set_single)]
 	pub as_clause: Option<AsClause>,
+	#[format(and_with = Format::prefix_ws_remove)]
 	pub semi:      token::Semi,
 }
 
@@ -36,6 +40,7 @@ pub enum CrateRef {
 #[derive(Parse, Format, Print)]
 pub struct AsClause {
 	pub as_:  token::As,
+	#[format(and_with = Format::prefix_ws_set_single)]
 	pub name: AsClauseName,
 }
 

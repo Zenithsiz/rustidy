@@ -10,4 +10,4 @@ use {
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
-pub struct SliceType(Bracketed<Box<Type>>);
+pub struct SliceType(#[format(and_with = Bracketed::format_remove)] Bracketed<Box<Type>>);

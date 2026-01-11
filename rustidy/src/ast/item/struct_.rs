@@ -11,11 +11,11 @@ use {
 			delimited::{Braced, Parenthesized},
 			expr::Expression,
 			ident::Identifier,
-			punct::PunctuatedTrailing,
+			punct::{self, PunctuatedTrailing},
 			token,
 			ty::Type,
 			vis::Visibility,
-			with_attrs::WithOuterAttributes,
+			with_attrs::{self, WithOuterAttributes},
 		},
 	},
 };
@@ -35,17 +35,25 @@ pub enum Struct {
 #[derive(Parse, Format, Print)]
 pub struct StructStruct {
 	pub struct_:  token::Struct,
+	#[format(and_with = Format::prefix_ws_set_single)]
 	pub ident:    Identifier,
+	#[format(and_with = Format::prefix_ws_remove)]
 	pub generics: Option<GenericParams>,
+	#[format(and_with = Format::prefix_ws_set_cur_indent)]
 	pub where_:   Option<WhereClause>,
 	pub inner:    StructStructInner,
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(strum::EnumIs)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub enum StructStructInner {
+	#[format(and_with = Format::prefix_ws_set_single)]
+	#[format(indent)]
+	#[format(and_with = Braced::format_indent_if_non_empty)]
 	Fields(Braced<Option<StructFields>>),
+	#[format(and_with = Format::prefix_ws_remove)]
 	Semi(token::Semi),
 }
 
@@ -53,23 +61,33 @@ pub enum StructStructInner {
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
-pub struct StructFields(PunctuatedTrailing<StructField, token::Comma>);
+pub struct StructFields(
+	#[format(and_with = punct::format_trailing(Format::prefix_ws_set_cur_indent, Format::prefix_ws_remove))]
+	PunctuatedTrailing<StructField, token::Comma>,
+);
 
 /// `StructField`
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
-pub struct StructField(pub WithOuterAttributes<StructFieldInner>);
+pub struct StructField(
+	#[format(and_with = with_attrs::format_outer_value_non_empty(Format::prefix_ws_set_cur_indent))]
+	pub  WithOuterAttributes<StructFieldInner>,
+);
 
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct StructFieldInner {
 	pub vis:   Option<Visibility>,
+	#[format(and_with = Format::prefix_ws_set_single)]
 	pub ident: Identifier,
+	#[format(and_with = Format::prefix_ws_remove)]
 	pub colon: token::Colon,
+	#[format(and_with = Format::prefix_ws_set_single)]
 	pub ty:    Type,
 	// Note: Nightly-only
+	#[format(and_with = Format::prefix_ws_set_single)]
 	pub eq:    Option<StructFieldEq>,
 }
 
@@ -78,6 +96,7 @@ pub struct StructFieldInner {
 #[derive(Parse, Format, Print)]
 pub struct StructFieldEq {
 	pub eq:   token::Eq,
+	#[format(and_with = Format::prefix_ws_set_single)]
 	pub expr: Expression,
 }
 
@@ -87,11 +106,17 @@ pub struct StructFieldEq {
 #[derive(Parse, Format, Print)]
 pub struct TupleStruct {
 	pub struct_:  token::Struct,
+	#[format(and_with = Format::prefix_ws_set_single)]
 	pub ident:    Identifier,
+	#[format(and_with = Format::prefix_ws_remove)]
 	pub generics: Option<GenericParams>,
+	#[format(and_with = Format::prefix_ws_remove)]
+	#[format(and_with = Parenthesized::format_remove)]
 	pub fields:   Parenthesized<Option<TupleFields>>,
 	#[parse(fatal)]
+	#[format(and_with = Format::prefix_ws_set_cur_indent)]
 	pub where_:   Option<WhereClause>,
+	#[format(and_with = Format::prefix_ws_remove)]
 	pub semi:     token::Semi,
 }
 
@@ -99,13 +124,19 @@ pub struct TupleStruct {
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
-pub struct TupleFields(PunctuatedTrailing<TupleField, token::Comma>);
+pub struct TupleFields(
+	#[format(and_with = punct::format_trailing(Format::prefix_ws_set_single, Format::prefix_ws_remove))]
+	PunctuatedTrailing<TupleField, token::Comma>,
+);
 
 /// `TupleField`
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
-pub struct TupleField(pub WithOuterAttributes<TupleFieldInner>);
+pub struct TupleField(
+	#[format(and_with = with_attrs::format_outer_value_non_empty(Format::prefix_ws_set_single))]
+	pub  WithOuterAttributes<TupleFieldInner>,
+);
 
 /// `TupleFieldInner`
 #[derive(PartialEq, Eq, Clone, Debug)]
@@ -113,5 +144,6 @@ pub struct TupleField(pub WithOuterAttributes<TupleFieldInner>);
 #[derive(Parse, Format, Print)]
 pub struct TupleFieldInner {
 	pub vis: Option<Visibility>,
+	#[format(and_with(expr = Format::prefix_ws_set_single, if = self.vis.is_some()))]
 	pub ty:  Type,
 }

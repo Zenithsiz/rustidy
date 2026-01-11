@@ -2,7 +2,11 @@
 
 // Imports
 use {
-	super::{ident::Identifier, punct::Punctuated, token},
+	super::{
+		ident::Identifier,
+		punct::{self, Punctuated},
+		token,
+	},
 	crate::{Format, Print, parser::Parse},
 	core::fmt::Debug,
 };
@@ -14,6 +18,8 @@ use {
 #[parse(name = "a simple path")]
 pub struct SimplePath {
 	pub prefix:   Option<token::PathSep>,
+	#[format(and_with(expr = Format::prefix_ws_remove, if = self.prefix.is_some()))]
+	#[format(and_with = punct::format(Format::prefix_ws_remove, Format::prefix_ws_remove))]
 	pub segments: Punctuated<SimplePathSegment, token::PathSep>,
 }
 

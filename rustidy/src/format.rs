@@ -15,7 +15,7 @@ use {
 		Replacements,
 		arena::{ArenaData, ArenaIdx, WithArena},
 		ast::whitespace::Whitespace,
-		parser::ParserRange,
+		parser::{ParserPos, ParserRange},
 	},
 	core::marker::PhantomData,
 };
@@ -57,11 +57,16 @@ pub trait Format: FormatRef {
 		self.with_prefix_ws(ctx, |whitespace, ctx| whitespace.set_single(ctx));
 	}
 
-	/// Sets the prefix whitespace to the current indentation
+	/// Sets the prefix whitespace to an indentation
 	fn prefix_ws_set_indent(&mut self, ctx: &mut Context, offset: isize, remove_if_empty: bool) {
 		self.with_prefix_ws(ctx, |whitespace, ctx| {
 			whitespace.set_indent(ctx, offset, remove_if_empty);
 		});
+	}
+
+	/// Sets the prefix whitespace to the current indentation without removing if empty
+	fn prefix_ws_set_cur_indent(&mut self, ctx: &mut Context) {
+		self.prefix_ws_set_indent(ctx, 0, false);
 	}
 }
 
@@ -374,6 +379,28 @@ impl<'a, 'input> Context<'a, 'input> {
 		self.arenas
 	}
 
+	/// Creates a string with a range
+	pub fn create_str(&self, range: ParserRange) -> ParserStr {
+		let idx = self.arenas.arena::<ParserStr>().push(range);
+		ParserStr(idx)
+	}
+
+	/// Creates a string at a position
+	pub fn create_str_at(&self, pos: ParserPos) -> ParserStr {
+		self.create_str(ParserRange { start: pos, end: pos })
+	}
+
+	/// Creates a string at a position with a replacement
+	pub fn create_str_at_pos_with_replacement(
+		&mut self,
+		pos: ParserPos,
+		replacement: impl Into<Replacement>,
+	) -> ParserStr {
+		let s = self.create_str_at(pos);
+		self.replace(s, replacement);
+		s
+	}
+
 	/// Replaces a string
 	pub fn replace(&mut self, s: ParserStr, replacement: impl Into<Replacement>) {
 		self.replacements
@@ -430,9 +457,12 @@ impl<'a, 'input> Context<'a, 'input> {
 /// A formatting function
 pub trait FormatFn<T: ?Sized> = Fn(&mut T, &mut Context);
 
-/// Sets the prefix whitespace to the current indentation
-pub fn prefix_ws_set_indent<T: Format>(offset: isize, remove_if_empty: bool) -> impl Fn(&mut T, &mut Context) {
-	move |this, ctx| this.prefix_ws_set_indent(ctx, offset, remove_if_empty)
+/// Formats an arena value
+pub fn arena<T: WithArena>(f: impl FormatFn<T::Data>) -> impl FormatFn<ArenaIdx<T>> {
+	move |idx, ctx| {
+		let mut value = ctx.arenas().get(*idx);
+		f(&mut value, ctx);
+	}
 }
 
 /// Formats an `Option<Self>` with `f` if it is `Some`.
@@ -444,11 +474,22 @@ pub fn format_option_with<T>(f: impl FormatFn<T>) -> impl FormatFn<Option<T>> {
 	}
 }
 
-/// Formats a `Vec<Self>` with `f`
-pub fn format_vec_each_with<T>(f: impl FormatFn<T>) -> impl FormatFn<Vec<T>> {
+/// Formats *all* items of a `Vec<T>` with `f`
+pub fn format_vec_each_with_all<T>(f: impl FormatFn<T>) -> impl FormatFn<Vec<T>> {
 	move |values, ctx| {
 		for value in values {
 			f(value, ctx);
+		}
+	}
+}
+
+/// Formats a `Vec<T>` (except the first element) with `f`
+pub fn format_vec_each_with<T>(f: impl FormatFn<T>) -> impl FormatFn<Vec<T>> {
+	move |values, ctx| {
+		if let Some(values) = values.get_mut(1..) {
+			for value in values {
+				f(value, ctx);
+			}
 		}
 	}
 }

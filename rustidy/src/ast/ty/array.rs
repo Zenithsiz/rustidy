@@ -15,13 +15,15 @@ use {
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
-pub struct ArrayType(Bracketed<ArrayTypeInner>);
+pub struct ArrayType(#[format(and_with = Bracketed::format_remove)] Bracketed<ArrayTypeInner>);
 
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct ArrayTypeInner {
 	pub ty:   Box<Type>,
+	#[format(and_with = Format::prefix_ws_remove)]
 	pub semi: token::Semi,
+	#[format(and_with = Format::prefix_ws_set_single)]
 	pub expr: Expression,
 }
