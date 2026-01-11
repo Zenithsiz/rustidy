@@ -100,6 +100,11 @@ pub enum MacroMatch {
 
 	DollarIdent(MacroMatchDollarIdent),
 	DollarRep(MacroMatchDollarRep),
+
+	// Note: The reference says we shouldn't allow `$` here, but
+	//       the compiler does, so we do as well, just with lower
+	//       priority
+	Dollar(token::Dollar),
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]
