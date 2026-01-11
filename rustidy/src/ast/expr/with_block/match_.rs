@@ -61,20 +61,54 @@ impl Parse for MatchArms {
 			};
 			let arrow = parser.parse::<token::FatArrow>()?;
 
-			let (expr, trailing_comma, control_flow) = match parser.try_parse::<ExpressionWithBlock>()? {
-				Ok(expr) => {
+
+			// Note: Because of `match () { () => {} () => {} }` and `match () { () => {}?, () => {} }`
+			//       requiring look-ahead after the block expressions, we need to parse both with and
+			//       without block.
+			let with_block_res = parser.peek::<(ExpressionWithBlock, Option<token::Comma>)>()?;
+			let without_block_res = parser.peek::<(ExpressionWithoutBlock, Option<token::Comma>)>()?;
+			let (expr, trailing_comma, control_flow) = match (with_block_res, without_block_res) {
+				// If both parse, we only accept with block if the without block had no comma.
+				(
+					Ok(((expr_with_block, with_block_trailing_comma), with_block_peek_state)),
+					Ok(((expr_without_block, without_block_trailing_comma), without_block_peek_state)),
+				) => match without_block_trailing_comma {
+					Some(trailing_comma) => {
+						parser.set_peeked(without_block_peek_state);
+
+						let expr = Expression::from_recursive_root(ExpressionInner::from(expr_without_block), parser);
+						(expr, Some(trailing_comma), ControlFlow::Continue(()))
+					},
+					None => {
+						parser.set_peeked(with_block_peek_state);
+
+						let expr = Expression::from_recursive_root(ExpressionInner::from(expr_with_block), parser);
+						(expr, with_block_trailing_comma, ControlFlow::Continue(()))
+					},
+				},
+				// If only one of them parses, we take it
+				(Ok(((expr, trailing_comma), peek_state)), Err(_)) => {
+					parser.set_peeked(peek_state);
+
 					let expr = Expression::from_recursive_root(ExpressionInner::from(expr), parser);
-					let trailing_comma = parser.try_parse::<token::Comma>()?.ok();
 					(expr, trailing_comma, ControlFlow::Continue(()))
 				},
-				Err(_) => {
-					let expr = parser.parse::<ExpressionWithoutBlock>()?;
+				(Err(_), Ok(((expr, trailing_comma), peek_state))) => {
+					parser.set_peeked(peek_state);
+
 					let expr = Expression::from_recursive_root(ExpressionInner::from(expr), parser);
-					match parser.try_parse::<token::Comma>()? {
-						Ok(trailing_comma) => (expr, Some(trailing_comma), ControlFlow::Continue(())),
-						Err(_) => (expr, None, ControlFlow::Break(())),
-					}
+					let control_flow = match trailing_comma.is_some() {
+						true => ControlFlow::Continue(()),
+						false => ControlFlow::Break(()),
+					};
+
+					(expr, trailing_comma, control_flow)
 				},
+				(Err(with_block), Err(without_block)) =>
+					return Err(Self::Error::Expression {
+						with_block,
+						without_block,
+					}),
 			};
 
 			arms.push(MatchArmWithExpr {
@@ -104,11 +138,18 @@ pub enum MatchArmsError {
 
 	#[parse_error(transparent)]
 	#[parse_error(fatal)]
-	ExpressionWithBlock(ParserError<ExpressionWithBlock>),
+	ExpressionWithBlock(ParserError<(ExpressionWithBlock, Option<token::Comma>)>),
 
 	#[parse_error(transparent)]
 	#[parse_error(fatal)]
-	ExpressionWithoutBlock(ParserError<ExpressionWithoutBlock>),
+	ExpressionWithoutBlock(ParserError<(ExpressionWithoutBlock, Option<token::Comma>)>),
+
+	#[parse_error(multiple)]
+	#[parse_error(fatal)]
+	Expression {
+		with_block:    ParserError<(ExpressionWithBlock, Option<token::Comma>)>,
+		without_block: ParserError<(ExpressionWithoutBlock, Option<token::Comma>)>,
+	},
 
 	#[parse_error(transparent)]
 	#[parse_error(fatal)]

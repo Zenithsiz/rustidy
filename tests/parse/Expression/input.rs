@@ -255,6 +255,7 @@ fn match_() {
 	let _ = match a { a => {}, c => d, };
 	let _ = match a { a if b => c };
 	let _ = match a { () => {} () => {} };
+	let _ = match a { () => {}?(), () => {} };
 }
 
 fn with_attr() {
