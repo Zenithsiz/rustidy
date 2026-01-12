@@ -226,7 +226,8 @@ pub struct BlockComment(#[parse(try_update_with = Self::parse)] pub ParserStr);
 
 impl BlockComment {
 	fn parse(s: &mut &str) -> Result<(), BlockCommentError> {
-		let is_doc_comment = (s.starts_with("/**") && !s.starts_with("/***")) || s.starts_with("/*!");
+		let is_doc_comment =
+			(s.starts_with("/**") && !s.starts_with("/***") && !s.starts_with("/**/")) || s.starts_with("/*!");
 
 		match s.strip_prefix("/*") {
 			Some(rest) if !is_doc_comment => {
