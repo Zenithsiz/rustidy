@@ -90,6 +90,8 @@ impl UseTreeGroup {
 		Self::format_tree_compact(tree, ctx);
 
 		// TODO: This should include the whitespace on the current line
+		// TODO: `.len` doesn't account for any changes we made, so we need to
+		//       change it to something else.
 		if tree.len(ctx) > ctx.config().max_use_tree_len {
 			if let Some(punct) = &mut tree.value {
 				let pos = punct.range(ctx).expect("Should have a range").end;
@@ -102,7 +104,7 @@ impl UseTreeGroup {
 				punct.format(ctx, Format::prefix_ws_set_cur_indent, Format::prefix_ws_remove);
 			}
 
-			tree.format_indent_if_non_empty(ctx);
+			tree.format_indent_if_non_blank(ctx);
 		}
 	}
 }

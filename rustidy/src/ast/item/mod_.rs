@@ -38,7 +38,7 @@ pub struct Module {
 pub enum ModuleInner {
 	None(token::Semi),
 	#[format(indent)]
-	#[format(and_with = Braced::format_indent_if_non_empty)]
+	#[format(and_with = Braced::format_indent_if_non_blank)]
 	Def(Braced<WithInnerAttributes<ModuleItems>>),
 }
 

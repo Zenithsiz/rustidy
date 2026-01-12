@@ -56,7 +56,7 @@ pub enum TraitBody {
 	// Note: Nightly-only
 	Eq(TraitBodyEq),
 	#[format(indent)]
-	#[format(and_with = Braced::format_indent_if_non_empty)]
+	#[format(and_with = Braced::format_indent_if_non_blank)]
 	Full(Braced<WithInnerAttributes<TraitBodyFull>>),
 }
 

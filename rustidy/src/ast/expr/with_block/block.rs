@@ -23,7 +23,7 @@ use crate::{
 #[parse(skip_if_tag = "skip:BlockExpression")]
 pub struct BlockExpression(
 	#[format(indent)]
-	#[format(and_with = Braced::format_indent_if_non_empty)]
+	#[format(and_with = Braced::format_indent_if_non_blank)]
 	pub Braced<WithInnerAttributes<Statements>>,
 );
 

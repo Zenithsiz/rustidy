@@ -260,7 +260,7 @@ fn derive_struct(fields: &darling::ast::Fields<FieldAttrs>) -> Impls<syn::Expr, 
 
 		parse_quote! {{
 			// TODO: Once polonius comes around, move this down
-			let is_empty = crate::format::FormatRef::is_empty(&self.#field_ident, ctx);
+			let is_empty = crate::format::FormatRef::range(&self.#field_ident, ctx).is_none_or(|range| range.is_empty());
 
 			// If we used the whitespace, return
 			if let Some(value) = crate::format::Format::with_prefix_ws(&mut self.#field_ident, ctx, f) {

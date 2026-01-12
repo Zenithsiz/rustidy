@@ -31,9 +31,12 @@ pub trait FormatRef {
 		self.range(ctx).map_or(0, |range| range.len())
 	}
 
-	/// Returns if this type is empty
-	fn is_empty(&self, ctx: &Context) -> bool {
-		self.len(ctx) == 0
+	/// Returns if this type is blank (consisting of just pure whitespace)
+	fn is_blank(&self, ctx: &Context) -> bool {
+		match self.range(ctx) {
+			Some(range) => range.str(ctx.input).bytes().all(|ch| ch.is_ascii_whitespace()),
+			None => true,
+		}
 	}
 }
 

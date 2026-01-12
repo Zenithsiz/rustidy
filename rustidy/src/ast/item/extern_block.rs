@@ -29,7 +29,7 @@ pub struct ExternBlock {
 	pub abi:     Option<Abi>,
 	#[format(and_with = Format::prefix_ws_set_single)]
 	#[format(indent)]
-	#[format(and_with = Braced::format_indent_if_non_empty)]
+	#[format(and_with = Braced::format_indent_if_non_blank)]
 	pub inner:   Braced<WithInnerAttributes<ExternBlockItems>>,
 }
 

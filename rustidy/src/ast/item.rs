@@ -146,11 +146,11 @@ pub enum DeclMacroBody {
 #[derive(Parse, Format, Print)]
 pub struct DeclMacroBodyInline {
 	#[format(indent)]
-	#[format(and_with = Parenthesized::format_indent_if_non_empty)]
+	#[format(and_with = Parenthesized::format_indent_if_non_blank)]
 	pub args: Parenthesized<DelimTokenTreeInner>,
 	#[format(and_with = Format::prefix_ws_set_single)]
 	#[format(indent)]
-	#[format(and_with = Braced::format_indent_if_non_empty)]
+	#[format(and_with = Braced::format_indent_if_non_blank)]
 	pub body: Braced<DelimTokenTreeInner>,
 }
 
@@ -159,7 +159,7 @@ pub struct DeclMacroBodyInline {
 #[derive(Parse, Format, Print)]
 pub struct DeclMacroBodyBranches(
 	#[format(indent)]
-	#[format(and_with = Braced::format_indent_if_non_empty)]
+	#[format(and_with = Braced::format_indent_if_non_blank)]
 	pub Braced<DeclMacroBodyBranchesInner>,
 );
 

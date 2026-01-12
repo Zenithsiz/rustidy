@@ -37,7 +37,7 @@ pub struct Enumeration {
 	pub where_:   Option<WhereClause>,
 	#[format(and_with = Format::prefix_ws_set_single)]
 	#[format(indent)]
-	#[format(and_with = Braced::format_indent_if_non_empty)]
+	#[format(and_with = Braced::format_indent_if_non_blank)]
 	pub variants: Braced<Option<EnumVariants>>,
 }
 
@@ -93,7 +93,7 @@ pub struct EnumVariantTuple(#[format(and_with = Parenthesized::format_remove)] p
 #[derive(Parse, Format, Print)]
 pub struct EnumVariantStruct(
 	#[format(indent)]
-	#[format(and_with = Braced::format_indent_if_non_empty)]
+	#[format(and_with = Braced::format_indent_if_non_blank)]
 	pub Braced<Option<StructFields>>,
 );
 

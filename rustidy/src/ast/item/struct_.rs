@@ -51,7 +51,7 @@ pub struct StructStruct {
 pub enum StructStructInner {
 	#[format(and_with = Format::prefix_ws_set_single)]
 	#[format(indent)]
-	#[format(and_with = Braced::format_indent_if_non_empty)]
+	#[format(and_with = Braced::format_indent_if_non_blank)]
 	Fields(Braced<Option<StructFields>>),
 	#[format(and_with = Format::prefix_ws_remove)]
 	Semi(token::Semi),

@@ -33,7 +33,7 @@ pub struct MatchExpression {
 	pub scrutinee: Box<Scrutinee>,
 	#[format(indent)]
 	#[format(and_with = Format::prefix_ws_set_single)]
-	#[format(and_with = Braced::format_indent_if_non_empty)]
+	#[format(and_with = Braced::format_indent_if_non_blank)]
 	pub arms:      Braced<WithInnerAttributes<Option<MatchArms>>>,
 }
 
