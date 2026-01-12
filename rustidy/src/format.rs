@@ -127,8 +127,8 @@ impl<T: Format> Format for Box<T> {
 }
 
 impl<T: FormatRef> FormatRef for Option<T> {
-	fn range(&self, _ctx: &Context) -> Option<ParserRange> {
-		None
+	fn range(&self, ctx: &Context) -> Option<ParserRange> {
+		self.as_ref()?.range(ctx)
 	}
 
 	fn len(&self, ctx: &Context) -> usize {
