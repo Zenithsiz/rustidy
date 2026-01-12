@@ -138,7 +138,6 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 
 	let Impls {
 		range,
-		len,
 		format,
 		with_prefix_ws,
 	} = impls;
@@ -170,10 +169,6 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 			fn range(&self, ctx: &crate::format::Context) -> Option<crate::parser::ParserRange> {
 				#range
 			}
-
-			fn len(&self, ctx: &crate::format::Context) -> usize {
-				#len
-			}
 		}
 
 		#[automatically_derived]
@@ -196,14 +191,13 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 	Ok(output.into())
 }
 
-fn derive_enum(variants: &[VariantAttrs]) -> Impls<syn::Expr, syn::Expr, syn::Expr, syn::Expr> {
+fn derive_enum(variants: &[VariantAttrs]) -> Impls<syn::Expr, syn::Expr, syn::Expr> {
 	let variant_impls = variants
 		.iter()
 		.map(|variant| {
 			let variant_ident = &variant.ident;
 			let range =
 				parse_quote! { Self::#variant_ident(ref value) => crate::format::FormatRef::range(value, ctx), };
-			let len = parse_quote! { Self::#variant_ident(ref value) => crate::format::FormatRef::len(value, ctx), };
 
 			let format = self::derive_format(
 				parse_quote! { value },
@@ -220,51 +214,45 @@ fn derive_enum(variants: &[VariantAttrs]) -> Impls<syn::Expr, syn::Expr, syn::Ex
 
 			Impls {
 				range,
-				len,
 				format,
 				with_prefix_ws,
 			}
 		})
-		.collect::<Impls<Vec<syn::Arm>, Vec<syn::Arm>, Vec<syn::Arm>, Vec<syn::Arm>>>();
+		.collect::<Impls<Vec<syn::Arm>, Vec<syn::Arm>, Vec<syn::Arm>>>();
 
 
 	let Impls {
 		range,
-		len,
 		format,
 		with_prefix_ws,
 	} = variant_impls;
 	let range = parse_quote! { match *self { #( #range )* } };
-	let len = parse_quote! { match *self { #( #len )* } };
 	let format = parse_quote! { match *self { #( #format )* } };
 	let with_prefix_ws = parse_quote! { match *self { #( #with_prefix_ws )* } };
 
 	Impls {
 		range,
-		len,
 		format,
 		with_prefix_ws,
 	}
 }
 
-fn derive_struct(fields: &darling::ast::Fields<FieldAttrs>) -> Impls<syn::Expr, syn::Expr, syn::Expr, syn::Expr> {
+fn derive_struct(fields: &darling::ast::Fields<FieldAttrs>) -> Impls<syn::Expr, syn::Expr, syn::Expr> {
 	let Impls {
 		range,
-		len,
 		format,
 		with_prefix_ws: (),
 	} = fields
 		.iter()
 		.enumerate()
 		.map(|(field_idx, field)| self::derive_struct_field(field_idx, field))
-		.collect::<Impls<Vec<_>, Vec<_>, Vec<_>, ()>>();
+		.collect::<Impls<Vec<_>, Vec<_>, ()>>();
 
 	let range = parse_quote! {{
 		let mut compute_range = crate::format::ComputeRange::default();
 		#( #range; )*
 		compute_range.finish()
 	}};
-	let len = parse_quote! { 0 #( + #len )* };
 	let format = parse_quote! {{ #( #format; )* }};
 
 	let with_prefix_ws_fields = fields.iter().enumerate().map(|(field_idx, field)| -> syn::Expr {
@@ -294,17 +282,15 @@ fn derive_struct(fields: &darling::ast::Fields<FieldAttrs>) -> Impls<syn::Expr, 
 
 	Impls {
 		range,
-		len,
 		format,
 		with_prefix_ws,
 	}
 }
 
-fn derive_struct_field(field_idx: usize, field: &FieldAttrs) -> Impls<syn::Expr, syn::Expr, syn::Expr, ()> {
+fn derive_struct_field(field_idx: usize, field: &FieldAttrs) -> Impls<syn::Expr, syn::Expr, ()> {
 	let field_ident = util::field_member_access(field_idx, field);
 
 	let range = parse_quote! { compute_range.add(&self.#field_ident, ctx) };
-	let len = parse_quote! { crate::format::FormatRef::len(&self.#field_ident, ctx) };
 
 	let format = self::derive_format(
 		parse_quote! { &mut self.#field_ident },
@@ -316,7 +302,6 @@ fn derive_struct_field(field_idx: usize, field: &FieldAttrs) -> Impls<syn::Expr,
 
 	Impls {
 		range,
-		len,
 		format,
 		with_prefix_ws: (),
 	}
@@ -464,25 +449,22 @@ fn derive_and_with_wrapper(fields: &darling::ast::Fields<FieldAttrs>, and_with_w
 }
 
 #[derive(Default, Debug)]
-struct Impls<Range, Len, Format, PrefixWs> {
+struct Impls<Range, Format, PrefixWs> {
 	range:          Range,
-	len:            Len,
 	format:         Format,
 	with_prefix_ws: PrefixWs,
 }
 
-impl<T0, T1, T2, T3, A0, A1, A2, A3> FromIterator<Impls<A0, A1, A2, A3>> for Impls<T0, T1, T2, T3>
+impl<T0, T1, T2, A0, A1, A2> FromIterator<Impls<A0, A1, A2>> for Impls<T0, T1, T2>
 where
 	T0: Default + Extend<A0>,
 	T1: Default + Extend<A1>,
 	T2: Default + Extend<A2>,
-	T3: Default + Extend<A3>,
 {
-	fn from_iter<I: IntoIterator<Item = Impls<A0, A1, A2, A3>>>(iter: I) -> Self {
+	fn from_iter<I: IntoIterator<Item = Impls<A0, A1, A2>>>(iter: I) -> Self {
 		let mut output = Self::default();
 		for impls in iter {
 			output.range.extend_one(impls.range);
-			output.len.extend_one(impls.len);
 			output.format.extend_one(impls.format);
 			output.with_prefix_ws.extend_one(impls.with_prefix_ws);
 		}

@@ -94,10 +94,6 @@ impl FormatRef for Whitespace {
 	fn range(&self, ctx: &format::Context) -> Option<ParserRange> {
 		ctx.arenas().get(self.0).range(ctx)
 	}
-
-	fn len(&self, ctx: &format::Context) -> usize {
-		ctx.arenas().get(self.0).len(ctx)
-	}
 }
 
 impl Format for Whitespace {

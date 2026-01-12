@@ -36,10 +36,6 @@ impl FormatRef for ParserStr {
 	fn range(&self, ctx: &format::Context) -> Option<super::ParserRange> {
 		Some(Self::range(self, ctx.arenas()))
 	}
-
-	fn len(&self, ctx: &format::Context) -> usize {
-		Self::range(self, ctx.arenas()).len()
-	}
 }
 
 impl Format for ParserStr {

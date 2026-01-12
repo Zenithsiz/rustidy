@@ -27,7 +27,9 @@ pub trait FormatRef {
 	fn range(&self, ctx: &Context) -> Option<ParserRange>;
 
 	/// Returns the length of this type
-	fn len(&self, ctx: &Context) -> usize;
+	fn len(&self, ctx: &Context) -> usize {
+		self.range(ctx).map_or(0, |range| range.len())
+	}
 
 	/// Returns if this type is empty
 	fn is_empty(&self, ctx: &Context) -> bool {
@@ -74,19 +76,11 @@ impl<T: FormatRef> FormatRef for &'_ T {
 	fn range(&self, ctx: &Context) -> Option<ParserRange> {
 		(**self).range(ctx)
 	}
-
-	fn len(&self, ctx: &Context) -> usize {
-		(**self).len(ctx)
-	}
 }
 
 impl<T: FormatRef> FormatRef for &'_ mut T {
 	fn range(&self, ctx: &Context) -> Option<ParserRange> {
 		(**self).range(ctx)
-	}
-
-	fn len(&self, ctx: &Context) -> usize {
-		(**self).len(ctx)
 	}
 }
 
@@ -107,10 +101,6 @@ impl<T: FormatRef> FormatRef for Box<T> {
 	fn range(&self, ctx: &Context) -> Option<ParserRange> {
 		(**self).range(ctx)
 	}
-
-	fn len(&self, ctx: &Context) -> usize {
-		(**self).len(ctx)
-	}
 }
 
 impl<T: Format> Format for Box<T> {
@@ -129,13 +119,6 @@ impl<T: Format> Format for Box<T> {
 impl<T: FormatRef> FormatRef for Option<T> {
 	fn range(&self, ctx: &Context) -> Option<ParserRange> {
 		self.as_ref()?.range(ctx)
-	}
-
-	fn len(&self, ctx: &Context) -> usize {
-		match self {
-			Some(value) => value.len(ctx),
-			None => 0,
-		}
 	}
 }
 
@@ -163,10 +146,6 @@ impl<T: FormatRef> FormatRef for Vec<T> {
 		compute_range.extend(self, ctx);
 		compute_range.finish()
 	}
-
-	fn len(&self, ctx: &Context) -> usize {
-		self.iter().map(|value| value.len(ctx)).sum()
-	}
 }
 
 impl<T: Format> Format for Vec<T> {
@@ -191,10 +170,6 @@ impl FormatRef for ! {
 	fn range(&self, _ctx: &Context) -> Option<ParserRange> {
 		*self
 	}
-
-	fn len(&self, _ctx: &Context) -> usize {
-		*self
-	}
 }
 
 impl Format for ! {
@@ -214,10 +189,6 @@ impl<T> FormatRef for PhantomData<T> {
 	fn range(&self, _ctx: &Context) -> Option<ParserRange> {
 		None
 	}
-
-	fn len(&self, _ctx: &Context) -> usize {
-		0
-	}
 }
 
 impl<T> Format for PhantomData<T> {
@@ -234,10 +205,6 @@ impl<T> Format for PhantomData<T> {
 impl FormatRef for () {
 	fn range(&self, _ctx: &Context) -> Option<ParserRange> {
 		None
-	}
-
-	fn len(&self, _ctx: &Context) -> usize {
-		0
 	}
 }
 
@@ -269,11 +236,6 @@ macro tuple_impl ($N:literal, $($T:ident),* $(,)?) {
 			$( compute_range.add($T, ctx); )*
 			compute_range.finish()
 		}
-
-		fn len(&self, ctx: &Context) -> usize {
-			let ( $($T,)* ) = self;
-			${concat( Tuple, $N )} { $( $T, )* }.len(ctx)
-		}
 	}
 
 	#[automatically_derived]
@@ -301,10 +263,6 @@ tuple_impl! { 3, T0, T1, T2 }
 impl<T: ArenaData<Data: FormatRef> + WithArena> FormatRef for ArenaIdx<T> {
 	fn range(&self, ctx: &Context) -> Option<ParserRange> {
 		ctx.arenas().get(*self).range(ctx)
-	}
-
-	fn len(&self, ctx: &Context) -> usize {
-		ctx.arenas().get(*self).len(ctx)
 	}
 }
 
