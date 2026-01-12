@@ -30,6 +30,22 @@ pub fn format() {
 		input.print(&mut print_fmt);
 		let found_output = print_fmt.output();
 
+		{
+			let mut replacements = Replacements::new();
+			let config = format::Config::default();
+			let mut ctx = format::Context::new(&file, &mut replacements, &arenas, &config);
+			input.format(&mut ctx);
+
+			let mut print_fmt = PrintFmt::new(&file, &replacements, &arenas);
+			input.print(&mut print_fmt);
+
+			assert_eq!(
+				found_output,
+				print_fmt.output(),
+				"Formatting twice did not yield the same output"
+			);
+		}
+
 		let output_path = test_dir.join("output.rs");
 		match env::var("UPDATE_FORMAT_OUTPUT").is_ok_and(|value| !value.trim().is_empty()) {
 			true => {
