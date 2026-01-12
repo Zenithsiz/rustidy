@@ -5337,13 +5337,13 @@
 										"suffix": [54, 109]
 									},
 									"segments": {
-										"first": [
-											[55, 111],
-											{
+										"first": {
+											"sep": [55, 111],
+											"segment": {
 												"ident": { "Ident": { "NonKw": [56, 113] } },
 												"generic": null
 											}
-										],
+										},
 										"rest": []
 									}
 								}
@@ -7570,7 +7570,10 @@
 							"Tuple": {
 								"prefix": [449, 899],
 								"value": {
-									"exprs": { "first": [135, [451, 903]], "rest": [] },
+									"exprs": {
+										"first": { "expr": 135, "comma": [451, 903] },
+										"rest": []
+									},
 									"last": null
 								},
 								"suffix": [452, 905]
@@ -7613,7 +7616,10 @@
 							"Tuple": {
 								"prefix": [457, 915],
 								"value": {
-									"exprs": { "first": [137, [459, 919]], "rest": [] },
+									"exprs": {
+										"first": { "expr": 137, "comma": [459, 919] },
+										"rest": []
+									},
 									"last": 138
 								},
 								"suffix": [461, 923]
@@ -7657,8 +7663,8 @@
 								"prefix": [466, 933],
 								"value": {
 									"exprs": {
-										"first": [140, [468, 937]],
-										"rest": [[141, [470, 941]]]
+										"first": { "expr": 140, "comma": [468, 937] },
+										"rest": [{ "expr": 141, "comma": [470, 941] }]
 									},
 									"last": null
 								},
