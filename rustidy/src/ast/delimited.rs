@@ -25,7 +25,7 @@ impl<T, L, R> Delimited<T, L, R> {
 		T: Format,
 		R: Format,
 	{
-		match self.value.is_blank(ctx) {
+		match self.value.input_is_blank(ctx) {
 			true => {
 				self.value.prefix_ws_set_single(ctx);
 				self.suffix.prefix_ws_remove(ctx);
@@ -43,7 +43,7 @@ impl<T, L, R> Delimited<T, L, R> {
 		T: Format,
 		R: Format,
 	{
-		match self.value.is_blank(ctx) {
+		match self.value.input_is_blank(ctx) {
 			true => {
 				self.value.prefix_ws_remove(ctx);
 				self.suffix.prefix_ws_set_indent(ctx, -1, true);

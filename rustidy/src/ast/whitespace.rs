@@ -91,8 +91,8 @@ impl ArenaData for Whitespace {
 }
 
 impl FormatRef for Whitespace {
-	fn range(&self, ctx: &format::Context) -> Option<ParserRange> {
-		ctx.arenas().get(self.0).range(ctx)
+	fn input_range(&self, ctx: &format::Context) -> Option<ParserRange> {
+		ctx.arenas().get(self.0).input_range(ctx)
 	}
 }
 

@@ -33,7 +33,7 @@ impl ArenaData for ParserStr {
 }
 
 impl FormatRef for ParserStr {
-	fn range(&self, ctx: &format::Context) -> Option<super::ParserRange> {
+	fn input_range(&self, ctx: &format::Context) -> Option<super::ParserRange> {
 		Some(Self::range(self, ctx.arenas()))
 	}
 }

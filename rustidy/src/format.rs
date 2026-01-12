@@ -23,17 +23,17 @@ use {
 /// Formattable read-only utils
 // TODO: Better name?
 pub trait FormatRef {
-	/// Returns the range of this type
-	fn range(&self, ctx: &Context) -> Option<ParserRange>;
+	/// Returns the input range of this type
+	fn input_range(&self, ctx: &Context) -> Option<ParserRange>;
 
-	/// Returns the length of this type
-	fn len(&self, ctx: &Context) -> usize {
-		self.range(ctx).map_or(0, |range| range.len())
+	/// Returns the input length of this type
+	fn input_len(&self, ctx: &Context) -> usize {
+		self.input_range(ctx).map_or(0, |range| range.len())
 	}
 
-	/// Returns if this type is blank (consisting of just pure whitespace)
-	fn is_blank(&self, ctx: &Context) -> bool {
-		match self.range(ctx) {
+	/// Returns if the input string of this type is blank (consisting of just pure whitespace)
+	fn input_is_blank(&self, ctx: &Context) -> bool {
+		match self.input_range(ctx) {
 			Some(range) => range.str(ctx.input).bytes().all(|ch| ch.is_ascii_whitespace()),
 			None => true,
 		}
@@ -76,14 +76,14 @@ pub trait Format: FormatRef {
 }
 
 impl<T: FormatRef> FormatRef for &'_ T {
-	fn range(&self, ctx: &Context) -> Option<ParserRange> {
-		(**self).range(ctx)
+	fn input_range(&self, ctx: &Context) -> Option<ParserRange> {
+		(**self).input_range(ctx)
 	}
 }
 
 impl<T: FormatRef> FormatRef for &'_ mut T {
-	fn range(&self, ctx: &Context) -> Option<ParserRange> {
-		(**self).range(ctx)
+	fn input_range(&self, ctx: &Context) -> Option<ParserRange> {
+		(**self).input_range(ctx)
 	}
 }
 
@@ -101,8 +101,8 @@ impl<T: Format> Format for &'_ mut T {
 }
 
 impl<T: FormatRef> FormatRef for Box<T> {
-	fn range(&self, ctx: &Context) -> Option<ParserRange> {
-		(**self).range(ctx)
+	fn input_range(&self, ctx: &Context) -> Option<ParserRange> {
+		(**self).input_range(ctx)
 	}
 }
 
@@ -120,8 +120,8 @@ impl<T: Format> Format for Box<T> {
 }
 
 impl<T: FormatRef> FormatRef for Option<T> {
-	fn range(&self, ctx: &Context) -> Option<ParserRange> {
-		self.as_ref()?.range(ctx)
+	fn input_range(&self, ctx: &Context) -> Option<ParserRange> {
+		self.as_ref()?.input_range(ctx)
 	}
 }
 
@@ -144,7 +144,7 @@ impl<T: Format> Format for Option<T> {
 }
 
 impl<T: FormatRef> FormatRef for Vec<T> {
-	fn range(&self, ctx: &Context) -> Option<ParserRange> {
+	fn input_range(&self, ctx: &Context) -> Option<ParserRange> {
 		let mut compute_range = ComputeRange::default();
 		compute_range.extend(self, ctx);
 		compute_range.finish()
@@ -170,7 +170,7 @@ impl<T: Format> Format for Vec<T> {
 }
 
 impl FormatRef for ! {
-	fn range(&self, _ctx: &Context) -> Option<ParserRange> {
+	fn input_range(&self, _ctx: &Context) -> Option<ParserRange> {
 		*self
 	}
 }
@@ -189,7 +189,7 @@ impl Format for ! {
 }
 
 impl<T> FormatRef for PhantomData<T> {
-	fn range(&self, _ctx: &Context) -> Option<ParserRange> {
+	fn input_range(&self, _ctx: &Context) -> Option<ParserRange> {
 		None
 	}
 }
@@ -206,7 +206,7 @@ impl<T> Format for PhantomData<T> {
 }
 
 impl FormatRef for () {
-	fn range(&self, _ctx: &Context) -> Option<ParserRange> {
+	fn input_range(&self, _ctx: &Context) -> Option<ParserRange> {
 		None
 	}
 }
@@ -232,7 +232,7 @@ macro tuple_impl ($N:literal, $($T:ident),* $(,)?) {
 	#[automatically_derived]
 	#[expect(non_snake_case)]
 	impl< $($T: FormatRef,)* > FormatRef for ( $($T,)* ) {
-		fn range(&self, ctx: &Context) -> Option<ParserRange> {
+		fn input_range(&self, ctx: &Context) -> Option<ParserRange> {
 			let ( $($T,)* ) = self;
 
 			let mut compute_range = ComputeRange::default();
@@ -264,8 +264,8 @@ tuple_impl! { 2, T0, T1 }
 tuple_impl! { 3, T0, T1, T2 }
 
 impl<T: ArenaData<Data: FormatRef> + WithArena> FormatRef for ArenaIdx<T> {
-	fn range(&self, ctx: &Context) -> Option<ParserRange> {
-		ctx.arenas().get(*self).range(ctx)
+	fn input_range(&self, ctx: &Context) -> Option<ParserRange> {
+		ctx.arenas().get(*self).input_range(ctx)
 	}
 }
 
@@ -472,7 +472,7 @@ impl ComputeRange {
 
 	/// Adds the next item to this
 	pub fn add<T: FormatRef>(&mut self, item: T, ctx: &Context) {
-		let Some(range) = item.range(ctx) else { return };
+		let Some(range) = item.input_range(ctx) else { return };
 		self.add_range(range);
 	}
 

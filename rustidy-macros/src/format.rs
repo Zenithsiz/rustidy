@@ -137,7 +137,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 	let (impl_generics, ty_generics, impl_where_clause) = impl_generics.split_for_impl();
 
 	let Impls {
-		range,
+		input_range,
 		format,
 		with_prefix_ws,
 	} = impls;
@@ -166,8 +166,8 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 	let output = quote! {
 		#[automatically_derived]
 		impl #impl_ref_generics crate::format::FormatRef for #item_ident #ty_ref_generics #impl_ref_where_clause {
-			fn range(&self, ctx: &crate::format::Context) -> Option<crate::parser::ParserRange> {
-				#range
+			fn input_range(&self, ctx: &crate::format::Context) -> Option<crate::parser::ParserRange> {
+				#input_range
 			}
 		}
 
@@ -196,8 +196,8 @@ fn derive_enum(variants: &[VariantAttrs]) -> Impls<syn::Expr, syn::Expr, syn::Ex
 		.iter()
 		.map(|variant| {
 			let variant_ident = &variant.ident;
-			let range =
-				parse_quote! { Self::#variant_ident(ref value) => crate::format::FormatRef::range(value, ctx), };
+			let input_range =
+				parse_quote! { Self::#variant_ident(ref value) => crate::format::FormatRef::input_range(value, ctx), };
 
 			let format = self::derive_format(
 				parse_quote! { value },
@@ -213,7 +213,7 @@ fn derive_enum(variants: &[VariantAttrs]) -> Impls<syn::Expr, syn::Expr, syn::Ex
 			let with_prefix_ws = parse_quote! { Self::#variant_ident(ref mut value) => value.with_prefix_ws(ctx, f), };
 
 			Impls {
-				range,
+				input_range,
 				format,
 				with_prefix_ws,
 			}
@@ -222,16 +222,16 @@ fn derive_enum(variants: &[VariantAttrs]) -> Impls<syn::Expr, syn::Expr, syn::Ex
 
 
 	let Impls {
-		range,
+		input_range,
 		format,
 		with_prefix_ws,
 	} = variant_impls;
-	let range = parse_quote! { match *self { #( #range )* } };
+	let input_range = parse_quote! { match *self { #( #input_range )* } };
 	let format = parse_quote! { match *self { #( #format )* } };
 	let with_prefix_ws = parse_quote! { match *self { #( #with_prefix_ws )* } };
 
 	Impls {
-		range,
+		input_range,
 		format,
 		with_prefix_ws,
 	}
@@ -239,7 +239,7 @@ fn derive_enum(variants: &[VariantAttrs]) -> Impls<syn::Expr, syn::Expr, syn::Ex
 
 fn derive_struct(fields: &darling::ast::Fields<FieldAttrs>) -> Impls<syn::Expr, syn::Expr, syn::Expr> {
 	let Impls {
-		range,
+		input_range,
 		format,
 		with_prefix_ws: (),
 	} = fields
@@ -248,9 +248,9 @@ fn derive_struct(fields: &darling::ast::Fields<FieldAttrs>) -> Impls<syn::Expr, 
 		.map(|(field_idx, field)| self::derive_struct_field(field_idx, field))
 		.collect::<Impls<Vec<_>, Vec<_>, ()>>();
 
-	let range = parse_quote! {{
+	let input_range = parse_quote! {{
 		let mut compute_range = crate::format::ComputeRange::default();
-		#( #range; )*
+		#( #input_range; )*
 		compute_range.finish()
 	}};
 	let format = parse_quote! {{ #( #format; )* }};
@@ -260,7 +260,7 @@ fn derive_struct(fields: &darling::ast::Fields<FieldAttrs>) -> Impls<syn::Expr, 
 
 		parse_quote! {{
 			// TODO: Once polonius comes around, move this down
-			let is_empty = crate::format::FormatRef::range(&self.#field_ident, ctx).is_none_or(|range| range.is_empty());
+			let is_empty = crate::format::FormatRef::input_range(&self.#field_ident, ctx).is_none_or(|range| range.is_empty());
 
 			// If we used the whitespace, return
 			if let Some(value) = crate::format::Format::with_prefix_ws(&mut self.#field_ident, ctx, f) {
@@ -281,7 +281,7 @@ fn derive_struct(fields: &darling::ast::Fields<FieldAttrs>) -> Impls<syn::Expr, 
 	}};
 
 	Impls {
-		range,
+		input_range,
 		format,
 		with_prefix_ws,
 	}
@@ -290,7 +290,7 @@ fn derive_struct(fields: &darling::ast::Fields<FieldAttrs>) -> Impls<syn::Expr, 
 fn derive_struct_field(field_idx: usize, field: &FieldAttrs) -> Impls<syn::Expr, syn::Expr, ()> {
 	let field_ident = util::field_member_access(field_idx, field);
 
-	let range = parse_quote! { compute_range.add(&self.#field_ident, ctx) };
+	let input_range = parse_quote! { compute_range.add(&self.#field_ident, ctx) };
 
 	let format = self::derive_format(
 		parse_quote! { &mut self.#field_ident },
@@ -301,7 +301,7 @@ fn derive_struct_field(field_idx: usize, field: &FieldAttrs) -> Impls<syn::Expr,
 	);
 
 	Impls {
-		range,
+		input_range,
 		format,
 		with_prefix_ws: (),
 	}
@@ -449,8 +449,8 @@ fn derive_and_with_wrapper(fields: &darling::ast::Fields<FieldAttrs>, and_with_w
 }
 
 #[derive(Default, Debug)]
-struct Impls<Range, Format, PrefixWs> {
-	range:          Range,
+struct Impls<InputRange, Format, PrefixWs> {
+	input_range:    InputRange,
 	format:         Format,
 	with_prefix_ws: PrefixWs,
 }
@@ -464,7 +464,7 @@ where
 	fn from_iter<I: IntoIterator<Item = Impls<A0, A1, A2>>>(iter: I) -> Self {
 		let mut output = Self::default();
 		for impls in iter {
-			output.range.extend_one(impls.range);
+			output.input_range.extend_one(impls.input_range);
 			output.format.extend_one(impls.format);
 			output.with_prefix_ws.extend_one(impls.with_prefix_ws);
 		}
