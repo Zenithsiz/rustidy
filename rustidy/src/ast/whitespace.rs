@@ -70,18 +70,18 @@ impl Whitespace {
 	}
 
 	fn format(&self, ctx: &mut format::Context, kind: FormatKind) {
-		let mut inner = ctx.arenas().get(self.0);
+		let mut inner = ctx.arenas().get(&self.0);
 
-		let prefix_str = kind.prefix_str(ctx, inner.first.0, inner.rest.is_empty());
-		ctx.replace(inner.first.0, prefix_str);
+		let prefix_str = kind.prefix_str(ctx, &inner.first.0, inner.rest.is_empty());
+		ctx.replace(&inner.first.0, prefix_str);
 
 		for (pos, (comment, ws)) in inner.rest.iter_mut().with_position() {
 			let is_last = matches!(pos, itertools::Position::Last | itertools::Position::Only);
 			let ws_str = match comment.is_line() {
-				true => kind.after_newline_str(ctx, ws.0, is_last),
-				false => kind.normal_str(ctx, ws.0, is_last),
+				true => kind.after_newline_str(ctx, &ws.0, is_last),
+				false => kind.normal_str(ctx, &ws.0, is_last),
 			};
-			ctx.replace(ws.0, ws_str);
+			ctx.replace(&ws.0, ws_str);
 		}
 	}
 }
@@ -92,7 +92,7 @@ impl ArenaData for Whitespace {
 
 impl FormatRef for Whitespace {
 	fn input_range(&self, ctx: &format::Context) -> Option<ParserRange> {
-		ctx.arenas().get(self.0).input_range(ctx)
+		ctx.arenas().get(&self.0).input_range(ctx)
 	}
 }
 
@@ -131,7 +131,7 @@ impl FormatKind {
 	}
 
 	/// Returns the indentation string, with a newline *before*
-	fn indent_str_nl(ctx: &mut format::Context, cur_str: ParserStr) -> String {
+	fn indent_str_nl(ctx: &mut format::Context, cur_str: &ParserStr) -> String {
 		// TODO: Should we be checking for multiple newlines?
 		let after_newline = cur_str.range(ctx.arenas()).str_before(ctx.input()).ends_with('\n');
 
@@ -148,7 +148,7 @@ impl FormatKind {
 	}
 
 	/// Returns the prefix string
-	fn prefix_str(self, ctx: &mut format::Context, cur_str: ParserStr, is_last: bool) -> Replacement {
+	fn prefix_str(self, ctx: &mut format::Context, cur_str: &ParserStr, is_last: bool) -> Replacement {
 		match self {
 			Self::Remove => "".into(),
 			Self::Single => " ".into(),
@@ -165,7 +165,7 @@ impl FormatKind {
 	}
 
 	/// Returns the string after a newline
-	fn after_newline_str(self, ctx: &mut format::Context, cur_str: ParserStr, is_last: bool) -> Replacement {
+	fn after_newline_str(self, ctx: &mut format::Context, cur_str: &ParserStr, is_last: bool) -> Replacement {
 		match self {
 			Self::Remove | Self::Single => "".into(),
 			Self::Indent { offset, .. } => match is_last {
@@ -177,7 +177,7 @@ impl FormatKind {
 	}
 
 	/// Returns the normal string
-	fn normal_str(self, ctx: &mut format::Context, cur_str: ParserStr, is_last: bool) -> Replacement {
+	fn normal_str(self, ctx: &mut format::Context, cur_str: &ParserStr, is_last: bool) -> Replacement {
 		match self {
 			Self::Remove => "".into(),
 			Self::Single => " ".into(),

@@ -19,7 +19,7 @@ pub struct SuffixNoE(pub Suffix);
 
 impl SuffixNoE {
 	fn check_no_e(&self, parser: &mut Parser) -> Result<(), SuffixNoEError> {
-		if parser.str(self.0.0.1).starts_with(['e', 'E']) {
+		if parser.str(&self.0.0.1).starts_with(['e', 'E']) {
 			return Err(SuffixNoEError::StartedWithE);
 		}
 

@@ -85,7 +85,7 @@ tuple_impl! { 3, T0, T1, T2 }
 
 impl<T: ArenaData<Data: Print> + WithArena> Print for ArenaIdx<T> {
 	fn print(&self, f: &mut PrintFmt) {
-		f.arenas.get(*self).print(f);
+		f.arenas.get(self).print(f);
 	}
 }
 
@@ -110,7 +110,7 @@ impl<'a, 'input> PrintFmt<'a, 'input> {
 	}
 
 	/// Writes an ast string
-	pub fn write_str(&mut self, s: ParserStr) {
+	pub fn write_str(&mut self, s: &ParserStr) {
 		match self.replacements.get(s) {
 			Some(replacement) => replacement.write(&mut self.output),
 			None => self.output.push_str(s.range(self.arenas).str(self.input)),

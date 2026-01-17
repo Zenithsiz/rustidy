@@ -15,7 +15,7 @@ use {
 };
 
 /// Parser string
-#[derive(PartialEq, Eq, Clone, Copy, Hash, Debug)]
+#[derive(PartialEq, Eq, Hash, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[must_use = "Parser output must not be discarded"]
 pub struct ParserStr(pub ArenaIdx<Self>);
@@ -24,7 +24,7 @@ impl ParserStr {
 	/// Returns the parser range of this string
 	#[must_use]
 	pub fn range(&self, arenas: &Arenas) -> ParserRange {
-		*arenas.get(self.0)
+		*arenas.get(&self.0)
 	}
 }
 
@@ -52,6 +52,6 @@ impl Format for ParserStr {
 
 impl Print for ParserStr {
 	fn print(&self, f: &mut crate::PrintFmt) {
-		f.write_str(*self);
+		f.write_str(self);
 	}
 }

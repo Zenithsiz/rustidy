@@ -5,7 +5,7 @@ use {crate::ParserStr, std::collections::HashMap};
 
 /// String replacements
 pub struct Replacements {
-	replacements: HashMap<ParserStr, Replacement>,
+	replacements: HashMap<u32, Replacement>,
 }
 
 impl Replacements {
@@ -18,18 +18,18 @@ impl Replacements {
 	}
 
 	/// Adds a replacement
-	pub fn add(&mut self, s: ParserStr, s_str: &str, replacement: impl Into<Replacement>) {
+	pub fn add(&mut self, s: &ParserStr, s_str: &str, replacement: impl Into<Replacement>) {
 		let replacement = replacement.into();
 		match replacement.is(s_str) {
-			true => _ = self.replacements.remove(&s),
-			false => _ = self.replacements.insert(s, replacement),
+			true => _ = self.replacements.remove(&s.0.id()),
+			false => _ = self.replacements.insert(s.0.id(), replacement),
 		}
 	}
 
 	/// Returns the replacement of a string
 	#[must_use]
-	pub fn get(&self, s: ParserStr) -> Option<&Replacement> {
-		self.replacements.get(&s)
+	pub fn get(&self, s: &ParserStr) -> Option<&Replacement> {
+		self.replacements.get(&s.0.id())
 	}
 }
 

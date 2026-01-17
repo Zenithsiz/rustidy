@@ -265,13 +265,13 @@ tuple_impl! { 3, T0, T1, T2 }
 
 impl<T: ArenaData<Data: FormatRef> + WithArena> FormatRef for ArenaIdx<T> {
 	fn input_range(&self, ctx: &Context) -> Option<ParserRange> {
-		ctx.arenas().get(*self).input_range(ctx)
+		ctx.arenas().get(self).input_range(ctx)
 	}
 }
 
 impl<T: ArenaData<Data: Format> + WithArena> Format for ArenaIdx<T> {
 	fn format(&mut self, ctx: &mut Context) {
-		ctx.arenas().get(*self).format(ctx);
+		ctx.arenas().get(self).format(ctx);
 	}
 
 	fn with_prefix_ws<R, F: Fn(&mut Whitespace, &mut Context) -> R + Copy>(
@@ -279,7 +279,7 @@ impl<T: ArenaData<Data: Format> + WithArena> Format for ArenaIdx<T> {
 		ctx: &mut Context,
 		f: F,
 	) -> Option<R> {
-		ctx.arenas().get(*self).with_prefix_ws(ctx, f)
+		ctx.arenas().get(self).with_prefix_ws(ctx, f)
 	}
 }
 
@@ -318,7 +318,7 @@ impl<'a, 'input> Context<'a, 'input> {
 
 	/// Returns the string of a string
 	#[must_use]
-	pub fn str(&mut self, s: ParserStr) -> &'input str {
+	pub fn str(&mut self, s: &ParserStr) -> &'input str {
 		s.range(self.arenas).str(self.input)
 	}
 
@@ -358,12 +358,12 @@ impl<'a, 'input> Context<'a, 'input> {
 		replacement: impl Into<Replacement>,
 	) -> ParserStr {
 		let s = self.create_str_at(pos);
-		self.replace(s, replacement);
+		self.replace(&s, replacement);
 		s
 	}
 
 	/// Replaces a string
-	pub fn replace(&mut self, s: ParserStr, replacement: impl Into<Replacement>) {
+	pub fn replace(&mut self, s: &ParserStr, replacement: impl Into<Replacement>) {
 		self.replacements
 			.add(s, s.range(self.arenas).str(self.input), replacement);
 	}
@@ -421,7 +421,7 @@ pub trait FormatFn<T: ?Sized> = Fn(&mut T, &mut Context);
 /// Formats an arena value
 pub fn arena<T: WithArena>(f: impl FormatFn<T::Data>) -> impl FormatFn<ArenaIdx<T>> {
 	move |idx, ctx| {
-		let mut value = ctx.arenas().get(*idx);
+		let mut value = ctx.arenas().get(idx);
 		f(&mut value, ctx);
 	}
 }

@@ -42,7 +42,7 @@ impl<T: ?Sized + ArenaData> Arena<T> {
 	}
 
 	/// Borrows a value at an index
-	pub fn get(&self, idx: ArenaIdx<T>) -> ArenaRef<'_, T> {
+	pub fn get(&self, idx: &ArenaIdx<T>) -> ArenaRef<'_, T> {
 		let idx = idx.inner as usize;
 		let value = self
 			.data
@@ -177,6 +177,14 @@ pub struct ArenaIdx<T: ?Sized> {
 	phantom: PhantomData<T>,
 }
 
+impl<T: ?Sized> ArenaIdx<T> {
+	/// Returns a unique id for this arena index
+	#[must_use]
+	pub const fn id(&self) -> u32 {
+		self.inner
+	}
+}
+
 impl<T: ?Sized> PartialEq for ArenaIdx<T> {
 	fn eq(&self, other: &Self) -> bool {
 		self.inner == other.inner
@@ -184,14 +192,6 @@ impl<T: ?Sized> PartialEq for ArenaIdx<T> {
 }
 
 impl<T: ?Sized> Eq for ArenaIdx<T> {}
-
-impl<T: ?Sized> Clone for ArenaIdx<T> {
-	fn clone(&self) -> Self {
-		*self
-	}
-}
-
-impl<T: ?Sized> Copy for ArenaIdx<T> {}
 
 impl<T: ?Sized> Hash for ArenaIdx<T> {
 	fn hash<H: Hasher>(&self, state: &mut H) {
@@ -253,7 +253,7 @@ macro arenas(
 
 		/// Borrows a value of `T`
 		#[must_use]
-		pub fn $get<T: ?Sized + WithArena>(&self, idx: ArenaIdx<T>) -> ArenaRef<'_, T> {
+		pub fn $get<T: ?Sized + WithArena>(&self, idx: &ArenaIdx<T>) -> ArenaRef<'_, T> {
 			self.$arena::<T>().get(idx)
 		}
 

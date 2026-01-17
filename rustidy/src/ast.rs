@@ -63,12 +63,12 @@ impl Crate {
 	fn format_trailing_line_comment(trailing: &mut Option<TrailingLineComment>, ctx: &mut format::Context) {
 		let Some(trailing) = trailing else { return };
 
-		let mut s = ctx.str(trailing.0).to_owned();
+		let mut s = ctx.str(&trailing.0).to_owned();
 
 		// Add the newline at the end of the trailing comment if it didn't have one already
 		if !s.ends_with('\n') {
 			s.push('\n');
-			ctx.replace(trailing.0, s);
+			ctx.replace(&trailing.0, s);
 		}
 	}
 }

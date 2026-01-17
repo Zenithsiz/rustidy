@@ -311,7 +311,7 @@ impl<'a, 'input> Parser<'a, 'input> {
 
 	/// Returns the string of an range
 	#[must_use]
-	pub fn str(&mut self, s: ParserStr) -> &'input str {
+	pub fn str(&mut self, s: &ParserStr) -> &'input str {
 		s.range(self.arenas).str(self.input)
 	}
 

@@ -63,7 +63,7 @@ pub macro decl_tokens(
 			fn check(&mut self, parser: &mut Parser) -> Result<(), <Self as Parse>::Error> {
 				// Note: This checks prevents matching `match` on `matches`
 				{
-					let token = parser.str(self.1);
+					let token = parser.str(&self.1);
 					let remaining = parser.remaining();
 
 					if token.ends_with(unicode_ident::is_xid_continue) &&
