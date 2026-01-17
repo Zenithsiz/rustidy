@@ -227,17 +227,18 @@ fn parse<R: ParsableRecursive<R>>(
 
 		let parsed = match (prefix, base) {
 			(Ok((prefix, prefix_state)), Ok((base, base_state))) => {
-				parser.set_peeked(base_state.clone());
+				parser.set_peeked(base_state);
 				match peek::<R::Base>(parser, &tags)
 					.map_err(RecursiveWrapperError::Base)?
 					.is_ok()
 				{
 					true => Either::Left((prefix, prefix_state)),
-					false => Either::Right((base, base_state)),
+					// TODO: We should undo the peek here
+					false => Either::Right((base, None)),
 				}
 			},
 			(Ok((prefix, prefix_state)), Err(_)) => Either::Left((prefix, prefix_state)),
-			(Err(_), Ok((base, base_state))) => Either::Right((base, base_state)),
+			(Err(_), Ok((base, base_state))) => Either::Right((base, Some(base_state))),
 			(Err(prefix), Err(base)) => return Err(RecursiveWrapperError::PrefixOrBase { prefix, base }),
 		};
 
@@ -247,7 +248,9 @@ fn parse<R: ParsableRecursive<R>>(
 				cur_prefixes.push(prefix);
 			},
 			Either::Right((base, base_state)) => {
-				parser.set_peeked(base_state);
+				if let Some(state) = base_state {
+					parser.set_peeked(state);
+				}
 
 				let mut cur_suffixes = vec![];
 				let infix = loop {
@@ -256,7 +259,7 @@ fn parse<R: ParsableRecursive<R>>(
 
 					let parsed = match (suffix, infix) {
 						(Ok((suffix, suffix_state)), Ok((infix, infix_state))) => 'parsed: {
-							parser.set_peeked(infix_state.clone());
+							parser.set_peeked(infix_state);
 							// TODO: This is a semi-hack to ensure that we parse `for _ in 0.. {}` correctly.
 							//       Technically this should be always correct, since the only suffix that can
 							//       be equal to an infix is `..`, and it can't be chained, so the only time
@@ -282,12 +285,13 @@ fn parse<R: ParsableRecursive<R>>(
 								.map_err(RecursiveWrapperError::Base)?
 								.is_ok()
 							{
-								true => Either::Right((infix, infix_state)),
+								// TODO: We should undo the peek here
+								true => Either::Right((infix, None)),
 								false => Either::Left((suffix, suffix_state)),
 							}
 						},
 						(Ok((suffix, suffix_state)), Err(_)) => Either::Left((suffix, suffix_state)),
-						(Err(_), Ok((infix, infix_state))) => Either::Right((infix, infix_state)),
+						(Err(_), Ok((infix, infix_state))) => Either::Right((infix, Some(infix_state))),
 						(Err(_), Err(_)) => break None,
 					};
 
@@ -297,7 +301,9 @@ fn parse<R: ParsableRecursive<R>>(
 							cur_suffixes.push(suffix);
 						},
 						Either::Right((infix, infix_state)) => {
-							parser.set_peeked(infix_state);
+							if let Some(state) = infix_state {
+								parser.set_peeked(state);
+							}
 							break Some(infix);
 						},
 					}
