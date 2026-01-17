@@ -9,7 +9,7 @@ use crate::{
 };
 
 /// `ExternCrate`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 #[parse(name = "extern crate")]
@@ -26,7 +26,7 @@ pub struct ExternCrate {
 }
 
 /// `CrateRef`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub enum CrateRef {
@@ -35,7 +35,7 @@ pub enum CrateRef {
 }
 
 /// `AsClause`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct AsClause {
@@ -44,7 +44,7 @@ pub struct AsClause {
 	pub name: AsClauseName,
 }
 
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub enum AsClauseName {

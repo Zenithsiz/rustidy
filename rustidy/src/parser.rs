@@ -495,7 +495,7 @@ impl<'a, 'input> Parser<'a, 'input> {
 }
 
 /// Peek state
-#[derive(Clone, Debug)]
+#[derive(Debug)]
 pub struct PeekState {
 	cur_pos:      ParserPos,
 	arenas_stash: ArenasCheckpointStash,

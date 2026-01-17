@@ -23,7 +23,7 @@ use {
 };
 
 /// `Enumeration`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct Enumeration {
@@ -42,7 +42,7 @@ pub struct Enumeration {
 }
 
 /// `EnumVariants`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct EnumVariants(
@@ -51,7 +51,7 @@ pub struct EnumVariants(
 );
 
 /// `EnumVariant`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct EnumVariant(
@@ -59,7 +59,7 @@ pub struct EnumVariant(
 	pub  WithOuterAttributes<EnumVariantInner>,
 );
 
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct EnumVariantInner {
@@ -71,7 +71,7 @@ pub struct EnumVariantInner {
 	pub discriminant: Option<EnumVariantDiscriminant>,
 }
 
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub enum EnumVariantKind {
@@ -82,13 +82,13 @@ pub enum EnumVariantKind {
 }
 
 /// `EnumVariantTuple`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct EnumVariantTuple(#[format(and_with = Parenthesized::format_remove)] pub Parenthesized<Option<TupleFields>>);
 
 /// `EnumVariantStruct`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct EnumVariantStruct(
@@ -98,7 +98,7 @@ pub struct EnumVariantStruct(
 );
 
 /// `EnumVariantDiscriminant`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct EnumVariantDiscriminant {

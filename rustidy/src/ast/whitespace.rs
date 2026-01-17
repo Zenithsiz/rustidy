@@ -18,7 +18,7 @@ use {
 };
 
 /// Whitespace
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Print)]
 #[parse(try_with = Self::parse_skip)]
@@ -191,7 +191,7 @@ impl FormatKind {
 }
 
 /// Pure whitespace
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct PureWhitespace(#[parse(update_with = Self::parse)] pub ParserStr);
@@ -203,7 +203,7 @@ impl PureWhitespace {
 }
 
 /// Comment
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(strum::EnumIs)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
@@ -213,7 +213,7 @@ pub enum Comment {
 }
 
 /// Block Comment
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 #[parse(error(name = NoComment, fmt = "Expected `/*` (except `/*!` or `/**`)"))]
@@ -251,7 +251,7 @@ impl BlockComment {
 }
 
 /// Line comment
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 #[parse(error(name = NoComment, fmt = "Expected `//` (except `///` or `//!`)"))]
@@ -273,7 +273,7 @@ impl LineComment {
 }
 
 /// Trailing line comment ([`LineComment`] without a newline)
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 #[parse(error(name = NoComment, fmt = "Expected `//` (except `///` or `//!`)"))]

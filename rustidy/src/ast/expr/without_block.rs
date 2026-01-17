@@ -63,7 +63,7 @@ use {
 };
 
 /// `ExpressionWithoutBlock`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(derive_more::From)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, ParseRecursive, Format, Print)]
@@ -94,7 +94,7 @@ impl TryFrom<ExpressionWithoutBlock> for ExpressionWithoutBlockInner {
 	}
 }
 
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(derive_more::From, derive_more::TryInto)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(ParseRecursive, Format, Print)]
@@ -139,7 +139,7 @@ pub enum ExpressionWithoutBlockInner {
 }
 
 // TODO: The specification doesn't have this, so we need to refine it
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct DoYeetExpression {

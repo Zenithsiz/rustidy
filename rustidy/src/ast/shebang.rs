@@ -4,7 +4,7 @@
 use crate::{Format, Parse, ParserStr, Print};
 
 /// Shebang
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 #[parse(name = "a shebang")]

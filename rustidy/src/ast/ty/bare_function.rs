@@ -19,7 +19,7 @@ use {
 };
 
 /// `BareFunctionType`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct BareFunctionType {
@@ -37,7 +37,7 @@ pub struct BareFunctionType {
 }
 
 /// `FunctionTypeQualifiers`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct FunctionTypeQualifiers {
@@ -47,7 +47,7 @@ pub struct FunctionTypeQualifiers {
 }
 
 /// `FunctionParametersMaybeNamedVariadic`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub enum FunctionParametersMaybeNamedVariadic {
@@ -56,7 +56,7 @@ pub enum FunctionParametersMaybeNamedVariadic {
 }
 
 /// `MaybeNamedFunctionParameters`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct MaybeNamedFunctionParameters(
@@ -65,12 +65,12 @@ pub struct MaybeNamedFunctionParameters(
 );
 
 /// `MaybeNamedParam`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct MaybeNamedParam(pub WithOuterAttributes<MaybeNamedParamInner>);
 
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct MaybeNamedParamInner {
@@ -79,7 +79,7 @@ pub struct MaybeNamedParamInner {
 	pub ty:   Box<Type>,
 }
 
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct MaybeNamedParamInnerName {
@@ -88,7 +88,7 @@ pub struct MaybeNamedParamInnerName {
 	pub colon: token::Colon,
 }
 
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub enum MaybeNamedParamInnerNameInner {
@@ -97,7 +97,7 @@ pub enum MaybeNamedParamInnerNameInner {
 }
 
 /// `MaybeNamedFunctionParametersVariadic`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct MaybeNamedFunctionParametersVariadic {
@@ -113,7 +113,7 @@ pub struct MaybeNamedFunctionParametersVariadic {
 }
 
 /// `BareFunctionReturnType`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct BareFunctionReturnType {

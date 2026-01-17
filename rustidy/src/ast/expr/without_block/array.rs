@@ -14,14 +14,14 @@ use crate::{
 };
 
 /// `ArrayExpression`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 #[parse(name = "an array expression")]
 pub struct ArrayExpression(#[format(and_with = Bracketed::format_remove)] Bracketed<Option<ArrayElements>>);
 
 /// `ArrayElements`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub enum ArrayElements {
@@ -30,7 +30,7 @@ pub enum ArrayElements {
 	Punctuated(PunctuatedTrailing<Expression, token::Comma>),
 }
 
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct ArrayElementsRepeat {

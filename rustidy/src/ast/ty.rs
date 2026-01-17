@@ -33,7 +33,7 @@ use {
 };
 
 /// `Type`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 #[parse(name = "a type")]
@@ -45,7 +45,7 @@ pub enum Type {
 }
 
 /// `TypeNoBounds`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub enum TypeNoBounds {
@@ -67,19 +67,19 @@ pub enum TypeNoBounds {
 }
 
 /// `ParenthesizedPath`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct ParenthesizedPath(#[format(and_with = Parenthesized::format_single_if_non_blank)] Parenthesized<Box<Type>>);
 
 /// `NeverType`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct NeverType(token::Not);
 
 /// `ReferenceType`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 #[parse(name = "a reference type")]
@@ -100,13 +100,13 @@ pub struct ReferenceType {
 }
 
 /// `InferredType`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct InferredType(token::Underscore);
 
 /// `ImplTraitTypeOneBound`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct ImplTraitTypeOneBound {
@@ -116,7 +116,7 @@ pub struct ImplTraitTypeOneBound {
 }
 
 /// `TraitObjectTypeOneBound`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct TraitObjectTypeOneBound {
@@ -126,7 +126,7 @@ pub struct TraitObjectTypeOneBound {
 }
 
 /// `ImplTraitType`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct ImplTraitType {
@@ -136,7 +136,7 @@ pub struct ImplTraitType {
 }
 
 /// `TraitObjectType`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct TraitObjectType {

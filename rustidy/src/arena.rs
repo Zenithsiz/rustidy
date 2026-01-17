@@ -299,7 +299,7 @@ macro arenas(
 	}
 
 	/// Arenas checkpoint stash
-	#[derive(Clone, Debug)]
+	#[derive(Debug)]
 	pub struct $ArenasCheckpointStash {
 		$(
 			$field: ArenaCheckpointStash<$Ty>,

@@ -13,7 +13,7 @@ use {
 	core::fmt::Debug,
 };
 
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub enum InnerAttrOrDocComment {
@@ -22,7 +22,7 @@ pub enum InnerAttrOrDocComment {
 }
 
 /// `InnerAttribute`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 #[parse(name = "an inner attribute")]
@@ -37,7 +37,7 @@ pub struct InnerAttribute {
 }
 
 /// Inner Doc comment
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub enum InnerDocComment {
@@ -46,7 +46,7 @@ pub enum InnerDocComment {
 }
 
 /// `INNER_LINE_DOC`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct InnerLineDoc {
@@ -55,7 +55,7 @@ pub struct InnerLineDoc {
 }
 
 /// `INNER_BLOCK_DOC`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct InnerBlockDoc {
@@ -64,7 +64,7 @@ pub struct InnerBlockDoc {
 }
 
 /// Outer attribute or doc comment
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub enum OuterAttrOrDocComment {
@@ -73,7 +73,7 @@ pub enum OuterAttrOrDocComment {
 }
 
 /// `OuterAttribute`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct OuterAttribute {
@@ -84,7 +84,7 @@ pub struct OuterAttribute {
 }
 
 /// Outer Doc comment
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub enum OuterDocComment {
@@ -93,7 +93,7 @@ pub enum OuterDocComment {
 }
 
 /// `OUTER_LINE_DOC`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct OuterLineDoc {
@@ -102,7 +102,7 @@ pub struct OuterLineDoc {
 }
 
 /// `OUTER_BLOCK_DOC`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct OuterBlockDoc {
@@ -113,7 +113,7 @@ pub struct OuterBlockDoc {
 }
 
 /// `Attr`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct Attr {
@@ -123,7 +123,7 @@ pub struct Attr {
 }
 
 /// `AttrInput`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub enum AttrInput {
@@ -133,7 +133,7 @@ pub enum AttrInput {
 	EqExpr(AttrInputEqExpr),
 }
 
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct AttrInputEqExpr {
@@ -143,7 +143,7 @@ pub struct AttrInputEqExpr {
 }
 
 /// `DelimTokenTree`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub enum DelimTokenTree {
@@ -152,13 +152,13 @@ pub enum DelimTokenTree {
 	Braces(Braced<DelimTokenTreeInner>),
 }
 
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct DelimTokenTreeInner(#[parse(fatal)] Vec<TokenTree>);
 
 /// `TokenTree`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub enum TokenTree {
@@ -167,7 +167,7 @@ pub enum TokenTree {
 }
 
 /// `Token` except delimiters
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct TokenNonDelimited(#[parse(with_tag = "skip:Delimiters")] token::Token);

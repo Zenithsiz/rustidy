@@ -12,7 +12,7 @@ use {
 };
 
 /// `SimplePath`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 #[parse(name = "a simple path")]
@@ -24,7 +24,7 @@ pub struct SimplePath {
 }
 
 /// `SimplePathSegment`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub enum SimplePathSegment {

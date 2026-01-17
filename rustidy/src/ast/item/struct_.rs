@@ -21,7 +21,7 @@ use {
 };
 
 /// `Struct`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub enum Struct {
@@ -30,7 +30,7 @@ pub enum Struct {
 }
 
 /// `StructStruct`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct StructStruct {
@@ -44,7 +44,7 @@ pub struct StructStruct {
 	pub inner:    StructStructInner,
 }
 
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(strum::EnumIs)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
@@ -58,7 +58,7 @@ pub enum StructStructInner {
 }
 
 /// `StructFields`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct StructFields(
@@ -67,7 +67,7 @@ pub struct StructFields(
 );
 
 /// `StructField`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct StructField(
@@ -75,7 +75,7 @@ pub struct StructField(
 	pub  WithOuterAttributes<StructFieldInner>,
 );
 
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct StructFieldInner {
@@ -91,7 +91,7 @@ pub struct StructFieldInner {
 	pub eq:    Option<StructFieldEq>,
 }
 
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct StructFieldEq {
@@ -101,7 +101,7 @@ pub struct StructFieldEq {
 }
 
 /// `TupleStruct`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct TupleStruct {
@@ -121,7 +121,7 @@ pub struct TupleStruct {
 }
 
 /// `TupleFields`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct TupleFields(
@@ -130,7 +130,7 @@ pub struct TupleFields(
 );
 
 /// `TupleField`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct TupleField(
@@ -139,7 +139,7 @@ pub struct TupleField(
 );
 
 /// `TupleFieldInner`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct TupleFieldInner {

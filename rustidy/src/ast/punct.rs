@@ -12,7 +12,7 @@ use {
 };
 
 /// Punctuated type `T`, separated by `P`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct Punctuated<T, P> {
@@ -105,7 +105,7 @@ impl<T, P> Punctuated<T, P> {
 }
 
 /// Punctuated type `T`, separated by `P` with an optional trailing `P`.
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct PunctuatedTrailing<T, P> {

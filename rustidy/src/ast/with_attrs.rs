@@ -14,7 +14,7 @@ use {
 };
 
 /// A type with outer attributes
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct WithOuterAttributes<T> {
@@ -83,7 +83,7 @@ where
 }
 
 /// A type with inner attributes
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct WithInnerAttributes<T> {

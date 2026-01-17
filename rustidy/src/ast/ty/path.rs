@@ -13,7 +13,7 @@ use crate::{
 };
 
 /// `TypePath`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct TypePath {
@@ -24,7 +24,7 @@ pub struct TypePath {
 }
 
 /// `TypePathSegment`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct TypePathSegment {
@@ -33,7 +33,7 @@ pub struct TypePathSegment {
 	pub generics: Option<TypePathSegmentGenerics>,
 }
 
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct TypePathSegmentGenerics {
@@ -42,7 +42,7 @@ pub struct TypePathSegmentGenerics {
 	pub inner: GenericArgsOrTypePathFn,
 }
 
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub enum GenericArgsOrTypePathFn {

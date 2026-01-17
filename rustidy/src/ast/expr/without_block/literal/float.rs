@@ -17,7 +17,7 @@ use {
 
 
 /// `FLOAT_LITERAL`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Format, Print)]
 pub struct FloatLiteral {
@@ -101,7 +101,7 @@ pub enum FloatLiteralError {
 }
 
 /// `FLOAT_EXPONENT`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 #[parse(error(name = E, fmt = "Expected `e` or `E`"))]

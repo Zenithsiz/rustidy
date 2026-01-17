@@ -13,13 +13,13 @@ use {
 };
 
 /// `TupleType`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 #[parse(name = "a tuple type")]
 pub struct TupleType(#[format(and_with = Parenthesized::format_remove)] Parenthesized<Option<TupleTypeInner>>);
 
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 #[format(and_with = Self::format_tys)]

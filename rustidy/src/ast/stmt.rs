@@ -14,7 +14,7 @@ use {
 };
 
 /// `Statement`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 #[parse(name = "a statement")]
@@ -26,7 +26,7 @@ pub enum Statement {
 }
 
 /// `LetStatement`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct LetStatement(
@@ -34,7 +34,7 @@ pub struct LetStatement(
 	pub  WithOuterAttributes<LetStatementInner>,
 );
 
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 #[parse(name = "a let statement")]
@@ -53,7 +53,7 @@ pub struct LetStatementInner {
 	pub semi:   token::Semi,
 }
 
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct LetStatementTy {
@@ -63,7 +63,7 @@ pub struct LetStatementTy {
 	pub ty:    Type,
 }
 
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub enum LetStatementEq {
@@ -71,7 +71,7 @@ pub enum LetStatementEq {
 	Normal(LetStatementEqNormal),
 }
 
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct LetStatementEqNormal {
@@ -81,7 +81,7 @@ pub struct LetStatementEqNormal {
 	pub expr: Expression,
 }
 
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct LetStatementEqElse {
@@ -97,7 +97,7 @@ pub struct LetStatementEqElse {
 }
 
 /// `ExpressionStatement`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub enum ExpressionStatement {
@@ -105,7 +105,7 @@ pub enum ExpressionStatement {
 	WithBlock(ExpressionStatementWithBlock),
 }
 
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct ExpressionStatementWithoutBlock {
@@ -114,7 +114,7 @@ pub struct ExpressionStatementWithoutBlock {
 	pub semi: token::Semi,
 }
 
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct ExpressionStatementWithBlock {

@@ -9,7 +9,7 @@ use crate::{
 };
 
 /// `ContinueExpression`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct ContinueExpression {

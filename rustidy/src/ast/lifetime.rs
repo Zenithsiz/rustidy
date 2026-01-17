@@ -10,13 +10,13 @@ use {
 };
 
 /// `Lifetime`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct Lifetime(LifetimeToken);
 
 /// `LIFETIME_TOKEN`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub enum LifetimeToken {
@@ -26,7 +26,7 @@ pub enum LifetimeToken {
 }
 
 /// `LIFETIME_OR_LABEL`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub enum LifetimeOrLabel {
@@ -35,7 +35,7 @@ pub enum LifetimeOrLabel {
 	// TODO: `r#'ident`
 }
 
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 #[parse(name = "a lifetime token")]

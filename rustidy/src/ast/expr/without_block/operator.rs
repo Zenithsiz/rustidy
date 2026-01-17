@@ -16,7 +16,7 @@ use {
 };
 
 /// `OperatorExpression`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(derive_more::From, derive_more::TryInto)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(ParseRecursive, Format, Print)]
@@ -47,7 +47,7 @@ pub enum OperatorExpression {
 }
 
 /// `ErrorPropagationExpression`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(ParseRecursive, Format, Print)]
 #[parse_recursive(root = ExpressionInner)]
@@ -60,7 +60,7 @@ pub struct TryPropagationExpression {
 }
 
 /// `BorrowExpression`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(ParseRecursive, Format, Print)]
 #[parse_recursive(root = ExpressionInner)]
@@ -77,7 +77,7 @@ pub struct BorrowExpression {
 	pub expr: Expression,
 }
 
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub enum BorrowExpressionKindRef {
@@ -85,7 +85,7 @@ pub enum BorrowExpressionKindRef {
 	AndAnd(token::AndAnd),
 }
 
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub enum BorrowExpressionKindRest {
@@ -95,7 +95,7 @@ pub enum BorrowExpressionKindRest {
 }
 
 /// `DereferenceExpression`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(ParseRecursive, Format, Print)]
 #[parse_recursive(root = ExpressionInner)]
@@ -108,7 +108,7 @@ pub struct DereferenceExpression {
 }
 
 /// `NegationExpression`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(ParseRecursive, Format, Print)]
 #[parse_recursive(root = ExpressionInner)]
@@ -120,7 +120,7 @@ pub struct NegationExpression {
 	pub expr:  Expression,
 }
 
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub enum NegationExpressionToken {
@@ -129,7 +129,7 @@ pub enum NegationExpressionToken {
 }
 
 /// `ArithmeticOrLogicalExpression`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(ParseRecursive, Format, Print)]
 #[parse_recursive(root = ExpressionInner)]
@@ -143,7 +143,7 @@ pub struct ArithmeticOrLogicalExpression {
 	pub rhs: Expression,
 }
 
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub enum ArithmeticOrLogicalExpressionOp {
@@ -160,7 +160,7 @@ pub enum ArithmeticOrLogicalExpressionOp {
 }
 
 /// `ComparisonExpression`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(ParseRecursive, Format, Print)]
 #[parse_recursive(root = ExpressionInner)]
@@ -174,7 +174,7 @@ pub struct ComparisonExpression {
 	pub rhs: Expression,
 }
 
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub enum ComparisonExpressionOp {
@@ -187,7 +187,7 @@ pub enum ComparisonExpressionOp {
 }
 
 /// `LazyBooleanExpression`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(ParseRecursive, Format, Print)]
 #[parse_recursive(root = ExpressionInner)]
@@ -202,7 +202,7 @@ pub struct LazyBooleanExpression {
 	pub rhs: Expression,
 }
 
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub enum LazyBooleanExpressionOp {
@@ -211,7 +211,7 @@ pub enum LazyBooleanExpressionOp {
 }
 
 /// `TypeCastExpression`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(ParseRecursive, Format, Print)]
 #[parse_recursive(root = ExpressionInner)]
@@ -226,7 +226,7 @@ pub struct TypeCastExpression {
 }
 
 /// `AssignmentExpression`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(ParseRecursive, Format, Print)]
 #[parse_recursive(root = ExpressionInner)]
@@ -242,7 +242,7 @@ pub struct AssignmentExpression {
 }
 
 /// `CompoundAssignmentExpression`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(ParseRecursive, Format, Print)]
 #[parse_recursive(root = ExpressionInner)]
@@ -257,7 +257,7 @@ pub struct CompoundAssignmentExpression {
 	pub rhs: Expression,
 }
 
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub enum CompoundAssignmentExpressionOp {

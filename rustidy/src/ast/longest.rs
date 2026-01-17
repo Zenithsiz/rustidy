@@ -6,7 +6,7 @@
 use crate::{Format, Parse, ParseError, Parser, Print, parser::ParserError};
 
 /// Parses the longest of two types
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Format, Print)]
 pub enum Longest<L, R> {

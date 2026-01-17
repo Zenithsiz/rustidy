@@ -14,7 +14,7 @@ use crate::{
 };
 
 /// `MacroInvocationSemi`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub enum MacroInvocationSemi {
@@ -23,7 +23,7 @@ pub enum MacroInvocationSemi {
 	Braces(MacroInvocationSemiBraces),
 }
 
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct MacroInvocationSemiParens {
@@ -36,7 +36,7 @@ pub struct MacroInvocationSemiParens {
 	pub semi:   token::Semi,
 }
 
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct MacroInvocationSemiBrackets {
@@ -49,7 +49,7 @@ pub struct MacroInvocationSemiBrackets {
 	pub semi:   token::Semi,
 }
 
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct MacroInvocationSemiBraces {

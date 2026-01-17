@@ -18,7 +18,7 @@ use {
 };
 
 /// `ExternBlock`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct ExternBlock {
@@ -33,7 +33,7 @@ pub struct ExternBlock {
 	pub inner:   Braced<WithInnerAttributes<ExternBlockItems>>,
 }
 
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct ExternBlockItems(
@@ -41,7 +41,7 @@ pub struct ExternBlockItems(
 );
 
 /// `ExternalItem`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct ExternalItem(
@@ -49,7 +49,7 @@ pub struct ExternalItem(
 	pub  WithOuterAttributes<ExternalItemInner>,
 );
 
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub enum ExternalItemInner {
@@ -60,7 +60,7 @@ pub enum ExternalItemInner {
 	TypeAlias(ExternalItemTypeAlias),
 }
 
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct ExternalItemStatic {
@@ -69,7 +69,7 @@ pub struct ExternalItemStatic {
 	pub static_: StaticItem,
 }
 
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct ExternalItemFunction {
@@ -78,7 +78,7 @@ pub struct ExternalItemFunction {
 	pub function: Function,
 }
 
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct ExternalItemTypeAlias {

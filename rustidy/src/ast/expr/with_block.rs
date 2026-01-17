@@ -29,7 +29,7 @@ use {
 };
 
 /// `ExpressionWithBlock`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct ExpressionWithBlock(
@@ -37,7 +37,7 @@ pub struct ExpressionWithBlock(
 	pub  WithOuterAttributes<ExpressionWithBlockInner>,
 );
 
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub enum ExpressionWithBlockInner {
@@ -51,7 +51,7 @@ pub enum ExpressionWithBlockInner {
 }
 
 /// `ConstBlockExpression`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct ConstBlockExpression {
@@ -61,7 +61,7 @@ pub struct ConstBlockExpression {
 }
 
 /// `UnsafeBlockExpression`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct UnsafeBlockExpression {
@@ -71,7 +71,7 @@ pub struct UnsafeBlockExpression {
 }
 
 // TODO: The specification doesn't have this, so we need to refine it
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct TryBlockExpression {
@@ -82,7 +82,7 @@ pub struct TryBlockExpression {
 }
 
 /// `IfExpression`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 #[parse(name = "an if expression")]
@@ -97,7 +97,7 @@ pub struct IfExpression {
 	pub else_:      Option<IfExpressionElse>,
 }
 
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct IfExpressionElse {
@@ -107,7 +107,7 @@ pub struct IfExpressionElse {
 	pub inner: IfExpressionElseInner,
 }
 
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub enum IfExpressionElseInner {
@@ -116,12 +116,12 @@ pub enum IfExpressionElseInner {
 }
 
 /// `Conditions`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct Conditions(Longest<LetChain, ConditionsExpr>);
 
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 struct ConditionsExpr(
@@ -131,7 +131,7 @@ struct ConditionsExpr(
 );
 
 /// `LetChain`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct LetChain(
@@ -140,7 +140,7 @@ pub struct LetChain(
 );
 
 /// `LetChainCondition`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub enum LetChainCondition {
@@ -156,7 +156,7 @@ pub enum LetChainCondition {
 	Expr(Expression),
 }
 
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct LetChainConditionLet {
@@ -179,7 +179,7 @@ pub struct LetChainConditionLet {
 }
 
 /// `LoopExpression`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct LoopExpression {
@@ -189,7 +189,7 @@ pub struct LoopExpression {
 }
 
 /// `LoopLabel`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct LoopLabel {
@@ -198,7 +198,7 @@ pub struct LoopLabel {
 	pub colon:    token::Colon,
 }
 
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub enum LoopExpressionInner {
@@ -209,7 +209,7 @@ pub enum LoopExpressionInner {
 }
 
 /// `IteratorLoopExpression`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct IteratorLoopExpression {
@@ -227,7 +227,7 @@ pub struct IteratorLoopExpression {
 }
 
 /// `PredicateLoopExpression`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct PredicateLoopExpression {
@@ -239,7 +239,7 @@ pub struct PredicateLoopExpression {
 }
 
 /// `InfiniteLoopExpression`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct InfiniteLoopExpression {
@@ -249,7 +249,7 @@ pub struct InfiniteLoopExpression {
 }
 
 /// `LabelBlockExpression`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct LabelBlockExpression(BlockExpression);

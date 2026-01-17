@@ -17,7 +17,7 @@ use {
 };
 
 /// `RangeExpression`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(derive_more::From, derive_more::TryInto)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(ParseRecursive, Format, Print)]
@@ -39,7 +39,7 @@ pub enum RangeExpression {
 }
 
 /// `RangeExpr`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(ParseRecursive, Format, Print)]
 #[parse_recursive(root = ExpressionInner)]
@@ -55,7 +55,7 @@ pub struct RangeExpr {
 }
 
 /// `RangeFromExpr`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(ParseRecursive, Format, Print)]
 #[parse_recursive(root = ExpressionInner)]
@@ -69,7 +69,7 @@ pub struct RangeFromExpr {
 }
 
 /// `RangeToExpr`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(ParseRecursive, Format, Print)]
 #[parse_recursive(root = ExpressionInner)]
@@ -82,14 +82,14 @@ pub struct RangeToExpr {
 }
 
 /// `RangeFullExpr`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct RangeFullExpr(token::DotDot);
 
 
 /// `RangeInclusiveExpr`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(ParseRecursive, Format, Print)]
 #[parse_recursive(root = ExpressionInner)]
@@ -105,7 +105,7 @@ pub struct RangeInclusiveExpr {
 }
 
 /// `RangeToInclusiveExpr`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(ParseRecursive, Format, Print)]
 #[parse_recursive(root = ExpressionInner)]

@@ -7,7 +7,7 @@ use {
 };
 
 /// `RAW_BYTE_STRING_LITERAL`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 #[parse(name = "a raw byte string literal")]

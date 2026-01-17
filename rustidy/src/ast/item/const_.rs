@@ -9,7 +9,7 @@ use crate::{
 };
 
 /// `ConstantItem`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct ConstantItem {
@@ -27,7 +27,7 @@ pub struct ConstantItem {
 	pub semi:   token::Semi,
 }
 
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub enum ConstantItemName {
@@ -35,7 +35,7 @@ pub enum ConstantItemName {
 	Underscore(token::Underscore),
 }
 
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct ConstantItemValue {

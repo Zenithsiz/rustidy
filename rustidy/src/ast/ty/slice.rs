@@ -7,7 +7,7 @@ use {
 };
 
 /// `SliceType`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct SliceType(#[format(and_with = Bracketed::format_remove)] Bracketed<Box<Type>>);

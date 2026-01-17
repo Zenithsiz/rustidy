@@ -22,7 +22,7 @@ use {
 };
 
 /// `MatchExpression`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 #[parse(name = "a match expression")]
@@ -38,13 +38,13 @@ pub struct MatchExpression {
 }
 
 /// `Scrutinee`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct Scrutinee(#[parse(with_tag = "skip:StructExpression")] Expression);
 
 /// `MatchArms`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Format, Print)]
 pub struct MatchArms {
@@ -162,7 +162,7 @@ pub enum MatchArmsError {
 	Comma(ParserError<token::Comma>),
 }
 
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct MatchArmWithExpr {
@@ -176,7 +176,7 @@ pub struct MatchArmWithExpr {
 }
 
 /// `MatchArm`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct MatchArm(
@@ -184,7 +184,7 @@ pub struct MatchArm(
 	pub  WithOuterAttributes<MatchArmInner>,
 );
 
-#[derive(PartialEq, Eq, Clone, derive_more::Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 #[parse(name = "a match arm")]
@@ -195,7 +195,7 @@ pub struct MatchArmInner {
 }
 
 /// `MatchArmGuard`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct MatchArmGuard {

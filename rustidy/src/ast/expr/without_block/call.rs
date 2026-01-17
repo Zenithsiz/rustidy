@@ -17,7 +17,7 @@ use {
 };
 
 /// `CallExpression`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(ParseRecursive, Format, Print)]
 #[parse_recursive(root = ExpressionInner)]
@@ -31,7 +31,7 @@ pub struct CallExpression {
 }
 
 /// `MethodCallExpression`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(ParseRecursive, Format, Print)]
 #[parse_recursive(root = ExpressionInner)]
@@ -49,7 +49,7 @@ pub struct MethodCallExpression {
 }
 
 /// `CallParams`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct CallParams(

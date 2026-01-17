@@ -16,7 +16,7 @@ use crate::{
 };
 
 /// `BlockExpression`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 #[parse(name = "a block expression")]
@@ -28,7 +28,7 @@ pub struct BlockExpression(
 );
 
 /// `Statements`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Format, Print)]
 pub struct Statements {

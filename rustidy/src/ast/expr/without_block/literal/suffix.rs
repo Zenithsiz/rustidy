@@ -4,13 +4,13 @@
 use crate::{Format, Parse, Parser, Print, ast::ident::IdentifierOrKeyword};
 
 /// `SUFFIX`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct Suffix(#[parse(with_tag = "skip:Whitespace")] IdentifierOrKeyword);
 
 /// `SUFFIX_NO_E`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 #[parse(error(name = StartedWithE, fmt = "Started with an `e` or `E`"))]

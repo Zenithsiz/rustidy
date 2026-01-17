@@ -14,7 +14,7 @@ use {
 };
 
 /// `TupleIndexingExpression`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(ParseRecursive, Format, Print)]
 #[parse_recursive(root = ExpressionInner)]

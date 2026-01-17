@@ -23,7 +23,7 @@ use {
 };
 
 /// `PathExpression`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub enum PathExpression {
@@ -32,7 +32,7 @@ pub enum PathExpression {
 }
 
 /// `PathInExpression`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct PathInExpression {
@@ -43,7 +43,7 @@ pub struct PathInExpression {
 }
 
 /// `PathExprSegment`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct PathExprSegment {
@@ -52,7 +52,7 @@ pub struct PathExprSegment {
 	pub generic: Option<PathExprSegmentGenericArgs>,
 }
 
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct PathExprSegmentGenericArgs {
@@ -62,7 +62,7 @@ pub struct PathExprSegmentGenericArgs {
 }
 
 /// `PathIdentSegment`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub enum PathIdentSegment {
@@ -75,7 +75,7 @@ pub enum PathIdentSegment {
 }
 
 /// `GenericArgs`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 #[parse(name = "generic arguments")]
@@ -83,7 +83,7 @@ pub struct GenericArgs(
 	#[format(and_with = Delimited::format_remove)] pub Delimited<Option<GenericArgsInner>, token::Lt, token::Gt>,
 );
 
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct GenericArgsInner(
@@ -92,7 +92,7 @@ pub struct GenericArgsInner(
 );
 
 /// `GenericArg`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub enum GenericArg {
@@ -106,7 +106,7 @@ pub enum GenericArg {
 }
 
 /// `GenericArgsConst`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub enum GenericArgsConst {
@@ -117,7 +117,7 @@ pub enum GenericArgsConst {
 }
 
 /// `GenericArgsBinding`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct GenericArgsBinding {
@@ -132,7 +132,7 @@ pub struct GenericArgsBinding {
 }
 
 /// `GenericArgsBounds`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct GenericArgsBounds {
@@ -147,7 +147,7 @@ pub struct GenericArgsBounds {
 }
 
 /// `TypePathFn`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct TypePathFn {
@@ -158,7 +158,7 @@ pub struct TypePathFn {
 }
 
 /// `TypePathFnInputs`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct TypePathFnInputs(
@@ -166,7 +166,7 @@ pub struct TypePathFnInputs(
 	PunctuatedTrailing<Box<Type>, token::Comma>,
 );
 
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct TypePathFnRet {
@@ -176,7 +176,7 @@ pub struct TypePathFnRet {
 }
 
 /// `QualifiedPathInExpression`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct QualifiedPathInExpression {
@@ -186,7 +186,7 @@ pub struct QualifiedPathInExpression {
 	pub segments:  AtLeast1<QualifiedPathInExpressionSegment>,
 }
 
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct QualifiedPathInExpressionSegment {
@@ -196,14 +196,14 @@ pub struct QualifiedPathInExpressionSegment {
 }
 
 /// `QualifiedPathType`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct QualifiedPathType(
 	#[format(and_with = Delimited::format_remove)] Delimited<QualifiedPathTypeInner, token::Lt, token::Gt>,
 );
 
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct QualifiedPathTypeInner {
@@ -212,7 +212,7 @@ pub struct QualifiedPathTypeInner {
 	pub as_: Option<QualifiedPathTypeAs>,
 }
 
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct QualifiedPathTypeAs {
@@ -221,7 +221,7 @@ pub struct QualifiedPathTypeAs {
 	pub ty:  TypePath,
 }
 
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct QualifiedPathInTypeSegment {

@@ -9,9 +9,7 @@ use crate::{
 };
 
 /// `GroupedExpression`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
-pub struct GroupedExpression(
-	#[format(and_with = Parenthesized::format_remove)] Parenthesized<Expression>,
-);
+pub struct GroupedExpression(#[format(and_with = Parenthesized::format_remove)] Parenthesized<Expression>);

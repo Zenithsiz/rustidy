@@ -4,7 +4,7 @@
 use crate::{Format, Parse, ParserStr, Print, ast::whitespace::Whitespace, parser};
 
 /// `IDENTIFIER_OR_KEYWORD`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 #[parse(error(name = XidStartOrUnderscore, fmt = "Expected `XID_START` or `_`"))]
@@ -31,7 +31,7 @@ impl IdentifierOrKeyword {
 }
 
 /// `RAW_IDENTIFIER`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 #[parse(error(name = Raw, fmt = "Expected `r#`"))]

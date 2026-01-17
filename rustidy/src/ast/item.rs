@@ -57,7 +57,7 @@ use {
 };
 
 /// `Item`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 #[expect(clippy::use_self, reason = "`Parse` derive macro doesn't support `Self`")]
@@ -70,7 +70,7 @@ impl ArenaData for Item {
 	type Data = WithOuterAttributes<ItemInner>;
 }
 
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 #[parse(name = "an item")]
@@ -80,7 +80,7 @@ pub enum ItemInner {
 }
 
 /// `VisItem`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct VisItem {
@@ -89,7 +89,7 @@ pub struct VisItem {
 	pub inner: VisItemInner,
 }
 
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub enum VisItemInner {
@@ -110,7 +110,7 @@ pub enum VisItemInner {
 }
 
 /// `MacroItem`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub enum MacroItem {
@@ -120,7 +120,7 @@ pub enum MacroItem {
 
 
 // TODO: The specification doesn't have this, so we need to refine it
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct DeclMacro {
@@ -131,7 +131,7 @@ pub struct DeclMacro {
 	pub body:   DeclMacroBody,
 }
 
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub enum DeclMacroBody {
@@ -141,7 +141,7 @@ pub enum DeclMacroBody {
 	Inline(DeclMacroBodyInline),
 }
 
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct DeclMacroBodyInline {
@@ -154,7 +154,7 @@ pub struct DeclMacroBodyInline {
 	pub body: Braced<DelimTokenTreeInner>,
 }
 
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct DeclMacroBodyBranches(
@@ -163,7 +163,7 @@ pub struct DeclMacroBodyBranches(
 	pub Braced<DeclMacroBodyBranchesInner>,
 );
 
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct DeclMacroBodyBranchesInner(
@@ -171,7 +171,7 @@ pub struct DeclMacroBodyBranchesInner(
 	pub  PunctuatedTrailing<DeclMacroBranch, token::Comma>,
 );
 
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct DeclMacroBranch {
@@ -184,7 +184,7 @@ pub struct DeclMacroBranch {
 	pub body:  DelimTokenTree,
 }
 
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub enum DeclMacroBranchExtra {
@@ -192,7 +192,7 @@ pub enum DeclMacroBranchExtra {
 	Derive(DeclMacroBranchDerive),
 }
 
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct DeclMacroBranchAttr {
@@ -202,7 +202,7 @@ pub struct DeclMacroBranchAttr {
 	pub args: Parenthesized<DelimTokenTreeInner>,
 }
 
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct DeclMacroBranchDerive {

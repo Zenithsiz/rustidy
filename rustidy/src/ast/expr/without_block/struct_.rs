@@ -19,7 +19,7 @@ use {
 };
 
 /// `StructExpression`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 #[parse(name = "a struct expression")]
@@ -32,7 +32,7 @@ pub struct StructExpression {
 	pub inner: Braced<Option<StructExpressionInner>>,
 }
 
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub enum StructExpressionInner {
@@ -41,7 +41,7 @@ pub enum StructExpressionInner {
 }
 
 /// `StructExprFields`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct StructExprFields {
@@ -51,7 +51,7 @@ pub struct StructExprFields {
 	pub end:    Option<StructExprFieldsEnd>,
 }
 
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub enum StructExprFieldsEnd {
@@ -59,7 +59,7 @@ pub enum StructExprFieldsEnd {
 	TrailingComma(token::Comma),
 }
 
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct StructExprFieldsEndBase {
@@ -69,7 +69,7 @@ pub struct StructExprFieldsEndBase {
 }
 
 /// `StructExprField`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct StructExprField(
@@ -77,7 +77,7 @@ pub struct StructExprField(
 	pub  WithOuterAttributes<StructExprFieldInner>,
 );
 
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub enum StructExprFieldInner {
@@ -85,7 +85,7 @@ pub enum StructExprFieldInner {
 	Ident(Identifier),
 }
 
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct StructExprFieldInnerWithExpr {
@@ -96,7 +96,7 @@ pub struct StructExprFieldInnerWithExpr {
 	pub expr:  Expression,
 }
 
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub enum StructExprFieldInnerWithExprStart {
@@ -105,7 +105,7 @@ pub enum StructExprFieldInnerWithExprStart {
 }
 
 /// `StructBase`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct StructBase {

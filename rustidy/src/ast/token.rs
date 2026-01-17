@@ -38,7 +38,7 @@ pub macro decl_tokens(
 	)*
 ) {
 	$(
-		#[derive(PartialEq, Eq, Clone, Debug)]
+		#[derive(PartialEq, Eq, Debug)]
 		#[derive(serde::Serialize, serde::Deserialize)]
 		#[derive(Parse, Format, Print)]
 		#[parse(error(name = NotFound, fmt = concat!("Expected `", $Token, "`")))]
@@ -225,7 +225,7 @@ decl_tokens! {
 }
 
 /// `Token`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub enum Token {
@@ -248,7 +248,7 @@ pub enum Token {
 }
 
 /// `Punctuation`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub enum Punctuation {

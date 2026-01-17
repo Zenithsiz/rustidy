@@ -20,7 +20,7 @@ use {
 	},
 };
 
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(ParseRecursive, Format, Print)]
 #[parse_recursive(root = ExpressionInner)]
@@ -40,7 +40,7 @@ pub struct ClosureExpression {
 	pub expr:   Expression,
 }
 
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub enum ClosureParams {
@@ -49,7 +49,7 @@ pub enum ClosureParams {
 	WithParams(Delimited<Option<ClosureParameters>, token::Or, token::Or>),
 }
 
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct ClosureRet {
@@ -60,7 +60,7 @@ pub struct ClosureRet {
 }
 
 /// `ClosureParameters`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct ClosureParameters(
@@ -69,12 +69,12 @@ pub struct ClosureParameters(
 );
 
 /// `ClosureParameter`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct ClosureParameter(pub WithOuterAttributes<ClosureParameterInner>);
 
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct ClosureParameterInner {
@@ -83,7 +83,7 @@ pub struct ClosureParameterInner {
 	pub ty:  Option<ClosureParameterInnerTy>,
 }
 
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct ClosureParameterInnerTy {

@@ -14,7 +14,7 @@ use {
 };
 
 /// `IDENTIFIER`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 #[parse(name = "an identifier")]
@@ -24,7 +24,7 @@ pub enum Identifier {
 }
 
 /// `NON_KEYWORD_IDENTIFIER`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 #[parse(error(name = StrictOrReserved, fmt = "Identifier was a strict or reserved keyword"))]

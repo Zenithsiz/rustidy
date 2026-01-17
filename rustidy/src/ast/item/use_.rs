@@ -18,7 +18,7 @@ use crate::{
 };
 
 /// `UseDeclaration`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 #[parse(name = "use declaration")]
@@ -32,7 +32,7 @@ pub struct UseDeclaration {
 }
 
 /// `UseTree`
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(strum::EnumIs)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
@@ -42,7 +42,7 @@ pub enum UseTree {
 	Simple(UseTreeSimple),
 }
 
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct UseTreeGlob {
@@ -51,7 +51,7 @@ pub struct UseTreeGlob {
 	pub glob:   token::Star,
 }
 
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct UseTreeGlobPrefix {
@@ -60,7 +60,7 @@ pub struct UseTreeGlobPrefix {
 	pub sep:  token::PathSep,
 }
 
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct UseTreeGroup {
@@ -109,7 +109,7 @@ impl UseTreeGroup {
 	}
 }
 
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct UseTreeGroupPrefix {
@@ -118,7 +118,7 @@ pub struct UseTreeGroupPrefix {
 	pub sep:  token::PathSep,
 }
 
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct UseTreeSimple {
@@ -127,7 +127,7 @@ pub struct UseTreeSimple {
 	pub as_:  Option<UseTreeSimpleAs>,
 }
 
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct UseTreeSimpleAs {
@@ -137,7 +137,7 @@ pub struct UseTreeSimpleAs {
 	pub value: UseTreeSimpleAsValue,
 }
 
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub enum UseTreeSimpleAsValue {
