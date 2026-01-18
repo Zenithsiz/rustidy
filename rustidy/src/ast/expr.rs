@@ -33,13 +33,8 @@ pub use self::{
 
 // Imports
 use {
-	crate::{
-		Format,
-		Parse,
-		ParseRecursive,
-		Print,
-		parser::{FromRecursiveRoot, RecursiveWrapper},
-	},
+	crate::{Format, Print},
+	rustidy_parse::{FromRecursiveRoot, Parse, ParseRecursive, Parser, RecursiveWrapper},
 	rustidy_util::{Arena, ArenaData, ArenaIdx},
 };
 
@@ -59,7 +54,7 @@ impl ArenaData for Expression {
 static EXPRESSION_ARENA: Arena<Expression> = Arena::new();
 
 impl FromRecursiveRoot<ExpressionInner> for Expression {
-	fn from_recursive_root(expr: ExpressionInner, _parser: &mut crate::Parser) -> Self {
+	fn from_recursive_root(expr: ExpressionInner, _parser: &mut Parser) -> Self {
 		let idx = EXPRESSION_ARENA.push(expr);
 		Self(idx)
 	}

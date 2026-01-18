@@ -3,7 +3,8 @@
 // Imports
 use {
 	super::token,
-	crate::{Format, Parse, Print, format},
+	crate::{Format, Print, format},
+	rustidy_parse::Parse,
 };
 
 /// A value `T` delimited by prefix `L` and suffix `R`

@@ -1,11 +1,13 @@
 //! Macro invocation
 
 // Imports
-use crate::{
-	Format,
-	Parse,
-	Print,
-	ast::{attr::DelimTokenTree, path::SimplePath, token},
+use {
+	crate::{
+		Format,
+		Print,
+		ast::{attr::DelimTokenTree, path::SimplePath, token},
+	},
+	rustidy_parse::Parse,
 };
 
 /// `MacroInvocation`

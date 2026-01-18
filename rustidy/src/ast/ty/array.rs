@@ -5,10 +5,10 @@ use {
 	super::Type,
 	crate::{
 		Format,
-		Parse,
 		Print,
 		ast::{delimited::Bracketed, expr::Expression, token},
 	},
+	rustidy_parse::Parse,
 };
 
 /// `ArrayType`

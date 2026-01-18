@@ -1,22 +1,24 @@
 //! Fn statements
 
 // Imports
-use crate::{
-	Format,
-	ast::{
-		delimited::{Delimited, Parenthesized},
-		expr::{BlockExpression, LiteralExpression, StringLiteral, without_block::literal::RawStringLiteral},
-		ident::Identifier,
-		lifetime::Lifetime,
-		pat::PatternNoTopAlt,
-		punct::{self, PunctuatedTrailing},
-		token,
-		ty::{Type, TypePath},
-		with_attrs::{self, WithOuterAttributes},
+use {
+	crate::{
+		Format,
+		ast::{
+			delimited::{Delimited, Parenthesized},
+			expr::{BlockExpression, LiteralExpression, StringLiteral, without_block::literal::RawStringLiteral},
+			ident::Identifier,
+			lifetime::Lifetime,
+			pat::PatternNoTopAlt,
+			punct::{self, PunctuatedTrailing},
+			token,
+			ty::{Type, TypePath},
+			with_attrs::{self, WithOuterAttributes},
+		},
+		format,
+		print::Print,
 	},
-	format,
-	parser::Parse,
-	print::Print,
+	rustidy_parse::Parse,
 };
 
 /// `Function`

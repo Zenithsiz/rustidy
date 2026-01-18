@@ -1,11 +1,13 @@
 //! Extern crate
 
 // Imports
-use crate::{
-	Format,
-	Parse,
-	Print,
-	ast::{ident::Identifier, token},
+use {
+	crate::{
+		Format,
+		Print,
+		ast::{ident::Identifier, token},
+	},
+	rustidy_parse::Parse,
 };
 
 /// `ExternCrate`

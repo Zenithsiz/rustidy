@@ -1,11 +1,13 @@
 //! Continue
 
 // Imports
-use crate::{
-	Format,
-	Parse,
-	Print,
-	ast::{lifetime::LifetimeOrLabel, token},
+use {
+	crate::{
+		Format,
+		Print,
+		ast::{lifetime::LifetimeOrLabel, token},
+	},
+	rustidy_parse::Parse,
 };
 
 /// `ContinueExpression`

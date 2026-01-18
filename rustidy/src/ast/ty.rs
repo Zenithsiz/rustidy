@@ -29,7 +29,8 @@ use {
 		lifetime::Lifetime,
 		token,
 	},
-	crate::{Format, Parse, Print},
+	crate::{Format, Print},
+	rustidy_parse::Parse,
 };
 
 /// `Type`

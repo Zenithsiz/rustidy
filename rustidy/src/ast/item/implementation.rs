@@ -15,9 +15,9 @@ use {
 			with_attrs::WithInnerAttributes,
 		},
 		format,
-		parser::Parse,
 		print::Print,
 	},
+	rustidy_parse::Parse,
 };
 
 /// `Implementation`

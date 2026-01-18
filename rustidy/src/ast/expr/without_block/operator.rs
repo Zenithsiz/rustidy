@@ -5,7 +5,6 @@ use {
 	super::{ExpressionWithoutBlockInner, Parse},
 	crate::{
 		Format,
-		ParseRecursive,
 		Print,
 		ast::{
 			expr::{Expression, ExpressionInner},
@@ -13,6 +12,7 @@ use {
 			ty::TypeNoBounds,
 		},
 	},
+	rustidy_parse::ParseRecursive,
 };
 
 /// `OperatorExpression`

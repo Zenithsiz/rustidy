@@ -3,7 +3,8 @@
 // Imports
 use {
 	super::Type,
-	crate::{Format, Parse, Print, ast::delimited::Bracketed},
+	crate::{Format, Print, ast::delimited::Bracketed},
+	rustidy_parse::Parse,
 };
 
 /// `SliceType`

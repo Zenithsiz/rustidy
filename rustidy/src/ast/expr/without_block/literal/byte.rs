@@ -5,12 +5,10 @@ use {
 	super::escape::ByteEscapeError,
 	crate::{
 		Format,
-		Parse,
-		ParserStr,
 		Print,
 		ast::{expr::without_block::literal::ByteEscape, whitespace::Whitespace},
-		parser,
 	},
+	rustidy_parse::{Parse, ParserStr},
 };
 
 /// `BYTE_LITERAL`
@@ -30,7 +28,7 @@ impl ByteLiteral {
 		match s.strip_prefix(|ch: char| ch.is_ascii() && !matches!(ch, '\'' | '\\' | '\n' | '\r' | '\t')) {
 			Some(rest) => *s = rest,
 			None =>
-				_ = parser::try_parse_from_str(s, ByteEscape::parse)
+				_ = rustidy_parse::try_parse_from_str(s, ByteEscape::parse)
 					.map_err(ByteLiteralError::ByteEscape)?
 					.ok()
 					.ok_or(ByteLiteralError::CharOrEscape)?,

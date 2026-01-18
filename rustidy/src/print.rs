@@ -5,8 +5,9 @@ pub use rustidy_macros::Print;
 
 // Imports
 use {
-	crate::{ParserStr, Replacements},
+	crate::Replacements,
 	core::marker::PhantomData,
+	rustidy_parse::ParserStr,
 	rustidy_util::{ArenaData, ArenaIdx},
 };
 

@@ -1,7 +1,10 @@
 //! Identifier or keyword
 
 // Imports
-use crate::{Format, Parse, ParserStr, Print, ast::whitespace::Whitespace, parser};
+use {
+	crate::{Format, Print, ast::whitespace::Whitespace},
+	rustidy_parse::{Parse, ParserStr},
+};
 
 /// `IDENTIFIER_OR_KEYWORD`
 #[derive(PartialEq, Eq, Debug)]
@@ -43,7 +46,7 @@ impl RawIdentifier {
 	fn parse(s: &mut &str) -> Result<(), RawIdentifierError> {
 		*s = s.strip_prefix("r#").ok_or(RawIdentifierError::Raw)?;
 		let ident =
-			parser::parse_from_str(s, IdentifierOrKeyword::parse).map_err(RawIdentifierError::IdentOrKeyword)?;
+			rustidy_parse::parse_from_str(s, IdentifierOrKeyword::parse).map_err(RawIdentifierError::IdentOrKeyword)?;
 		if ["crate", "self", "super", "Self"].contains(&ident) {
 			return Err(RawIdentifierError::ForbiddenKeyword);
 		}

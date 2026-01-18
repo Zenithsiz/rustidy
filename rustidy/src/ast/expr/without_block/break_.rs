@@ -1,11 +1,13 @@
 //! Break
 
 // Imports
-use crate::{
-	Format,
-	Parse,
-	Print,
-	ast::{expr::Expression, lifetime::LifetimeOrLabel, token},
+use {
+	crate::{
+		Format,
+		Print,
+		ast::{expr::Expression, lifetime::LifetimeOrLabel, token},
+	},
+	rustidy_parse::Parse,
 };
 
 /// `BreakExpression`

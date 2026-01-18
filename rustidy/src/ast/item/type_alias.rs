@@ -5,10 +5,10 @@ use {
 	super::function::{GenericParams, TypeParamBounds, WhereClause},
 	crate::{
 		Format,
-		Parse,
 		Print,
 		ast::{ident::Identifier, token, ty::Type},
 	},
+	rustidy_parse::Parse,
 };
 
 /// `TypeAlias`

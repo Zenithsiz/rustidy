@@ -1,7 +1,10 @@
 //! Underscore expression
 
 // Imports
-use crate::{Format, Parse, Print, ast::token};
+use {
+	crate::{Format, Print, ast::token},
+	rustidy_parse::Parse,
+};
 
 /// `UnderscoreExpression`
 #[derive(PartialEq, Eq, Debug)]

@@ -7,8 +7,9 @@ use {
 		punct::{self, Punctuated},
 		token,
 	},
-	crate::{Format, Print, parser::Parse},
+	crate::{Format, Print},
 	core::fmt::Debug,
+	rustidy_parse::Parse,
 };
 
 /// `SimplePath`

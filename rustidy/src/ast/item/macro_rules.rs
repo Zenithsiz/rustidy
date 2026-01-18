@@ -1,18 +1,20 @@
 //! Macro rules
 
 // Imports
-use crate::{
-	Format,
-	Parse,
-	Print,
-	ast::{
-		at_least::AtLeast1,
-		attr::DelimTokenTree,
-		delimited::{Braced, Bracketed, Parenthesized},
-		ident::{Identifier, IdentifierOrKeyword, ident_or_keyword::RawIdentifier},
-		punct::PunctuatedTrailing,
-		token::{self, Token},
+use {
+	crate::{
+		Format,
+		Print,
+		ast::{
+			at_least::AtLeast1,
+			attr::DelimTokenTree,
+			delimited::{Braced, Bracketed, Parenthesized},
+			ident::{Identifier, IdentifierOrKeyword, ident_or_keyword::RawIdentifier},
+			punct::PunctuatedTrailing,
+			token::{self, Token},
+		},
 	},
+	rustidy_parse::Parse,
 };
 
 /// `MacroRulesDefinition`

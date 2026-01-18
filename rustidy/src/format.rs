@@ -8,14 +8,9 @@ pub use {self::config::Config, rustidy_macros::Format};
 
 // Imports
 use {
-	crate::{
-		ParserStr,
-		Replacement,
-		Replacements,
-		ast::whitespace::Whitespace,
-		parser::{ParserPos, ParserRange},
-	},
+	crate::{Replacement, Replacements, ast::whitespace::Whitespace},
 	core::marker::PhantomData,
+	rustidy_parse::{ParserPos, ParserRange, ParserStr},
 	rustidy_util::{ArenaData, ArenaIdx},
 };
 

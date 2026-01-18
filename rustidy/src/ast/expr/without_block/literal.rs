@@ -39,7 +39,10 @@ pub use self::{
 };
 
 // Imports
-use crate::{Format, Parse, Print, ast::token};
+use {
+	crate::{Format, Print, ast::token},
+	rustidy_parse::Parse,
+};
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]

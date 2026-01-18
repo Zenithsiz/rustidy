@@ -1,15 +1,17 @@
 //! Type path
 
 // Imports
-use crate::{
-	Format,
-	Parse,
-	Print,
-	ast::{
-		expr::without_block::path::{GenericArgs, PathIdentSegment, TypePathFn},
-		punct::{self, Punctuated},
-		token,
+use {
+	crate::{
+		Format,
+		Print,
+		ast::{
+			expr::without_block::path::{GenericArgs, PathIdentSegment, TypePathFn},
+			punct::{self, Punctuated},
+			token,
+		},
 	},
+	rustidy_parse::Parse,
 };
 
 /// `TypePath`

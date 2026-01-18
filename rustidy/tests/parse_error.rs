@@ -2,7 +2,7 @@
 
 // Imports
 use {
-	rustidy::Parser,
+	rustidy_parse::Parser,
 	std::{env, fs, path::Path},
 };
 

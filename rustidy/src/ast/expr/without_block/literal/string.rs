@@ -5,14 +5,13 @@ use {
 	super::Suffix,
 	crate::{
 		Format,
-		Parse,
-		ParserStr,
 		Print,
 		ast::{
 			expr::without_block::literal::{AsciiEscape, QuoteEscape, StringContinue, UnicodeEscape},
 			whitespace::Whitespace,
 		},
 	},
+	rustidy_parse::{Parse, ParserStr},
 };
 
 

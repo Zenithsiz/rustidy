@@ -4,7 +4,6 @@ use {
 	super::LiteralExpression,
 	crate::{
 		Format,
-		Parse,
 		Print,
 		ast::{
 			at_least::{self, AtLeast1},
@@ -20,6 +19,7 @@ use {
 			ty::{Type, TypeNoBounds, TypePath, path::TypePathSegment},
 		},
 	},
+	rustidy_parse::Parse,
 };
 
 /// `PathExpression`

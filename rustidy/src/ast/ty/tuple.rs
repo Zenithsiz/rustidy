@@ -5,11 +5,11 @@ use {
 	super::Type,
 	crate::{
 		Format,
-		Parse,
 		Print,
 		ast::{delimited::Parenthesized, token},
 		format,
 	},
+	rustidy_parse::Parse,
 };
 
 /// `TupleType`

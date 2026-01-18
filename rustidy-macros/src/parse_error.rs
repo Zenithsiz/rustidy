@@ -118,7 +118,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 						let ty = &field.ty;
 						impl_where_clause
 							.predicates
-							.push(parse_quote! { #ty: crate::parser::ParseError });
+							.push(parse_quote! { #ty: rustidy_parse::ParseError });
 					}
 				}
 			}
@@ -250,10 +250,10 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 							quote! { app_error::AppError::msg(#msg) }
 						},
 						[field_ident] => {
-							quote! { crate::parser::ParseError::to_app_error(#field_ident, parser) }
+							quote! { rustidy_parse::ParseError::to_app_error(#field_ident, parser) }
 						},
 						_ => quote! { app_error::AppError::from_multiple([
-							#( crate::parser::ParseError::to_app_error(#field_idents, parser), )*
+							#( rustidy_parse::ParseError::to_app_error(#field_idents, parser), )*
 						]) },
 					};
 
@@ -298,7 +298,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 						let ty = &field.ty;
 						impl_where_clause
 							.predicates
-							.push(parse_quote! { #ty: crate::parser::ParseError });
+							.push(parse_quote! { #ty: rustidy_parse::ParseError });
 					}
 
 					quote! { #field_access.to_app_error(parser) }
@@ -334,16 +334,16 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 	let (impl_generics, ty_generics, where_clause) = impl_generics.split_for_impl();
 	let output = quote! {
 		#[automatically_derived]
-		impl #impl_generics crate::parser::ParseError for #item_ident #ty_generics #where_clause {
+		impl #impl_generics rustidy_parse::ParseError for #item_ident #ty_generics #where_clause {
 			fn is_fatal(&self) -> bool {
 				#is_fatal
 			}
 
-			fn pos(&self) -> Option<crate::parser::ParserPos> {
+			fn pos(&self) -> Option<rustidy_parse::ParserPos> {
 				#pos
 			}
 
-			fn to_app_error(&self, parser: &crate::parser::Parser) -> app_error::AppError {
+			fn to_app_error(&self, parser: &rustidy_parse::Parser) -> app_error::AppError {
 				#to_app_error
 			}
 		}

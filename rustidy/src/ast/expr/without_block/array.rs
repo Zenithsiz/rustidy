@@ -1,16 +1,18 @@
 //! Array
 
 // Imports
-use crate::{
-	Format,
-	Parse,
-	Print,
-	ast::{
-		delimited::Bracketed,
-		expr::Expression,
-		punct::{self, PunctuatedTrailing},
-		token,
+use {
+	crate::{
+		Format,
+		Print,
+		ast::{
+			delimited::Bracketed,
+			expr::Expression,
+			punct::{self, PunctuatedTrailing},
+			token,
+		},
 	},
+	rustidy_parse::Parse,
 };
 
 /// `ArrayExpression`

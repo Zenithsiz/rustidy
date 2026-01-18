@@ -5,13 +5,11 @@ use {
 	super::{Suffix, int::DecLiteral},
 	crate::{
 		Format,
-		Parse,
-		ParserStr,
 		Print,
 		ast::{expr::without_block::literal::SuffixNoE, token, whitespace::Whitespace},
-		parser::{Parser, ParserError},
 	},
 	rustidy_macros::ParseError,
+	rustidy_parse::{Parse, Parser, ParserError, ParserStr},
 	std::fmt,
 };
 

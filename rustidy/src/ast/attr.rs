@@ -9,8 +9,9 @@ use {
 		path::SimplePath,
 		token,
 	},
-	crate::{Format, parser::Parse, print::Print},
+	crate::{Format, Print},
 	core::fmt::Debug,
+	rustidy_parse::Parse,
 };
 
 #[derive(PartialEq, Eq, Debug)]

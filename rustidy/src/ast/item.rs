@@ -47,7 +47,8 @@ use {
 		vis::Visibility,
 		with_attrs::{self, WithOuterAttributes},
 	},
-	crate::{Format, Parse, Print, format},
+	crate::{Format, Print, format},
+	rustidy_parse::Parse,
 	rustidy_util::{Arena, ArenaData, ArenaIdx},
 };
 

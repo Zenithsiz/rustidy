@@ -1,16 +1,18 @@
 //! Tuple
 
 // Imports
-use crate::{
-	Format,
-	Parse,
-	Print,
-	ast::{
-		at_least::{self, AtLeast1},
-		delimited::Parenthesized,
-		expr::Expression,
-		token,
+use {
+	crate::{
+		Format,
+		Print,
+		ast::{
+			at_least::{self, AtLeast1},
+			delimited::Parenthesized,
+			expr::Expression,
+			token,
+		},
 	},
+	rustidy_parse::Parse,
 };
 
 /// `TupleExpression`

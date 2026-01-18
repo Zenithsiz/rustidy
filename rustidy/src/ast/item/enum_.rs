@@ -8,7 +8,6 @@ use {
 	},
 	crate::{
 		Format,
-		Parse,
 		Print,
 		ast::{
 			delimited::{Braced, Parenthesized},
@@ -20,6 +19,7 @@ use {
 			with_attrs::{self, WithOuterAttributes},
 		},
 	},
+	rustidy_parse::Parse,
 };
 
 /// `Enumeration`

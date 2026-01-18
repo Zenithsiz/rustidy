@@ -4,7 +4,6 @@ use {
 	super::ExpressionWithoutBlockInner,
 	crate::{
 		Format,
-		ParseRecursive,
 		Print,
 		ast::{
 			expr::{Expression, ExpressionInner},
@@ -12,6 +11,7 @@ use {
 			token,
 		},
 	},
+	rustidy_parse::ParseRecursive,
 };
 
 /// `FieldExpression`

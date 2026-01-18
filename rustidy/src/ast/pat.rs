@@ -25,8 +25,9 @@ use {
 		token,
 		with_attrs::WithOuterAttributes,
 	},
-	crate::{Format, parser::Parse, print::Print},
+	crate::{Format, Print},
 	core::fmt::Debug,
+	rustidy_parse::Parse,
 };
 
 /// `Pattern`

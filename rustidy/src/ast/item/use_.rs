@@ -1,20 +1,22 @@
 //! Use statements
 
 // Imports
-use crate::{
-	Format,
-	FormatRef,
-	ast::{
-		delimited::Braced,
-		ident::Identifier,
-		path::SimplePath,
-		punct::PunctuatedTrailing,
-		token,
-		whitespace::Whitespace,
+use {
+	crate::{
+		Format,
+		FormatRef,
+		ast::{
+			delimited::Braced,
+			ident::Identifier,
+			path::SimplePath,
+			punct::PunctuatedTrailing,
+			token,
+			whitespace::Whitespace,
+		},
+		format,
+		print::Print,
 	},
-	format,
-	parser::Parse,
-	print::Print,
+	rustidy_parse::Parse,
 };
 
 /// `UseDeclaration`

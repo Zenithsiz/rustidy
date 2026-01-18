@@ -8,15 +8,13 @@ use {
 	},
 	crate::{
 		Format,
-		Parse,
-		ParserStr,
 		Print,
 		ast::{
 			expr::without_block::literal::{NonNulByteEscape, NonNulUnicodeEscape, StringContinue},
 			whitespace::Whitespace,
 		},
-		parser,
 	},
+	rustidy_parse::{Parse, ParserStr},
 };
 
 
@@ -46,7 +44,7 @@ impl CStringLiteral {
 				Some(rest) => *s = rest,
 				None => {
 					macro try_parse($Escape:ident) {
-						parser::try_parse_from_str(s, $Escape::parse)
+						rustidy_parse::try_parse_from_str(s, $Escape::parse)
 							.map_err(CStringLiteralError::$Escape)?
 							.is_ok()
 					}

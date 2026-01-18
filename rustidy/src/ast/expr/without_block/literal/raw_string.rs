@@ -3,7 +3,8 @@
 // Imports
 use {
 	super::Suffix,
-	crate::{Format, Parse, ParserStr, Print, ast::whitespace::Whitespace},
+	crate::{Format, Print, ast::whitespace::Whitespace},
+	rustidy_parse::{Parse, ParserStr},
 };
 
 

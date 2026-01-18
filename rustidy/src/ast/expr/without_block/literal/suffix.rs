@@ -1,7 +1,10 @@
 //! Suffix
 
 // Imports
-use crate::{Format, Parse, Parser, Print, ast::ident::IdentifierOrKeyword};
+use {
+	crate::{Format, Print, ast::ident::IdentifierOrKeyword},
+	rustidy_parse::{Parse, Parser},
+};
 
 /// `SUFFIX`
 #[derive(PartialEq, Eq, Debug)]

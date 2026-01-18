@@ -1,18 +1,20 @@
 //! Block expression
 
 // Imports
-use crate::{
-	Format,
-	ast::{
-		delimited::Braced,
-		expr::ExpressionWithoutBlock,
-		stmt::{ExpressionStatement, ExpressionStatementWithoutBlock, Statement},
-		token,
-		with_attrs::WithInnerAttributes,
+use {
+	crate::{
+		Format,
+		ast::{
+			delimited::Braced,
+			expr::ExpressionWithoutBlock,
+			stmt::{ExpressionStatement, ExpressionStatementWithoutBlock, Statement},
+			token,
+			with_attrs::WithInnerAttributes,
+		},
+		format,
+		print::Print,
 	},
-	format,
-	parser::{Parse, ParseError, Parser, ParserError},
-	print::Print,
+	rustidy_parse::{Parse, ParseError, Parser, ParserError},
 };
 
 /// `BlockExpression`

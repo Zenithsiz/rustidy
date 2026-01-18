@@ -4,8 +4,6 @@ use {
 	super::{ExpressionWithoutBlockInner, path::PathExprSegment},
 	crate::{
 		Format,
-		Parse,
-		ParseRecursive,
 		Print,
 		ast::{
 			delimited::Parenthesized,
@@ -14,6 +12,7 @@ use {
 			token,
 		},
 	},
+	rustidy_parse::{Parse, ParseRecursive},
 };
 
 /// `CallExpression`

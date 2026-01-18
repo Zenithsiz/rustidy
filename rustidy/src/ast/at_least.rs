@@ -1,7 +1,10 @@
 //! At least N
 
 // Imports
-use crate::{Format, Parse, Print, format::FormatFn};
+use {
+	crate::{Format, Print, format::FormatFn},
+	rustidy_parse::Parse,
+};
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]

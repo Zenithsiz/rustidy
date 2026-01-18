@@ -6,14 +6,13 @@ use {
 	super::ExpressionWithoutBlockInner,
 	crate::{
 		Format,
-		Parse,
-		ParseRecursive,
 		Print,
 		ast::{
 			expr::{Expression, ExpressionInner},
 			token,
 		},
 	},
+	rustidy_parse::{Parse, ParseRecursive},
 };
 
 /// `RangeExpression`

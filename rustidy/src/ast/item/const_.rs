@@ -1,11 +1,13 @@
 //! Constants
 
 // Imports
-use crate::{
-	Format,
-	Parse,
-	Print,
-	ast::{expr::Expression, ident::Identifier, token, ty::Type},
+use {
+	crate::{
+		Format,
+		Print,
+		ast::{expr::Expression, ident::Identifier, token, ty::Type},
+	},
+	rustidy_parse::Parse,
 };
 
 /// `ConstantItem`

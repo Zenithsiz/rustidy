@@ -5,15 +5,13 @@ use {
 	super::escape::{AsciiEscapeError, QuoteEscapeError, UnicodeEscapeError},
 	crate::{
 		Format,
-		Parse,
-		ParserStr,
 		Print,
 		ast::{
 			expr::without_block::literal::{AsciiEscape, QuoteEscape, UnicodeEscape},
 			whitespace::Whitespace,
 		},
-		parser,
 	},
+	rustidy_parse::{Parse, ParserStr},
 };
 
 /// `CHAR_LITERAL`
@@ -38,7 +36,7 @@ impl CharLiteral {
 			None => {
 				// TODO: Better way to express this
 				macro try_parse($Escape:ident) {
-					parser::try_parse_from_str(s, $Escape::parse)
+					rustidy_parse::try_parse_from_str(s, $Escape::parse)
 						.map_err(CharLiteralError::$Escape)?
 						.is_ok()
 				}

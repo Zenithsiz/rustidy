@@ -15,7 +15,6 @@ use {
 	super::Expression,
 	crate::{
 		Format,
-		Parse,
 		Print,
 		ast::{
 			lifetime::LifetimeOrLabel,
@@ -26,6 +25,7 @@ use {
 			with_attrs::{self, WithOuterAttributes},
 		},
 	},
+	rustidy_parse::Parse,
 };
 
 /// `ExpressionWithBlock`

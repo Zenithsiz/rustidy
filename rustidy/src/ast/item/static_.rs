@@ -5,10 +5,10 @@ use {
 	super::function::ItemSafety,
 	crate::{
 		Format,
-		Parse,
 		Print,
 		ast::{expr::Expression, ident::Identifier, token, ty::Type},
 	},
+	rustidy_parse::Parse,
 };
 
 /// `StaticItem`

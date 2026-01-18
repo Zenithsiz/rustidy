@@ -3,17 +3,9 @@
 // Imports
 use {
 	super::punct::Punctuated,
-	crate::{
-		Format,
-		FormatRef,
-		Parser,
-		ParserStr,
-		Print,
-		Replacement,
-		format,
-		parser::{Parse, ParserPos, ParserRange},
-	},
+	crate::{Format, FormatRef, Print, Replacement, format},
 	itertools::Itertools,
+	rustidy_parse::{Parse, Parser, ParserPos, ParserRange, ParserStr},
 	rustidy_util::{Arena, ArenaData, ArenaIdx},
 };
 
@@ -305,8 +297,9 @@ pub fn set_indent(offset: isize, remove_if_empty: bool) -> impl Fn(&mut Whitespa
 mod tests {
 	use {
 		super::*,
-		crate::{ParseError, Replacements, print},
+		crate::{Replacements, print},
 		app_error::{AppError, Context, ensure},
+		rustidy_parse::ParseError,
 	};
 
 	#[derive(Clone, Debug)]

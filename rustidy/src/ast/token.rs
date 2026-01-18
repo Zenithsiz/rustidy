@@ -21,12 +21,8 @@ use {
 		lifetime::LifetimeToken,
 		whitespace::Whitespace,
 	},
-	crate::{
-		Format,
-		ParserStr,
-		parser::{Parse, Parser},
-		print::Print,
-	},
+	crate::{Format, print::Print},
+	rustidy_parse::{Parse, Parser, ParserStr},
 };
 
 pub macro decl_tokens(

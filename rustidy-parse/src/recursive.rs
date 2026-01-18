@@ -6,7 +6,7 @@ pub use rustidy_macros::ParseRecursive;
 // Imports
 use {
 	super::{ParsableFrom, Parse, ParseError, Parser, ParserError, ParserTag},
-	crate::parser::PeekState,
+	crate::{self as rustidy_parse, PeekState},
 	core::{marker::PhantomData, mem},
 	either::Either,
 };

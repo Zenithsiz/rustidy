@@ -3,7 +3,8 @@
 // Imports
 use {
 	super::{delimited::Parenthesized, path::SimplePath, token},
-	crate::{Format, Parse, Print, format},
+	crate::{Format, Print, format},
+	rustidy_parse::Parse,
 };
 
 /// `Visibility`

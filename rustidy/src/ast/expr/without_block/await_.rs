@@ -5,13 +5,13 @@ use {
 	super::ExpressionWithoutBlockInner,
 	crate::{
 		Format,
-		ParseRecursive,
 		Print,
 		ast::{
 			expr::{Expression, ExpressionInner},
 			token,
 		},
 	},
+	rustidy_parse::ParseRecursive,
 };
 
 /// `AwaitExpression`

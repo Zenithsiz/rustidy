@@ -1,7 +1,10 @@
 //! Line remainder
 
 // Imports
-use crate::{Format, Parse, ParserStr, Print};
+use {
+	crate::{Format, Print},
+	rustidy_parse::{Parse, ParserStr},
+};
 
 /// Characters remaining until the end of the line (including the newline if it exists)
 #[derive(PartialEq, Eq, Debug)]

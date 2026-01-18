@@ -29,14 +29,12 @@
 // Modules
 pub mod ast;
 pub mod format;
-pub mod parser;
 pub mod print;
 pub mod replacement;
 
 // Exports
 pub use self::{
 	format::{Format, FormatRef},
-	parser::{Parse, ParseError, ParseRecursive, Parser, ParserStr},
 	print::{Print, PrintFmt},
 	replacement::{Replacement, Replacements},
 };
@@ -44,6 +42,7 @@ pub use self::{
 // Imports
 use {
 	app_error::{AppError, Context, app_error},
+	rustidy_parse::{ParseError, Parser},
 	std::path::Path,
 };
 

@@ -1,11 +1,13 @@
 //! Grouped
 
 // Imports
-use crate::{
-	Format,
-	Parse,
-	Print,
-	ast::{delimited::Parenthesized, expr::Expression},
+use {
+	crate::{
+		Format,
+		Print,
+		ast::{delimited::Parenthesized, expr::Expression},
+	},
+	rustidy_parse::Parse,
 };
 
 /// `GroupedExpression`

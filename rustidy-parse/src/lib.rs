@@ -1,5 +1,18 @@
 //! Parser
 
+// Features
+#![feature(
+	never_type,
+	try_trait_v2,
+	try_trait_v2_residual,
+	pattern,
+	coverage_attribute,
+	decl_macro,
+	macro_metavar_expr_concat,
+	unwrap_infallible,
+	substr_range
+)]
+
 // Modules
 mod error;
 mod recursive;

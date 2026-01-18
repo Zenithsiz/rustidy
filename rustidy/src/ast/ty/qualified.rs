@@ -5,7 +5,6 @@ use {
 	super::path::TypePathSegment,
 	crate::{
 		Format,
-		Parse,
 		Print,
 		ast::{
 			at_least::{self, AtLeast1},
@@ -13,6 +12,7 @@ use {
 			token,
 		},
 	},
+	rustidy_parse::Parse,
 };
 
 /// `QualifiedPathInType`

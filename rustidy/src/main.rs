@@ -21,7 +21,8 @@ use {
 	self::args::Args,
 	app_error::{AppError, Context},
 	clap::Parser as _,
-	rustidy::{Format, Parser, Print, PrintFmt, Replacements, format},
+	rustidy::{Format, Print, PrintFmt, Replacements, format},
+	rustidy_parse::Parser,
 	std::{fs, process::ExitCode},
 	zutil_logger::Logger,
 };

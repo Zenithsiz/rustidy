@@ -1,7 +1,10 @@
 //! Escapes
 
 // Imports
-use crate::{Format, Parse, ParserStr, Print, parser};
+use {
+	crate::{Format, Print},
+	rustidy_parse::{Parse, ParserStr},
+};
 
 /// `QUOTE_ESCAPE`
 #[derive(PartialEq, Eq, Debug)]
@@ -94,7 +97,7 @@ pub struct NonNulByteEscape(#[parse(try_update_with = Self::parse)] pub ParserSt
 
 impl NonNulByteEscape {
 	pub fn parse(s: &mut &str) -> Result<(), NonNulByteEscapeError> {
-		let s = parser::parse_from_str(s, ByteEscape::parse).map_err(NonNulByteEscapeError::ByteEscape)?;
+		let s = rustidy_parse::parse_from_str(s, ByteEscape::parse).map_err(NonNulByteEscapeError::ByteEscape)?;
 		if s == "\\0" {
 			return Err(NonNulByteEscapeError::Nul);
 		}
@@ -144,7 +147,8 @@ pub struct NonNulUnicodeEscape(#[parse(try_update_with = Self::parse)] pub Parse
 
 impl NonNulUnicodeEscape {
 	pub fn parse(s: &mut &str) -> Result<(), NonNulUnicodeEscapeError> {
-		let s = parser::parse_from_str(s, UnicodeEscape::parse).map_err(NonNulUnicodeEscapeError::UnicodeEscape)?;
+		let s =
+			rustidy_parse::parse_from_str(s, UnicodeEscape::parse).map_err(NonNulUnicodeEscapeError::UnicodeEscape)?;
 		// TODO: This check should be done better
 		if s.chars().all(|ch| !ch.is_ascii_digit() || ch == '0') {
 			return Err(NonNulUnicodeEscapeError::Nul);

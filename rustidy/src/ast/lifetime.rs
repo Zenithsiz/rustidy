@@ -6,7 +6,8 @@ use {
 		ident::{IdentifierOrKeyword, NonKeywordIdentifier},
 		token,
 	},
-	crate::{Format, Parse, Parser, Print},
+	crate::{Format, Print},
+	rustidy_parse::{Parse, Parser},
 };
 
 /// `Lifetime`

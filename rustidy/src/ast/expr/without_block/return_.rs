@@ -1,11 +1,13 @@
 //! Return
 
 // Imports
-use crate::{
-	Format,
-	Parse,
-	Print,
-	ast::{expr::Expression, token},
+use {
+	crate::{
+		Format,
+		Print,
+		ast::{expr::Expression, token},
+	},
+	rustidy_parse::Parse,
 };
 
 /// `ReturnExpression`

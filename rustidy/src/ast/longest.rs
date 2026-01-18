@@ -3,7 +3,10 @@
 // TODO: Replace usages of this with peeking at the end of matches.
 
 // Imports
-use crate::{Format, Parse, ParseError, Parser, Print, parser::ParserError};
+use {
+	crate::{Format, Print},
+	rustidy_parse::{Parse, ParseError, Parser, ParserError},
+};
 
 /// Parses the longest of two types
 #[derive(PartialEq, Eq, Debug)]

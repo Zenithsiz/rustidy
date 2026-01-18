@@ -1,11 +1,13 @@
 //! Async block
 
 // Imports
-use crate::{
-	Format,
-	Parse,
-	Print,
-	ast::{expr::BlockExpression, token},
+use {
+	crate::{
+		Format,
+		Print,
+		ast::{expr::BlockExpression, token},
+	},
+	rustidy_parse::Parse,
 };
 
 /// `AsyncBlockExpression`

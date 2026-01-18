@@ -193,16 +193,16 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 					.parse::<#from>()
 					.map_err(#error_ident::From)?;
 
-				Ok(crate::parser::ParsableFrom::from_parsable(value))
+				Ok(rustidy_parse::ParsableFrom::from_parsable(value))
 			};
 
 			let generics = &attrs.generics;
 			let extra_variants = &attrs.error;
 			let error_enum = quote! {
-				#[derive(derive_more::Debug, crate::parser::ParseError)]
+				#[derive(derive_more::Debug, rustidy_parse::ParseError)]
 				pub enum #error_ident #generics {
 					#[parse_error(transparent)]
-					From(crate::parser::ParserError<#from>),
+					From(rustidy_parse::ParserError<#from>),
 
 					#skip_if_tag_err_variant
 
@@ -328,7 +328,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 					.iter()
 					.zip(&variant_tys)
 					.map(|(variant, variant_ty)| {
-						let ty = quote! { crate::parser::ParserError<#variant_ty> };
+						let ty = quote! { rustidy_parse::ParserError<#variant_ty> };
 						let ty = match variant.box_error {
 							true => quote! { Box<#ty> },
 							false => ty,
@@ -346,7 +346,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 							ty: PeekAttrs(ty),
 							err_variant,
 						} = peek;
-						let err_ty = quote! { crate::parser::ParserError<#ty> };
+						let err_ty = quote! { rustidy_parse::ParserError<#ty> };
 
 						quote! {
 														#[parse_error(transparent)]
@@ -357,7 +357,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 
 				let unknown_errs_decl = itertools::izip!(variants, &err_idents, &variant_tys)
 					.map(|(variant, err_ident, variant_ty)| {
-						let ty = quote! { crate::parser::ParserError<#variant_ty> };
+						let ty = quote! { rustidy_parse::ParserError<#variant_ty> };
 						let ty = match variant.box_error {
 							true => quote! { Box<#ty> },
 							false => ty,
@@ -372,14 +372,14 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 				let error_generics = util::with_enum_bounds(
 					attrs.generics.clone(),
 					variants,
-					|ty| parse_quote! { #ty: crate::parser::Parse },
+					|ty| parse_quote! { #ty: rustidy_parse::Parse },
 				);
 
 				// TODO: Figure out why using just `#error_generics` doesn't work here
 				let (impl_generics, _, where_clause) = error_generics.split_for_impl();
 				let extra_variants = &attrs.error;
 				let error_enum = quote! {
-					#[derive(derive_more::Debug, crate::parser::ParseError)]
+					#[derive(derive_more::Debug, rustidy_parse::ParseError)]
 					pub enum #error_ident #impl_generics #where_clause {
 						#( #error_enum_variants )*
 
@@ -541,7 +541,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 							false => quote! {},
 						};
 
-						let ty = quote! { crate::parser::ParserError<#field_ty> };
+						let ty = quote! { rustidy_parse::ParserError<#field_ty> };
 						let ty = match field.box_error {
 							true => quote! { Box<#ty> },
 							false => ty,
@@ -559,12 +559,12 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 				let error_generics = util::with_struct_bounds(
 					attrs.generics.clone(),
 					&fields.fields,
-					|ty| parse_quote! { #ty: crate::parser::Parse },
+					|ty| parse_quote! { #ty: rustidy_parse::Parse },
 				);
 				let (impl_generics, _, where_clause) = error_generics.split_for_impl();
 				let extra_variants = &attrs.error;
 				let error_enum = quote! {
-					#[derive(derive_more::Debug, crate::parser::ParseError)]
+					#[derive(derive_more::Debug, rustidy_parse::ParseError)]
 					pub enum #error_ident #impl_generics #where_clause {
 						#( #error_enum_variants )*
 
@@ -580,13 +580,13 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 	};
 
 	let parse_impl = {
-		let generics = util::with_bounds(&attrs, |ty| parse_quote! { #ty: crate::parser::Parse });
+		let generics = util::with_bounds(&attrs, |ty| parse_quote! { #ty: rustidy_parse::Parse });
 		let (impl_generics, ty_generics, where_clause) = generics.split_for_impl();
 		let try_with = attrs.try_with;
 		let and_try_with = attrs.and_try_with;
 		quote! {
 			#[automatically_derived]
-			impl #impl_generics crate::parser::Parse for #item_ident #ty_generics #where_clause {
+			impl #impl_generics rustidy_parse::Parse for #item_ident #ty_generics #where_clause {
 				type Error = #error_ident #ty_generics;
 
 				#name_coverage
@@ -595,7 +595,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 				}
 
 				#[coverage(on)]
-				fn parse_from(parser: &mut crate::parser::Parser) -> Result<Self, Self::Error> {
+				fn parse_from(parser: &mut rustidy_parse::Parser) -> Result<Self, Self::Error> {
 					#(
 						if let Some(value) = (#try_with)(parser)? {
 							return Ok(value)

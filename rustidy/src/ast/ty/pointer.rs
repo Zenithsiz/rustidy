@@ -3,7 +3,8 @@
 // Imports
 use {
 	super::TypeNoBounds,
-	crate::{Format, Parse, Print, ast::token},
+	crate::{Format, Print, ast::token},
+	rustidy_parse::Parse,
 };
 
 /// `RawPointerType`

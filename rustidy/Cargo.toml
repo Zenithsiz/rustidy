@@ -7,13 +7,11 @@ version     = { workspace = true }
 repository  = { workspace = true }
 publish     = { workspace = true }
 
-[features]
-parse-debug-name = []
-
 [dependencies]
 
 # Workspace
 rustidy-macros = { workspace = true }
+rustidy-parse  = { workspace = true }
 rustidy-util   = { workspace = true }
 
 app-error     = { workspace = true }

@@ -5,10 +5,10 @@ use {
 	crate::{
 		Format,
 		format::{self, FormatFn},
-		parser::Parse,
 		print::Print,
 	},
 	either::Either,
+	rustidy_parse::Parse,
 };
 
 /// Punctuated type `T`, separated by `P`

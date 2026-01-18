@@ -5,11 +5,11 @@ use {
 	super::Item,
 	crate::{
 		Format,
-		Parse,
 		Print,
 		ast::{delimited::Braced, ident::Identifier, token, with_attrs::WithInnerAttributes},
 		format,
 	},
+	rustidy_parse::Parse,
 };
 
 /// `Module`

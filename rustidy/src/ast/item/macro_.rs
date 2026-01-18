@@ -1,16 +1,18 @@
 //! Macro
 
 // Imports
-use crate::{
-	Format,
-	Parse,
-	Print,
-	ast::{
-		attr::TokenTree,
-		delimited::{Braced, Bracketed, Parenthesized},
-		path::SimplePath,
-		token,
+use {
+	crate::{
+		Format,
+		Print,
+		ast::{
+			attr::TokenTree,
+			delimited::{Braced, Bracketed, Parenthesized},
+			path::SimplePath,
+			token,
+		},
 	},
+	rustidy_parse::Parse,
 };
 
 /// `MacroInvocationSemi`

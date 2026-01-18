@@ -2,7 +2,8 @@
 
 // Imports
 use {
-	rustidy::{Format, Parser, Print, PrintFmt, Replacements, format, parser::ParserPos},
+	rustidy::{Format, Print, PrintFmt, Replacements, format},
+	rustidy_parse::{Parser, ParserPos},
 	std::{env, fs, path::Path},
 };
 
