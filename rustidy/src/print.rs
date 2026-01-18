@@ -79,6 +79,15 @@ tuple_impl! { 1, T0 }
 tuple_impl! { 2, T0, T1 }
 tuple_impl! { 3, T0, T1, T2 }
 
+impl Print for ParserStr {
+	fn print(&self, f: &mut PrintFmt) {
+		match f.replacements.get(self) {
+			Some(replacement) => replacement.write(&mut f.output),
+			None => f.output.push_str(self.range().str(f.input)),
+		}
+	}
+}
+
 impl<T: ArenaData<Data: Print>> Print for ArenaIdx<T> {
 	fn print(&self, f: &mut PrintFmt) {
 		T::ARENA.get(self).print(f);
@@ -100,14 +109,6 @@ impl<'a, 'input> PrintFmt<'a, 'input> {
 			input,
 			output: String::new(),
 			replacements,
-		}
-	}
-
-	/// Writes an ast string
-	pub fn write_str(&mut self, s: &ParserStr) {
-		match self.replacements.get(s) {
-			Some(replacement) => replacement.write(&mut self.output),
-			None => self.output.push_str(s.range().str(self.input)),
 		}
 	}
 

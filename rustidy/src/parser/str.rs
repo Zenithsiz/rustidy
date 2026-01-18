@@ -3,7 +3,6 @@
 // Imports
 use {
 	super::{ParserPos, ParserRange},
-	crate::{Format, FormatRef, Print, ast::whitespace::Whitespace, format},
 	rustidy_util::{Arena, ArenaData, ArenaIdx},
 };
 
@@ -38,27 +37,3 @@ impl ArenaData for ParserStr {
 }
 
 static ARENA: Arena<ParserStr> = Arena::new();
-
-impl FormatRef for ParserStr {
-	fn input_range(&self, _ctx: &format::Context) -> Option<super::ParserRange> {
-		Some(Self::range(self))
-	}
-}
-
-impl Format for ParserStr {
-	fn format(&mut self, _ctx: &mut format::Context) {}
-
-	fn with_prefix_ws<R, F: Fn(&mut Whitespace, &mut format::Context) -> R + Copy>(
-		&mut self,
-		_ctx: &mut format::Context,
-		_f: F,
-	) -> Option<R> {
-		None
-	}
-}
-
-impl Print for ParserStr {
-	fn print(&self, f: &mut crate::PrintFmt) {
-		f.write_str(self);
-	}
-}

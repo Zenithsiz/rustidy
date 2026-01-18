@@ -262,6 +262,24 @@ tuple_impl! { 1, T0 }
 tuple_impl! { 2, T0, T1 }
 tuple_impl! { 3, T0, T1, T2 }
 
+impl FormatRef for ParserStr {
+	fn input_range(&self, _ctx: &Context) -> Option<ParserRange> {
+		Some(Self::range(self))
+	}
+}
+
+impl Format for ParserStr {
+	fn format(&mut self, _ctx: &mut Context) {}
+
+	fn with_prefix_ws<R, F: Fn(&mut Whitespace, &mut Context) -> R + Copy>(
+		&mut self,
+		_ctx: &mut Context,
+		_f: F,
+	) -> Option<R> {
+		None
+	}
+}
+
 impl<T: ArenaData<Data: FormatRef>> FormatRef for ArenaIdx<T> {
 	fn input_range(&self, ctx: &Context) -> Option<ParserRange> {
 		T::ARENA.get(self).input_range(ctx)
