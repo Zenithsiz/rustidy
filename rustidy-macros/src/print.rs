@@ -55,7 +55,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 				.iter()
 				.map(|variant| {
 					let variant_ident = &variant.ident;
-					quote! { Self::#variant_ident(ref value) => crate::print::Print::print(value, f), }
+					quote! { Self::#variant_ident(ref value) => rustidy_print::Print::print(value, f), }
 				})
 				.collect::<Vec<_>>();
 
@@ -75,7 +75,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 				.enumerate()
 				.map(|(field_idx, field)| {
 					let field_ident = util::field_member_access(field_idx, field);
-					quote! { crate::print::Print::print(&self.#field_ident, f); }
+					quote! { rustidy_print::Print::print(&self.#field_ident, f); }
 				})
 				.collect::<Vec<_>>();
 
@@ -87,12 +87,12 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 		},
 	};
 
-	let impl_generics = util::with_bounds(&attrs, |ty| parse_quote! { #ty: crate::print::Print });
+	let impl_generics = util::with_bounds(&attrs, |ty| parse_quote! { #ty: rustidy_print::Print });
 	let (impl_generics, ty_generics, fmt_where_clause) = impl_generics.split_for_impl();
 	let output = quote! {
-		impl #impl_generics crate::print::Print for #item_ident #ty_generics #fmt_where_clause {
+		impl #impl_generics rustidy_print::Print for #item_ident #ty_generics #fmt_where_clause {
 			#[coverage(on)]
-			fn print(&self, f: &mut crate::print::PrintFmt) {
+			fn print(&self, f: &mut rustidy_print::PrintFmt) {
 				#fmt_body
 			}
 		}

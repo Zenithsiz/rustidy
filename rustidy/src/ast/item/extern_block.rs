@@ -5,7 +5,6 @@ use {
 	super::{Function, MacroInvocationSemi, StaticItem, TypeAlias, function::Abi},
 	crate::{
 		Format,
-		Print,
 		ast::{
 			delimited::Braced,
 			token,
@@ -15,6 +14,7 @@ use {
 		format,
 	},
 	rustidy_parse::Parse,
+	rustidy_print::Print,
 };
 
 /// `ExternBlock`

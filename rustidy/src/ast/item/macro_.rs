@@ -4,7 +4,6 @@
 use {
 	crate::{
 		Format,
-		Print,
 		ast::{
 			attr::TokenTree,
 			delimited::{Braced, Bracketed, Parenthesized},
@@ -13,6 +12,7 @@ use {
 		},
 	},
 	rustidy_parse::Parse,
+	rustidy_print::Print,
 };
 
 /// `MacroInvocationSemi`

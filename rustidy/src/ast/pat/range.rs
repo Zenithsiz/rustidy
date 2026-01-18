@@ -5,10 +5,10 @@ use {
 	super::LiteralPattern,
 	crate::{
 		Format,
-		Print,
 		ast::{expr::PathExpression, token},
 	},
 	rustidy_parse::Parse,
+	rustidy_print::Print,
 };
 
 /// `RangePattern`

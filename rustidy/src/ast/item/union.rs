@@ -8,10 +8,10 @@ use {
 	},
 	crate::{
 		Format,
-		Print,
 		ast::{delimited::Braced, ident::Identifier, token},
 	},
 	rustidy_parse::Parse,
+	rustidy_print::Print,
 };
 
 /// `Union`

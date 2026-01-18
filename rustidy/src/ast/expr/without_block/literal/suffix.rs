@@ -2,8 +2,9 @@
 
 // Imports
 use {
-	crate::{Format, Print, ast::ident::IdentifierOrKeyword},
+	crate::{Format, ast::ident::IdentifierOrKeyword},
 	rustidy_parse::{Parse, Parser},
+	rustidy_print::Print,
 };
 
 /// `SUFFIX`

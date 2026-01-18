@@ -8,7 +8,6 @@ use {
 	},
 	crate::{
 		Format,
-		Print,
 		ast::{
 			delimited::{Braced, Parenthesized},
 			expr::Expression,
@@ -20,6 +19,7 @@ use {
 		},
 	},
 	rustidy_parse::Parse,
+	rustidy_print::Print,
 };
 
 /// `Enumeration`

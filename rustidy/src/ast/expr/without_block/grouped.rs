@@ -4,10 +4,10 @@
 use {
 	crate::{
 		Format,
-		Print,
 		ast::{delimited::Parenthesized, expr::Expression},
 	},
 	rustidy_parse::Parse,
+	rustidy_print::Print,
 };
 
 /// `GroupedExpression`

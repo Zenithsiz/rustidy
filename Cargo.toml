@@ -1,6 +1,6 @@
 [workspace]
 
-members  = ["rustidy", "rustidy-macros", "rustidy-parse", "rustidy-util"]
+members  = ["rustidy", "rustidy-macros", "rustidy-parse", "rustidy-print", "rustidy-util"]
 resolver = "2"
 
 [workspace.package]
@@ -17,6 +17,7 @@ version     = "0.1.10"
 rustidy        = { path = "rustidy" }
 rustidy-macros = { path = "rustidy-macros" }
 rustidy-parse  = { path = "rustidy-parse" }
+rustidy-print  = { path = "rustidy-print" }
 rustidy-util   = { path = "rustidy-util" }
 
 app-error        = { git = "https://github.com/Zenithsiz/app-error", rev = "e21d2eab03d97a675c4b44ccfa4df00e18d56ba7" }

@@ -5,13 +5,13 @@ use {
 	super::escape::{AsciiEscapeError, QuoteEscapeError, UnicodeEscapeError},
 	crate::{
 		Format,
-		Print,
 		ast::{
 			expr::without_block::literal::{AsciiEscape, QuoteEscape, UnicodeEscape},
 			whitespace::Whitespace,
 		},
 	},
 	rustidy_parse::Parse,
+	rustidy_print::Print,
 	rustidy_util::AstStr,
 };
 

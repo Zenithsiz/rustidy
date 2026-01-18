@@ -4,10 +4,10 @@
 use {
 	crate::{
 		Format,
-		Print,
 		ast::{attr::DelimTokenTree, path::SimplePath, token},
 	},
 	rustidy_parse::Parse,
+	rustidy_print::Print,
 };
 
 /// `MacroInvocation`

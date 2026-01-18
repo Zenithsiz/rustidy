@@ -4,7 +4,6 @@ use {
 	super::LiteralExpression,
 	crate::{
 		Format,
-		Print,
 		ast::{
 			at_least::{self, AtLeast1},
 			delimited::{Delimited, Parenthesized},
@@ -20,6 +19,7 @@ use {
 		},
 	},
 	rustidy_parse::Parse,
+	rustidy_print::Print,
 };
 
 /// `PathExpression`

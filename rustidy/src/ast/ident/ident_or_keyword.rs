@@ -2,8 +2,9 @@
 
 // Imports
 use {
-	crate::{Format, Print, ast::whitespace::Whitespace},
+	crate::{Format, ast::whitespace::Whitespace},
 	rustidy_parse::Parse,
+	rustidy_print::Print,
 	rustidy_util::AstStr,
 };
 

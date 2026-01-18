@@ -5,7 +5,6 @@ use {
 	super::{literal::TupleIndex, path::PathInExpression},
 	crate::{
 		Format,
-		Print,
 		ast::{
 			delimited::Braced,
 			expr::Expression,
@@ -16,6 +15,7 @@ use {
 		},
 	},
 	rustidy_parse::Parse,
+	rustidy_print::Print,
 };
 
 /// `StructExpression`

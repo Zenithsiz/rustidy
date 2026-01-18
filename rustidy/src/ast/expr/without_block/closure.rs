@@ -5,7 +5,6 @@ use {
 	super::ExpressionWithoutBlockInner,
 	crate::{
 		Format,
-		Print,
 		ast::{
 			delimited::Delimited,
 			expr::{Expression, ExpressionInner},
@@ -17,6 +16,7 @@ use {
 		},
 	},
 	rustidy_parse::{Parse, ParseRecursive},
+	rustidy_print::Print,
 };
 
 #[derive(PartialEq, Eq, Debug)]

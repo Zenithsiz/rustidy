@@ -4,10 +4,10 @@
 use {
 	crate::{
 		Format,
-		Print,
 		ast::{expr::Expression, ident::Identifier, token, ty::Type},
 	},
 	rustidy_parse::Parse,
+	rustidy_print::Print,
 };
 
 /// `ConstantItem`

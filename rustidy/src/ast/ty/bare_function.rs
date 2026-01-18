@@ -5,7 +5,6 @@ use {
 	super::{Type, TypeNoBounds},
 	crate::{
 		Format,
-		Print,
 		ast::{
 			delimited::Parenthesized,
 			ident::Identifier,
@@ -16,6 +15,7 @@ use {
 		},
 	},
 	rustidy_parse::Parse,
+	rustidy_print::Print,
 };
 
 /// `BareFunctionType`

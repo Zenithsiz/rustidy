@@ -3,9 +3,10 @@
 // Imports
 use {
 	super::punct::Punctuated,
-	crate::{Format, FormatRef, Print, format},
+	crate::{Format, FormatRef, format},
 	itertools::Itertools,
 	rustidy_parse::{Parse, Parser},
+	rustidy_print::Print,
 	rustidy_util::{Arena, ArenaData, ArenaIdx, AstPos, AstRange, AstStr, Replacement},
 };
 
@@ -297,9 +298,9 @@ pub fn set_indent(offset: isize, remove_if_empty: bool) -> impl Fn(&mut Whitespa
 mod tests {
 	use {
 		super::*,
-		crate::print,
 		app_error::{AppError, Context, ensure},
 		rustidy_parse::ParseError,
+		rustidy_print::{Print, PrintFmt},
 		rustidy_util::Replacements,
 	};
 
@@ -331,7 +332,7 @@ mod tests {
 		fmt_ctx.set_indent_depth(config.indent_depth);
 		whitespace.format(&mut fmt_ctx, kind);
 
-		let mut print_fmt = print::PrintFmt::new(source, &replacements);
+		let mut print_fmt = PrintFmt::new(source, &replacements);
 		whitespace.print(&mut print_fmt);
 		let output = print_fmt.output();
 

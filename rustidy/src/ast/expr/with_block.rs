@@ -15,7 +15,6 @@ use {
 	super::Expression,
 	crate::{
 		Format,
-		Print,
 		ast::{
 			lifetime::LifetimeOrLabel,
 			longest::Longest,
@@ -26,6 +25,7 @@ use {
 		},
 	},
 	rustidy_parse::Parse,
+	rustidy_print::Print,
 };
 
 /// `ExpressionWithBlock`

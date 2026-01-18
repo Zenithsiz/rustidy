@@ -1,0 +1,21 @@
+[package]
+name    = "rustidy-print"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+
+# Workspace
+rustidy-macros = { workspace = true }
+rustidy-util   = { workspace = true }
+
+app-error    = { workspace = true }
+convert_case = { workspace = true }
+derive_more  = { features = ["full"], workspace = true }
+either       = { workspace = true }
+itertools    = { workspace = true }
+serde        = { workspace = true }
+strum        = { workspace = true }
+
+[lints]
+workspace = true

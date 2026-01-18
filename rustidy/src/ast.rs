@@ -29,9 +29,10 @@ use {
 		shebang::Shebang,
 		whitespace::{TrailingLineComment, Whitespace},
 	},
-	crate::{Format, format, print::Print},
+	crate::{Format, format},
 	core::fmt::Debug,
 	rustidy_parse::Parse,
+	rustidy_print::Print,
 };
 
 /// `Crate`

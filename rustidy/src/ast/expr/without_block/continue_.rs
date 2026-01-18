@@ -4,10 +4,10 @@
 use {
 	crate::{
 		Format,
-		Print,
 		ast::{lifetime::LifetimeOrLabel, token},
 	},
 	rustidy_parse::Parse,
+	rustidy_print::Print,
 };
 
 /// `ContinueExpression`

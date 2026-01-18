@@ -10,8 +10,9 @@ pub use self::{ident_or_keyword::IdentifierOrKeyword, keyword::STRICT_OR_RESERVE
 // Imports
 use {
 	self::ident_or_keyword::RawIdentifier,
-	crate::{Format, Print},
+	crate::Format,
 	rustidy_parse::{Parse, Parser},
+	rustidy_print::Print,
 };
 
 /// `IDENTIFIER`

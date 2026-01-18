@@ -4,8 +4,9 @@
 
 // Imports
 use {
-	crate::{Format, Print},
+	crate::Format,
 	rustidy_parse::{Parse, ParseError, Parser, ParserError},
+	rustidy_print::Print,
 };
 
 /// Parses the longest of two types

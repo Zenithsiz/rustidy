@@ -5,10 +5,10 @@ use {
 	super::attr::{InnerAttrOrDocComment, OuterAttrOrDocComment},
 	crate::{
 		Format,
-		Print,
 		format::{self, FormatFn},
 	},
 	rustidy_parse::{ParsableRecursive, Parse, Parser},
+	rustidy_print::Print,
 };
 
 /// A type with outer attributes

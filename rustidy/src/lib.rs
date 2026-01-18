@@ -29,13 +29,9 @@
 // Modules
 pub mod ast;
 pub mod format;
-pub mod print;
 
 // Exports
-pub use self::{
-	format::{Format, FormatRef},
-	print::{Print, PrintFmt},
-};
+pub use self::format::{Format, FormatRef};
 
 // Imports
 use {

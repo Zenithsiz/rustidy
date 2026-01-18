@@ -459,6 +459,7 @@ dependencies = [
  "ref-cast",
  "rustidy-macros",
  "rustidy-parse",
+ "rustidy-print",
  "rustidy-util",
  "serde",
  "serde_json",
@@ -487,6 +488,21 @@ dependencies = [
 
 [[package]]
 name = "rustidy-parse"
+version = "0.1.0"
+dependencies = [
+ "app-error",
+ "convert_case 0.8.0",
+ "derive_more",
+ "either",
+ "itertools",
+ "rustidy-macros",
+ "rustidy-util",
+ "serde",
+ "strum",
+]
+
+[[package]]
+name = "rustidy-print"
 version = "0.1.0"
 dependencies = [
  "app-error",

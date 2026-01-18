@@ -33,8 +33,9 @@ pub use self::{
 
 // Imports
 use {
-	crate::{Format, Print},
+	crate::Format,
 	rustidy_parse::{FromRecursiveRoot, Parse, ParseRecursive, Parser, RecursiveWrapper},
+	rustidy_print::Print,
 	rustidy_util::{Arena, ArenaData, ArenaIdx},
 };
 

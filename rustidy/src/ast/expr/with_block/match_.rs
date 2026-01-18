@@ -5,7 +5,6 @@ use {
 	super::Conditions,
 	crate::{
 		Format,
-		Print,
 		ast::{
 			delimited::Braced,
 			expr::{Expression, ExpressionInner, ExpressionWithBlock, ExpressionWithoutBlock},
@@ -17,6 +16,7 @@ use {
 	},
 	core::ops::ControlFlow,
 	rustidy_parse::{FromRecursiveRoot, Parse, ParseError, Parser, ParserError},
+	rustidy_print::Print,
 	std::fmt,
 };
 

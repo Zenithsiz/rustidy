@@ -4,7 +4,6 @@
 use {
 	crate::{
 		Format,
-		Print,
 		ast::{
 			delimited::Bracketed,
 			expr::Expression,
@@ -13,6 +12,7 @@ use {
 		},
 	},
 	rustidy_parse::Parse,
+	rustidy_print::Print,
 };
 
 /// `ArrayExpression`

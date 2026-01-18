@@ -14,9 +14,9 @@ use {
 			whitespace::Whitespace,
 		},
 		format,
-		print::Print,
 	},
 	rustidy_parse::Parse,
+	rustidy_print::Print,
 };
 
 /// `UseDeclaration`

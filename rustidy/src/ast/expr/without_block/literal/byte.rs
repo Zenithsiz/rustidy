@@ -5,10 +5,10 @@ use {
 	super::escape::ByteEscapeError,
 	crate::{
 		Format,
-		Print,
 		ast::{expr::without_block::literal::ByteEscape, whitespace::Whitespace},
 	},
 	rustidy_parse::Parse,
+	rustidy_print::Print,
 	rustidy_util::AstStr,
 };
 

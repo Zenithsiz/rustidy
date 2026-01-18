@@ -8,13 +8,13 @@ use {
 	},
 	crate::{
 		Format,
-		Print,
 		ast::{
 			expr::without_block::literal::{NonNulByteEscape, NonNulUnicodeEscape, StringContinue},
 			whitespace::Whitespace,
 		},
 	},
 	rustidy_parse::Parse,
+	rustidy_print::Print,
 	rustidy_util::AstStr,
 };
 

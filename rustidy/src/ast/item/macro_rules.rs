@@ -4,7 +4,6 @@
 use {
 	crate::{
 		Format,
-		Print,
 		ast::{
 			at_least::AtLeast1,
 			attr::DelimTokenTree,
@@ -15,6 +14,7 @@ use {
 		},
 	},
 	rustidy_parse::Parse,
+	rustidy_print::Print,
 };
 
 /// `MacroRulesDefinition`

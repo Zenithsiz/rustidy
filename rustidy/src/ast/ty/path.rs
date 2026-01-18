@@ -4,7 +4,6 @@
 use {
 	crate::{
 		Format,
-		Print,
 		ast::{
 			expr::without_block::path::{GenericArgs, PathIdentSegment, TypePathFn},
 			punct::{self, Punctuated},
@@ -12,6 +11,7 @@ use {
 		},
 	},
 	rustidy_parse::Parse,
+	rustidy_print::Print,
 };
 
 /// `TypePath`

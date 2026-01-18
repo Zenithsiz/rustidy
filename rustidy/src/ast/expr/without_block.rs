@@ -51,13 +51,13 @@ use {
 	super::{Expression, ExpressionInner},
 	crate::{
 		Format,
-		Print,
 		ast::{
 			token,
 			with_attrs::{self, WithOuterAttributes},
 		},
 	},
 	rustidy_parse::{Parse, ParseRecursive, RecursiveWrapper},
+	rustidy_print::Print,
 };
 
 /// `ExpressionWithoutBlock`

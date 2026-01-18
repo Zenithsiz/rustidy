@@ -10,8 +10,9 @@ use {
 		ty::Type,
 		with_attrs::{self, WithOuterAttributes},
 	},
-	crate::{Format, Print},
+	crate::Format,
 	rustidy_parse::Parse,
+	rustidy_print::Print,
 };
 
 /// `Statement`

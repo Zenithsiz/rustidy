@@ -2,8 +2,9 @@
 
 // Imports
 use {
-	crate::{Format, Print, ast::token},
+	crate::{Format, ast::token},
 	rustidy_parse::Parse,
+	rustidy_print::Print,
 };
 
 /// `UnderscoreExpression`

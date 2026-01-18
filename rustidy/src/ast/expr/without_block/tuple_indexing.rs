@@ -4,13 +4,13 @@ use {
 	super::{ExpressionWithoutBlockInner, literal::TupleIndex},
 	crate::{
 		Format,
-		Print,
 		ast::{
 			expr::{Expression, ExpressionInner},
 			token,
 		},
 	},
 	rustidy_parse::ParseRecursive,
+	rustidy_print::Print,
 };
 
 /// `TupleIndexingExpression`

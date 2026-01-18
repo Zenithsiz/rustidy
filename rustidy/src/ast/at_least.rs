@@ -2,8 +2,9 @@
 
 // Imports
 use {
-	crate::{Format, Print, format::FormatFn},
+	crate::{Format, format::FormatFn},
 	rustidy_parse::Parse,
+	rustidy_print::Print,
 };
 
 #[derive(PartialEq, Eq, Debug)]

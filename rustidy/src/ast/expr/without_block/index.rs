@@ -5,13 +5,13 @@ use {
 	super::ExpressionWithoutBlockInner,
 	crate::{
 		Format,
-		Print,
 		ast::{
 			delimited::Bracketed,
 			expr::{Expression, ExpressionInner},
 		},
 	},
 	rustidy_parse::ParseRecursive,
+	rustidy_print::Print,
 };
 
 /// `IndexExpression`

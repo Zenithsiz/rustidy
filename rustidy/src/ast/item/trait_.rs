@@ -19,9 +19,9 @@ use {
 			with_attrs::{self, WithInnerAttributes, WithOuterAttributes},
 		},
 		format,
-		print::Print,
 	},
 	rustidy_parse::Parse,
+	rustidy_print::Print,
 };
 
 /// `Trait`

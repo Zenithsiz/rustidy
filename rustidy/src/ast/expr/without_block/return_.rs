@@ -4,10 +4,10 @@
 use {
 	crate::{
 		Format,
-		Print,
 		ast::{expr::Expression, token},
 	},
 	rustidy_parse::Parse,
+	rustidy_print::Print,
 };
 
 /// `ReturnExpression`

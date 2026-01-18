@@ -16,9 +16,9 @@ use {
 			with_attrs::{self, WithOuterAttributes},
 		},
 		format,
-		print::Print,
 	},
 	rustidy_parse::Parse,
+	rustidy_print::Print,
 };
 
 /// `Function`

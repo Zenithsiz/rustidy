@@ -12,9 +12,9 @@ use {
 			with_attrs::WithInnerAttributes,
 		},
 		format,
-		print::Print,
 	},
 	rustidy_parse::{Parse, ParseError, Parser, ParserError},
+	rustidy_print::Print,
 };
 
 /// `BlockExpression`

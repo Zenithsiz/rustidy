@@ -5,7 +5,6 @@ use {
 	super::function::{GenericParams, WhereClause},
 	crate::{
 		Format,
-		Print,
 		ast::{
 			delimited::{Braced, Parenthesized},
 			expr::Expression,
@@ -18,6 +17,7 @@ use {
 		},
 	},
 	rustidy_parse::Parse,
+	rustidy_print::Print,
 };
 
 /// `Struct`

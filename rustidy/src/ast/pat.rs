@@ -25,9 +25,10 @@ use {
 		token,
 		with_attrs::WithOuterAttributes,
 	},
-	crate::{Format, Print},
+	crate::Format,
 	core::fmt::Debug,
 	rustidy_parse::Parse,
+	rustidy_print::Print,
 };
 
 /// `Pattern`
