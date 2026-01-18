@@ -5,7 +5,7 @@ pub use rustidy_macros::ParseError;
 
 // Imports
 use {
-	super::{Parse, Parser, ParserPos, ParserRange},
+	super::{AstPos, AstRange, Parse, Parser},
 	app_error::AppError,
 	core::{error::Error as StdError, fmt},
 };
@@ -16,7 +16,7 @@ pub trait ParseError {
 	fn is_fatal(&self) -> bool;
 
 	/// Returns the position at which this error occurred.
-	fn pos(&self) -> Option<ParserPos>;
+	fn pos(&self) -> Option<AstPos>;
 
 	/// Converts this error type to an `AppError`
 	fn to_app_error(&self, parser: &Parser) -> AppError;
@@ -27,7 +27,7 @@ impl ParseError for ! {
 		*self
 	}
 
-	fn pos(&self) -> Option<ParserPos> {
+	fn pos(&self) -> Option<AstPos> {
 		*self
 	}
 
@@ -41,7 +41,7 @@ impl<E: ParseError> ParseError for Box<E> {
 		(**self).is_fatal()
 	}
 
-	fn pos(&self) -> Option<ParserPos> {
+	fn pos(&self) -> Option<AstPos> {
 		(**self).pos()
 	}
 
@@ -55,7 +55,7 @@ impl ParseError for () {
 		false
 	}
 
-	fn pos(&self) -> Option<ParserPos> {
+	fn pos(&self) -> Option<AstPos> {
 		None
 	}
 
@@ -70,11 +70,11 @@ pub struct ParserError<T: Parse> {
 	// Note: This is behind an indirection to avoid overflowing the stack when
 	//       we parse large enums.
 	source: Box<T::Error>,
-	range:  ParserRange,
+	range:  AstRange,
 }
 
 impl<T: Parse> ParserError<T> {
-	pub(super) fn new(source: T::Error, range: ParserRange) -> Self {
+	pub(super) fn new(source: T::Error, range: AstRange) -> Self {
 		Self {
 			source: Box::new(source),
 			range,
@@ -114,11 +114,11 @@ impl<T: Parse> ParseError for ParserError<T> {
 		self.source.is_fatal()
 	}
 
-	fn pos(&self) -> Option<ParserPos> {
+	fn pos(&self) -> Option<AstPos> {
 		// Note: We prefer deeper positions since they contain the
 		//       nearest position to the error.
 		let pos = match self.source.pos() {
-			Some(pos) => ParserPos::max(pos, self.range.end),
+			Some(pos) => AstPos::max(pos, self.range.end),
 			None => self.range.end,
 		};
 

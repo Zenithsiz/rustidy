@@ -15,7 +15,7 @@ use {
 		},
 	},
 	rustidy_parse::Parse,
-	rustidy_util::ParserStr,
+	rustidy_util::AstStr,
 };
 
 
@@ -31,7 +31,7 @@ use {
 pub struct ByteStringLiteral {
 	pub ws:     Whitespace,
 	#[parse(try_update_with = Self::parse)]
-	pub s:      ParserStr,
+	pub s:      AstStr,
 	pub suffix: Option<Suffix>,
 }
 

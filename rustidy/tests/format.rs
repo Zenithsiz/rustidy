@@ -4,7 +4,7 @@
 use {
 	rustidy::{Format, Print, PrintFmt, Replacements, format},
 	rustidy_parse::Parser,
-	rustidy_util::ParserPos,
+	rustidy_util::AstPos,
 	std::{env, fs, path::Path},
 };
 
@@ -62,7 +62,7 @@ pub fn format() {
 					.or_else(|| {
 						(found_output.len() != output.len()).then(|| usize::min(found_output.len(), output.len()))
 					}) {
-					parser.set_pos(ParserPos::from_usize(idx));
+					parser.set_pos(AstPos::from_usize(idx));
 					parser.reverse_line();
 					let idx = parser.cur_pos().to_usize();
 

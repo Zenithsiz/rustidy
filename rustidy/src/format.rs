@@ -10,14 +10,14 @@ pub use {self::config::Config, rustidy_macros::Format};
 use {
 	crate::{Replacement, Replacements, ast::whitespace::Whitespace},
 	core::marker::PhantomData,
-	rustidy_util::{ArenaData, ArenaIdx, ParserPos, ParserRange, ParserStr},
+	rustidy_util::{ArenaData, ArenaIdx, AstPos, AstRange, AstStr},
 };
 
 /// Formattable read-only utils
 // TODO: Better name?
 pub trait FormatRef {
 	/// Returns the input range of this type
-	fn input_range(&self, ctx: &Context) -> Option<ParserRange>;
+	fn input_range(&self, ctx: &Context) -> Option<AstRange>;
 
 	/// Returns the input length of this type
 	fn input_len(&self, ctx: &Context) -> usize {
@@ -69,13 +69,13 @@ pub trait Format: FormatRef {
 }
 
 impl<T: FormatRef> FormatRef for &'_ T {
-	fn input_range(&self, ctx: &Context) -> Option<ParserRange> {
+	fn input_range(&self, ctx: &Context) -> Option<AstRange> {
 		(**self).input_range(ctx)
 	}
 }
 
 impl<T: FormatRef> FormatRef for &'_ mut T {
-	fn input_range(&self, ctx: &Context) -> Option<ParserRange> {
+	fn input_range(&self, ctx: &Context) -> Option<AstRange> {
 		(**self).input_range(ctx)
 	}
 }
@@ -94,7 +94,7 @@ impl<T: Format> Format for &'_ mut T {
 }
 
 impl<T: FormatRef> FormatRef for Box<T> {
-	fn input_range(&self, ctx: &Context) -> Option<ParserRange> {
+	fn input_range(&self, ctx: &Context) -> Option<AstRange> {
 		(**self).input_range(ctx)
 	}
 }
@@ -113,7 +113,7 @@ impl<T: Format> Format for Box<T> {
 }
 
 impl<T: FormatRef> FormatRef for Option<T> {
-	fn input_range(&self, ctx: &Context) -> Option<ParserRange> {
+	fn input_range(&self, ctx: &Context) -> Option<AstRange> {
 		self.as_ref()?.input_range(ctx)
 	}
 }
@@ -137,7 +137,7 @@ impl<T: Format> Format for Option<T> {
 }
 
 impl<T: FormatRef> FormatRef for Vec<T> {
-	fn input_range(&self, ctx: &Context) -> Option<ParserRange> {
+	fn input_range(&self, ctx: &Context) -> Option<AstRange> {
 		let mut compute_range = ComputeRange::default();
 		compute_range.extend(self, ctx);
 		compute_range.finish()
@@ -163,7 +163,7 @@ impl<T: Format> Format for Vec<T> {
 }
 
 impl FormatRef for ! {
-	fn input_range(&self, _ctx: &Context) -> Option<ParserRange> {
+	fn input_range(&self, _ctx: &Context) -> Option<AstRange> {
 		*self
 	}
 }
@@ -182,7 +182,7 @@ impl Format for ! {
 }
 
 impl<T> FormatRef for PhantomData<T> {
-	fn input_range(&self, _ctx: &Context) -> Option<ParserRange> {
+	fn input_range(&self, _ctx: &Context) -> Option<AstRange> {
 		None
 	}
 }
@@ -199,7 +199,7 @@ impl<T> Format for PhantomData<T> {
 }
 
 impl FormatRef for () {
-	fn input_range(&self, _ctx: &Context) -> Option<ParserRange> {
+	fn input_range(&self, _ctx: &Context) -> Option<AstRange> {
 		None
 	}
 }
@@ -225,7 +225,7 @@ macro tuple_impl ($N:literal, $($T:ident),* $(,)?) {
 	#[automatically_derived]
 	#[expect(non_snake_case)]
 	impl< $($T: FormatRef,)* > FormatRef for ( $($T,)* ) {
-		fn input_range(&self, ctx: &Context) -> Option<ParserRange> {
+		fn input_range(&self, ctx: &Context) -> Option<AstRange> {
 			let ( $($T,)* ) = self;
 
 			let mut compute_range = ComputeRange::default();
@@ -256,13 +256,13 @@ tuple_impl! { 1, T0 }
 tuple_impl! { 2, T0, T1 }
 tuple_impl! { 3, T0, T1, T2 }
 
-impl FormatRef for ParserStr {
-	fn input_range(&self, _ctx: &Context) -> Option<ParserRange> {
+impl FormatRef for AstStr {
+	fn input_range(&self, _ctx: &Context) -> Option<AstRange> {
 		Some(Self::range(self))
 	}
 }
 
-impl Format for ParserStr {
+impl Format for AstStr {
 	fn format(&mut self, _ctx: &mut Context) {}
 
 	fn with_prefix_ws<R, F: Fn(&mut Whitespace, &mut Context) -> R + Copy>(
@@ -275,7 +275,7 @@ impl Format for ParserStr {
 }
 
 impl<T: ArenaData<Data: FormatRef>> FormatRef for ArenaIdx<T> {
-	fn input_range(&self, ctx: &Context) -> Option<ParserRange> {
+	fn input_range(&self, ctx: &Context) -> Option<AstRange> {
 		T::ARENA.get(self).input_range(ctx)
 	}
 }
@@ -322,7 +322,7 @@ impl<'a, 'input> Context<'a, 'input> {
 
 	/// Returns the string of a string
 	#[must_use]
-	pub fn str(&mut self, s: &ParserStr) -> &'input str {
+	pub fn str(&mut self, s: &AstStr) -> &'input str {
 		s.range().str(self.input)
 	}
 
@@ -339,18 +339,14 @@ impl<'a, 'input> Context<'a, 'input> {
 	}
 
 	/// Creates a string at a position with a replacement
-	pub fn create_str_at_pos_with_replacement(
-		&mut self,
-		pos: ParserPos,
-		replacement: impl Into<Replacement>,
-	) -> ParserStr {
-		let s = ParserStr::empty_at(pos);
+	pub fn create_str_at_pos_with_replacement(&mut self, pos: AstPos, replacement: impl Into<Replacement>) -> AstStr {
+		let s = AstStr::empty_at(pos);
 		self.replace(&s, replacement);
 		s
 	}
 
 	/// Replaces a string
-	pub fn replace(&mut self, s: &ParserStr, replacement: impl Into<Replacement>) {
+	pub fn replace(&mut self, s: &AstStr, replacement: impl Into<Replacement>) {
 		self.replacements.add(s, s.range().str(self.input), replacement);
 	}
 
@@ -444,12 +440,12 @@ pub fn format_vec_each_with<T>(f: impl FormatFn<T>) -> impl FormatFn<Vec<T>> {
 /// Item range computer
 #[derive(Clone, Copy, Default, Debug)]
 pub struct ComputeRange {
-	cur: Option<ParserRange>,
+	cur: Option<AstRange>,
 }
 
 impl ComputeRange {
-	/// Adds a parser range to this
-	pub const fn add_range(&mut self, range: ParserRange) {
+	/// Adds an ast range to this
+	pub const fn add_range(&mut self, range: AstRange) {
 		match &mut self.cur {
 			Some(cur) => cur.end = range.end,
 			None => self.cur = Some(range),
@@ -474,7 +470,7 @@ impl ComputeRange {
 
 	/// Returns the computed range
 	#[must_use]
-	pub const fn finish(&mut self) -> Option<ParserRange> {
+	pub const fn finish(&mut self) -> Option<AstRange> {
 		self.cur
 	}
 }

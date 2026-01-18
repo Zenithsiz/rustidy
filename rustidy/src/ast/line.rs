@@ -4,7 +4,7 @@
 use {
 	crate::{Format, Print},
 	rustidy_parse::Parse,
-	rustidy_util::ParserStr,
+	rustidy_util::AstStr,
 };
 
 /// Characters remaining until the end of the line (including the newline if it exists)
@@ -12,7 +12,7 @@ use {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 #[parse(name = "remaining characters in line")]
-pub struct RemainingLine(#[parse(update_with = Self::parse)] pub ParserStr);
+pub struct RemainingLine(#[parse(update_with = Self::parse)] pub AstStr);
 
 impl RemainingLine {
 	fn parse(s: &mut &str) {
@@ -31,7 +31,7 @@ impl RemainingLine {
 #[derive(Parse, Format, Print)]
 #[parse(name = "remaining characters in block comment")]
 #[parse(error(name = MissingCommentEnd, fmt = "Expected `*/` after `/*`", fatal))]
-pub struct RemainingBlockComment(#[parse(try_update_with = Self::parse)] pub ParserStr);
+pub struct RemainingBlockComment(#[parse(try_update_with = Self::parse)] pub AstStr);
 
 impl RemainingBlockComment {
 	// TODO: Deduplicate this with `whitespace::BlockComment::parse`

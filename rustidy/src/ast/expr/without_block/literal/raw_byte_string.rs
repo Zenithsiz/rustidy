@@ -5,7 +5,7 @@ use {
 	super::Suffix,
 	crate::{Format, Print, ast::whitespace::Whitespace},
 	rustidy_parse::Parse,
-	rustidy_util::ParserStr,
+	rustidy_util::AstStr,
 };
 
 /// `RAW_BYTE_STRING_LITERAL`
@@ -20,7 +20,7 @@ use {
 pub struct RawByteStringLiteral {
 	pub ws:     Whitespace,
 	#[parse(try_update_with = Self::parse)]
-	pub s:      ParserStr,
+	pub s:      AstStr,
 	pub suffix: Option<Suffix>,
 }
 

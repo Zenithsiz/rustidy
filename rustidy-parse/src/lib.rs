@@ -41,7 +41,7 @@ use {
 		mem,
 		ops::{Residual, Try},
 	},
-	rustidy_util::{ArenaData, ArenaIdx, ParserPos, ParserRange, ParserStr},
+	rustidy_util::{ArenaData, ArenaIdx, AstPos, AstRange, AstStr},
 	std::{fmt, str::pattern::Pattern},
 };
 
@@ -74,7 +74,7 @@ impl ParseError for NeverError {
 		false
 	}
 
-	fn pos(&self) -> Option<ParserPos> {
+	fn pos(&self) -> Option<AstPos> {
 		None
 	}
 
@@ -215,7 +215,7 @@ macro tuple_impl($N:literal, $($T:ident),* $(,)?) {
 			}
 		}
 
-		fn pos(&self) -> Option<ParserPos> {
+		fn pos(&self) -> Option<AstPos> {
 			match *self {
 				$(
 					Self::$T(ref err, ..) => err.pos(),
@@ -259,11 +259,11 @@ pub struct Parser<'input> {
 	input: &'input str,
 
 	/// Current position
-	cur_pos: ParserPos,
+	cur_pos: AstPos,
 
 	/// Tags
-	// Note: Always sorted by parser position.
-	tags: Vec<(ParserPos, ParserTag)>,
+	// Note: Always sorted by ast position.
+	tags: Vec<(AstPos, ParserTag)>,
 }
 
 impl<'input> Parser<'input> {
@@ -272,7 +272,7 @@ impl<'input> Parser<'input> {
 	pub const fn new(input: &'input str) -> Self {
 		Self {
 			input,
-			cur_pos: ParserPos::from_usize(0),
+			cur_pos: AstPos::from_usize(0),
 			tags: vec![],
 		}
 	}
@@ -290,12 +290,12 @@ impl<'input> Parser<'input> {
 	}
 
 	/// Returns the current position of the parser
-	pub const fn cur_pos(&mut self) -> ParserPos {
+	pub const fn cur_pos(&mut self) -> AstPos {
 		self.cur_pos
 	}
 
 	/// Sets the position of this parser
-	pub const fn set_pos(&mut self, pos: ParserPos) {
+	pub const fn set_pos(&mut self, pos: AstPos) {
 		self.cur_pos = pos;
 	}
 
@@ -325,7 +325,7 @@ impl<'input> Parser<'input> {
 
 	/// Gets the position (0-indexed) of the parser at a position
 	#[must_use]
-	pub fn loc(&self, pos: ParserPos) -> ParserLoc {
+	pub fn loc(&self, pos: AstPos) -> ParserLoc {
 		let line = self.input[..pos.0].chars().filter(|&ch| ch == '\n').count();
 		let column = match self.input[..pos.0].rfind('\n') {
 			Some(newline_pos) => pos.0 - newline_pos - 1,
@@ -343,7 +343,7 @@ impl<'input> Parser<'input> {
 
 	/// Returns the string of an range
 	#[must_use]
-	pub fn str(&mut self, s: &ParserStr) -> &'input str {
+	pub fn str(&mut self, s: &AstStr) -> &'input str {
 		s.range().str(self.input)
 	}
 
@@ -356,7 +356,7 @@ impl<'input> Parser<'input> {
 	/// Updates this parser from a string.
 	///
 	/// See [`Self::try_update_with`] for more details.
-	pub fn update_with<F>(&mut self, f: F) -> ParserStr
+	pub fn update_with<F>(&mut self, f: F) -> AstStr
 	where
 		F: FnOnce(&mut &'input str),
 	{
@@ -380,10 +380,10 @@ impl<'input> Parser<'input> {
 	/// # Failure
 	/// If `f` returns unsuccessfully, an error will be returned
 	/// with the latest change to the string as it's position.
-	pub fn try_update_with<F, T>(&mut self, f: F) -> <T::Residual as Residual<ParserStr>>::TryType
+	pub fn try_update_with<F, T>(&mut self, f: F) -> <T::Residual as Residual<AstStr>>::TryType
 	where
 		F: FnOnce(&mut &'input str) -> T,
-		T: Try<Output = (), Residual: Residual<ParserStr>>,
+		T: Try<Output = (), Residual: Residual<AstStr>>,
 	{
 		let mut remaining = self.remaining();
 		let res = f(&mut remaining);
@@ -406,17 +406,17 @@ impl<'input> Parser<'input> {
 			.substr_range(output)
 			.expect("Output was not a substring of the input");
 
-		let output_range = ParserRange {
-			start: ParserPos(output_range.start),
-			end:   ParserPos(output_range.end),
+		let output_range = AstRange {
+			start: AstPos(output_range.start),
+			end:   AstPos(output_range.end),
 		};
 
-		<_>::from_output(ParserStr::new(output_range))
+		<_>::from_output(AstStr::new(output_range))
 	}
 
 	/// Strips a prefix `s` from the parser
 	#[expect(clippy::needless_pass_by_value, reason = "It's more ergonomic")]
-	pub fn strip_prefix<S>(&mut self, s: S) -> Option<ParserStr>
+	pub fn strip_prefix<S>(&mut self, s: S) -> Option<AstStr>
 	where
 		S: Pattern + Clone + Into<String>,
 	{
@@ -429,7 +429,7 @@ impl<'input> Parser<'input> {
 	/// Parses `T` from this parser
 	pub fn parse<T: Parse>(&mut self) -> Result<T, ParserError<T>> {
 		let start_pos = self.cur_pos;
-		T::parse_from(self).map_err(|source| ParserError::new(source, ParserRange::new(start_pos, self.cur_pos)))
+		T::parse_from(self).map_err(|source| ParserError::new(source, AstRange::new(start_pos, self.cur_pos)))
 	}
 
 	/// Tries to parses `T` from this parser.
@@ -523,7 +523,7 @@ impl<'input> Parser<'input> {
 /// Peek state
 #[derive(Debug)]
 pub struct PeekState {
-	cur_pos: ParserPos,
+	cur_pos: AstPos,
 }
 
 impl PeekState {

@@ -1,14 +1,14 @@
-//! Parser position
+//! Ast position
 
-/// Parser position
+/// Ast position
 #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Copy, Hash, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(derive_more::From)]
 #[serde(transparent)]
-pub struct ParserPos(pub usize);
+pub struct AstPos(pub usize);
 
-impl ParserPos {
-	/// Creates a parser position from a usize
+impl AstPos {
+	/// Creates an ast position from a usize
 	// TODO: Should we allow this?
 	#[must_use]
 	pub const fn from_usize(pos: usize) -> Self {

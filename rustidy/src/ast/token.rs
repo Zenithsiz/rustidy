@@ -23,7 +23,7 @@ use {
 	},
 	crate::{Format, print::Print},
 	rustidy_parse::{Parse, Parser},
-	rustidy_util::ParserStr,
+	rustidy_util::AstStr,
 };
 
 pub macro decl_tokens(
@@ -48,7 +48,7 @@ pub macro decl_tokens(
 			pub Whitespace,
 
 			#[parse(try_update_with = Self::parse)]
-			pub ParserStr,
+			pub AstStr,
 		);
 
 		impl $TokenName {

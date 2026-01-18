@@ -6,7 +6,7 @@ use {
 	crate::{Format, FormatRef, Print, Replacement, format},
 	itertools::Itertools,
 	rustidy_parse::{Parse, Parser},
-	rustidy_util::{Arena, ArenaData, ArenaIdx, ParserPos, ParserRange, ParserStr},
+	rustidy_util::{Arena, ArenaData, ArenaIdx, AstPos, AstRange, AstStr},
 };
 
 /// Whitespace
@@ -19,9 +19,9 @@ pub struct Whitespace(ArenaIdx<Whitespace>);
 
 impl Whitespace {
 	/// Creates an empty whitespace at a position
-	pub fn empty(pos: ParserPos) -> Self {
+	pub fn empty(pos: AstPos) -> Self {
 		let inner = Punctuated {
-			first: PureWhitespace(ParserStr::empty_at(pos)),
+			first: PureWhitespace(AstStr::empty_at(pos)),
 			rest:  vec![],
 		};
 		let idx = ARENA.push(inner);
@@ -87,7 +87,7 @@ impl ArenaData for Whitespace {
 static ARENA: Arena<Whitespace> = Arena::new();
 
 impl FormatRef for Whitespace {
-	fn input_range(&self, ctx: &format::Context) -> Option<ParserRange> {
+	fn input_range(&self, ctx: &format::Context) -> Option<AstRange> {
 		ARENA.get(&self.0).input_range(ctx)
 	}
 }
@@ -127,7 +127,7 @@ impl FormatKind {
 	}
 
 	/// Returns the indentation string, with a newline *before*
-	fn indent_str_nl(ctx: &mut format::Context, cur_str: &ParserStr) -> String {
+	fn indent_str_nl(ctx: &mut format::Context, cur_str: &AstStr) -> String {
 		// TODO: Should we be checking for multiple newlines?
 		let after_newline = cur_str.range().str_before(ctx.input()).ends_with('\n');
 
@@ -144,7 +144,7 @@ impl FormatKind {
 	}
 
 	/// Returns the prefix string
-	fn prefix_str(self, ctx: &mut format::Context, cur_str: &ParserStr, is_last: bool) -> Replacement {
+	fn prefix_str(self, ctx: &mut format::Context, cur_str: &AstStr, is_last: bool) -> Replacement {
 		match self {
 			Self::Remove => "".into(),
 			Self::Single => " ".into(),
@@ -161,7 +161,7 @@ impl FormatKind {
 	}
 
 	/// Returns the string after a newline
-	fn after_newline_str(self, ctx: &mut format::Context, cur_str: &ParserStr, is_last: bool) -> Replacement {
+	fn after_newline_str(self, ctx: &mut format::Context, cur_str: &AstStr, is_last: bool) -> Replacement {
 		match self {
 			Self::Remove | Self::Single => "".into(),
 			Self::Indent { offset, .. } => match is_last {
@@ -173,7 +173,7 @@ impl FormatKind {
 	}
 
 	/// Returns the normal string
-	fn normal_str(self, ctx: &mut format::Context, cur_str: &ParserStr, is_last: bool) -> Replacement {
+	fn normal_str(self, ctx: &mut format::Context, cur_str: &AstStr, is_last: bool) -> Replacement {
 		match self {
 			Self::Remove => "".into(),
 			Self::Single => " ".into(),
@@ -190,7 +190,7 @@ impl FormatKind {
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
-pub struct PureWhitespace(#[parse(update_with = Self::parse)] pub ParserStr);
+pub struct PureWhitespace(#[parse(update_with = Self::parse)] pub AstStr);
 
 impl PureWhitespace {
 	fn parse(s: &mut &str) {
@@ -214,7 +214,7 @@ pub enum Comment {
 #[derive(Parse, Format, Print)]
 #[parse(error(name = NoComment, fmt = "Expected `/*` (except `/*!` or `/**`)"))]
 #[parse(error(name = MissingCommentEnd, fmt = "Expected `*/` after `/*`", fatal))]
-pub struct BlockComment(#[parse(try_update_with = Self::parse)] pub ParserStr);
+pub struct BlockComment(#[parse(try_update_with = Self::parse)] pub AstStr);
 
 impl BlockComment {
 	fn parse(s: &mut &str) -> Result<(), BlockCommentError> {
@@ -252,7 +252,7 @@ impl BlockComment {
 #[derive(Parse, Format, Print)]
 #[parse(error(name = NoComment, fmt = "Expected `//` (except `///` or `//!`)"))]
 #[parse(error(name = Newline, fmt = "Expected newline after `//`"))]
-pub struct LineComment(#[parse(try_update_with = Self::parse)] pub ParserStr);
+pub struct LineComment(#[parse(try_update_with = Self::parse)] pub AstStr);
 
 impl LineComment {
 	fn parse(s: &mut &str) -> Result<(), LineCommentError> {
@@ -273,7 +273,7 @@ impl LineComment {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 #[parse(error(name = NoComment, fmt = "Expected `//` (except `///` or `//!`)"))]
-pub struct TrailingLineComment(#[parse(try_update_with = Self::parse)] pub ParserStr);
+pub struct TrailingLineComment(#[parse(try_update_with = Self::parse)] pub AstStr);
 
 impl TrailingLineComment {
 	fn parse(s: &mut &str) -> Result<(), TrailingLineCommentError> {

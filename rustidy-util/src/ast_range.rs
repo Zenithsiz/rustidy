@@ -1,20 +1,20 @@
-//! Parser range
+//! Ast range
 
 // Imports
-use crate::ParserPos;
+use crate::AstPos;
 
-/// Parser range
+/// Ast range
 #[derive(PartialEq, Eq, Clone, Copy, Hash, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-pub struct ParserRange {
-	pub start: ParserPos,
-	pub end:   ParserPos,
+pub struct AstRange {
+	pub start: AstPos,
+	pub end:   AstPos,
 }
 
-impl ParserRange {
-	/// Creates a parser range from a start and end position
+impl AstRange {
+	/// Creates an ast range from a start and end position
 	#[must_use]
-	pub const fn new(start: ParserPos, end: ParserPos) -> Self {
+	pub const fn new(start: AstPos, end: AstPos) -> Self {
 		Self { start, end }
 	}
 

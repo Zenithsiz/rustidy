@@ -7,7 +7,7 @@ pub use rustidy_macros::Print;
 use {
 	crate::Replacements,
 	core::marker::PhantomData,
-	rustidy_util::{ArenaData, ArenaIdx, ParserStr},
+	rustidy_util::{ArenaData, ArenaIdx, AstStr},
 };
 
 /// Printable types
@@ -79,7 +79,7 @@ tuple_impl! { 1, T0 }
 tuple_impl! { 2, T0, T1 }
 tuple_impl! { 3, T0, T1, T2 }
 
-impl Print for ParserStr {
+impl Print for AstStr {
 	fn print(&self, f: &mut PrintFmt) {
 		match f.replacements.get(self) {
 			Some(replacement) => replacement.write(&mut f.output),

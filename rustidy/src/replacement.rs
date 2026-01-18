@@ -1,7 +1,7 @@
 //! String replacements
 
 // Imports
-use {rustidy_util::ParserStr, std::collections::HashMap};
+use {rustidy_util::AstStr, std::collections::HashMap};
 
 /// String replacements
 pub struct Replacements {
@@ -18,7 +18,7 @@ impl Replacements {
 	}
 
 	/// Adds a replacement
-	pub fn add(&mut self, s: &ParserStr, s_str: &str, replacement: impl Into<Replacement>) {
+	pub fn add(&mut self, s: &AstStr, s_str: &str, replacement: impl Into<Replacement>) {
 		let replacement = replacement.into();
 		match replacement.is(s_str) {
 			true => _ = self.replacements.remove(&s.0.id()),
@@ -28,7 +28,7 @@ impl Replacements {
 
 	/// Returns the replacement of a string
 	#[must_use]
-	pub fn get(&self, s: &ParserStr) -> Option<&Replacement> {
+	pub fn get(&self, s: &AstStr) -> Option<&Replacement> {
 		self.replacements.get(&s.0.id())
 	}
 }

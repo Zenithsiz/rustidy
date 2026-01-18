@@ -9,7 +9,7 @@ use {
 		ast::{expr::without_block::literal::ByteEscape, whitespace::Whitespace},
 	},
 	rustidy_parse::Parse,
-	rustidy_util::ParserStr,
+	rustidy_util::AstStr,
 };
 
 /// `BYTE_LITERAL`
@@ -21,7 +21,7 @@ use {
 #[parse(error(name = ByteEscape(ByteEscapeError), transparent))]
 #[parse(error(name = CharOrEscape, fmt = "Expected character or escape", fatal))]
 #[parse(error(name = EndQuote, fmt = "Expected `'` after `b'`", fatal))]
-pub struct ByteLiteral(pub Whitespace, #[parse(try_update_with = Self::parse)] pub ParserStr);
+pub struct ByteLiteral(pub Whitespace, #[parse(try_update_with = Self::parse)] pub AstStr);
 
 impl ByteLiteral {
 	fn parse(s: &mut &str) -> Result<(), ByteLiteralError> {

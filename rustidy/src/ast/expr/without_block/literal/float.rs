@@ -10,7 +10,7 @@ use {
 	},
 	rustidy_macros::ParseError,
 	rustidy_parse::{Parse, Parser, ParserError},
-	rustidy_util::ParserStr,
+	rustidy_util::AstStr,
 	std::fmt,
 };
 
@@ -105,7 +105,7 @@ pub enum FloatLiteralError {
 #[derive(Parse, Format, Print)]
 #[parse(error(name = E, fmt = "Expected `e` or `E`"))]
 #[parse(error(name = Digit, fmt = "Expected a digit"))]
-pub struct FloatExponent(#[parse(try_update_with = Self::parse)] pub ParserStr);
+pub struct FloatExponent(#[parse(try_update_with = Self::parse)] pub AstStr);
 
 impl FloatExponent {
 	fn parse(s: &mut &str) -> Result<(), FloatExponentError> {
