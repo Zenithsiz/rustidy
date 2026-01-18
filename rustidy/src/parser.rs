@@ -30,9 +30,9 @@ use {
 		mem,
 		ops::{Residual, Try},
 	},
+	rustidy_util::{ArenaData, ArenaIdx},
 	std::{fmt, str::pattern::Pattern},
 };
-use rustidy_util::{ArenaData, ArenaIdx};
 
 
 /// Parsable types
@@ -48,6 +48,7 @@ pub trait Parse: Sized {
 	///
 	/// If this returns `None`, no extra error is displayed when parsing the type.
 	/// This is useful for containers that usually don't want to expose themselves
+	// TODO: Add a default impl for this.
 	fn name() -> Option<impl fmt::Display>;
 
 	/// Parses this type from `input`, mutating it in-place.

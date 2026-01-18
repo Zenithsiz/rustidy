@@ -50,6 +50,20 @@ impl<E: ParseError> ParseError for Box<E> {
 	}
 }
 
+impl ParseError for () {
+	fn is_fatal(&self) -> bool {
+		false
+	}
+
+	fn pos(&self) -> Option<ParserPos> {
+		None
+	}
+
+	fn to_app_error(&self, _parser: &Parser) -> AppError {
+		AppError::from_multiple([])
+	}
+}
+
 
 /// Parser error
 pub struct ParserError<T: Parse> {

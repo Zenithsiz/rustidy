@@ -6,7 +6,7 @@ pub use rustidy_macros::ParseRecursive;
 // Imports
 use {
 	super::{ParsableFrom, Parse, ParseError, Parser, ParserError, ParserTag},
-	crate::{ast::expr::BlockExpression, parser::PeekState},
+	crate::parser::PeekState,
 	core::{marker::PhantomData, mem},
 	either::Either,
 };
@@ -162,7 +162,8 @@ pub enum RecursiveWrapperError<R: ParsableRecursive<R>> {
 	Base(ParserError<R::Base>),
 
 	#[parse_error(transparent)]
-	BlockExpression(ParserError<BlockExpression>),
+	#[doc(hidden)]
+	BracesOpen(ParserError<ParseBracesOpen>),
 
 	#[parse_error(fmt = "Expected a prefix or base")]
 	#[parse_error(multiple)]
@@ -272,10 +273,11 @@ fn parse<R: ParsableRecursive<R>>(parser: &mut Parser) -> Result<RecursiveWrappe
 							if tags
 								.iter()
 								.any(|tag| tag.name == "skip:OptionalTrailingBlockExpression") &&
-								peek::<BlockExpression>(parser, &tags)
-									.map_err(RecursiveWrapperError::BlockExpression)?
+								peek::<ParseBracesOpen>(parser, &tags)
+									.map_err(RecursiveWrapperError::BracesOpen)?
 									.is_ok()
 							{
+								// TODO: We should undo the peek here
 								break 'parsed Either::Left((suffix, suffix_state));
 							}
 
@@ -339,4 +341,37 @@ fn parse<R: ParsableRecursive<R>>(parser: &mut Parser) -> Result<RecursiveWrappe
 	};
 
 	Ok(RecursiveWrapperInner { first, rest })
+}
+
+/// Hack to ensure we don't parse optional trailing block expressions
+/// on range expressions.
+#[doc(hidden)]
+pub struct ParseBracesOpen;
+
+impl Parse for ParseBracesOpen {
+	type Error = ();
+
+	fn name() -> Option<impl std::fmt::Display> {
+		None::<!>
+	}
+
+	fn parse_from(parser: &mut Parser) -> Result<Self, Self::Error> {
+		if parser.has_tag("skip:Delimiters") {
+			return Err(());
+		}
+
+		parser
+			.try_update_with(|s| {
+				// TODO: Parse proper whitespace here
+				*s = s.trim_start();
+				match s.strip_prefix('{') {
+					Some(rest) => {
+						*s = rest;
+						Ok(())
+					},
+					None => Err(()),
+				}
+			})
+			.map(|_| Self)
+	}
 }
