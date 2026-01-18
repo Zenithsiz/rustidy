@@ -14,8 +14,8 @@ use {
 		parser::{Parse, ParserPos, ParserRange},
 	},
 	itertools::Itertools,
+	rustidy_util::{Arena, ArenaData, ArenaIdx},
 };
-use rustidy_util::{Arena, ArenaData, ArenaIdx};
 
 /// Whitespace
 #[derive(PartialEq, Eq, Debug)]

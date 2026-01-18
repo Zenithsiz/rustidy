@@ -16,8 +16,8 @@ use {
 		parser::{ParserPos, ParserRange},
 	},
 	core::marker::PhantomData,
+	rustidy_util::{ArenaData, ArenaIdx},
 };
-use rustidy_util::{ArenaData, ArenaIdx};
 
 /// Formattable read-only utils
 // TODO: Better name?

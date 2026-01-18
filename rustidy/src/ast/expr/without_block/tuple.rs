@@ -17,9 +17,7 @@ use crate::{
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
-pub struct TupleExpression(
-	#[format(and_with = Parenthesized::format_remove)] Parenthesized<Option<TupleElements>>,
-);
+pub struct TupleExpression(#[format(and_with = Parenthesized::format_remove)] Parenthesized<Option<TupleElements>>);
 
 /// `TupleElements`
 #[derive(PartialEq, Eq, Debug)]
