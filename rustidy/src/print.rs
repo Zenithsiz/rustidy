@@ -5,12 +5,9 @@ pub use rustidy_macros::Print;
 
 // Imports
 use {
-	crate::{
-		ParserStr,
-		Replacements,
-		arena::{ArenaData, ArenaIdx},
-	},
+	crate::{ParserStr, Replacements},
 	core::marker::PhantomData,
+	rustidy_util::{ArenaData, ArenaIdx},
 };
 
 /// Printable types

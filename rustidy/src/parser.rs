@@ -24,7 +24,6 @@ pub use {
 
 // Imports
 use {
-	crate::arena::{ArenaData, ArenaIdx},
 	app_error::AppError,
 	core::{
 		marker::PhantomData,
@@ -33,6 +32,7 @@ use {
 	},
 	std::{fmt, str::pattern::Pattern},
 };
+use rustidy_util::{ArenaData, ArenaIdx};
 
 
 /// Parsable types

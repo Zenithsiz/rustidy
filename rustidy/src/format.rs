@@ -12,12 +12,12 @@ use {
 		ParserStr,
 		Replacement,
 		Replacements,
-		arena::{ArenaData, ArenaIdx},
 		ast::whitespace::Whitespace,
 		parser::{ParserPos, ParserRange},
 	},
 	core::marker::PhantomData,
 };
+use rustidy_util::{ArenaData, ArenaIdx};
 
 /// Formattable read-only utils
 // TODO: Better name?

@@ -10,12 +10,12 @@ use {
 		ParserStr,
 		Print,
 		Replacement,
-		arena::{Arena, ArenaData, ArenaIdx},
 		format,
 		parser::{Parse, ParserPos, ParserRange},
 	},
 	itertools::Itertools,
 };
+use rustidy_util::{Arena, ArenaData, ArenaIdx};
 
 /// Whitespace
 #[derive(PartialEq, Eq, Debug)]

@@ -3,14 +3,8 @@
 // Imports
 use {
 	super::{ParserPos, ParserRange},
-	crate::{
-		Format,
-		FormatRef,
-		Print,
-		arena::{Arena, ArenaData, ArenaIdx},
-		ast::whitespace::Whitespace,
-		format,
-	},
+	crate::{Format, FormatRef, Print, ast::whitespace::Whitespace, format},
+	rustidy_util::{Arena, ArenaData, ArenaIdx},
 };
 
 /// Parser string

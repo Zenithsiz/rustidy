@@ -32,13 +32,15 @@ pub use self::{
 };
 
 // Imports
-use crate::{
-	Format,
-	Parse,
-	ParseRecursive,
-	Print,
-	arena::{Arena, ArenaData, ArenaIdx},
-	parser::{FromRecursiveRoot, RecursiveWrapper},
+use {
+	crate::{
+		Format,
+		Parse,
+		ParseRecursive,
+		Print,
+		parser::{FromRecursiveRoot, RecursiveWrapper},
+	},
+	rustidy_util::{Arena, ArenaData, ArenaIdx},
 };
 
 /// `Expression`
