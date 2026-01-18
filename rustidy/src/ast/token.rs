@@ -22,7 +22,8 @@ use {
 		whitespace::Whitespace,
 	},
 	crate::{Format, print::Print},
-	rustidy_parse::{Parse, Parser, ParserStr},
+	rustidy_parse::{Parse, Parser},
+	rustidy_util::ParserStr,
 };
 
 pub macro decl_tokens(

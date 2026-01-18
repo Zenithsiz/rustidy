@@ -5,8 +5,8 @@ use {
 	super::punct::Punctuated,
 	crate::{Format, FormatRef, Print, Replacement, format},
 	itertools::Itertools,
-	rustidy_parse::{Parse, Parser, ParserPos, ParserRange, ParserStr},
-	rustidy_util::{Arena, ArenaData, ArenaIdx},
+	rustidy_parse::{Parse, Parser},
+	rustidy_util::{Arena, ArenaData, ArenaIdx, ParserPos, ParserRange, ParserStr},
 };
 
 /// Whitespace

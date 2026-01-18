@@ -3,7 +3,8 @@
 // Imports
 use {
 	crate::{Format, Print},
-	rustidy_parse::{Parse, ParserStr},
+	rustidy_parse::Parse,
+	rustidy_util::ParserStr,
 };
 
 /// `QUOTE_ESCAPE`

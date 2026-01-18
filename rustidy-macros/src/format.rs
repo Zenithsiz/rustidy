@@ -166,7 +166,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 	let output = quote! {
 		#[automatically_derived]
 		impl #impl_ref_generics crate::format::FormatRef for #item_ident #ty_ref_generics #impl_ref_where_clause {
-			fn input_range(&self, ctx: &crate::format::Context) -> Option<rustidy_parse::ParserRange> {
+			fn input_range(&self, ctx: &crate::format::Context) -> Option<rustidy_util::ParserRange> {
 				#input_range
 			}
 		}

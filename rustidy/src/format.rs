@@ -10,8 +10,7 @@ pub use {self::config::Config, rustidy_macros::Format};
 use {
 	crate::{Replacement, Replacements, ast::whitespace::Whitespace},
 	core::marker::PhantomData,
-	rustidy_parse::{ParserPos, ParserRange, ParserStr},
-	rustidy_util::{ArenaData, ArenaIdx},
+	rustidy_util::{ArenaData, ArenaIdx, ParserPos, ParserRange, ParserStr},
 };
 
 /// Formattable read-only utils

@@ -8,7 +8,8 @@ use {
 		Print,
 		ast::{expr::without_block::literal::ByteEscape, whitespace::Whitespace},
 	},
-	rustidy_parse::{Parse, ParserStr},
+	rustidy_parse::Parse,
+	rustidy_util::ParserStr,
 };
 
 /// `BYTE_LITERAL`

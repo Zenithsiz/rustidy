@@ -7,8 +7,7 @@ pub use rustidy_macros::Print;
 use {
 	crate::Replacements,
 	core::marker::PhantomData,
-	rustidy_parse::ParserStr,
-	rustidy_util::{ArenaData, ArenaIdx},
+	rustidy_util::{ArenaData, ArenaIdx, ParserStr},
 };
 
 /// Printable types

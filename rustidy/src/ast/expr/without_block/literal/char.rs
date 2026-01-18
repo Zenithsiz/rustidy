@@ -11,7 +11,8 @@ use {
 			whitespace::Whitespace,
 		},
 	},
-	rustidy_parse::{Parse, ParserStr},
+	rustidy_parse::Parse,
+	rustidy_util::ParserStr,
 };
 
 /// `CHAR_LITERAL`

@@ -1,10 +1,7 @@
 //! Parse string
 
 // Imports
-use {
-	super::{ParserPos, ParserRange},
-	rustidy_util::{Arena, ArenaData, ArenaIdx},
-};
+use crate::{Arena, ArenaData, ArenaIdx, ParserPos, ParserRange};
 
 /// Parser string
 #[derive(PartialEq, Eq, Hash, Debug)]

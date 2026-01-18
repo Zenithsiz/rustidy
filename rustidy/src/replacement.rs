@@ -1,7 +1,7 @@
 //! String replacements
 
 // Imports
-use {rustidy_parse::ParserStr, std::collections::HashMap};
+use {rustidy_util::ParserStr, std::collections::HashMap};
 
 /// String replacements
 pub struct Replacements {

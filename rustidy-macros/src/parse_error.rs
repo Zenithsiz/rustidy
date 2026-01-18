@@ -339,7 +339,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 				#is_fatal
 			}
 
-			fn pos(&self) -> Option<rustidy_parse::ParserPos> {
+			fn pos(&self) -> Option<rustidy_util::ParserPos> {
 				#pos
 			}
 

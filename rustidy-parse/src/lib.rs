@@ -16,7 +16,6 @@
 // Modules
 mod error;
 mod recursive;
-mod str;
 
 // Exports
 pub use {
@@ -30,7 +29,6 @@ pub use {
 			RecursiveWrapper,
 			TryFromRecursiveRoot,
 		},
-		str::ParserStr,
 	},
 	rustidy_macros::Parse,
 };
@@ -43,7 +41,7 @@ use {
 		mem,
 		ops::{Residual, Try},
 	},
-	rustidy_util::{ArenaData, ArenaIdx},
+	rustidy_util::{ArenaData, ArenaIdx, ParserPos, ParserRange, ParserStr},
 	std::{fmt, str::pattern::Pattern},
 };
 
@@ -274,7 +272,7 @@ impl<'input> Parser<'input> {
 	pub const fn new(input: &'input str) -> Self {
 		Self {
 			input,
-			cur_pos: ParserPos(0),
+			cur_pos: ParserPos::from_usize(0),
 			tags: vec![],
 		}
 	}
@@ -539,69 +537,6 @@ impl PeekState {
 	#[must_use]
 	pub fn ahead_of_or_equal(&self, other: &Self) -> bool {
 		self.cur_pos >= other.cur_pos
-	}
-}
-
-/// Parser range
-#[derive(PartialEq, Eq, Clone, Copy, Hash, Debug)]
-#[derive(serde::Serialize, serde::Deserialize)]
-pub struct ParserRange {
-	pub start: ParserPos,
-	pub end:   ParserPos,
-}
-
-impl ParserRange {
-	/// Creates a parser range from a start and end position
-	#[must_use]
-	pub const fn new(start: ParserPos, end: ParserPos) -> Self {
-		Self { start, end }
-	}
-
-	/// Returns the length of this range
-	#[must_use]
-	pub const fn len(&self) -> usize {
-		self.end.0 - self.start.0
-	}
-
-	/// Returns if this range is empty
-	#[must_use]
-	pub const fn is_empty(&self) -> bool {
-		self.len() == 0
-	}
-
-	/// Slices the input string with this range
-	#[must_use]
-	pub fn str<'input>(&self, input: &'input str) -> &'input str {
-		&input[self.start.0..self.end.0]
-	}
-
-	/// Slices the input string before this range
-	#[must_use]
-	pub fn str_before(self, s: &str) -> &str {
-		&s[..self.start.0]
-	}
-}
-
-/// Parser position
-#[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Copy, Hash, Debug)]
-#[derive(serde::Serialize, serde::Deserialize)]
-#[derive(derive_more::From)]
-#[serde(transparent)]
-pub struct ParserPos(usize);
-
-impl ParserPos {
-	/// Creates a parser position from a usize
-	// TODO: Should we allow this?
-	#[must_use]
-	pub const fn from_usize(pos: usize) -> Self {
-		Self(pos)
-	}
-
-	/// Returns the index corresponding to this position
-	// TODO: Should we allow this?
-	#[must_use]
-	pub const fn to_usize(self) -> usize {
-		self.0
 	}
 }
 

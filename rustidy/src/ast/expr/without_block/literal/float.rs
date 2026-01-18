@@ -9,7 +9,8 @@ use {
 		ast::{expr::without_block::literal::SuffixNoE, token, whitespace::Whitespace},
 	},
 	rustidy_macros::ParseError,
-	rustidy_parse::{Parse, Parser, ParserError, ParserStr},
+	rustidy_parse::{Parse, Parser, ParserError},
+	rustidy_util::ParserStr,
 	std::fmt,
 };
 
