@@ -58,18 +58,14 @@ impl Print for () {
 }
 
 macro tuple_impl($N:literal, $($T:ident),* $(,)?) {
-	#[derive(Debug, Print)]
-	#[expect(non_snake_case)]
-	struct ${concat( Tuple, $N )}< $( $T, )* > {
-		$( $T: $T, )*
-	}
-
 	#[automatically_derived]
 	impl< $($T: Print,)* > Print for ( $($T,)* ) {
 		#[expect(non_snake_case)]
 		fn print(&self, f: &mut PrintFmt) {
 			let ( $($T,)* ) = self;
-			${concat( Tuple, $N )} { $( $T, )* }.print(f);
+			$(
+				$T.print(f);
+			)*
 		}
 	}
 }
