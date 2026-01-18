@@ -8,9 +8,9 @@ pub use {self::config::Config, rustidy_macros::Format};
 
 // Imports
 use {
-	crate::{Replacement, Replacements, ast::whitespace::Whitespace},
+	crate::ast::whitespace::Whitespace,
 	core::marker::PhantomData,
-	rustidy_util::{ArenaData, ArenaIdx, AstPos, AstRange, AstStr},
+	rustidy_util::{ArenaData, ArenaIdx, AstPos, AstRange, AstStr, Replacement, Replacements},
 };
 
 /// Formattable read-only utils

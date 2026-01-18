@@ -6,8 +6,9 @@
 // Imports
 use {
 	assert_json_diff::assert_json_eq,
-	rustidy::{Print, Replacements, ast, print},
+	rustidy::{Print, ast, print},
 	rustidy_parse::Parser,
+	rustidy_util::Replacements,
 	serde::Deserialize,
 	std::{env, fs, path::Path, process},
 };

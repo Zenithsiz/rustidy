@@ -21,10 +21,11 @@ use {
 	self::args::Args,
 	app_error::{AppError, Context},
 	clap::Parser as _,
-	rustidy::{Format, Print, PrintFmt, Replacements, format},
+	rustidy::{Format, Print, PrintFmt, format},
 	rustidy_parse::Parser,
 	std::{fs, process::ExitCode},
 	zutil_logger::Logger,
+	rustidy_util::Replacements,
 };
 
 fn main() -> ExitCode {

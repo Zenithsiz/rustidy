@@ -1,7 +1,7 @@
 //! String replacements
 
 // Imports
-use {rustidy_util::AstStr, std::collections::HashMap};
+use {crate::AstStr, std::collections::HashMap};
 
 /// String replacements
 pub struct Replacements {
