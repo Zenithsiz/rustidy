@@ -169,9 +169,6 @@ impl Parse for () {
 }
 
 macro tuple_impl($N:literal, $($T:ident),* $(,)?) {
-	#[derive(Debug, Parse)]
-	struct ${concat( Tuple, $N )}< $( $T, )* >( $( $T, )* );
-
 	#[automatically_derived]
 	impl< $($T: Parse,)* > Parse for ( $($T,)* ) {
 		type Error = ${concat( Tuple, $N, Error )}< $($T,)* >;
@@ -183,8 +180,44 @@ macro tuple_impl($N:literal, $($T:ident),* $(,)?) {
 
 		#[expect(non_snake_case)]
 		fn parse_from(parser: &mut Parser) -> Result<Self, Self::Error> {
-			let ${concat( Tuple, $N )}( $($T,)* ) = < ${concat( Tuple, $N )}< $($T,)* > >::parse_from(parser)?;
-			Ok( ( $($T,)* ) )
+			$(
+				let $T = parser.parse().map_err(Self::Error::$T)?;
+			)*
+			Ok(( $( $T, )* ))
+		}
+	}
+
+	#[derive(derive_more::Debug)]
+	pub enum ${concat( Tuple, $N, Error )}< $($T: Parse,)* > {
+		$(
+			$T(ParserError<$T>),
+		)*
+	}
+
+	#[automatically_derived]
+	impl< $($T: Parse,)* > ParseError for ${concat( Tuple, $N, Error )}< $($T,)* > {
+		fn is_fatal(&self) -> bool {
+			match *self {
+				$(
+					Self::$T(ref err, ..) => err.is_fatal(),
+				)*
+			}
+		}
+
+		fn pos(&self) -> Option<ParserPos> {
+			match *self {
+				$(
+					Self::$T(ref err, ..) => err.pos(),
+				)*
+			}
+		}
+
+		fn to_app_error(&self, parser: &Parser) -> AppError {
+			match *self {
+				$(
+					Self::$T(ref err, ..) => err.to_app_error(parser),
+				)*
+			}
 		}
 	}
 }
