@@ -37,7 +37,7 @@ use crate::{
 	Parse,
 	ParseRecursive,
 	Print,
-	arena::{ArenaData, ArenaIdx},
+	arena::{Arena, ArenaData, ArenaIdx},
 	parser::{FromRecursiveRoot, RecursiveWrapper},
 };
 
@@ -50,11 +50,15 @@ pub struct Expression(ArenaIdx<Expression>);
 
 impl ArenaData for Expression {
 	type Data = ExpressionInner;
+
+	const ARENA: &'static Arena<Self> = &EXPRESSION_ARENA;
 }
 
+static EXPRESSION_ARENA: Arena<Expression> = Arena::new();
+
 impl FromRecursiveRoot<ExpressionInner> for Expression {
-	fn from_recursive_root(expr: ExpressionInner, parser: &mut crate::Parser) -> Self {
-		let idx = parser.arenas().arena::<Self>().push(expr);
+	fn from_recursive_root(expr: ExpressionInner, _parser: &mut crate::Parser) -> Self {
+		let idx = EXPRESSION_ARENA.push(expr);
 		Self(idx)
 	}
 }

@@ -6,7 +6,7 @@
 // Imports
 use {
 	assert_json_diff::assert_json_eq,
-	rustidy::{Arenas, Parser, Print, Replacements, ast, print},
+	rustidy::{Parser, Print, Replacements, ast, print},
 	serde::Deserialize,
 	std::{env, fs, path::Path, process},
 };
@@ -23,13 +23,12 @@ pub fn parse() {
 
 		let input_path = test_dir.join("input.rs");
 		let input_file = fs::read_to_string(&input_path).expect("Unable to read file");
-		let arenas = Arenas::new();
-		let mut parser = Parser::new(&input_file, &arenas);
+		let mut parser = Parser::new(&input_file);
 
 		let input = rustidy::parse(&input_path, &mut parser).expect("Unable to parse input");
 
 		let replacements = Replacements::new();
-		let mut print_fmt = print::PrintFmt::new(&input_file, &replacements, &arenas);
+		let mut print_fmt = print::PrintFmt::new(&input_file, &replacements);
 		input.print(&mut print_fmt);
 		let input_printed = print_fmt.output();
 		assert_eq!(input_file, input_printed);
@@ -37,8 +36,7 @@ pub fn parse() {
 		let output_path = test_dir.join("output.json");
 		match env::var("UPDATE_AST_OUTPUT").is_ok_and(|value| !value.trim().is_empty()) {
 			true => {
-				let output = TestOutput { ast: input, arenas };
-				let output = serde_json::to_string(&output).expect("Unable to serialize input");
+				let output = serde_json::to_string(&input).expect("Unable to serialize input");
 				fs::write(&output_path, &output).expect("Unable to update output");
 
 				// TODO: Better solution than shelling out to `prettier`?
@@ -58,11 +56,10 @@ pub fn parse() {
 					let mut deserializer = serde_stacker::Deserializer::new(&mut deserializer);
 					deserializer.red_zone = 512 * 1024;
 					deserializer.stack_size = 8 * 1024 * 1024;
-					TestOutput::deserialize(deserializer).expect("Unable to deserialize output")
+					ast::Crate::deserialize(deserializer).expect("Unable to deserialize output")
 				};
 
-				assert_json_eq!(input, output.ast);
-				assert_json_eq!(arenas, output.arenas);
+				assert_json_eq!(input, output);
 			},
 		}
 	}
@@ -73,11 +70,4 @@ pub fn parse() {
 			.exit_ok()
 			.expect("`prettier` failed");
 	}
-}
-
-#[derive(Debug)]
-#[derive(serde::Serialize, serde::Deserialize)]
-struct TestOutput {
-	ast:    ast::Crate,
-	arenas: Arenas,
 }

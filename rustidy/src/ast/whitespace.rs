@@ -10,7 +10,7 @@ use {
 		ParserStr,
 		Print,
 		Replacement,
-		arena::{ArenaData, ArenaIdx},
+		arena::{Arena, ArenaData, ArenaIdx},
 		format,
 		parser::{Parse, ParserPos, ParserRange},
 	},
@@ -27,12 +27,12 @@ pub struct Whitespace(ArenaIdx<Whitespace>);
 
 impl Whitespace {
 	/// Creates an empty whitespace at a position
-	pub fn empty(pos: ParserPos, ctx: &mut format::Context) -> Self {
+	pub fn empty(pos: ParserPos) -> Self {
 		let inner = Punctuated {
-			first: PureWhitespace(ctx.create_str_at(pos)),
+			first: PureWhitespace(ParserStr::empty_at(pos)),
 			rest:  vec![],
 		};
-		let idx = ctx.arenas().arena::<Self>().push(inner);
+		let idx = ARENA.push(inner);
 
 		Self(idx)
 	}
@@ -45,7 +45,7 @@ impl Whitespace {
 				first: PureWhitespace(s),
 				rest:  vec![],
 			};
-			let idx = parser.arenas().arena::<Self>().push(inner);
+			let idx = ARENA.push(inner);
 
 			Self(idx)
 		}))
@@ -70,7 +70,7 @@ impl Whitespace {
 	}
 
 	fn format(&self, ctx: &mut format::Context, kind: FormatKind) {
-		let mut inner = ctx.arenas().get(&self.0);
+		let mut inner = ARENA.get(&self.0);
 
 		let prefix_str = kind.prefix_str(ctx, &inner.first.0, inner.rest.is_empty());
 		ctx.replace(&inner.first.0, prefix_str);
@@ -88,11 +88,15 @@ impl Whitespace {
 
 impl ArenaData for Whitespace {
 	type Data = Punctuated<PureWhitespace, Comment>;
+
+	const ARENA: &'static Arena<Self> = &ARENA;
 }
+
+static ARENA: Arena<Whitespace> = Arena::new();
 
 impl FormatRef for Whitespace {
 	fn input_range(&self, ctx: &format::Context) -> Option<ParserRange> {
-		ctx.arenas().get(&self.0).input_range(ctx)
+		ARENA.get(&self.0).input_range(ctx)
 	}
 }
 
@@ -133,7 +137,7 @@ impl FormatKind {
 	/// Returns the indentation string, with a newline *before*
 	fn indent_str_nl(ctx: &mut format::Context, cur_str: &ParserStr) -> String {
 		// TODO: Should we be checking for multiple newlines?
-		let after_newline = cur_str.range(ctx.arenas()).str_before(ctx.input()).ends_with('\n');
+		let after_newline = cur_str.range().str_before(ctx.input()).ends_with('\n');
 
 		let min_newlines = ctx.config().empty_line_spacing.min;
 		let max_newlines = ctx.config().empty_line_spacing.max;
@@ -301,7 +305,7 @@ pub fn set_indent(offset: isize, remove_if_empty: bool) -> impl Fn(&mut Whitespa
 mod tests {
 	use {
 		super::*,
-		crate::{Arenas, ParseError, Replacements, print},
+		crate::{ParseError, Replacements, print},
 		app_error::{AppError, Context, ensure},
 	};
 
@@ -317,8 +321,7 @@ mod tests {
 		config: &Config,
 		kind: FormatKind,
 	) -> Result<(), AppError> {
-		let arenas = Arenas::new();
-		let mut parser = Parser::new(source, &arenas);
+		let mut parser = Parser::new(source);
 		let whitespace = parser
 			.parse::<Whitespace>()
 			.map_err(|err| err.to_app_error(&parser))
@@ -330,11 +333,11 @@ mod tests {
 
 
 		let mut replacements = Replacements::new();
-		let mut fmt_ctx = format::Context::new(source, &mut replacements, &arenas, fmt_config);
+		let mut fmt_ctx = format::Context::new(source, &mut replacements, fmt_config);
 		fmt_ctx.set_indent_depth(config.indent_depth);
 		whitespace.format(&mut fmt_ctx, kind);
 
-		let mut print_fmt = print::PrintFmt::new(source, &replacements, &arenas);
+		let mut print_fmt = print::PrintFmt::new(source, &replacements);
 		whitespace.print(&mut print_fmt);
 		let output = print_fmt.output();
 

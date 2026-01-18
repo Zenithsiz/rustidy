@@ -6,10 +6,9 @@ pub use rustidy_macros::Print;
 // Imports
 use {
 	crate::{
-		Arenas,
 		ParserStr,
 		Replacements,
-		arena::{ArenaData, ArenaIdx, WithArena},
+		arena::{ArenaData, ArenaIdx},
 	},
 	core::marker::PhantomData,
 };
@@ -83,9 +82,9 @@ tuple_impl! { 1, T0 }
 tuple_impl! { 2, T0, T1 }
 tuple_impl! { 3, T0, T1, T2 }
 
-impl<T: ArenaData<Data: Print> + WithArena> Print for ArenaIdx<T> {
+impl<T: ArenaData<Data: Print>> Print for ArenaIdx<T> {
 	fn print(&self, f: &mut PrintFmt) {
-		f.arenas.get(self).print(f);
+		T::ARENA.get(self).print(f);
 	}
 }
 
@@ -94,18 +93,16 @@ pub struct PrintFmt<'a, 'input> {
 	input:        &'input str,
 	output:       String,
 	replacements: &'a Replacements,
-	arenas:       &'a Arenas,
 }
 
 impl<'a, 'input> PrintFmt<'a, 'input> {
 	/// Creates a new formatter
 	#[must_use]
-	pub const fn new(input: &'input str, replacements: &'a Replacements, arenas: &'a Arenas) -> Self {
+	pub const fn new(input: &'input str, replacements: &'a Replacements) -> Self {
 		Self {
 			input,
 			output: String::new(),
 			replacements,
-			arenas,
 		}
 	}
 
@@ -113,7 +110,7 @@ impl<'a, 'input> PrintFmt<'a, 'input> {
 	pub fn write_str(&mut self, s: &ParserStr) {
 		match self.replacements.get(s) {
 			Some(replacement) => replacement.write(&mut self.output),
-			None => self.output.push_str(s.range(self.arenas).str(self.input)),
+			None => self.output.push_str(s.range().str(self.input)),
 		}
 	}
 

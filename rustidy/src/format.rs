@@ -9,11 +9,10 @@ pub use {self::config::Config, rustidy_macros::Format};
 // Imports
 use {
 	crate::{
-		Arenas,
 		ParserStr,
 		Replacement,
 		Replacements,
-		arena::{ArenaData, ArenaIdx, WithArena},
+		arena::{ArenaData, ArenaIdx},
 		ast::whitespace::Whitespace,
 		parser::{ParserPos, ParserRange},
 	},
@@ -263,15 +262,15 @@ tuple_impl! { 1, T0 }
 tuple_impl! { 2, T0, T1 }
 tuple_impl! { 3, T0, T1, T2 }
 
-impl<T: ArenaData<Data: FormatRef> + WithArena> FormatRef for ArenaIdx<T> {
+impl<T: ArenaData<Data: FormatRef>> FormatRef for ArenaIdx<T> {
 	fn input_range(&self, ctx: &Context) -> Option<ParserRange> {
-		ctx.arenas().get(self).input_range(ctx)
+		T::ARENA.get(self).input_range(ctx)
 	}
 }
 
-impl<T: ArenaData<Data: Format> + WithArena> Format for ArenaIdx<T> {
+impl<T: ArenaData<Data: Format>> Format for ArenaIdx<T> {
 	fn format(&mut self, ctx: &mut Context) {
-		ctx.arenas().get(self).format(ctx);
+		T::ARENA.get(self).format(ctx);
 	}
 
 	fn with_prefix_ws<R, F: Fn(&mut Whitespace, &mut Context) -> R + Copy>(
@@ -279,7 +278,7 @@ impl<T: ArenaData<Data: Format> + WithArena> Format for ArenaIdx<T> {
 		ctx: &mut Context,
 		f: F,
 	) -> Option<R> {
-		ctx.arenas().get(self).with_prefix_ws(ctx, f)
+		T::ARENA.get(self).with_prefix_ws(ctx, f)
 	}
 }
 
@@ -289,24 +288,17 @@ pub struct Context<'a, 'input> {
 	config:       &'a Config,
 	indent_depth: usize,
 	replacements: &'a mut Replacements,
-	arenas:       &'a Arenas,
 }
 
 impl<'a, 'input> Context<'a, 'input> {
 	/// Creates a new context
 	#[must_use]
-	pub const fn new(
-		input: &'input str,
-		replacements: &'a mut Replacements,
-		arenas: &'a Arenas,
-		config: &'a Config,
-	) -> Self {
+	pub const fn new(input: &'input str, replacements: &'a mut Replacements, config: &'a Config) -> Self {
 		Self {
 			input,
 			config,
 			indent_depth: 0,
 			replacements,
-			arenas,
 		}
 	}
 
@@ -319,7 +311,7 @@ impl<'a, 'input> Context<'a, 'input> {
 	/// Returns the string of a string
 	#[must_use]
 	pub fn str(&mut self, s: &ParserStr) -> &'input str {
-		s.range(self.arenas).str(self.input)
+		s.range().str(self.input)
 	}
 
 	/// Returns the config
@@ -334,38 +326,20 @@ impl<'a, 'input> Context<'a, 'input> {
 		self.indent_depth
 	}
 
-	/// Returns the arenas
-	#[must_use]
-	pub const fn arenas(&self) -> &'a Arenas {
-		self.arenas
-	}
-
-	/// Creates a string with a range
-	pub fn create_str(&self, range: ParserRange) -> ParserStr {
-		let idx = self.arenas.arena::<ParserStr>().push(range);
-		ParserStr(idx)
-	}
-
-	/// Creates a string at a position
-	pub fn create_str_at(&self, pos: ParserPos) -> ParserStr {
-		self.create_str(ParserRange { start: pos, end: pos })
-	}
-
 	/// Creates a string at a position with a replacement
 	pub fn create_str_at_pos_with_replacement(
 		&mut self,
 		pos: ParserPos,
 		replacement: impl Into<Replacement>,
 	) -> ParserStr {
-		let s = self.create_str_at(pos);
+		let s = ParserStr::empty_at(pos);
 		self.replace(&s, replacement);
 		s
 	}
 
 	/// Replaces a string
 	pub fn replace(&mut self, s: &ParserStr, replacement: impl Into<Replacement>) {
-		self.replacements
-			.add(s, s.range(self.arenas).str(self.input), replacement);
+		self.replacements.add(s, s.range().str(self.input), replacement);
 	}
 
 	/// Runs `f` with a further indentation level
@@ -419,9 +393,9 @@ impl<'a, 'input> Context<'a, 'input> {
 pub trait FormatFn<T: ?Sized> = Fn(&mut T, &mut Context);
 
 /// Formats an arena value
-pub fn arena<T: WithArena>(f: impl FormatFn<T::Data>) -> impl FormatFn<ArenaIdx<T>> {
+pub fn arena<T: ArenaData>(f: impl FormatFn<T::Data>) -> impl FormatFn<ArenaIdx<T>> {
 	move |idx, ctx| {
-		let mut value = ctx.arenas().get(idx);
+		let mut value = T::ARENA.get(idx);
 		f(&mut value, ctx);
 	}
 }

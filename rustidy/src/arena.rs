@@ -2,39 +2,34 @@
 
 // Imports
 use {
-	crate::{
-		ParserStr,
-		ast::{expr::Expression, item::Item, whitespace::Whitespace},
-	},
-	core::{cell::RefCell, fmt, hash::Hash, marker::PhantomData, ops},
-	std::hash::Hasher,
+	core::{fmt, hash::Hash, marker::PhantomData, mem, ops},
+	std::{hash::Hasher, sync::Mutex},
 };
 
 /// Arena for `T`'s Data
 #[derive(Debug)]
-#[derive(serde::Serialize, serde::Deserialize)]
-#[serde(bound(serialize = "T::Data: serde::Serialize"))]
-#[serde(bound(deserialize = "T::Data: serde::Deserialize<'de>"))]
 pub struct Arena<T: ?Sized + ArenaData> {
-	// TODO: Track the borrows separately to not wrap each
-	//       data within an `Option`?
-	data: RefCell<Vec<Option<T::Data>>>,
+	// TODO: Track the borrows/dropped separately to not wrap each
+	//       data within an `ArenaSlot`?
+	data: Mutex<Vec<ArenaSlot<T::Data>>>,
 }
 
 impl<T: ?Sized + ArenaData> Arena<T> {
 	/// Creates a new, empty, arena
 	#[must_use]
-	const fn new() -> Self {
+	pub const fn new() -> Self {
 		Self {
-			data: RefCell::new(vec![]),
+			data: Mutex::new(vec![]),
 		}
 	}
 
 	/// Pushes a value onto the arena, returning it's index
 	pub fn push(&self, value: T::Data) -> ArenaIdx<T> {
-		let mut data = self.data.borrow_mut();
+		let mut data = self.data.lock().expect("Poisoned");
 		let idx = data.len();
-		data.push(Some(value));
+		data.push(ArenaSlot::Alive(value));
+		drop(data);
+
 		ArenaIdx {
 			inner:   idx.try_into().expect("Too many indices"),
 			phantom: PhantomData,
@@ -46,10 +41,11 @@ impl<T: ?Sized + ArenaData> Arena<T> {
 		let idx = idx.inner as usize;
 		let value = self
 			.data
-			.borrow_mut()
+			.lock()
+			.expect("Poisoned")
 			.get_mut(idx)
 			.expect("Invalid arena index")
-			.take()
+			.borrow()
 			.expect("Attempted to borrow arena value twice");
 
 		ArenaRef {
@@ -62,65 +58,64 @@ impl<T: ?Sized + ArenaData> Arena<T> {
 	/// Returns the number of values in this arena
 	#[must_use]
 	pub fn len(&self) -> usize {
-		self.data.borrow().len()
+		self.data.lock().expect("Poisoned").len()
 	}
 
 	/// Returns if the arena is empty
 	#[must_use]
 	pub fn is_empty(&self) -> bool {
-		self.data.borrow().is_empty()
+		self.data.lock().expect("Poisoned").is_empty()
 	}
 
-	/// Creates a checkpoint
-	pub fn checkpoint(&self) -> ArenaCheckpoint {
-		ArenaCheckpoint { len: self.len() }
-	}
+	/// Drops an arena index
+	fn drop(&self, idx: u32) {
+		let idx = idx as usize;
 
-	/// Undoes a checkpoint
-	pub fn undo_checkpoint(&self, checkpoint: ArenaCheckpoint) {
-		let mut data = self.data.borrow_mut();
-		for (idx, data) in data.iter().enumerate().skip(checkpoint.len) {
-			if data.is_none() {
-				Self::panic_on_borrowed_checkpoint_stash(idx);
-			}
+		let mut data = self.data.lock().expect("Poisoned");
+		let value = mem::replace(&mut data[idx], ArenaSlot::Empty);
+		assert!(value.is_alive(), "Attempted to drop a non-alive pack");
+
+		// TODO: Track the first/last dropped value to make this cheaper?
+		if data[idx + 1..].iter().all(ArenaSlot::is_empty) {
+			let backwards_len = data[..idx]
+				.iter()
+				.rev()
+				.position(|slot| !slot.is_empty())
+				.unwrap_or(idx);
+			let len = idx - backwards_len;
+			data.truncate(len);
 		}
 
-		data.truncate(checkpoint.len);
-	}
-
-	/// Stashes a checkpoint
-	pub fn stash_checkpoint(&self, checkpoint: ArenaCheckpoint) -> ArenaCheckpointStash<T> {
-		ArenaCheckpointStash {
-			values: self
-				.data
-				.borrow_mut()
-				.drain(checkpoint.len..)
-				.enumerate()
-				.map(|(idx, data)| match data {
-					Some(data) => data,
-					None => Self::panic_on_borrowed_checkpoint_stash(checkpoint.len + idx),
-				})
-				.collect(),
-		}
-	}
-
-	/// Applies a checkpoint stash
-	pub fn apply_checkpoint_stash(&self, stash: ArenaCheckpointStash<T>) {
-		self.data.borrow_mut().extend(stash.values.into_iter().map(Some));
-	}
-
-	#[cold]
-	fn panic_on_borrowed_checkpoint_stash(idx: usize) -> ! {
-		panic!(
-			"Attempted to stash checkpoint with a borrowed value at index {idx} in arena {:?}",
-			std::any::type_name::<T>(),
-		);
+		drop(data);
+		drop(value);
 	}
 }
 
 impl<T: ArenaData> Default for Arena<T> {
 	fn default() -> Self {
 		Self::new()
+	}
+}
+
+#[derive(Debug)]
+#[derive(strum::EnumIs)]
+enum ArenaSlot<T> {
+	Alive(T),
+	Borrowed,
+	Empty,
+}
+
+impl<T> ArenaSlot<T> {
+	/// Borrows the value in this arena slot.
+	fn borrow(&mut self) -> Option<T> {
+		match mem::replace(self, Self::Borrowed) {
+			Self::Alive(value) => Some(value),
+			Self::Borrowed => None,
+			Self::Empty => {
+				*self = Self::Empty;
+				None
+			},
+		}
 	}
 }
 
@@ -146,38 +141,21 @@ impl<T: ?Sized + ArenaData> ops::DerefMut for ArenaRef<'_, T> {
 
 impl<T: ?Sized + ArenaData> Drop for ArenaRef<'_, T> {
 	fn drop(&mut self) {
-		*self
-			.arena
-			.data
-			.borrow_mut()
-			.get_mut(self.idx)
-			.expect("Arena was truncated during borrow") = Some(self.value.take().expect("Value should exist"));
+		let mut data = self.arena.data.lock().expect("Poisoned");
+		let value = data.get_mut(self.idx).expect("Arena was truncated during borrow");
+		assert!(value.is_borrowed(), "Borrowed value wasn't borrowed");
+		*value = ArenaSlot::Alive(self.value.take().expect("Value should exist"));
+		drop(data);
 	}
 }
 
-/// Arena checkpoint
-#[derive(Clone, Copy, Debug)]
-pub struct ArenaCheckpoint {
-	len: usize,
-}
-
-/// Arena checkpoint stash
-#[derive(Clone, Debug)]
-pub struct ArenaCheckpointStash<T: ?Sized + ArenaData> {
-	// TODO: Ideally here we wouldn't allocate and maybe just move
-	//       the new ranges somewhere else temporarily.
-	values: Vec<T::Data>,
-}
-
 /// Arena index for `T`
-#[derive(serde::Serialize, serde::Deserialize)]
-#[serde(transparent)]
-pub struct ArenaIdx<T: ?Sized> {
+pub struct ArenaIdx<T: ?Sized + ArenaData> {
 	inner:   u32,
 	phantom: PhantomData<T>,
 }
 
-impl<T: ?Sized> ArenaIdx<T> {
+impl<T: ?Sized + ArenaData> ArenaIdx<T> {
 	/// Returns a unique id for this arena index
 	#[must_use]
 	pub const fn id(&self) -> u32 {
@@ -185,150 +163,53 @@ impl<T: ?Sized> ArenaIdx<T> {
 	}
 }
 
-impl<T: ?Sized> PartialEq for ArenaIdx<T> {
+impl<T: ?Sized + ArenaData> Drop for ArenaIdx<T> {
+	fn drop(&mut self) {
+		T::ARENA.drop(self.inner);
+	}
+}
+
+impl<T: ?Sized + ArenaData> PartialEq for ArenaIdx<T> {
 	fn eq(&self, other: &Self) -> bool {
 		self.inner == other.inner
 	}
 }
 
-impl<T: ?Sized> Eq for ArenaIdx<T> {}
+impl<T: ?Sized + ArenaData> Eq for ArenaIdx<T> {}
 
-impl<T: ?Sized> Hash for ArenaIdx<T> {
+impl<T: ?Sized + ArenaData> Hash for ArenaIdx<T> {
 	fn hash<H: Hasher>(&self, state: &mut H) {
 		self.inner.hash(state);
 	}
 }
 
-impl<T: ?Sized> fmt::Debug for ArenaIdx<T> {
+impl<T: ?Sized + ArenaData> fmt::Debug for ArenaIdx<T> {
 	fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
 		f.debug_tuple("ArenaIdx").field(&self.inner).finish()
 	}
 }
 
+
+impl<T: ?Sized + ArenaData<Data: serde::Serialize>> serde::Serialize for ArenaIdx<T> {
+	fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+	where
+		S: serde::Serializer,
+	{
+		T::ARENA.get(self).serialize(serializer)
+	}
+}
+
+impl<'de, T: ?Sized + ArenaData<Data: serde::Deserialize<'de>>> serde::Deserialize<'de> for ArenaIdx<T> {
+	fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+	where
+		D: serde::Deserializer<'de>,
+	{
+		let value = T::Data::deserialize(deserializer)?;
+		Ok(T::ARENA.push(value))
+	}
+}
 /// Arena data
-pub trait ArenaData {
-	type Data;
-}
-
-// TODO: This should be sealed
-pub trait WithArena: ArenaData {
-	fn get_arena(arenas: &Arenas) -> &Arena<Self>;
-}
-
-macro arenas(
-	$Arenas:ident;
-	$ArenasCheckpoint:ident;
-	$ArenasCheckpointStash:ident;
-	$new:ident;
-	$arena:ident;
-	$get:ident;
-	$checkpoint:ident;
-	$undo_checkpoint:ident;
-	$stash_checkpoint:ident;
-	$apply_checkpoint_stash:ident;
-
-	$($Ty:ty => $field:ident),* $(,)?
-) {
-	/// Arenas
-	#[derive(Default, Debug)]
-	#[derive(serde::Serialize, serde::Deserialize)]
-	pub struct $Arenas {
-		$(
-			$field: Arena<$Ty>,
-		)*
-	}
-
-	impl $Arenas {
-		/// Creates all arenas as empty
-		#[must_use]
-		pub fn $new() -> Self {
-			Self::default()
-		}
-
-		/// Returns the arena for `T`
-		#[must_use]
-		pub fn $arena<T: ?Sized + WithArena>(&self) -> &Arena<T> {
-			T::get_arena(self)
-		}
-
-		/// Borrows a value of `T`
-		#[must_use]
-		pub fn $get<T: ?Sized + WithArena>(&self, idx: &ArenaIdx<T>) -> ArenaRef<'_, T> {
-			self.$arena::<T>().get(idx)
-		}
-
-		/// Creates a checkpoint on all arenas
-		pub fn $checkpoint(&self) -> $ArenasCheckpoint {
-			$ArenasCheckpoint {
-				$(
-					$field: self.$field.checkpoint(),
-				)*
-			}
-		}
-
-		/// Undoes a checkpoint on all arenas
-		pub fn $undo_checkpoint(&self, checkpoint: $ArenasCheckpoint) {
-			$(
-				self.$field.undo_checkpoint(checkpoint.$field);
-			)*
-		}
-
-		/// Stashes a checkpoint on all arenas
-		pub fn $stash_checkpoint(&self, checkpoint: $ArenasCheckpoint) -> $ArenasCheckpointStash {
-			$ArenasCheckpointStash {
-				$(
-					$field: self.$field.stash_checkpoint(checkpoint.$field),
-				)*
-			}
-		}
-
-		/// Applies a checkpoint stash on all arenas
-		pub fn $apply_checkpoint_stash(&self, stash: $ArenasCheckpointStash) {
-			$(
-				self.$field.apply_checkpoint_stash(stash.$field);
-			)*
-		}
-	}
-
-	/// Arenas checkpoint
-	#[derive(Clone, Copy, Debug)]
-	pub struct $ArenasCheckpoint {
-		$(
-			$field: ArenaCheckpoint,
-		)*
-	}
-
-	/// Arenas checkpoint stash
-	#[derive(Debug)]
-	pub struct $ArenasCheckpointStash {
-		$(
-			$field: ArenaCheckpointStash<$Ty>,
-		)*
-	}
-
-	$(
-		impl WithArena for $Ty {
-			fn get_arena(arenas: &$Arenas) -> &Arena<Self> {
-				&arenas.$field
-			}
-		}
-	)*
-}
-
-arenas! {
-	Arenas;
-	ArenasCheckpoint;
-	ArenasCheckpointStash;
-	new;
-	arena;
-	get;
-	checkpoint;
-	undo_checkpoint;
-	stash_checkpoint;
-	apply_checkpoint_stash;
-
-	ParserStr => parser_str,
-	Whitespace => whitespace,
-	Expression => expression,
-	Item => item,
+pub trait ArenaData: 'static {
+	type Data: 'static;
+	const ARENA: &'static Arena<Self>;
 }

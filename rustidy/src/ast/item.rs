@@ -51,7 +51,7 @@ use {
 		Format,
 		Parse,
 		Print,
-		arena::{ArenaData, ArenaIdx},
+		arena::{Arena, ArenaData, ArenaIdx},
 		format,
 	},
 };
@@ -68,7 +68,11 @@ pub struct Item(
 
 impl ArenaData for Item {
 	type Data = WithOuterAttributes<ItemInner>;
+
+	const ARENA: &'static Arena<Self> = &ITEM_ARENA;
 }
+
+static ITEM_ARENA: Arena<Item> = Arena::new();
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]

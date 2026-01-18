@@ -2,7 +2,7 @@
 
 // Imports
 use {
-	rustidy::{Arenas, Format, Parser, Print, PrintFmt, Replacements, format, parser::ParserPos},
+	rustidy::{Format, Parser, Print, PrintFmt, Replacements, format, parser::ParserPos},
 	std::{env, fs, path::Path},
 };
 
@@ -16,27 +16,26 @@ pub fn format() {
 
 		let input_path = test_dir.join("input.rs");
 		let file = fs::read_to_string(&input_path).expect("Unable to read file");
-		let arenas = Arenas::new();
-		let mut parser = Parser::new(&file, &arenas);
+		let mut parser = Parser::new(&file);
 
 		let mut input = rustidy::parse(&input_path, &mut parser).expect("Input did not fail");
 
 		let mut replacements = Replacements::new();
 		let config = format::Config::default();
-		let mut ctx = format::Context::new(&file, &mut replacements, &arenas, &config);
+		let mut ctx = format::Context::new(&file, &mut replacements, &config);
 		input.format(&mut ctx);
 
-		let mut print_fmt = PrintFmt::new(&file, &replacements, &arenas);
+		let mut print_fmt = PrintFmt::new(&file, &replacements);
 		input.print(&mut print_fmt);
 		let found_output = print_fmt.output();
 
 		{
 			let mut replacements = Replacements::new();
 			let config = format::Config::default();
-			let mut ctx = format::Context::new(&file, &mut replacements, &arenas, &config);
+			let mut ctx = format::Context::new(&file, &mut replacements, &config);
 			input.format(&mut ctx);
 
-			let mut print_fmt = PrintFmt::new(&file, &replacements, &arenas);
+			let mut print_fmt = PrintFmt::new(&file, &replacements);
 			input.print(&mut print_fmt);
 
 			assert_eq!(

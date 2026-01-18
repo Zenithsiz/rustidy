@@ -36,7 +36,6 @@ pub mod replacement;
 
 // Exports
 pub use self::{
-	arena::Arenas,
 	format::{Format, FormatRef},
 	parser::{Parse, ParseError, ParseRecursive, Parser, ParserStr},
 	print::{Print, PrintFmt},

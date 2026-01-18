@@ -24,10 +24,7 @@ pub use {
 
 // Imports
 use {
-	crate::{
-		Arenas,
-		arena::{ArenaData, ArenaIdx, ArenasCheckpointStash, WithArena},
-	},
+	crate::arena::{ArenaData, ArenaIdx},
 	app_error::AppError,
 	core::{
 		marker::PhantomData,
@@ -196,7 +193,7 @@ tuple_impl! { 2, T0, T1 }
 tuple_impl! { 3, T0, T1, T2 }
 tuple_impl! { 4, T0, T1, T2, T3 }
 
-impl<T: ArenaData<Data: Parse> + WithArena> Parse for ArenaIdx<T> {
+impl<T: ArenaData<Data: Parse>> Parse for ArenaIdx<T> {
 	type Error = ParserError<T::Data>;
 
 	fn name() -> Option<impl fmt::Display> {
@@ -205,14 +202,14 @@ impl<T: ArenaData<Data: Parse> + WithArena> Parse for ArenaIdx<T> {
 
 	fn parse_from(parser: &mut Parser) -> Result<Self, Self::Error> {
 		let value = parser.parse::<T::Data>()?;
-		let idx = parser.arenas.arena::<T>().push(value);
+		let idx = T::ARENA.push(value);
 		Ok(idx)
 	}
 }
 
 /// Parser
 #[derive(Debug)]
-pub struct Parser<'a, 'input> {
+pub struct Parser<'input> {
 	/// Input
 	input: &'input str,
 
@@ -222,20 +219,16 @@ pub struct Parser<'a, 'input> {
 	/// Tags
 	// Note: Always sorted by parser position.
 	tags: Vec<(ParserPos, ParserTag)>,
-
-	/// Arenas
-	arenas: &'a Arenas,
 }
 
-impl<'a, 'input> Parser<'a, 'input> {
+impl<'input> Parser<'input> {
 	/// Creates a new parser
 	#[must_use]
-	pub const fn new(input: &'input str, arenas: &'a Arenas) -> Self {
+	pub const fn new(input: &'input str) -> Self {
 		Self {
 			input,
 			cur_pos: ParserPos(0),
 			tags: vec![],
-			arenas,
 		}
 	}
 
@@ -243,12 +236,6 @@ impl<'a, 'input> Parser<'a, 'input> {
 	#[must_use]
 	pub const fn input(&self) -> &'input str {
 		self.input
-	}
-
-	/// Returns the arenas
-	#[must_use]
-	pub const fn arenas(&self) -> &'a Arenas {
-		self.arenas
 	}
 
 	/// Returns the remaining string for the parser
@@ -312,7 +299,7 @@ impl<'a, 'input> Parser<'a, 'input> {
 	/// Returns the string of an range
 	#[must_use]
 	pub fn str(&mut self, s: &ParserStr) -> &'input str {
-		s.range(self.arenas).str(self.input)
+		s.range().str(self.input)
 	}
 
 	/// Returns if the parser is finished
@@ -378,9 +365,8 @@ impl<'a, 'input> Parser<'a, 'input> {
 			start: ParserPos(output_range.start),
 			end:   ParserPos(output_range.end),
 		};
-		let idx = self.arenas.arena::<ParserStr>().push(output_range);
 
-		<_>::from_output(ParserStr(idx))
+		<_>::from_output(ParserStr::new(output_range))
 	}
 
 	/// Strips a prefix `s` from the parser
@@ -406,13 +392,11 @@ impl<'a, 'input> Parser<'a, 'input> {
 	/// On error, nothing is modified.
 	pub fn try_parse<T: Parse>(&mut self) -> Result<Result<T, ParserError<T>>, ParserError<T>> {
 		let prev_pos = self.cur_pos;
-		let arenas_checkpoint = self.arenas.checkpoint();
 		match self.parse::<T>() {
 			Ok(value) => Ok(Ok(value)),
 			Err(err) if err.is_fatal() => Err(err),
 			Err(err) => {
 				self.cur_pos = prev_pos;
-				self.arenas.undo_checkpoint(arenas_checkpoint);
 				Ok(Err(err))
 			},
 		}
@@ -424,18 +408,13 @@ impl<'a, 'input> Parser<'a, 'input> {
 	#[expect(clippy::type_complexity, reason = "TODO")]
 	pub fn peek<T: Parse>(&mut self) -> Result<Result<(T, PeekState), ParserError<T>>, ParserError<T>> {
 		let start_pos = self.cur_pos;
-		let arenas_checkpoint = self.arenas.checkpoint();
-
 		let output = match self.parse::<T>() {
 			Ok(value) => Ok(value),
 			Err(err) if err.is_fatal() => return Err(err),
 			Err(err) => Err(err),
 		};
 
-		let peek_state = PeekState {
-			cur_pos:      self.cur_pos,
-			arenas_stash: self.arenas.stash_checkpoint(arenas_checkpoint),
-		};
+		let peek_state = PeekState { cur_pos: self.cur_pos };
 		self.cur_pos = start_pos;
 
 		let output = output.map(|value| (value, peek_state));
@@ -443,10 +422,12 @@ impl<'a, 'input> Parser<'a, 'input> {
 	}
 
 	/// Accepts a peeked state.
-	// TODO: We should validate that the user doesn't use a previous peek
-	pub fn set_peeked(&mut self, peek_state: PeekState) {
+	#[expect(
+		clippy::needless_pass_by_value,
+		reason = "It's to ensure the user doesn't use the same peek state multiple times"
+	)]
+	pub const fn set_peeked(&mut self, peek_state: PeekState) {
 		self.cur_pos = peek_state.cur_pos;
-		self.arenas.apply_checkpoint_stash(peek_state.arenas_stash);
 	}
 
 	/// Returns all current tags
@@ -497,8 +478,7 @@ impl<'a, 'input> Parser<'a, 'input> {
 /// Peek state
 #[derive(Debug)]
 pub struct PeekState {
-	cur_pos:      ParserPos,
-	arenas_stash: ArenasCheckpointStash,
+	cur_pos: ParserPos,
 }
 
 impl PeekState {

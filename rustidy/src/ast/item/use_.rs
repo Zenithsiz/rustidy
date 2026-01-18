@@ -96,7 +96,7 @@ impl UseTreeGroup {
 			if let Some(punct) = &mut tree.value {
 				let pos = punct.input_range(ctx).expect("Should have a range").end;
 				if punct.trailing.is_none() {
-					let ws = Whitespace::empty(pos, ctx);
+					let ws = Whitespace::empty(pos);
 					let comma = ctx.create_str_at_pos_with_replacement(pos, ",");
 					punct.trailing = Some(token::Comma(ws, comma));
 				}

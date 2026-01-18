@@ -1,186 +1,218 @@
 {
-	"ast": {
-		"shebang": null,
-		"inner_attrs": [],
-		"items": [0],
-		"suffix_ws": 24,
-		"trailing_line_comment": null
-	},
-	"arenas": {
-		"parser_str": {
-			"data": [
-				{ "start": 0, "end": 0 },
-				{ "start": 0, "end": 1 },
-				{ "start": 1, "end": 1 },
-				{ "start": 1, "end": 2 },
-				{ "start": 2, "end": 2 },
-				{ "start": 2, "end": 3 },
-				{ "start": 3, "end": 3 },
-				{ "start": 3, "end": 5 },
-				{ "start": 5, "end": 5 },
-				{ "start": 5, "end": 6 },
-				{ "start": 6, "end": 6 },
-				{ "start": 6, "end": 8 },
-				{ "start": 8, "end": 8 },
-				{ "start": 8, "end": 9 },
-				{ "start": 9, "end": 9 },
-				{ "start": 9, "end": 10 },
-				{ "start": 10, "end": 11 },
-				{ "start": 11, "end": 12 },
-				{ "start": 12, "end": 12 },
-				{ "start": 12, "end": 13 },
-				{ "start": 13, "end": 13 },
-				{ "start": 13, "end": 15 },
-				{ "start": 15, "end": 15 },
-				{ "start": 15, "end": 21 },
-				{ "start": 21, "end": 21 },
-				{ "start": 21, "end": 23 },
-				{ "start": 23, "end": 23 },
-				{ "start": 23, "end": 24 },
-				{ "start": 24, "end": 24 },
-				{ "start": 24, "end": 25 },
-				{ "start": 25, "end": 26 },
-				{ "start": 26, "end": 29 },
-				{ "start": 29, "end": 31 },
-				{ "start": 31, "end": 31 },
-				{ "start": 31, "end": 34 },
-				{ "start": 34, "end": 37 },
-				{ "start": 37, "end": 38 },
-				{ "start": 38, "end": 41 },
-				{ "start": 41, "end": 48 },
-				{ "start": 48, "end": 49 },
-				{ "start": 49, "end": 51 },
-				{ "start": 51, "end": 52 },
-				{ "start": 52, "end": 53 },
-				{ "start": 53, "end": 53 },
-				{ "start": 53, "end": 54 },
-				{ "start": 54, "end": 54 },
-				{ "start": 54, "end": 55 },
-				{ "start": 55, "end": 56 },
-				{ "start": 56, "end": 57 },
-				{ "start": 57, "end": 57 },
-				{ "start": 57, "end": 58 },
-				{ "start": 58, "end": 59 }
-			]
-		},
-		"whitespace": {
-			"data": [
-				{ "first": 0, "rest": [] },
-				{ "first": 2, "rest": [] },
-				{ "first": 4, "rest": [] },
-				{ "first": 6, "rest": [] },
-				{ "first": 8, "rest": [] },
-				{ "first": 10, "rest": [] },
-				{ "first": 12, "rest": [] },
-				{ "first": 14, "rest": [] },
-				{ "first": 16, "rest": [] },
-				{ "first": 18, "rest": [] },
-				{ "first": 20, "rest": [] },
-				{ "first": 22, "rest": [] },
-				{ "first": 24, "rest": [] },
-				{ "first": 26, "rest": [] },
-				{ "first": 28, "rest": [] },
-				{ "first": 30, "rest": [] },
-				{ "first": 33, "rest": [] },
-				{ "first": 36, "rest": [] },
-				{ "first": 39, "rest": [] },
-				{ "first": 41, "rest": [] },
-				{ "first": 43, "rest": [] },
-				{ "first": 45, "rest": [] },
-				{ "first": 47, "rest": [] },
-				{ "first": 49, "rest": [] },
-				{ "first": 51, "rest": [] }
-			]
-		},
-		"expression": { "data": [] },
-		"item": {
-			"data": [
+	"shebang": null,
+	"inner_attrs": [],
+	"items": [
+		{
+			"attrs": [
 				{
-					"attrs": [
-						{
-							"Attr": {
-								"pound": [0, 1],
-								"open": {
-									"prefix": [1, 3],
-									"value": {
-										"path": {
-											"prefix": null,
-											"segments": {
-												"first": { "Ident": { "NonKw": [2, 5] } },
-												"rest": [
-													[[3, 7], { "Ident": { "NonKw": [4, 9] } }],
-													[[5, 11], { "Ident": { "NonKw": [6, 13] } }]
+					"Attr": {
+						"pound": [
+							{ "first": { "start": 0, "end": 0 }, "rest": [] },
+							{ "start": 0, "end": 1 }
+						],
+						"open": {
+							"prefix": [
+								{ "first": { "start": 1, "end": 1 }, "rest": [] },
+								{ "start": 1, "end": 2 }
+							],
+							"value": {
+								"path": {
+									"prefix": null,
+									"segments": {
+										"first": {
+											"Ident": {
+												"NonKw": [
+													{ "first": { "start": 2, "end": 2 }, "rest": [] },
+													{ "start": 2, "end": 3 }
 												]
 											}
 										},
-										"input": null
-									},
-									"suffix": [7, 15]
-								}
-							}
-						},
-						{
-							"Attr": {
-								"pound": [8, 17],
-								"open": {
-									"prefix": [9, 19],
-									"value": {
-										"path": {
-											"prefix": [10, 21],
-											"segments": {
-												"first": { "DollarCrate": [11, 23] },
-												"rest": [[[12, 25], { "Ident": { "NonKw": [13, 27] } }]]
-											}
-										},
-										"input": null
-									},
-									"suffix": [14, 29]
-								}
-							}
-						},
-						{ "DocComment": { "Line": { "prefix": [15, 31], "comment": 32 } } },
-						{
-							"DocComment": { "Block": { "prefix": [16, 34], "comment": 35 } }
-						},
-						{ "DocComment": { "Block": { "prefix": [17, 37], "comment": 38 } } }
-					],
-					"inner": {
-						"Vis": {
-							"vis": null,
-							"inner": {
-								"Function": {
-									"qualifiers": {
-										"const_": null,
-										"async_": null,
-										"safety": null,
-										"extern_": null
-									},
-									"fn_": [18, 40],
-									"ident": { "NonKw": [19, 42] },
-									"generics": null,
-									"params": {
-										"prefix": [20, 44],
-										"value": null,
-										"suffix": [21, 46]
-									},
-									"ret": null,
-									"where_": null,
-									"body": {
-										"Expr": {
-											"prefix": [22, 48],
-											"value": {
-												"attrs": [],
-												"inner": { "stmts": [], "trailing_expr": null }
-											},
-											"suffix": [23, 50]
-										}
+										"rest": [
+											[
+												[
+													{ "first": { "start": 3, "end": 3 }, "rest": [] },
+													{ "start": 3, "end": 5 }
+												],
+												{
+													"Ident": {
+														"NonKw": [
+															{ "first": { "start": 5, "end": 5 }, "rest": [] },
+															{ "start": 5, "end": 6 }
+														]
+													}
+												}
+											],
+											[
+												[
+													{ "first": { "start": 6, "end": 6 }, "rest": [] },
+													{ "start": 6, "end": 8 }
+												],
+												{
+													"Ident": {
+														"NonKw": [
+															{ "first": { "start": 8, "end": 8 }, "rest": [] },
+															{ "start": 8, "end": 9 }
+														]
+													}
+												}
+											]
+										]
 									}
+								},
+								"input": null
+							},
+							"suffix": [
+								{ "first": { "start": 9, "end": 9 }, "rest": [] },
+								{ "start": 9, "end": 10 }
+							]
+						}
+					}
+				},
+				{
+					"Attr": {
+						"pound": [
+							{ "first": { "start": 10, "end": 11 }, "rest": [] },
+							{ "start": 11, "end": 12 }
+						],
+						"open": {
+							"prefix": [
+								{ "first": { "start": 12, "end": 12 }, "rest": [] },
+								{ "start": 12, "end": 13 }
+							],
+							"value": {
+								"path": {
+									"prefix": [
+										{ "first": { "start": 13, "end": 13 }, "rest": [] },
+										{ "start": 13, "end": 15 }
+									],
+									"segments": {
+										"first": {
+											"DollarCrate": [
+												{ "first": { "start": 15, "end": 15 }, "rest": [] },
+												{ "start": 15, "end": 21 }
+											]
+										},
+										"rest": [
+											[
+												[
+													{ "first": { "start": 21, "end": 21 }, "rest": [] },
+													{ "start": 21, "end": 23 }
+												],
+												{
+													"Ident": {
+														"NonKw": [
+															{
+																"first": { "start": 23, "end": 23 },
+																"rest": []
+															},
+															{ "start": 23, "end": 24 }
+														]
+													}
+												}
+											]
+										]
+									}
+								},
+								"input": null
+							},
+							"suffix": [
+								{ "first": { "start": 24, "end": 24 }, "rest": [] },
+								{ "start": 24, "end": 25 }
+							]
+						}
+					}
+				},
+				{
+					"DocComment": {
+						"Line": {
+							"prefix": [
+								{ "first": { "start": 25, "end": 26 }, "rest": [] },
+								{ "start": 26, "end": 29 }
+							],
+							"comment": { "start": 29, "end": 31 }
+						}
+					}
+				},
+				{
+					"DocComment": {
+						"Block": {
+							"prefix": [
+								{ "first": { "start": 31, "end": 31 }, "rest": [] },
+								{ "start": 31, "end": 34 }
+							],
+							"comment": { "start": 34, "end": 37 }
+						}
+					}
+				},
+				{
+					"DocComment": {
+						"Block": {
+							"prefix": [
+								{ "first": { "start": 37, "end": 38 }, "rest": [] },
+								{ "start": 38, "end": 41 }
+							],
+							"comment": { "start": 41, "end": 48 }
+						}
+					}
+				}
+			],
+			"inner": {
+				"Vis": {
+					"vis": null,
+					"inner": {
+						"Function": {
+							"qualifiers": {
+								"const_": null,
+								"async_": null,
+								"safety": null,
+								"extern_": null
+							},
+							"fn_": [
+								{ "first": { "start": 48, "end": 49 }, "rest": [] },
+								{ "start": 49, "end": 51 }
+							],
+							"ident": {
+								"NonKw": [
+									{ "first": { "start": 51, "end": 52 }, "rest": [] },
+									{ "start": 52, "end": 53 }
+								]
+							},
+							"generics": null,
+							"params": {
+								"prefix": [
+									{ "first": { "start": 53, "end": 53 }, "rest": [] },
+									{ "start": 53, "end": 54 }
+								],
+								"value": null,
+								"suffix": [
+									{ "first": { "start": 54, "end": 54 }, "rest": [] },
+									{ "start": 54, "end": 55 }
+								]
+							},
+							"ret": null,
+							"where_": null,
+							"body": {
+								"Expr": {
+									"prefix": [
+										{ "first": { "start": 55, "end": 56 }, "rest": [] },
+										{ "start": 56, "end": 57 }
+									],
+									"value": {
+										"attrs": [],
+										"inner": { "stmts": [], "trailing_expr": null }
+									},
+									"suffix": [
+										{ "first": { "start": 57, "end": 57 }, "rest": [] },
+										{ "start": 57, "end": 58 }
+									]
 								}
 							}
 						}
 					}
 				}
-			]
+			}
 		}
-	}
+	],
+	"suffix_ws": { "first": { "start": 58, "end": 59 }, "rest": [] },
+	"trailing_line_comment": null
 }

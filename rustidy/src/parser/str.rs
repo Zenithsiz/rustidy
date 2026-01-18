@@ -2,13 +2,12 @@
 
 // Imports
 use {
-	super::ParserRange,
+	super::{ParserPos, ParserRange},
 	crate::{
-		Arenas,
 		Format,
 		FormatRef,
 		Print,
-		arena::{ArenaData, ArenaIdx},
+		arena::{Arena, ArenaData, ArenaIdx},
 		ast::whitespace::Whitespace,
 		format,
 	},
@@ -21,20 +20,34 @@ use {
 pub struct ParserStr(pub ArenaIdx<Self>);
 
 impl ParserStr {
+	/// Creates a new parser string from a range
+	pub fn new(range: ParserRange) -> Self {
+		Self(ARENA.push(range))
+	}
+
+	/// Creates a new 0-sized parser string from a position
+	pub fn empty_at(pos: ParserPos) -> Self {
+		Self::new(ParserRange { start: pos, end: pos })
+	}
+
 	/// Returns the parser range of this string
 	#[must_use]
-	pub fn range(&self, arenas: &Arenas) -> ParserRange {
-		*arenas.get(&self.0)
+	pub fn range(&self) -> ParserRange {
+		*ARENA.get(&self.0)
 	}
 }
 
 impl ArenaData for ParserStr {
 	type Data = ParserRange;
+
+	const ARENA: &'static Arena<Self> = &ARENA;
 }
 
+static ARENA: Arena<ParserStr> = Arena::new();
+
 impl FormatRef for ParserStr {
-	fn input_range(&self, ctx: &format::Context) -> Option<super::ParserRange> {
-		Some(Self::range(self, ctx.arenas()))
+	fn input_range(&self, _ctx: &format::Context) -> Option<super::ParserRange> {
+		Some(Self::range(self))
 	}
 }
 
