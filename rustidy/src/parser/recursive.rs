@@ -6,10 +6,7 @@ pub use rustidy_macros::ParseRecursive;
 // Imports
 use {
 	super::{ParsableFrom, Parse, ParseError, Parser, ParserError, ParserTag},
-	crate::{
-		ast::{expr::BlockExpression, punct::Punctuated},
-		parser::PeekState,
-	},
+	crate::{ast::expr::BlockExpression, parser::PeekState},
 	core::{marker::PhantomData, mem},
 	either::Either,
 };
@@ -125,7 +122,7 @@ where
 
 	// TODO: Account for precedence
 	fn parse_from(parser: &mut Parser) -> Result<Self, Self::Error> {
-		let convert_inner = |parser: &mut Parser, inner: RecursiveWrapperInner<R>| {
+		let convert_inner = |parser: &mut Parser, inner: RecursiveWrapperInnerPart<R>| {
 			let mut base = R::from_base(inner.base, parser);
 			for prefix in inner.prefixes.into_iter().rev() {
 				base = R::join_prefix(prefix, base, parser);
@@ -137,10 +134,10 @@ where
 			base
 		};
 
-		let raw = self::parse(parser)?;
+		let inner = self::parse(parser)?;
 
-		let mut base = convert_inner(parser, raw.first);
-		for (infix, rhs) in raw.rest {
+		let mut base = convert_inner(parser, inner.first);
+		for (infix, rhs) in inner.rest {
 			base = R::join_infix(base, infix, convert_inner(parser, rhs), parser);
 		}
 
@@ -196,15 +193,18 @@ pub enum RecursiveWrapperError<R: ParsableRecursive<R>> {
 
 #[derive(derive_more::Debug)]
 struct RecursiveWrapperInner<R: ParsableRecursive<R>> {
+	first: RecursiveWrapperInnerPart<R>,
+	rest:  Vec<(R::Infix, RecursiveWrapperInnerPart<R>)>,
+}
+
+#[derive(derive_more::Debug)]
+struct RecursiveWrapperInnerPart<R: ParsableRecursive<R>> {
 	prefixes: Vec<R::Prefix>,
 	base:     R::Base,
 	suffixes: Vec<R::Suffix>,
 }
 
-// Todo: Not clone parser states here
-fn parse<R: ParsableRecursive<R>>(
-	parser: &mut Parser,
-) -> Result<Punctuated<RecursiveWrapperInner<R>, R::Infix>, RecursiveWrapperError<R>> {
+fn parse<R: ParsableRecursive<R>>(parser: &mut Parser) -> Result<RecursiveWrapperInner<R>, RecursiveWrapperError<R>> {
 	// Note: We want to ensure that any tags that are active at the beginning
 	//       stay active throughout the whole parsing, so we manually set them
 	//       on each parse.
@@ -309,7 +309,7 @@ fn parse<R: ParsableRecursive<R>>(
 					}
 				};
 
-				let inner = RecursiveWrapperInner {
+				let inner = RecursiveWrapperInnerPart {
 					prefixes: mem::take(&mut cur_prefixes),
 					base,
 					suffixes: cur_suffixes,
@@ -338,5 +338,5 @@ fn parse<R: ParsableRecursive<R>>(
 		None => (last_inner, vec![]),
 	};
 
-	Ok(Punctuated { first, rest })
+	Ok(RecursiveWrapperInner { first, rest })
 }
