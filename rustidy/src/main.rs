@@ -24,7 +24,7 @@ use {
 	rustidy_format::Format,
 	rustidy_parse::Parser,
 	rustidy_print::{Print, PrintFmt},
-	rustidy_util::Replacements,
+	rustidy_format::Replacements,
 	std::{fs, process::ExitCode},
 	zutil_logger::Logger,
 };

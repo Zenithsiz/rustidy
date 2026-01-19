@@ -5,15 +5,22 @@
 
 // Modules
 pub mod config;
+pub mod replacement;
 
 // Exports
-pub use {self::config::Config, rustidy_macros::Format};
+pub use {
+	self::{
+		config::Config,
+		replacement::{Replacement, Replacements},
+	},
+	rustidy_macros::Format,
+};
 
 // Imports
 use {
 	crate as rustidy_format,
 	core::marker::PhantomData,
-	rustidy_util::{ArenaData, ArenaIdx, AstPos, AstRange, AstStr, Replacement, Replacements},
+	rustidy_util::{ArenaData, ArenaIdx, AstPos, AstRange, AstStr},
 };
 
 /// Whitespace-like for formatting

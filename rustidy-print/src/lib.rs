@@ -9,7 +9,8 @@ pub use rustidy_macros::Print;
 // Imports
 use {
 	core::marker::PhantomData,
-	rustidy_util::{ArenaData, ArenaIdx, AstStr, Replacements},
+	rustidy_format::Replacements,
+	rustidy_util::{ArenaData, ArenaIdx, AstStr},
 };
 
 /// Printable types
