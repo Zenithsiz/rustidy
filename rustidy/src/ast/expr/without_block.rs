@@ -49,13 +49,11 @@ pub use self::{
 // Imports
 use {
 	super::{Expression, ExpressionInner},
-	crate::{
-		Format,
-		ast::{
-			token,
-			with_attrs::{self, WithOuterAttributes},
-		},
+	crate::ast::{
+		token,
+		with_attrs::{self, WithOuterAttributes},
 	},
+	rustidy_format::Format,
 	rustidy_parse::{Parse, ParseRecursive, RecursiveWrapper},
 	rustidy_print::Print,
 };

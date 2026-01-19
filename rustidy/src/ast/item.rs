@@ -47,7 +47,7 @@ use {
 		vis::Visibility,
 		with_attrs::{self, WithOuterAttributes},
 	},
-	crate::{Format, format},
+	rustidy_format::Format,
 	rustidy_parse::Parse,
 	rustidy_print::Print,
 	rustidy_util::{Arena, ArenaData, ArenaIdx},
@@ -59,7 +59,7 @@ use {
 #[derive(Parse, Format, Print)]
 #[expect(clippy::use_self, reason = "`Parse` derive macro doesn't support `Self`")]
 pub struct Item(
-	#[format(and_with = format::arena(with_attrs::format_outer_value_non_empty(Format::prefix_ws_set_cur_indent)))]
+	#[format(and_with = rustidy_format::arena(with_attrs::format_outer_value_non_empty(Format::prefix_ws_set_cur_indent)))]
 	pub ArenaIdx<Item>,
 );
 

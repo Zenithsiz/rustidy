@@ -130,10 +130,10 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 		darling::ast::Data::Struct(fields) => self::derive_struct(fields),
 	};
 
-	let impl_ref_generics = util::with_bounds(&attrs, |ty| parse_quote! { #ty: crate::format::FormatRef });
+	let impl_ref_generics = util::with_bounds(&attrs, |ty| parse_quote! { #ty: rustidy_format::FormatRef });
 	let (impl_ref_generics, ty_ref_generics, impl_ref_where_clause) = impl_ref_generics.split_for_impl();
 
-	let impl_generics = util::with_bounds(&attrs, |ty| parse_quote! { #ty: crate::format::Format });
+	let impl_generics = util::with_bounds(&attrs, |ty| parse_quote! { #ty: rustidy_format::Format });
 	let (impl_generics, ty_generics, impl_where_clause) = impl_generics.split_for_impl();
 
 	let Impls {
@@ -165,21 +165,21 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 
 	let output = quote! {
 		#[automatically_derived]
-		impl #impl_ref_generics crate::format::FormatRef for #item_ident #ty_ref_generics #impl_ref_where_clause {
-			fn input_range(&self, ctx: &crate::format::Context) -> Option<rustidy_util::AstRange> {
+		impl #impl_ref_generics rustidy_format::FormatRef for #item_ident #ty_ref_generics #impl_ref_where_clause {
+			fn input_range(&self, ctx: &rustidy_format::Context) -> Option<rustidy_util::AstRange> {
 				#input_range
 			}
 		}
 
 		#[automatically_derived]
-		impl #impl_generics crate::format::Format for #item_ident #ty_generics #impl_where_clause {
+		impl #impl_generics rustidy_format::Format for #item_ident #ty_generics #impl_where_clause {
 			#[coverage(on)]
-			fn format(&mut self, ctx: &mut crate::format::Context) {
+			fn format(&mut self, ctx: &mut rustidy_format::Context) {
 				#format;
 			}
 
 			#[allow(unreachable_code)]
-			fn with_prefix_ws<WITH_PREFIX_WS_V: crate::format::WhitespaceVisitor>(&mut self, ctx: &mut crate::format::Context, visitor: &mut WITH_PREFIX_WS_V) -> Option<<WITH_PREFIX_WS_V as crate::format::WhitespaceVisitor>::Output> {
+			fn with_prefix_ws<WITH_PREFIX_WS_V: rustidy_format::WhitespaceVisitor>(&mut self, ctx: &mut rustidy_format::Context, visitor: &mut WITH_PREFIX_WS_V) -> Option<<WITH_PREFIX_WS_V as rustidy_format::WhitespaceVisitor>::Output> {
 				#with_prefix_ws
 			}
 		}
@@ -194,12 +194,12 @@ fn derive_enum(variants: &[VariantAttrs]) -> Impls<syn::Expr, syn::Expr, syn::Ex
 		.map(|variant| {
 			let variant_ident = &variant.ident;
 			let input_range =
-				parse_quote! { Self::#variant_ident(ref value) => crate::format::FormatRef::input_range(value, ctx), };
+				parse_quote! { Self::#variant_ident(ref value) => rustidy_format::FormatRef::input_range(value, ctx), };
 
 			let format = self::derive_format(
 				parse_quote! { value },
 				&variant.with,
-				parse_quote! { crate::format::Format::format(value, ctx) },
+				parse_quote! { rustidy_format::Format::format(value, ctx) },
 				&variant.and_with,
 				variant.indent,
 			);
@@ -247,7 +247,7 @@ fn derive_struct(fields: &darling::ast::Fields<FieldAttrs>) -> Impls<syn::Expr, 
 		.collect::<Impls<Vec<_>, Vec<_>, ()>>();
 
 	let input_range = parse_quote! {{
-		let mut compute_range = crate::format::ComputeRange::default();
+		let mut compute_range = rustidy_format::ComputeRange::default();
 		#( #input_range; )*
 		compute_range.finish()
 	}};
@@ -258,10 +258,10 @@ fn derive_struct(fields: &darling::ast::Fields<FieldAttrs>) -> Impls<syn::Expr, 
 
 		parse_quote! {{
 			// TODO: Once polonius comes around, move this down
-			let is_empty = crate::format::FormatRef::input_range(&self.#field_ident, ctx).is_none_or(|range| range.is_empty());
+			let is_empty = rustidy_format::FormatRef::input_range(&self.#field_ident, ctx).is_none_or(|range| range.is_empty());
 
 			// If we used the whitespace, return
-			if let Some(value) = crate::format::Format::with_prefix_ws(&mut self.#field_ident, ctx, visitor) {
+			if let Some(value) = rustidy_format::Format::with_prefix_ws(&mut self.#field_ident, ctx, visitor) {
 				return Some(value);
 			}
 
@@ -293,7 +293,7 @@ fn derive_struct_field(field_idx: usize, field: &FieldAttrs) -> Impls<syn::Expr,
 	let format = self::derive_format(
 		parse_quote! { &mut self.#field_ident },
 		&field.with,
-		parse_quote! { crate::format::Format::format(&mut self.#field_ident, ctx) },
+		parse_quote! { rustidy_format::Format::format(&mut self.#field_ident, ctx) },
 		&field.and_with,
 		field.indent,
 	);
@@ -410,7 +410,7 @@ fn derive_and_with_wrapper(fields: &darling::ast::Fields<FieldAttrs>, and_with_w
 		.map(|expr| {
 			let wrapper: syn::ItemStruct = match fields.style {
 				darling::ast::Style::Tuple => parse_quote! {
-					#[derive(Debug, crate::format::Format)]
+					#[derive(Debug, rustidy_format::Format)]
 					pub struct Wrapper<'a>(
 						#(
 							&'a mut #wrapper_field_tys,
@@ -418,7 +418,7 @@ fn derive_and_with_wrapper(fields: &darling::ast::Fields<FieldAttrs>, and_with_w
 					);
 				},
 				darling::ast::Style::Struct => parse_quote! {
-					#[derive(Debug, crate::format::Format)]
+					#[derive(Debug, rustidy_format::Format)]
 					pub struct Wrapper<'a> {
 						#(
 							#wrapper_field_idents: &'a mut #wrapper_field_tys,
@@ -426,7 +426,7 @@ fn derive_and_with_wrapper(fields: &darling::ast::Fields<FieldAttrs>, and_with_w
 					}
 				},
 				darling::ast::Style::Unit => parse_quote! {
-					#[derive(Debug, crate::format::Format)]
+					#[derive(Debug, rustidy_format::Format)]
 					pub struct Wrapper;
 				},
 			};

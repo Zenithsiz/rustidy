@@ -3,11 +3,8 @@
 // Imports
 use {
 	super::Type,
-	crate::{
-		Format,
-		ast::{delimited::Parenthesized, token},
-		format,
-	},
+	crate::ast::{delimited::Parenthesized, token},
+	rustidy_format::Format,
 	rustidy_parse::Parse,
 	rustidy_print::Print,
 };
@@ -29,7 +26,7 @@ pub struct TupleTypeInner {
 }
 
 impl TupleTypeInner {
-	fn format_tys(&mut self, ctx: &mut format::Context) {
+	fn format_tys(&mut self, ctx: &mut rustidy_format::Context) {
 		let Some(((_, first_comma), tys)) = self.tys.split_first_mut() else {
 			return;
 		};

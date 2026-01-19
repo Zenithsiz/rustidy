@@ -3,17 +3,15 @@
 // Imports
 use {
 	super::{Type, TypeNoBounds},
-	crate::{
-		Format,
-		ast::{
-			delimited::Parenthesized,
-			ident::Identifier,
-			item::function::{ExternAbi, ForLifetimes},
-			punct::{self, Punctuated, PunctuatedTrailing},
-			token,
-			with_attrs::WithOuterAttributes,
-		},
+	crate::ast::{
+		delimited::Parenthesized,
+		ident::Identifier,
+		item::function::{ExternAbi, ForLifetimes},
+		punct::{self, Punctuated, PunctuatedTrailing},
+		token,
+		with_attrs::WithOuterAttributes,
 	},
+	rustidy_format::Format,
 	rustidy_parse::Parse,
 	rustidy_print::Print,
 };

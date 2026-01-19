@@ -3,14 +3,12 @@
 // Imports
 use {
 	super::{ExpressionWithoutBlockInner, Parse},
-	crate::{
-		Format,
-		ast::{
-			expr::{Expression, ExpressionInner},
-			token,
-			ty::TypeNoBounds,
-		},
+	crate::ast::{
+		expr::{Expression, ExpressionInner},
+		token,
+		ty::TypeNoBounds,
 	},
+	rustidy_format::Format,
 	rustidy_parse::ParseRecursive,
 	rustidy_print::Print,
 };

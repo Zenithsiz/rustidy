@@ -2,7 +2,7 @@
 
 // Imports
 use {
-	rustidy::{Format, format},
+	rustidy_format::Format,
 	rustidy_parse::Parser,
 	rustidy_print::{Print, PrintFmt},
 	rustidy_util::{AstPos, Replacements},
@@ -24,8 +24,8 @@ pub fn format() {
 		let mut input = rustidy::parse(&input_path, &mut parser).expect("Input did not fail");
 
 		let mut replacements = Replacements::new();
-		let config = format::Config::default();
-		let mut ctx = format::Context::new(&file, &mut replacements, &config);
+		let config = rustidy_format::Config::default();
+		let mut ctx = rustidy_format::Context::new(&file, &mut replacements, &config);
 		input.format(&mut ctx);
 
 		let mut print_fmt = PrintFmt::new(&file, &replacements);
@@ -34,8 +34,8 @@ pub fn format() {
 
 		{
 			let mut replacements = Replacements::new();
-			let config = format::Config::default();
-			let mut ctx = format::Context::new(&file, &mut replacements, &config);
+			let config = rustidy_format::Config::default();
+			let mut ctx = rustidy_format::Context::new(&file, &mut replacements, &config);
 			input.format(&mut ctx);
 
 			let mut print_fmt = PrintFmt::new(&file, &replacements);

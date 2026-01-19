@@ -3,7 +3,8 @@
 // Imports
 use {
 	super::Type,
-	crate::{Format, ast::delimited::Bracketed},
+	crate::ast::delimited::Bracketed,
+	rustidy_format::Format,
 	rustidy_parse::Parse,
 	rustidy_print::Print,
 };

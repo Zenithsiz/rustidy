@@ -1,12 +1,7 @@
 //! Delimited
 
 // Imports
-use {
-	super::token,
-	crate::{Format, format},
-	rustidy_parse::Parse,
-	rustidy_print::Print,
-};
+use {super::token, rustidy_format::Format, rustidy_parse::Parse, rustidy_print::Print};
 
 /// A value `T` delimited by prefix `L` and suffix `R`
 #[derive(PartialEq, Eq, Debug)]
@@ -22,7 +17,7 @@ pub struct Delimited<T, L, R> {
 
 impl<T, L, R> Delimited<T, L, R> {
 	/// Formats this delimited with a single space if non-blank, otherwise removes
-	pub fn format_single_if_non_blank(&mut self, ctx: &mut format::Context)
+	pub fn format_single_if_non_blank(&mut self, ctx: &mut rustidy_format::Context)
 	where
 		T: Format,
 		R: Format,
@@ -40,7 +35,7 @@ impl<T, L, R> Delimited<T, L, R> {
 	}
 
 	/// Formats this delimited by indenting if non-blank, otherwise removing
-	pub fn format_indent_if_non_blank(&mut self, ctx: &mut format::Context)
+	pub fn format_indent_if_non_blank(&mut self, ctx: &mut rustidy_format::Context)
 	where
 		T: Format,
 		R: Format,
@@ -58,7 +53,7 @@ impl<T, L, R> Delimited<T, L, R> {
 	}
 
 	/// Formats this delimited by removing all inner whitespace
-	pub fn format_remove(&mut self, ctx: &mut format::Context)
+	pub fn format_remove(&mut self, ctx: &mut rustidy_format::Context)
 	where
 		T: Format,
 		R: Format,

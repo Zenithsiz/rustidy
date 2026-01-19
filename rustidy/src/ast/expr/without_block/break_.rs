@@ -2,10 +2,8 @@
 
 // Imports
 use {
-	crate::{
-		Format,
-		ast::{expr::Expression, lifetime::LifetimeOrLabel, token},
-	},
+	crate::ast::{expr::Expression, lifetime::LifetimeOrLabel, token},
+	rustidy_format::Format,
 	rustidy_parse::Parse,
 	rustidy_print::Print,
 };

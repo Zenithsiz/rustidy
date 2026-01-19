@@ -2,14 +2,12 @@
 
 use {
 	super::ExpressionWithoutBlockInner,
-	crate::{
-		Format,
-		ast::{
-			expr::{Expression, ExpressionInner},
-			ident::Identifier,
-			token,
-		},
+	crate::ast::{
+		expr::{Expression, ExpressionInner},
+		ident::Identifier,
+		token,
 	},
+	rustidy_format::Format,
 	rustidy_parse::ParseRecursive,
 	rustidy_print::Print,
 };

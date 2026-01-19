@@ -1,6 +1,6 @@
 [workspace]
 
-members  = ["rustidy", "rustidy-macros", "rustidy-parse", "rustidy-print", "rustidy-util"]
+members  = ["rustidy", "rustidy-format", "rustidy-macros", "rustidy-parse", "rustidy-print", "rustidy-util"]
 resolver = "2"
 
 [workspace.package]
@@ -15,6 +15,7 @@ version     = "0.1.10"
 
 # Workspace
 rustidy        = { path = "rustidy" }
+rustidy-format = { path = "rustidy-format" }
 rustidy-macros = { path = "rustidy-macros" }
 rustidy-parse  = { path = "rustidy-parse" }
 rustidy-print  = { path = "rustidy-print" }

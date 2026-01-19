@@ -3,18 +3,16 @@
 // Imports
 use {
 	super::ExpressionWithoutBlockInner,
-	crate::{
-		Format,
-		ast::{
-			delimited::Delimited,
-			expr::{Expression, ExpressionInner},
-			pat::PatternNoTopAlt,
-			punct::{self, PunctuatedTrailing},
-			token,
-			ty::{Type, TypeNoBounds},
-			with_attrs::WithOuterAttributes,
-		},
+	crate::ast::{
+		delimited::Delimited,
+		expr::{Expression, ExpressionInner},
+		pat::PatternNoTopAlt,
+		punct::{self, PunctuatedTrailing},
+		token,
+		ty::{Type, TypeNoBounds},
+		with_attrs::WithOuterAttributes,
 	},
+	rustidy_format::Format,
 	rustidy_parse::{Parse, ParseRecursive},
 	rustidy_print::Print,
 };

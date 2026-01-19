@@ -2,11 +2,8 @@
 
 // Imports
 use {
-	crate::{
-		Format,
-		format::{self, FormatFn},
-	},
 	either::Either,
+	rustidy_format::{Format, FormatFn},
 	rustidy_parse::Parse,
 	rustidy_print::Print,
 };
@@ -92,8 +89,12 @@ impl<T, P> Punctuated<T, P> {
 	}
 
 	/// Formats this value
-	pub fn format(&mut self, ctx: &mut format::Context, format_value: impl FormatFn<T>, format_punct: impl FormatFn<P>)
-	where
+	pub fn format(
+		&mut self,
+		ctx: &mut rustidy_format::Context,
+		format_value: impl FormatFn<T>,
+		format_punct: impl FormatFn<P>,
+	) where
 		T: Format,
 		P: Format,
 	{
@@ -126,8 +127,12 @@ impl<T, P> PunctuatedTrailing<T, P> {
 	}
 
 	/// Formats this value
-	pub fn format(&mut self, ctx: &mut format::Context, format_value: impl FormatFn<T>, format_punct: impl FormatFn<P>)
-	where
+	pub fn format(
+		&mut self,
+		ctx: &mut rustidy_format::Context,
+		format_value: impl FormatFn<T>,
+		format_punct: impl FormatFn<P>,
+	) where
 		T: Format,
 		P: Format,
 	{

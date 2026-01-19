@@ -3,14 +3,12 @@
 // Imports
 use {
 	super::path::TypePathSegment,
-	crate::{
-		Format,
-		ast::{
-			at_least::{self, AtLeast1},
-			expr::without_block::path::QualifiedPathType,
-			token,
-		},
+	crate::ast::{
+		at_least::{self, AtLeast1},
+		expr::without_block::path::QualifiedPathType,
+		token,
 	},
+	rustidy_format::Format,
 	rustidy_parse::Parse,
 	rustidy_print::Print,
 };

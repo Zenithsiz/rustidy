@@ -2,17 +2,14 @@
 
 // Imports
 use {
-	crate::{
-		Format,
-		ast::{
-			delimited::Braced,
-			expr::ExpressionWithoutBlock,
-			stmt::{ExpressionStatement, ExpressionStatementWithoutBlock, Statement},
-			token,
-			with_attrs::WithInnerAttributes,
-		},
-		format,
+	crate::ast::{
+		delimited::Braced,
+		expr::ExpressionWithoutBlock,
+		stmt::{ExpressionStatement, ExpressionStatementWithoutBlock, Statement},
+		token,
+		with_attrs::WithInnerAttributes,
 	},
+	rustidy_format::Format,
 	rustidy_parse::{Parse, ParseError, Parser, ParserError},
 	rustidy_print::Print,
 };
@@ -34,7 +31,7 @@ pub struct BlockExpression(
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Format, Print)]
 pub struct Statements {
-	#[format(and_with = format::format_vec_each_with_all(Format::prefix_ws_set_cur_indent))]
+	#[format(and_with = rustidy_format::format_vec_each_with_all(Format::prefix_ws_set_cur_indent))]
 	pub stmts:         Vec<Statement>,
 	#[format(and_with(expr = Format::prefix_ws_set_cur_indent, if = !self.stmts.is_empty()))]
 	pub trailing_expr: Option<ExpressionWithoutBlock>,

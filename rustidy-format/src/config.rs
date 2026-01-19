@@ -1,5 +1,7 @@
 //! Format configuration
 
+// TODO: Move to util?
+
 /// Format config
 #[derive(Clone, Debug)]
 pub struct Config {

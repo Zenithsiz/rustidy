@@ -6,10 +6,8 @@ use {
 		function::{GenericParams, WhereClause},
 		struct_::StructFields,
 	},
-	crate::{
-		Format,
-		ast::{delimited::Braced, ident::Identifier, token},
-	},
+	crate::ast::{delimited::Braced, ident::Identifier, token},
+	rustidy_format::Format,
 	rustidy_parse::Parse,
 	rustidy_print::Print,
 };

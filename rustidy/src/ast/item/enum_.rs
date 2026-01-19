@@ -6,18 +6,16 @@ use {
 		function::{GenericParams, WhereClause},
 		struct_::{StructFields, TupleFields},
 	},
-	crate::{
-		Format,
-		ast::{
-			delimited::{Braced, Parenthesized},
-			expr::Expression,
-			ident::Identifier,
-			punct::{self, PunctuatedTrailing},
-			token,
-			vis::Visibility,
-			with_attrs::{self, WithOuterAttributes},
-		},
+	crate::ast::{
+		delimited::{Braced, Parenthesized},
+		expr::Expression,
+		ident::Identifier,
+		punct::{self, PunctuatedTrailing},
+		token,
+		vis::Visibility,
+		with_attrs::{self, WithOuterAttributes},
 	},
+	rustidy_format::Format,
 	rustidy_parse::Parse,
 	rustidy_print::Print,
 };

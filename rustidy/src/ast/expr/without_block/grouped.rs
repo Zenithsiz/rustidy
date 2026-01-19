@@ -2,10 +2,8 @@
 
 // Imports
 use {
-	crate::{
-		Format,
-		ast::{delimited::Parenthesized, expr::Expression},
-	},
+	crate::ast::{delimited::Parenthesized, expr::Expression},
+	rustidy_format::Format,
 	rustidy_parse::Parse,
 	rustidy_print::Print,
 };

@@ -10,16 +10,13 @@ use {
 		Visibility,
 		function::{GenericParams, TypeParamBounds, WhereClause},
 	},
-	crate::{
-		Format,
-		ast::{
-			delimited::Braced,
-			ident::Identifier,
-			token,
-			with_attrs::{self, WithInnerAttributes, WithOuterAttributes},
-		},
-		format,
+	crate::ast::{
+		delimited::Braced,
+		ident::Identifier,
+		token,
+		with_attrs::{self, WithInnerAttributes, WithOuterAttributes},
 	},
+	rustidy_format::Format,
 	rustidy_parse::Parse,
 	rustidy_print::Print,
 };
@@ -75,7 +72,8 @@ pub struct TraitBodyEq {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct TraitBodyFull(
-	#[format(and_with = format::format_vec_each_with_all(Format::prefix_ws_set_cur_indent))] pub Vec<AssociatedItem>,
+	#[format(and_with = rustidy_format::format_vec_each_with_all(Format::prefix_ws_set_cur_indent))]
+	pub  Vec<AssociatedItem>,
 );
 
 #[derive(PartialEq, Eq, Debug)]

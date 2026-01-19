@@ -2,14 +2,12 @@
 
 // Imports
 use {
-	crate::{
-		Format,
-		ast::{
-			expr::without_block::path::{GenericArgs, PathIdentSegment, TypePathFn},
-			punct::{self, Punctuated},
-			token,
-		},
+	crate::ast::{
+		expr::without_block::path::{GenericArgs, PathIdentSegment, TypePathFn},
+		punct::{self, Punctuated},
+		token,
 	},
+	rustidy_format::Format,
 	rustidy_parse::Parse,
 	rustidy_print::Print,
 };

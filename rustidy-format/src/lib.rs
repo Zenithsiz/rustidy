@@ -1,4 +1,7 @@
-//! Formattable types
+//! Formatting
+
+// Features
+#![feature(decl_macro, never_type, coverage_attribute, macro_metavar_expr_concat, trait_alias)]
 
 // Modules
 pub mod config;
@@ -8,6 +11,7 @@ pub use {self::config::Config, rustidy_macros::Format};
 
 // Imports
 use {
+	crate as rustidy_format,
 	core::marker::PhantomData,
 	rustidy_util::{ArenaData, ArenaIdx, AstPos, AstRange, AstStr, Replacement, Replacements},
 };
@@ -409,7 +413,7 @@ impl<'a, 'input> Context<'a, 'input> {
 		}
 	}
 
-	#[cfg(test)]
+	#[doc(hidden)]
 	pub const fn set_indent_depth(&mut self, indent_depth: usize) {
 		self.indent_depth = indent_depth;
 	}

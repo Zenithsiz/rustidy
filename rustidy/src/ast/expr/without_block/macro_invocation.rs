@@ -2,10 +2,8 @@
 
 // Imports
 use {
-	crate::{
-		Format,
-		ast::{attr::DelimTokenTree, path::SimplePath, token},
-	},
+	crate::ast::{attr::DelimTokenTree, path::SimplePath, token},
+	rustidy_format::Format,
 	rustidy_parse::Parse,
 	rustidy_print::Print,
 };

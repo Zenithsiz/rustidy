@@ -2,17 +2,15 @@
 
 // Imports
 use {
-	crate::{
-		Format,
-		ast::{
-			at_least::AtLeast1,
-			attr::DelimTokenTree,
-			delimited::{Braced, Bracketed, Parenthesized},
-			ident::{Identifier, IdentifierOrKeyword, ident_or_keyword::RawIdentifier},
-			punct::PunctuatedTrailing,
-			token::{self, Token},
-		},
+	crate::ast::{
+		at_least::AtLeast1,
+		attr::DelimTokenTree,
+		delimited::{Braced, Bracketed, Parenthesized},
+		ident::{Identifier, IdentifierOrKeyword, ident_or_keyword::RawIdentifier},
+		punct::PunctuatedTrailing,
+		token::{self, Token},
 	},
+	rustidy_format::Format,
 	rustidy_parse::Parse,
 	rustidy_print::Print,
 };

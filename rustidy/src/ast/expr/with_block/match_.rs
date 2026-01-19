@@ -3,18 +3,15 @@
 // Imports
 use {
 	super::Conditions,
-	crate::{
-		Format,
-		ast::{
-			delimited::Braced,
-			expr::{Expression, ExpressionInner, ExpressionWithBlock, ExpressionWithoutBlock},
-			pat::Pattern,
-			token,
-			with_attrs::{self, WithInnerAttributes, WithOuterAttributes},
-		},
-		format,
+	crate::ast::{
+		delimited::Braced,
+		expr::{Expression, ExpressionInner, ExpressionWithBlock, ExpressionWithoutBlock},
+		pat::Pattern,
+		token,
+		with_attrs::{self, WithInnerAttributes, WithOuterAttributes},
 	},
 	core::ops::ControlFlow,
+	rustidy_format::Format,
 	rustidy_parse::{FromRecursiveRoot, Parse, ParseError, Parser, ParserError},
 	rustidy_print::Print,
 	std::fmt,
@@ -47,7 +44,7 @@ pub struct Scrutinee(#[parse(with_tag = "skip:StructExpression")] Expression);
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Format, Print)]
 pub struct MatchArms {
-	#[format(and_with = format::format_vec_each_with_all(Format::prefix_ws_set_cur_indent))]
+	#[format(and_with = rustidy_format::format_vec_each_with_all(Format::prefix_ws_set_cur_indent))]
 	pub arms: Vec<MatchArmWithExpr>,
 }
 

@@ -3,12 +3,8 @@
 // Imports
 use {
 	super::punct::Punctuated,
-	crate::{
-		Format,
-		FormatRef,
-		format::{self, WhitespaceLike, WhitespaceVisitor},
-	},
 	itertools::Itertools,
+	rustidy_format::{Format, WhitespaceLike},
 	rustidy_parse::{Parse, Parser},
 	rustidy_print::Print,
 	rustidy_util::{Arena, ArenaData, ArenaIdx, AstPos, AstRange, AstStr, Replacement},
@@ -48,7 +44,7 @@ impl Whitespace {
 		}))
 	}
 
-	fn format(&self, ctx: &mut format::Context, kind: FormatKind) {
+	fn format(&self, ctx: &mut rustidy_format::Context, kind: FormatKind) {
 		let mut inner = ARENA.get(&self.0);
 
 		let prefix_str = kind.prefix_str(ctx, &inner.first.0, inner.rest.is_empty());
@@ -74,15 +70,15 @@ impl ArenaData for Whitespace {
 static ARENA: Arena<Whitespace> = Arena::new();
 
 impl WhitespaceLike for Whitespace {
-	fn remove(&mut self, ctx: &mut format::Context) {
+	fn remove(&mut self, ctx: &mut rustidy_format::Context) {
 		Self::format(self, ctx, FormatKind::Remove);
 	}
 
-	fn set_single(&mut self, ctx: &mut format::Context) {
+	fn set_single(&mut self, ctx: &mut rustidy_format::Context) {
 		Self::format(self, ctx, FormatKind::Single);
 	}
 
-	fn set_indent(&mut self, ctx: &mut format::Context, offset: isize, remove_if_empty: bool) {
+	fn set_indent(&mut self, ctx: &mut rustidy_format::Context, offset: isize, remove_if_empty: bool) {
 		Self::format(self, ctx, FormatKind::Indent {
 			offset,
 			remove_if_empty,
@@ -90,20 +86,20 @@ impl WhitespaceLike for Whitespace {
 	}
 }
 
-impl FormatRef for Whitespace {
-	fn input_range(&self, ctx: &format::Context) -> Option<AstRange> {
+impl rustidy_format::FormatRef for Whitespace {
+	fn input_range(&self, ctx: &rustidy_format::Context) -> Option<AstRange> {
 		ARENA.get(&self.0).input_range(ctx)
 	}
 }
 
 impl Format for Whitespace {
-	fn format(&mut self, _ctx: &mut format::Context) {
+	fn format(&mut self, _ctx: &mut rustidy_format::Context) {
 		// Note: By default no formatting is done
 	}
 
-	fn with_prefix_ws<V: WhitespaceVisitor>(
+	fn with_prefix_ws<V: rustidy_format::WhitespaceVisitor>(
 		&mut self,
-		ctx: &mut format::Context,
+		ctx: &mut rustidy_format::Context,
 		visitor: &mut V,
 	) -> Option<V::Output> {
 		Some(visitor.visit(self, ctx))
@@ -126,12 +122,12 @@ enum FormatKind {
 
 impl FormatKind {
 	/// Returns the indentation string, without a newline
-	fn indent_str(ctx: &format::Context) -> String {
+	fn indent_str(ctx: &rustidy_format::Context) -> String {
 		ctx.config().indent.repeat(ctx.indent())
 	}
 
 	/// Returns the indentation string, with a newline *before*
-	fn indent_str_nl(ctx: &mut format::Context, cur_str: &AstStr) -> String {
+	fn indent_str_nl(ctx: &mut rustidy_format::Context, cur_str: &AstStr) -> String {
 		// TODO: Should we be checking for multiple newlines?
 		let after_newline = cur_str.range().str_before(ctx.input()).ends_with('\n');
 
@@ -148,7 +144,7 @@ impl FormatKind {
 	}
 
 	/// Returns the prefix string
-	fn prefix_str(self, ctx: &mut format::Context, cur_str: &AstStr, is_last: bool) -> Replacement {
+	fn prefix_str(self, ctx: &mut rustidy_format::Context, cur_str: &AstStr, is_last: bool) -> Replacement {
 		match self {
 			Self::Remove => "".into(),
 			Self::Single => " ".into(),
@@ -165,7 +161,7 @@ impl FormatKind {
 	}
 
 	/// Returns the string after a newline
-	fn after_newline_str(self, ctx: &mut format::Context, cur_str: &AstStr, is_last: bool) -> Replacement {
+	fn after_newline_str(self, ctx: &mut rustidy_format::Context, cur_str: &AstStr, is_last: bool) -> Replacement {
 		match self {
 			Self::Remove | Self::Single => "".into(),
 			Self::Indent { offset, .. } => match is_last {
@@ -177,7 +173,7 @@ impl FormatKind {
 	}
 
 	/// Returns the normal string
-	fn normal_str(self, ctx: &mut format::Context, cur_str: &AstStr, is_last: bool) -> Replacement {
+	fn normal_str(self, ctx: &mut rustidy_format::Context, cur_str: &AstStr, is_last: bool) -> Replacement {
 		match self {
 			Self::Remove => "".into(),
 			Self::Single => " ".into(),
@@ -293,7 +289,7 @@ impl TrailingLineComment {
 }
 
 /// Sets the whitespace to the current indentation
-pub fn set_indent(offset: isize, remove_if_empty: bool) -> impl Fn(&mut Whitespace, &mut format::Context) {
+pub fn set_indent(offset: isize, remove_if_empty: bool) -> impl Fn(&mut Whitespace, &mut rustidy_format::Context) {
 	move |ws, ctx| ws.set_indent(ctx, offset, remove_if_empty)
 }
 
@@ -315,7 +311,7 @@ mod tests {
 	fn test_case_with(
 		source: &str,
 		expected: &str,
-		fmt_config: &format::Config,
+		fmt_config: &rustidy_format::Config,
 		config: &Config,
 		kind: FormatKind,
 	) -> Result<(), AppError> {
@@ -331,7 +327,7 @@ mod tests {
 
 
 		let mut replacements = Replacements::new();
-		let mut fmt_ctx = format::Context::new(source, &mut replacements, fmt_config);
+		let mut fmt_ctx = rustidy_format::Context::new(source, &mut replacements, fmt_config);
 		fmt_ctx.set_indent_depth(config.indent_depth);
 		whitespace.format(&mut fmt_ctx, kind);
 
@@ -363,7 +359,7 @@ mod tests {
 
 	fn test_cases_with(
 		cases: impl IntoIterator<Item = CaseKinds<'_>>,
-		fmt_config: &format::Config,
+		fmt_config: &rustidy_format::Config,
 		config: &Config,
 	) -> Result<(), AppError> {
 		cases
@@ -483,7 +479,7 @@ mod tests {
 			},
 		];
 
-		let fmt_config = format::Config::default();
+		let fmt_config = rustidy_format::Config::default();
 		let config = Config { indent_depth: 2 };
 		self::test_cases_with(cases, &fmt_config, &config).map_err(AppError::flatten)
 	}

@@ -1,7 +1,7 @@
 //! Shebang
 
 // Imports
-use {crate::Format, rustidy_parse::Parse, rustidy_print::Print, rustidy_util::AstStr};
+use {rustidy_format::Format, rustidy_parse::Parse, rustidy_print::Print, rustidy_util::AstStr};
 
 /// Shebang
 #[derive(PartialEq, Eq, Debug)]

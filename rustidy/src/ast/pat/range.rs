@@ -3,10 +3,8 @@
 // Imports
 use {
 	super::LiteralPattern,
-	crate::{
-		Format,
-		ast::{expr::PathExpression, token},
-	},
+	crate::ast::{expr::PathExpression, token},
+	rustidy_format::Format,
 	rustidy_parse::Parse,
 	rustidy_print::Print,
 };

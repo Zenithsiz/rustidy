@@ -29,7 +29,7 @@ use {
 		lifetime::Lifetime,
 		token,
 	},
-	crate::Format,
+	rustidy_format::Format,
 	rustidy_parse::Parse,
 	rustidy_print::Print,
 };

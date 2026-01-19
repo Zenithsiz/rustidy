@@ -3,10 +3,8 @@
 // Imports
 use {
 	super::{Suffix, int::DecLiteral},
-	crate::{
-		Format,
-		ast::{expr::without_block::literal::SuffixNoE, token, whitespace::Whitespace},
-	},
+	crate::ast::{expr::without_block::literal::SuffixNoE, token, whitespace::Whitespace},
+	rustidy_format::Format,
 	rustidy_macros::ParseError,
 	rustidy_parse::{Parse, Parser, ParserError},
 	rustidy_print::Print,

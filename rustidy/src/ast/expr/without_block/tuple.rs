@@ -2,15 +2,13 @@
 
 // Imports
 use {
-	crate::{
-		Format,
-		ast::{
-			at_least::{self, AtLeast1},
-			delimited::Parenthesized,
-			expr::Expression,
-			token,
-		},
+	crate::ast::{
+		at_least::{self, AtLeast1},
+		delimited::Parenthesized,
+		expr::Expression,
+		token,
 	},
+	rustidy_format::Format,
 	rustidy_parse::Parse,
 	rustidy_print::Print,
 };

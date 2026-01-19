@@ -3,17 +3,15 @@
 // Imports
 use {
 	super::{literal::TupleIndex, path::PathInExpression},
-	crate::{
-		Format,
-		ast::{
-			delimited::Braced,
-			expr::Expression,
-			ident::Identifier,
-			punct::{self, Punctuated},
-			token,
-			with_attrs::{self, WithOuterAttributes},
-		},
+	crate::ast::{
+		delimited::Braced,
+		expr::Expression,
+		ident::Identifier,
+		punct::{self, Punctuated},
+		token,
+		with_attrs::{self, WithOuterAttributes},
 	},
+	rustidy_format::Format,
 	rustidy_parse::Parse,
 	rustidy_print::Print,
 };

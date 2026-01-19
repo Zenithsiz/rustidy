@@ -9,8 +9,8 @@ use {
 		path::SimplePath,
 		token,
 	},
-	crate::Format,
 	core::fmt::Debug,
+	rustidy_format::Format,
 	rustidy_parse::Parse,
 	rustidy_print::Print,
 };

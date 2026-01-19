@@ -2,19 +2,15 @@
 
 // Imports
 use {
-	crate::{
-		Format,
-		FormatRef,
-		ast::{
-			delimited::Braced,
-			ident::Identifier,
-			path::SimplePath,
-			punct::PunctuatedTrailing,
-			token,
-			whitespace::Whitespace,
-		},
-		format,
+	crate::ast::{
+		delimited::Braced,
+		ident::Identifier,
+		path::SimplePath,
+		punct::PunctuatedTrailing,
+		token,
+		whitespace::Whitespace,
 	},
+	rustidy_format::{Format, FormatRef},
 	rustidy_parse::Parse,
 	rustidy_print::Print,
 };
@@ -76,7 +72,7 @@ pub struct UseTreeGroup {
 impl UseTreeGroup {
 	fn format_tree_compact(
 		tree: &mut Braced<Option<PunctuatedTrailing<Box<UseTree>, token::Comma>>>,
-		ctx: &mut format::Context,
+		ctx: &mut rustidy_format::Context,
 	) {
 		if let Some(punct) = &mut tree.value {
 			punct.trailing = None;
@@ -87,7 +83,7 @@ impl UseTreeGroup {
 
 	fn format_tree(
 		tree: &mut Braced<Option<PunctuatedTrailing<Box<UseTree>, token::Comma>>>,
-		ctx: &mut format::Context,
+		ctx: &mut rustidy_format::Context,
 	) {
 		Self::format_tree_compact(tree, ctx);
 

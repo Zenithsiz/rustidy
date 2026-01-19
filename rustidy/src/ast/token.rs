@@ -21,7 +21,7 @@ use {
 		lifetime::LifetimeToken,
 		whitespace::Whitespace,
 	},
-	crate::Format,
+	rustidy_format::Format,
 	rustidy_parse::{Parse, Parser},
 	rustidy_print::Print,
 	rustidy_util::AstStr,

@@ -28,10 +28,6 @@
 
 // Modules
 pub mod ast;
-pub mod format;
-
-// Exports
-pub use self::format::{Format, FormatRef};
 
 // Imports
 use {

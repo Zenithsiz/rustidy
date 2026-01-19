@@ -2,15 +2,13 @@
 
 use {
 	super::{ExpressionWithoutBlockInner, path::PathExprSegment},
-	crate::{
-		Format,
-		ast::{
-			delimited::Parenthesized,
-			expr::{Expression, ExpressionInner},
-			punct::{self, PunctuatedTrailing},
-			token,
-		},
+	crate::ast::{
+		delimited::Parenthesized,
+		expr::{Expression, ExpressionInner},
+		punct::{self, PunctuatedTrailing},
+		token,
 	},
+	rustidy_format::Format,
 	rustidy_parse::{Parse, ParseRecursive},
 	rustidy_print::Print,
 };

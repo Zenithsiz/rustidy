@@ -1,7 +1,7 @@
 //! Escapes
 
 // Imports
-use {crate::Format, rustidy_parse::Parse, rustidy_print::Print, rustidy_util::AstStr};
+use {rustidy_format::Format, rustidy_parse::Parse, rustidy_print::Print, rustidy_util::AstStr};
 
 /// `QUOTE_ESCAPE`
 #[derive(PartialEq, Eq, Debug)]

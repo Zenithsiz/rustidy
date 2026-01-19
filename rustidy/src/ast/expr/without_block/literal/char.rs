@@ -3,13 +3,11 @@
 // Imports
 use {
 	super::escape::{AsciiEscapeError, QuoteEscapeError, UnicodeEscapeError},
-	crate::{
-		Format,
-		ast::{
-			expr::without_block::literal::{AsciiEscape, QuoteEscape, UnicodeEscape},
-			whitespace::Whitespace,
-		},
+	crate::ast::{
+		expr::without_block::literal::{AsciiEscape, QuoteEscape, UnicodeEscape},
+		whitespace::Whitespace,
 	},
+	rustidy_format::Format,
 	rustidy_parse::Parse,
 	rustidy_print::Print,
 	rustidy_util::AstStr,

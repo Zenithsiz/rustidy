@@ -25,8 +25,8 @@ use {
 		token,
 		with_attrs::WithOuterAttributes,
 	},
-	crate::Format,
 	core::fmt::Debug,
+	rustidy_format::Format,
 	rustidy_parse::Parse,
 	rustidy_print::Print,
 };

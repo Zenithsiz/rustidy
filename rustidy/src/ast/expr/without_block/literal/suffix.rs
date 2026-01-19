@@ -2,7 +2,8 @@
 
 // Imports
 use {
-	crate::{Format, ast::ident::IdentifierOrKeyword},
+	crate::ast::ident::IdentifierOrKeyword,
+	rustidy_format::Format,
 	rustidy_parse::{Parse, Parser},
 	rustidy_print::Print,
 };

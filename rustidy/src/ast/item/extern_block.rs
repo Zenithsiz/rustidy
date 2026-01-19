@@ -3,16 +3,13 @@
 // Imports
 use {
 	super::{Function, MacroInvocationSemi, StaticItem, TypeAlias, function::Abi},
-	crate::{
-		Format,
-		ast::{
-			delimited::Braced,
-			token,
-			vis::Visibility,
-			with_attrs::{self, WithInnerAttributes, WithOuterAttributes},
-		},
-		format,
+	crate::ast::{
+		delimited::Braced,
+		token,
+		vis::Visibility,
+		with_attrs::{self, WithInnerAttributes, WithOuterAttributes},
 	},
+	rustidy_format::Format,
 	rustidy_parse::Parse,
 	rustidy_print::Print,
 };
@@ -37,7 +34,7 @@ pub struct ExternBlock {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct ExternBlockItems(
-	#[format(and_with = format::format_vec_each_with_all(Format::prefix_ws_set_cur_indent))] Vec<ExternalItem>,
+	#[format(and_with = rustidy_format::format_vec_each_with_all(Format::prefix_ws_set_cur_indent))] Vec<ExternalItem>,
 );
 
 /// `ExternalItem`

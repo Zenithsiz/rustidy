@@ -3,19 +3,17 @@
 // Imports
 use {
 	super::function::{GenericParams, WhereClause},
-	crate::{
-		Format,
-		ast::{
-			delimited::{Braced, Parenthesized},
-			expr::Expression,
-			ident::Identifier,
-			punct::{self, PunctuatedTrailing},
-			token,
-			ty::Type,
-			vis::Visibility,
-			with_attrs::{self, WithOuterAttributes},
-		},
+	crate::ast::{
+		delimited::{Braced, Parenthesized},
+		expr::Expression,
+		ident::Identifier,
+		punct::{self, PunctuatedTrailing},
+		token,
+		ty::Type,
+		vis::Visibility,
+		with_attrs::{self, WithOuterAttributes},
 	},
+	rustidy_format::Format,
 	rustidy_parse::Parse,
 	rustidy_print::Print,
 };

@@ -4,7 +4,7 @@
 
 // Imports
 use {
-	crate::Format,
+	rustidy_format::Format,
 	rustidy_parse::{Parse, ParseError, Parser, ParserError},
 	rustidy_print::Print,
 };

@@ -2,7 +2,7 @@
 
 // Imports
 use {
-	crate::{Format, format::FormatFn},
+	rustidy_format::{Format, FormatFn},
 	rustidy_parse::Parse,
 	rustidy_print::Print,
 };

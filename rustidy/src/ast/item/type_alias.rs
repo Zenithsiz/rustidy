@@ -3,10 +3,8 @@
 // Imports
 use {
 	super::function::{GenericParams, TypeParamBounds, WhereClause},
-	crate::{
-		Format,
-		ast::{ident::Identifier, token, ty::Type},
-	},
+	crate::ast::{ident::Identifier, token, ty::Type},
+	rustidy_format::Format,
 	rustidy_parse::Parse,
 	rustidy_print::Print,
 };

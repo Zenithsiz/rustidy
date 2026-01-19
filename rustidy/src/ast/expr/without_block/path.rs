@@ -2,22 +2,20 @@
 
 use {
 	super::LiteralExpression,
-	crate::{
-		Format,
-		ast::{
-			at_least::{self, AtLeast1},
-			delimited::{Delimited, Parenthesized},
-			expr::with_block::BlockExpression,
-			ident::Identifier,
-			item::function::TypeParamBounds,
-			lifetime::Lifetime,
-			longest::Longest,
-			path::SimplePathSegment,
-			punct::{self, Punctuated, PunctuatedTrailing},
-			token,
-			ty::{Type, TypeNoBounds, TypePath, path::TypePathSegment},
-		},
+	crate::ast::{
+		at_least::{self, AtLeast1},
+		delimited::{Delimited, Parenthesized},
+		expr::with_block::BlockExpression,
+		ident::Identifier,
+		item::function::TypeParamBounds,
+		lifetime::Lifetime,
+		longest::Longest,
+		path::SimplePathSegment,
+		punct::{self, Punctuated, PunctuatedTrailing},
+		token,
+		ty::{Type, TypeNoBounds, TypePath, path::TypePathSegment},
 	},
+	rustidy_format::Format,
 	rustidy_parse::Parse,
 	rustidy_print::Print,
 };

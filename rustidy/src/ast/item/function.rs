@@ -2,21 +2,18 @@
 
 // Imports
 use {
-	crate::{
-		Format,
-		ast::{
-			delimited::{Delimited, Parenthesized},
-			expr::{BlockExpression, LiteralExpression, StringLiteral, without_block::literal::RawStringLiteral},
-			ident::Identifier,
-			lifetime::Lifetime,
-			pat::PatternNoTopAlt,
-			punct::{self, PunctuatedTrailing},
-			token,
-			ty::{Type, TypePath},
-			with_attrs::{self, WithOuterAttributes},
-		},
-		format,
+	crate::ast::{
+		delimited::{Delimited, Parenthesized},
+		expr::{BlockExpression, LiteralExpression, StringLiteral, without_block::literal::RawStringLiteral},
+		ident::Identifier,
+		lifetime::Lifetime,
+		pat::PatternNoTopAlt,
+		punct::{self, PunctuatedTrailing},
+		token,
+		ty::{Type, TypePath},
+		with_attrs::{self, WithOuterAttributes},
 	},
+	rustidy_format::Format,
 	rustidy_parse::Parse,
 	rustidy_print::Print,
 };
@@ -384,7 +381,7 @@ pub struct TraitBoundInner {
 }
 
 impl TraitBoundInner {
-	fn format_prefix(&mut self, ctx: &mut format::Context) {
+	fn format_prefix(&mut self, ctx: &mut rustidy_format::Context) {
 		match self.prefix {
 			Some(TraitBoundInnerPrefix::Question(_)) => self.path.prefix_ws_remove(ctx),
 			Some(TraitBoundInnerPrefix::ForLifetimes(_)) => self.path.prefix_ws_set_single(ctx),
@@ -411,7 +408,7 @@ pub struct WhereClause {
 	//       but the compiler accepts it, so we do to.
 	#[format(indent)]
 	#[format(and_with = Format::prefix_ws_set_cur_indent)]
-	#[format(and_with = format::format_option_with(punct::format_trailing(Format::prefix_ws_set_cur_indent, Format::prefix_ws_remove)))]
+	#[format(and_with = rustidy_format::format_option_with(punct::format_trailing(Format::prefix_ws_set_cur_indent, Format::prefix_ws_remove)))]
 	pub items:  Option<PunctuatedTrailing<WhereClauseItem, token::Comma>>,
 }
 

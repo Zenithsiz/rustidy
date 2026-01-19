@@ -33,7 +33,7 @@ pub use self::{
 
 // Imports
 use {
-	crate::Format,
+	rustidy_format::Format,
 	rustidy_parse::{FromRecursiveRoot, Parse, ParseRecursive, Parser, RecursiveWrapper},
 	rustidy_print::Print,
 	rustidy_util::{Arena, ArenaData, ArenaIdx},

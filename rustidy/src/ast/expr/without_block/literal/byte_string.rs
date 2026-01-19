@@ -6,13 +6,11 @@ use {
 		Suffix,
 		escape::{ByteEscapeError, StringContinueError},
 	},
-	crate::{
-		Format,
-		ast::{
-			expr::without_block::literal::{ByteEscape, StringContinue},
-			whitespace::Whitespace,
-		},
+	crate::ast::{
+		expr::without_block::literal::{ByteEscape, StringContinue},
+		whitespace::Whitespace,
 	},
+	rustidy_format::Format,
 	rustidy_parse::Parse,
 	rustidy_print::Print,
 	rustidy_util::AstStr,

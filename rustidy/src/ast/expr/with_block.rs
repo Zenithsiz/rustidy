@@ -13,17 +13,15 @@ pub use self::{
 // Imports
 use {
 	super::Expression,
-	crate::{
-		Format,
-		ast::{
-			lifetime::LifetimeOrLabel,
-			longest::Longest,
-			pat::Pattern,
-			punct::{self, Punctuated},
-			token,
-			with_attrs::{self, WithOuterAttributes},
-		},
+	crate::ast::{
+		lifetime::LifetimeOrLabel,
+		longest::Longest,
+		pat::Pattern,
+		punct::{self, Punctuated},
+		token,
+		with_attrs::{self, WithOuterAttributes},
 	},
+	rustidy_format::Format,
 	rustidy_parse::Parse,
 	rustidy_print::Print,
 };

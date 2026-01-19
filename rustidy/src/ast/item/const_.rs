@@ -2,10 +2,8 @@
 
 // Imports
 use {
-	crate::{
-		Format,
-		ast::{expr::Expression, ident::Identifier, token, ty::Type},
-	},
+	crate::ast::{expr::Expression, ident::Identifier, token, ty::Type},
+	rustidy_format::Format,
 	rustidy_parse::Parse,
 	rustidy_print::Print,
 };

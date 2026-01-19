@@ -6,7 +6,7 @@ use {
 		ident::{IdentifierOrKeyword, NonKeywordIdentifier},
 		token,
 	},
-	crate::Format,
+	rustidy_format::Format,
 	rustidy_parse::{Parse, Parser},
 	rustidy_print::Print,
 };

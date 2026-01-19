@@ -6,16 +6,13 @@ use {
 		function::{GenericParams, WhereClause},
 		trait_::AssociatedItem,
 	},
-	crate::{
-		Format,
-		ast::{
-			delimited::Braced,
-			token,
-			ty::{Type, TypePath},
-			with_attrs::WithInnerAttributes,
-		},
-		format,
+	crate::ast::{
+		delimited::Braced,
+		token,
+		ty::{Type, TypePath},
+		with_attrs::WithInnerAttributes,
 	},
+	rustidy_format::Format,
 	rustidy_parse::Parse,
 	rustidy_print::Print,
 };
@@ -89,5 +86,6 @@ pub struct ImplBody(pub WithInnerAttributes<ImplBodyInner>);
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct ImplBodyInner(
-	#[format(and_with = format::format_vec_each_with_all(Format::prefix_ws_set_cur_indent))] pub Vec<AssociatedItem>,
+	#[format(and_with = rustidy_format::format_vec_each_with_all(Format::prefix_ws_set_cur_indent))]
+	pub  Vec<AssociatedItem>,
 );

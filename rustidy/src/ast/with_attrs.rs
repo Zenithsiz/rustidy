@@ -3,10 +3,7 @@
 // Imports
 use {
 	super::attr::{InnerAttrOrDocComment, OuterAttrOrDocComment},
-	crate::{
-		Format,
-		format::{self, FormatFn},
-	},
+	rustidy_format::{Format, FormatFn},
 	rustidy_parse::{ParsableRecursive, Parse, Parser},
 	rustidy_print::Print,
 };
@@ -16,7 +13,7 @@ use {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct WithOuterAttributes<T> {
-	#[format(and_with = format::format_vec_each_with(Format::prefix_ws_set_cur_indent))]
+	#[format(and_with = rustidy_format::format_vec_each_with(Format::prefix_ws_set_cur_indent))]
 	pub attrs: Vec<OuterAttrOrDocComment>,
 	pub inner: T,
 }
@@ -85,7 +82,7 @@ where
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct WithInnerAttributes<T> {
-	#[format(and_with = format::format_vec_each_with(Format::prefix_ws_set_cur_indent))]
+	#[format(and_with = rustidy_format::format_vec_each_with(Format::prefix_ws_set_cur_indent))]
 	pub attrs: Vec<InnerAttrOrDocComment>,
 	pub inner: T,
 }

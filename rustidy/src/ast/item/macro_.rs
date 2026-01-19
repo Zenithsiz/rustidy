@@ -2,15 +2,13 @@
 
 // Imports
 use {
-	crate::{
-		Format,
-		ast::{
-			attr::TokenTree,
-			delimited::{Braced, Bracketed, Parenthesized},
-			path::SimplePath,
-			token,
-		},
+	crate::ast::{
+		attr::TokenTree,
+		delimited::{Braced, Bracketed, Parenthesized},
+		path::SimplePath,
+		token,
 	},
+	rustidy_format::Format,
 	rustidy_parse::Parse,
 	rustidy_print::Print,
 };
