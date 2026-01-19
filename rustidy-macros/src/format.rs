@@ -179,10 +179,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 			}
 
 			#[allow(unreachable_code)]
-			fn with_prefix_ws<WITH_PREFIX_WS_R, WITH_PREFIX_WS_F>(&mut self, ctx: &mut crate::format::Context, f: WITH_PREFIX_WS_F) -> Option<WITH_PREFIX_WS_R>
-			where
-				WITH_PREFIX_WS_F: std::ops::Fn(&mut crate::ast::whitespace::Whitespace, &mut crate::format::Context) -> WITH_PREFIX_WS_R + Copy
-			{
+			fn with_prefix_ws<WITH_PREFIX_WS_V: crate::format::WhitespaceVisitor>(&mut self, ctx: &mut crate::format::Context, visitor: &mut WITH_PREFIX_WS_V) -> Option<<WITH_PREFIX_WS_V as crate::format::WhitespaceVisitor>::Output> {
 				#with_prefix_ws
 			}
 		}
@@ -210,7 +207,8 @@ fn derive_enum(variants: &[VariantAttrs]) -> Impls<syn::Expr, syn::Expr, syn::Ex
 				Self::#variant_ident(ref mut value) => #format,
 			};
 
-			let with_prefix_ws = parse_quote! { Self::#variant_ident(ref mut value) => value.with_prefix_ws(ctx, f), };
+			let with_prefix_ws =
+				parse_quote! { Self::#variant_ident(ref mut value) => value.with_prefix_ws(ctx, visitor), };
 
 			Impls {
 				input_range,
@@ -263,7 +261,7 @@ fn derive_struct(fields: &darling::ast::Fields<FieldAttrs>) -> Impls<syn::Expr, 
 			let is_empty = crate::format::FormatRef::input_range(&self.#field_ident, ctx).is_none_or(|range| range.is_empty());
 
 			// If we used the whitespace, return
-			if let Some(value) = crate::format::Format::with_prefix_ws(&mut self.#field_ident, ctx, f) {
+			if let Some(value) = crate::format::Format::with_prefix_ws(&mut self.#field_ident, ctx, visitor) {
 				return Some(value);
 			}
 

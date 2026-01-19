@@ -3,7 +3,11 @@
 // Imports
 use {
 	super::punct::Punctuated,
-	crate::{Format, FormatRef, format},
+	crate::{
+		Format,
+		FormatRef,
+		format::{self, WhitespaceLike, WhitespaceVisitor},
+	},
 	itertools::Itertools,
 	rustidy_parse::{Parse, Parser},
 	rustidy_print::Print,
@@ -44,24 +48,6 @@ impl Whitespace {
 		}))
 	}
 
-	/// Removes this whitespace
-	pub fn remove(&self, ctx: &mut format::Context) {
-		self.format(ctx, FormatKind::Remove);
-	}
-
-	/// Sets this whitespace to a single space
-	pub fn set_single(&self, ctx: &mut format::Context) {
-		self.format(ctx, FormatKind::Single);
-	}
-
-	/// Sets this whitespace to a newline + indentation
-	pub fn set_indent(&self, ctx: &mut format::Context, offset: isize, remove_if_empty: bool) {
-		self.format(ctx, FormatKind::Indent {
-			offset,
-			remove_if_empty,
-		});
-	}
-
 	fn format(&self, ctx: &mut format::Context, kind: FormatKind) {
 		let mut inner = ARENA.get(&self.0);
 
@@ -87,6 +73,23 @@ impl ArenaData for Whitespace {
 
 static ARENA: Arena<Whitespace> = Arena::new();
 
+impl WhitespaceLike for Whitespace {
+	fn remove(&mut self, ctx: &mut format::Context) {
+		Self::format(self, ctx, FormatKind::Remove);
+	}
+
+	fn set_single(&mut self, ctx: &mut format::Context) {
+		Self::format(self, ctx, FormatKind::Single);
+	}
+
+	fn set_indent(&mut self, ctx: &mut format::Context, offset: isize, remove_if_empty: bool) {
+		Self::format(self, ctx, FormatKind::Indent {
+			offset,
+			remove_if_empty,
+		});
+	}
+}
+
 impl FormatRef for Whitespace {
 	fn input_range(&self, ctx: &format::Context) -> Option<AstRange> {
 		ARENA.get(&self.0).input_range(ctx)
@@ -98,12 +101,12 @@ impl Format for Whitespace {
 		// Note: By default no formatting is done
 	}
 
-	fn with_prefix_ws<R, F: Fn(&mut Self, &mut format::Context) -> R + Copy>(
+	fn with_prefix_ws<V: WhitespaceVisitor>(
 		&mut self,
 		ctx: &mut format::Context,
-		f: F,
-	) -> Option<R> {
-		Some(f(self, ctx))
+		visitor: &mut V,
+	) -> Option<V::Output> {
+		Some(visitor.visit(self, ctx))
 	}
 }
 

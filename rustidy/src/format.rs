@@ -8,10 +8,29 @@ pub use {self::config::Config, rustidy_macros::Format};
 
 // Imports
 use {
-	crate::ast::whitespace::Whitespace,
 	core::marker::PhantomData,
 	rustidy_util::{ArenaData, ArenaIdx, AstPos, AstRange, AstStr, Replacement, Replacements},
 };
+
+/// Whitespace-like for formatting
+// TODO: Once we move into our own crate, just rename this to `Whitespace`
+pub trait WhitespaceLike {
+	/// Removes this whitespace
+	fn remove(&mut self, ctx: &mut Context);
+
+	/// Sets this whitespace to a single space
+	fn set_single(&mut self, ctx: &mut Context);
+
+	/// Sets this whitespace to indentation.
+	fn set_indent(&mut self, ctx: &mut Context, offset: isize, remove_if_empty: bool);
+}
+
+/// Whitespace visitor
+pub trait WhitespaceVisitor {
+	type Output;
+
+	fn visit<W: WhitespaceLike>(&mut self, whitespace: &mut W, context: &mut Context) -> Self::Output;
+}
 
 /// Formattable read-only utils
 // TODO: Better name?
@@ -41,24 +60,23 @@ pub trait Format: FormatRef {
 	/// Uses the first whitespace of this type, if any.
 	///
 	/// Returns if successfully used.
-	fn with_prefix_ws<R, F>(&mut self, ctx: &mut Context, f: F) -> Option<R>
-	where
-		F: Fn(&mut Whitespace, &mut Context) -> R + Copy;
+	fn with_prefix_ws<V: WhitespaceVisitor>(&mut self, ctx: &mut Context, visitor: &mut V) -> Option<V::Output>;
 
 	/// Remove the prefix whitespace, if any
 	fn prefix_ws_remove(&mut self, ctx: &mut Context) {
-		self.with_prefix_ws(ctx, |whitespace, ctx| whitespace.remove(ctx));
+		self.with_prefix_ws(ctx, &mut self::whitespace_visitor! { |ws, ctx| => ws.remove(ctx) });
 	}
 
 	/// Sets the prefix whitespace to a single space
 	fn prefix_ws_set_single(&mut self, ctx: &mut Context) {
-		self.with_prefix_ws(ctx, |whitespace, ctx| whitespace.set_single(ctx));
+		self.with_prefix_ws(ctx, &mut self::whitespace_visitor! { |ws, ctx| => ws.set_single(ctx) });
 	}
 
 	/// Sets the prefix whitespace to an indentation
 	fn prefix_ws_set_indent(&mut self, ctx: &mut Context, offset: isize, remove_if_empty: bool) {
-		self.with_prefix_ws(ctx, |whitespace, ctx| {
-			whitespace.set_indent(ctx, offset, remove_if_empty);
+		self.with_prefix_ws(ctx, &mut self::whitespace_visitor! {
+			capture(offset: isize, remove_if_empty: bool)
+			|ws, ctx| => ws.set_indent(ctx, *offset, *remove_if_empty)
 		});
 	}
 
@@ -67,6 +85,38 @@ pub trait Format: FormatRef {
 		self.prefix_ws_set_indent(ctx, 0, false);
 	}
 }
+
+macro whitespace_visitor(
+	$(
+		capture(
+			$(
+				$capture:ident: $CaptureTy:ty
+			),*
+
+			$(,)?
+		)
+	)?
+	| $whitespace:ident, $context:ident | => $output:expr
+) {{
+	struct Visitor {
+		$(
+			$(
+				$capture: $CaptureTy,
+			)*
+		)?
+	}
+
+	impl WhitespaceVisitor for Visitor {
+		type Output = ();
+
+		fn visit<W: WhitespaceLike>(&mut self, $whitespace: &mut W, $context: &mut Context) -> Self::Output {
+			$( let Self { $( $capture, )* } = self; )?
+			$output
+		}
+	}
+
+	Visitor { $( $( $capture, )* )? }
+}}
 
 impl<T: FormatRef> FormatRef for &'_ T {
 	fn input_range(&self, ctx: &Context) -> Option<AstRange> {
@@ -85,11 +135,8 @@ impl<T: Format> Format for &'_ mut T {
 		(**self).format(ctx);
 	}
 
-	fn with_prefix_ws<R, F>(&mut self, ctx: &mut Context, f: F) -> Option<R>
-	where
-		F: Fn(&mut Whitespace, &mut Context) -> R + Copy,
-	{
-		(**self).with_prefix_ws(ctx, f)
+	fn with_prefix_ws<V: WhitespaceVisitor>(&mut self, ctx: &mut Context, visitor: &mut V) -> Option<V::Output> {
+		(**self).with_prefix_ws(ctx, visitor)
 	}
 }
 
@@ -104,11 +151,8 @@ impl<T: Format> Format for Box<T> {
 		(**self).format(ctx);
 	}
 
-	fn with_prefix_ws<R, F>(&mut self, ctx: &mut Context, f: F) -> Option<R>
-	where
-		F: Fn(&mut Whitespace, &mut Context) -> R + Copy,
-	{
-		(**self).with_prefix_ws(ctx, f)
+	fn with_prefix_ws<V: WhitespaceVisitor>(&mut self, ctx: &mut Context, visitor: &mut V) -> Option<V::Output> {
+		(**self).with_prefix_ws(ctx, visitor)
 	}
 }
 
@@ -125,12 +169,9 @@ impl<T: Format> Format for Option<T> {
 		}
 	}
 
-	fn with_prefix_ws<R, F>(&mut self, ctx: &mut Context, f: F) -> Option<R>
-	where
-		F: Fn(&mut Whitespace, &mut Context) -> R + Copy,
-	{
+	fn with_prefix_ws<V: WhitespaceVisitor>(&mut self, ctx: &mut Context, visitor: &mut V) -> Option<V::Output> {
 		match self {
-			Some(value) => value.with_prefix_ws(ctx, f),
+			Some(value) => value.with_prefix_ws(ctx, visitor),
 			_ => None,
 		}
 	}
@@ -151,12 +192,9 @@ impl<T: Format> Format for Vec<T> {
 		}
 	}
 
-	fn with_prefix_ws<R, F>(&mut self, ctx: &mut Context, f: F) -> Option<R>
-	where
-		F: Fn(&mut Whitespace, &mut Context) -> R + Copy,
-	{
+	fn with_prefix_ws<V: WhitespaceVisitor>(&mut self, ctx: &mut Context, visitor: &mut V) -> Option<V::Output> {
 		match self.first_mut() {
-			Some(value) => value.with_prefix_ws(ctx, f),
+			Some(value) => value.with_prefix_ws(ctx, visitor),
 			None => None,
 		}
 	}
@@ -173,10 +211,7 @@ impl Format for ! {
 		*self
 	}
 
-	fn with_prefix_ws<R, F>(&mut self, _ctx: &mut Context, _f: F) -> Option<R>
-	where
-		F: Fn(&mut Whitespace, &mut Context) -> R + Copy,
-	{
+	fn with_prefix_ws<V: WhitespaceVisitor>(&mut self, _ctx: &mut Context, _visitor: &mut V) -> Option<V::Output> {
 		*self
 	}
 }
@@ -190,10 +225,7 @@ impl<T> FormatRef for PhantomData<T> {
 impl<T> Format for PhantomData<T> {
 	fn format(&mut self, _ctx: &mut Context) {}
 
-	fn with_prefix_ws<R, F>(&mut self, _ctx: &mut Context, _f: F) -> Option<R>
-	where
-		F: Fn(&mut Whitespace, &mut Context) -> R + Copy,
-	{
+	fn with_prefix_ws<V: WhitespaceVisitor>(&mut self, _ctx: &mut Context, _visitor: &mut V) -> Option<V::Output> {
 		None
 	}
 }
@@ -207,10 +239,7 @@ impl FormatRef for () {
 impl Format for () {
 	fn format(&mut self, _ctx: &mut Context) {}
 
-	fn with_prefix_ws<R, F>(&mut self, _ctx: &mut Context, _f: F) -> Option<R>
-	where
-		F: Fn(&mut Whitespace, &mut Context) -> R + Copy,
-	{
+	fn with_prefix_ws<V: WhitespaceVisitor>(&mut self, _ctx: &mut Context, _visitor: &mut V) -> Option<V::Output> {
 		None
 	}
 }
@@ -242,12 +271,9 @@ macro tuple_impl ($N:literal, $($T:ident),* $(,)?) {
 			${concat( Tuple, $N )} { $( $T, )* }.format(ctx)
 		}
 
-		fn with_prefix_ws<R, F>(&mut self, ctx: &mut Context, f: F) -> Option<R>
-		where
-			F: Fn(&mut Whitespace, &mut Context) -> R + Copy,
-		{
+		fn with_prefix_ws<V: WhitespaceVisitor>(&mut self, ctx: &mut Context, visitor: &mut V) -> Option<V::Output> {
 			let ( $($T,)* ) = self;
-			${concat( Tuple, $N )} { $( $T, )* }.with_prefix_ws(ctx, f)
+			${concat( Tuple, $N )} { $( $T, )* }.with_prefix_ws(ctx, visitor)
 		}
 	}
 }
@@ -265,11 +291,7 @@ impl FormatRef for AstStr {
 impl Format for AstStr {
 	fn format(&mut self, _ctx: &mut Context) {}
 
-	fn with_prefix_ws<R, F: Fn(&mut Whitespace, &mut Context) -> R + Copy>(
-		&mut self,
-		_ctx: &mut Context,
-		_f: F,
-	) -> Option<R> {
+	fn with_prefix_ws<V: WhitespaceVisitor>(&mut self, _ctx: &mut Context, _visitor: &mut V) -> Option<V::Output> {
 		None
 	}
 }
@@ -285,12 +307,8 @@ impl<T: ArenaData<Data: Format>> Format for ArenaIdx<T> {
 		T::ARENA.get(self).format(ctx);
 	}
 
-	fn with_prefix_ws<R, F: Fn(&mut Whitespace, &mut Context) -> R + Copy>(
-		&mut self,
-		ctx: &mut Context,
-		f: F,
-	) -> Option<R> {
-		T::ARENA.get(self).with_prefix_ws(ctx, f)
+	fn with_prefix_ws<V: WhitespaceVisitor>(&mut self, ctx: &mut Context, visitor: &mut V) -> Option<V::Output> {
+		T::ARENA.get(self).with_prefix_ws(ctx, visitor)
 	}
 }
 
