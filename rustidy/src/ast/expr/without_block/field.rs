@@ -4,9 +4,9 @@ use {
 	super::ExpressionWithoutBlockInner,
 	crate::ast::{
 		expr::{Expression, ExpressionInner},
-		ident::Identifier,
 		token,
 	},
+	rustidy_ast_util::Identifier,
 	rustidy_format::Format,
 	rustidy_parse::ParseRecursive,
 	rustidy_print::Print,

@@ -5,11 +5,7 @@ use {
 	super::{
 		function::{GenericParams, WhereClause},
 		struct_::StructFields,
-	},
-	crate::ast::{ident::Identifier, token, util::Braced},
-	rustidy_format::Format,
-	rustidy_parse::Parse,
-	rustidy_print::Print,
+	}, crate::ast::{token, util::Braced}, rustidy_ast_util::Identifier, rustidy_format::Format, rustidy_parse::Parse, rustidy_print::Print
 };
 
 /// `Union`

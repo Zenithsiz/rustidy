@@ -2,9 +2,17 @@
 
 // Imports
 use {
-	super::{Type, TypeNoBounds}, crate::ast::{
-		ident::Identifier, item::function::{ExternAbi, ForLifetimes}, token, util::Parenthesized, with_attrs::WithOuterAttributes
-	}, rustidy_ast_util::{Punctuated, PunctuatedTrailing, punct}, rustidy_format::Format, rustidy_parse::Parse, rustidy_print::Print
+	super::{Type, TypeNoBounds},
+	crate::ast::{
+		item::function::{ExternAbi, ForLifetimes},
+		token,
+		util::Parenthesized,
+		with_attrs::WithOuterAttributes,
+	},
+	rustidy_ast_util::{Identifier, Punctuated, PunctuatedTrailing, punct},
+	rustidy_format::Format,
+	rustidy_parse::Parse,
+	rustidy_print::Print,
 };
 
 /// `BareFunctionType`

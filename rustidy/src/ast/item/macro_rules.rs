@@ -4,11 +4,10 @@
 use {
 	crate::ast::{
 		attr::DelimTokenTree,
-		ident::{Identifier, IdentifierOrKeyword, ident_or_keyword::RawIdentifier},
 		token::{self, Token},
 		util::{Braced, Bracketed, Parenthesized},
 	},
-	rustidy_ast_util::{AtLeast1, PunctuatedTrailing},
+	rustidy_ast_util::{AtLeast1, Identifier, IdentifierOrKeyword, PunctuatedTrailing, RawIdentifier},
 	rustidy_format::Format,
 	rustidy_parse::Parse,
 	rustidy_print::Print,

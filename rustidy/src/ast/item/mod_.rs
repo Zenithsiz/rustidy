@@ -2,11 +2,7 @@
 
 // Imports
 use {
-	super::Item,
-	crate::ast::{ident::Identifier, token, util::Braced, with_attrs::WithInnerAttributes},
-	rustidy_format::Format,
-	rustidy_parse::Parse,
-	rustidy_print::Print,
+	super::Item, crate::ast::{token, util::Braced, with_attrs::WithInnerAttributes}, rustidy_ast_util::Identifier, rustidy_format::Format, rustidy_parse::Parse, rustidy_print::Print
 };
 
 /// `Module`

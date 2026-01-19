@@ -2,10 +2,7 @@
 
 // Imports
 use {
-	crate::ast::ident::IdentifierOrKeyword,
-	rustidy_format::Format,
-	rustidy_parse::{Parse, Parser},
-	rustidy_print::Print,
+	rustidy_ast_util::IdentifierOrKeyword, rustidy_format::Format, rustidy_parse::{Parse, Parser}, rustidy_print::Print
 };
 
 /// `SUFFIX`

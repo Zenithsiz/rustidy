@@ -6,6 +6,7 @@
 // Modules
 pub mod at_least;
 pub mod delimited;
+pub mod ident;
 pub mod line;
 pub mod longest;
 pub mod punct;
@@ -15,6 +16,7 @@ pub mod whitespace;
 pub use self::{
 	at_least::AtLeast1,
 	delimited::Delimited,
+	ident::{Identifier, IdentifierOrKeyword, NonKeywordIdentifier, RawIdentifier},
 	line::{RemainingBlockComment, RemainingLine},
 	longest::Longest,
 	punct::{Punctuated, PunctuatedTrailing},

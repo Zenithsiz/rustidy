@@ -4,11 +4,10 @@
 pub mod ident_or_keyword;
 
 // Exports
-pub use self::ident_or_keyword::IdentifierOrKeyword;
+pub use self::ident_or_keyword::{IdentifierOrKeyword, RawIdentifier};
 
 // Imports
 use {
-	self::ident_or_keyword::RawIdentifier,
 	rustidy_format::Format,
 	rustidy_parse::{Parse, Parser},
 	rustidy_print::Print,

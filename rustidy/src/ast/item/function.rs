@@ -4,7 +4,6 @@
 use {
 	crate::ast::{
 		expr::{BlockExpression, LiteralExpression, StringLiteral, without_block::literal::RawStringLiteral},
-		ident::Identifier,
 		lifetime::Lifetime,
 		pat::PatternNoTopAlt,
 		token,
@@ -12,7 +11,7 @@ use {
 		util::Parenthesized,
 		with_attrs::{self, WithOuterAttributes},
 	},
-	rustidy_ast_util::{Delimited, PunctuatedTrailing, punct},
+	rustidy_ast_util::{Delimited, Identifier, PunctuatedTrailing, punct},
 	rustidy_format::Format,
 	rustidy_parse::Parse,
 	rustidy_print::Print,

@@ -2,10 +2,8 @@
 
 // Imports
 use {
-	super::{
-		ident::{IdentifierOrKeyword, NonKeywordIdentifier},
-		token,
-	},
+	super::token,
+	rustidy_ast_util::{IdentifierOrKeyword, NonKeywordIdentifier},
 	rustidy_format::Format,
 	rustidy_parse::{Parse, Parser},
 	rustidy_print::Print,

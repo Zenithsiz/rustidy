@@ -3,7 +3,6 @@
 // Modules
 pub mod attr;
 pub mod expr;
-pub mod ident;
 pub mod item;
 pub mod lifetime;
 pub mod pat;

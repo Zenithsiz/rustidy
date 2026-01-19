@@ -2,10 +2,7 @@
 
 // Imports
 use {
-	crate::ast::{ident::Identifier, token},
-	rustidy_format::Format,
-	rustidy_parse::Parse,
-	rustidy_print::Print,
+	crate::ast::token, rustidy_ast_util::Identifier, rustidy_format::Format, rustidy_parse::Parse, rustidy_print::Print
 };
 
 /// `ExternCrate`

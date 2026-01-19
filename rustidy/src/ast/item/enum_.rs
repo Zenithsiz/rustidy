@@ -5,9 +5,18 @@ use {
 	super::{
 		function::{GenericParams, WhereClause},
 		struct_::{StructFields, TupleFields},
-	}, crate::ast::{
-		expr::Expression, ident::Identifier, token, util::{Braced, Parenthesized}, vis::Visibility, with_attrs::{self, WithOuterAttributes}
-	}, rustidy_ast_util::{PunctuatedTrailing, punct}, rustidy_format::Format, rustidy_parse::Parse, rustidy_print::Print
+	},
+	crate::ast::{
+		expr::Expression,
+		token,
+		util::{Braced, Parenthesized},
+		vis::Visibility,
+		with_attrs::{self, WithOuterAttributes},
+	},
+	rustidy_ast_util::{Identifier, PunctuatedTrailing, punct},
+	rustidy_format::Format,
+	rustidy_parse::Parse,
+	rustidy_print::Print,
 };
 
 /// `Enumeration`
