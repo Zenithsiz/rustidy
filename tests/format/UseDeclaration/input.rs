@@ -10,3 +10,4 @@ use a::{
 	f::{g, loooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong, h},
 	j,
 };
+use {                                                                              long_whitespace};
