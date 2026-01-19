@@ -21,10 +21,9 @@ use {
 	self::args::Args,
 	app_error::{AppError, Context},
 	clap::Parser as _,
-	rustidy_format::Format,
+	rustidy_format::{Format, Replacements},
 	rustidy_parse::Parser,
 	rustidy_print::{Print, PrintFmt},
-	rustidy_format::Replacements,
 	std::{fs, process::ExitCode},
 	zutil_logger::Logger,
 };
@@ -68,7 +67,7 @@ fn run() -> Result<(), AppError> {
 		crate_.format(&mut ctx);
 
 		// Then output it to file
-		let mut print_fmt = PrintFmt::new(&file, &replacements);
+		let mut print_fmt = PrintFmt::new(&file, &config, &replacements);
 		crate_.print(&mut print_fmt);
 		fs::write(file_path, print_fmt.output()).context("Unable to write file")?;
 	}

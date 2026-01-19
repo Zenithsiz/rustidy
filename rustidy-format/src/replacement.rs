@@ -1,7 +1,10 @@
 //! String replacements
 
 // Imports
-use {crate::AstStr, std::collections::HashMap};
+use {
+	crate::{AstStr, Config},
+	std::collections::HashMap,
+};
 
 /// String replacements
 pub struct Replacements {
@@ -18,9 +21,9 @@ impl Replacements {
 	}
 
 	/// Adds a replacement
-	pub fn add(&mut self, s: &AstStr, s_str: &str, replacement: impl Into<Replacement>) {
+	pub fn add(&mut self, config: &Config, s: &AstStr, s_str: &str, replacement: impl Into<Replacement>) {
 		let replacement = replacement.into();
-		match replacement.is(s_str) {
+		match replacement.is(config, s_str) {
 			true => _ = self.replacements.remove(&s.0.id()),
 			false => _ = self.replacements.insert(s.0.id(), replacement),
 		}
@@ -43,26 +46,57 @@ impl Default for Replacements {
 #[derive(Debug)]
 #[derive(derive_more::From)]
 pub enum Replacement {
+	#[from]
 	Static(&'static str),
-	// TODO: Replace this with other variants to avoid allocations
+	Indentation {
+		newlines: usize,
+		depth:    usize,
+	},
+
+	// Note: Not `#[from]` to make it clear this is expensive
 	Dynamic(String),
 }
 
 impl Replacement {
 	/// Returns if this replacement is equal to `s`
 	#[must_use]
-	pub fn is(&self, s: &str) -> bool {
-		match self {
-			Self::Static(replacement) => *replacement == s,
-			Self::Dynamic(replacement) => replacement == s,
+	pub fn is(&self, config: &Config, s: &str) -> bool {
+		match *self {
+			Self::Static(replacement) => replacement == s,
+			Self::Indentation { newlines, depth } => {
+				let mut chars = s.chars();
+				for _ in 0..newlines {
+					if chars.next() != Some('\n') {
+						return false;
+					}
+				}
+
+				for _ in 0..depth {
+					if !chars.as_str().starts_with(&config.indent) {
+						return false;
+					}
+					_ = chars.advance_by(config.indent.len());
+				}
+
+				chars.next().is_none()
+			},
+			Self::Dynamic(ref replacement) => replacement == s,
 		}
 	}
 
 	/// Writes this replacement onto a string
-	pub fn write(&self, output: &mut String) {
-		match self {
+	pub fn write(&self, config: &Config, output: &mut String) {
+		match *self {
 			Self::Static(replacement) => *output += replacement,
-			Self::Dynamic(replacement) => *output += replacement,
+			Self::Indentation { newlines, depth } => {
+				for _ in 0..newlines {
+					output.push('\n');
+				}
+				for _ in 0..depth {
+					output.push_str(&config.indent);
+				}
+			},
+			Self::Dynamic(ref replacement) => *output += replacement,
 		}
 	}
 }

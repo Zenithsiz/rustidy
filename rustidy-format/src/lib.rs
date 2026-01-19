@@ -1,7 +1,14 @@
 //! Formatting
 
 // Features
-#![feature(decl_macro, never_type, coverage_attribute, macro_metavar_expr_concat, trait_alias)]
+#![feature(
+	decl_macro,
+	never_type,
+	coverage_attribute,
+	macro_metavar_expr_concat,
+	trait_alias,
+	iter_advance_by
+)]
 
 // Modules
 pub mod config;
@@ -61,6 +68,8 @@ pub trait FormatRef {
 			None => true,
 		}
 	}
+
+	// TODO: Iterate over replacements
 }
 
 /// Formattable type
@@ -376,7 +385,8 @@ impl<'a, 'input> Context<'a, 'input> {
 
 	/// Replaces a string
 	pub fn replace(&mut self, s: &AstStr, replacement: impl Into<Replacement>) {
-		self.replacements.add(s, s.range().str(self.input), replacement);
+		self.replacements
+			.add(self.config, s, s.range().str(self.input), replacement);
 	}
 
 	/// Runs `f` with a further indentation level

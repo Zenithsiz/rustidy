@@ -23,7 +23,7 @@ use {
 		Whitespace,
 		whitespace::{self, TrailingLineComment},
 	},
-	rustidy_format::Format,
+	rustidy_format::{Format, Replacement},
 	rustidy_parse::Parse,
 	rustidy_print::Print,
 };
@@ -63,7 +63,7 @@ impl Crate {
 		// Add the newline at the end of the trailing comment if it didn't have one already
 		if !s.ends_with('\n') {
 			s.push('\n');
-			ctx.replace(&trailing.0, s);
+			ctx.replace(&trailing.0, Replacement::Dynamic(s));
 		}
 	}
 }

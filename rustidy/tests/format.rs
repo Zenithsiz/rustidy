@@ -28,7 +28,7 @@ pub fn format() {
 		let mut ctx = rustidy_format::Context::new(&file, &mut replacements, &config);
 		input.format(&mut ctx);
 
-		let mut print_fmt = PrintFmt::new(&file, &replacements);
+		let mut print_fmt = PrintFmt::new(&file, &config, &replacements);
 		input.print(&mut print_fmt);
 		let found_output = print_fmt.output();
 
@@ -38,7 +38,7 @@ pub fn format() {
 			let mut ctx = rustidy_format::Context::new(&file, &mut replacements, &config);
 			input.format(&mut ctx);
 
-			let mut print_fmt = PrintFmt::new(&file, &replacements);
+			let mut print_fmt = PrintFmt::new(&file, &config, &replacements);
 			input.print(&mut print_fmt);
 
 			assert_eq!(

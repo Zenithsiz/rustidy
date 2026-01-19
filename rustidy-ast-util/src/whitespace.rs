@@ -122,12 +122,15 @@ enum FormatKind {
 
 impl FormatKind {
 	/// Returns the indentation string, without a newline
-	fn indent_str(ctx: &rustidy_format::Context) -> String {
-		ctx.config().indent.repeat(ctx.indent())
+	const fn indent_str(ctx: &rustidy_format::Context) -> Replacement {
+		Replacement::Indentation {
+			newlines: 0,
+			depth:    ctx.indent(),
+		}
 	}
 
 	/// Returns the indentation string, with a newline *before*
-	fn indent_str_nl(ctx: &mut rustidy_format::Context, cur_str: &AstStr) -> String {
+	fn indent_str_nl(ctx: &mut rustidy_format::Context, cur_str: &AstStr) -> Replacement {
 		// TODO: Should we be checking for multiple newlines?
 		let after_newline = cur_str.range().str_before(ctx.input()).ends_with('\n');
 
@@ -140,7 +143,10 @@ impl FormatKind {
 		let newlines = ctx.str(cur_str).chars().filter(|&ch| ch == '\n').count();
 		let newlines = newlines.clamp(min_newlines, max_newlines);
 
-		"\n".repeat(newlines) + &Self::indent_str(ctx)
+		Replacement::Indentation {
+			newlines,
+			depth: ctx.indent(),
+		}
 	}
 
 	/// Returns the prefix string
@@ -153,9 +159,7 @@ impl FormatKind {
 				remove_if_empty,
 			} => match remove_if_empty && is_last {
 				true => "".into(),
-				false => ctx
-					.with_indent_offset_if(offset, is_last, |ctx| Self::indent_str_nl(ctx, cur_str))
-					.into(),
+				false => ctx.with_indent_offset_if(offset, is_last, |ctx| Self::indent_str_nl(ctx, cur_str)),
 			},
 		}
 	}
@@ -167,8 +171,7 @@ impl FormatKind {
 			Self::Indent { offset, .. } => match is_last {
 				true => ctx.with_indent_offset(offset, |ctx| Self::indent_str(ctx)),
 				false => Self::indent_str_nl(ctx, cur_str),
-			}
-			.into(),
+			},
 		}
 	}
 
@@ -180,8 +183,7 @@ impl FormatKind {
 			Self::Indent { offset, .. } => match is_last {
 				true => ctx.with_indent_offset(offset, |ctx| Self::indent_str_nl(ctx, cur_str)),
 				false => Self::indent_str_nl(ctx, cur_str),
-			}
-			.into(),
+			},
 		}
 	}
 }
@@ -331,7 +333,7 @@ mod tests {
 		fmt_ctx.set_indent_depth(config.indent_depth);
 		whitespace.format(&mut fmt_ctx, kind);
 
-		let mut print_fmt = PrintFmt::new(source, &replacements);
+		let mut print_fmt = PrintFmt::new(source, fmt_config, &replacements);
 		whitespace.print(&mut print_fmt);
 		let output = print_fmt.output();
 

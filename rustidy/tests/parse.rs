@@ -7,7 +7,7 @@
 use {
 	assert_json_diff::assert_json_eq,
 	rustidy::ast,
-	rustidy_format::Replacements,
+	rustidy_format::{Config, Replacements},
 	rustidy_parse::Parser,
 	rustidy_print::{Print, PrintFmt},
 	serde::{Deserialize, Serialize},
@@ -28,8 +28,9 @@ pub fn parse() {
 
 		let input = rustidy::parse(&input_path, &mut parser).expect("Unable to parse input");
 
+		let config = Config::default();
 		let replacements = Replacements::new();
-		let mut print_fmt = PrintFmt::new(&input_file, &replacements);
+		let mut print_fmt = PrintFmt::new(&input_file, &config, &replacements);
 		input.print(&mut print_fmt);
 		let input_printed = print_fmt.output();
 		assert_eq!(input_file, input_printed);
