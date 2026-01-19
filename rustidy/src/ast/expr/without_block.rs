@@ -133,7 +133,7 @@ pub enum ExpressionWithoutBlockInner {
 	AsyncBlock(AsyncBlockExpression),
 }
 
-// TODO: The specification doesn't have this, so we need to refine it
+// Note: Nightly-only
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]

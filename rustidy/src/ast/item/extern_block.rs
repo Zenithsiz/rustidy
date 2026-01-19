@@ -53,7 +53,7 @@ pub enum ExternalItemInner {
 	Macro(MacroInvocationSemi),
 	Static(ExternalItemStatic),
 	Function(ExternalItemFunction),
-	// TODO: Nightly-only
+	// Note: Nightly-only
 	TypeAlias(ExternalItemTypeAlias),
 }
 

@@ -67,15 +67,15 @@ pub struct UnsafeBlockExpression {
 	pub expr:    BlockExpression,
 }
 
-// TODO: The specification doesn't have this, so we need to refine it
+// Note: Nightly-only
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct TryBlockExpression {
-	pub unsafe_: token::Try,
+	pub try_: token::Try,
 	#[parse(fatal)]
 	#[format(and_with = Format::prefix_ws_set_single)]
-	pub expr:    BlockExpression,
+	pub expr: BlockExpression,
 }
 
 /// `IfExpression`
