@@ -1,4 +1,15 @@
-//! Literal expression
+//! Ast literals
+
+// Features
+#![feature(
+	never_type,
+	coverage_attribute,
+	yeet_expr,
+	anonymous_lifetime_in_impl_trait,
+	decl_macro,
+	is_ascii_octdigit,
+	trim_prefix_suffix
+)]
 
 // Modules
 pub mod byte;
@@ -39,7 +50,7 @@ pub use self::{
 };
 
 // Imports
-use {crate::ast::token, rustidy_format::Format, rustidy_parse::Parse, rustidy_print::Print};
+use {rustidy_format::Format, rustidy_parse::Parse, rustidy_print::Print};
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
@@ -56,12 +67,6 @@ pub enum LiteralExpression {
 	CString(CStringLiteral),
 	RawCString(RawCStringLiteral),
 	Integer(IntegerLiteral),
-	True(token::True),
-	False(token::False),
+	True(rustidy_ast_tokens::True),
+	False(rustidy_ast_tokens::False),
 }
-
-/// `TUPLE_INDEX`
-#[derive(PartialEq, Eq, Debug)]
-#[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
-pub struct TupleIndex(pub IntegerLiteral);

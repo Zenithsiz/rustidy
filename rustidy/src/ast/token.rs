@@ -2,22 +2,18 @@
 
 // Imports
 use {
-	super::{
-		expr::{
-			IntegerLiteral,
-			StringLiteral,
-			without_block::literal::{
-				ByteLiteral,
-				ByteStringLiteral,
-				CStringLiteral,
-				CharLiteral,
-				FloatLiteral,
-				RawByteStringLiteral,
-				RawCStringLiteral,
-				RawStringLiteral,
-			},
-		},
-		lifetime::LifetimeToken,
+	super::lifetime::LifetimeToken,
+	rustidy_ast_literal::{
+		ByteLiteral,
+		ByteStringLiteral,
+		CStringLiteral,
+		CharLiteral,
+		FloatLiteral,
+		IntegerLiteral,
+		RawByteStringLiteral,
+		RawCStringLiteral,
+		RawStringLiteral,
+		StringLiteral,
 	},
 	rustidy_ast_util::{IdentifierOrKeyword, RawIdentifier},
 	rustidy_format::Format,

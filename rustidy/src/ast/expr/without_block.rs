@@ -11,7 +11,6 @@ pub mod continue_;
 pub mod field;
 pub mod grouped;
 pub mod index;
-pub mod literal;
 pub mod macro_invocation;
 pub mod operator;
 pub mod path;
@@ -34,7 +33,6 @@ pub use self::{
 	field::FieldExpression,
 	grouped::GroupedExpression,
 	index::IndexExpression,
-	literal::{IntegerLiteral, LiteralExpression, StringLiteral},
 	macro_invocation::MacroInvocation,
 	operator::OperatorExpression,
 	path::PathExpression,
@@ -53,6 +51,7 @@ use {
 		token,
 		with_attrs::{self, WithOuterAttributes},
 	},
+	rustidy_ast_literal::{IntegerLiteral, LiteralExpression},
 	rustidy_format::Format,
 	rustidy_parse::{Parse, ParseRecursive, RecursiveWrapper},
 	rustidy_print::Print,
@@ -146,3 +145,9 @@ pub struct DoYeetExpression {
 	#[format(and_with = Format::prefix_ws_set_single)]
 	pub expr:  Option<Expression>,
 }
+
+/// `TUPLE_INDEX`
+#[derive(PartialEq, Eq, Debug)]
+#[derive(serde::Serialize, serde::Deserialize)]
+#[derive(Parse, Format, Print)]
+pub struct TupleIndex(pub IntegerLiteral);

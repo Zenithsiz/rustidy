@@ -2,7 +2,7 @@
 
 // Imports
 use {
-	super::{literal::TupleIndex, path::PathInExpression},
+	super::{TupleIndex, path::PathInExpression},
 	crate::ast::{
 		expr::Expression,
 		token,

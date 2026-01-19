@@ -3,10 +3,8 @@
 // Imports
 use {
 	super::escape::{AsciiEscapeError, QuoteEscapeError, UnicodeEscapeError},
-	crate::ast::{
-		expr::without_block::literal::{AsciiEscape, QuoteEscape, UnicodeEscape},
-		whitespace::Whitespace,
-	},
+	crate::{AsciiEscape, QuoteEscape, UnicodeEscape},
+	rustidy_ast_util::Whitespace,
 	rustidy_format::Format,
 	rustidy_parse::Parse,
 	rustidy_print::Print,

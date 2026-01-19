@@ -3,7 +3,7 @@
 // Imports
 use {
 	crate::ast::{
-		expr::{BlockExpression, LiteralExpression, StringLiteral, without_block::literal::RawStringLiteral},
+		expr::BlockExpression,
 		lifetime::Lifetime,
 		pat::PatternNoTopAlt,
 		token,
@@ -11,6 +11,7 @@ use {
 		util::Parenthesized,
 		with_attrs::{self, WithOuterAttributes},
 	},
+	rustidy_ast_literal::{LiteralExpression, RawStringLiteral, StringLiteral},
 	rustidy_ast_util::{Delimited, Identifier, PunctuatedTrailing, punct},
 	rustidy_format::Format,
 	rustidy_parse::Parse,

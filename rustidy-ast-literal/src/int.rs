@@ -3,7 +3,7 @@
 // Imports
 use {
 	super::SuffixNoE,
-	crate::ast::whitespace::Whitespace,
+	rustidy_ast_util::Whitespace,
 	rustidy_format::Format,
 	rustidy_parse::Parse,
 	rustidy_print::Print,

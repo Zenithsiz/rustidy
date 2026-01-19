@@ -3,7 +3,8 @@
 // Imports
 use {
 	super::escape::ByteEscapeError,
-	crate::ast::{expr::without_block::literal::ByteEscape, whitespace::Whitespace},
+	crate::ByteEscape,
+	rustidy_ast_util::Whitespace,
 	rustidy_format::Format,
 	rustidy_parse::Parse,
 	rustidy_print::Print,

@@ -10,19 +10,16 @@ pub use self::range::RangePattern;
 use {
 	super::{
 		expr::{
-			LiteralExpression,
 			MacroInvocation,
 			PathExpression,
-			without_block::{
-				literal::{ByteLiteral, TupleIndex},
-				path::PathInExpression,
-			},
+			without_block::{TupleIndex, path::PathInExpression},
 		},
 		token,
 		util::{Braced, Bracketed, Parenthesized},
 		with_attrs::WithOuterAttributes,
 	},
 	core::fmt::Debug,
+	rustidy_ast_literal::{ByteLiteral, LiteralExpression},
 	rustidy_ast_util::{AtLeast1, Identifier, Punctuated, PunctuatedTrailing, at_least, punct},
 	rustidy_format::Format,
 	rustidy_parse::Parse,

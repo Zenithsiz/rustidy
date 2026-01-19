@@ -6,10 +6,8 @@ use {
 		Suffix,
 		escape::{NonNulByteEscapeError, NonNulUnicodeEscapeError, StringContinueError},
 	},
-	crate::ast::{
-		expr::without_block::literal::{NonNulByteEscape, NonNulUnicodeEscape, StringContinue},
-		whitespace::Whitespace,
-	},
+	crate::{NonNulByteEscape, NonNulUnicodeEscape, StringContinue},
+	rustidy_ast_util::Whitespace,
 	rustidy_format::Format,
 	rustidy_parse::Parse,
 	rustidy_print::Print,

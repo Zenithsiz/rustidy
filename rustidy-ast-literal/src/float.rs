@@ -3,7 +3,8 @@
 // Imports
 use {
 	super::{Suffix, int::DecLiteral},
-	crate::ast::{expr::without_block::literal::SuffixNoE, token, whitespace::Whitespace},
+	crate::SuffixNoE,
+	rustidy_ast_util::Whitespace,
 	rustidy_format::Format,
 	rustidy_macros::ParseError,
 	rustidy_parse::{Parse, Parser, ParserError},
@@ -20,7 +21,7 @@ use {
 pub struct FloatLiteral {
 	pub ws:       Whitespace,
 	pub int:      DecLiteral,
-	pub dot:      Option<token::Dot>,
+	pub dot:      Option<rustidy_ast_tokens::Dot>,
 	pub frac:     Option<DecLiteral>,
 	pub exponent: Option<FloatExponent>,
 	pub suffix:   Option<Suffix>,
@@ -39,7 +40,7 @@ impl Parse for FloatLiteral {
 		let ws = parser.parse::<Whitespace>()?;
 		let int = parser.parse::<DecLiteral>()?;
 
-		let (dot, frac) = match parser.with_tag("skip:Whitespace", Parser::try_parse::<token::Dot>)? {
+		let (dot, frac) = match parser.with_tag("skip:Whitespace", Parser::try_parse::<rustidy_ast_tokens::Dot>)? {
 			Ok(dot) => match parser.try_parse::<DecLiteral>()? {
 				Ok(frac) => (Some(dot), Some(frac)),
 				Err(_) => match parser
@@ -85,7 +86,7 @@ pub enum FloatLiteralError {
 	#[parse_error(transparent)]
 	DecLiteral(ParserError<DecLiteral>),
 	#[parse_error(transparent)]
-	Dot(ParserError<token::Dot>),
+	Dot(ParserError<rustidy_ast_tokens::Dot>),
 	#[parse_error(transparent)]
 	Suffix(ParserError<Suffix>),
 	#[parse_error(transparent)]

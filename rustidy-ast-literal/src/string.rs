@@ -3,10 +3,8 @@
 // Imports
 use {
 	super::Suffix,
-	crate::ast::{
-		expr::without_block::literal::{AsciiEscape, QuoteEscape, StringContinue, UnicodeEscape},
-		whitespace::Whitespace,
-	},
+	crate::{AsciiEscape, QuoteEscape, StringContinue, UnicodeEscape},
+	rustidy_ast_util::Whitespace,
 	rustidy_format::Format,
 	rustidy_parse::Parse,
 	rustidy_print::Print,

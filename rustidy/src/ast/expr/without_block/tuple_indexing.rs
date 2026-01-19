@@ -1,7 +1,7 @@
 //! Tuple indexing expression
 
 use {
-	super::{ExpressionWithoutBlockInner, literal::TupleIndex},
+	super::{ExpressionWithoutBlockInner, TupleIndex},
 	crate::ast::{
 		expr::{Expression, ExpressionInner},
 		token,
