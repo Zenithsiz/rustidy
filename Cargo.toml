@@ -2,6 +2,7 @@
 
 members = [
 	"rustidy",
+	"rustidy-ast-tokens",
 	"rustidy-ast-util",
 	"rustidy-format",
 	"rustidy-macros",
@@ -22,13 +23,14 @@ version     = "0.1.10"
 [workspace.dependencies]
 
 # Workspace
-rustidy          = { path = "rustidy" }
-rustidy-ast-util = { path = "rustidy-ast-util" }
-rustidy-format   = { path = "rustidy-format" }
-rustidy-macros   = { path = "rustidy-macros" }
-rustidy-parse    = { path = "rustidy-parse" }
-rustidy-print    = { path = "rustidy-print" }
-rustidy-util     = { path = "rustidy-util" }
+rustidy            = { path = "rustidy" }
+rustidy-ast-tokens = { path = "rustidy-ast-tokens" }
+rustidy-ast-util   = { path = "rustidy-ast-util" }
+rustidy-format     = { path = "rustidy-format" }
+rustidy-macros     = { path = "rustidy-macros" }
+rustidy-parse      = { path = "rustidy-parse" }
+rustidy-print      = { path = "rustidy-print" }
+rustidy-util       = { path = "rustidy-util" }
 
 app-error        = { git = "https://github.com/Zenithsiz/app-error", rev = "e21d2eab03d97a675c4b44ccfa4df00e18d56ba7" }
 assert-json-diff = "2.0.2"

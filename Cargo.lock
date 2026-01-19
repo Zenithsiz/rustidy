@@ -457,6 +457,7 @@ dependencies = [
  "extend",
  "itertools",
  "ref-cast",
+ "rustidy-ast-tokens",
  "rustidy-ast-util",
  "rustidy-format",
  "rustidy-macros",
@@ -472,6 +473,26 @@ dependencies = [
  "tracing",
  "unicode-ident",
  "zutil-logger",
+]
+
+[[package]]
+name = "rustidy-ast-tokens"
+version = "0.1.0"
+dependencies = [
+ "app-error",
+ "convert_case 0.8.0",
+ "derive_more",
+ "either",
+ "itertools",
+ "rustidy-ast-util",
+ "rustidy-format",
+ "rustidy-macros",
+ "rustidy-parse",
+ "rustidy-print",
+ "rustidy-util",
+ "serde",
+ "strum",
+ "unicode-ident",
 ]
 
 [[package]]
