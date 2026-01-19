@@ -99,4 +99,20 @@ impl Replacement {
 			Self::Dynamic(ref replacement) => *output += replacement,
 		}
 	}
+
+	/// Returns the length of this replacement
+	#[must_use]
+	pub const fn len(&self) -> usize {
+		match *self {
+			Self::Static(s) => s.len(),
+			Self::Indentation { newlines, depth } => newlines + depth,
+			Self::Dynamic(ref s) => s.len(),
+		}
+	}
+
+	/// Returns if this replacement is empty
+	#[must_use]
+	pub const fn is_empty(&self) -> bool {
+		self.len() == 0
+	}
 }

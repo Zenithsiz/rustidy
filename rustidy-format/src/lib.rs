@@ -71,6 +71,16 @@ pub trait FormatRef {
 
 	/// Iterates over all output strings
 	fn with_output(&self, ctx: &Context, f: &mut impl FnMut(&AstStr, &Context));
+
+	/// Returns the output length of this type
+	fn output_len(&self, ctx: &Context) -> usize {
+		let mut len = 0;
+		self.with_output(ctx, &mut |s, ctx| match dbg!(ctx.replacements.get(s)) {
+			Some(replacement) => len += replacement.len(),
+			None => len += s.range().len(),
+		});
+		len
+	}
 }
 
 /// Formattable type
