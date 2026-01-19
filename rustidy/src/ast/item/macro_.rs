@@ -4,9 +4,9 @@
 use {
 	crate::ast::{
 		attr::TokenTree,
-		delimited::{Braced, Bracketed, Parenthesized},
 		path::SimplePath,
 		token,
+		util::{Braced, Bracketed, Parenthesized},
 	},
 	rustidy_format::Format,
 	rustidy_parse::Parse,

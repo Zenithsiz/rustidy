@@ -3,13 +3,13 @@
 // Imports
 use {
 	super::{
-		delimited::{Braced, Bracketed, Parenthesized},
 		expr::Expression,
-		line::{RemainingBlockComment, RemainingLine},
 		path::SimplePath,
 		token,
+		util::{Braced, Bracketed, Parenthesized},
 	},
 	core::fmt::Debug,
+	rustidy_ast_util::{RemainingBlockComment, RemainingLine},
 	rustidy_format::Format,
 	rustidy_parse::Parse,
 	rustidy_print::Print,

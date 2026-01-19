@@ -2,18 +2,9 @@
 
 // Imports
 use {
-	super::{literal::TupleIndex, path::PathInExpression},
-	crate::ast::{
-		delimited::Braced,
-		expr::Expression,
-		ident::Identifier,
-		punct::{self, Punctuated},
-		token,
-		with_attrs::{self, WithOuterAttributes},
-	},
-	rustidy_format::Format,
-	rustidy_parse::Parse,
-	rustidy_print::Print,
+	super::{literal::TupleIndex, path::PathInExpression}, crate::ast::{
+		expr::Expression, ident::Identifier, token, util::Braced, with_attrs::{self, WithOuterAttributes}
+	}, rustidy_ast_util::{Punctuated, punct}, rustidy_format::Format, rustidy_parse::Parse, rustidy_print::Print
 };
 
 /// `StructExpression`

@@ -4,8 +4,8 @@
 use {
 	super::ExpressionWithoutBlockInner,
 	crate::ast::{
-		delimited::Bracketed,
 		expr::{Expression, ExpressionInner},
+		util::Bracketed,
 	},
 	rustidy_format::Format,
 	rustidy_parse::ParseRecursive,

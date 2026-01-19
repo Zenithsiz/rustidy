@@ -23,11 +23,10 @@ pub use self::{
 // Imports
 use {
 	super::{
-		delimited::Parenthesized,
 		expr::without_block::MacroInvocation,
 		item::function::{TraitBound, TypeParamBounds},
 		lifetime::Lifetime,
-		token,
+		token, util::Parenthesized,
 	},
 	rustidy_format::Format,
 	rustidy_parse::Parse,

@@ -2,19 +2,13 @@
 
 // Imports
 use {
-	super::ExpressionWithoutBlockInner,
-	crate::ast::{
-		delimited::Delimited,
+	super::ExpressionWithoutBlockInner, crate::ast::{
 		expr::{Expression, ExpressionInner},
 		pat::PatternNoTopAlt,
-		punct::{self, PunctuatedTrailing},
 		token,
 		ty::{Type, TypeNoBounds},
 		with_attrs::WithOuterAttributes,
-	},
-	rustidy_format::Format,
-	rustidy_parse::{Parse, ParseRecursive},
-	rustidy_print::Print,
+	}, rustidy_ast_util::{Delimited, PunctuatedTrailing, punct}, rustidy_format::Format, rustidy_parse::{Parse, ParseRecursive}, rustidy_print::Print
 };
 
 #[derive(PartialEq, Eq, Debug)]

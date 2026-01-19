@@ -3,11 +3,10 @@
 use {
 	super::{ExpressionWithoutBlockInner, path::PathExprSegment},
 	crate::ast::{
-		delimited::Parenthesized,
 		expr::{Expression, ExpressionInner},
-		punct::{self, PunctuatedTrailing},
-		token,
+		token, util::Parenthesized,
 	},
+	rustidy_ast_util::{PunctuatedTrailing, punct},
 	rustidy_format::Format,
 	rustidy_parse::{Parse, ParseRecursive},
 	rustidy_print::Print,

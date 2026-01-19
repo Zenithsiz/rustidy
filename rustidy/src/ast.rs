@@ -1,35 +1,29 @@
 //! Syntax tree
 
 // Modules
-pub mod at_least;
 pub mod attr;
-pub mod delimited;
 pub mod expr;
 pub mod ident;
 pub mod item;
 pub mod lifetime;
-pub mod line;
-pub mod longest;
 pub mod pat;
 pub mod path;
-pub mod punct;
 pub mod shebang;
 pub mod stmt;
 pub mod token;
 pub mod ty;
+pub mod util;
 pub mod vis;
-pub mod whitespace;
 pub mod with_attrs;
 
 // Imports
 use {
-	self::{
-		attr::InnerAttrOrDocComment,
-		item::Item,
-		shebang::Shebang,
-		whitespace::{TrailingLineComment, Whitespace},
-	},
+	self::{attr::InnerAttrOrDocComment, item::Item, shebang::Shebang},
 	core::fmt::Debug,
+	rustidy_ast_util::{
+		Whitespace,
+		whitespace::{self, TrailingLineComment},
+	},
 	rustidy_format::Format,
 	rustidy_parse::Parse,
 	rustidy_print::Print,

@@ -2,12 +2,8 @@
 
 // Imports
 use {
-	crate::ast::{
-		delimited::Bracketed,
-		expr::Expression,
-		punct::{self, PunctuatedTrailing},
-		token,
-	},
+	crate::ast::{expr::Expression, token, util::Bracketed},
+	rustidy_ast_util::punct::{self, PunctuatedTrailing},
 	rustidy_format::Format,
 	rustidy_parse::Parse,
 	rustidy_print::Print,

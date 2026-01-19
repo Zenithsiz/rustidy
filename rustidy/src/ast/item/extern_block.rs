@@ -4,8 +4,8 @@
 use {
 	super::{Function, MacroInvocationSemi, StaticItem, TypeAlias, function::Abi},
 	crate::ast::{
-		delimited::Braced,
 		token,
+		util::Braced,
 		vis::Visibility,
 		with_attrs::{self, WithInnerAttributes, WithOuterAttributes},
 	},

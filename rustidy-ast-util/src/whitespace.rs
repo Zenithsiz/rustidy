@@ -2,7 +2,7 @@
 
 // Imports
 use {
-	super::punct::Punctuated,
+	crate::Punctuated,
 	itertools::Itertools,
 	rustidy_format::{Format, WhitespaceLike},
 	rustidy_parse::{Parse, Parser},

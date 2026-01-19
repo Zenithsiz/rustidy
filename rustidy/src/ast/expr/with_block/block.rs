@@ -3,10 +3,10 @@
 // Imports
 use {
 	crate::ast::{
-		delimited::Braced,
 		expr::ExpressionWithoutBlock,
 		stmt::{ExpressionStatement, ExpressionStatementWithoutBlock, Statement},
 		token,
+		util::Braced,
 		with_attrs::WithInnerAttributes,
 	},
 	rustidy_format::Format,

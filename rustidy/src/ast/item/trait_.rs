@@ -11,10 +11,7 @@ use {
 		function::{GenericParams, TypeParamBounds, WhereClause},
 	},
 	crate::ast::{
-		delimited::Braced,
-		ident::Identifier,
-		token,
-		with_attrs::{self, WithInnerAttributes, WithOuterAttributes},
+		ident::Identifier, token, util::Braced, with_attrs::{self, WithInnerAttributes, WithOuterAttributes}
 	},
 	rustidy_format::Format,
 	rustidy_parse::Parse,

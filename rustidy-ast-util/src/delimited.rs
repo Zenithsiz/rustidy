@@ -1,7 +1,7 @@
 //! Delimited
 
 // Imports
-use {super::token, rustidy_format::Format, rustidy_parse::Parse, rustidy_print::Print};
+use {rustidy_format::Format, rustidy_parse::Parse, rustidy_print::Print};
 
 /// A value `T` delimited by prefix `L` and suffix `R`
 #[derive(PartialEq, Eq, Debug)]
@@ -62,12 +62,3 @@ impl<T, L, R> Delimited<T, L, R> {
 		self.suffix.prefix_ws_remove(ctx);
 	}
 }
-
-/// A value delimited by parenthesis
-pub type Parenthesized<T> = Delimited<T, token::ParenOpen, token::ParenClose>;
-
-/// A value delimited by brackets
-pub type Bracketed<T> = Delimited<T, token::BracketOpen, token::BracketClose>;
-
-/// A value delimited by braces
-pub type Braced<T> = Delimited<T, token::BracesOpen, token::BracesClose>;

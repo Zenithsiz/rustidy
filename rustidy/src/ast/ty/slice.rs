@@ -1,13 +1,7 @@
 //! Slice type
 
 // Imports
-use {
-	super::Type,
-	crate::ast::delimited::Bracketed,
-	rustidy_format::Format,
-	rustidy_parse::Parse,
-	rustidy_print::Print,
-};
+use {super::Type, crate::ast::util::Bracketed, rustidy_format::Format, rustidy_parse::Parse, rustidy_print::Print};
 
 /// `SliceType`
 #[derive(PartialEq, Eq, Debug)]

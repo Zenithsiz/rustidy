@@ -4,15 +4,15 @@
 use {
 	super::function::{GenericParams, WhereClause},
 	crate::ast::{
-		delimited::{Braced, Parenthesized},
 		expr::Expression,
 		ident::Identifier,
-		punct::{self, PunctuatedTrailing},
 		token,
 		ty::Type,
+		util::{Braced, Parenthesized},
 		vis::Visibility,
 		with_attrs::{self, WithOuterAttributes},
 	},
+	rustidy_ast_util::{PunctuatedTrailing, punct},
 	rustidy_format::Format,
 	rustidy_parse::Parse,
 	rustidy_print::Print,

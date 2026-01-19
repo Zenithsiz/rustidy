@@ -9,8 +9,6 @@ pub use self::range::RangePattern;
 // Imports
 use {
 	super::{
-		at_least::{self, AtLeast1},
-		delimited::{Braced, Bracketed, Parenthesized},
 		expr::{
 			LiteralExpression,
 			MacroInvocation,
@@ -21,11 +19,12 @@ use {
 			},
 		},
 		ident::Identifier,
-		punct::{self, Punctuated, PunctuatedTrailing},
 		token,
+		util::{Braced, Bracketed, Parenthesized},
 		with_attrs::WithOuterAttributes,
 	},
 	core::fmt::Debug,
+	rustidy_ast_util::{AtLeast1, Punctuated, PunctuatedTrailing, at_least, punct},
 	rustidy_format::Format,
 	rustidy_parse::Parse,
 	rustidy_print::Print,

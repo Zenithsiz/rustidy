@@ -3,7 +3,7 @@
 // Imports
 use {
 	super::Type,
-	crate::ast::{delimited::Parenthesized, token},
+	crate::ast::{token, util::Parenthesized},
 	rustidy_format::Format,
 	rustidy_parse::Parse,
 	rustidy_print::Print,

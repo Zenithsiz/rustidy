@@ -1,23 +1,15 @@
 //! Path expression
 
 use {
-	super::LiteralExpression,
-	crate::ast::{
-		at_least::{self, AtLeast1},
-		delimited::{Delimited, Parenthesized},
+	super::LiteralExpression, crate::ast::{
 		expr::with_block::BlockExpression,
 		ident::Identifier,
 		item::function::TypeParamBounds,
 		lifetime::Lifetime,
-		longest::Longest,
 		path::SimplePathSegment,
-		punct::{self, Punctuated, PunctuatedTrailing},
 		token,
-		ty::{Type, TypeNoBounds, TypePath, path::TypePathSegment},
-	},
-	rustidy_format::Format,
-	rustidy_parse::Parse,
-	rustidy_print::Print,
+		ty::{Type, TypeNoBounds, TypePath, path::TypePathSegment}, util::Parenthesized,
+	}, rustidy_ast_util::{AtLeast1, Delimited, Longest, Punctuated, PunctuatedTrailing, at_least, punct}, rustidy_format::Format, rustidy_parse::Parse, rustidy_print::Print
 };
 
 /// `PathExpression`

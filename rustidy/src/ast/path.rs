@@ -2,15 +2,7 @@
 
 // Imports
 use {
-	super::{
-		ident::Identifier,
-		punct::{self, Punctuated},
-		token,
-	},
-	core::fmt::Debug,
-	rustidy_format::Format,
-	rustidy_parse::Parse,
-	rustidy_print::Print,
+	super::{ident::Identifier, token}, core::fmt::Debug, rustidy_ast_util::{Punctuated, punct}, rustidy_format::Format, rustidy_parse::Parse, rustidy_print::Print
 };
 
 /// `SimplePath`

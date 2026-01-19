@@ -7,10 +7,7 @@ use {
 		trait_::AssociatedItem,
 	},
 	crate::ast::{
-		delimited::Braced,
-		token,
-		ty::{Type, TypePath},
-		with_attrs::WithInnerAttributes,
+		token, ty::{Type, TypePath}, util::Braced, with_attrs::WithInnerAttributes
 	},
 	rustidy_format::Format,
 	rustidy_parse::Parse,

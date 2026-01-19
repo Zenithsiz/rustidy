@@ -4,12 +4,8 @@
 use {
 	crate::ast::{
 		expr::without_block::path::{GenericArgs, PathIdentSegment, TypePathFn},
-		punct::{self, Punctuated},
 		token,
-	},
-	rustidy_format::Format,
-	rustidy_parse::Parse,
-	rustidy_print::Print,
+	}, rustidy_ast_util::{Punctuated, punct}, rustidy_format::Format, rustidy_parse::Parse, rustidy_print::Print
 };
 
 /// `TypePath`
