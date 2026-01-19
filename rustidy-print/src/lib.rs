@@ -1,4 +1,4 @@
-//! Formatting
+//! Printing
 
 // Features
 #![feature(never_type, decl_macro, coverage_attribute, macro_metavar_expr_concat)]
