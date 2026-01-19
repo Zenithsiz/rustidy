@@ -257,9 +257,6 @@ fn derive_struct(fields: &darling::ast::Fields<FieldAttrs>) -> Impls<syn::Expr, 
 		let field_ident = util::field_member_access(field_idx, field);
 
 		parse_quote! {{
-			// TODO: Once polonius comes around, move this down
-			let is_empty = rustidy_format::FormatRef::input_range(&self.#field_ident, ctx).is_none_or(|range| range.is_empty());
-
 			// If we used the whitespace, return
 			if let Some(value) = rustidy_format::Format::with_prefix_ws(&mut self.#field_ident, ctx, visitor) {
 				return Some(value);
@@ -267,7 +264,7 @@ fn derive_struct(fields: &darling::ast::Fields<FieldAttrs>) -> Impls<syn::Expr, 
 
 			// Otherwise, if this field had any length, we have no more fields
 			// to check and we can return
-			if !is_empty {
+			if !rustidy_format::FormatRef::input_range(&self.#field_ident, ctx).is_none_or(|range| range.is_empty()) {
 				return None;
 			}
 		}}
