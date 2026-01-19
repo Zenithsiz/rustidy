@@ -10,14 +10,12 @@ use {
 	rustidy_parse::Parser,
 	rustidy_print::{Print, PrintFmt},
 	rustidy_util::Replacements,
-	serde::Deserialize,
-	std::{env, fs, path::Path, process},
+	serde::{Deserialize, Serialize},
+	std::{env, fs, path::Path},
 };
 
 #[test]
 pub fn parse() {
-	let mut prettier_procs = vec![];
-
 	std::env::set_current_dir("..").expect("Unable to ascend a directory");
 	let tests_dir = Path::new("tests/parse/");
 	for test_dir in tests_dir.read_dir().expect("Unable to read tests directory") {
@@ -39,17 +37,12 @@ pub fn parse() {
 		let output_path = test_dir.join("output.json");
 		match env::var("UPDATE_AST_OUTPUT").is_ok_and(|value| !value.trim().is_empty()) {
 			true => {
-				let output = serde_json::to_string(&input).expect("Unable to serialize input");
-				fs::write(&output_path, &output).expect("Unable to update output");
+				let mut output = Vec::new();
+				let formatter = serde_json::ser::PrettyFormatter::with_indent(b"\t");
+				let mut serializer = serde_json::Serializer::with_formatter(&mut output, formatter);
+				input.serialize(&mut serializer).expect("Unable to serialize input");
 
-				// TODO: Better solution than shelling out to `prettier`?
-				let cmd = process::Command::new("prettier")
-					.arg("-w")
-					.arg(&output_path)
-					.stdout(process::Stdio::null())
-					.spawn()
-					.expect("Unable to spawn `prettier`");
-				prettier_procs.push(cmd);
+				fs::write(&output_path, &output).expect("Unable to update output");
 			},
 			false => {
 				let output = fs::read_to_string(output_path).expect("Unable to read output path");
@@ -65,12 +58,5 @@ pub fn parse() {
 				assert_json_eq!(input, output);
 			},
 		}
-	}
-
-	for mut cmd in prettier_procs {
-		cmd.wait()
-			.expect("`prettier` was killed")
-			.exit_ok()
-			.expect("`prettier` failed");
 	}
 }
