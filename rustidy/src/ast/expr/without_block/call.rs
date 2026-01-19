@@ -4,7 +4,8 @@ use {
 	super::{ExpressionWithoutBlockInner, path::PathExprSegment},
 	crate::ast::{
 		expr::{Expression, ExpressionInner},
-		token, util::Parenthesized,
+		token,
+		util::Parenthesized,
 	},
 	rustidy_ast_util::{PunctuatedTrailing, punct},
 	rustidy_format::Format,

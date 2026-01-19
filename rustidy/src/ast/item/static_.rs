@@ -2,7 +2,12 @@
 
 // Imports
 use {
-	super::function::ItemSafety, crate::ast::{expr::Expression, token, ty::Type}, rustidy_ast_util::Identifier, rustidy_format::Format, rustidy_parse::Parse, rustidy_print::Print
+	super::function::ItemSafety,
+	crate::ast::{expr::Expression, token, ty::Type},
+	rustidy_ast_util::Identifier,
+	rustidy_format::Format,
+	rustidy_parse::Parse,
+	rustidy_print::Print,
 };
 
 /// `StaticItem`

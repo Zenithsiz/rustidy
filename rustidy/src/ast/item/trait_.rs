@@ -9,11 +9,16 @@ use {
 		TypeAlias,
 		Visibility,
 		function::{GenericParams, TypeParamBounds, WhereClause},
-	}, crate::ast::{
+	},
+	crate::ast::{
 		token,
 		util::Braced,
 		with_attrs::{self, WithInnerAttributes, WithOuterAttributes},
-	}, rustidy_ast_util::Identifier, rustidy_format::Format, rustidy_parse::Parse, rustidy_print::Print
+	},
+	rustidy_ast_util::Identifier,
+	rustidy_format::Format,
+	rustidy_parse::Parse,
+	rustidy_print::Print,
 };
 
 /// `Trait`

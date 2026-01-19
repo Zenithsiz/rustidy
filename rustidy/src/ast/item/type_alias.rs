@@ -2,7 +2,12 @@
 
 // Imports
 use {
-	super::function::{GenericParams, TypeParamBounds, WhereClause}, crate::ast::{token, ty::Type}, rustidy_ast_util::Identifier, rustidy_format::Format, rustidy_parse::Parse, rustidy_print::Print
+	super::function::{GenericParams, TypeParamBounds, WhereClause},
+	crate::ast::{token, ty::Type},
+	rustidy_ast_util::Identifier,
+	rustidy_format::Format,
+	rustidy_parse::Parse,
+	rustidy_print::Print,
 };
 
 /// `TypeAlias`

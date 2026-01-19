@@ -2,10 +2,11 @@
 
 // Imports
 use {
-	crate::ast::{
-		expr::Expression,
-		token, util::Parenthesized,
-	}, rustidy_ast_util::{AtLeast1, at_least}, rustidy_format::Format, rustidy_parse::Parse, rustidy_print::Print
+	crate::ast::{expr::Expression, token, util::Parenthesized},
+	rustidy_ast_util::{AtLeast1, at_least},
+	rustidy_format::Format,
+	rustidy_parse::Parse,
+	rustidy_print::Print,
 };
 
 /// `TupleExpression`

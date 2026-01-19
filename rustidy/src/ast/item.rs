@@ -39,8 +39,17 @@ pub use self::{
 // Imports
 use {
 	super::{
-		attr::{DelimTokenTree, DelimTokenTreeInner}, token, util::{Braced, Parenthesized}, vis::Visibility, with_attrs::{self, WithOuterAttributes}
-	}, rustidy_ast_util::{Identifier, PunctuatedTrailing, punct}, rustidy_format::Format, rustidy_parse::Parse, rustidy_print::Print, rustidy_util::{Arena, ArenaData, ArenaIdx}
+		attr::{DelimTokenTree, DelimTokenTreeInner},
+		token,
+		util::{Braced, Parenthesized},
+		vis::Visibility,
+		with_attrs::{self, WithOuterAttributes},
+	},
+	rustidy_ast_util::{Identifier, PunctuatedTrailing, punct},
+	rustidy_format::Format,
+	rustidy_parse::Parse,
+	rustidy_print::Print,
+	rustidy_util::{Arena, ArenaData, ArenaIdx},
 };
 
 /// `Item`
