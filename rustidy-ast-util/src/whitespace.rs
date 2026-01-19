@@ -90,6 +90,10 @@ impl rustidy_format::FormatRef for Whitespace {
 	fn input_range(&self, ctx: &rustidy_format::Context) -> Option<AstRange> {
 		ARENA.get(&self.0).input_range(ctx)
 	}
+
+	fn with_output(&self, ctx: &rustidy_format::Context, f: &mut impl FnMut(&AstStr, &rustidy_format::Context)) {
+		ARENA.get(&self.0).with_output(ctx, f);
+	}
 }
 
 impl Format for Whitespace {

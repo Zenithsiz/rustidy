@@ -69,7 +69,8 @@ pub trait FormatRef {
 		}
 	}
 
-	// TODO: Iterate over replacements
+	/// Iterates over all output strings
+	fn with_output(&self, ctx: &Context, f: &mut impl FnMut(&AstStr, &Context));
 }
 
 /// Formattable type
@@ -142,11 +143,19 @@ impl<T: FormatRef> FormatRef for &'_ T {
 	fn input_range(&self, ctx: &Context) -> Option<AstRange> {
 		(**self).input_range(ctx)
 	}
+
+	fn with_output(&self, ctx: &Context, f: &mut impl FnMut(&AstStr, &Context)) {
+		(**self).with_output(ctx, f);
+	}
 }
 
 impl<T: FormatRef> FormatRef for &'_ mut T {
 	fn input_range(&self, ctx: &Context) -> Option<AstRange> {
 		(**self).input_range(ctx)
+	}
+
+	fn with_output(&self, ctx: &Context, f: &mut impl FnMut(&AstStr, &Context)) {
+		(**self).with_output(ctx, f);
 	}
 }
 
@@ -164,6 +173,10 @@ impl<T: FormatRef> FormatRef for Box<T> {
 	fn input_range(&self, ctx: &Context) -> Option<AstRange> {
 		(**self).input_range(ctx)
 	}
+
+	fn with_output(&self, ctx: &Context, f: &mut impl FnMut(&AstStr, &Context)) {
+		(**self).with_output(ctx, f);
+	}
 }
 
 impl<T: Format> Format for Box<T> {
@@ -179,6 +192,12 @@ impl<T: Format> Format for Box<T> {
 impl<T: FormatRef> FormatRef for Option<T> {
 	fn input_range(&self, ctx: &Context) -> Option<AstRange> {
 		self.as_ref()?.input_range(ctx)
+	}
+
+	fn with_output(&self, ctx: &Context, f: &mut impl FnMut(&AstStr, &Context)) {
+		if let Some(value) = self {
+			value.with_output(ctx, f);
+		}
 	}
 }
 
@@ -203,6 +222,12 @@ impl<T: FormatRef> FormatRef for Vec<T> {
 		compute_range.extend(self, ctx);
 		compute_range.finish()
 	}
+
+	fn with_output(&self, ctx: &Context, f: &mut impl FnMut(&AstStr, &Context)) {
+		for value in self {
+			value.with_output(ctx, f);
+		}
+	}
 }
 
 impl<T: Format> Format for Vec<T> {
@@ -224,6 +249,10 @@ impl FormatRef for ! {
 	fn input_range(&self, _ctx: &Context) -> Option<AstRange> {
 		*self
 	}
+
+	fn with_output(&self, _ctx: &Context, _f: &mut impl FnMut(&AstStr, &Context)) {
+		*self
+	}
 }
 
 impl Format for ! {
@@ -240,6 +269,8 @@ impl<T> FormatRef for PhantomData<T> {
 	fn input_range(&self, _ctx: &Context) -> Option<AstRange> {
 		None
 	}
+
+	fn with_output(&self, _ctx: &Context, _f: &mut impl FnMut(&AstStr, &Context)) {}
 }
 
 impl<T> Format for PhantomData<T> {
@@ -254,6 +285,8 @@ impl FormatRef for () {
 	fn input_range(&self, _ctx: &Context) -> Option<AstRange> {
 		None
 	}
+
+	fn with_output(&self, _ctx: &Context, _f: &mut impl FnMut(&AstStr, &Context)) {}
 }
 
 impl Format for () {
@@ -281,6 +314,14 @@ macro tuple_impl ($N:literal, $($T:ident),* $(,)?) {
 			$( compute_range.add($T, ctx); )*
 			compute_range.finish()
 		}
+
+		fn with_output(&self, ctx: &Context, f: &mut impl FnMut(&AstStr, &Context)) {
+			let ( $($T,)* ) = self;
+
+			$(
+				$T.with_output(ctx, f);
+			)*
+		}
 	}
 
 	#[automatically_derived]
@@ -306,6 +347,10 @@ impl FormatRef for AstStr {
 	fn input_range(&self, _ctx: &Context) -> Option<AstRange> {
 		Some(Self::range(self))
 	}
+
+	fn with_output(&self, ctx: &Context, f: &mut impl FnMut(&Self, &Context)) {
+		f(self, ctx);
+	}
 }
 
 impl Format for AstStr {
@@ -319,6 +364,10 @@ impl Format for AstStr {
 impl<T: ArenaData<Data: FormatRef>> FormatRef for ArenaIdx<T> {
 	fn input_range(&self, ctx: &Context) -> Option<AstRange> {
 		T::ARENA.get(self).input_range(ctx)
+	}
+
+	fn with_output(&self, ctx: &Context, f: &mut impl FnMut(&AstStr, &Context)) {
+		T::ARENA.get(self).with_output(ctx, f);
 	}
 }
 

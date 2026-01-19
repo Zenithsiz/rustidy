@@ -138,6 +138,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 
 	let Impls {
 		input_range,
+		with_output,
 		format,
 		with_prefix_ws,
 	} = impls;
@@ -169,6 +170,10 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 			fn input_range(&self, ctx: &rustidy_format::Context) -> Option<rustidy_util::AstRange> {
 				#input_range
 			}
+
+			fn with_output(&self, ctx: &rustidy_format::Context, f: &mut impl FnMut(&rustidy_util::AstStr, &rustidy_format::Context)) {
+				#with_output
+			}
 		}
 
 		#[automatically_derived]
@@ -188,13 +193,15 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 	Ok(output.into())
 }
 
-fn derive_enum(variants: &[VariantAttrs]) -> Impls<syn::Expr, syn::Expr, syn::Expr> {
+fn derive_enum(variants: &[VariantAttrs]) -> Impls<syn::Expr, syn::Expr, syn::Expr, syn::Expr> {
 	let variant_impls = variants
 		.iter()
 		.map(|variant| {
 			let variant_ident = &variant.ident;
 			let input_range =
 				parse_quote! { Self::#variant_ident(ref value) => rustidy_format::FormatRef::input_range(value, ctx), };
+			let with_output =
+				parse_quote! { Self::#variant_ident(ref value) => rustidy_format::FormatRef::with_output(value, ctx, f), };
 
 			let format = self::derive_format(
 				parse_quote! { value },
@@ -212,45 +219,51 @@ fn derive_enum(variants: &[VariantAttrs]) -> Impls<syn::Expr, syn::Expr, syn::Ex
 
 			Impls {
 				input_range,
+				with_output,
 				format,
 				with_prefix_ws,
 			}
 		})
-		.collect::<Impls<Vec<syn::Arm>, Vec<syn::Arm>, Vec<syn::Arm>>>();
+		.collect::<Impls<Vec<syn::Arm>, Vec<syn::Arm>, Vec<syn::Arm>, Vec<syn::Arm>>>();
 
 
 	let Impls {
 		input_range,
+		with_output,
 		format,
 		with_prefix_ws,
 	} = variant_impls;
 	let input_range = parse_quote! { match *self { #( #input_range )* } };
+	let with_output = parse_quote! { match *self { #( #with_output )* } };
 	let format = parse_quote! { match *self { #( #format )* } };
 	let with_prefix_ws = parse_quote! { match *self { #( #with_prefix_ws )* } };
 
 	Impls {
 		input_range,
+		with_output,
 		format,
 		with_prefix_ws,
 	}
 }
 
-fn derive_struct(fields: &darling::ast::Fields<FieldAttrs>) -> Impls<syn::Expr, syn::Expr, syn::Expr> {
+fn derive_struct(fields: &darling::ast::Fields<FieldAttrs>) -> Impls<syn::Expr, syn::Expr, syn::Expr, syn::Expr> {
 	let Impls {
 		input_range,
+		with_output,
 		format,
 		with_prefix_ws: (),
 	} = fields
 		.iter()
 		.enumerate()
 		.map(|(field_idx, field)| self::derive_struct_field(field_idx, field))
-		.collect::<Impls<Vec<_>, Vec<_>, ()>>();
+		.collect::<Impls<Vec<_>, Vec<_>, Vec<_>, ()>>();
 
 	let input_range = parse_quote! {{
 		let mut compute_range = rustidy_format::ComputeRange::default();
 		#( #input_range; )*
 		compute_range.finish()
 	}};
+	let with_output = parse_quote! {{ #( #with_output; )* }};
 	let format = parse_quote! {{ #( #format; )* }};
 
 	let with_prefix_ws_fields = fields.iter().enumerate().map(|(field_idx, field)| -> syn::Expr {
@@ -277,15 +290,17 @@ fn derive_struct(fields: &darling::ast::Fields<FieldAttrs>) -> Impls<syn::Expr, 
 
 	Impls {
 		input_range,
+		with_output,
 		format,
 		with_prefix_ws,
 	}
 }
 
-fn derive_struct_field(field_idx: usize, field: &FieldAttrs) -> Impls<syn::Expr, syn::Expr, ()> {
+fn derive_struct_field(field_idx: usize, field: &FieldAttrs) -> Impls<syn::Expr, syn::Expr, syn::Expr, ()> {
 	let field_ident = util::field_member_access(field_idx, field);
 
 	let input_range = parse_quote! { compute_range.add(&self.#field_ident, ctx) };
+	let with_output = parse_quote! { rustidy_format::FormatRef::with_output(&self.#field_ident, ctx, f) };
 
 	let format = self::derive_format(
 		parse_quote! { &mut self.#field_ident },
@@ -297,6 +312,7 @@ fn derive_struct_field(field_idx: usize, field: &FieldAttrs) -> Impls<syn::Expr,
 
 	Impls {
 		input_range,
+		with_output,
 		format,
 		with_prefix_ws: (),
 	}
@@ -444,22 +460,25 @@ fn derive_and_with_wrapper(fields: &darling::ast::Fields<FieldAttrs>, and_with_w
 }
 
 #[derive(Default, Debug)]
-struct Impls<InputRange, Format, PrefixWs> {
+struct Impls<InputRange, WithOutput, Format, PrefixWs> {
 	input_range:    InputRange,
+	with_output:    WithOutput,
 	format:         Format,
 	with_prefix_ws: PrefixWs,
 }
 
-impl<T0, T1, T2, A0, A1, A2> FromIterator<Impls<A0, A1, A2>> for Impls<T0, T1, T2>
+impl<T0, T1, T2, T3, A0, A1, A2, A3> FromIterator<Impls<A0, A1, A2, A3>> for Impls<T0, T1, T2, T3>
 where
 	T0: Default + Extend<A0>,
 	T1: Default + Extend<A1>,
 	T2: Default + Extend<A2>,
+	T3: Default + Extend<A3>,
 {
-	fn from_iter<I: IntoIterator<Item = Impls<A0, A1, A2>>>(iter: I) -> Self {
+	fn from_iter<I: IntoIterator<Item = Impls<A0, A1, A2, A3>>>(iter: I) -> Self {
 		let mut output = Self::default();
 		for impls in iter {
 			output.input_range.extend_one(impls.input_range);
+			output.with_output.extend_one(impls.with_output);
 			output.format.extend_one(impls.format);
 			output.with_prefix_ws.extend_one(impls.with_prefix_ws);
 		}
