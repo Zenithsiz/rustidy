@@ -3,6 +3,7 @@
 // Imports
 use {
 	rustidy_parse::Parser,
+	rustidy_util::Config,
 	std::{env, fs, path::Path},
 };
 
@@ -16,7 +17,8 @@ pub fn parse_error() {
 
 		let input_path = test_dir.join("input.rs");
 		let file = fs::read_to_string(&input_path).expect("Unable to read file");
-		let mut parser = Parser::new(&file);
+		let config = Config::default();
+		let mut parser = Parser::new(&file, &config);
 
 		let err = rustidy::parse(&input_path, &mut parser).expect_err("Input did not fail");
 		let err = err.pretty().to_string();

@@ -58,12 +58,12 @@ fn run() -> Result<(), AppError> {
 
 		// Parse
 		let file = fs::read_to_string(file_path).context("Unable to read file")?;
-		let mut parser = Parser::new(&file);
+		let config = rustidy_util::Config::default();
+		let mut parser = Parser::new(&file, &config);
 		let mut crate_ = rustidy::parse(file_path, &mut parser).context("Unable to parse file")?;
 
 		// Format
 		let mut replacements = Replacements::new();
-		let config = rustidy_util::Config::default();
 		let mut ctx = rustidy_format::Context::new(&file, &mut replacements, &config);
 		crate_.format(&mut ctx);
 

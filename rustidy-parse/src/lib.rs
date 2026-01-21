@@ -41,7 +41,7 @@ use {
 		mem,
 		ops::{Residual, Try},
 	},
-	rustidy_util::{ArenaData, ArenaIdx, AstPos, AstRange, AstStr},
+	rustidy_util::{ArenaData, ArenaIdx, AstPos, AstRange, AstStr, Config},
 	std::{fmt, str::pattern::Pattern},
 };
 
@@ -254,7 +254,7 @@ impl<T: ArenaData<Data: Parse>> Parse for ArenaIdx<T> {
 
 /// Parser
 #[derive(Debug)]
-pub struct Parser<'input> {
+pub struct Parser<'a, 'input> {
 	/// Input
 	input: &'input str,
 
@@ -264,16 +264,19 @@ pub struct Parser<'input> {
 	/// Tags
 	// Note: Always sorted by ast position.
 	tags: Vec<(AstPos, ParserTag)>,
+
+	_config: &'a Config,
 }
 
-impl<'input> Parser<'input> {
+impl<'a, 'input> Parser<'a, 'input> {
 	/// Creates a new parser
 	#[must_use]
-	pub const fn new(input: &'input str) -> Self {
+	pub const fn new(input: &'input str, config: &'a Config) -> Self {
 		Self {
 			input,
 			cur_pos: AstPos::from_usize(0),
 			tags: vec![],
+			_config: config,
 		}
 	}
 

@@ -19,12 +19,12 @@ pub fn format() {
 
 		let input_path = test_dir.join("input.rs");
 		let file = fs::read_to_string(&input_path).expect("Unable to read file");
-		let mut parser = Parser::new(&file);
+		let config = rustidy_util::Config::default();
+		let mut parser = Parser::new(&file, &config);
 
 		let mut input = rustidy::parse(&input_path, &mut parser).expect("Input did not fail");
 
 		let mut replacements = Replacements::new();
-		let config = rustidy_util::Config::default();
 		let mut ctx = rustidy_format::Context::new(&file, &mut replacements, &config);
 		input.format(&mut ctx);
 

@@ -24,11 +24,11 @@ pub fn parse() {
 
 		let input_path = test_dir.join("input.rs");
 		let input_file = fs::read_to_string(&input_path).expect("Unable to read file");
-		let mut parser = Parser::new(&input_file);
+		let config = Config::default();
+		let mut parser = Parser::new(&input_file, &config);
 
 		let input = rustidy::parse(&input_path, &mut parser).expect("Unable to parse input");
 
-		let config = Config::default();
 		let replacements = Replacements::new();
 		let mut print_fmt = PrintFmt::new(&input_file, &config, &replacements);
 		input.print(&mut print_fmt);

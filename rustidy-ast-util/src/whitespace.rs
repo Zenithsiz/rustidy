@@ -331,7 +331,7 @@ mod tests {
 		config: &Config,
 		kind: FormatKind,
 	) -> Result<(), AppError> {
-		let mut parser = Parser::new(source);
+		let mut parser = Parser::new(source, fmt_config);
 		let whitespace = parser
 			.parse::<Whitespace>()
 			.map_err(|err| err.to_app_error(&parser))
