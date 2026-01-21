@@ -27,7 +27,7 @@ pub use {
 use {
 	crate as rustidy_format,
 	core::marker::PhantomData,
-	rustidy_util::{ArenaData, ArenaIdx, AstPos, AstRange, AstStr, ast_str::AstStrRepr},
+	rustidy_util::{ArenaData, ArenaIdx, AstRange, AstStr, ast_str::AstStrRepr},
 };
 
 /// Whitespace-like for formatting
@@ -81,6 +81,7 @@ pub trait Format {
 			Some(replacement) => len += replacement.len(),
 			None => match s.repr() {
 				AstStrRepr::AstRange(range) => len += range.len(),
+				AstStrRepr::String(s) => len += s.len(),
 			},
 		});
 		len
@@ -366,6 +367,7 @@ impl Format for AstStr {
 	fn input_range(&mut self, _ctx: &mut Context) -> Option<AstRange> {
 		match self.repr() {
 			AstStrRepr::AstRange(range) => Some(range),
+			AstStrRepr::String(_) => None,
 		}
 	}
 
@@ -440,13 +442,6 @@ impl<'a, 'input> Context<'a, 'input> {
 	#[must_use]
 	pub const fn indent(&self) -> usize {
 		self.indent_depth
-	}
-
-	/// Creates a string at a position with a replacement
-	pub fn create_str_at_pos_with_replacement(&mut self, pos: AstPos, replacement: impl Into<Replacement>) -> AstStr {
-		let s = AstStr::empty_at(pos);
-		self.replace(&s, replacement);
-		s
 	}
 
 	/// Replaces a string

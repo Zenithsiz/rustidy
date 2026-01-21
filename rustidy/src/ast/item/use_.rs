@@ -7,6 +7,7 @@ use {
 	rustidy_format::Format,
 	rustidy_parse::Parse,
 	rustidy_print::Print,
+	rustidy_util::AstStr,
 };
 
 /// `UseDeclaration`
@@ -25,11 +26,7 @@ pub struct UseDeclaration {
 
 impl UseDeclaration {
 	/// Merges several use declarations into this one
-	pub fn merge(
-		&mut self,
-		ctx: &mut rustidy_format::Context,
-		others: impl IntoIterator<Item = Self, IntoIter: ExactSizeIterator>,
-	) {
+	pub fn merge(&mut self, others: impl IntoIterator<Item = Self, IntoIter: ExactSizeIterator>) {
 		let others = others.into_iter();
 
 		// Note: This is to avoid creating an unnecessary group
@@ -37,31 +34,22 @@ impl UseDeclaration {
 			return;
 		}
 
-		replace_with::replace_with_or_abort(&mut self.tree, |mut tree| {
+		replace_with::replace_with_or_abort(&mut self.tree, |tree| {
 			let mut group_tree = match tree {
 				UseTree::Group(tree) => tree,
-				_ => {
-					let tree_range = tree.input_range(ctx).expect("A use tree must have a range");
-					UseTreeGroup {
-						prefix: None,
-						tree:   Braced {
-							prefix: token::BracesOpen(
-								Whitespace::empty(tree_range.start),
-								ctx.create_str_at_pos_with_replacement(tree_range.start, "{"),
-							),
-							value:  Some(PunctuatedTrailing {
-								punctuated: Punctuated {
-									first: Box::new(tree),
-									rest:  vec![],
-								},
-								trailing:   None,
-							}),
-							suffix: token::BracesClose(
-								Whitespace::empty(tree_range.end),
-								ctx.create_str_at_pos_with_replacement(tree_range.end, "}"),
-							),
-						},
-					}
+				_ => UseTreeGroup {
+					prefix: None,
+					tree:   Braced {
+						prefix: token::BracesOpen(Whitespace::empty(), AstStr::new("{")),
+						value:  Some(PunctuatedTrailing {
+							punctuated: Punctuated {
+								first: Box::new(tree),
+								rest:  vec![],
+							},
+							trailing:   None,
+						}),
+						suffix: token::BracesClose(Whitespace::empty(), AstStr::new("}")),
+					},
 				},
 			};
 
@@ -70,16 +58,7 @@ impl UseDeclaration {
 			for use_decl in others {
 				match &mut group_tree.tree.value {
 					Some(inner) => {
-						let pos = inner
-							.punctuated
-							.split_last_mut()
-							.1
-							.input_range(ctx)
-							.expect("Use tree must have an input range")
-							.end;
-						let comma =
-							token::Comma(Whitespace::empty(pos), ctx.create_str_at_pos_with_replacement(pos, ","));
-						// TODO: Should we "move" all the strings inside of the use declaration?
+						let comma = token::Comma(Whitespace::empty(), AstStr::new(","));
 						inner.punctuated.rest.push((comma, Box::new(use_decl.tree)));
 					},
 					None =>
@@ -158,11 +137,8 @@ impl UseTreeGroup {
 
 		if tree.output_len_without_prefix_ws(ctx) > ctx.config().max_use_tree_len {
 			if let Some(punct) = &mut tree.value {
-				let pos = punct.input_range(ctx).expect("Should have a range").end;
 				if punct.trailing.is_none() {
-					let ws = Whitespace::empty(pos);
-					let comma = ctx.create_str_at_pos_with_replacement(pos, ",");
-					punct.trailing = Some(token::Comma(ws, comma));
+					punct.trailing = Some(token::Comma(Whitespace::empty(), AstStr::new(",")));
 				}
 
 				punct.format(ctx, Format::prefix_ws_set_cur_indent, Format::prefix_ws_remove);

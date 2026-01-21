@@ -74,7 +74,7 @@ impl Items {
 						use_decls.push(use_decl);
 					}
 
-					first_use_decl.merge(ctx, use_decls);
+					first_use_decl.merge(use_decls);
 					Item(ITEM_ARENA.push(WithOuterAttributes {
 						attrs,
 						inner: ItemInner::Vis(VisItem {

@@ -7,7 +7,7 @@ use {
 	rustidy_format::{Format, Replacement, WhitespaceLike},
 	rustidy_parse::{Parse, Parser},
 	rustidy_print::Print,
-	rustidy_util::{Arena, ArenaData, ArenaIdx, AstPos, AstRange, AstStr, ast_str::AstStrRepr},
+	rustidy_util::{Arena, ArenaData, ArenaIdx, AstRange, AstStr, ast_str::AstStrRepr},
 };
 
 /// Whitespace
@@ -19,10 +19,10 @@ use {
 pub struct Whitespace(ArenaIdx<Whitespace>);
 
 impl Whitespace {
-	/// Creates an empty whitespace at a position
-	pub fn empty(pos: AstPos) -> Self {
+	/// Creates an empty whitespace
+	pub fn empty() -> Self {
 		let inner = Punctuated {
-			first: PureWhitespace(AstStr::empty_at(pos)),
+			first: PureWhitespace(AstStr::new("")),
 			rest:  vec![],
 		};
 		let idx = ARENA.push(inner);
@@ -144,6 +144,8 @@ impl FormatKind {
 		// TODO: Should we be checking for multiple newlines?
 		let after_newline = match cur_str.repr() {
 			AstStrRepr::AstRange(range) => range.str_before(ctx.input()).ends_with('\n'),
+			// TODO: What should we do in this scenario?
+			AstStrRepr::String(_) => false,
 		};
 
 		let min_newlines = ctx.config().empty_line_spacing.min;

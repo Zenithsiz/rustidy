@@ -1,7 +1,7 @@
 //! Ast string
 
 // Imports
-use crate::{Arena, ArenaData, ArenaIdx, AstPos, AstRange};
+use crate::{Arena, ArenaData, ArenaIdx, AstRange};
 
 /// Ast string
 // TODO: Add an "empty" position for newly created ast nodes?
@@ -16,11 +16,6 @@ impl AstStr {
 		Self(ARENA.push(repr.into()))
 	}
 
-	/// Creates a new 0-sized ast string from a position
-	pub fn empty_at(pos: AstPos) -> Self {
-		Self::new(AstRange { start: pos, end: pos })
-	}
-
 	/// Returns the inner representation of this string
 	#[must_use]
 	pub fn repr(&self) -> AstStrRepr {
@@ -32,6 +27,7 @@ impl AstStr {
 	pub fn str<'input>(&self, input: &'input str) -> &'input str {
 		match self.repr() {
 			AstStrRepr::AstRange(range) => range.str(input),
+			AstStrRepr::String(s) => s,
 		}
 	}
 }
@@ -46,8 +42,18 @@ static ARENA: Arena<AstStr> = Arena::new();
 
 #[derive(Debug, Clone, Copy)]
 #[derive(derive_more::From)]
-#[derive(serde::Serialize, serde::Deserialize)]
+#[derive(serde::Serialize)]
 #[serde(untagged)]
 pub enum AstStrRepr {
 	AstRange(AstRange),
+	String(&'static str),
+}
+
+impl<'de> serde::Deserialize<'de> for AstStrRepr {
+	fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+	where
+		D: serde::Deserializer<'de>,
+	{
+		AstRange::deserialize(deserializer).map(Self::AstRange)
+	}
 }
