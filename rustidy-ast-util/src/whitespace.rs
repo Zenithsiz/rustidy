@@ -86,17 +86,19 @@ impl WhitespaceLike for Whitespace {
 	}
 }
 
-impl rustidy_format::FormatRef for Whitespace {
-	fn input_range(&self, ctx: &rustidy_format::Context) -> Option<AstRange> {
+impl Format for Whitespace {
+	fn input_range(&mut self, ctx: &mut rustidy_format::Context) -> Option<AstRange> {
 		ARENA.get(&self.0).input_range(ctx)
 	}
 
-	fn with_output(&self, ctx: &rustidy_format::Context, f: &mut impl FnMut(&AstStr, &rustidy_format::Context)) {
+	fn with_output(
+		&mut self,
+		ctx: &mut rustidy_format::Context,
+		f: &mut impl FnMut(&mut AstStr, &mut rustidy_format::Context),
+	) {
 		ARENA.get(&self.0).with_output(ctx, f);
 	}
-}
 
-impl Format for Whitespace {
 	fn format(&mut self, _ctx: &mut rustidy_format::Context) {
 		// Note: By default no formatting is done
 	}

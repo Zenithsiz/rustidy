@@ -139,9 +139,6 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 		darling::ast::Data::Struct(fields) => self::derive_struct(fields),
 	};
 
-	let impl_ref_generics = util::with_bounds(&attrs, |ty| parse_quote! { #ty: rustidy_format::FormatRef });
-	let (impl_ref_generics, ty_ref_generics, impl_ref_where_clause) = impl_ref_generics.split_for_impl();
-
 	let impl_generics = util::with_bounds(&attrs, |ty| parse_quote! { #ty: rustidy_format::Format });
 	let (impl_generics, ty_generics, impl_where_clause) = impl_generics.split_for_impl();
 
@@ -176,18 +173,15 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 
 	let output = quote! {
 		#[automatically_derived]
-		impl #impl_ref_generics rustidy_format::FormatRef for #item_ident #ty_ref_generics #impl_ref_where_clause {
-			fn input_range(&self, ctx: &rustidy_format::Context) -> Option<rustidy_util::AstRange> {
+		impl #impl_generics rustidy_format::Format for #item_ident #ty_generics #impl_where_clause {
+			fn input_range(&mut self, ctx: &mut rustidy_format::Context) -> Option<rustidy_util::AstRange> {
 				#input_range
 			}
 
-			fn with_output(&self, ctx: &rustidy_format::Context, f: &mut impl FnMut(&rustidy_util::AstStr, &rustidy_format::Context)) {
+			fn with_output(&mut self, ctx: &mut rustidy_format::Context, f: &mut impl FnMut(&mut rustidy_util::AstStr, &mut rustidy_format::Context)) {
 				#with_output
 			}
-		}
 
-		#[automatically_derived]
-		impl #impl_generics rustidy_format::Format for #item_ident #ty_generics #impl_where_clause {
 			#[coverage(on)]
 			fn format(&mut self, ctx: &mut rustidy_format::Context) {
 				#format;
@@ -209,9 +203,9 @@ fn derive_enum(variants: &[VariantAttrs]) -> Impls<syn::Expr, syn::Expr, syn::Ex
 		.map(|variant| {
 			let variant_ident = &variant.ident;
 			let input_range =
-				parse_quote! { Self::#variant_ident(ref value) => rustidy_format::FormatRef::input_range(value, ctx), };
+				parse_quote! { Self::#variant_ident(ref mut value) => rustidy_format::Format::input_range(value, ctx), };
 			let with_output =
-				parse_quote! { Self::#variant_ident(ref value) => rustidy_format::FormatRef::with_output(value, ctx, f), };
+				parse_quote! { Self::#variant_ident(ref mut value) => rustidy_format::Format::with_output(value, ctx, f), };
 
 			let format = self::derive_format(
 				parse_quote! { value },
@@ -288,7 +282,7 @@ fn derive_struct(fields: &darling::ast::Fields<FieldAttrs>) -> Impls<syn::Expr, 
 
 			// Otherwise, if this field had any length, we have no more fields
 			// to check and we can return
-			if !rustidy_format::FormatRef::input_range(&self.#field_ident, ctx).is_none_or(|range| range.is_empty()) {
+			if !rustidy_format::Format::input_range(&mut self.#field_ident, ctx).is_none_or(|range| range.is_empty()) {
 				return None;
 			}
 		}}
@@ -310,8 +304,8 @@ fn derive_struct(fields: &darling::ast::Fields<FieldAttrs>) -> Impls<syn::Expr, 
 fn derive_struct_field(field_idx: usize, field: &FieldAttrs) -> Impls<syn::Expr, syn::Expr, syn::Expr, ()> {
 	let field_ident = util::field_member_access(field_idx, field);
 
-	let input_range = parse_quote! { compute_range.add(&self.#field_ident, ctx) };
-	let with_output = parse_quote! { rustidy_format::FormatRef::with_output(&self.#field_ident, ctx, f) };
+	let input_range = parse_quote! { compute_range.add(&mut self.#field_ident, ctx) };
+	let with_output = parse_quote! { rustidy_format::Format::with_output(&mut self.#field_ident, ctx, f) };
 
 	let format = self::derive_format(
 		parse_quote! { &mut self.#field_ident },

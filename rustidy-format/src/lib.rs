@@ -50,19 +50,18 @@ pub trait WhitespaceVisitor {
 	fn visit<W: WhitespaceLike>(&mut self, whitespace: &mut W, context: &mut Context) -> Self::Output;
 }
 
-/// Formattable read-only utils
-// TODO: Better name?
-pub trait FormatRef {
+/// Formattable type
+pub trait Format {
 	/// Returns the input range of this type
-	fn input_range(&self, ctx: &Context) -> Option<AstRange>;
+	fn input_range(&mut self, ctx: &mut Context) -> Option<AstRange>;
 
 	/// Returns the input length of this type
-	fn input_len(&self, ctx: &Context) -> usize {
+	fn input_len(&mut self, ctx: &mut Context) -> usize {
 		self.input_range(ctx).map_or(0, |range| range.len())
 	}
 
 	/// Returns if the input string of this type is blank (consisting of just pure whitespace)
-	fn input_is_blank(&self, ctx: &Context) -> bool {
+	fn input_is_blank(&mut self, ctx: &mut Context) -> bool {
 		match self.input_range(ctx) {
 			Some(range) => range.str(ctx.input).bytes().all(|ch| ch.is_ascii_whitespace()),
 			None => true,
@@ -70,10 +69,10 @@ pub trait FormatRef {
 	}
 
 	/// Iterates over all output strings
-	fn with_output(&self, ctx: &Context, f: &mut impl FnMut(&AstStr, &Context));
+	fn with_output(&mut self, ctx: &mut Context, f: &mut impl FnMut(&mut AstStr, &mut Context));
 
 	/// Returns the output length of this type
-	fn output_len(&self, ctx: &Context) -> usize {
+	fn output_len(&mut self, ctx: &mut Context) -> usize {
 		let mut len = 0;
 		self.with_output(ctx, &mut |s, ctx| match ctx.replacements.get(s) {
 			Some(replacement) => len += replacement.len(),
@@ -81,10 +80,7 @@ pub trait FormatRef {
 		});
 		len
 	}
-}
 
-/// Formattable type
-pub trait Format: FormatRef {
 	/// Formats this type
 	fn format(&mut self, ctx: &mut Context);
 
@@ -149,47 +145,33 @@ macro whitespace_visitor(
 	Visitor { $( $( $capture, )* )? }
 }}
 
-impl<T: FormatRef> FormatRef for &'_ T {
-	fn input_range(&self, ctx: &Context) -> Option<AstRange> {
-		(**self).input_range(ctx)
-	}
-
-	fn with_output(&self, ctx: &Context, f: &mut impl FnMut(&AstStr, &Context)) {
-		(**self).with_output(ctx, f);
-	}
-}
-
-impl<T: FormatRef> FormatRef for &'_ mut T {
-	fn input_range(&self, ctx: &Context) -> Option<AstRange> {
-		(**self).input_range(ctx)
-	}
-
-	fn with_output(&self, ctx: &Context, f: &mut impl FnMut(&AstStr, &Context)) {
-		(**self).with_output(ctx, f);
-	}
-}
-
 impl<T: Format> Format for &'_ mut T {
+	fn input_range(&mut self, ctx: &mut Context) -> Option<AstRange> {
+		(**self).input_range(ctx)
+	}
+
+	fn with_output(&mut self, ctx: &mut Context, f: &mut impl FnMut(&mut AstStr, &mut Context)) {
+		(**self).with_output(ctx, f);
+	}
+
 	fn format(&mut self, ctx: &mut Context) {
 		(**self).format(ctx);
 	}
 
 	fn with_prefix_ws<V: WhitespaceVisitor>(&mut self, ctx: &mut Context, visitor: &mut V) -> Option<V::Output> {
 		(**self).with_prefix_ws(ctx, visitor)
-	}
-}
-
-impl<T: FormatRef> FormatRef for Box<T> {
-	fn input_range(&self, ctx: &Context) -> Option<AstRange> {
-		(**self).input_range(ctx)
-	}
-
-	fn with_output(&self, ctx: &Context, f: &mut impl FnMut(&AstStr, &Context)) {
-		(**self).with_output(ctx, f);
 	}
 }
 
 impl<T: Format> Format for Box<T> {
+	fn input_range(&mut self, ctx: &mut Context) -> Option<AstRange> {
+		(**self).input_range(ctx)
+	}
+
+	fn with_output(&mut self, ctx: &mut Context, f: &mut impl FnMut(&mut AstStr, &mut Context)) {
+		(**self).with_output(ctx, f);
+	}
+
 	fn format(&mut self, ctx: &mut Context) {
 		(**self).format(ctx);
 	}
@@ -199,19 +181,17 @@ impl<T: Format> Format for Box<T> {
 	}
 }
 
-impl<T: FormatRef> FormatRef for Option<T> {
-	fn input_range(&self, ctx: &Context) -> Option<AstRange> {
-		self.as_ref()?.input_range(ctx)
+impl<T: Format> Format for Option<T> {
+	fn input_range(&mut self, ctx: &mut Context) -> Option<AstRange> {
+		self.as_mut()?.input_range(ctx)
 	}
 
-	fn with_output(&self, ctx: &Context, f: &mut impl FnMut(&AstStr, &Context)) {
+	fn with_output(&mut self, ctx: &mut Context, f: &mut impl FnMut(&mut AstStr, &mut Context)) {
 		if let Some(value) = self {
 			value.with_output(ctx, f);
 		}
 	}
-}
 
-impl<T: Format> Format for Option<T> {
 	fn format(&mut self, ctx: &mut Context) {
 		if let Some(value) = self {
 			value.format(ctx);
@@ -226,21 +206,19 @@ impl<T: Format> Format for Option<T> {
 	}
 }
 
-impl<T: FormatRef> FormatRef for Vec<T> {
-	fn input_range(&self, ctx: &Context) -> Option<AstRange> {
+impl<T: Format> Format for Vec<T> {
+	fn input_range(&mut self, ctx: &mut Context) -> Option<AstRange> {
 		let mut compute_range = ComputeRange::default();
 		compute_range.extend(self, ctx);
 		compute_range.finish()
 	}
 
-	fn with_output(&self, ctx: &Context, f: &mut impl FnMut(&AstStr, &Context)) {
+	fn with_output(&mut self, ctx: &mut Context, f: &mut impl FnMut(&mut AstStr, &mut Context)) {
 		for value in self {
 			value.with_output(ctx, f);
 		}
 	}
-}
 
-impl<T: Format> Format for Vec<T> {
 	fn format(&mut self, ctx: &mut Context) {
 		for value in self {
 			value.format(ctx);
@@ -255,17 +233,15 @@ impl<T: Format> Format for Vec<T> {
 	}
 }
 
-impl FormatRef for ! {
-	fn input_range(&self, _ctx: &Context) -> Option<AstRange> {
-		*self
-	}
-
-	fn with_output(&self, _ctx: &Context, _f: &mut impl FnMut(&AstStr, &Context)) {
-		*self
-	}
-}
-
 impl Format for ! {
+	fn input_range(&mut self, _ctx: &mut Context) -> Option<AstRange> {
+		*self
+	}
+
+	fn with_output(&mut self, _ctx: &mut Context, _f: &mut impl FnMut(&mut AstStr, &mut Context)) {
+		*self
+	}
+
 	fn format(&mut self, _ctx: &mut Context) {
 		*self
 	}
@@ -275,15 +251,13 @@ impl Format for ! {
 	}
 }
 
-impl<T> FormatRef for PhantomData<T> {
-	fn input_range(&self, _ctx: &Context) -> Option<AstRange> {
+impl<T> Format for PhantomData<T> {
+	fn input_range(&mut self, _ctx: &mut Context) -> Option<AstRange> {
 		None
 	}
 
-	fn with_output(&self, _ctx: &Context, _f: &mut impl FnMut(&AstStr, &Context)) {}
-}
+	fn with_output(&mut self, _ctx: &mut Context, _f: &mut impl FnMut(&mut AstStr, &mut Context)) {}
 
-impl<T> Format for PhantomData<T> {
 	fn format(&mut self, _ctx: &mut Context) {}
 
 	fn with_prefix_ws<V: WhitespaceVisitor>(&mut self, _ctx: &mut Context, _visitor: &mut V) -> Option<V::Output> {
@@ -291,15 +265,13 @@ impl<T> Format for PhantomData<T> {
 	}
 }
 
-impl FormatRef for () {
-	fn input_range(&self, _ctx: &Context) -> Option<AstRange> {
+impl Format for () {
+	fn input_range(&mut self, _ctx: &mut Context) -> Option<AstRange> {
 		None
 	}
 
-	fn with_output(&self, _ctx: &Context, _f: &mut impl FnMut(&AstStr, &Context)) {}
-}
+	fn with_output(&mut self, _ctx: &mut Context, _f: &mut impl FnMut(&mut AstStr, &mut Context)) {}
 
-impl Format for () {
 	fn format(&mut self, _ctx: &mut Context) {}
 
 	fn with_prefix_ws<V: WhitespaceVisitor>(&mut self, _ctx: &mut Context, _visitor: &mut V) -> Option<V::Output> {
@@ -316,8 +288,8 @@ macro tuple_impl ($N:literal, $($T:ident),* $(,)?) {
 
 	#[automatically_derived]
 	#[expect(non_snake_case)]
-	impl< $($T: FormatRef,)* > FormatRef for ( $($T,)* ) {
-		fn input_range(&self, ctx: &Context) -> Option<AstRange> {
+	impl< $($T: Format,)* > Format for ( $($T,)* ) {
+		fn input_range(&mut self, ctx: &mut Context) -> Option<AstRange> {
 			let ( $($T,)* ) = self;
 
 			let mut compute_range = ComputeRange::default();
@@ -325,18 +297,14 @@ macro tuple_impl ($N:literal, $($T:ident),* $(,)?) {
 			compute_range.finish()
 		}
 
-		fn with_output(&self, ctx: &Context, f: &mut impl FnMut(&AstStr, &Context)) {
+		fn with_output(&mut self, ctx: &mut Context, f: &mut impl FnMut(&mut AstStr, &mut Context)) {
 			let ( $($T,)* ) = self;
 
 			$(
 				$T.with_output(ctx, f);
 			)*
 		}
-	}
 
-	#[automatically_derived]
-	#[expect(non_snake_case)]
-	impl< $($T: Format,)* > Format for ( $($T,)* ) {
 		fn format(&mut self, ctx: &mut Context) {
 			let ( $($T,)* ) = self;
 			${concat( Tuple, $N )} { $( $T, )* }.format(ctx)
@@ -353,17 +321,15 @@ tuple_impl! { 1, T0 }
 tuple_impl! { 2, T0, T1 }
 tuple_impl! { 3, T0, T1, T2 }
 
-impl FormatRef for AstStr {
-	fn input_range(&self, _ctx: &Context) -> Option<AstRange> {
+impl Format for AstStr {
+	fn input_range(&mut self, _ctx: &mut Context) -> Option<AstRange> {
 		Some(Self::range(self))
 	}
 
-	fn with_output(&self, ctx: &Context, f: &mut impl FnMut(&Self, &Context)) {
+	fn with_output(&mut self, ctx: &mut Context, f: &mut impl FnMut(&mut Self, &mut Context)) {
 		f(self, ctx);
 	}
-}
 
-impl Format for AstStr {
 	fn format(&mut self, _ctx: &mut Context) {}
 
 	fn with_prefix_ws<V: WhitespaceVisitor>(&mut self, _ctx: &mut Context, _visitor: &mut V) -> Option<V::Output> {
@@ -371,17 +337,15 @@ impl Format for AstStr {
 	}
 }
 
-impl<T: ArenaData<Data: FormatRef>> FormatRef for ArenaIdx<T> {
-	fn input_range(&self, ctx: &Context) -> Option<AstRange> {
+impl<T: ArenaData<Data: Format>> Format for ArenaIdx<T> {
+	fn input_range(&mut self, ctx: &mut Context) -> Option<AstRange> {
 		T::ARENA.get(self).input_range(ctx)
 	}
 
-	fn with_output(&self, ctx: &Context, f: &mut impl FnMut(&AstStr, &Context)) {
+	fn with_output(&mut self, ctx: &mut Context, f: &mut impl FnMut(&mut AstStr, &mut Context)) {
 		T::ARENA.get(self).with_output(ctx, f);
 	}
-}
 
-impl<T: ArenaData<Data: Format>> Format for ArenaIdx<T> {
 	fn format(&mut self, ctx: &mut Context) {
 		T::ARENA.get(self).format(ctx);
 	}
@@ -551,15 +515,15 @@ impl ComputeRange {
 	}
 
 	/// Adds the next item to this
-	pub fn add<T: FormatRef>(&mut self, item: T, ctx: &Context) {
+	pub fn add<T: Format>(&mut self, mut item: T, ctx: &mut Context) {
 		let Some(range) = item.input_range(ctx) else { return };
 		self.add_range(range);
 	}
 
 	/// Adds several items to this
-	pub fn extend<I>(&mut self, items: I, ctx: &Context)
+	pub fn extend<I>(&mut self, items: I, ctx: &mut Context)
 	where
-		I: IntoIterator<Item: FormatRef>,
+		I: IntoIterator<Item: Format>,
 	{
 		for item in items {
 			self.add(item, ctx);

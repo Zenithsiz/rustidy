@@ -4,7 +4,7 @@
 use {
 	crate::ast::{path::SimplePath, token, util::Braced, whitespace::Whitespace},
 	rustidy_ast_util::{Identifier, PunctuatedTrailing},
-	rustidy_format::{Format, FormatRef},
+	rustidy_format::Format,
 	rustidy_parse::Parse,
 	rustidy_print::Print,
 };
