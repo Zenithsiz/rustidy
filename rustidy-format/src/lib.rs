@@ -27,7 +27,7 @@ pub use {
 use {
 	crate as rustidy_format,
 	core::marker::PhantomData,
-	rustidy_util::{ArenaData, ArenaIdx, AstPos, AstRange, AstStr},
+	rustidy_util::{ArenaData, ArenaIdx, AstPos, AstRange, AstStr, ast_str::AstStrRepr},
 };
 
 /// Whitespace-like for formatting
@@ -79,7 +79,9 @@ pub trait Format {
 		let mut len = 0;
 		self.with_output(ctx, &mut |s, ctx| match ctx.replacements.get(s) {
 			Some(replacement) => len += replacement.len(),
-			None => len += s.range().len(),
+			None => match s.repr() {
+				AstStrRepr::AstRange(range) => len += range.len(),
+			},
 		});
 		len
 	}
@@ -362,7 +364,9 @@ tuple_impl! { 3, T0, T1, T2 }
 
 impl Format for AstStr {
 	fn input_range(&mut self, _ctx: &mut Context) -> Option<AstRange> {
-		Some(Self::range(self))
+		match self.repr() {
+			AstStrRepr::AstRange(range) => Some(range),
+		}
 	}
 
 	fn with_output(&mut self, ctx: &mut Context, f: &mut impl FnMut(&mut Self, &mut Context)) {
@@ -423,7 +427,7 @@ impl<'a, 'input> Context<'a, 'input> {
 	/// Returns the string of a string
 	#[must_use]
 	pub fn str(&mut self, s: &AstStr) -> &'input str {
-		s.range().str(self.input)
+		s.str(self.input)
 	}
 
 	/// Returns the config
@@ -447,8 +451,7 @@ impl<'a, 'input> Context<'a, 'input> {
 
 	/// Replaces a string
 	pub fn replace(&mut self, s: &AstStr, replacement: impl Into<Replacement>) {
-		self.replacements
-			.add(self.config, s, s.range().str(self.input), replacement);
+		self.replacements.add(self.config, s, s.str(self.input), replacement);
 	}
 
 	/// Runs `f` with a further indentation level

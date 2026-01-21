@@ -344,7 +344,7 @@ impl<'input> Parser<'input> {
 	/// Returns the string of an range
 	#[must_use]
 	pub fn str(&mut self, s: &AstStr) -> &'input str {
-		s.range().str(self.input)
+		s.str(self.input)
 	}
 
 	/// Returns if the parser is finished

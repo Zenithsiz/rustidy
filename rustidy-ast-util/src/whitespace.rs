@@ -7,7 +7,7 @@ use {
 	rustidy_format::{Format, Replacement, WhitespaceLike},
 	rustidy_parse::{Parse, Parser},
 	rustidy_print::Print,
-	rustidy_util::{Arena, ArenaData, ArenaIdx, AstPos, AstRange, AstStr},
+	rustidy_util::{Arena, ArenaData, ArenaIdx, AstPos, AstRange, AstStr, ast_str::AstStrRepr},
 };
 
 /// Whitespace
@@ -142,7 +142,9 @@ impl FormatKind {
 	/// Returns the indentation string, with a newline *before*
 	fn indent_str_nl(ctx: &mut rustidy_format::Context, cur_str: &AstStr) -> Replacement {
 		// TODO: Should we be checking for multiple newlines?
-		let after_newline = cur_str.range().str_before(ctx.input()).ends_with('\n');
+		let after_newline = match cur_str.repr() {
+			AstStrRepr::AstRange(range) => range.str_before(ctx.input()).ends_with('\n'),
+		};
 
 		let min_newlines = ctx.config().empty_line_spacing.min;
 		let max_newlines = ctx.config().empty_line_spacing.max;

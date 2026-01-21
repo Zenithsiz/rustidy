@@ -82,7 +82,7 @@ impl Print for AstStr {
 	fn print(&self, f: &mut PrintFmt) {
 		match f.replacements.get(self) {
 			Some(replacement) => replacement.write(f.config, &mut f.output),
-			None => f.output.push_str(self.range().str(f.input)),
+			None => f.output.push_str(self.str(f.input)),
 		}
 	}
 }
