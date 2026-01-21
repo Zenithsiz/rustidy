@@ -4,6 +4,7 @@
 use crate::{Arena, ArenaData, ArenaIdx, AstPos, AstRange};
 
 /// Ast string
+// TODO: Add an "empty" position for newly created ast nodes?
 #[derive(PartialEq, Eq, Hash, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[must_use = "Ast output must not be discarded"]

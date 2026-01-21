@@ -446,6 +446,12 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c3160422bbd54dd5ecfdca71e5fd59b7b8fe2b1697ab2baf64f6d05dcc66d298"
 
 [[package]]
+name = "replace_with"
+version = "0.1.8"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "51743d3e274e2b18df81c4dc6caf8a5b8e15dbe799e0dca05c7617380094e884"
+
+[[package]]
 name = "rustidy"
 version = "0.1.10"
 dependencies = [
@@ -457,6 +463,7 @@ dependencies = [
  "extend",
  "itertools",
  "ref-cast",
+ "replace_with",
  "rustidy-ast-literal",
  "rustidy-ast-tokens",
  "rustidy-ast-util",

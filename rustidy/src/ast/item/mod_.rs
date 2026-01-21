@@ -2,7 +2,7 @@
 
 // Imports
 use {
-	super::Item,
+	super::Items,
 	crate::ast::{token, util::Braced, with_attrs::WithInnerAttributes},
 	rustidy_ast_util::Identifier,
 	rustidy_format::Format,
@@ -37,12 +37,5 @@ pub enum ModuleInner {
 	None(token::Semi),
 	#[format(indent)]
 	#[format(and_with = Braced::format_indent_if_non_blank)]
-	Def(Braced<WithInnerAttributes<ModuleItems>>),
+	Def(Braced<WithInnerAttributes<Items>>),
 }
-
-#[derive(PartialEq, Eq, Debug)]
-#[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
-pub struct ModuleItems(
-	#[format(and_with = rustidy_format::format_vec_each_with_all(Format::prefix_ws_set_cur_indent))] pub Vec<Item>,
-);

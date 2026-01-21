@@ -39,18 +39,57 @@ pub use self::{
 // Imports
 use {
 	super::{
-		attr::{DelimTokenTree, DelimTokenTreeInner},
+		attr::{DelimTokenTree, DelimTokenTreeInner, OuterAttrOrDocComment},
 		token,
 		util::{Braced, Parenthesized},
 		vis::Visibility,
 		with_attrs::{self, WithOuterAttributes},
 	},
+	core::mem,
 	rustidy_ast_util::{Identifier, PunctuatedTrailing, punct},
 	rustidy_format::Format,
 	rustidy_parse::Parse,
 	rustidy_print::Print,
 	rustidy_util::{Arena, ArenaData, ArenaIdx},
 };
+
+#[derive(PartialEq, Eq, Debug)]
+#[derive(serde::Serialize, serde::Deserialize)]
+#[derive(Parse, Format, Print)]
+#[format(before_with = Self::merge_use)]
+pub struct Items(
+	#[format(and_with = rustidy_format::format_vec_each_with_all(Format::prefix_ws_set_cur_indent))] pub Vec<Item>,
+);
+
+impl Items {
+	pub fn merge_use(&mut self, ctx: &mut rustidy_format::Context) {
+		#[expect(clippy::unused_peekable, reason = "We use `Peekable::next_if_map`")]
+		let mut items = mem::take(&mut self.0).into_iter().peekable();
+		while let Some(mut item) = items.next() {
+			item = match item.try_into_use_decl() {
+				Ok((attrs, vis, mut first_use_decl)) => {
+					let mut use_decls = vec![];
+					while let Some(use_decl) = items.next_if_map(|item| item.try_into_just_use_decl(ctx, vis.as_ref()))
+					{
+						use_decls.push(use_decl);
+					}
+
+					first_use_decl.merge(ctx, use_decls);
+					Item(ITEM_ARENA.push(WithOuterAttributes {
+						attrs,
+						inner: ItemInner::Vis(VisItem {
+							vis,
+							inner: VisItemInner::Use(first_use_decl),
+						}),
+					}))
+				},
+				Err(item) => item,
+			};
+
+			self.0.push(item);
+		}
+	}
+}
 
 /// `Item`
 #[derive(PartialEq, Eq, Debug)]
@@ -61,6 +100,48 @@ pub struct Item(
 	#[format(and_with = rustidy_format::arena(with_attrs::format_outer_value_non_empty(Format::prefix_ws_set_cur_indent)))]
 	pub ArenaIdx<Item>,
 );
+
+impl Item {
+	#[expect(clippy::result_large_err, reason = "TODO")]
+	fn try_into_use_decl(self) -> Result<(Vec<OuterAttrOrDocComment>, Option<Visibility>, UseDeclaration), Self> {
+		ITEM_ARENA
+			.try_take_map(self.0, |item| match item.inner {
+				ItemInner::Vis(VisItem {
+					vis,
+					inner: VisItemInner::Use(use_decl),
+				}) => Ok((item.attrs, vis, use_decl)),
+				_ => Err(item),
+			})
+			.map_err(Self)
+	}
+
+	// TODO: This needs to check for comments in the prefix whitespace.
+	#[expect(clippy::result_large_err, reason = "TODO")]
+	fn try_into_just_use_decl(
+		self,
+		ctx: &mut rustidy_format::Context,
+		expected_vis: Option<&Visibility>,
+	) -> Result<UseDeclaration, Self> {
+		ITEM_ARENA
+			.try_take_map(self.0, |mut item| {
+				if !item.prefix_ws_is_pure(ctx) {
+					return Err(item);
+				}
+				if !item.attrs.is_empty() {
+					return Err(item);
+				}
+
+				match item.inner {
+					ItemInner::Vis(VisItem {
+						vis,
+						inner: VisItemInner::Use(use_decl),
+					}) if vis.as_ref() == expected_vis => Ok(use_decl),
+					_ => Err(item),
+				}
+			})
+			.map_err(Self)
+	}
+}
 
 impl ArenaData for Item {
 	type Data = WithOuterAttributes<ItemInner>;

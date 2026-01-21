@@ -23,7 +23,8 @@
 	exact_size_is_empty,
 	coverage_attribute,
 	is_ascii_octdigit,
-	trim_prefix_suffix
+	trim_prefix_suffix,
+	if_let_guard
 )]
 
 // Modules

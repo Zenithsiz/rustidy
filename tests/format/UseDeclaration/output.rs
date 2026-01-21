@@ -1,12 +1,18 @@
 use a;
+//
 use {a};
+//
 use {a, b};
+//
 use a::b::{c, d};
+//
 use loooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong;
+//
 use a::{
 	loooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong,
 	short,
 };
+//
 use a::{
 	b::{c, d},
 	e,
@@ -17,5 +23,15 @@ use a::{
 	},
 	j,
 };
+//
 use {long_whitespace};
+//
 use {long_whitespace};
+//
+use {a, b};
+//
+use {a, b, c};
+//
+use {a};
+//
+use {*, {}, a, {b, c}, d};

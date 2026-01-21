@@ -17,7 +17,7 @@ pub mod with_attrs;
 
 // Imports
 use {
-	self::{attr::InnerAttrOrDocComment, item::Item, shebang::Shebang},
+	self::{attr::InnerAttrOrDocComment, item::Items, shebang::Shebang},
 	core::fmt::Debug,
 	rustidy_ast_util::{
 		Whitespace,
@@ -38,9 +38,8 @@ pub struct Crate {
 	pub shebang:               Option<Shebang>,
 	#[format(and_with = rustidy_format::format_vec_each_with_all(Format::prefix_ws_set_cur_indent))]
 	pub inner_attrs:           Vec<InnerAttrOrDocComment>,
-	#[format(and_with = rustidy_format::format_vec_each_with_all(Format::prefix_ws_set_cur_indent))]
-	pub items:                 Vec<Item>,
-	#[format(and_with = whitespace::set_indent(0, self.shebang.is_none() && self.inner_attrs.is_empty() && self.items.is_empty()))]
+	pub items:                 Items,
+	#[format(and_with = whitespace::set_indent(0, self.shebang.is_none() && self.inner_attrs.is_empty() && self.items.0.is_empty()))]
 	pub suffix_ws:             Whitespace,
 	#[format(and_with = Self::format_trailing_line_comment)]
 	pub trailing_line_comment: Option<TrailingLineComment>,
@@ -50,7 +49,7 @@ impl Crate {
 	fn format_first_inner_attr_or_item(&mut self, ctx: &mut rustidy_format::Context) {
 		if let Some(attr) = self.inner_attrs.first_mut() {
 			attr.prefix_ws_remove(ctx);
-		} else if let Some(item) = self.items.first_mut() {
+		} else if let Some(item) = self.items.0.first_mut() {
 			item.prefix_ws_remove(ctx);
 		}
 	}
