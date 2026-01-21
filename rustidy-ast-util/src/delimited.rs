@@ -16,6 +16,19 @@ pub struct Delimited<T, L, R> {
 }
 
 impl<T, L, R> Delimited<T, L, R> {
+	/// Creates a new delimited from it's inner value
+	pub fn from_value(value: T) -> Self
+	where
+		L: Default,
+		R: Default,
+	{
+		Self {
+			prefix: L::default(),
+			value,
+			suffix: R::default(),
+		}
+	}
+
 	/// Formats this delimited with a single space if non-blank, otherwise removes
 	pub fn format_single_if_non_blank(&mut self, ctx: &mut rustidy_format::Context)
 	where

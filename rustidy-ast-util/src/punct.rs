@@ -22,6 +22,27 @@ pub struct Punctuated<T, P> {
 type Rest<T, P> = Vec<(P, T)>;
 
 impl<T, P> Punctuated<T, P> {
+	/// Creates a punctuated from a single value
+	pub const fn single(value: T) -> Self {
+		Self {
+			first: value,
+			rest:  vec![],
+		}
+	}
+
+	/// Pushes a punctuation and value onto this punctuated
+	pub fn push(&mut self, punct: P, value: T) {
+		self.rest.push((punct, value));
+	}
+
+	/// Pushes a value onto this punctuated, with a default punctuated
+	pub fn push_value(&mut self, value: T)
+	where
+		P: Default,
+	{
+		self.push(P::default(), value);
+	}
+
 	/// Splits this punctuated at the first value
 	pub fn split_first_mut(
 		&mut self,
@@ -115,6 +136,27 @@ pub struct PunctuatedTrailing<T, P> {
 }
 
 impl<T, P> PunctuatedTrailing<T, P> {
+	/// Creates a punctuated trailing from a single value
+	pub const fn single(value: T) -> Self {
+		Self {
+			punctuated: Punctuated::single(value),
+			trailing:   None,
+		}
+	}
+
+	/// Pushes a value onto this punctuated
+	pub fn push(&mut self, punct: P, value: T) {
+		self.punctuated.push(punct, value);
+	}
+
+	/// Pushes a value onto this punctuated, with a default punctuated
+	pub fn push_value(&mut self, value: T)
+	where
+		P: Default,
+	{
+		self.push(P::default(), value);
+	}
+
 	/// Splits this punctuated at the last value
 	pub fn split_last_mut(&mut self) -> (SplitLastMut<'_, T, P>, &mut T, &mut Option<P>) {
 		let (iter, last) = self.punctuated.split_last_mut();

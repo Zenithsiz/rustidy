@@ -3,7 +3,7 @@
 // Imports
 use {
 	crate::ast::{path::SimplePath, token, util::Braced},
-	rustidy_ast_util::{Identifier, Punctuated, PunctuatedTrailing},
+	rustidy_ast_util::{Identifier, PunctuatedTrailing},
 	rustidy_format::Format,
 	rustidy_parse::Parse,
 	rustidy_print::Print,
@@ -34,43 +34,10 @@ impl UseDeclaration {
 		}
 
 		replace_with::replace_with_or_abort(&mut self.tree, |tree| {
-			let mut group_tree = match tree {
-				UseTree::Group(tree) => tree,
-				_ => UseTreeGroup {
-					prefix: None,
-					tree:   Braced {
-						prefix: token::BracesOpen::new(),
-						value:  Some(PunctuatedTrailing {
-							punctuated: Punctuated {
-								first: Box::new(tree),
-								rest:  vec![],
-							},
-							trailing:   None,
-						}),
-						suffix: token::BracesClose::new(),
-					},
-				},
-			};
-
-			// TODO: We should probably flatten group use declarations here
-			//       even if we do a flattening step later on to avoid duplicate work.
+			let mut group_tree = tree.into_group();
 			for use_decl in others {
-				match &mut group_tree.tree.value {
-					Some(inner) => {
-						let comma = token::Comma::new();
-						inner.punctuated.rest.push((comma, Box::new(use_decl.tree)));
-					},
-					None =>
-						group_tree.tree.value = Some(PunctuatedTrailing {
-							punctuated: Punctuated {
-								first: Box::new(use_decl.tree),
-								rest:  vec![],
-							},
-							trailing:   None,
-						}),
-				}
+				group_tree.push(use_decl.tree);
 			}
-
 			UseTree::Group(group_tree)
 		});
 	}
@@ -85,6 +52,21 @@ pub enum UseTree {
 	Glob(UseTreeGlob),
 	Group(UseTreeGroup),
 	Simple(UseTreeSimple),
+}
+
+impl UseTree {
+	/// Converts this tree into a group.
+	#[must_use]
+	pub fn into_group(self) -> UseTreeGroup {
+		match self {
+			Self::Group(tree) => tree,
+
+			_ => UseTreeGroup {
+				prefix: None,
+				tree:   Braced::from_value(Some(PunctuatedTrailing::single(Box::new(self)))),
+			},
+		}
+	}
 }
 
 #[derive(PartialEq, Eq, Debug)]
@@ -117,6 +99,16 @@ pub struct UseTreeGroup {
 }
 
 impl UseTreeGroup {
+	/// Pushes a tree into this group
+	pub fn push(&mut self, tree: UseTree) {
+		// TODO: We should probably flatten group use declarations here
+		//       even if we do a flattening step later on to avoid duplicate work.
+		match &mut self.tree.value {
+			Some(inner) => inner.push_value(Box::new(tree)),
+			None => self.tree.value = Some(PunctuatedTrailing::single(Box::new(tree))),
+		}
+	}
+
 	fn format_tree_compact(
 		tree: &mut Braced<Option<PunctuatedTrailing<Box<UseTree>, token::Comma>>>,
 		ctx: &mut rustidy_format::Context,
