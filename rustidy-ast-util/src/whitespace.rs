@@ -345,17 +345,34 @@ mod tests {
 
 		let mut print_fmt = PrintFmt::new(source, fmt_config, &replacements);
 		whitespace.print(&mut print_fmt);
-		let output = print_fmt.output();
+		let output = print_fmt.output().to_owned();
 
-		let source = source.replace(' ', "·").replace('\t', "⭾");
-		let expected = expected.replace(' ', "·").replace('\t', "⭾");
-		let output = output.replace(' ', "·").replace('\t', "⭾");
+		let source_fmt = source.replace(' ', "·").replace('\t', "⭾");
+		let expected_fmt = expected.replace(' ', "·").replace('\t', "⭾");
+		let output_fmt = output.replace(' ', "·").replace('\t', "⭾");
 
 		ensure!(
 			output == expected,
-			"Found wrong output.\nKind    : {kind:?}\nInput   : {source:?}\nExpected: {expected:?}\nFound   : \
-			 {output:?}"
+			"Found wrong output.\nKind    : {kind:?}\nInput   : {source_fmt:?}\nExpected: {expected_fmt:?}\nFound   : \
+			 {output_fmt:?}"
 		);
+
+		{
+			let mut fmt_ctx = rustidy_format::Context::new(source, &mut replacements, fmt_config);
+			fmt_ctx.set_indent_depth(config.indent_depth);
+			whitespace.format(&mut fmt_ctx, kind);
+
+			let mut print_fmt = PrintFmt::new(source, fmt_config, &replacements);
+			whitespace.print(&mut print_fmt);
+
+			let output_fmt = print_fmt.output().replace(' ', "·").replace('\t', "⭾");
+
+			app_error::ensure!(
+				output == print_fmt.output(),
+				"Formatting twice didn't preserve the formatting.\nKind    : {kind:?}\nInput   : \
+				 {source_fmt:?}\nFirst   : {expected_fmt:?}\nSecond  : {output_fmt:?}",
+			);
+		}
 
 		Ok(())
 	}
