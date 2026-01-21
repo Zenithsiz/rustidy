@@ -55,6 +55,39 @@ impl<T: ?Sized + ArenaData> Arena<T> {
 		}
 	}
 
+	/// Takes a value in the arena if `f` returns `Ok`.
+	pub fn try_take_map<F, R>(&self, idx: ArenaIdx<T>, f: F) -> Result<R, ArenaIdx<T>>
+	where
+		F: FnOnce(T::Data) -> Result<R, T::Data>,
+	{
+		let inner_idx = idx.inner as usize;
+		let value = self
+			.data
+			.lock()
+			.expect("Poisoned")
+			.get_mut(inner_idx)
+			.expect("Invalid arena index")
+			.borrow()
+			.expect("Attempted to borrow arena value twice");
+
+		let (output, slot) = match f(value) {
+			Ok(output) => {
+				mem::forget(idx);
+				(Ok(output), ArenaSlot::Empty)
+			},
+			Err(value) => (Err(idx), ArenaSlot::Alive(value)),
+		};
+
+		*self
+			.data
+			.lock()
+			.expect("Poisoned")
+			.get_mut(inner_idx)
+			.expect("Invalid arena index") = slot;
+
+		output
+	}
+
 	/// Returns the number of values in this arena
 	#[must_use]
 	pub fn len(&self) -> usize {
