@@ -7,7 +7,7 @@ use {
 	rustidy_format::{Format, WhitespaceLike},
 	rustidy_parse::{Parse, Parser},
 	rustidy_print::Print,
-	rustidy_util::{Arena, ArenaData, ArenaIdx, AstRange, AstStr, Replacement, ast_str::AstStrRepr},
+	rustidy_util::{Arena, ArenaData, ArenaIdx, AstStr, Replacement, ast_str::AstStrRepr},
 };
 
 /// Whitespace
@@ -91,10 +91,6 @@ impl WhitespaceLike for Whitespace {
 }
 
 impl Format for Whitespace {
-	fn input_range(&mut self, ctx: &mut rustidy_format::Context) -> Option<AstRange> {
-		ARENA.get(&self.0).input_range(ctx)
-	}
-
 	fn with_output(
 		&mut self,
 		ctx: &mut rustidy_format::Context,
