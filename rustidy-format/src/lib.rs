@@ -10,20 +10,14 @@
 	iter_advance_by
 )]
 
-// Modules
-pub mod replacement;
-
 // Exports
-pub use {
-	self::replacement::{Replacement, Replacements},
-	rustidy_macros::Format,
-};
+pub use rustidy_macros::Format;
 
 // Imports
 use {
 	crate as rustidy_format,
 	core::marker::PhantomData,
-	rustidy_util::{ArenaData, ArenaIdx, AstRange, AstStr, Config, ast_str::AstStrRepr},
+	rustidy_util::{ArenaData, ArenaIdx, AstRange, AstStr, Config, Replacement, Replacements, ast_str::AstStrRepr},
 };
 
 /// Whitespace-like for formatting

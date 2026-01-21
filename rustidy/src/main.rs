@@ -21,9 +21,10 @@ use {
 	self::args::Args,
 	app_error::{AppError, Context},
 	clap::Parser as _,
-	rustidy_format::{Format, Replacements},
+	rustidy_format::Format,
 	rustidy_parse::Parser,
 	rustidy_print::{Print, PrintFmt},
+	rustidy_util::Replacements,
 	std::{fs, process::ExitCode},
 	zutil_logger::Logger,
 };

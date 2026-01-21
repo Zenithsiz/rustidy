@@ -23,9 +23,10 @@ use {
 		Whitespace,
 		whitespace::{self, TrailingLineComment},
 	},
-	rustidy_format::{Format, Replacement},
+	rustidy_format::Format,
 	rustidy_parse::Parse,
 	rustidy_print::Print,
+	rustidy_util::Replacement,
 };
 
 /// `Crate`

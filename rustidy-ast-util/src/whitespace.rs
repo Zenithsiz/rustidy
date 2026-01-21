@@ -4,10 +4,10 @@
 use {
 	crate::Punctuated,
 	itertools::Itertools,
-	rustidy_format::{Format, Replacement, WhitespaceLike},
+	rustidy_format::{Format, WhitespaceLike},
 	rustidy_parse::{Parse, Parser},
 	rustidy_print::Print,
-	rustidy_util::{Arena, ArenaData, ArenaIdx, AstRange, AstStr, ast_str::AstStrRepr},
+	rustidy_util::{Arena, ArenaData, ArenaIdx, AstRange, AstStr, Replacement, ast_str::AstStrRepr},
 };
 
 /// Whitespace
@@ -314,9 +314,9 @@ mod tests {
 	use {
 		super::*,
 		app_error::{AppError, Context, ensure},
-		rustidy_format::Replacements,
 		rustidy_parse::ParseError,
 		rustidy_print::{Print, PrintFmt},
+		rustidy_util::Replacements,
 	};
 
 	#[derive(Clone, Debug)]

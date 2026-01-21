@@ -2,10 +2,10 @@
 
 // Imports
 use {
-	rustidy_format::{Format, Replacements},
+	rustidy_format::Format,
 	rustidy_parse::Parser,
 	rustidy_print::{Print, PrintFmt},
-	rustidy_util::AstPos,
+	rustidy_util::{AstPos, Replacements},
 	std::{env, fs, path::Path},
 };
 
