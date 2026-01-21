@@ -17,7 +17,7 @@ pub use rustidy_macros::Format;
 use {
 	crate as rustidy_format,
 	core::marker::PhantomData,
-	rustidy_util::{ArenaData, ArenaIdx, AstStr, Config, ast_str::AstStrRepr},
+	rustidy_util::{ArenaData, ArenaIdx, AstStr, Config},
 	std::borrow::Cow,
 };
 
@@ -52,22 +52,14 @@ pub trait Format {
 	/// Returns the length of this type
 	fn len(&mut self, ctx: &mut Context) -> usize {
 		let mut len = 0;
-		self.with_strings(ctx, &mut |s, _ctx| match *s.repr() {
-			AstStrRepr::AstRange(range) => len += range.len(),
-			AstStrRepr::String(s) => len += s.len(),
-			AstStrRepr::Replacement(ref replacement) => len += replacement.len(),
-		});
+		self.with_strings(ctx, &mut |s, _ctx| len += AstStr::len(s));
 		len
 	}
 
 	/// Returns if this type is blank
 	fn is_blank(&mut self, ctx: &mut Context) -> bool {
 		let mut is_blank = true;
-		self.with_strings(ctx, &mut |s, ctx| match *s.repr() {
-			AstStrRepr::AstRange(range) => is_blank &= rustidy_util::is_str_blank(range.str(ctx.input)),
-			AstStrRepr::String(s) => is_blank &= rustidy_util::is_str_blank(s),
-			AstStrRepr::Replacement(ref replacement) => is_blank &= replacement.is_blank(ctx.config),
-		});
+		self.with_strings(ctx, &mut |s, ctx| is_blank &= AstStr::is_blank(s, ctx.input));
 
 		is_blank
 	}

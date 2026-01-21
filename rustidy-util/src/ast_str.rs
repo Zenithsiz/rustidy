@@ -2,7 +2,7 @@
 
 // Imports
 use {
-	crate::{Arena, ArenaData, ArenaIdx, ArenaRef, AstRange, Config, Replacement},
+	crate::{Arena, ArenaData, ArenaIdx, ArenaRef, AstRange, Config},
 	std::borrow::Cow,
 };
 
@@ -25,15 +25,64 @@ impl AstStr {
 		ARENA.get(&self.0)
 	}
 
+	/// Returns the length of this string
+	#[must_use]
+	pub fn len(&self) -> usize {
+		match *self.repr() {
+			AstStrRepr::AstRange(range) => range.len(),
+			AstStrRepr::String(s) => s.len(),
+			AstStrRepr::Indentation { newlines, depth } => newlines + depth,
+			AstStrRepr::Dynamic(ref s) => s.len(),
+		}
+	}
+
+	/// Returns if this string is empty
+	#[must_use]
+	pub fn is_empty(&self) -> bool {
+		self.len() == 0
+	}
+
+	/// Returns if this string is blank
+	#[must_use]
+	pub fn is_blank(&self, input: &str) -> bool {
+		match *self.repr() {
+			AstStrRepr::AstRange(range) => crate::is_str_blank(range.str(input)),
+			AstStrRepr::String(s) => crate::is_str_blank(s),
+			AstStrRepr::Indentation { .. } => true,
+			AstStrRepr::Dynamic(ref s) => crate::is_str_blank(s),
+		}
+	}
+
+	/// Writes this string
+	pub fn write(&self, config: &Config, input: &str, output: &mut String) {
+		match *self.repr() {
+			AstStrRepr::AstRange(range) => output.push_str(range.str(input)),
+			AstStrRepr::String(s) => output.push_str(s),
+			AstStrRepr::Indentation { newlines, depth } => {
+				for _ in 0..newlines {
+					output.push('\n');
+				}
+				for _ in 0..depth {
+					output.push_str(&config.indent);
+				}
+			},
+			AstStrRepr::Dynamic(ref s) => output.push_str(s),
+		}
+	}
+
 	/// Returns the string of this string
 	#[must_use]
 	pub fn str<'input>(&self, input: &'input str, config: &Config) -> Cow<'input, str> {
-		match *self.repr() {
+		let repr = self.repr();
+		match *repr {
 			AstStrRepr::AstRange(range) => range.str(input).into(),
 			AstStrRepr::String(s) => s.into(),
-			AstStrRepr::Replacement(ref replacement) => {
+			AstStrRepr::Dynamic(ref s) => s.clone().into(),
+
+			AstStrRepr::Indentation { .. } => {
+				drop(repr);
 				let mut output = String::new();
-				replacement.write(config, &mut output);
+				self.write(config, input, &mut output);
 				output.into()
 			},
 		}
@@ -53,9 +102,24 @@ static ARENA: Arena<AstStr> = Arena::new();
 #[derive(serde::Serialize)]
 #[serde(untagged)]
 pub enum AstStrRepr {
+	/// Input range
+	#[from]
 	AstRange(AstRange),
+
+	/// Static string
+	#[from]
 	String(&'static str),
-	Replacement(Replacement),
+
+	/// Indentation
+	#[from]
+	Indentation {
+		newlines: usize,
+		depth:    usize,
+	},
+
+	// Dynamic string
+	// Note: Not `#[from]` to make it clear this is expensive
+	Dynamic(String),
 }
 
 impl<'de> serde::Deserialize<'de> for AstStrRepr {

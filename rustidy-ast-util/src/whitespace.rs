@@ -7,7 +7,7 @@ use {
 	rustidy_format::{Format, WhitespaceLike},
 	rustidy_parse::{Parse, Parser},
 	rustidy_print::Print,
-	rustidy_util::{Arena, ArenaData, ArenaIdx, AstStr, Replacement},
+	rustidy_util::{Arena, ArenaData, ArenaIdx, AstStr, ast_str::AstStrRepr},
 };
 
 /// Whitespace
@@ -128,8 +128,8 @@ enum FormatKind {
 
 impl FormatKind {
 	/// Returns the indentation string, without a newline
-	const fn indent_str(ctx: &rustidy_format::Context) -> Replacement {
-		Replacement::Indentation {
+	const fn indent_str(ctx: &rustidy_format::Context) -> AstStrRepr {
+		AstStrRepr::Indentation {
 			newlines: 0,
 			depth:    ctx.indent(),
 		}
@@ -137,7 +137,7 @@ impl FormatKind {
 
 	/// Returns the indentation string, with a newline *before*
 	// TODO: Should we be checking for multiple newlines?
-	fn indent_str_nl(ctx: &mut rustidy_format::Context, cur_str: &AstStr, after_newline: bool) -> Replacement {
+	fn indent_str_nl(ctx: &mut rustidy_format::Context, cur_str: &AstStr, after_newline: bool) -> AstStrRepr {
 		let min_newlines = ctx.config().empty_line_spacing.min;
 		let max_newlines = ctx.config().empty_line_spacing.max;
 		let (min_newlines, max_newlines) = match after_newline {
@@ -147,14 +147,14 @@ impl FormatKind {
 		let newlines = ctx.str(cur_str).chars().filter(|&ch| ch == '\n').count();
 		let newlines = newlines.clamp(min_newlines, max_newlines);
 
-		Replacement::Indentation {
+		AstStrRepr::Indentation {
 			newlines,
 			depth: ctx.indent(),
 		}
 	}
 
 	/// Returns the prefix string
-	fn prefix_str(self, ctx: &mut rustidy_format::Context, cur_str: &AstStr, is_last: bool) -> Replacement {
+	fn prefix_str(self, ctx: &mut rustidy_format::Context, cur_str: &AstStr, is_last: bool) -> AstStrRepr {
 		match self {
 			Self::Remove => "".into(),
 			Self::Single => " ".into(),
@@ -171,7 +171,7 @@ impl FormatKind {
 	}
 
 	/// Returns the string after a newline
-	fn after_newline_str(self, ctx: &mut rustidy_format::Context, cur_str: &AstStr, is_last: bool) -> Replacement {
+	fn after_newline_str(self, ctx: &mut rustidy_format::Context, cur_str: &AstStr, is_last: bool) -> AstStrRepr {
 		match self {
 			Self::Remove | Self::Single => "".into(),
 			Self::Indent { offset, .. } => match is_last {
@@ -182,7 +182,7 @@ impl FormatKind {
 	}
 
 	/// Returns the normal string
-	fn normal_str(self, ctx: &mut rustidy_format::Context, cur_str: &AstStr, is_last: bool) -> Replacement {
+	fn normal_str(self, ctx: &mut rustidy_format::Context, cur_str: &AstStr, is_last: bool) -> AstStrRepr {
 		match self {
 			Self::Remove => "".into(),
 			Self::Single => " ".into(),

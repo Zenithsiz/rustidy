@@ -9,7 +9,7 @@ pub use rustidy_macros::Print;
 // Imports
 use {
 	core::marker::PhantomData,
-	rustidy_util::{ArenaData, ArenaIdx, AstStr, Config, ast_str::AstStrRepr},
+	rustidy_util::{ArenaData, ArenaIdx, AstStr, Config},
 };
 
 /// Printable types
@@ -79,11 +79,7 @@ tuple_impl! { 3, T0, T1, T2 }
 
 impl Print for AstStr {
 	fn print(&self, f: &mut PrintFmt) {
-		match *self.repr() {
-			AstStrRepr::AstRange(range) => f.output.push_str(range.str(f.input)),
-			AstStrRepr::String(s) => f.output.push_str(s),
-			AstStrRepr::Replacement(ref replacement) => replacement.write(f.config, &mut f.output),
-		}
+		self.write(f.config, f.input, &mut f.output);
 	}
 }
 
