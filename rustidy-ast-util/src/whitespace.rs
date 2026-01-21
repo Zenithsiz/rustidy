@@ -70,6 +70,10 @@ impl ArenaData for Whitespace {
 static ARENA: Arena<Whitespace> = Arena::new();
 
 impl WhitespaceLike for Whitespace {
+	fn is_pure(&mut self, _ctx: &mut rustidy_format::Context) -> bool {
+		ARENA.get(&self.0).rest.is_empty()
+	}
+
 	fn remove(&mut self, ctx: &mut rustidy_format::Context) {
 		Self::format(self, ctx, FormatKind::Remove);
 	}

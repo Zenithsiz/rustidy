@@ -33,6 +33,9 @@ use {
 /// Whitespace-like for formatting
 // TODO: Once we move into our own crate, just rename this to `Whitespace`
 pub trait WhitespaceLike: Format {
+	/// Returns if this whitespace is pure
+	fn is_pure(&mut self, ctx: &mut Context) -> bool;
+
 	/// Removes this whitespace
 	fn remove(&mut self, ctx: &mut Context);
 
@@ -87,7 +90,7 @@ pub trait Format {
 		self.with_prefix_ws(ctx, &mut self::whitespace_visitor! {
 			lifetimes<'a>
 			capture(len: &'a mut usize = &mut len)
-			|ws, ctx| => **len -= ws.output_len(ctx)
+			|ws, ctx| -> () => **len -= ws.output_len(ctx)
 		});
 
 		len
@@ -101,21 +104,36 @@ pub trait Format {
 	/// Returns if successfully used.
 	fn with_prefix_ws<V: WhitespaceVisitor>(&mut self, ctx: &mut Context, visitor: &mut V) -> Option<V::Output>;
 
+	/// Returns if the prefix whitespace is pure
+	fn prefix_ws_is_pure(&mut self, ctx: &mut Context) -> bool {
+		self.with_prefix_ws(
+			ctx,
+			&mut self::whitespace_visitor! { |ws, ctx| -> bool => ws.is_pure(ctx) },
+		)
+		.unwrap_or(false)
+	}
+
 	/// Remove the prefix whitespace, if any
 	fn prefix_ws_remove(&mut self, ctx: &mut Context) {
-		self.with_prefix_ws(ctx, &mut self::whitespace_visitor! { |ws, ctx| => ws.remove(ctx) });
+		self.with_prefix_ws(
+			ctx,
+			&mut self::whitespace_visitor! { |ws, ctx| -> () => ws.remove(ctx) },
+		);
 	}
 
 	/// Sets the prefix whitespace to a single space
 	fn prefix_ws_set_single(&mut self, ctx: &mut Context) {
-		self.with_prefix_ws(ctx, &mut self::whitespace_visitor! { |ws, ctx| => ws.set_single(ctx) });
+		self.with_prefix_ws(
+			ctx,
+			&mut self::whitespace_visitor! { |ws, ctx| -> () => ws.set_single(ctx) },
+		);
 	}
 
 	/// Sets the prefix whitespace to an indentation
 	fn prefix_ws_set_indent(&mut self, ctx: &mut Context, offset: isize, remove_if_empty: bool) {
 		self.with_prefix_ws(ctx, &mut self::whitespace_visitor! {
 			capture(offset: isize, remove_if_empty: bool)
-			|ws, ctx| => ws.set_indent(ctx, *offset, *remove_if_empty)
+			|ws, ctx| -> () => ws.set_indent(ctx, *offset, *remove_if_empty)
 		});
 	}
 
@@ -140,7 +158,7 @@ macro whitespace_visitor(
 			$(,)?
 		)
 	)?
-	| $whitespace:ident, $context:ident | => $output:expr
+	| $whitespace:ident, $context:ident | -> $OutputTy:ty => $output:expr
 ) {{
 	struct Visitor
 	$(<
@@ -155,7 +173,7 @@ macro whitespace_visitor(
 	}
 
 	impl$(< $($generic_lifetime,)* >)? WhitespaceVisitor for Visitor $(< $($generic_lifetime,)* >)? {
-		type Output = ();
+		type Output = $OutputTy;
 
 		fn visit<W: WhitespaceLike>(&mut self, $whitespace: &mut W, $context: &mut Context) -> Self::Output {
 			$( let Self { $( $capture, )* } = self; )?
