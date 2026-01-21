@@ -58,7 +58,7 @@ impl Crate {
 	fn format_trailing_line_comment(trailing: &mut Option<TrailingLineComment>, ctx: &mut rustidy_format::Context) {
 		let Some(trailing) = trailing else { return };
 
-		let mut s = ctx.str(&trailing.0).to_owned();
+		let mut s = ctx.str(&trailing.0).into_owned();
 
 		// Add the newline at the end of the trailing comment if it didn't have one already
 		if !s.ends_with('\n') {

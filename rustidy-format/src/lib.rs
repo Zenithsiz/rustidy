@@ -18,6 +18,7 @@ use {
 	crate as rustidy_format,
 	core::marker::PhantomData,
 	rustidy_util::{ArenaData, ArenaIdx, AstStr, Config, Replacement, Replacements, ast_str::AstStrRepr},
+	std::borrow::Cow,
 };
 
 /// Whitespace-like for formatting
@@ -53,9 +54,10 @@ pub trait Format {
 		let mut len = 0;
 		self.with_strings(ctx, &mut |s, ctx| match ctx.replacements.get(s) {
 			Some(replacement) => len += replacement.len(),
-			None => match s.repr() {
+			None => match *s.repr() {
 				AstStrRepr::AstRange(range) => len += range.len(),
 				AstStrRepr::String(s) => len += s.len(),
+				AstStrRepr::Replacement(ref replacement) => len += replacement.len(),
 			},
 		});
 		len
@@ -66,9 +68,10 @@ pub trait Format {
 		let mut is_blank = true;
 		self.with_strings(ctx, &mut |s, ctx| match ctx.replacements.get(s) {
 			Some(replacement) => is_blank &= replacement.is_blank(ctx.config),
-			None => match s.repr() {
+			None => match *s.repr() {
 				AstStrRepr::AstRange(range) => is_blank &= rustidy_util::is_str_blank(range.str(ctx.input)),
 				AstStrRepr::String(s) => is_blank &= rustidy_util::is_str_blank(s),
+				AstStrRepr::Replacement(ref replacement) => is_blank &= replacement.is_blank(ctx.config),
 			},
 		});
 
@@ -364,8 +367,8 @@ impl<'a, 'input> Context<'a, 'input> {
 
 	/// Returns the string of a string
 	#[must_use]
-	pub fn str(&mut self, s: &AstStr) -> &'input str {
-		s.str(self.input)
+	pub fn str(&mut self, s: &AstStr) -> Cow<'input, str> {
+		s.str(self.input, self.config)
 	}
 
 	/// Returns the config
@@ -382,7 +385,8 @@ impl<'a, 'input> Context<'a, 'input> {
 
 	/// Replaces a string
 	pub fn replace(&mut self, s: &AstStr, replacement: impl Into<Replacement>) {
-		self.replacements.add(self.config, s, s.str(self.input), replacement);
+		self.replacements
+			.add(self.config, s, &s.str(self.input, self.config), replacement);
 	}
 
 	/// Runs `f` with a further indentation level

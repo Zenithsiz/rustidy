@@ -43,8 +43,9 @@ impl Default for Replacements {
 }
 
 /// String replacement
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 #[derive(derive_more::From)]
+#[derive(serde::Serialize, serde::Deserialize)]
 pub enum Replacement {
 	#[from]
 	Static(&'static str),
