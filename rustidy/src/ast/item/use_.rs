@@ -81,8 +81,7 @@ impl UseTreeGroup {
 	) {
 		Self::format_tree_compact(tree, ctx);
 
-		// TODO: This should include the whitespace on the current line
-		if tree.output_len(ctx) > ctx.config().max_use_tree_len {
+		if tree.output_len_without_prefix_ws(ctx) > ctx.config().max_use_tree_len {
 			if let Some(punct) = &mut tree.value {
 				let pos = punct.input_range(ctx).expect("Should have a range").end;
 				if punct.trailing.is_none() {

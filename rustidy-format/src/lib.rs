@@ -32,7 +32,7 @@ use {
 
 /// Whitespace-like for formatting
 // TODO: Once we move into our own crate, just rename this to `Whitespace`
-pub trait WhitespaceLike {
+pub trait WhitespaceLike: Format {
 	/// Removes this whitespace
 	fn remove(&mut self, ctx: &mut Context);
 
@@ -81,6 +81,18 @@ pub trait Format {
 		len
 	}
 
+	/// Returns the output length of this type without the prefix whitespace
+	fn output_len_without_prefix_ws(&mut self, ctx: &mut Context) -> usize {
+		let mut len = self.output_len(ctx);
+		self.with_prefix_ws(ctx, &mut self::whitespace_visitor! {
+			lifetimes<'a>
+			capture(len: &'a mut usize = &mut len)
+			|ws, ctx| => **len -= ws.output_len(ctx)
+		});
+
+		len
+	}
+
 	/// Formats this type
 	fn format(&mut self, ctx: &mut Context);
 
@@ -115,9 +127,14 @@ pub trait Format {
 
 macro whitespace_visitor(
 	$(
+		lifetimes<
+			$($generic_lifetime:lifetime),* $(,)?
+		>
+	)?
+	$(
 		capture(
 			$(
-				$capture:ident: $CaptureTy:ty
+				$capture:ident: $CaptureTy:ty $( = $capture_expr:expr)?
 			),*
 
 			$(,)?
@@ -125,7 +142,11 @@ macro whitespace_visitor(
 	)?
 	| $whitespace:ident, $context:ident | => $output:expr
 ) {{
-	struct Visitor {
+	struct Visitor
+	$(<
+			$($generic_lifetime,)*
+	>)?
+	{
 		$(
 			$(
 				$capture: $CaptureTy,
@@ -133,7 +154,7 @@ macro whitespace_visitor(
 		)?
 	}
 
-	impl WhitespaceVisitor for Visitor {
+	impl$(< $($generic_lifetime,)* >)? WhitespaceVisitor for Visitor $(< $($generic_lifetime,)* >)? {
 		type Output = ();
 
 		fn visit<W: WhitespaceLike>(&mut self, $whitespace: &mut W, $context: &mut Context) -> Self::Output {
@@ -142,7 +163,7 @@ macro whitespace_visitor(
 		}
 	}
 
-	Visitor { $( $( $capture, )* )? }
+	Visitor { $( $( $capture $(: $capture_expr)?, )* )? }
 }}
 
 impl<T: Format> Format for &'_ mut T {
