@@ -35,3 +35,13 @@ use {};
 use a;
 use {b, c};
 use d;
+//
+use /*a0*/a/*a1*/;
+use /*b0*/b/*b1*/;
+use /*c0*/c/*c1*/;
+//
+use {a, {b}, {{c}, {{d}}}};
+//
+use {a::{b, c}, d};
+//
+use {/*a0*/{/*a1*/a/*a2*/}/*a3*/,/*b0*/b/*b1*/};
