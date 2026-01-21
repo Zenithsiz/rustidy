@@ -19,6 +19,8 @@ use {
 };
 
 pub macro decl_tokens(
+	$new:ident;
+
 	$(
 		$TokenName:ident = $Token:literal
 		$( skip_if_tag $skip_if_tag:literal )?
@@ -44,6 +46,11 @@ pub macro decl_tokens(
 		);
 
 		impl $TokenName {
+			/// Creates a new token, not associated to the input
+			pub fn $new() -> Self {
+				Self(Whitespace::empty(), AstStr::new($Token))
+			}
+
 			fn parse(s: &mut &str) -> Result<(), <Self as Parse>::Error> {
 				*s = s.strip_prefix($Token).ok_or(<Self as Parse>::Error::NotFound)?;
 				Ok(())
@@ -72,10 +79,18 @@ pub macro decl_tokens(
 				Ok(())
 			}
 		}
+
+		impl Default for $TokenName {
+			fn default() -> Self {
+				Self::$new()
+			}
+		}
 	)*
 }
 
 decl_tokens! {
+	new;
+
 	InnerLineDoc = "//!";
 	OuterLineDoc = "///";
 	InnerBlockDoc = "/*!";

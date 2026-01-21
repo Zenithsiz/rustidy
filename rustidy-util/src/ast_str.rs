@@ -31,6 +31,7 @@ impl AstStr {
 		match *self.repr() {
 			AstStrRepr::AstRange(range) => range.len(),
 			AstStrRepr::String(s) => s.len(),
+			AstStrRepr::Char(ch) => ch.len_utf8(),
 			AstStrRepr::Indentation { newlines, depth } => newlines + depth,
 			AstStrRepr::Dynamic(ref s) => s.len(),
 		}
@@ -48,6 +49,7 @@ impl AstStr {
 		match *self.repr() {
 			AstStrRepr::AstRange(range) => crate::is_str_blank(range.str(input)),
 			AstStrRepr::String(s) => crate::is_str_blank(s),
+			AstStrRepr::Char(ch) => ch.is_ascii_whitespace(),
 			AstStrRepr::Indentation { .. } => true,
 			AstStrRepr::Dynamic(ref s) => crate::is_str_blank(s),
 		}
@@ -58,6 +60,7 @@ impl AstStr {
 		match *self.repr() {
 			AstStrRepr::AstRange(range) => output.push_str(range.str(input)),
 			AstStrRepr::String(s) => output.push_str(s),
+			AstStrRepr::Char(ch) => output.push(ch),
 			AstStrRepr::Indentation { newlines, depth } => {
 				for _ in 0..newlines {
 					output.push('\n');
@@ -71,12 +74,15 @@ impl AstStr {
 	}
 
 	/// Returns the string of this string
+	// TODO: This can be somewhat expensive, should we replace it with
+	//       functions performing whatever checks the callers need instead?
 	#[must_use]
 	pub fn str<'input>(&self, input: &'input str, config: &Config) -> Cow<'input, str> {
 		let repr = self.repr();
 		match *repr {
 			AstStrRepr::AstRange(range) => range.str(input).into(),
 			AstStrRepr::String(s) => s.into(),
+			AstStrRepr::Char(ch) => ch.to_string().into(),
 			AstStrRepr::Dynamic(ref s) => s.clone().into(),
 
 			AstStrRepr::Indentation { .. } => {
@@ -109,6 +115,10 @@ pub enum AstStrRepr {
 	/// Static string
 	#[from]
 	String(&'static str),
+
+	/// Single character
+	#[from]
+	Char(char),
 
 	/// Indentation
 	#[from]

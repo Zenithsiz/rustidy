@@ -2,12 +2,11 @@
 
 // Imports
 use {
-	crate::ast::{path::SimplePath, token, util::Braced, whitespace::Whitespace},
+	crate::ast::{path::SimplePath, token, util::Braced},
 	rustidy_ast_util::{Identifier, Punctuated, PunctuatedTrailing},
 	rustidy_format::Format,
 	rustidy_parse::Parse,
 	rustidy_print::Print,
-	rustidy_util::AstStr,
 };
 
 /// `UseDeclaration`
@@ -40,7 +39,7 @@ impl UseDeclaration {
 				_ => UseTreeGroup {
 					prefix: None,
 					tree:   Braced {
-						prefix: token::BracesOpen(Whitespace::empty(), AstStr::new("{")),
+						prefix: token::BracesOpen::new(),
 						value:  Some(PunctuatedTrailing {
 							punctuated: Punctuated {
 								first: Box::new(tree),
@@ -48,7 +47,7 @@ impl UseDeclaration {
 							},
 							trailing:   None,
 						}),
-						suffix: token::BracesClose(Whitespace::empty(), AstStr::new("}")),
+						suffix: token::BracesClose::new(),
 					},
 				},
 			};
@@ -58,7 +57,7 @@ impl UseDeclaration {
 			for use_decl in others {
 				match &mut group_tree.tree.value {
 					Some(inner) => {
-						let comma = token::Comma(Whitespace::empty(), AstStr::new(","));
+						let comma = token::Comma::new();
 						inner.punctuated.rest.push((comma, Box::new(use_decl.tree)));
 					},
 					None =>
@@ -138,7 +137,7 @@ impl UseTreeGroup {
 		if tree.len_without_prefix_ws(ctx) > ctx.config().max_use_tree_len {
 			if let Some(punct) = &mut tree.value {
 				if punct.trailing.is_none() {
-					punct.trailing = Some(token::Comma(Whitespace::empty(), AstStr::new(",")));
+					punct.trailing = Some(token::Comma::new());
 				}
 
 				punct.format(ctx, Format::prefix_ws_set_cur_indent, Format::prefix_ws_remove);
