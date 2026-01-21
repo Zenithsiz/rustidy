@@ -76,6 +76,9 @@ struct VariantAttrs {
 	with: Option<syn::Expr>,
 
 	#[darling(multiple)]
+	before_with: Vec<AndWith>,
+
+	#[darling(multiple)]
 	and_with: Vec<AndWith>,
 }
 
@@ -91,6 +94,9 @@ struct FieldAttrs {
 	indent: bool,
 
 	with: Option<syn::Expr>,
+
+	#[darling(multiple)]
+	before_with: Vec<AndWith>,
 
 	#[darling(multiple)]
 	and_with: Vec<AndWith>,
@@ -110,6 +116,9 @@ struct Attrs {
 	indent: bool,
 
 	with: Option<syn::Expr>,
+
+	#[darling(multiple)]
+	before_with: Vec<AndWith>,
 
 	#[darling(multiple)]
 	and_with: Vec<AndWith>,
@@ -147,6 +156,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 		parse_quote! { self },
 		&attrs.with,
 		format,
+		&attrs.before_with,
 		&attrs.and_with,
 		attrs.indent,
 	);
@@ -207,6 +217,7 @@ fn derive_enum(variants: &[VariantAttrs]) -> Impls<syn::Expr, syn::Expr, syn::Ex
 				parse_quote! { value },
 				&variant.with,
 				parse_quote! { rustidy_format::Format::format(value, ctx) },
+				&variant.before_with,
 				&variant.and_with,
 				variant.indent,
 			);
@@ -306,6 +317,7 @@ fn derive_struct_field(field_idx: usize, field: &FieldAttrs) -> Impls<syn::Expr,
 		parse_quote! { &mut self.#field_ident },
 		&field.with,
 		parse_quote! { rustidy_format::Format::format(&mut self.#field_ident, ctx) },
+		&field.before_with,
 		&field.and_with,
 		field.indent,
 	);
@@ -327,6 +339,7 @@ fn derive_format(
 	value: syn::Expr,
 	with: &Option<syn::Expr>,
 	default: syn::Expr,
+	before_with: &[AndWith],
 	and_with: &[AndWith],
 	indent: bool,
 ) -> syn::Expr {
@@ -334,10 +347,14 @@ fn derive_format(
 		Some(with) => parse_quote! { (#with)(#value, ctx) },
 		None => default,
 	};
+	let before_with = before_with
+		.iter()
+		.map(|and_with| and_with.map(|expr| parse_quote! { (#expr)(#value, ctx) }).eval());
 	let and_with = and_with
 		.iter()
 		.map(|and_with| and_with.map(|expr| parse_quote! { (#expr)(#value, ctx) }).eval());
 	let format: syn::Expr = parse_quote! {{
+		#( #before_with; )*
 		#format;
 		#( #and_with; )*
 	}};

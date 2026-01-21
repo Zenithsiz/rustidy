@@ -20,8 +20,8 @@ pub struct ArrayType(#[format(and_with = Bracketed::format_remove)] Bracketed<Ar
 #[derive(Parse, Format, Print)]
 pub struct ArrayTypeInner {
 	pub ty:   Box<Type>,
-	#[format(and_with = Format::prefix_ws_remove)]
+	#[format(before_with = Format::prefix_ws_remove)]
 	pub semi: token::Semi,
-	#[format(and_with = Format::prefix_ws_set_single)]
+	#[format(before_with = Format::prefix_ws_set_single)]
 	pub expr: Expression,
 }

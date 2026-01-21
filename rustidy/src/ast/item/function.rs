@@ -25,19 +25,19 @@ use {
 #[parse(name = "a function")]
 pub struct Function {
 	pub qualifiers: FunctionQualifiers,
-	#[format(and_with(expr = Format::prefix_ws_set_single, if = self.qualifiers.has_any()))]
+	#[format(before_with(expr = Format::prefix_ws_set_single, if = self.qualifiers.has_any()))]
 	pub fn_:        token::Fn,
 	#[parse(fatal)]
-	#[format(and_with = Format::prefix_ws_set_single)]
+	#[format(before_with = Format::prefix_ws_set_single)]
 	pub ident:      Identifier,
-	#[format(and_with = Format::prefix_ws_remove)]
+	#[format(before_with = Format::prefix_ws_remove)]
 	pub generics:   Option<GenericParams>,
-	#[format(and_with = Format::prefix_ws_remove)]
+	#[format(before_with = Format::prefix_ws_remove)]
 	#[format(and_with = Parenthesized::format_remove)]
 	pub params:     Parenthesized<Option<FunctionParameters>>,
-	#[format(and_with = Format::prefix_ws_set_single)]
+	#[format(before_with = Format::prefix_ws_set_single)]
 	pub ret:        Option<FunctionReturnType>,
-	#[format(and_with = Format::prefix_ws_set_cur_indent)]
+	#[format(before_with = Format::prefix_ws_set_cur_indent)]
 	pub where_:     Option<WhereClause>,
 	#[format(and_with = |body: &mut FunctionBody, ctx| match body.is_semi() {
 		true => body.prefix_ws_remove(ctx),
@@ -65,11 +65,11 @@ pub enum FunctionBody {
 #[parse(name = "function qualifiers")]
 pub struct FunctionQualifiers {
 	pub const_:  Option<token::Const>,
-	#[format(and_with = Format::prefix_ws_set_single)]
+	#[format(before_with = Format::prefix_ws_set_single)]
 	pub async_:  Option<token::Async>,
-	#[format(and_with = Format::prefix_ws_set_single)]
+	#[format(before_with = Format::prefix_ws_set_single)]
 	pub safety:  Option<ItemSafety>,
-	#[format(and_with = Format::prefix_ws_set_single)]
+	#[format(before_with = Format::prefix_ws_set_single)]
 	pub extern_: Option<ExternAbi>,
 }
 
@@ -86,7 +86,7 @@ impl FunctionQualifiers {
 #[derive(Parse, Format, Print)]
 pub struct ExternAbi {
 	pub extern_: token::Extern,
-	#[format(and_with = Format::prefix_ws_set_single)]
+	#[format(before_with = Format::prefix_ws_set_single)]
 	pub abi:     Option<Abi>,
 }
 
@@ -124,7 +124,7 @@ pub enum FunctionParameters {
 #[derive(Parse, Format, Print)]
 pub struct FunctionParametersOnlySelf {
 	pub self_:          SelfParam,
-	#[format(and_with = Format::prefix_ws_remove)]
+	#[format(before_with = Format::prefix_ws_remove)]
 	pub trailing_comma: Option<token::Comma>,
 }
 
@@ -134,7 +134,7 @@ pub struct FunctionParametersOnlySelf {
 pub struct FunctionParametersFull {
 	pub self_: Option<FunctionParametersFullSelf>,
 	#[format(and_with = punct::format_trailing(Format::prefix_ws_set_single, Format::prefix_ws_remove))]
-	#[format(and_with = Format::prefix_ws_set_single)]
+	#[format(before_with = Format::prefix_ws_set_single)]
 	pub rest:  PunctuatedTrailing<FunctionParam, token::Comma>,
 }
 
@@ -143,7 +143,7 @@ pub struct FunctionParametersFull {
 #[derive(Parse, Format, Print)]
 pub struct FunctionParametersFullSelf {
 	pub self_: SelfParam,
-	#[format(and_with = Format::prefix_ws_remove)]
+	#[format(before_with = Format::prefix_ws_remove)]
 	pub comma: token::Comma,
 }
 
@@ -171,10 +171,10 @@ pub enum FunctionParamInner {
 #[derive(Parse, Format, Print)]
 pub struct FunctionParamPattern {
 	pub pat:   PatternNoTopAlt,
-	#[format(and_with = Format::prefix_ws_remove)]
+	#[format(before_with = Format::prefix_ws_remove)]
 	pub colon: token::Colon,
 	#[parse(fatal)]
-	#[format(and_with = Format::prefix_ws_set_single)]
+	#[format(before_with = Format::prefix_ws_set_single)]
 	pub ty:    Type,
 }
 
@@ -198,7 +198,7 @@ pub enum ShorthandOrTypedSelf {
 #[derive(Parse, Format, Print)]
 pub struct ShorthandSelf {
 	pub ref_:  Option<ShorthandSelfRef>,
-	#[format(and_with = Format::prefix_ws_remove)]
+	#[format(before_with = Format::prefix_ws_remove)]
 	#[format(and_with = match self.ref_.as_ref().is_some_and(|ref_| ref_.lifetime.is_some()) {
 		true => Format::prefix_ws_set_single,
 		false => Format::prefix_ws_remove,
@@ -217,7 +217,7 @@ pub struct ShorthandSelf {
 pub struct ShorthandSelfRef {
 	pub ref_:     token::And,
 	#[parse(fatal)]
-	#[format(and_with = Format::prefix_ws_remove)]
+	#[format(before_with = Format::prefix_ws_remove)]
 	pub lifetime: Option<Lifetime>,
 }
 
@@ -227,11 +227,11 @@ pub struct ShorthandSelfRef {
 #[derive(Parse, Format, Print)]
 pub struct TypedSelf {
 	pub mut_:  Option<token::Mut>,
-	#[format(and_with(expr = Format::prefix_ws_set_single, if = self.mut_.is_some()))]
+	#[format(before_with(expr = Format::prefix_ws_set_single, if = self.mut_.is_some()))]
 	pub self_: token::SelfLower,
-	#[format(and_with = Format::prefix_ws_remove)]
+	#[format(before_with = Format::prefix_ws_remove)]
 	pub colon: token::Colon,
-	#[format(and_with = Format::prefix_ws_set_single)]
+	#[format(before_with = Format::prefix_ws_set_single)]
 	pub ty:    Type,
 }
 
@@ -243,7 +243,7 @@ pub struct TypedSelf {
 pub struct FunctionReturnType {
 	pub arrow: token::RArrow,
 	#[parse(fatal)]
-	#[format(and_with = Format::prefix_ws_set_single)]
+	#[format(before_with = Format::prefix_ws_set_single)]
 	pub ty:    Type,
 }
 
@@ -290,7 +290,7 @@ pub enum GenericParamInner {
 #[parse(name = "a lifetime parameter")]
 pub struct LifetimeParam {
 	pub lifetime: Lifetime,
-	#[format(and_with = Format::prefix_ws_remove)]
+	#[format(before_with = Format::prefix_ws_remove)]
 	pub bounds:   Option<LifetimeParamBounds>,
 }
 
@@ -299,7 +299,7 @@ pub struct LifetimeParam {
 #[derive(Parse, Format, Print)]
 pub struct LifetimeParamBounds {
 	pub colon:  token::Colon,
-	#[format(and_with = Format::prefix_ws_set_single)]
+	#[format(before_with = Format::prefix_ws_set_single)]
 	pub bounds: Option<LifetimeBounds>,
 }
 
@@ -319,9 +319,9 @@ pub struct LifetimeBounds(
 #[parse(name = "a type parameter")]
 pub struct TypeParam {
 	pub ident:  Identifier,
-	#[format(and_with = Format::prefix_ws_remove)]
+	#[format(before_with = Format::prefix_ws_remove)]
 	pub bounds: Option<TypeParamColonBounds>,
-	#[format(and_with = Format::prefix_ws_set_single)]
+	#[format(before_with = Format::prefix_ws_set_single)]
 	pub eq_ty:  Option<TypeParamEqType>,
 }
 
@@ -330,7 +330,7 @@ pub struct TypeParam {
 #[derive(Parse, Format, Print)]
 pub struct TypeParamColonBounds {
 	pub colon:  token::Colon,
-	#[format(and_with = Format::prefix_ws_set_single)]
+	#[format(before_with = Format::prefix_ws_set_single)]
 	pub bounds: Option<TypeParamBounds>,
 }
 
@@ -339,7 +339,7 @@ pub struct TypeParamColonBounds {
 #[derive(Parse, Format, Print)]
 pub struct TypeParamEqType {
 	pub eq: token::Eq,
-	#[format(and_with = Format::prefix_ws_set_single)]
+	#[format(before_with = Format::prefix_ws_set_single)]
 	pub ty: Box<Type>,
 }
 
@@ -406,8 +406,8 @@ pub struct WhereClause {
 	pub where_: token::Where,
 	// TODO: The reference says that this can't have a trailing comma,
 	//       but the compiler accepts it, so we do to.
+	#[format(before_with = Format::prefix_ws_set_cur_indent)]
 	#[format(indent)]
-	#[format(and_with = Format::prefix_ws_set_cur_indent)]
 	#[format(and_with = rustidy_format::format_option_with(punct::format_trailing(Format::prefix_ws_set_cur_indent, Format::prefix_ws_remove)))]
 	pub items:  Option<PunctuatedTrailing<WhereClauseItem, token::Comma>>,
 }
@@ -427,10 +427,10 @@ pub enum WhereClauseItem {
 #[derive(Parse, Format, Print)]
 pub struct LifetimeWhereClauseItem {
 	pub lifetime: Lifetime,
-	#[format(and_with = Format::prefix_ws_remove)]
+	#[format(before_with = Format::prefix_ws_remove)]
 	pub colon:    token::Colon,
 	#[parse(fatal)]
-	#[format(and_with = Format::prefix_ws_set_single)]
+	#[format(before_with = Format::prefix_ws_set_single)]
 	pub bounds:   LifetimeBounds,
 }
 
@@ -440,12 +440,12 @@ pub struct LifetimeWhereClauseItem {
 #[derive(Parse, Format, Print)]
 pub struct TypeBoundWhereClauseItem {
 	pub for_lifetimes: Option<ForLifetimes>,
-	#[format(and_with(expr = Format::prefix_ws_set_single, if = self.for_lifetimes.is_some()))]
+	#[format(before_with(expr = Format::prefix_ws_set_single, if = self.for_lifetimes.is_some()))]
 	pub ty:            Type,
-	#[format(and_with = Format::prefix_ws_remove)]
+	#[format(before_with = Format::prefix_ws_remove)]
 	pub colon:         token::Colon,
 	#[parse(fatal)]
-	#[format(and_with = Format::prefix_ws_set_single)]
+	#[format(before_with = Format::prefix_ws_set_single)]
 	pub bounds:        Option<TypeParamBounds>,
 }
 
@@ -455,7 +455,7 @@ pub struct TypeBoundWhereClauseItem {
 #[derive(Parse, Format, Print)]
 pub struct ForLifetimes {
 	pub for_:   token::For,
-	#[format(and_with = Format::prefix_ws_remove)]
+	#[format(before_with = Format::prefix_ws_remove)]
 	pub params: GenericParams,
 }
 
@@ -465,13 +465,13 @@ pub struct ForLifetimes {
 #[derive(Parse, Format, Print)]
 pub struct ConstParam {
 	pub const_: token::Const,
-	#[format(and_with = Format::prefix_ws_set_single)]
+	#[format(before_with = Format::prefix_ws_set_single)]
 	pub ident:  Identifier,
-	#[format(and_with = Format::prefix_ws_remove)]
+	#[format(before_with = Format::prefix_ws_remove)]
 	pub colon:  token::Colon,
-	#[format(and_with = Format::prefix_ws_set_single)]
+	#[format(before_with = Format::prefix_ws_set_single)]
 	pub ty:     Box<Type>,
-	#[format(and_with = Format::prefix_ws_set_single)]
+	#[format(before_with = Format::prefix_ws_set_single)]
 	pub eq:     Option<ConstParamEq>,
 }
 
@@ -480,7 +480,7 @@ pub struct ConstParam {
 #[derive(Parse, Format, Print)]
 pub struct ConstParamEq {
 	eq:   token::Eq,
-	#[format(and_with = Format::prefix_ws_set_single)]
+	#[format(before_with = Format::prefix_ws_set_single)]
 	rest: ConstParamEqRest,
 }
 
@@ -498,7 +498,7 @@ pub enum ConstParamEqRest {
 #[derive(Parse, Format, Print)]
 pub struct ConstParamEqRestLiteral {
 	neg:  Option<token::Minus>,
-	#[format(and_with = Format::prefix_ws_remove)]
+	#[format(before_with = Format::prefix_ws_remove)]
 	expr: Box<LiteralExpression>,
 }
 

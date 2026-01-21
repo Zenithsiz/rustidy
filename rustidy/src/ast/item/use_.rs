@@ -17,9 +17,9 @@ use {
 pub struct UseDeclaration {
 	pub use_: token::Use,
 	#[parse(fatal)]
-	#[format(and_with = Format::prefix_ws_set_single)]
+	#[format(before_with = Format::prefix_ws_set_single)]
 	pub tree: UseTree,
-	#[format(and_with = Format::prefix_ws_remove)]
+	#[format(before_with = Format::prefix_ws_remove)]
 	pub semi: token::Semi,
 }
 
@@ -39,7 +39,7 @@ pub enum UseTree {
 #[derive(Parse, Format, Print)]
 pub struct UseTreeGlob {
 	pub prefix: Option<UseTreeGlobPrefix>,
-	#[format(and_with(expr = Format::prefix_ws_remove, if = self.prefix.is_some()))]
+	#[format(before_with(expr = Format::prefix_ws_remove, if = self.prefix.is_some()))]
 	pub glob:   token::Star,
 }
 
@@ -48,7 +48,7 @@ pub struct UseTreeGlob {
 #[derive(Parse, Format, Print)]
 pub struct UseTreeGlobPrefix {
 	pub path: Option<SimplePath>,
-	#[format(and_with(expr = Format::prefix_ws_remove, if = self.path.is_some()))]
+	#[format(before_with(expr = Format::prefix_ws_remove, if = self.path.is_some()))]
 	pub sep:  token::PathSep,
 }
 
@@ -57,7 +57,7 @@ pub struct UseTreeGlobPrefix {
 #[derive(Parse, Format, Print)]
 pub struct UseTreeGroup {
 	pub prefix: Option<UseTreeGroupPrefix>,
-	#[format(and_with(expr = Format::prefix_ws_remove, if = self.prefix.is_some()))]
+	#[format(before_with(expr = Format::prefix_ws_remove, if = self.prefix.is_some()))]
 	#[format(indent)]
 	#[format(and_with = Self::format_tree)]
 	pub tree:   Braced<Option<PunctuatedTrailing<Box<UseTree>, token::Comma>>>,
@@ -104,7 +104,7 @@ impl UseTreeGroup {
 #[derive(Parse, Format, Print)]
 pub struct UseTreeGroupPrefix {
 	pub path: Option<SimplePath>,
-	#[format(and_with(expr = Format::prefix_ws_remove, if = self.path.is_some()))]
+	#[format(before_with(expr = Format::prefix_ws_remove, if = self.path.is_some()))]
 	pub sep:  token::PathSep,
 }
 
@@ -113,7 +113,7 @@ pub struct UseTreeGroupPrefix {
 #[derive(Parse, Format, Print)]
 pub struct UseTreeSimple {
 	pub path: SimplePath,
-	#[format(and_with = Format::prefix_ws_set_single)]
+	#[format(before_with = Format::prefix_ws_set_single)]
 	pub as_:  Option<UseTreeSimpleAs>,
 }
 
@@ -123,7 +123,7 @@ pub struct UseTreeSimple {
 pub struct UseTreeSimpleAs {
 	pub as_:   token::As,
 	#[parse(fatal)]
-	#[format(and_with = Format::prefix_ws_set_single)]
+	#[format(before_with = Format::prefix_ws_set_single)]
 	pub value: UseTreeSimpleAsValue,
 }
 

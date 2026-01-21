@@ -32,7 +32,7 @@ pub enum PathExpression {
 #[derive(Parse, Format, Print)]
 pub struct PathInExpression {
 	pub prefix:   Option<token::PathSep>,
-	#[format(and_with(expr = Format::prefix_ws_remove, if = self.prefix.is_some()))]
+	#[format(before_with(expr = Format::prefix_ws_remove, if = self.prefix.is_some()))]
 	#[format(and_with = punct::format(Format::prefix_ws_remove, Format::prefix_ws_remove))]
 	pub segments: Punctuated<PathExprSegment, token::PathSep>,
 }
@@ -43,7 +43,7 @@ pub struct PathInExpression {
 #[derive(Parse, Format, Print)]
 pub struct PathExprSegment {
 	pub ident:   PathIdentSegment,
-	#[format(and_with = Format::prefix_ws_remove)]
+	#[format(before_with = Format::prefix_ws_remove)]
 	pub generic: Option<PathExprSegmentGenericArgs>,
 }
 
@@ -52,7 +52,7 @@ pub struct PathExprSegment {
 #[derive(Parse, Format, Print)]
 pub struct PathExprSegmentGenericArgs {
 	pub sep:     token::PathSep,
-	#[format(and_with = Format::prefix_ws_remove)]
+	#[format(before_with = Format::prefix_ws_remove)]
 	pub generic: GenericArgs,
 }
 
@@ -117,12 +117,12 @@ pub enum GenericArgsConst {
 #[derive(Parse, Format, Print)]
 pub struct GenericArgsBinding {
 	pub ident:    Identifier,
-	#[format(and_with = Format::prefix_ws_remove)]
+	#[format(before_with = Format::prefix_ws_remove)]
 	pub generics: Option<Box<GenericArgs>>,
-	#[format(and_with = Format::prefix_ws_set_single)]
+	#[format(before_with = Format::prefix_ws_set_single)]
 	pub eq:       token::Eq,
 	#[parse(fatal)]
-	#[format(and_with = Format::prefix_ws_set_single)]
+	#[format(before_with = Format::prefix_ws_set_single)]
 	pub ty:       Box<Type>,
 }
 
@@ -132,12 +132,12 @@ pub struct GenericArgsBinding {
 #[derive(Parse, Format, Print)]
 pub struct GenericArgsBounds {
 	pub ident:    Identifier,
-	#[format(and_with = Format::prefix_ws_remove)]
+	#[format(before_with = Format::prefix_ws_remove)]
 	pub generics: Option<Box<GenericArgs>>,
-	#[format(and_with = Format::prefix_ws_remove)]
+	#[format(before_with = Format::prefix_ws_remove)]
 	pub colon:    token::Colon,
 	#[parse(fatal)]
-	#[format(and_with = Format::prefix_ws_set_single)]
+	#[format(before_with = Format::prefix_ws_set_single)]
 	pub ty:       Box<TypeParamBounds>,
 }
 
@@ -148,7 +148,7 @@ pub struct GenericArgsBounds {
 pub struct TypePathFn {
 	#[format(and_with = Parenthesized::format_remove)]
 	pub inputs: Parenthesized<Option<TypePathFnInputs>>,
-	#[format(and_with = Format::prefix_ws_set_single)]
+	#[format(before_with = Format::prefix_ws_set_single)]
 	pub ret:    Option<TypePathFnRet>,
 }
 
@@ -166,7 +166,7 @@ pub struct TypePathFnInputs(
 #[derive(Parse, Format, Print)]
 pub struct TypePathFnRet {
 	pub arrow: token::RArrow,
-	#[format(and_with = Format::prefix_ws_set_single)]
+	#[format(before_with = Format::prefix_ws_set_single)]
 	pub ty:    Box<TypeNoBounds>,
 }
 
@@ -176,7 +176,7 @@ pub struct TypePathFnRet {
 #[derive(Parse, Format, Print)]
 pub struct QualifiedPathInExpression {
 	pub qualified: QualifiedPathType,
-	#[format(and_with = Format::prefix_ws_remove)]
+	#[format(before_with = Format::prefix_ws_remove)]
 	#[format(and_with = at_least::format(Format::prefix_ws_remove))]
 	pub segments:  AtLeast1<QualifiedPathInExpressionSegment>,
 }
@@ -186,7 +186,7 @@ pub struct QualifiedPathInExpression {
 #[derive(Parse, Format, Print)]
 pub struct QualifiedPathInExpressionSegment {
 	sep:     token::PathSep,
-	#[format(and_with = Format::prefix_ws_remove)]
+	#[format(before_with = Format::prefix_ws_remove)]
 	segment: PathExprSegment,
 }
 
@@ -203,7 +203,7 @@ pub struct QualifiedPathType(
 #[derive(Parse, Format, Print)]
 pub struct QualifiedPathTypeInner {
 	pub ty:  Box<Type>,
-	#[format(and_with = Format::prefix_ws_set_single)]
+	#[format(before_with = Format::prefix_ws_set_single)]
 	pub as_: Option<QualifiedPathTypeAs>,
 }
 
@@ -212,7 +212,7 @@ pub struct QualifiedPathTypeInner {
 #[derive(Parse, Format, Print)]
 pub struct QualifiedPathTypeAs {
 	pub as_: token::As,
-	#[format(and_with = Format::prefix_ws_set_single)]
+	#[format(before_with = Format::prefix_ws_set_single)]
 	pub ty:  TypePath,
 }
 

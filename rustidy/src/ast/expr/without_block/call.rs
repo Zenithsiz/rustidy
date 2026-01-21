@@ -22,7 +22,7 @@ use {
 #[parse_recursive(kind = "left")]
 pub struct CallExpression {
 	pub expr:   Expression,
-	#[format(and_with = Format::prefix_ws_remove)]
+	#[format(before_with = Format::prefix_ws_remove)]
 	#[format(and_with = Parenthesized::format_remove)]
 	pub params: Parenthesized<Option<CallParams>>,
 }
@@ -36,11 +36,11 @@ pub struct CallExpression {
 #[parse_recursive(kind = "left")]
 pub struct MethodCallExpression {
 	pub expr:    Expression,
-	#[format(and_with = Format::prefix_ws_remove)]
+	#[format(before_with = Format::prefix_ws_remove)]
 	pub dot:     token::Dot,
-	#[format(and_with = Format::prefix_ws_remove)]
+	#[format(before_with = Format::prefix_ws_remove)]
 	pub segment: PathExprSegment,
-	#[format(and_with = Format::prefix_ws_remove)]
+	#[format(before_with = Format::prefix_ws_remove)]
 	#[format(and_with = Parenthesized::format_remove)]
 	pub params:  Parenthesized<Option<CallParams>>,
 }

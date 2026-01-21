@@ -17,10 +17,10 @@ use {
 #[parse(name = "module declaration")]
 pub struct Module {
 	pub unsafe_: Option<token::Unsafe>,
-	#[format(and_with(expr = Format::prefix_ws_set_single, if = self.unsafe_.is_some()))]
+	#[format(before_with(expr = Format::prefix_ws_set_single, if = self.unsafe_.is_some()))]
 	pub mod_:    token::Mod,
 	#[parse(fatal)]
-	#[format(and_with = Format::prefix_ws_set_single)]
+	#[format(before_with = Format::prefix_ws_set_single)]
 	pub ident:   Identifier,
 	#[format(and_with = match self.inner.is_none() {
 		true => Format::prefix_ws_remove,

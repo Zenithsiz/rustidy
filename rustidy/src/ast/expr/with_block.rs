@@ -53,7 +53,7 @@ pub enum ExpressionWithBlockInner {
 #[derive(Parse, Format, Print)]
 pub struct ConstBlockExpression {
 	pub const_: token::Const,
-	#[format(and_with = Format::prefix_ws_set_single)]
+	#[format(before_with = Format::prefix_ws_set_single)]
 	pub expr:   BlockExpression,
 }
 
@@ -63,7 +63,7 @@ pub struct ConstBlockExpression {
 #[derive(Parse, Format, Print)]
 pub struct UnsafeBlockExpression {
 	pub unsafe_: token::Unsafe,
-	#[format(and_with = Format::prefix_ws_set_single)]
+	#[format(before_with = Format::prefix_ws_set_single)]
 	pub expr:    BlockExpression,
 }
 
@@ -74,7 +74,7 @@ pub struct UnsafeBlockExpression {
 pub struct TryBlockExpression {
 	pub try_: token::Try,
 	#[parse(fatal)]
-	#[format(and_with = Format::prefix_ws_set_single)]
+	#[format(before_with = Format::prefix_ws_set_single)]
 	pub expr: BlockExpression,
 }
 
@@ -86,11 +86,11 @@ pub struct TryBlockExpression {
 pub struct IfExpression {
 	pub if_:        token::If,
 	#[parse(fatal)]
-	#[format(and_with = Format::prefix_ws_set_single)]
+	#[format(before_with = Format::prefix_ws_set_single)]
 	pub conditions: Conditions,
-	#[format(and_with = Format::prefix_ws_set_single)]
+	#[format(before_with = Format::prefix_ws_set_single)]
 	pub expr:       BlockExpression,
-	#[format(and_with = Format::prefix_ws_set_single)]
+	#[format(before_with = Format::prefix_ws_set_single)]
 	pub else_:      Option<IfExpressionElse>,
 }
 
@@ -100,7 +100,7 @@ pub struct IfExpression {
 pub struct IfExpressionElse {
 	pub else_: token::Else,
 	#[parse(fatal)]
-	#[format(and_with = Format::prefix_ws_set_single)]
+	#[format(before_with = Format::prefix_ws_set_single)]
 	pub inner: IfExpressionElseInner,
 }
 
@@ -159,9 +159,9 @@ pub enum LetChainCondition {
 pub struct LetChainConditionLet {
 	pub let_:      token::Let,
 	#[parse(fatal)]
-	#[format(and_with = Format::prefix_ws_set_single)]
+	#[format(before_with = Format::prefix_ws_set_single)]
 	pub pat:       Pattern,
-	#[format(and_with = Format::prefix_ws_set_single)]
+	#[format(before_with = Format::prefix_ws_set_single)]
 	pub eq:        token::Eq,
 	#[parse(with_tag = "skip:StructExpression")]
 	#[parse(with_tag = "skip:LazyBooleanExpression")]
@@ -171,7 +171,7 @@ pub struct LetChainConditionLet {
 	#[parse(with_tag = "skip:AssignmentExpression")]
 	#[parse(with_tag = "skip:CompoundAssignmentExpression")]
 	#[parse(with_tag = "skip:OptionalTrailingBlockExpression")]
-	#[format(and_with = Format::prefix_ws_set_single)]
+	#[format(before_with = Format::prefix_ws_set_single)]
 	pub scrutinee: Box<Scrutinee>,
 }
 
@@ -181,7 +181,7 @@ pub struct LetChainConditionLet {
 #[derive(Parse, Format, Print)]
 pub struct LoopExpression {
 	pub label: Option<LoopLabel>,
-	#[format(and_with(expr = Format::prefix_ws_set_single, if = self.label.is_some()))]
+	#[format(before_with(expr = Format::prefix_ws_set_single, if = self.label.is_some()))]
 	pub inner: LoopExpressionInner,
 }
 
@@ -191,7 +191,7 @@ pub struct LoopExpression {
 #[derive(Parse, Format, Print)]
 pub struct LoopLabel {
 	pub lifetime: LifetimeOrLabel,
-	#[format(and_with = Format::prefix_ws_remove)]
+	#[format(before_with = Format::prefix_ws_remove)]
 	pub colon:    token::Colon,
 }
 
@@ -211,15 +211,15 @@ pub enum LoopExpressionInner {
 #[derive(Parse, Format, Print)]
 pub struct IteratorLoopExpression {
 	pub for_: token::For,
-	#[format(and_with = Format::prefix_ws_set_single)]
+	#[format(before_with = Format::prefix_ws_set_single)]
 	pub pat:  Pattern,
-	#[format(and_with = Format::prefix_ws_set_single)]
+	#[format(before_with = Format::prefix_ws_set_single)]
 	pub in_:  token::In,
 	#[parse(with_tag = "skip:StructExpression")]
 	#[parse(with_tag = "skip:OptionalTrailingBlockExpression")]
-	#[format(and_with = Format::prefix_ws_set_single)]
+	#[format(before_with = Format::prefix_ws_set_single)]
 	pub expr: Expression,
-	#[format(and_with = Format::prefix_ws_set_single)]
+	#[format(before_with = Format::prefix_ws_set_single)]
 	pub body: BlockExpression,
 }
 
@@ -229,9 +229,9 @@ pub struct IteratorLoopExpression {
 #[derive(Parse, Format, Print)]
 pub struct PredicateLoopExpression {
 	pub for_: token::While,
-	#[format(and_with = Format::prefix_ws_set_single)]
+	#[format(before_with = Format::prefix_ws_set_single)]
 	pub cond: Conditions,
-	#[format(and_with = Format::prefix_ws_set_single)]
+	#[format(before_with = Format::prefix_ws_set_single)]
 	pub body: BlockExpression,
 }
 
@@ -241,7 +241,7 @@ pub struct PredicateLoopExpression {
 #[derive(Parse, Format, Print)]
 pub struct InfiniteLoopExpression {
 	pub loop_: token::Loop,
-	#[format(and_with = Format::prefix_ws_set_single)]
+	#[format(before_with = Format::prefix_ws_set_single)]
 	pub body:  BlockExpression,
 }
 

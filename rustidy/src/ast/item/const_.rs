@@ -15,16 +15,16 @@ use {
 #[derive(Parse, Format, Print)]
 pub struct ConstantItem {
 	pub const_: token::Const,
-	#[format(and_with = Format::prefix_ws_set_single)]
+	#[format(before_with = Format::prefix_ws_set_single)]
 	pub name:   ConstantItemName,
 	#[parse(fatal)]
-	#[format(and_with = Format::prefix_ws_remove)]
+	#[format(before_with = Format::prefix_ws_remove)]
 	pub colon:  token::Colon,
-	#[format(and_with = Format::prefix_ws_set_single)]
+	#[format(before_with = Format::prefix_ws_set_single)]
 	pub ty:     Type,
-	#[format(and_with = Format::prefix_ws_set_single)]
+	#[format(before_with = Format::prefix_ws_set_single)]
 	pub value:  Option<ConstantItemValue>,
-	#[format(and_with = Format::prefix_ws_remove)]
+	#[format(before_with = Format::prefix_ws_remove)]
 	pub semi:   token::Semi,
 }
 
@@ -41,6 +41,6 @@ pub enum ConstantItemName {
 #[derive(Parse, Format, Print)]
 pub struct ConstantItemValue {
 	pub eq:   token::Eq,
-	#[format(and_with = Format::prefix_ws_set_single)]
+	#[format(before_with = Format::prefix_ws_set_single)]
 	pub expr: Expression,
 }

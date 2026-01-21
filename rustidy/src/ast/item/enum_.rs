@@ -26,13 +26,13 @@ use {
 pub struct Enumeration {
 	pub enum_:    token::Enum,
 	#[parse(fatal)]
-	#[format(and_with = Format::prefix_ws_set_single)]
+	#[format(before_with = Format::prefix_ws_set_single)]
 	pub ident:    Identifier,
-	#[format(and_with = Format::prefix_ws_remove)]
+	#[format(before_with = Format::prefix_ws_remove)]
 	pub generic:  Option<GenericParams>,
-	#[format(and_with = Format::prefix_ws_set_cur_indent)]
+	#[format(before_with = Format::prefix_ws_set_cur_indent)]
 	pub where_:   Option<WhereClause>,
-	#[format(and_with = Format::prefix_ws_set_single)]
+	#[format(before_with = Format::prefix_ws_set_single)]
 	#[format(indent)]
 	#[format(and_with = Braced::format_indent_if_non_blank)]
 	pub variants: Braced<Option<EnumVariants>>,
@@ -61,10 +61,10 @@ pub struct EnumVariant(
 #[derive(Parse, Format, Print)]
 pub struct EnumVariantInner {
 	pub vis:          Option<Visibility>,
-	#[format(and_with = Format::prefix_ws_set_single)]
+	#[format(before_with = Format::prefix_ws_set_single)]
 	pub ident:        Identifier,
 	pub kind:         Option<EnumVariantKind>,
-	#[format(and_with = Format::prefix_ws_set_single)]
+	#[format(before_with = Format::prefix_ws_set_single)]
 	pub discriminant: Option<EnumVariantDiscriminant>,
 }
 
@@ -72,9 +72,9 @@ pub struct EnumVariantInner {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub enum EnumVariantKind {
-	#[format(and_with = Format::prefix_ws_remove)]
+	#[format(before_with = Format::prefix_ws_remove)]
 	Tuple(EnumVariantTuple),
-	#[format(and_with = Format::prefix_ws_set_single)]
+	#[format(before_with = Format::prefix_ws_set_single)]
 	Struct(EnumVariantStruct),
 }
 
@@ -100,6 +100,6 @@ pub struct EnumVariantStruct(
 #[derive(Parse, Format, Print)]
 pub struct EnumVariantDiscriminant {
 	pub eq:   token::Eq,
-	#[format(and_with = Format::prefix_ws_set_single)]
+	#[format(before_with = Format::prefix_ws_set_single)]
 	pub expr: Expression,
 }

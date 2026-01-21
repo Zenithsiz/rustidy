@@ -85,7 +85,7 @@ pub enum ItemInner {
 #[derive(Parse, Format, Print)]
 pub struct VisItem {
 	pub vis:   Option<Visibility>,
-	#[format(and_with(expr = Format::prefix_ws_set_single, if = self.vis.is_some()))]
+	#[format(before_with(expr = Format::prefix_ws_set_single, if = self.vis.is_some()))]
 	pub inner: VisItemInner,
 }
 
@@ -126,7 +126,7 @@ pub enum MacroItem {
 pub struct DeclMacro {
 	pub macro_: token::Macro,
 	#[parse(fatal)]
-	#[format(and_with = Format::prefix_ws_set_single)]
+	#[format(before_with = Format::prefix_ws_set_single)]
 	pub ident:  Identifier,
 	pub body:   DeclMacroBody,
 }
@@ -135,9 +135,9 @@ pub struct DeclMacro {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub enum DeclMacroBody {
-	#[format(and_with = Format::prefix_ws_set_single)]
+	#[format(before_with = Format::prefix_ws_set_single)]
 	Branches(DeclMacroBodyBranches),
-	#[format(and_with = Format::prefix_ws_remove)]
+	#[format(before_with = Format::prefix_ws_remove)]
 	Inline(DeclMacroBodyInline),
 }
 
@@ -148,7 +148,7 @@ pub struct DeclMacroBodyInline {
 	#[format(indent)]
 	#[format(and_with = Parenthesized::format_indent_if_non_blank)]
 	pub args: Parenthesized<DelimTokenTreeInner>,
-	#[format(and_with = Format::prefix_ws_set_single)]
+	#[format(before_with = Format::prefix_ws_set_single)]
 	#[format(indent)]
 	#[format(and_with = Braced::format_indent_if_non_blank)]
 	pub body: Braced<DelimTokenTreeInner>,
@@ -176,11 +176,11 @@ pub struct DeclMacroBodyBranchesInner(
 #[derive(Parse, Format, Print)]
 pub struct DeclMacroBranch {
 	pub extra: Option<DeclMacroBranchExtra>,
-	#[format(and_with(expr = Format::prefix_ws_set_single, if = self.extra.is_some()))]
+	#[format(before_with(expr = Format::prefix_ws_set_single, if = self.extra.is_some()))]
 	pub args:  DelimTokenTree,
-	#[format(and_with = Format::prefix_ws_set_single)]
+	#[format(before_with = Format::prefix_ws_set_single)]
 	pub arrow: token::FatArrow,
-	#[format(and_with = Format::prefix_ws_set_single)]
+	#[format(before_with = Format::prefix_ws_set_single)]
 	pub body:  DelimTokenTree,
 }
 
@@ -197,7 +197,7 @@ pub enum DeclMacroBranchExtra {
 #[derive(Parse, Format, Print)]
 pub struct DeclMacroBranchAttr {
 	pub attr: token::Attr,
-	#[format(and_with = Format::prefix_ws_remove)]
+	#[format(before_with = Format::prefix_ws_remove)]
 	#[format(and_with = Parenthesized::format_remove)]
 	pub args: Parenthesized<DelimTokenTreeInner>,
 }
@@ -207,7 +207,7 @@ pub struct DeclMacroBranchAttr {
 #[derive(Parse, Format, Print)]
 pub struct DeclMacroBranchDerive {
 	pub derive: token::Derive,
-	#[format(and_with = Format::prefix_ws_remove)]
+	#[format(before_with = Format::prefix_ws_remove)]
 	#[format(and_with = Parenthesized::format_remove)]
 	pub args:   Parenthesized<()>,
 }

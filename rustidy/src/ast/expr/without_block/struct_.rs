@@ -23,7 +23,7 @@ use {
 #[parse(skip_if_tag = "skip:StructExpression")]
 pub struct StructExpression {
 	pub path:  PathInExpression,
-	#[format(and_with = Format::prefix_ws_set_single)]
+	#[format(before_with = Format::prefix_ws_set_single)]
 	#[format(indent)]
 	#[format(and_with = Braced::format_indent_if_non_blank)]
 	pub inner: Braced<Option<StructExpressionInner>>,
@@ -44,7 +44,7 @@ pub enum StructExpressionInner {
 pub struct StructExprFields {
 	#[format(and_with = punct::format(Format::prefix_ws_set_cur_indent, Format::prefix_ws_remove))]
 	pub fields: Punctuated<StructExprField, token::Comma>,
-	#[format(and_with = Format::prefix_ws_remove)]
+	#[format(before_with = Format::prefix_ws_remove)]
 	pub end:    Option<StructExprFieldsEnd>,
 }
 
@@ -61,7 +61,7 @@ pub enum StructExprFieldsEnd {
 #[derive(Parse, Format, Print)]
 pub struct StructExprFieldsEndBase {
 	pub comma: token::Comma,
-	#[format(and_with = Format::prefix_ws_set_single)]
+	#[format(before_with = Format::prefix_ws_set_single)]
 	pub base:  StructBase,
 }
 
@@ -87,9 +87,9 @@ pub enum StructExprFieldInner {
 #[derive(Parse, Format, Print)]
 pub struct StructExprFieldInnerWithExpr {
 	pub start: StructExprFieldInnerWithExprStart,
-	#[format(and_with = Format::prefix_ws_remove)]
+	#[format(before_with = Format::prefix_ws_remove)]
 	pub colon: token::Colon,
-	#[format(and_with = Format::prefix_ws_set_single)]
+	#[format(before_with = Format::prefix_ws_set_single)]
 	pub expr:  Expression,
 }
 
@@ -107,6 +107,6 @@ pub enum StructExprFieldInnerWithExprStart {
 #[derive(Parse, Format, Print)]
 pub struct StructBase {
 	pub dot_dot: token::DotDot,
-	#[format(and_with = Format::prefix_ws_remove)]
+	#[format(before_with = Format::prefix_ws_remove)]
 	pub expr:    Expression,
 }

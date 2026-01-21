@@ -9,9 +9,9 @@ use {super::TypeNoBounds, crate::ast::token, rustidy_format::Format, rustidy_par
 #[derive(Parse, Format, Print)]
 pub struct RawPointerType {
 	pub star: token::Star,
-	#[format(and_with = Format::prefix_ws_remove)]
+	#[format(before_with = Format::prefix_ws_remove)]
 	pub kind: RawPointerTypeKind,
-	#[format(and_with = Format::prefix_ws_set_single)]
+	#[format(before_with = Format::prefix_ws_set_single)]
 	pub ty:   Box<TypeNoBounds>,
 }
 

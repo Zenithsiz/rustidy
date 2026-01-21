@@ -24,15 +24,15 @@ use {
 #[parse_recursive(kind = "right")]
 pub struct ClosureExpression {
 	pub async_: Option<token::Async>,
-	#[format(and_with(expr = Format::prefix_ws_set_single, if = self.async_.is_some()))]
+	#[format(before_with(expr = Format::prefix_ws_set_single, if = self.async_.is_some()))]
 	pub move_:  Option<token::Move>,
-	#[format(and_with(expr = Format::prefix_ws_set_single, if = self.async_.is_some() || self.move_.is_some()))]
+	#[format(before_with(expr = Format::prefix_ws_set_single, if = self.async_.is_some() || self.move_.is_some()))]
 	pub params: ClosureParams,
-	#[format(and_with = Format::prefix_ws_set_single)]
+	#[format(before_with = Format::prefix_ws_set_single)]
 	pub ret:    Option<ClosureRet>,
 	// TODO: If we parsed a return type, we should error
 	//       if this isn't a block expression.
-	#[format(and_with = Format::prefix_ws_set_single)]
+	#[format(before_with = Format::prefix_ws_set_single)]
 	pub expr:   Expression,
 }
 
@@ -51,7 +51,7 @@ pub enum ClosureParams {
 pub struct ClosureRet {
 	pub arrow: token::RArrow,
 	#[parse(fatal)]
-	#[format(and_with = Format::prefix_ws_set_single)]
+	#[format(before_with = Format::prefix_ws_set_single)]
 	pub ty:    TypeNoBounds,
 }
 
@@ -75,7 +75,7 @@ pub struct ClosureParameter(pub WithOuterAttributes<ClosureParameterInner>);
 #[derive(Parse, Format, Print)]
 pub struct ClosureParameterInner {
 	pub pat: PatternNoTopAlt,
-	#[format(and_with = Format::prefix_ws_remove)]
+	#[format(before_with = Format::prefix_ws_remove)]
 	pub ty:  Option<ClosureParameterInnerTy>,
 }
 
@@ -84,6 +84,6 @@ pub struct ClosureParameterInner {
 #[derive(Parse, Format, Print)]
 pub struct ClosureParameterInnerTy {
 	pub colon: token::Colon,
-	#[format(and_with = Format::prefix_ws_set_single)]
+	#[format(before_with = Format::prefix_ws_set_single)]
 	pub ty:    Type,
 }

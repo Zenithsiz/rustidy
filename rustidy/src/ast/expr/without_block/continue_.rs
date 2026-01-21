@@ -14,6 +14,6 @@ use {
 #[derive(Parse, Format, Print)]
 pub struct ContinueExpression {
 	pub continue_: token::Continue,
-	#[format(and_with = Format::prefix_ws_set_single)]
+	#[format(before_with = Format::prefix_ws_set_single)]
 	pub label:     Option<LifetimeOrLabel>,
 }

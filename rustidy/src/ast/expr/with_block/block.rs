@@ -33,7 +33,7 @@ pub struct BlockExpression(
 pub struct Statements {
 	#[format(and_with = rustidy_format::format_vec_each_with_all(Format::prefix_ws_set_cur_indent))]
 	pub stmts:         Vec<Statement>,
-	#[format(and_with(expr = Format::prefix_ws_set_cur_indent, if = !self.stmts.is_empty()))]
+	#[format(before_with(expr = Format::prefix_ws_set_cur_indent, if = !self.stmts.is_empty()))]
 	pub trailing_expr: Option<ExpressionWithoutBlock>,
 }
 

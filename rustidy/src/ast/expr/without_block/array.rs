@@ -31,8 +31,8 @@ pub enum ArrayElements {
 #[derive(Parse, Format, Print)]
 pub struct ArrayElementsRepeat {
 	pub expr:  Expression,
-	#[format(and_with = Format::prefix_ws_remove)]
+	#[format(before_with = Format::prefix_ws_remove)]
 	pub semi:  token::Semi,
-	#[format(and_with = Format::prefix_ws_set_single)]
+	#[format(before_with = Format::prefix_ws_set_single)]
 	pub count: Expression,
 }

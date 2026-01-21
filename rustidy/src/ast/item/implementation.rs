@@ -33,13 +33,13 @@ pub enum Implementation {
 #[derive(Parse, Format, Print)]
 pub struct InherentImpl {
 	pub impl_:    token::Impl,
-	#[format(and_with = Format::prefix_ws_remove)]
+	#[format(before_with = Format::prefix_ws_remove)]
 	pub generics: Option<GenericParams>,
-	#[format(and_with = Format::prefix_ws_set_single)]
+	#[format(before_with = Format::prefix_ws_set_single)]
 	pub ty:       Type,
-	#[format(and_with = Format::prefix_ws_set_cur_indent)]
+	#[format(before_with = Format::prefix_ws_set_cur_indent)]
 	pub where_:   Option<WhereClause>,
-	#[format(and_with = Format::prefix_ws_set_single)]
+	#[format(before_with = Format::prefix_ws_set_single)]
 	#[format(indent)]
 	#[format(and_with = Braced::format_indent_if_non_blank)]
 	pub body:     Braced<ImplBody>,
@@ -51,13 +51,13 @@ pub struct InherentImpl {
 #[derive(Parse, Format, Print)]
 pub struct TraitImpl {
 	pub unsafe_:  Option<token::Unsafe>,
-	#[format(and_with(expr = Format::prefix_ws_set_single, if = self.unsafe_.is_some()))]
+	#[format(before_with(expr = Format::prefix_ws_set_single, if = self.unsafe_.is_some()))]
 	pub impl_:    token::Impl,
-	#[format(and_with = Format::prefix_ws_remove)]
+	#[format(before_with = Format::prefix_ws_remove)]
 	pub generics: Option<GenericParams>,
-	#[format(and_with = Format::prefix_ws_set_single)]
+	#[format(before_with = Format::prefix_ws_set_single)]
 	pub const_:   Option<token::Const>,
-	#[format(and_with = Format::prefix_ws_set_single)]
+	#[format(before_with = Format::prefix_ws_set_single)]
 	pub not:      Option<token::Not>,
 	#[format(and_with = match self.not.is_some() {
 		true => Format::prefix_ws_remove,
@@ -65,13 +65,13 @@ pub struct TraitImpl {
 	})]
 	pub trait_:   TypePath,
 	#[parse(fatal)]
-	#[format(and_with = Format::prefix_ws_set_single)]
+	#[format(before_with = Format::prefix_ws_set_single)]
 	pub for_:     token::For,
-	#[format(and_with = Format::prefix_ws_set_single)]
+	#[format(before_with = Format::prefix_ws_set_single)]
 	pub ty:       Type,
-	#[format(and_with = Format::prefix_ws_set_cur_indent)]
+	#[format(before_with = Format::prefix_ws_set_cur_indent)]
 	pub where_:   Option<WhereClause>,
-	#[format(and_with = Format::prefix_ws_set_single)]
+	#[format(before_with = Format::prefix_ws_set_single)]
 	#[format(indent)]
 	#[format(and_with = Braced::format_indent_if_non_blank)]
 	pub body:     Braced<ImplBody>,

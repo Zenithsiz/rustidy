@@ -14,7 +14,7 @@ use {
 #[derive(Parse, Format, Print)]
 pub struct Visibility {
 	pub pub_: token::Pub,
-	#[format(and_with = Format::prefix_ws_remove)]
+	#[format(before_with = Format::prefix_ws_remove)]
 	#[format(and_with = rustidy_format::format_option_with(Parenthesized::format_remove))]
 	pub path: Option<Parenthesized<VisibilityPath>>,
 }
@@ -35,6 +35,6 @@ pub enum VisibilityPath {
 pub struct VisibilityPathIn {
 	pub in_:  token::In,
 	#[parse(fatal)]
-	#[format(and_with = Format::prefix_ws_set_single)]
+	#[format(before_with = Format::prefix_ws_set_single)]
 	pub path: SimplePath,
 }

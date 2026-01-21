@@ -139,10 +139,10 @@ pub enum ExpressionWithoutBlockInner {
 #[derive(Parse, Format, Print)]
 pub struct DoYeetExpression {
 	pub do_:   token::Do,
-	#[format(and_with = Format::prefix_ws_set_single)]
+	#[format(before_with = Format::prefix_ws_set_single)]
 	pub yeet_: token::Yeet,
 	// TODO: This should be recursive
-	#[format(and_with = Format::prefix_ws_set_single)]
+	#[format(before_with = Format::prefix_ws_set_single)]
 	pub expr:  Option<Expression>,
 }
 

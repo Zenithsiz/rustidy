@@ -20,11 +20,11 @@ use {
 pub struct MacroRulesDefinition {
 	pub macro_rules: token::MacroRules,
 	#[parse(fatal)]
-	#[format(and_with = Format::prefix_ws_remove)]
+	#[format(before_with = Format::prefix_ws_remove)]
 	pub not:         token::Not,
-	#[format(and_with = Format::prefix_ws_set_single)]
+	#[format(before_with = Format::prefix_ws_set_single)]
 	pub ident:       Identifier,
-	#[format(and_with = Format::prefix_ws_set_single)]
+	#[format(before_with = Format::prefix_ws_set_single)]
 	#[format(indent)]
 	pub def:         MacroRulesDef,
 }

@@ -28,11 +28,11 @@ pub enum MacroInvocationSemi {
 #[derive(Parse, Format, Print)]
 pub struct MacroInvocationSemiParens {
 	pub path:   SimplePath,
-	#[format(and_with = Format::prefix_ws_remove)]
+	#[format(before_with = Format::prefix_ws_remove)]
 	pub not:    token::Not,
-	#[format(and_with = Format::prefix_ws_remove)]
+	#[format(before_with = Format::prefix_ws_remove)]
 	pub tokens: Parenthesized<Vec<TokenTree>>,
-	#[format(and_with = Format::prefix_ws_remove)]
+	#[format(before_with = Format::prefix_ws_remove)]
 	pub semi:   token::Semi,
 }
 
@@ -41,11 +41,11 @@ pub struct MacroInvocationSemiParens {
 #[derive(Parse, Format, Print)]
 pub struct MacroInvocationSemiBrackets {
 	pub path:   SimplePath,
-	#[format(and_with = Format::prefix_ws_remove)]
+	#[format(before_with = Format::prefix_ws_remove)]
 	pub not:    token::Not,
-	#[format(and_with = Format::prefix_ws_remove)]
+	#[format(before_with = Format::prefix_ws_remove)]
 	pub tokens: Bracketed<Vec<TokenTree>>,
-	#[format(and_with = Format::prefix_ws_remove)]
+	#[format(before_with = Format::prefix_ws_remove)]
 	pub semi:   token::Semi,
 }
 
@@ -54,8 +54,8 @@ pub struct MacroInvocationSemiBrackets {
 #[derive(Parse, Format, Print)]
 pub struct MacroInvocationSemiBraces {
 	pub path:   SimplePath,
-	#[format(and_with = Format::prefix_ws_remove)]
+	#[format(before_with = Format::prefix_ws_remove)]
 	pub not:    token::Not,
-	#[format(and_with = Format::prefix_ws_set_single)]
+	#[format(before_with = Format::prefix_ws_set_single)]
 	pub tokens: Braced<Vec<TokenTree>>,
 }

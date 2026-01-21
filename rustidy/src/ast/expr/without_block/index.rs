@@ -21,7 +21,7 @@ use {
 #[parse_recursive(kind = "left")]
 pub struct IndexExpression {
 	pub expr:  Expression,
-	#[format(and_with = Format::prefix_ws_remove)]
+	#[format(before_with = Format::prefix_ws_remove)]
 	#[format(and_with = Bracketed::format_remove)]
 	pub index: Bracketed<Expression>,
 }

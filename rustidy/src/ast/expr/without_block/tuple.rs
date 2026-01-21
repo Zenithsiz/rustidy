@@ -22,7 +22,7 @@ pub struct TupleExpression(#[format(and_with = Parenthesized::format_remove)] Pa
 pub struct TupleElements {
 	#[format(and_with = at_least::format(Format::prefix_ws_set_single))]
 	pub exprs: AtLeast1<TupleElementsInner>,
-	#[format(and_with = Format::prefix_ws_set_single)]
+	#[format(before_with = Format::prefix_ws_set_single)]
 	pub last:  Option<Expression>,
 }
 
@@ -31,6 +31,6 @@ pub struct TupleElements {
 #[derive(Parse, Format, Print)]
 pub struct TupleElementsInner {
 	pub expr:  Expression,
-	#[format(and_with = Format::prefix_ws_remove)]
+	#[format(before_with = Format::prefix_ws_remove)]
 	pub comma: token::Comma,
 }

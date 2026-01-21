@@ -32,11 +32,11 @@ pub enum Struct {
 #[derive(Parse, Format, Print)]
 pub struct StructStruct {
 	pub struct_:  token::Struct,
-	#[format(and_with = Format::prefix_ws_set_single)]
+	#[format(before_with = Format::prefix_ws_set_single)]
 	pub ident:    Identifier,
-	#[format(and_with = Format::prefix_ws_remove)]
+	#[format(before_with = Format::prefix_ws_remove)]
 	pub generics: Option<GenericParams>,
-	#[format(and_with = Format::prefix_ws_set_cur_indent)]
+	#[format(before_with = Format::prefix_ws_set_cur_indent)]
 	pub where_:   Option<WhereClause>,
 	pub inner:    StructStructInner,
 }
@@ -46,11 +46,11 @@ pub struct StructStruct {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub enum StructStructInner {
-	#[format(and_with = Format::prefix_ws_set_single)]
+	#[format(before_with = Format::prefix_ws_set_single)]
 	#[format(indent)]
 	#[format(and_with = Braced::format_indent_if_non_blank)]
 	Fields(Braced<Option<StructFields>>),
-	#[format(and_with = Format::prefix_ws_remove)]
+	#[format(before_with = Format::prefix_ws_remove)]
 	Semi(token::Semi),
 }
 
@@ -77,14 +77,14 @@ pub struct StructField(
 #[derive(Parse, Format, Print)]
 pub struct StructFieldInner {
 	pub vis:   Option<Visibility>,
-	#[format(and_with = Format::prefix_ws_set_single)]
+	#[format(before_with = Format::prefix_ws_set_single)]
 	pub ident: Identifier,
-	#[format(and_with = Format::prefix_ws_remove)]
+	#[format(before_with = Format::prefix_ws_remove)]
 	pub colon: token::Colon,
-	#[format(and_with = Format::prefix_ws_set_single)]
+	#[format(before_with = Format::prefix_ws_set_single)]
 	pub ty:    Type,
 	// Note: Nightly-only
-	#[format(and_with = Format::prefix_ws_set_single)]
+	#[format(before_with = Format::prefix_ws_set_single)]
 	pub eq:    Option<StructFieldEq>,
 }
 
@@ -93,7 +93,7 @@ pub struct StructFieldInner {
 #[derive(Parse, Format, Print)]
 pub struct StructFieldEq {
 	pub eq:   token::Eq,
-	#[format(and_with = Format::prefix_ws_set_single)]
+	#[format(before_with = Format::prefix_ws_set_single)]
 	pub expr: Expression,
 }
 
@@ -103,17 +103,17 @@ pub struct StructFieldEq {
 #[derive(Parse, Format, Print)]
 pub struct TupleStruct {
 	pub struct_:  token::Struct,
-	#[format(and_with = Format::prefix_ws_set_single)]
+	#[format(before_with = Format::prefix_ws_set_single)]
 	pub ident:    Identifier,
-	#[format(and_with = Format::prefix_ws_remove)]
+	#[format(before_with = Format::prefix_ws_remove)]
 	pub generics: Option<GenericParams>,
-	#[format(and_with = Format::prefix_ws_remove)]
+	#[format(before_with = Format::prefix_ws_remove)]
 	#[format(and_with = Parenthesized::format_remove)]
 	pub fields:   Parenthesized<Option<TupleFields>>,
 	#[parse(fatal)]
-	#[format(and_with = Format::prefix_ws_set_cur_indent)]
+	#[format(before_with = Format::prefix_ws_set_cur_indent)]
 	pub where_:   Option<WhereClause>,
-	#[format(and_with = Format::prefix_ws_remove)]
+	#[format(before_with = Format::prefix_ws_remove)]
 	pub semi:     token::Semi,
 }
 
@@ -141,6 +141,6 @@ pub struct TupleField(
 #[derive(Parse, Format, Print)]
 pub struct TupleFieldInner {
 	pub vis: Option<Visibility>,
-	#[format(and_with(expr = Format::prefix_ws_set_single, if = self.vis.is_some()))]
+	#[format(before_with(expr = Format::prefix_ws_set_single, if = self.vis.is_some()))]
 	pub ty:  Type,
 }

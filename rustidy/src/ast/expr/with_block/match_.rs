@@ -25,10 +25,10 @@ use {
 pub struct MatchExpression {
 	pub match_:    token::Match,
 	#[parse(fatal)]
-	#[format(and_with = Format::prefix_ws_set_single)]
+	#[format(before_with = Format::prefix_ws_set_single)]
 	pub scrutinee: Box<Scrutinee>,
 	#[format(indent)]
-	#[format(and_with = Format::prefix_ws_set_single)]
+	#[format(before_with = Format::prefix_ws_set_single)]
 	#[format(and_with = Braced::format_indent_if_non_blank)]
 	pub arms:      Braced<WithInnerAttributes<Option<MatchArms>>>,
 }
@@ -163,11 +163,11 @@ pub enum MatchArmsError {
 #[derive(Parse, Format, Print)]
 pub struct MatchArmWithExpr {
 	pub arm:            MatchArm,
-	#[format(and_with = Format::prefix_ws_set_single)]
+	#[format(before_with = Format::prefix_ws_set_single)]
 	pub arrow:          token::FatArrow,
-	#[format(and_with = Format::prefix_ws_set_single)]
+	#[format(before_with = Format::prefix_ws_set_single)]
 	pub expr:           Expression,
-	#[format(and_with = Format::prefix_ws_remove)]
+	#[format(before_with = Format::prefix_ws_remove)]
 	pub trailing_comma: Option<token::Comma>,
 }
 
@@ -186,7 +186,7 @@ pub struct MatchArm(
 #[parse(name = "a match arm")]
 pub struct MatchArmInner {
 	pub pat:   Pattern,
-	#[format(and_with = Format::prefix_ws_set_single)]
+	#[format(before_with = Format::prefix_ws_set_single)]
 	pub guard: Option<MatchArmGuard>,
 }
 
@@ -199,6 +199,6 @@ pub struct MatchArmGuard {
 	// TODO: The reference says this is just an expression, but
 	//       that means we don't parse `Some(...) if let ...`, so
 	//       instead we allow any conditions.
-	#[format(and_with = Format::prefix_ws_set_single)]
+	#[format(before_with = Format::prefix_ws_set_single)]
 	pub cond: Conditions,
 }
