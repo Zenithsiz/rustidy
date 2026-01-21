@@ -20,3 +20,9 @@ pub use self::{
 	config::Config,
 	replacement::{Replacement, Replacements},
 };
+
+/// Returns if a string is blank
+#[must_use]
+pub fn is_str_blank(s: &str) -> bool {
+	s.chars().all(|ch| ch.is_ascii_whitespace())
+}

@@ -77,6 +77,20 @@ pub trait Format {
 		len
 	}
 
+	/// Returns if the output is blank
+	fn output_is_blank(&mut self, ctx: &mut Context) -> bool {
+		let mut is_blank = true;
+		self.with_output(ctx, &mut |s, ctx| match ctx.replacements.get(s) {
+			Some(replacement) => is_blank &= replacement.is_blank(ctx.config),
+			None => match s.repr() {
+				AstStrRepr::AstRange(range) => is_blank &= rustidy_util::is_str_blank(range.str(ctx.input)),
+				AstStrRepr::String(s) => is_blank &= rustidy_util::is_str_blank(s),
+			},
+		});
+
+		is_blank
+	}
+
 	/// Returns the output length of this type without the prefix whitespace
 	fn output_len_without_prefix_ws(&mut self, ctx: &mut Context) -> usize {
 		let mut len = self.output_len(ctx);

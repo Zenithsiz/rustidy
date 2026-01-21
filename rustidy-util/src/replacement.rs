@@ -84,6 +84,16 @@ impl Replacement {
 		}
 	}
 
+	/// Returns if this replacement is blank
+	#[must_use]
+	pub fn is_blank(&self, _config: &Config) -> bool {
+		match *self {
+			Self::Static(s) => crate::is_str_blank(s),
+			Self::Indentation { .. } => true,
+			Self::Dynamic(ref s) => crate::is_str_blank(s),
+		}
+	}
+
 	/// Writes this replacement onto a string
 	pub fn write(&self, config: &Config, output: &mut String) {
 		match *self {
