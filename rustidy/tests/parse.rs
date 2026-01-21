@@ -9,7 +9,7 @@ use {
 	rustidy::ast,
 	rustidy_parse::Parser,
 	rustidy_print::{Print, PrintFmt},
-	rustidy_util::{Config, Replacements},
+	rustidy_util::Config,
 	serde::{Deserialize, Serialize},
 	std::{env, fs, path::Path},
 };
@@ -29,8 +29,7 @@ pub fn parse() {
 
 		let input = rustidy::parse(&input_path, &mut parser).expect("Unable to parse input");
 
-		let replacements = Replacements::new();
-		let mut print_fmt = PrintFmt::new(&input_file, &config, &replacements);
+		let mut print_fmt = PrintFmt::new(&input_file, &config);
 		input.print(&mut print_fmt);
 		let input_printed = print_fmt.output();
 		assert_eq!(input_file, input_printed);

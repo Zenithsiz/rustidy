@@ -17,7 +17,7 @@ pub use rustidy_macros::Format;
 use {
 	crate as rustidy_format,
 	core::marker::PhantomData,
-	rustidy_util::{ArenaData, ArenaIdx, AstStr, Config, Replacement, Replacements, ast_str::AstStrRepr},
+	rustidy_util::{ArenaData, ArenaIdx, AstStr, Config, ast_str::AstStrRepr},
 	std::borrow::Cow,
 };
 
@@ -52,13 +52,10 @@ pub trait Format {
 	/// Returns the length of this type
 	fn len(&mut self, ctx: &mut Context) -> usize {
 		let mut len = 0;
-		self.with_strings(ctx, &mut |s, ctx| match ctx.replacements.get(s) {
-			Some(replacement) => len += replacement.len(),
-			None => match *s.repr() {
-				AstStrRepr::AstRange(range) => len += range.len(),
-				AstStrRepr::String(s) => len += s.len(),
-				AstStrRepr::Replacement(ref replacement) => len += replacement.len(),
-			},
+		self.with_strings(ctx, &mut |s, _ctx| match *s.repr() {
+			AstStrRepr::AstRange(range) => len += range.len(),
+			AstStrRepr::String(s) => len += s.len(),
+			AstStrRepr::Replacement(ref replacement) => len += replacement.len(),
 		});
 		len
 	}
@@ -66,13 +63,10 @@ pub trait Format {
 	/// Returns if this type is blank
 	fn is_blank(&mut self, ctx: &mut Context) -> bool {
 		let mut is_blank = true;
-		self.with_strings(ctx, &mut |s, ctx| match ctx.replacements.get(s) {
-			Some(replacement) => is_blank &= replacement.is_blank(ctx.config),
-			None => match *s.repr() {
-				AstStrRepr::AstRange(range) => is_blank &= rustidy_util::is_str_blank(range.str(ctx.input)),
-				AstStrRepr::String(s) => is_blank &= rustidy_util::is_str_blank(s),
-				AstStrRepr::Replacement(ref replacement) => is_blank &= replacement.is_blank(ctx.config),
-			},
+		self.with_strings(ctx, &mut |s, ctx| match *s.repr() {
+			AstStrRepr::AstRange(range) => is_blank &= rustidy_util::is_str_blank(range.str(ctx.input)),
+			AstStrRepr::String(s) => is_blank &= rustidy_util::is_str_blank(s),
+			AstStrRepr::Replacement(ref replacement) => is_blank &= replacement.is_blank(ctx.config),
 		});
 
 		is_blank
@@ -344,18 +338,16 @@ pub struct Context<'a, 'input> {
 	input:        &'input str,
 	config:       &'a Config,
 	indent_depth: usize,
-	replacements: &'a mut Replacements,
 }
 
 impl<'a, 'input> Context<'a, 'input> {
 	/// Creates a new context
 	#[must_use]
-	pub const fn new(input: &'input str, replacements: &'a mut Replacements, config: &'a Config) -> Self {
+	pub const fn new(input: &'input str, config: &'a Config) -> Self {
 		Self {
 			input,
 			config,
 			indent_depth: 0,
-			replacements,
 		}
 	}
 
@@ -381,12 +373,6 @@ impl<'a, 'input> Context<'a, 'input> {
 	#[must_use]
 	pub const fn indent(&self) -> usize {
 		self.indent_depth
-	}
-
-	/// Replaces a string
-	pub fn replace(&mut self, s: &AstStr, replacement: impl Into<Replacement>) {
-		self.replacements
-			.add(self.config, s, &s.str(self.input, self.config), replacement);
 	}
 
 	/// Runs `f` with a further indentation level

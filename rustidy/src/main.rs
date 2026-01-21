@@ -24,7 +24,6 @@ use {
 	rustidy_format::Format,
 	rustidy_parse::Parser,
 	rustidy_print::{Print, PrintFmt},
-	rustidy_util::Replacements,
 	std::{fs, process::ExitCode},
 	zutil_logger::Logger,
 };
@@ -63,12 +62,11 @@ fn run() -> Result<(), AppError> {
 		let mut crate_ = rustidy::parse(file_path, &mut parser).context("Unable to parse file")?;
 
 		// Format
-		let mut replacements = Replacements::new();
-		let mut ctx = rustidy_format::Context::new(&file, &mut replacements, &config);
+		let mut ctx = rustidy_format::Context::new(&file, &config);
 		crate_.format(&mut ctx);
 
 		// Then output it to file
-		let mut print_fmt = PrintFmt::new(&file, &config, &replacements);
+		let mut print_fmt = PrintFmt::new(&file, &config);
 		crate_.print(&mut print_fmt);
 		fs::write(file_path, print_fmt.output()).context("Unable to write file")?;
 	}

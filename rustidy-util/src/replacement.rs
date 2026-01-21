@@ -1,46 +1,7 @@
 //! String replacements
 
 // Imports
-use {
-	crate::{AstStr, Config},
-	std::collections::HashMap,
-};
-
-/// String replacements
-pub struct Replacements {
-	replacements: HashMap<u32, Replacement>,
-}
-
-impl Replacements {
-	/// Creates new, empty, replacements
-	#[must_use]
-	pub fn new() -> Self {
-		Self {
-			replacements: HashMap::new(),
-		}
-	}
-
-	/// Adds a replacement
-	pub fn add(&mut self, config: &Config, s: &AstStr, s_str: &str, replacement: impl Into<Replacement>) {
-		let replacement = replacement.into();
-		match replacement.is(config, s_str) {
-			true => _ = self.replacements.remove(&s.0.id()),
-			false => _ = self.replacements.insert(s.0.id(), replacement),
-		}
-	}
-
-	/// Returns the replacement of a string
-	#[must_use]
-	pub fn get(&self, s: &AstStr) -> Option<&Replacement> {
-		self.replacements.get(&s.0.id())
-	}
-}
-
-impl Default for Replacements {
-	fn default() -> Self {
-		Self::new()
-	}
-}
+use crate::Config;
 
 /// String replacement
 #[derive(Debug, Clone)]

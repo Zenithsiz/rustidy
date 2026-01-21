@@ -48,7 +48,7 @@ impl Whitespace {
 		let mut inner = ARENA.get(&self.0);
 
 		let prefix_str = kind.prefix_str(ctx, &inner.first.0, inner.rest.is_empty());
-		ctx.replace(&inner.first.0, prefix_str);
+		inner.first.0 = AstStr::new(prefix_str);
 
 		for (pos, (comment, ws)) in inner.rest.iter_mut().with_position() {
 			let is_last = matches!(pos, itertools::Position::Last | itertools::Position::Only);
@@ -56,7 +56,7 @@ impl Whitespace {
 				true => kind.after_newline_str(ctx, &ws.0, is_last),
 				false => kind.normal_str(ctx, &ws.0, is_last),
 			};
-			ctx.replace(&ws.0, ws_str);
+			ws.0 = AstStr::new(ws_str);
 		}
 	}
 }
@@ -308,7 +308,6 @@ mod tests {
 		app_error::{AppError, Context, ensure},
 		rustidy_parse::ParseError,
 		rustidy_print::{Print, PrintFmt},
-		rustidy_util::Replacements,
 	};
 
 	#[derive(Clone, Debug)]
@@ -334,12 +333,11 @@ mod tests {
 		);
 
 
-		let mut replacements = Replacements::new();
-		let mut fmt_ctx = rustidy_format::Context::new(source, &mut replacements, fmt_config);
+		let mut fmt_ctx = rustidy_format::Context::new(source, fmt_config);
 		fmt_ctx.set_indent_depth(config.indent_depth);
 		whitespace.format(&mut fmt_ctx, kind);
 
-		let mut print_fmt = PrintFmt::new(source, fmt_config, &replacements);
+		let mut print_fmt = PrintFmt::new(source, fmt_config);
 		whitespace.print(&mut print_fmt);
 		let output = print_fmt.output().to_owned();
 
@@ -354,11 +352,11 @@ mod tests {
 		);
 
 		{
-			let mut fmt_ctx = rustidy_format::Context::new(source, &mut replacements, fmt_config);
+			let mut fmt_ctx = rustidy_format::Context::new(source, fmt_config);
 			fmt_ctx.set_indent_depth(config.indent_depth);
 			whitespace.format(&mut fmt_ctx, kind);
 
-			let mut print_fmt = PrintFmt::new(source, fmt_config, &replacements);
+			let mut print_fmt = PrintFmt::new(source, fmt_config);
 			whitespace.print(&mut print_fmt);
 
 			let output_fmt = print_fmt.output().replace(' ', "·").replace('\t', "⭾");

@@ -9,7 +9,7 @@ pub use rustidy_macros::Print;
 // Imports
 use {
 	core::marker::PhantomData,
-	rustidy_util::{ArenaData, ArenaIdx, AstStr, Config, Replacements, ast_str::AstStrRepr},
+	rustidy_util::{ArenaData, ArenaIdx, AstStr, Config, ast_str::AstStrRepr},
 };
 
 /// Printable types
@@ -79,13 +79,10 @@ tuple_impl! { 3, T0, T1, T2 }
 
 impl Print for AstStr {
 	fn print(&self, f: &mut PrintFmt) {
-		match f.replacements.get(self) {
-			Some(replacement) => replacement.write(f.config, &mut f.output),
-			None => match *self.repr() {
-				AstStrRepr::AstRange(range) => f.output.push_str(range.str(f.input)),
-				AstStrRepr::String(s) => f.output.push_str(s),
-				AstStrRepr::Replacement(ref replacement) => replacement.write(f.config, &mut f.output),
-			},
+		match *self.repr() {
+			AstStrRepr::AstRange(range) => f.output.push_str(range.str(f.input)),
+			AstStrRepr::String(s) => f.output.push_str(s),
+			AstStrRepr::Replacement(ref replacement) => replacement.write(f.config, &mut f.output),
 		}
 	}
 }
@@ -98,21 +95,19 @@ impl<T: ArenaData<Data: Print>> Print for ArenaIdx<T> {
 
 /// Print formatter
 pub struct PrintFmt<'a, 'input> {
-	input:        &'input str,
-	output:       String,
-	config:       &'a Config,
-	replacements: &'a Replacements,
+	input:  &'input str,
+	output: String,
+	config: &'a Config,
 }
 
 impl<'a, 'input> PrintFmt<'a, 'input> {
 	/// Creates a new formatter
 	#[must_use]
-	pub const fn new(input: &'input str, config: &'a Config, replacements: &'a Replacements) -> Self {
+	pub const fn new(input: &'input str, config: &'a Config) -> Self {
 		Self {
 			input,
 			output: String::new(),
 			config,
-			replacements,
 		}
 	}
 

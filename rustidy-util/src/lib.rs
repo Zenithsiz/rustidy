@@ -18,7 +18,7 @@ pub use self::{
 	ast_range::AstRange,
 	ast_str::AstStr,
 	config::Config,
-	replacement::{Replacement, Replacements},
+	replacement::Replacement,
 };
 
 /// Returns if a string is blank

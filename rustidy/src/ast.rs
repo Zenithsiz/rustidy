@@ -26,7 +26,7 @@ use {
 	rustidy_format::Format,
 	rustidy_parse::Parse,
 	rustidy_print::Print,
-	rustidy_util::Replacement,
+	rustidy_util::{AstStr, Replacement},
 };
 
 /// `Crate`
@@ -63,7 +63,7 @@ impl Crate {
 		// Add the newline at the end of the trailing comment if it didn't have one already
 		if !s.ends_with('\n') {
 			s.push('\n');
-			ctx.replace(&trailing.0, Replacement::Dynamic(s));
+			trailing.0 = AstStr::new(Replacement::Dynamic(s));
 		}
 	}
 }

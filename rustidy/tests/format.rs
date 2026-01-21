@@ -5,7 +5,7 @@ use {
 	rustidy_format::Format,
 	rustidy_parse::Parser,
 	rustidy_print::{Print, PrintFmt},
-	rustidy_util::{AstPos, Replacements},
+	rustidy_util::AstPos,
 	std::{env, fs, path::Path},
 };
 
@@ -24,19 +24,18 @@ pub fn format() {
 
 		let mut input = rustidy::parse(&input_path, &mut parser).expect("Input did not fail");
 
-		let mut replacements = Replacements::new();
-		let mut ctx = rustidy_format::Context::new(&file, &mut replacements, &config);
+		let mut ctx = rustidy_format::Context::new(&file, &config);
 		input.format(&mut ctx);
 
-		let mut print_fmt = PrintFmt::new(&file, &config, &replacements);
+		let mut print_fmt = PrintFmt::new(&file, &config);
 		input.print(&mut print_fmt);
 		let found_output = print_fmt.output().to_owned();
 
 		{
-			let mut ctx = rustidy_format::Context::new(&file, &mut replacements, &config);
+			let mut ctx = rustidy_format::Context::new(&file, &config);
 			input.format(&mut ctx);
 
-			let mut print_fmt = PrintFmt::new(&file, &config, &replacements);
+			let mut print_fmt = PrintFmt::new(&file, &config);
 			input.print(&mut print_fmt);
 
 			assert_eq!(
