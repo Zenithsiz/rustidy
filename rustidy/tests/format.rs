@@ -24,7 +24,7 @@ pub fn format() {
 		let mut input = rustidy::parse(&input_path, &mut parser).expect("Input did not fail");
 
 		let mut replacements = Replacements::new();
-		let config = rustidy_format::Config::default();
+		let config = rustidy_util::Config::default();
 		let mut ctx = rustidy_format::Context::new(&file, &mut replacements, &config);
 		input.format(&mut ctx);
 

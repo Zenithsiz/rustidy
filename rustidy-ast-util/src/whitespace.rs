@@ -327,7 +327,7 @@ mod tests {
 	fn test_case_with(
 		source: &str,
 		expected: &str,
-		fmt_config: &rustidy_format::Config,
+		fmt_config: &rustidy_util::Config,
 		config: &Config,
 		kind: FormatKind,
 	) -> Result<(), AppError> {
@@ -375,7 +375,7 @@ mod tests {
 
 	fn test_cases_with(
 		cases: impl IntoIterator<Item = CaseKinds<'_>>,
-		fmt_config: &rustidy_format::Config,
+		fmt_config: &rustidy_util::Config,
 		config: &Config,
 	) -> Result<(), AppError> {
 		cases
@@ -495,7 +495,7 @@ mod tests {
 			},
 		];
 
-		let fmt_config = rustidy_format::Config::default();
+		let fmt_config = rustidy_util::Config::default();
 		let config = Config { indent_depth: 2 };
 		self::test_cases_with(cases, &fmt_config, &config).map_err(AppError::flatten)
 	}

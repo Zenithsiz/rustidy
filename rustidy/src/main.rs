@@ -62,7 +62,7 @@ fn run() -> Result<(), AppError> {
 
 		// Format
 		let mut replacements = Replacements::new();
-		let config = rustidy_format::Config::default();
+		let config = rustidy_util::Config::default();
 		let mut ctx = rustidy_format::Context::new(&file, &mut replacements, &config);
 		crate_.format(&mut ctx);
 

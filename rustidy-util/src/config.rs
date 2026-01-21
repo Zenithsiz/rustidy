@@ -1,8 +1,6 @@
-//! Format configuration
+//! Formatter configuration
 
-// TODO: Move to util?
-
-/// Format config
+/// Formatter configuration
 #[derive(Clone, Debug)]
 pub struct Config {
 	/// Indentation string

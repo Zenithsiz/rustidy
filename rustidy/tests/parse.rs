@@ -7,9 +7,10 @@
 use {
 	assert_json_diff::assert_json_eq,
 	rustidy::ast,
-	rustidy_format::{Config, Replacements},
+	rustidy_format::Replacements,
 	rustidy_parse::Parser,
 	rustidy_print::{Print, PrintFmt},
+	rustidy_util::Config,
 	serde::{Deserialize, Serialize},
 	std::{env, fs, path::Path},
 };
