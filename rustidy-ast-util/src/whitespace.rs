@@ -7,7 +7,7 @@ use {
 	rustidy_format::{Format, WhitespaceLike},
 	rustidy_parse::{Parse, Parser},
 	rustidy_print::Print,
-	rustidy_util::{Arena, ArenaData, ArenaIdx, AstStr, Replacement, ast_str::AstStrRepr},
+	rustidy_util::{Arena, ArenaData, ArenaIdx, AstStr, Replacement},
 };
 
 /// Whitespace
@@ -136,14 +136,8 @@ impl FormatKind {
 	}
 
 	/// Returns the indentation string, with a newline *before*
-	fn indent_str_nl(ctx: &mut rustidy_format::Context, cur_str: &AstStr) -> Replacement {
-		// TODO: Should we be checking for multiple newlines?
-		let after_newline = match cur_str.repr() {
-			AstStrRepr::AstRange(range) => range.str_before(ctx.input()).ends_with('\n'),
-			// TODO: What should we do in this scenario?
-			AstStrRepr::String(_) => false,
-		};
-
+	// TODO: Should we be checking for multiple newlines?
+	fn indent_str_nl(ctx: &mut rustidy_format::Context, cur_str: &AstStr, after_newline: bool) -> Replacement {
 		let min_newlines = ctx.config().empty_line_spacing.min;
 		let max_newlines = ctx.config().empty_line_spacing.max;
 		let (min_newlines, max_newlines) = match after_newline {
@@ -169,7 +163,9 @@ impl FormatKind {
 				remove_if_empty,
 			} => match remove_if_empty && is_last {
 				true => "".into(),
-				false => ctx.with_indent_offset_if(offset, is_last, |ctx| Self::indent_str_nl(ctx, cur_str)),
+				// Note: Since we're the prefix string, there is no whitespace before us, so
+				//       we *are* not after a newline
+				false => ctx.with_indent_offset_if(offset, is_last, |ctx| Self::indent_str_nl(ctx, cur_str, false)),
 			},
 		}
 	}
@@ -180,7 +176,7 @@ impl FormatKind {
 			Self::Remove | Self::Single => "".into(),
 			Self::Indent { offset, .. } => match is_last {
 				true => ctx.with_indent_offset(offset, |ctx| Self::indent_str(ctx)),
-				false => Self::indent_str_nl(ctx, cur_str),
+				false => Self::indent_str_nl(ctx, cur_str, true),
 			},
 		}
 	}
@@ -191,8 +187,8 @@ impl FormatKind {
 			Self::Remove => "".into(),
 			Self::Single => " ".into(),
 			Self::Indent { offset, .. } => match is_last {
-				true => ctx.with_indent_offset(offset, |ctx| Self::indent_str_nl(ctx, cur_str)),
-				false => Self::indent_str_nl(ctx, cur_str),
+				true => ctx.with_indent_offset(offset, |ctx| Self::indent_str_nl(ctx, cur_str, false)),
+				false => Self::indent_str_nl(ctx, cur_str, false),
 			},
 		}
 	}
