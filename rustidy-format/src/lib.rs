@@ -45,13 +45,13 @@ pub trait WhitespaceVisitor {
 
 /// Formattable type
 pub trait Format {
-	/// Iterates over all output strings
-	fn with_output(&mut self, ctx: &mut Context, f: &mut impl FnMut(&mut AstStr, &mut Context));
+	/// Iterates over all strings in this type
+	fn with_strings(&mut self, ctx: &mut Context, f: &mut impl FnMut(&mut AstStr, &mut Context));
 
-	/// Returns the output length of this type
-	fn output_len(&mut self, ctx: &mut Context) -> usize {
+	/// Returns the length of this type
+	fn len(&mut self, ctx: &mut Context) -> usize {
 		let mut len = 0;
-		self.with_output(ctx, &mut |s, ctx| match ctx.replacements.get(s) {
+		self.with_strings(ctx, &mut |s, ctx| match ctx.replacements.get(s) {
 			Some(replacement) => len += replacement.len(),
 			None => match s.repr() {
 				AstStrRepr::AstRange(range) => len += range.len(),
@@ -61,10 +61,10 @@ pub trait Format {
 		len
 	}
 
-	/// Returns if the output is blank
-	fn output_is_blank(&mut self, ctx: &mut Context) -> bool {
+	/// Returns if this type is blank
+	fn is_blank(&mut self, ctx: &mut Context) -> bool {
 		let mut is_blank = true;
-		self.with_output(ctx, &mut |s, ctx| match ctx.replacements.get(s) {
+		self.with_strings(ctx, &mut |s, ctx| match ctx.replacements.get(s) {
 			Some(replacement) => is_blank &= replacement.is_blank(ctx.config),
 			None => match s.repr() {
 				AstStrRepr::AstRange(range) => is_blank &= rustidy_util::is_str_blank(range.str(ctx.input)),
@@ -75,13 +75,13 @@ pub trait Format {
 		is_blank
 	}
 
-	/// Returns the output length of this type without the prefix whitespace
-	fn output_len_without_prefix_ws(&mut self, ctx: &mut Context) -> usize {
-		let mut len = self.output_len(ctx);
+	/// Returns the length of this type without the prefix whitespace
+	fn len_without_prefix_ws(&mut self, ctx: &mut Context) -> usize {
+		let mut len = self.len(ctx);
 		self.with_prefix_ws(ctx, &mut self::whitespace_visitor! {
 			lifetimes<'a>
 			capture(len: &'a mut usize = &mut len)
-			|ws, ctx| -> () => **len -= ws.output_len(ctx)
+			|ws, ctx| -> () => **len -= ws.len(ctx)
 		});
 
 		len
@@ -176,8 +176,8 @@ macro whitespace_visitor(
 }}
 
 impl<T: Format> Format for &'_ mut T {
-	fn with_output(&mut self, ctx: &mut Context, f: &mut impl FnMut(&mut AstStr, &mut Context)) {
-		(**self).with_output(ctx, f);
+	fn with_strings(&mut self, ctx: &mut Context, f: &mut impl FnMut(&mut AstStr, &mut Context)) {
+		(**self).with_strings(ctx, f);
 	}
 
 	fn format(&mut self, ctx: &mut Context) {
@@ -190,8 +190,8 @@ impl<T: Format> Format for &'_ mut T {
 }
 
 impl<T: Format> Format for Box<T> {
-	fn with_output(&mut self, ctx: &mut Context, f: &mut impl FnMut(&mut AstStr, &mut Context)) {
-		(**self).with_output(ctx, f);
+	fn with_strings(&mut self, ctx: &mut Context, f: &mut impl FnMut(&mut AstStr, &mut Context)) {
+		(**self).with_strings(ctx, f);
 	}
 
 	fn format(&mut self, ctx: &mut Context) {
@@ -204,9 +204,9 @@ impl<T: Format> Format for Box<T> {
 }
 
 impl<T: Format> Format for Option<T> {
-	fn with_output(&mut self, ctx: &mut Context, f: &mut impl FnMut(&mut AstStr, &mut Context)) {
+	fn with_strings(&mut self, ctx: &mut Context, f: &mut impl FnMut(&mut AstStr, &mut Context)) {
 		if let Some(value) = self {
-			value.with_output(ctx, f);
+			value.with_strings(ctx, f);
 		}
 	}
 
@@ -225,9 +225,9 @@ impl<T: Format> Format for Option<T> {
 }
 
 impl<T: Format> Format for Vec<T> {
-	fn with_output(&mut self, ctx: &mut Context, f: &mut impl FnMut(&mut AstStr, &mut Context)) {
+	fn with_strings(&mut self, ctx: &mut Context, f: &mut impl FnMut(&mut AstStr, &mut Context)) {
 		for value in self {
-			value.with_output(ctx, f);
+			value.with_strings(ctx, f);
 		}
 	}
 
@@ -246,7 +246,7 @@ impl<T: Format> Format for Vec<T> {
 }
 
 impl Format for ! {
-	fn with_output(&mut self, _ctx: &mut Context, _f: &mut impl FnMut(&mut AstStr, &mut Context)) {
+	fn with_strings(&mut self, _ctx: &mut Context, _f: &mut impl FnMut(&mut AstStr, &mut Context)) {
 		*self
 	}
 
@@ -260,7 +260,7 @@ impl Format for ! {
 }
 
 impl<T> Format for PhantomData<T> {
-	fn with_output(&mut self, _ctx: &mut Context, _f: &mut impl FnMut(&mut AstStr, &mut Context)) {}
+	fn with_strings(&mut self, _ctx: &mut Context, _f: &mut impl FnMut(&mut AstStr, &mut Context)) {}
 
 	fn format(&mut self, _ctx: &mut Context) {}
 
@@ -270,7 +270,7 @@ impl<T> Format for PhantomData<T> {
 }
 
 impl Format for () {
-	fn with_output(&mut self, _ctx: &mut Context, _f: &mut impl FnMut(&mut AstStr, &mut Context)) {}
+	fn with_strings(&mut self, _ctx: &mut Context, _f: &mut impl FnMut(&mut AstStr, &mut Context)) {}
 
 	fn format(&mut self, _ctx: &mut Context) {}
 
@@ -289,12 +289,9 @@ macro tuple_impl ($N:literal, $($T:ident),* $(,)?) {
 	#[automatically_derived]
 	#[expect(non_snake_case)]
 	impl< $($T: Format,)* > Format for ( $($T,)* ) {
-		fn with_output(&mut self, ctx: &mut Context, f: &mut impl FnMut(&mut AstStr, &mut Context)) {
+		fn with_strings(&mut self, ctx: &mut Context, f: &mut impl FnMut(&mut AstStr, &mut Context)) {
 			let ( $($T,)* ) = self;
-
-			$(
-				$T.with_output(ctx, f);
-			)*
+			${concat( Tuple, $N )} { $( $T, )* }.with_strings(ctx, f)
 		}
 
 		fn format(&mut self, ctx: &mut Context) {
@@ -314,7 +311,7 @@ tuple_impl! { 2, T0, T1 }
 tuple_impl! { 3, T0, T1, T2 }
 
 impl Format for AstStr {
-	fn with_output(&mut self, ctx: &mut Context, f: &mut impl FnMut(&mut Self, &mut Context)) {
+	fn with_strings(&mut self, ctx: &mut Context, f: &mut impl FnMut(&mut Self, &mut Context)) {
 		f(self, ctx);
 	}
 
@@ -326,8 +323,8 @@ impl Format for AstStr {
 }
 
 impl<T: ArenaData<Data: Format>> Format for ArenaIdx<T> {
-	fn with_output(&mut self, ctx: &mut Context, f: &mut impl FnMut(&mut AstStr, &mut Context)) {
-		T::ARENA.get(self).with_output(ctx, f);
+	fn with_strings(&mut self, ctx: &mut Context, f: &mut impl FnMut(&mut AstStr, &mut Context)) {
+		T::ARENA.get(self).with_strings(ctx, f);
 	}
 
 	fn format(&mut self, ctx: &mut Context) {

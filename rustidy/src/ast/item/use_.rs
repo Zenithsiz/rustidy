@@ -135,7 +135,7 @@ impl UseTreeGroup {
 	) {
 		Self::format_tree_compact(tree, ctx);
 
-		if tree.output_len_without_prefix_ws(ctx) > ctx.config().max_use_tree_len {
+		if tree.len_without_prefix_ws(ctx) > ctx.config().max_use_tree_len {
 			if let Some(punct) = &mut tree.value {
 				if punct.trailing.is_none() {
 					punct.trailing = Some(token::Comma(Whitespace::empty(), AstStr::new(",")));

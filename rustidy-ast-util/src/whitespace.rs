@@ -91,12 +91,12 @@ impl WhitespaceLike for Whitespace {
 }
 
 impl Format for Whitespace {
-	fn with_output(
+	fn with_strings(
 		&mut self,
 		ctx: &mut rustidy_format::Context,
 		f: &mut impl FnMut(&mut AstStr, &mut rustidy_format::Context),
 	) {
-		ARENA.get(&self.0).with_output(ctx, f);
+		ARENA.get(&self.0).with_strings(ctx, f);
 	}
 
 	fn format(&mut self, _ctx: &mut rustidy_format::Context) {
