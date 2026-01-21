@@ -14,12 +14,8 @@ use {
 #[derive(Parse, Format, Print)]
 pub struct Punctuated<T, P> {
 	pub first: T,
-	pub rest:  Rest<T, P>,
+	pub rest:  Vec<(P, T)>,
 }
-
-// TODO: Remove this alias once `thiserror` actually adds the correct
-//       bounds without it.
-type Rest<T, P> = Vec<(P, T)>;
 
 impl<T, P> Punctuated<T, P> {
 	/// Creates a punctuated from a single value
