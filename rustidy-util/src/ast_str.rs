@@ -19,6 +19,11 @@ impl AstStr {
 		Self(ARENA.push(repr.into()))
 	}
 
+	/// Joins two strings
+	pub fn join(self, other: Self) -> Self {
+		Self(ARENA.push(AstStrRepr::Join { lhs: self, rhs: other }))
+	}
+
 	/// Returns the inner representation of this string
 	#[must_use]
 	pub fn repr(&self) -> ArenaRef<'_, Self> {
@@ -33,6 +38,7 @@ impl AstStr {
 			AstStrRepr::String(s) => s.len(),
 			AstStrRepr::Char(ch) => ch.len_utf8(),
 			AstStrRepr::Indentation { newlines, depth } => newlines + depth,
+			AstStrRepr::Join { ref lhs, ref rhs } => lhs.len() + rhs.len(),
 			AstStrRepr::Dynamic(ref s) => s.len(),
 		}
 	}
@@ -51,6 +57,7 @@ impl AstStr {
 			AstStrRepr::String(s) => crate::is_str_blank(s),
 			AstStrRepr::Char(ch) => ch.is_ascii_whitespace(),
 			AstStrRepr::Indentation { .. } => true,
+			AstStrRepr::Join { ref lhs, ref rhs } => lhs.is_blank(input) && rhs.is_blank(input),
 			AstStrRepr::Dynamic(ref s) => crate::is_str_blank(s),
 		}
 	}
@@ -69,6 +76,10 @@ impl AstStr {
 					output.push_str(&config.indent);
 				}
 			},
+			AstStrRepr::Join { ref lhs, ref rhs } => {
+				lhs.write(config, input, output);
+				rhs.write(config, input, output);
+			},
 			AstStrRepr::Dynamic(ref s) => output.push_str(s),
 		}
 	}
@@ -85,7 +96,7 @@ impl AstStr {
 			AstStrRepr::Char(ch) => ch.to_string().into(),
 			AstStrRepr::Dynamic(ref s) => s.clone().into(),
 
-			AstStrRepr::Indentation { .. } => {
+			AstStrRepr::Indentation { .. } | AstStrRepr::Join { .. } => {
 				drop(repr);
 				let mut output = String::new();
 				self.write(config, input, &mut output);
@@ -103,7 +114,7 @@ impl ArenaData for AstStr {
 
 static ARENA: Arena<AstStr> = Arena::new();
 
-#[derive(Debug, Clone)]
+#[derive(Debug)]
 #[derive(derive_more::From)]
 #[derive(serde::Serialize)]
 #[serde(untagged)]
@@ -125,6 +136,12 @@ pub enum AstStrRepr {
 	Indentation {
 		newlines: usize,
 		depth:    usize,
+	},
+
+	/// Joined strings
+	Join {
+		lhs: AstStr,
+		rhs: AstStr,
 	},
 
 	// Dynamic string
