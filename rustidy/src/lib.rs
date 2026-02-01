@@ -18,7 +18,6 @@
 	macro_derive,
 	debug_closure_helpers,
 	trait_alias,
-	push_mut,
 	anonymous_lifetime_in_impl_trait,
 	exact_size_is_empty,
 	coverage_attribute,
