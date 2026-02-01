@@ -19,6 +19,8 @@ use {
 };
 
 pub macro decl_tokens(
+	$ws:ident;
+	$token:ident;
 	$new:ident;
 
 	$(
@@ -38,17 +40,20 @@ pub macro decl_tokens(
 			#[parse(skip_if_tag = $skip_if_tag)]
 		)?
 		#[parse(and_try_with = Self::check)]
-		pub struct $TokenName(
-			pub Whitespace,
+		pub struct $TokenName {
+			pub $ws: Whitespace,
 
 			#[parse(try_update_with = Self::parse)]
-			pub AstStr,
-		);
+			pub $token: AstStr,
+		}
 
 		impl $TokenName {
 			/// Creates a new token, not associated to the input
 			pub fn $new() -> Self {
-				Self(Whitespace::empty(), AstStr::new($Token))
+				Self {
+					$ws: Whitespace::empty(),
+					$token: AstStr::new($Token)
+				}
 			}
 
 			fn parse(s: &mut &str) -> Result<(), <Self as Parse>::Error> {
@@ -59,7 +64,7 @@ pub macro decl_tokens(
 			fn check(&mut self, parser: &mut Parser) -> Result<(), <Self as Parse>::Error> {
 				// Note: This checks prevents matching `match` on `matches`
 				{
-					let token = parser.str(&self.1);
+					let token = parser.str(&self.$token);
 					let remaining = parser.remaining();
 
 					if token.ends_with(unicode_ident::is_xid_continue) &&
@@ -89,6 +94,8 @@ pub macro decl_tokens(
 }
 
 decl_tokens! {
+	ws;
+	token;
 	new;
 
 	InnerLineDoc = "//!";
