@@ -30,6 +30,16 @@ impl Whitespace {
 		Self(idx)
 	}
 
+	/// Joins another whitespace into this one
+	pub fn join(&mut self, other: Self) {
+		let mut lhs = ARENA.get(&self.0);
+		let mut rhs = ARENA.take(other.0);
+
+		let (_, lhs_last) = lhs.split_last_mut();
+		replace_with::replace_with_or_abort(&mut lhs_last.0, |lhs_last| AstStr::join(lhs_last, rhs.first.0));
+		lhs.rest.append(&mut rhs.rest);
+	}
+
 	#[expect(clippy::unnecessary_wraps, reason = "Necessary for type signature")]
 	fn parse_skip(parser: &mut Parser) -> Result<Option<Self>, WhitespaceError> {
 		Ok(parser.has_tag("skip:Whitespace").then(|| {
