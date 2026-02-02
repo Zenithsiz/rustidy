@@ -2,6 +2,7 @@
 
 /// Formatter configuration
 #[derive(Clone, Debug)]
+#[derive(serde::Serialize, serde::Deserialize)]
 pub struct Config {
 	/// Indentation string
 	pub indent:             String,
@@ -15,6 +16,7 @@ pub struct Config {
 /// and at most `max` (inclusive).
 // TODO: Should we allow this being different for items and statements?
 #[derive(Clone, Debug)]
+#[derive(serde::Serialize, serde::Deserialize)]
 pub struct EmptyLineSpacing {
 	pub min: usize,
 	pub max: usize,

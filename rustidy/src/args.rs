@@ -14,6 +14,12 @@ pub struct Args {
 	#[clap(long = "log-file")]
 	pub log_file: Option<PathBuf>,
 
+	/// Configuration file.
+	///
+	/// By default, `.rustidy.toml` is used.
+	#[clap(long = "config-file")]
+	pub config_file: Option<PathBuf>,
+
 	/// Files to format
 	pub files: Vec<PathBuf>,
 }
