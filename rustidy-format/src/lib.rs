@@ -24,6 +24,12 @@ use {
 /// Whitespace-like for formatting
 // TODO: Once we move into our own crate, just rename this to `Whitespace`
 pub trait WhitespaceLike: Format {
+	/// Returns this whitespace as it's concrete type.
+	///
+	/// # Panics
+	/// Panics if `W` isn't the correct type.
+	fn as_concrete<W: 'static>(&mut self) -> &mut W;
+
 	/// Returns if this whitespace is pure
 	fn is_pure(&mut self, ctx: &mut Context) -> bool;
 

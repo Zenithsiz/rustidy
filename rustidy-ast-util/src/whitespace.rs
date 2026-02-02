@@ -3,6 +3,7 @@
 // Imports
 use {
 	crate::Punctuated,
+	core::any::Any,
 	itertools::Itertools,
 	rustidy_format::{Format, WhitespaceLike},
 	rustidy_parse::{Parse, Parser},
@@ -88,6 +89,10 @@ impl ArenaData for Whitespace {
 static ARENA: Arena<Whitespace> = Arena::new();
 
 impl WhitespaceLike for Whitespace {
+	fn as_concrete<W: 'static>(&mut self) -> &mut W {
+		(self as &mut dyn Any).downcast_mut().expect("Wrong whitespace type")
+	}
+
 	fn is_pure(&mut self, _ctx: &mut rustidy_format::Context) -> bool {
 		ARENA.get(&self.0).rest.is_empty()
 	}
