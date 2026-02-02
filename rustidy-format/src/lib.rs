@@ -41,6 +41,12 @@ pub trait WhitespaceLike: Format {
 
 	/// Sets this whitespace to indentation.
 	fn set_indent(&mut self, ctx: &mut Context, offset: isize, remove_if_empty: bool);
+
+	/// Joins another whitespace into this one as a suffix
+	fn join_suffix(&mut self, other: Self);
+
+	/// Joins another whitespace into this one as a prefix
+	fn join_prefix(&mut self, other: Self);
 }
 
 /// Whitespace visitor
@@ -74,7 +80,7 @@ pub trait Format {
 	fn len_without_prefix_ws(&mut self, ctx: &mut Context) -> usize {
 		let mut len = self.len(ctx);
 		self.with_prefix_ws(ctx, &mut self::whitespace_visitor! {
-			lifetimes<'a>
+			generics<'a>
 			capture(len: &'a mut usize = &mut len)
 			|ws, ctx| -> () => **len -= ws.len(ctx)
 		});
@@ -127,12 +133,52 @@ pub trait Format {
 	fn prefix_ws_set_cur_indent(&mut self, ctx: &mut Context) {
 		self.prefix_ws_set_indent(ctx, 0, false);
 	}
+
+	/// Joins a whitespace into this type's prefix whitespace as a suffix.
+	///
+	/// # Panics
+	/// Panics if `W` isn't the concrete type of the whitespace of this type.
+	fn prefix_ws_join_suffix<W: WhitespaceLike + 'static>(&mut self, ctx: &mut Context, ws: W) -> Result<(), W> {
+		let mut new_ws = Some(ws);
+
+		trait WsBound = WhitespaceLike + 'static;
+		self.with_prefix_ws(ctx, &mut self::whitespace_visitor! {
+			generics<'a, Ws: WsBound>
+			capture(new_ws: &'a mut Option<Ws> = &mut new_ws)
+			|ws, _ctx| -> () => ws.as_concrete::<Ws>().join_suffix(new_ws.take().expect("Should exist"))
+		});
+
+		match new_ws {
+			Some(ws) => Err(ws),
+			None => Ok(()),
+		}
+	}
+
+	/// Joins a whitespace into this type's prefix whitespace as a prefix.
+	///
+	/// # Panics
+	/// Panics if `W` isn't the concrete type of the whitespace of this type.
+	fn prefix_ws_join_prefix<W: WhitespaceLike + 'static>(&mut self, ctx: &mut Context, ws: W) -> Result<(), W> {
+		let mut new_ws = Some(ws);
+
+		trait WsBound = WhitespaceLike + 'static;
+		self.with_prefix_ws(ctx, &mut self::whitespace_visitor! {
+			generics<'a, Ws: WsBound>
+			capture(new_ws: &'a mut Option<Ws> = &mut new_ws)
+			|ws, _ctx| -> () => ws.as_concrete::<Ws>().join_prefix(new_ws.take().expect("Should exist"))
+		});
+
+		match new_ws {
+			Some(ws) => Err(ws),
+			None => Ok(()),
+		}
+	}
 }
 
 macro whitespace_visitor(
 	$(
-		lifetimes<
-			$($generic_lifetime:lifetime),* $(,)?
+		generics<
+			$($generic:tt $(: $bound:tt)?),* $(,)?
 		>
 	)?
 	$(
@@ -148,7 +194,7 @@ macro whitespace_visitor(
 ) {{
 	struct Visitor
 	$(<
-			$($generic_lifetime,)*
+			$($generic,)*
 	>)?
 	{
 		$(
@@ -158,7 +204,7 @@ macro whitespace_visitor(
 		)?
 	}
 
-	impl$(< $($generic_lifetime,)* >)? WhitespaceVisitor for Visitor $(< $($generic_lifetime,)* >)? {
+	impl$(< $($generic $(: $bound)?,)* >)? WhitespaceVisitor for Visitor $(< $($generic,)* >)? {
 		type Output = $OutputTy;
 
 		fn visit<W: WhitespaceLike>(&mut self, $whitespace: &mut W, $context: &mut Context) -> Self::Output {

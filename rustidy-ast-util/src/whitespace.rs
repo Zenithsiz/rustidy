@@ -31,24 +31,6 @@ impl Whitespace {
 		Self(idx)
 	}
 
-	/// Joins another whitespace into this one as a suffix
-	pub fn join_suffix(&mut self, other: Self) {
-		let mut lhs = ARENA.get(&self.0);
-		let mut rhs = ARENA.take(other.0);
-
-		let (_, lhs_last) = lhs.split_last_mut();
-		replace_with::replace_with_or_abort(&mut lhs_last.0, |lhs_last| AstStr::join(lhs_last, rhs.first.0));
-		lhs.rest.append(&mut rhs.rest);
-	}
-
-	/// Joins another whitespace into this one as a prefix
-	pub fn join_prefix(&mut self, mut other: Self) {
-		replace_with::replace_with_or_abort(self, |this| {
-			other.join_suffix(this);
-			other
-		});
-	}
-
 	#[expect(clippy::unnecessary_wraps, reason = "Necessary for type signature")]
 	fn parse_skip(parser: &mut Parser) -> Result<Option<Self>, WhitespaceError> {
 		Ok(parser.has_tag("skip:Whitespace").then(|| {
@@ -109,6 +91,22 @@ impl WhitespaceLike for Whitespace {
 		Self::format(self, ctx, FormatKind::Indent {
 			offset,
 			remove_if_empty,
+		});
+	}
+
+	fn join_suffix(&mut self, other: Self) {
+		let mut lhs = ARENA.get(&self.0);
+		let mut rhs = ARENA.take(other.0);
+
+		let (_, lhs_last) = lhs.split_last_mut();
+		replace_with::replace_with_or_abort(&mut lhs_last.0, |lhs_last| AstStr::join(lhs_last, rhs.first.0));
+		lhs.rest.append(&mut rhs.rest);
+	}
+
+	fn join_prefix(&mut self, mut other: Self) {
+		replace_with::replace_with_or_abort(self, |this| {
+			other.join_suffix(this);
+			other
 		});
 	}
 }
