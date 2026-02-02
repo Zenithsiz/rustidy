@@ -41,7 +41,7 @@ use {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 #[expect(clippy::use_self, reason = "`Parse` derive macro doesn't support `Self`")]
-pub struct Expression(ArenaIdx<Expression>);
+pub struct Expression(pub ArenaIdx<Expression>);
 
 impl ArenaData for Expression {
 	type Data = ExpressionInner;

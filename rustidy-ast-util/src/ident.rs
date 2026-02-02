@@ -11,6 +11,7 @@ use {
 	rustidy_format::Format,
 	rustidy_parse::{Parse, Parser},
 	rustidy_print::Print,
+	rustidy_util::Config,
 };
 
 /// `IDENTIFIER`
@@ -21,6 +22,20 @@ use {
 pub enum Identifier {
 	Raw(RawIdentifier),
 	NonKw(NonKeywordIdentifier),
+}
+
+impl Identifier {
+	/// Returns if this identifier is the same as `ident`.
+	///
+	/// For raw identifiers, the `r#` prefix isn't included in
+	/// the comparison, so `r#abc` would return true for `"abc"`.
+	#[must_use]
+	pub fn is_str(&self, input: &str, config: &Config, ident: &str) -> bool {
+		match self {
+			Self::Raw(_) => todo!("Raw identifiers aren't fully implemented"),
+			Self::NonKw(this) => this.0.1.is_str(input, config, ident),
+		}
+	}
 }
 
 /// `NON_KEYWORD_IDENTIFIER`

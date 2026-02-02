@@ -95,6 +95,11 @@ impl<T, P> Punctuated<T, P> {
 		]
 	}
 
+	/// Returns an iterator over all values
+	pub fn values(&self) -> impl Iterator<Item = &T> {
+		itertools::chain![[&self.first], self.rest.iter().map(|(_, value)| value)]
+	}
+
 	/// Returns a mutable iterator over all values
 	pub fn values_mut(&mut self) -> impl Iterator<Item = &mut T> {
 		itertools::chain![[&mut self.first], self.rest.iter_mut().map(|(_, value)| value)]

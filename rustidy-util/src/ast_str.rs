@@ -62,6 +62,23 @@ impl AstStr {
 		}
 	}
 
+	/// Returns if this string is equal to `other`
+	#[must_use]
+	pub fn is_str(&self, input: &str, config: &Config, other: &str) -> bool {
+		let repr = self.repr();
+		match *repr {
+			AstStrRepr::AstRange(range) => range.str(input) == other,
+			AstStrRepr::String(s) => s == other,
+			AstStrRepr::Dynamic(ref s) => s == other,
+
+			// TODO: Properly implement these to avoid allocating a string
+			_ => {
+				drop(repr);
+				self.str(input, config) == other
+			},
+		}
+	}
+
 	/// Writes this string
 	pub fn write(&self, config: &Config, input: &str, output: &mut String) {
 		match *self.repr() {

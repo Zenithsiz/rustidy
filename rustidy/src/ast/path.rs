@@ -8,6 +8,7 @@ use {
 	rustidy_format::Format,
 	rustidy_parse::Parse,
 	rustidy_print::Print,
+	rustidy_util::Config,
 };
 
 /// `SimplePath`
@@ -22,8 +23,40 @@ pub struct SimplePath {
 	pub segments: Punctuated<SimplePathSegment, token::PathSep>,
 }
 
+impl SimplePath {
+	/// Returns if this path is the same as `path`.
+	#[must_use]
+	pub fn is_str(&self, input: &str, config: &Config, path: &str) -> bool {
+		// Check for prefix
+		let (path, has_prefix) = match path.strip_prefix("::") {
+			Some(path) => (path, true),
+			None => (path, false),
+		};
+		if self.prefix.is_some() != has_prefix {
+			return false;
+		}
+
+		// Then check each segment
+		let mut lhs_segments = self.segments.values();
+		let mut rhs_segments = path.split("::");
+		loop {
+			match (lhs_segments.next(), rhs_segments.next()) {
+				(None, None) => break,
+				(None, Some(_)) | (Some(_), None) => return false,
+				(Some(lhs), Some(rhs)) =>
+					if !lhs.is_str(input, config, rhs) {
+						return false;
+					},
+			}
+		}
+
+		true
+	}
+}
+
 /// `SimplePathSegment`
 #[derive(PartialEq, Eq, Debug)]
+#[derive(strum::EnumTryAs)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub enum SimplePathSegment {
@@ -32,4 +65,18 @@ pub enum SimplePathSegment {
 	Crate(token::Crate),
 	DollarCrate(token::DollarCrate),
 	Ident(Identifier),
+}
+
+impl SimplePathSegment {
+	/// Returns if this segment is the same as `segment`.
+	#[must_use]
+	pub fn is_str(&self, input: &str, config: &Config, segment: &str) -> bool {
+		match self {
+			Self::Super(_) => segment == "super",
+			Self::SelfLower(_) => segment == "self",
+			Self::Crate(_) => segment == "crate",
+			Self::DollarCrate(_) => segment == "$crate",
+			Self::Ident(ident) => ident.is_str(input, config, segment),
+		}
+	}
 }

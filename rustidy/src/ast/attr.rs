@@ -67,6 +67,7 @@ pub struct InnerBlockDoc {
 
 /// Outer attribute or doc comment
 #[derive(PartialEq, Eq, Debug)]
+#[derive(strum::EnumTryAs)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub enum OuterAttrOrDocComment {
@@ -139,9 +140,9 @@ pub enum AttrInput {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct AttrInputEqExpr {
-	eq:   token::Eq,
+	pub eq:   token::Eq,
 	#[format(before_with = Format::prefix_ws_set_single)]
-	expr: Expression,
+	pub expr: Expression,
 }
 
 /// `DelimTokenTree`
