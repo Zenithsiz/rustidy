@@ -45,8 +45,8 @@ impl Whitespace {
 		}))
 	}
 
-	fn format(&self, ctx: &mut rustidy_format::Context, kind: FormatKind) {
-		let mut inner = ARENA.get(&self.0);
+	fn format(&mut self, ctx: &mut rustidy_format::Context, kind: FormatKind) {
+		let mut inner = ARENA.get_mut(&mut self.0);
 
 		// Note: If we're whitespace after a line doc comment, then we have a newline
 		//       prior to us that we need to take into account.
@@ -110,7 +110,7 @@ impl WhitespaceLike for Whitespace {
 	}
 
 	fn join_suffix(&mut self, other: Self) {
-		let mut lhs = ARENA.get(&self.0);
+		let mut lhs = ARENA.get_mut(&mut self.0);
 		let mut rhs = ARENA.take(other.0);
 
 		let (_, lhs_last) = lhs.split_last_mut();
@@ -132,7 +132,7 @@ impl Format for Whitespace {
 		ctx: &mut rustidy_format::Context,
 		f: &mut impl FnMut(&mut AstStr, &mut rustidy_format::Context),
 	) {
-		ARENA.get(&self.0).with_strings(ctx, f);
+		ARENA.get_mut(&mut self.0).with_strings(ctx, f);
 	}
 
 	fn format(&mut self, _ctx: &mut rustidy_format::Context) {
@@ -364,7 +364,7 @@ mod tests {
 		kind: FormatKind,
 	) -> Result<(), AppError> {
 		let mut parser = Parser::new(source, fmt_config);
-		let whitespace = parser
+		let mut whitespace = parser
 			.parse::<Whitespace>()
 			.map_err(|err| err.to_app_error(&parser))
 			.with_context(|| format!("Unable to parse whitespace: {source:?}"))?;

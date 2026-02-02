@@ -55,6 +55,25 @@ impl<T: ?Sized + ArenaData> Arena<T> {
 		}
 	}
 
+	/// Borrows a value mutably at an index
+	pub fn get_mut(&self, idx: &mut ArenaIdx<T>) -> ArenaRefMut<'_, T> {
+		let idx = idx.inner as usize;
+		let value = self
+			.data
+			.lock()
+			.expect("Poisoned")
+			.get_mut(idx)
+			.expect("Invalid arena index")
+			.borrow()
+			.expect("Attempted to borrow arena value twice");
+
+		ArenaRefMut {
+			value: Some(value),
+			arena: self,
+			idx,
+		}
+	}
+
 	/// Takes a value in the arena
 	pub fn take(&self, idx: ArenaIdx<T>) -> T::Data {
 		let inner_idx = idx.inner as usize;
@@ -191,13 +210,39 @@ impl<T: ?Sized + ArenaData> ops::Deref for ArenaRef<'_, T> {
 		self.value.as_ref().expect("Value should exist")
 	}
 }
-impl<T: ?Sized + ArenaData> ops::DerefMut for ArenaRef<'_, T> {
+
+impl<T: ?Sized + ArenaData> Drop for ArenaRef<'_, T> {
+	fn drop(&mut self) {
+		let mut data = self.arena.data.lock().expect("Poisoned");
+		let value = data.get_mut(self.idx).expect("Arena was truncated during borrow");
+		assert!(value.is_borrowed(), "Borrowed value wasn't borrowed");
+		*value = ArenaSlot::Alive(self.value.take().expect("Value should exist"));
+		drop(data);
+	}
+}
+
+/// Arena mutable reference
+pub struct ArenaRefMut<'a, T: ?Sized + ArenaData> {
+	value: Option<T::Data>,
+	arena: &'a Arena<T>,
+	idx:   usize,
+}
+
+impl<T: ?Sized + ArenaData> ops::Deref for ArenaRefMut<'_, T> {
+	type Target = T::Data;
+
+	fn deref(&self) -> &Self::Target {
+		self.value.as_ref().expect("Value should exist")
+	}
+}
+
+impl<T: ?Sized + ArenaData> ops::DerefMut for ArenaRefMut<'_, T> {
 	fn deref_mut(&mut self) -> &mut Self::Target {
 		self.value.as_mut().expect("Value should exist")
 	}
 }
 
-impl<T: ?Sized + ArenaData> Drop for ArenaRef<'_, T> {
+impl<T: ?Sized + ArenaData> Drop for ArenaRefMut<'_, T> {
 	fn drop(&mut self) {
 		let mut data = self.arena.data.lock().expect("Poisoned");
 		let value = data.get_mut(self.idx).expect("Arena was truncated during borrow");

@@ -365,15 +365,15 @@ impl Format for AstStr {
 
 impl<T: ArenaData<Data: Format>> Format for ArenaIdx<T> {
 	fn with_strings(&mut self, ctx: &mut Context, f: &mut impl FnMut(&mut AstStr, &mut Context)) {
-		T::ARENA.get(self).with_strings(ctx, f);
+		T::ARENA.get_mut(self).with_strings(ctx, f);
 	}
 
 	fn format(&mut self, ctx: &mut Context) {
-		T::ARENA.get(self).format(ctx);
+		T::ARENA.get_mut(self).format(ctx);
 	}
 
 	fn with_prefix_ws<V: WhitespaceVisitor>(&mut self, ctx: &mut Context, visitor: &mut V) -> Option<V::Output> {
-		T::ARENA.get(self).with_prefix_ws(ctx, visitor)
+		T::ARENA.get_mut(self).with_prefix_ws(ctx, visitor)
 	}
 }
 
@@ -472,7 +472,7 @@ pub trait FormatFn<T: ?Sized> = Fn(&mut T, &mut Context);
 /// Formats an arena value
 pub fn arena<T: ArenaData>(f: impl FormatFn<T::Data>) -> impl FormatFn<ArenaIdx<T>> {
 	move |idx, ctx| {
-		let mut value = T::ARENA.get(idx);
+		let mut value = T::ARENA.get_mut(idx);
 		f(&mut value, ctx);
 	}
 }
