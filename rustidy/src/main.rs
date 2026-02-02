@@ -54,7 +54,7 @@ fn run() -> Result<(), AppError> {
 	logger.set_file(args.log_file.as_deref());
 
 	let default_config_path = Path::new(".rustidy.toml");
-	let config_path = args.config_file.as_deref().unwrap_or(&default_config_path);
+	let config_path = args.config_file.as_deref().unwrap_or(default_config_path);
 	let config = match fs::read_to_string(config_path) {
 		Ok(config) => toml::from_str(&config).context("Unable to parse configuration file")?,
 		Err(err) if err.kind() == io::ErrorKind::NotFound => {
@@ -66,7 +66,7 @@ fn run() -> Result<(), AppError> {
 				fs::write(config_path, config).context("Unable to write configuration to file")?;
 			};
 			if let Err(err) = res {
-				tracing::warn!("Unable to write configuration file: {err:?}")
+				tracing::warn!("Unable to write configuration file: {err:?}");
 			}
 
 			config
