@@ -77,7 +77,7 @@ pub struct StructField(
 #[derive(Parse, Format, Print)]
 pub struct StructFieldInner {
 	pub vis:   Option<Visibility>,
-	#[format(before_with = Format::prefix_ws_set_single)]
+	#[format(before_with(expr = Format::prefix_ws_set_single, if = self.vis.is_some()))]
 	pub ident: Identifier,
 	#[format(before_with = Format::prefix_ws_remove)]
 	pub colon: token::Colon,
