@@ -48,7 +48,22 @@ impl Whitespace {
 	fn format(&self, ctx: &mut rustidy_format::Context, kind: FormatKind) {
 		let mut inner = ARENA.get(&self.0);
 
-		let prefix_str = kind.prefix_str(ctx, &inner.first.0, inner.rest.is_empty());
+		// Note: If we're whitespace after a line doc comment, then we have a newline
+		//       prior to us that we need to take into account.
+		// TODO: Using the input to check this isn't ideal and is just a hack, since it
+		//       could have changed already. Ideally we'd need some `Format::with_strings_before` or alike.
+		//       This even breaks when the same whitespace gets formatted multiple time, since we'll
+		//       stop being a range.
+		fn is_after_newline(repr: &AstStrRepr, ctx: &mut rustidy_format::Context) -> bool {
+			match *repr {
+				AstStrRepr::AstRange(ref range) => range.str_before(ctx.input()).ends_with('\n'),
+				AstStrRepr::Join { ref lhs, .. } => is_after_newline(&lhs.repr(), ctx),
+				_ => false,
+			}
+		}
+		let after_newline = is_after_newline(&inner.first.0.repr(), ctx);
+
+		let prefix_str = kind.prefix_str(ctx, &inner.first.0, inner.rest.is_empty(), after_newline);
 		inner.first.0 = AstStr::new(prefix_str);
 
 		for (pos, (comment, ws)) in inner.rest.iter_mut().with_position() {
@@ -175,7 +190,13 @@ impl FormatKind {
 	}
 
 	/// Returns the prefix string
-	fn prefix_str(self, ctx: &mut rustidy_format::Context, cur_str: &AstStr, is_last: bool) -> AstStrRepr {
+	fn prefix_str(
+		self,
+		ctx: &mut rustidy_format::Context,
+		cur_str: &AstStr,
+		is_last: bool,
+		after_newline: bool,
+	) -> AstStrRepr {
 		match self {
 			Self::Remove => "".into(),
 			Self::Single => " ".into(),
@@ -184,9 +205,8 @@ impl FormatKind {
 				remove_if_empty,
 			} => match remove_if_empty && is_last {
 				true => "".into(),
-				// Note: Since we're the prefix string, there is no whitespace before us, so
-				//       we *are* not after a newline
-				false => ctx.with_indent_offset_if(offset, is_last, |ctx| Self::indent_str_nl(ctx, cur_str, false)),
+				false =>
+					ctx.with_indent_offset_if(offset, is_last, |ctx| Self::indent_str_nl(ctx, cur_str, after_newline)),
 			},
 		}
 	}

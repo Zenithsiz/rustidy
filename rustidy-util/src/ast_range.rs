@@ -38,7 +38,7 @@ impl AstRange {
 
 	/// Slices the input string before this range
 	#[must_use]
-	pub fn str_before(self, s: &str) -> &str {
-		&s[..self.start.0]
+	pub fn str_before<'input>(&self, input: &'input str) -> &'input str {
+		&input[..self.start.0]
 	}
 }
