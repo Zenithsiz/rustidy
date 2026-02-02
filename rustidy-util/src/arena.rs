@@ -101,9 +101,9 @@ impl<T> ArenaSlot<T> {
 
 /// Arena reference
 pub struct ArenaRef<'a, T: ?Sized + ArenaData> {
-	value: Option<T::Data>,
-	arena: &'a Arena<T>,
-	idx:   usize,
+	value:   Option<T::Data>,
+	idx:     usize,
+	phantom: PhantomData<&'a T>,
 }
 
 impl<T: ?Sized + ArenaData> ops::Deref for ArenaRef<'_, T> {
@@ -116,7 +116,7 @@ impl<T: ?Sized + ArenaData> ops::Deref for ArenaRef<'_, T> {
 
 impl<T: ?Sized + ArenaData> Drop for ArenaRef<'_, T> {
 	fn drop(&mut self) {
-		let mut data = self.arena.data.lock().expect("Poisoned");
+		let mut data = T::ARENA.data.lock().expect("Poisoned");
 		let value = data.get_mut(self.idx).expect("Arena was truncated during borrow");
 		assert!(value.is_borrowed(), "Borrowed value wasn't borrowed");
 		*value = ArenaSlot::Alive(self.value.take().expect("Value should exist"));
@@ -126,9 +126,9 @@ impl<T: ?Sized + ArenaData> Drop for ArenaRef<'_, T> {
 
 /// Arena mutable reference
 pub struct ArenaRefMut<'a, T: ?Sized + ArenaData> {
-	value: Option<T::Data>,
-	arena: &'a Arena<T>,
-	idx:   usize,
+	value:   Option<T::Data>,
+	idx:     usize,
+	phantom: PhantomData<&'a mut T>,
 }
 
 impl<T: ?Sized + ArenaData> ops::Deref for ArenaRefMut<'_, T> {
@@ -147,7 +147,7 @@ impl<T: ?Sized + ArenaData> ops::DerefMut for ArenaRefMut<'_, T> {
 
 impl<T: ?Sized + ArenaData> Drop for ArenaRefMut<'_, T> {
 	fn drop(&mut self) {
-		let mut data = self.arena.data.lock().expect("Poisoned");
+		let mut data = T::ARENA.data.lock().expect("Poisoned");
 		let value = data.get_mut(self.idx).expect("Arena was truncated during borrow");
 		assert!(value.is_borrowed(), "Borrowed value wasn't borrowed");
 		*value = ArenaSlot::Alive(self.value.take().expect("Value should exist"));
@@ -189,8 +189,8 @@ impl<T: ?Sized + ArenaData> ArenaIdx<T> {
 
 		ArenaRef {
 			value: Some(value),
-			arena: T::ARENA,
 			idx,
+			phantom: PhantomData,
 		}
 	}
 
@@ -208,8 +208,8 @@ impl<T: ?Sized + ArenaData> ArenaIdx<T> {
 
 		ArenaRefMut {
 			value: Some(value),
-			arena: T::ARENA,
 			idx,
+			phantom: PhantomData,
 		}
 	}
 
