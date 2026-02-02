@@ -247,7 +247,7 @@ impl<T: ArenaData<Data: Parse>> Parse for ArenaIdx<T> {
 
 	fn parse_from(parser: &mut Parser) -> Result<Self, Self::Error> {
 		let value = parser.parse::<T::Data>()?;
-		let idx = T::ARENA.push(value);
+		let idx = Self::new(value);
 		Ok(idx)
 	}
 }

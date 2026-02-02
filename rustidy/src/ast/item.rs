@@ -75,7 +75,7 @@ impl Items {
 					}
 
 					first_use_decl.merge(use_decls);
-					Item(ITEM_ARENA.push(WithOuterAttributes {
+					Item(ArenaIdx::new(WithOuterAttributes {
 						attrs,
 						inner: ItemInner::Vis(VisItem {
 							vis,
@@ -104,8 +104,8 @@ pub struct Item(
 impl Item {
 	#[expect(clippy::result_large_err, reason = "TODO")]
 	fn try_into_use_decl(self) -> Result<(Vec<OuterAttrOrDocComment>, Option<Visibility>, UseDeclaration), Self> {
-		ITEM_ARENA
-			.try_take_map(self.0, |item| match item.inner {
+		self.0
+			.try_take_map(|item| match item.inner {
 				ItemInner::Vis(VisItem {
 					vis,
 					inner: VisItemInner::Use(use_decl),
@@ -122,8 +122,8 @@ impl Item {
 		ctx: &mut rustidy_format::Context,
 		expected_vis: Option<&Visibility>,
 	) -> Result<UseDeclaration, Self> {
-		ITEM_ARENA
-			.try_take_map(self.0, |mut item| {
+		self.0
+			.try_take_map(|mut item| {
 				if !item.prefix_ws_is_pure(ctx) {
 					return Err(item);
 				}

@@ -23,103 +23,6 @@ impl<T: ?Sized + ArenaData> Arena<T> {
 		}
 	}
 
-	/// Pushes a value onto the arena, returning it's index
-	pub fn push(&self, value: T::Data) -> ArenaIdx<T> {
-		let mut data = self.data.lock().expect("Poisoned");
-		let idx = data.len();
-		data.push(ArenaSlot::Alive(value));
-		drop(data);
-
-		ArenaIdx {
-			inner:   idx.try_into().expect("Too many indices"),
-			phantom: PhantomData,
-		}
-	}
-
-	/// Borrows a value at an index
-	pub fn get(&self, idx: &ArenaIdx<T>) -> ArenaRef<'_, T> {
-		let idx = idx.inner as usize;
-		let value = self
-			.data
-			.lock()
-			.expect("Poisoned")
-			.get_mut(idx)
-			.expect("Invalid arena index")
-			.borrow()
-			.expect("Attempted to borrow arena value twice");
-
-		ArenaRef {
-			value: Some(value),
-			arena: self,
-			idx,
-		}
-	}
-
-	/// Borrows a value mutably at an index
-	pub fn get_mut(&self, idx: &mut ArenaIdx<T>) -> ArenaRefMut<'_, T> {
-		let idx = idx.inner as usize;
-		let value = self
-			.data
-			.lock()
-			.expect("Poisoned")
-			.get_mut(idx)
-			.expect("Invalid arena index")
-			.borrow()
-			.expect("Attempted to borrow arena value twice");
-
-		ArenaRefMut {
-			value: Some(value),
-			arena: self,
-			idx,
-		}
-	}
-
-	/// Takes a value in the arena
-	pub fn take(&self, idx: ArenaIdx<T>) -> T::Data {
-		let inner_idx = idx.inner as usize;
-		mem::forget(idx);
-		self.data
-			.lock()
-			.expect("Poisoned")
-			.get_mut(inner_idx)
-			.expect("Invalid arena index")
-			.take()
-			.expect("Attempted to borrow arena value twice")
-	}
-
-	/// Takes a value in the arena if `f` returns `Ok`.
-	pub fn try_take_map<F, R>(&self, idx: ArenaIdx<T>, f: F) -> Result<R, ArenaIdx<T>>
-	where
-		F: FnOnce(T::Data) -> Result<R, T::Data>,
-	{
-		let inner_idx = idx.inner as usize;
-		let value = self
-			.data
-			.lock()
-			.expect("Poisoned")
-			.get_mut(inner_idx)
-			.expect("Invalid arena index")
-			.borrow()
-			.expect("Attempted to borrow arena value twice");
-
-		let (output, slot) = match f(value) {
-			Ok(output) => {
-				mem::forget(idx);
-				(Ok(output), ArenaSlot::Empty)
-			},
-			Err(value) => (Err(idx), ArenaSlot::Alive(value)),
-		};
-
-		*self
-			.data
-			.lock()
-			.expect("Poisoned")
-			.get_mut(inner_idx)
-			.expect("Invalid arena index") = slot;
-
-		output
-	}
-
 	/// Returns the number of values in this arena
 	#[must_use]
 	pub fn len(&self) -> usize {
@@ -259,6 +162,104 @@ pub struct ArenaIdx<T: ?Sized + ArenaData> {
 }
 
 impl<T: ?Sized + ArenaData> ArenaIdx<T> {
+	/// Creates a new value in the arena
+	pub fn new(value: T::Data) -> Self {
+		let mut data = T::ARENA.data.lock().expect("Poisoned");
+		let idx = data.len();
+		data.push(ArenaSlot::Alive(value));
+		drop(data);
+
+		Self {
+			inner:   idx.try_into().expect("Too many indices"),
+			phantom: PhantomData,
+		}
+	}
+
+	/// Borrows this value
+	pub fn get(&self) -> ArenaRef<'_, T> {
+		let idx = self.inner as usize;
+		let value = T::ARENA
+			.data
+			.lock()
+			.expect("Poisoned")
+			.get_mut(idx)
+			.expect("Invalid arena index")
+			.borrow()
+			.expect("Attempted to borrow arena value twice");
+
+		ArenaRef {
+			value: Some(value),
+			arena: T::ARENA,
+			idx,
+		}
+	}
+
+	/// Borrows this value mutably
+	pub fn get_mut(&mut self) -> ArenaRefMut<'_, T> {
+		let idx = self.inner as usize;
+		let value = T::ARENA
+			.data
+			.lock()
+			.expect("Poisoned")
+			.get_mut(idx)
+			.expect("Invalid arena index")
+			.borrow()
+			.expect("Attempted to borrow arena value twice");
+
+		ArenaRefMut {
+			value: Some(value),
+			arena: T::ARENA,
+			idx,
+		}
+	}
+
+	/// Moves out of this value
+	pub fn take(self) -> T::Data {
+		let inner_idx = self.inner as usize;
+		mem::forget(self);
+		T::ARENA
+			.data
+			.lock()
+			.expect("Poisoned")
+			.get_mut(inner_idx)
+			.expect("Invalid arena index")
+			.take()
+			.expect("Attempted to borrow arena value twice")
+	}
+
+	/// Moves out of this value if `f` returns `Ok`.
+	pub fn try_take_map<F, R>(self, f: F) -> Result<R, Self>
+	where
+		F: FnOnce(T::Data) -> Result<R, T::Data>,
+	{
+		let inner_idx = self.inner as usize;
+		let value = T::ARENA
+			.data
+			.lock()
+			.expect("Poisoned")
+			.get_mut(inner_idx)
+			.expect("Invalid arena index")
+			.borrow()
+			.expect("Attempted to borrow arena value twice");
+
+		let (output, slot) = match f(value) {
+			Ok(output) => {
+				mem::forget(self);
+				(Ok(output), ArenaSlot::Empty)
+			},
+			Err(value) => (Err(self), ArenaSlot::Alive(value)),
+		};
+
+		*T::ARENA
+			.data
+			.lock()
+			.expect("Poisoned")
+			.get_mut(inner_idx)
+			.expect("Invalid arena index") = slot;
+
+		output
+	}
+
 	/// Returns a unique id for this arena index
 	#[must_use]
 	pub const fn id(&self) -> u32 {
@@ -298,7 +299,7 @@ impl<T: ?Sized + ArenaData<Data: serde::Serialize>> serde::Serialize for ArenaId
 	where
 		S: serde::Serializer,
 	{
-		T::ARENA.get(self).serialize(serializer)
+		self.get().serialize(serializer)
 	}
 }
 
@@ -308,7 +309,7 @@ impl<'de, T: ?Sized + ArenaData<Data: serde::Deserialize<'de>>> serde::Deseriali
 		D: serde::Deserializer<'de>,
 	{
 		let value = T::Data::deserialize(deserializer)?;
-		Ok(T::ARENA.push(value))
+		Ok(Self::new(value))
 	}
 }
 /// Arena data

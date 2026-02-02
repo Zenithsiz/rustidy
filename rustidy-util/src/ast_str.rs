@@ -16,18 +16,18 @@ pub struct AstStr(pub ArenaIdx<Self>);
 impl AstStr {
 	/// Creates a new ast string
 	pub fn new(repr: impl Into<AstStrRepr>) -> Self {
-		Self(ARENA.push(repr.into()))
+		Self(ArenaIdx::new(repr.into()))
 	}
 
 	/// Joins two strings
 	pub fn join(self, other: Self) -> Self {
-		Self(ARENA.push(AstStrRepr::Join { lhs: self, rhs: other }))
+		Self(ArenaIdx::new(AstStrRepr::Join { lhs: self, rhs: other }))
 	}
 
 	/// Returns the inner representation of this string
 	#[must_use]
 	pub fn repr(&self) -> ArenaRef<'_, Self> {
-		ARENA.get(&self.0)
+		self.0.get()
 	}
 
 	/// Returns the length of this string

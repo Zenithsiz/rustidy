@@ -21,12 +21,13 @@ pub struct Whitespace(ArenaIdx<Whitespace>);
 
 impl Whitespace {
 	/// Creates an empty whitespace
+	#[must_use]
 	pub fn empty() -> Self {
 		let inner = Punctuated {
 			first: PureWhitespace(AstStr::new("")),
 			rest:  vec![],
 		};
-		let idx = ARENA.push(inner);
+		let idx = ArenaIdx::new(inner);
 
 		Self(idx)
 	}
@@ -39,14 +40,14 @@ impl Whitespace {
 				first: PureWhitespace(s),
 				rest:  vec![],
 			};
-			let idx = ARENA.push(inner);
+			let idx = ArenaIdx::new(inner);
 
 			Self(idx)
 		}))
 	}
 
 	fn format(&mut self, ctx: &mut rustidy_format::Context, kind: FormatKind) {
-		let mut inner = ARENA.get_mut(&mut self.0);
+		let mut inner = self.0.get_mut();
 
 		// Note: If we're whitespace after a line doc comment, then we have a newline
 		//       prior to us that we need to take into account.
@@ -91,7 +92,7 @@ impl WhitespaceLike for Whitespace {
 	}
 
 	fn is_pure(&mut self, _ctx: &mut rustidy_format::Context) -> bool {
-		ARENA.get(&self.0).rest.is_empty()
+		self.0.get().rest.is_empty()
 	}
 
 	fn remove(&mut self, ctx: &mut rustidy_format::Context) {
@@ -110,8 +111,8 @@ impl WhitespaceLike for Whitespace {
 	}
 
 	fn join_suffix(&mut self, other: Self) {
-		let mut lhs = ARENA.get_mut(&mut self.0);
-		let mut rhs = ARENA.take(other.0);
+		let mut lhs = self.0.get_mut();
+		let mut rhs = other.0.take();
 
 		let (_, lhs_last) = lhs.split_last_mut();
 		replace_with::replace_with_or_abort(&mut lhs_last.0, |lhs_last| AstStr::join(lhs_last, rhs.first.0));
@@ -132,7 +133,7 @@ impl Format for Whitespace {
 		ctx: &mut rustidy_format::Context,
 		f: &mut impl FnMut(&mut AstStr, &mut rustidy_format::Context),
 	) {
-		ARENA.get_mut(&mut self.0).with_strings(ctx, f);
+		self.0.get_mut().with_strings(ctx, f);
 	}
 
 	fn format(&mut self, _ctx: &mut rustidy_format::Context) {
