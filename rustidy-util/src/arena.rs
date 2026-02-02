@@ -34,29 +34,6 @@ impl<T: ?Sized + ArenaData> Arena<T> {
 	pub fn is_empty(&self) -> bool {
 		self.data.lock().expect("Poisoned").is_empty()
 	}
-
-	/// Drops an arena index
-	fn drop(&self, idx: u32) {
-		let idx = idx as usize;
-
-		let mut data = self.data.lock().expect("Poisoned");
-		let value = mem::replace(&mut data[idx], ArenaSlot::Empty);
-		assert!(value.is_alive(), "Attempted to drop a non-alive pack");
-
-		// TODO: Track the first/last dropped value to make this cheaper?
-		if data[idx + 1..].iter().all(ArenaSlot::is_empty) {
-			let backwards_len = data[..idx]
-				.iter()
-				.rev()
-				.position(|slot| !slot.is_empty())
-				.unwrap_or(idx);
-			let len = idx - backwards_len;
-			data.truncate(len);
-		}
-
-		drop(data);
-		drop(value);
-	}
 }
 
 impl<T: ArenaData> Default for Arena<T> {
@@ -165,6 +142,11 @@ impl<T: ?Sized + ArenaData> ArenaIdx<T> {
 	/// Creates a new value in the arena
 	pub fn new(value: T::Data) -> Self {
 		let mut data = T::ARENA.data.lock().expect("Poisoned");
+
+		// Pop all dead slots at the end
+		while data.pop_if(|slot| slot.is_empty()).is_some() {}
+
+		// Then push the new value
 		let idx = data.len();
 		data.push(ArenaSlot::Alive(value));
 		drop(data);
@@ -269,7 +251,13 @@ impl<T: ?Sized + ArenaData> ArenaIdx<T> {
 
 impl<T: ?Sized + ArenaData> Drop for ArenaIdx<T> {
 	fn drop(&mut self) {
-		T::ARENA.drop(self.inner);
+		let inner_idx = self.inner as usize;
+
+		let mut data = T::ARENA.data.lock().expect("Poisoned");
+		let value = mem::replace(&mut data[inner_idx], ArenaSlot::Empty);
+		drop(data);
+
+		assert!(value.is_alive(), "Attempted to drop a non-alive pack");
 	}
 }
 
