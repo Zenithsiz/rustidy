@@ -24,7 +24,7 @@ use {
 	rustidy_format::Format,
 	rustidy_parse::Parser,
 	rustidy_print::{Print, PrintFmt},
-	std::{fs, process::ExitCode},
+	std::{fs, process::ExitCode, time::Instant},
 	zutil_logger::Logger,
 };
 
@@ -53,7 +53,7 @@ fn run() -> Result<(), AppError> {
 	logger.set_file(args.log_file.as_deref());
 
 	for file_path in &args.files {
-		println!("{file_path:?}:");
+		let start = Instant::now();
 
 		// Parse
 		let file = fs::read_to_string(file_path).context("Unable to read file")?;
@@ -69,6 +69,10 @@ fn run() -> Result<(), AppError> {
 		let mut print_fmt = PrintFmt::new(&file, &config);
 		crate_.print(&mut print_fmt);
 		fs::write(file_path, print_fmt.output()).context("Unable to write file")?;
+
+		let duration = start.elapsed();
+
+		tracing::info!("{file_path:?}: {duration:.2?}");
 	}
 
 	Ok(())
