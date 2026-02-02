@@ -3,8 +3,8 @@
 // Imports
 use {
 	crate::ast::{path::SimplePath, token, util::Braced},
-	rustidy_ast_util::{Identifier, PunctuatedTrailing},
-	rustidy_format::Format,
+	rustidy_ast_util::{Identifier, Punctuated, PunctuatedTrailing, Whitespace},
+	rustidy_format::{Format, WhitespaceLike},
 	rustidy_parse::Parse,
 	rustidy_print::Print,
 };
@@ -36,6 +36,8 @@ impl UseDeclaration {
 		replace_with::replace_with_or_abort(&mut self.tree, |tree| {
 			let mut group_tree = tree.into_group();
 			for use_decl in others {
+				// TODO: Here we're discarding the whitespace after `use` and before `;`,
+				//       we should probably instead return an error saying we couldn't merge.
 				group_tree.push(use_decl.tree);
 			}
 			UseTree::Group(group_tree)
@@ -90,6 +92,7 @@ pub struct UseTreeGlobPrefix {
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
+#[format(before_with = Self::flatten)]
 pub struct UseTreeGroup {
 	pub prefix: Option<UseTreeGroupPrefix>,
 	#[format(before_with(expr = Format::prefix_ws_remove, if = self.prefix.is_some()))]
@@ -101,12 +104,68 @@ pub struct UseTreeGroup {
 impl UseTreeGroup {
 	/// Pushes a tree into this group
 	pub fn push(&mut self, tree: UseTree) {
-		// TODO: We should probably flatten group use declarations here
-		//       even if we do a flattening step later on to avoid duplicate work.
+		// TODO: We should probably flatten group use declarations here to avoid duplicate work.
 		match &mut self.tree.value {
 			Some(inner) => inner.push_value(Box::new(tree)),
 			None => self.tree.value = Some(PunctuatedTrailing::single(Box::new(tree))),
 		}
+	}
+
+	pub fn flatten(&mut self, ctx: &mut rustidy_format::Context) {
+		replace_with::replace_with_or_abort(&mut self.tree.value, |trees| {
+			let mut trees = trees?;
+			let mut trees_first = Some((token::Comma::new(), trees.punctuated.first));
+			let mut sub_trees = vec![];
+			let mut new_trees: Vec<(token::Comma, _)> = vec![];
+			let mut trailing_comma = trees.trailing;
+
+			// Note: We process the trees backwards to ensure that we always have
+			//       somewhere to add the whitespace of the braces we're removing.
+			while let Some((mut comma, tree)) = sub_trees
+				.pop()
+				.or_else(|| trees.punctuated.rest.pop())
+				.or_else(|| trees_first.take())
+			{
+				// Joins a prefix whitespace to the latest whitespace we have
+				let mut latest_ws_join_prefix = |ws: Whitespace| match new_trees.last_mut() {
+					Some((last_comma, _)) => last_comma.ws.join_prefix(ws),
+					None => match &mut trailing_comma {
+						Some(trailing_comma) => trailing_comma.ws.join_prefix(ws),
+						None => self.tree.suffix.ws.join_prefix(ws),
+					},
+				};
+
+				match *tree {
+					UseTree::Group(group) if group.prefix.is_none() => {
+						latest_ws_join_prefix(group.tree.suffix.ws);
+
+						match group.tree.value {
+							Some(trees) => {
+								comma.ws.join_prefix(group.tree.prefix.ws);
+								sub_trees.push((comma, trees.punctuated.first));
+								for (comma, tree) in trees.punctuated.rest {
+									sub_trees.push((comma, tree));
+								}
+							},
+							None => latest_ws_join_prefix(group.tree.prefix.ws),
+						}
+					},
+					_ => new_trees.push((comma, tree)),
+				}
+			}
+
+			new_trees.pop().map(|(first_comma, mut first)| {
+				first
+					.prefix_ws_join_prefix(ctx, first_comma.ws)
+					.expect("Should have prefix whitespace");
+
+				new_trees.reverse();
+				PunctuatedTrailing {
+					punctuated: Punctuated { first, rest: new_trees },
+					trailing:   trailing_comma,
+				}
+			})
+		});
 	}
 
 	fn format_tree_compact(
