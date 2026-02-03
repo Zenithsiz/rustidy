@@ -55,10 +55,6 @@ pub struct Statements {
 impl Parse for Statements {
 	type Error = StatementsError;
 
-	fn name() -> Option<impl std::fmt::Display> {
-		None::<!>
-	}
-
 	#[coverage(on)]
 	fn parse_from(parser: &mut Parser) -> Result<Self, Self::Error> {
 		let mut stmts = vec![];

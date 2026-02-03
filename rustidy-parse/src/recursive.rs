@@ -115,11 +115,6 @@ where
 {
 	type Error = RecursiveWrapperError<R>;
 
-	#[coverage(off)]
-	fn name() -> Option<impl std::fmt::Display> {
-		None::<!>
-	}
-
 	// TODO: Account for precedence
 	fn parse_from(parser: &mut Parser) -> Result<Self, Self::Error> {
 		let convert_inner = |parser: &mut Parser, inner: RecursiveWrapperInnerPart<R>| {
@@ -350,10 +345,6 @@ pub struct ParseBracesOpen;
 
 impl Parse for ParseBracesOpen {
 	type Error = ();
-
-	fn name() -> Option<impl std::fmt::Display> {
-		None::<!>
-	}
 
 	fn parse_from(parser: &mut Parser) -> Result<Self, Self::Error> {
 		if parser.has_tag("skip:Delimiters") {

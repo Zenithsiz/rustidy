@@ -14,7 +14,6 @@ use {
 	rustidy_format::Format,
 	rustidy_parse::{FromRecursiveRoot, Parse, ParseError, Parser, ParserError},
 	rustidy_print::Print,
-	std::fmt,
 };
 
 /// `MatchExpression`
@@ -50,10 +49,6 @@ pub struct MatchArms {
 
 impl Parse for MatchArms {
 	type Error = MatchArmsError;
-
-	fn name() -> Option<impl fmt::Display> {
-		None::<!>
-	}
 
 	fn parse_from(parser: &mut Parser) -> Result<Self, Self::Error> {
 		let mut arms = vec![];

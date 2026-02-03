@@ -156,11 +156,13 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 	// Error type identifier
 	let error_ident = syn::Ident::new(&format!("{item_ident}Error"), item_ident.span());
 
-	let name_coverage = attrs.name.as_ref().map(|_| quote! { #[coverage(off)] });
-	let name = match &attrs.name {
-		Some(name) => quote! { Some(#name) },
-		None => quote! { None::<!> },
-	};
+	let name_impl = attrs.name.as_ref().map(|name| {
+		quote! {
+			fn name() -> Option<impl std::fmt::Display> {
+				Some(#name)
+			}
+		}
+	});
 
 	let skip_if_tag_err_variant_ident = syn::Ident::new("Tag", Span::mixed_site());
 	let skip_if_tag_expr = attrs.skip_if_tag.as_ref().map(|tag| {
@@ -589,10 +591,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 			impl #impl_generics rustidy_parse::Parse for #item_ident #ty_generics #where_clause {
 				type Error = #error_ident #ty_generics;
 
-				#name_coverage
-				fn name() -> Option<impl std::fmt::Display> {
-					#name
-				}
+				#name_impl
 
 				#[coverage(on)]
 				fn parse_from(parser: &mut rustidy_parse::Parser) -> Result<Self, Self::Error> {

@@ -59,8 +59,11 @@ pub trait Parse: Sized {
 	///
 	/// If this returns `None`, no extra error is displayed when parsing the type.
 	/// This is useful for containers that usually don't want to expose themselves
-	// TODO: Add a default impl for this.
-	fn name() -> Option<impl fmt::Display>;
+	#[must_use]
+	#[coverage(off)]
+	fn name() -> Option<impl fmt::Display> {
+		None::<!>
+	}
 
 	/// Parses this type from `input`, mutating it in-place.
 	fn parse_from(parser: &mut Parser) -> Result<Self, Self::Error>;
@@ -86,11 +89,6 @@ impl ParseError for NeverError {
 impl Parse for ! {
 	type Error = NeverError;
 
-	#[coverage(off)]
-	fn name() -> Option<impl fmt::Display> {
-		None::<!>
-	}
-
 	fn parse_from(_parser: &mut Parser) -> Result<Self, Self::Error> {
 		Err(NeverError)
 	}
@@ -98,11 +96,6 @@ impl Parse for ! {
 
 impl<T> Parse for PhantomData<T> {
 	type Error = !;
-
-	#[coverage(off)]
-	fn name() -> Option<impl fmt::Display> {
-		None::<!>
-	}
 
 	fn parse_from(_parser: &mut Parser) -> Result<Self, Self::Error> {
 		Ok(Self)
@@ -115,11 +108,6 @@ where
 {
 	type Error = ParserError<T>;
 
-	#[coverage(off)]
-	fn name() -> Option<impl fmt::Display> {
-		None::<!>
-	}
-
 	fn parse_from(parser: &mut Parser) -> Result<Self, Self::Error> {
 		parser.parse::<T>().map(Self::new)
 	}
@@ -131,11 +119,6 @@ where
 {
 	type Error = ParserError<T>;
 
-	#[coverage(off)]
-	fn name() -> Option<impl fmt::Display> {
-		None::<!>
-	}
-
 	fn parse_from(parser: &mut Parser) -> Result<Self, Self::Error> {
 		parser.try_parse::<T>().map(Result::ok)
 	}
@@ -146,11 +129,6 @@ where
 	T: Parse,
 {
 	type Error = ParserError<T>;
-
-	#[coverage(off)]
-	fn name() -> Option<impl fmt::Display> {
-		None::<!>
-	}
 
 	fn parse_from(parser: &mut Parser) -> Result<Self, Self::Error> {
 		let mut values = vec![];
@@ -169,11 +147,6 @@ where
 impl Parse for () {
 	type Error = !;
 
-	#[coverage(off)]
-	fn name() -> Option<impl fmt::Display> {
-		None::<!>
-	}
-
 	fn parse_from(_parser: &mut Parser) -> Result<Self, Self::Error> {
 		Ok(())
 	}
@@ -183,11 +156,6 @@ macro tuple_impl($N:literal, $($T:ident),* $(,)?) {
 	#[automatically_derived]
 	impl< $($T: Parse,)* > Parse for ( $($T,)* ) {
 		type Error = ${concat( Tuple, $N, Error )}< $($T,)* >;
-
-		#[coverage(off)]
-		fn name() -> Option<impl fmt::Display> {
-			None::<!>
-		}
 
 		#[expect(non_snake_case)]
 		fn parse_from(parser: &mut Parser) -> Result<Self, Self::Error> {
@@ -240,10 +208,6 @@ tuple_impl! { 4, T0, T1, T2, T3 }
 
 impl<T: ArenaData<Data: Parse>> Parse for ArenaIdx<T> {
 	type Error = ParserError<T::Data>;
-
-	fn name() -> Option<impl fmt::Display> {
-		None::<!>
-	}
 
 	fn parse_from(parser: &mut Parser) -> Result<Self, Self::Error> {
 		let value = parser.parse::<T::Data>()?;

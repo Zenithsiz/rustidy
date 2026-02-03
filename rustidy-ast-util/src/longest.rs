@@ -34,10 +34,6 @@ pub enum LongestError<L: Parse, R: Parse> {
 impl<L: Parse, R: Parse> Parse for Longest<L, R> {
 	type Error = LongestError<L, R>;
 
-	fn name() -> Option<impl std::fmt::Display> {
-		None::<!>
-	}
-
 	#[coverage(on)]
 	fn parse_from(parser: &mut Parser) -> Result<Self, Self::Error> {
 		let lhs = parser.peek::<L>().map_err(Self::Error::Left)?;
