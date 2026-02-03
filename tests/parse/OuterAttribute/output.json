@@ -6,33 +6,33 @@
 			"attrs": [
 				{
 					"Attr": {
-						"pound": [
-							{
+						"pound": {
+							"ws": {
 								"first": {
 									"start": 0,
 									"end": 0
 								},
 								"rest": []
 							},
-							{
+							"token": {
 								"start": 0,
 								"end": 1
 							}
-						],
+						},
 						"open": {
-							"prefix": [
-								{
+							"prefix": {
+								"ws": {
 									"first": {
 										"start": 1,
 										"end": 1
 									},
 									"rest": []
 								},
-								{
+								"token": {
 									"start": 1,
 									"end": 2
 								}
-							],
+							},
 							"value": {
 								"path": {
 									"prefix": null,
@@ -56,19 +56,19 @@
 										},
 										"rest": [
 											[
-												[
-													{
+												{
+													"ws": {
 														"first": {
 															"start": 3,
 															"end": 3
 														},
 														"rest": []
 													},
-													{
+													"token": {
 														"start": 3,
 														"end": 5
 													}
-												],
+												},
 												{
 													"Ident": {
 														"NonKw": [
@@ -88,19 +88,19 @@
 												}
 											],
 											[
-												[
-													{
+												{
+													"ws": {
 														"first": {
 															"start": 6,
 															"end": 6
 														},
 														"rest": []
 													},
-													{
+													"token": {
 														"start": 6,
 														"end": 8
 													}
-												],
+												},
 												{
 													"Ident": {
 														"NonKw": [
@@ -124,97 +124,97 @@
 								},
 								"input": null
 							},
-							"suffix": [
-								{
+							"suffix": {
+								"ws": {
 									"first": {
 										"start": 9,
 										"end": 9
 									},
 									"rest": []
 								},
-								{
+								"token": {
 									"start": 9,
 									"end": 10
 								}
-							]
+							}
 						}
 					}
 				},
 				{
 					"Attr": {
-						"pound": [
-							{
+						"pound": {
+							"ws": {
 								"first": {
 									"start": 10,
 									"end": 11
 								},
 								"rest": []
 							},
-							{
+							"token": {
 								"start": 11,
 								"end": 12
 							}
-						],
+						},
 						"open": {
-							"prefix": [
-								{
+							"prefix": {
+								"ws": {
 									"first": {
 										"start": 12,
 										"end": 12
 									},
 									"rest": []
 								},
-								{
+								"token": {
 									"start": 12,
 									"end": 13
 								}
-							],
+							},
 							"value": {
 								"path": {
-									"prefix": [
-										{
+									"prefix": {
+										"ws": {
 											"first": {
 												"start": 13,
 												"end": 13
 											},
 											"rest": []
 										},
-										{
+										"token": {
 											"start": 13,
 											"end": 15
 										}
-									],
+									},
 									"segments": {
 										"first": {
-											"DollarCrate": [
-												{
+											"DollarCrate": {
+												"ws": {
 													"first": {
 														"start": 15,
 														"end": 15
 													},
 													"rest": []
 												},
-												{
+												"token": {
 													"start": 15,
 													"end": 21
 												}
-											]
+											}
 										},
 										"rest": [
 											[
-												[
-													{
+												{
+													"ws": {
 														"first": {
 															"start": 21,
 															"end": 21
 														},
 														"rest": []
 													},
-													{
+													"token": {
 														"start": 21,
 														"end": 23
 													}
-												],
+												},
 												{
 													"Ident": {
 														"NonKw": [
@@ -238,38 +238,38 @@
 								},
 								"input": null
 							},
-							"suffix": [
-								{
+							"suffix": {
+								"ws": {
 									"first": {
 										"start": 24,
 										"end": 24
 									},
 									"rest": []
 								},
-								{
+								"token": {
 									"start": 24,
 									"end": 25
 								}
-							]
+							}
 						}
 					}
 				},
 				{
 					"DocComment": {
 						"Line": {
-							"prefix": [
-								{
+							"prefix": {
+								"ws": {
 									"first": {
 										"start": 25,
 										"end": 26
 									},
 									"rest": []
 								},
-								{
+								"token": {
 									"start": 26,
 									"end": 29
 								}
-							],
+							},
 							"comment": {
 								"start": 29,
 								"end": 31
@@ -280,19 +280,19 @@
 				{
 					"DocComment": {
 						"Block": {
-							"prefix": [
-								{
+							"prefix": {
+								"ws": {
 									"first": {
 										"start": 31,
 										"end": 31
 									},
 									"rest": []
 								},
-								{
+								"token": {
 									"start": 31,
 									"end": 34
 								}
-							],
+							},
 							"comment": {
 								"start": 34,
 								"end": 37
@@ -303,19 +303,19 @@
 				{
 					"DocComment": {
 						"Block": {
-							"prefix": [
-								{
+							"prefix": {
+								"ws": {
 									"first": {
 										"start": 37,
 										"end": 38
 									},
 									"rest": []
 								},
-								{
+								"token": {
 									"start": 38,
 									"end": 41
 								}
-							],
+							},
 							"comment": {
 								"start": 41,
 								"end": 48
@@ -335,19 +335,19 @@
 								"safety": null,
 								"extern_": null
 							},
-							"fn_": [
-								{
+							"fn_": {
+								"ws": {
 									"first": {
 										"start": 48,
 										"end": 49
 									},
 									"rest": []
 								},
-								{
+								"token": {
 									"start": 49,
 									"end": 51
 								}
-							],
+							},
 							"ident": {
 								"NonKw": [
 									{
@@ -365,51 +365,51 @@
 							},
 							"generics": null,
 							"params": {
-								"prefix": [
-									{
+								"prefix": {
+									"ws": {
 										"first": {
 											"start": 53,
 											"end": 53
 										},
 										"rest": []
 									},
-									{
+									"token": {
 										"start": 53,
 										"end": 54
 									}
-								],
+								},
 								"value": null,
-								"suffix": [
-									{
+								"suffix": {
+									"ws": {
 										"first": {
 											"start": 54,
 											"end": 54
 										},
 										"rest": []
 									},
-									{
+									"token": {
 										"start": 54,
 										"end": 55
 									}
-								]
+								}
 							},
 							"ret": null,
 							"where_": null,
 							"body": {
 								"Expr": {
-									"prefix": [
-										{
+									"prefix": {
+										"ws": {
 											"first": {
 												"start": 55,
 												"end": 56
 											},
 											"rest": []
 										},
-										{
+										"token": {
 											"start": 56,
 											"end": 57
 										}
-									],
+									},
 									"value": {
 										"attrs": [],
 										"inner": {
@@ -417,19 +417,19 @@
 											"trailing_expr": null
 										}
 									},
-									"suffix": [
-										{
+									"suffix": {
+										"ws": {
 											"first": {
 												"start": 57,
 												"end": 57
 											},
 											"rest": []
 										},
-										{
+										"token": {
 											"start": 57,
 											"end": 58
 										}
-									]
+									}
 								}
 							}
 						}
