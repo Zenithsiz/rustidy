@@ -273,7 +273,11 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 					.iter()
 					.map(|variant| {
 						let name = variant.ident.to_string().to_case(convert_case::Case::Snake);
-						syn::Ident::new(&format!("{name}_err"), item_ident.span())
+						let name = match name.ends_with('_') {
+							true => format!("{name}err"),
+							false => format!("{name}_err"),
+						};
+						syn::Ident::new(&name, item_ident.span())
 					})
 					.collect::<Vec<_>>();
 
