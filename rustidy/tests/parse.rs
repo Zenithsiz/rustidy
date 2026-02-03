@@ -11,7 +11,7 @@ use {
 	rustidy_parse::Parser,
 	rustidy_print::{Print, PrintFmt},
 	rustidy_util::Config,
-	serde::{Deserialize, Serialize},
+	serde::Serialize,
 	std::{env, fs, path::Path},
 };
 
@@ -47,14 +47,7 @@ pub fn parse() {
 			},
 			false => {
 				let output = fs::read_to_string(output_path).expect("Unable to read output path");
-				let output = {
-					let mut deserializer = serde_json::Deserializer::from_str(&output);
-					deserializer.disable_recursion_limit();
-					let mut deserializer = serde_stacker::Deserializer::new(&mut deserializer);
-					deserializer.red_zone = 512 * 1024;
-					deserializer.stack_size = 8 * 1024 * 1024;
-					rustidy_ast::Crate::deserialize(deserializer).expect("Unable to deserialize output")
-				};
+				let output = serde_json::from_str::<rustidy_ast::Crate>(&output).expect("Unable to deserialize output");
 
 				assert_json_eq!(input, output);
 			},
