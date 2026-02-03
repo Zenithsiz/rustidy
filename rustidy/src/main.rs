@@ -59,10 +59,7 @@ fn main() -> ExitCode {
 
 fn run() -> Result<(), AppError> {
 	// Initialize logging
-	let logger = {
-		let default_filters = |default| [(None, default)];
-		Logger::new(std::io::stderr, (), default_filters("info"), default_filters("debug"))
-	};
+	let logger = Logger::new();
 
 	// Parse arguments
 	let args = Args::parse();
