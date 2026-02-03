@@ -292,17 +292,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "877a4ace8713b0bcf2a4e7eec82529c029f1d0619886d18145fea96c3ffe5c0f"
 
 [[package]]
-name = "extend"
-version = "1.2.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "311a6d2f1f9d60bff73d2c78a0af97ed27f79672f15c238192a5bbb64db56d00"
-dependencies = [
- "proc-macro2",
- "quote",
- "syn",
-]
-
-[[package]]
 name = "find-msvc-tools"
 version = "0.1.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -474,26 +463,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "ref-cast"
-version = "1.0.25"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f354300ae66f76f1c85c5f84693f0ce81d747e2c3f21a45fef496d89c960bf7d"
-dependencies = [
- "ref-cast-impl",
-]
-
-[[package]]
-name = "ref-cast-impl"
-version = "1.0.25"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b7186006dcb21920990093f30e3dea63b7d6e977bf1256be20c3563a5db070da"
-dependencies = [
- "proc-macro2",
- "quote",
- "syn",
-]
-
-[[package]]
 name = "regex-automata"
 version = "0.4.12"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -523,12 +492,6 @@ dependencies = [
  "app-error",
  "assert-json-diff",
  "clap",
- "derive_more",
- "either",
- "extend",
- "itertools",
- "ref-cast",
- "replace_with",
  "rustidy-ast",
  "rustidy-ast-literal",
  "rustidy-ast-tokens",
@@ -541,12 +504,8 @@ dependencies = [
  "serde",
  "serde_json",
  "serde_stacker",
- "stacker",
- "strum",
- "thiserror",
  "toml",
  "tracing",
- "unicode-ident",
  "zutil-logger",
 ]
 
@@ -555,32 +514,17 @@ name = "rustidy-ast"
 version = "0.1.10"
 dependencies = [
  "app-error",
- "assert-json-diff",
- "clap",
  "derive_more",
- "either",
- "extend",
- "itertools",
- "ref-cast",
  "replace_with",
  "rustidy-ast-literal",
  "rustidy-ast-tokens",
  "rustidy-ast-util",
  "rustidy-format",
- "rustidy-macros",
  "rustidy-parse",
  "rustidy-print",
  "rustidy-util",
  "serde",
- "serde_json",
- "serde_stacker",
- "stacker",
  "strum",
- "thiserror",
- "toml",
- "tracing",
- "unicode-ident",
- "zutil-logger",
 ]
 
 [[package]]
@@ -588,10 +532,7 @@ name = "rustidy-ast-literal"
 version = "0.1.0"
 dependencies = [
  "app-error",
- "convert_case 0.8.0",
  "derive_more",
- "either",
- "itertools",
  "rustidy-ast-tokens",
  "rustidy-ast-util",
  "rustidy-format",
@@ -600,7 +541,6 @@ dependencies = [
  "rustidy-print",
  "rustidy-util",
  "serde",
- "strum",
  "unicode-ident",
 ]
 
@@ -609,18 +549,13 @@ name = "rustidy-ast-tokens"
 version = "0.1.0"
 dependencies = [
  "app-error",
- "convert_case 0.8.0",
  "derive_more",
- "either",
- "itertools",
  "rustidy-ast-util",
  "rustidy-format",
- "rustidy-macros",
  "rustidy-parse",
  "rustidy-print",
  "rustidy-util",
  "serde",
- "strum",
  "unicode-ident",
 ]
 
@@ -629,13 +564,11 @@ name = "rustidy-ast-util"
 version = "0.1.0"
 dependencies = [
  "app-error",
- "convert_case 0.8.0",
  "derive_more",
  "either",
  "itertools",
  "replace_with",
  "rustidy-format",
- "rustidy-macros",
  "rustidy-parse",
  "rustidy-print",
  "rustidy-util",
@@ -652,15 +585,6 @@ dependencies = [
  "cargo_metadata",
  "clap",
  "clap-cargo",
- "convert_case 0.8.0",
- "derive_more",
- "either",
- "itertools",
- "rustidy-format",
- "rustidy-macros",
- "rustidy-util",
- "serde",
- "strum",
  "tracing",
  "zutil-logger",
 ]
@@ -669,15 +593,8 @@ dependencies = [
 name = "rustidy-format"
 version = "0.1.0"
 dependencies = [
- "app-error",
- "convert_case 0.8.0",
- "derive_more",
- "either",
- "itertools",
  "rustidy-macros",
  "rustidy-util",
- "serde",
- "strum",
 ]
 
 [[package]]
@@ -699,40 +616,25 @@ name = "rustidy-parse"
 version = "0.1.0"
 dependencies = [
  "app-error",
- "convert_case 0.8.0",
  "derive_more",
  "either",
- "itertools",
  "rustidy-macros",
  "rustidy-util",
- "serde",
- "strum",
 ]
 
 [[package]]
 name = "rustidy-print"
 version = "0.1.0"
 dependencies = [
- "app-error",
- "convert_case 0.8.0",
- "derive_more",
- "either",
- "itertools",
- "rustidy-format",
  "rustidy-macros",
  "rustidy-util",
- "serde",
- "strum",
 ]
 
 [[package]]
 name = "rustidy-util"
 version = "0.1.0"
 dependencies = [
- "app-error",
- "convert_case 0.8.0",
  "derive_more",
- "itertools",
  "serde",
  "strum",
 ]

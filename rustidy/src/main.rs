@@ -16,6 +16,8 @@
 	if_let_guard,
 	anonymous_lifetime_in_impl_trait
 )]
+// Lints
+#![expect(unused_crate_dependencies, reason = "They're used in other targets")]
 
 // Modules
 mod args;

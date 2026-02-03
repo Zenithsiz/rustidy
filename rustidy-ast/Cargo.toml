@@ -14,32 +14,15 @@ rustidy-ast-literal = { workspace = true }
 rustidy-ast-tokens  = { workspace = true }
 rustidy-ast-util    = { workspace = true }
 rustidy-format      = { workspace = true }
-rustidy-macros      = { workspace = true }
 rustidy-parse       = { workspace = true }
 rustidy-print       = { workspace = true }
 rustidy-util        = { workspace = true }
 
-app-error     = { workspace = true }
-clap          = { features = ["derive"], workspace = true }
-derive_more   = { features = ["full"], workspace = true }
-either        = { workspace = true }
-extend        = { workspace = true }
-itertools     = { workspace = true }
-ref-cast      = { workspace = true }
-replace_with  = { workspace = true }
-serde         = { features = ["derive", "unstable"], workspace = true }
-stacker       = { workspace = true }
-strum         = { features = ["derive"], workspace = true }
-thiserror     = { workspace = true }
-toml          = { workspace = true }
-tracing       = { workspace = true }
-unicode-ident = { workspace = true }
-zutil-logger  = { workspace = true }
-
-[dev-dependencies]
-serde_json       = { workspace = true, features = ["unbounded_depth"] }
-assert-json-diff = { workspace = true }
-serde_stacker    = { workspace = true }
+app-error    = { workspace = true }
+derive_more  = { features = ["full"], workspace = true }
+replace_with = { workspace = true }
+serde        = { features = ["derive", "unstable"], workspace = true }
+strum        = { workspace = true }
 
 [lints]
 workspace = true

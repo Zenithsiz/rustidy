@@ -5,12 +5,9 @@ edition = "2024"
 
 [dependencies]
 
-app-error    = { workspace = true }
-convert_case = { workspace = true }
-derive_more  = { features = ["full"], workspace = true }
-itertools    = { workspace = true }
-serde        = { features = ["derive"], workspace = true }
-strum        = { features = ["derive"], workspace = true }
+derive_more = { features = ["full"], workspace = true }
+serde       = { features = ["derive"], workspace = true }
+strum       = { features = ["derive"], workspace = true }
 
 [lints]
 workspace = true

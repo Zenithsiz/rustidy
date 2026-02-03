@@ -69,6 +69,8 @@ zutil-logger     = { git = "https://github.com/Zenithsiz/zutil", rev = "29137563
 
 rust.unexpected_cfgs = { check-cfg = ['cfg(rust_analyzer)'], level = "warn" }
 
+rust.unused_crate_dependencies = "warn"
+
 clippy.nursery  = { level = "warn", priority = -1 }
 clippy.pedantic = { level = "warn", priority = -1 }
 

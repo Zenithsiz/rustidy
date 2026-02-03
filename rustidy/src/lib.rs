@@ -25,6 +25,8 @@
 	trim_prefix_suffix,
 	if_let_guard
 )]
+// Lints
+#![expect(unused_crate_dependencies, reason = "They're used in other targets")]
 
 // Imports
 use {

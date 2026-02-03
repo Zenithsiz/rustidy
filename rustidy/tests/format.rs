@@ -1,5 +1,8 @@
 //! Format tests
 
+// Lints
+#![expect(unused_crate_dependencies, reason = "They're used in other targets")]
+
 // Imports
 use {
 	rustidy_format::Format,
