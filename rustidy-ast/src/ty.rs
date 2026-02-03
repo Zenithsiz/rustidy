@@ -32,14 +32,29 @@ use {
 	rustidy_format::Format,
 	rustidy_parse::Parse,
 	rustidy_print::Print,
+	rustidy_util::{Arena, ArenaData, ArenaIdx},
 };
 
 /// `Type`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
+#[expect(clippy::use_self, reason = "`Parse` derive macro doesn't support `Self`")]
+pub struct Type(pub ArenaIdx<Type>);
+
+impl ArenaData for Type {
+	type Data = TypeInner;
+
+	const ARENA: &'static Arena<Self> = &TYPE_ARENA;
+}
+
+static TYPE_ARENA: Arena<Type> = Arena::new();
+
+#[derive(PartialEq, Eq, Debug)]
+#[derive(serde::Serialize, serde::Deserialize)]
+#[derive(Parse, Format, Print)]
 #[parse(name = "a type")]
-pub enum Type {
+pub enum TypeInner {
 	ImplTrait(ImplTraitType),
 	TraitObject(TraitObjectType),
 	#[parse(peek = MacroInvocation)]
