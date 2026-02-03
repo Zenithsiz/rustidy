@@ -39,7 +39,7 @@ use {
 	std::{
 		borrow::Cow,
 		fs,
-		io,
+		io::{self, Write},
 		path::{Path, PathBuf},
 		process::ExitCode,
 		time::Instant,
@@ -89,45 +89,65 @@ fn run() -> Result<(), AppError> {
 		Err(err) => bail!("Unable to read configuration file: {:?}", AppError::<()>::new(&err)),
 	};
 
-	let mut files = args.files;
-	while let Some(file_path) = files.pop() {
-		let start = Instant::now();
+	match args.files.is_empty() {
+		true => {
+			self::format_file(&config, None, None).context("Unable to format stdin")?;
+		},
+		false => {
+			let mut files = args.files;
+			while let Some(file_path) = files.pop() {
+				let start = Instant::now();
 
-		self::format_file(&config, &mut files, &file_path)
-			.with_context(|| format!("Unable to format {file_path:?}"))?;
+				self::format_file(&config, Some(&mut files), Some(&file_path))
+					.with_context(|| format!("Unable to format {file_path:?}"))?;
 
-		let duration = start.elapsed();
+				let duration = start.elapsed();
 
-		tracing::info!("{file_path:?}: {duration:.2?}");
+				tracing::info!("{file_path:?}: {duration:.2?}");
+			}
+		},
 	}
+
 
 	Ok(())
 }
 
-fn format_file(config: &rustidy_util::Config, files: &mut Vec<PathBuf>, file_path: &PathBuf) -> Result<(), AppError> {
+fn format_file(
+	config: &rustidy_util::Config,
+	files: Option<&mut Vec<PathBuf>>,
+	file_path: Option<&Path>,
+) -> Result<(), AppError> {
 	// Parse
-	let input = fs::read_to_string(file_path).context("Unable to read file")?;
+	let input = match file_path {
+		Some(file_path) => fs::read_to_string(file_path).context("Unable to read file")?,
+		None => io::read_to_string(io::stdin()).context("Unable to read stdin")?,
+	};
 	let mut parser = Parser::new(&input, config);
-	let mut crate_ = rustidy::parse(file_path, &mut parser).context("Unable to parse file")?;
+	let mut crate_ = rustidy::parse(file_path.unwrap_or_else(|| Path::new("<stdin>")), &mut parser)
+		.context("Unable to parse file")?;
 
 	// Queue modules for formatting.
-	for item in &crate_.items.0 {
-		// If it's not a module definition, skip it
-		// TODO: Support modules inside of other modules (and other items).
-		let item = item.0.get();
-		let ItemInner::Vis(vis_item) = &item.inner else {
-			continue;
-		};
-		let VisItemInner::Module(mod_) = &vis_item.inner else {
-			continue;
-		};
-		if mod_.inner.is_def() {
-			continue;
-		}
+	if let Some(file_path) = file_path &&
+		let Some(files) = files
+	{
+		for item in &crate_.items.0 {
+			// If it's not a module definition, skip it
+			// TODO: Support modules inside of other modules (and other items).
+			let item = item.0.get();
+			let ItemInner::Vis(vis_item) = &item.inner else {
+				continue;
+			};
+			let VisItemInner::Module(mod_) = &vis_item.inner else {
+				continue;
+			};
+			if mod_.inner.is_def() {
+				continue;
+			}
 
-		// Then get it's path
-		let mod_path = self::mod_path(file_path, &input, config, &item.attrs, mod_)?;
-		files.push(mod_path);
+			// Then get it's path
+			let mod_path = self::mod_path(file_path, &input, config, &item.attrs, mod_)?;
+			files.push(mod_path);
+		}
 	}
 
 	// Format
@@ -137,7 +157,13 @@ fn format_file(config: &rustidy_util::Config, files: &mut Vec<PathBuf>, file_pat
 	// Then output it to file
 	let mut print_fmt = PrintFmt::new(&input, config);
 	crate_.print(&mut print_fmt);
-	fs::write(file_path, print_fmt.output()).context("Unable to write file")?;
+	match file_path {
+		Some(file_path) => fs::write(file_path, print_fmt.output()).context("Unable to write file")?,
+		None => io::stdout()
+			.write_all(print_fmt.output().as_bytes())
+			.context("Unable to write to stdout")?,
+	}
+
 
 	Ok(())
 }
