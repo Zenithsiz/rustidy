@@ -2,6 +2,7 @@
 
 members = [
 	"rustidy",
+	"rustidy-ast",
 	"rustidy-ast-literal",
 	"rustidy-ast-tokens",
 	"rustidy-ast-util",
@@ -26,6 +27,7 @@ version     = "0.1.10"
 
 # Workspace
 rustidy             = { path = "rustidy" }
+rustidy-ast         = { path = "rustidy-ast" }
 rustidy-ast-literal = { path = "rustidy-ast-literal" }
 rustidy-ast-tokens  = { path = "rustidy-ast-tokens" }
 rustidy-ast-util    = { path = "rustidy-ast-util" }

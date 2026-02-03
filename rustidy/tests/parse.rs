@@ -6,7 +6,6 @@
 // Imports
 use {
 	assert_json_diff::assert_json_eq,
-	rustidy::ast,
 	rustidy_parse::Parser,
 	rustidy_print::{Print, PrintFmt},
 	rustidy_util::Config,
@@ -52,7 +51,7 @@ pub fn parse() {
 					let mut deserializer = serde_stacker::Deserializer::new(&mut deserializer);
 					deserializer.red_zone = 512 * 1024;
 					deserializer.stack_size = 8 * 1024 * 1024;
-					ast::Crate::deserialize(deserializer).expect("Unable to deserialize output")
+					rustidy_ast::Crate::deserialize(deserializer).expect("Unable to deserialize output")
 				};
 
 				assert_json_eq!(input, output);

@@ -25,7 +25,7 @@ use {
 	self::args::Args,
 	app_error::{AppError, Context, bail},
 	clap::Parser as _,
-	rustidy::ast::{
+	rustidy_ast::{
 		attr::{AttrInput, OuterAttrOrDocComment},
 		expr::{ExpressionInner, without_block::ExpressionWithoutBlockInner},
 		item::{ItemInner, Module, VisItemInner},

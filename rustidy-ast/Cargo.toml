@@ -1,6 +1,6 @@
 [package]
 edition     = { workspace = true }
-name        = "rustidy"
+name        = "rustidy-ast"
 description = { workspace = true }
 license     = { workspace = true }
 version     = { workspace = true }
@@ -10,7 +10,6 @@ publish     = { workspace = true }
 [dependencies]
 
 # Workspace
-rustidy-ast         = { workspace = true }
 rustidy-ast-literal = { workspace = true }
 rustidy-ast-tokens  = { workspace = true }
 rustidy-ast-util    = { workspace = true }

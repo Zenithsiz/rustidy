@@ -26,9 +26,6 @@
 	if_let_guard
 )]
 
-// Modules
-pub mod ast;
-
 // Imports
 use {
 	app_error::{AppError, Context, app_error},
@@ -37,11 +34,11 @@ use {
 };
 
 /// Parses a file
-pub fn parse(file_path: &Path, parser: &mut Parser) -> Result<ast::Crate, AppError> {
+pub fn parse(file_path: &Path, parser: &mut Parser) -> Result<rustidy_ast::Crate, AppError> {
 	// TODO: Once we have more things in arenas, we can probably remove this
 	stacker::grow(16 * 1024 * 1024, || {
 		parser
-			.parse::<ast::Crate>()
+			.parse::<rustidy_ast::Crate>()
 			.map_err(|err| {
 				if let Some(pos) = err.pos() {
 					parser.set_pos(pos);
