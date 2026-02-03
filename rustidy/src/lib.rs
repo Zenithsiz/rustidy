@@ -35,26 +35,23 @@ use {
 
 /// Parses a file
 pub fn parse(file_path: &Path, parser: &mut Parser) -> Result<rustidy_ast::Crate, AppError> {
-	// TODO: Once we have more things in arenas, we can probably remove this
-	stacker::grow(16 * 1024 * 1024, || {
-		parser
-			.parse::<rustidy_ast::Crate>()
-			.map_err(|err| {
-				if let Some(pos) = err.pos() {
-					parser.set_pos(pos);
-				}
-				parser.reverse_whitespace();
+	parser
+		.parse::<rustidy_ast::Crate>()
+		.map_err(|err| {
+			if let Some(pos) = err.pos() {
+				parser.set_pos(pos);
+			}
+			parser.reverse_whitespace();
 
-				err.to_app_error(parser)
-					.with_context(|| self::parser_error_ctx(file_path, parser))
-			})
-			.and_then(|ast| match parser.is_finished() {
-				true => Ok(ast),
-				false => Err(app_error!("Unexpected tokens at the end of file")
-					.with_context(|| self::parser_error_ctx(file_path, parser))),
-			})
-			.context("Unable to parse ast")
-	})
+			err.to_app_error(parser)
+				.with_context(|| self::parser_error_ctx(file_path, parser))
+		})
+		.and_then(|ast| match parser.is_finished() {
+			true => Ok(ast),
+			false => Err(app_error!("Unexpected tokens at the end of file")
+				.with_context(|| self::parser_error_ctx(file_path, parser))),
+		})
+		.context("Unable to parse ast")
 }
 
 fn parser_error_ctx(file_path: &Path, parser: &Parser) -> String {
