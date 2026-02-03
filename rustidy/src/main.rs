@@ -36,6 +36,7 @@ use {
 	rustidy_format::Format,
 	rustidy_parse::Parser,
 	rustidy_print::{Print, PrintFmt},
+	rustidy_util::Config,
 	std::{
 		borrow::Cow,
 		fs,
@@ -68,25 +69,31 @@ fn run() -> Result<(), AppError> {
 	// Set logger file from arguments
 	logger.set_file(args.log_file.as_deref());
 
-	let default_config_path = Path::new(".rustidy.toml");
-	let config_path = args.config_file.as_deref().unwrap_or(default_config_path);
-	let config = match fs::read_to_string(config_path) {
-		Ok(config) => toml::from_str(&config).context("Unable to parse configuration file")?,
-		Err(err) if err.kind() == io::ErrorKind::NotFound => {
-			tracing::info!("Config file wasn't found, creating a default configuration");
-			let config = rustidy_util::Config::default();
+	let config_path = match args.config_file {
+		Some(config_path) => Some(config_path),
+		None => {
+			let cur_dir = std::env::current_dir().context("Unable to get current directory")?;
+			let mut cur_dir = cur_dir.as_path();
+			loop {
+				// TODO: Should we also allow `rustidy.toml`?
+				let config_path = cur_dir.join(".rustidy.toml");
+				if fs::exists(&config_path).context("Unable to check if directory exists")? {
+					break Some(config_path);
+				}
 
-			let res: Result<(), AppError> = try {
-				let config = toml::to_string_pretty(&config).context("Unable to serialize configuration")?;
-				fs::write(config_path, config).context("Unable to write configuration to file")?;
-			};
-			if let Err(err) = res {
-				tracing::warn!("Unable to write configuration file: {err:?}");
+				match cur_dir.parent() {
+					Some(parent) => cur_dir = parent,
+					None => break None,
+				}
 			}
-
-			config
 		},
-		Err(err) => bail!("Unable to read configuration file: {:?}", AppError::<()>::new(&err)),
+	};
+	let config = match config_path {
+		Some(config_path) => {
+			let config = fs::read_to_string(config_path).context("Unable to read configuration")?;
+			toml::from_str(&config).context("Unable to parse configuration")?
+		},
+		None => Config::default(),
 	};
 
 	match args.files.is_empty() {
