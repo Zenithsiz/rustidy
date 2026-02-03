@@ -275,3 +275,9 @@ fn do_yeet() {
 	do yeet 5;
 	do yeet return 7;
 }
+
+
+
+fn block_and_prefix() {
+	{} * a
+}
