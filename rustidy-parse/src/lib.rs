@@ -242,7 +242,7 @@ impl<T: ArenaData<Data: Parse>> Parse for ArenaIdx<T> {
 	type Error = ParserError<T::Data>;
 
 	fn name() -> Option<impl fmt::Display> {
-		T::Data::name()
+		None::<!>
 	}
 
 	fn parse_from(parser: &mut Parser) -> Result<Self, Self::Error> {
