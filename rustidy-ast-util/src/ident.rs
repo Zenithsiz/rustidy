@@ -36,6 +36,15 @@ impl Identifier {
 			Self::NonKw(this) => this.0.1.is_str(input, config, ident),
 		}
 	}
+
+	/// Returns the identifier length not including whitespace
+	#[must_use]
+	pub fn non_ws_len(&self, config: &Config) -> usize {
+		match self {
+			Self::Raw(ident) => ident.1.len(config),
+			Self::NonKw(ident) => ident.0.1.len(config),
+		}
+	}
 }
 
 /// `NON_KEYWORD_IDENTIFIER`
