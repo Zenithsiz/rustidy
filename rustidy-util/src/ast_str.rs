@@ -32,21 +32,15 @@ impl AstStr {
 
 	/// Returns the length of this string
 	#[must_use]
-	pub fn len(&self) -> usize {
+	pub fn len(&self, config: &Config) -> usize {
 		match *self.repr() {
 			AstStrRepr::AstRange(range) => range.len(),
 			AstStrRepr::String(s) => s.len(),
 			AstStrRepr::Char(ch) => ch.len_utf8(),
-			AstStrRepr::Indentation { newlines, depth } => newlines + depth,
-			AstStrRepr::Join { ref lhs, ref rhs } => lhs.len() + rhs.len(),
+			AstStrRepr::Indentation { newlines, depth } => newlines + depth * config.indent.len(),
+			AstStrRepr::Join { ref lhs, ref rhs } => lhs.len(config) + rhs.len(config),
 			AstStrRepr::Dynamic(ref s) => s.len(),
 		}
-	}
-
-	/// Returns if this string is empty
-	#[must_use]
-	pub fn is_empty(&self) -> bool {
-		self.len() == 0
 	}
 
 	/// Returns if this string is blank

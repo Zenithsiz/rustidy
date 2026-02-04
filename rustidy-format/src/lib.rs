@@ -64,7 +64,7 @@ pub trait Format {
 	/// Returns the length of this type
 	fn len(&mut self, ctx: &mut Context) -> usize {
 		let mut len = 0;
-		self.with_strings(ctx, &mut |s, _ctx| len += AstStr::len(s));
+		self.with_strings(ctx, &mut |s, _ctx| len += AstStr::len(s, ctx.config));
 		len
 	}
 
