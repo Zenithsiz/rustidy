@@ -278,5 +278,8 @@ fn do_yeet() {
 
 
 fn block_and_prefix() {
-	{} * a
+	{} * a;
+	{}.f;
+	{}.f();
+	{}?;
 }

@@ -9,6 +9,7 @@ use {
 		util::Braced,
 		with_attrs::WithInnerAttributes,
 	},
+	rustidy_ast_util::NotFollows,
 	rustidy_format::Format,
 	rustidy_parse::{Parse, ParseError, Parser, ParserError},
 	rustidy_print::Print,
@@ -59,7 +60,15 @@ impl Parse for Statements {
 	fn parse_from(parser: &mut Parser) -> Result<Self, Self::Error> {
 		let mut stmts = vec![];
 		let trailing_expr = loop {
-			if let Ok(expr) = parser.try_parse::<ExpressionStatementWithBlock>()? {
+			// Note: Blocks usually take priority over expressions here, as `{} * a`
+			//       parses as an empty block, followed by the expression `*a`, but
+			//       this is not the case for field/method access and the question mark
+			//       operator.
+			if let Ok((expr, ..)) = parser.try_parse::<(
+				ExpressionStatementWithBlock,
+				NotFollows<token::Dot>,
+				NotFollows<token::Question>,
+			)>()? {
 				stmts.push(Statement::Expression(ExpressionStatement::WithBlock(expr)));
 				continue;
 			}
@@ -101,7 +110,13 @@ impl Parse for Statements {
 #[derive(derive_more::Debug, derive_more::From, ParseError)]
 pub enum StatementsError {
 	#[parse_error(transparent)]
-	ExpressionStatementWithBlock(ParserError<ExpressionStatementWithBlock>),
+	ExpressionStatementWithBlock(
+		ParserError<(
+			ExpressionStatementWithBlock,
+			NotFollows<token::Dot>,
+			NotFollows<token::Question>,
+		)>,
+	),
 
 	#[parse_error(transparent)]
 	ExpressionWithoutBlock(ParserError<(ExpressionWithoutBlock, Option<token::Semi>)>),

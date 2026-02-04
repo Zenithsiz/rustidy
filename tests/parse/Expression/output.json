@@ -35508,78 +35508,407 @@
 															"semi": null
 														}
 													}
-												}
-											],
-											"trailing_expr": {
-												"attrs": [],
-												"inner": {
-													"Operator": {
-														"Dereference": {
-															"star": {
-																"ws": {
-																	"first": {
-																		"start": 4112,
-																		"end": 4113
-																	},
-																	"rest": []
-																},
-																"token": {
-																	"start": 4113,
-																	"end": 4114
-																}
-															},
+												},
+												{
+													"Expression": {
+														"WithoutBlock": {
 															"expr": {
-																"WithoutBlock": {
-																	"attrs": [],
-																	"inner": {
-																		"Path": {
-																			"Normal": {
-																				"prefix": null,
-																				"segments": {
+																"attrs": [],
+																"inner": {
+																	"Operator": {
+																		"Dereference": {
+																			"star": {
+																				"ws": {
 																					"first": {
-																						"ident": {
-																							"Ident": {
-																								"NonKw": [
-																									{
-																										"first": {
-																											"start": 4114,
-																											"end": 4115
-																										},
-																										"rest": []
-																									},
-																									{
-																										"start": 4115,
-																										"end": 4116
-																									}
-																								]
-																							}
-																						},
-																						"generic": null
+																						"start": 4112,
+																						"end": 4113
 																					},
 																					"rest": []
+																				},
+																				"token": {
+																					"start": 4113,
+																					"end": 4114
+																				}
+																			},
+																			"expr": {
+																				"WithoutBlock": {
+																					"attrs": [],
+																					"inner": {
+																						"Path": {
+																							"Normal": {
+																								"prefix": null,
+																								"segments": {
+																									"first": {
+																										"ident": {
+																											"Ident": {
+																												"NonKw": [
+																													{
+																														"first": {
+																															"start": 4114,
+																															"end": 4115
+																														},
+																														"rest": []
+																													},
+																													{
+																														"start": 4115,
+																														"end": 4116
+																													}
+																												]
+																											}
+																										},
+																										"generic": null
+																									},
+																									"rest": []
+																								}
+																							}
+																						}
+																					}
 																				}
 																			}
 																		}
 																	}
 																}
+															},
+															"semi": {
+																"ws": {
+																	"first": {
+																		"start": 4116,
+																		"end": 4116
+																	},
+																	"rest": []
+																},
+																"token": {
+																	"start": 4116,
+																	"end": 4117
+																}
+															}
+														}
+													}
+												},
+												{
+													"Expression": {
+														"WithoutBlock": {
+															"expr": {
+																"attrs": [],
+																"inner": {
+																	"Field": {
+																		"expr": {
+																			"WithBlock": {
+																				"attrs": [],
+																				"inner": {
+																					"Block": {
+																						"prefix": {
+																							"ws": {
+																								"first": {
+																									"start": 4117,
+																									"end": 4119
+																								},
+																								"rest": []
+																							},
+																							"token": {
+																								"start": 4119,
+																								"end": 4120
+																							}
+																						},
+																						"value": {
+																							"attrs": [],
+																							"inner": {
+																								"stmts": [],
+																								"trailing_expr": null
+																							}
+																						},
+																						"suffix": {
+																							"ws": {
+																								"first": {
+																									"start": 4120,
+																									"end": 4120
+																								},
+																								"rest": []
+																							},
+																							"token": {
+																								"start": 4120,
+																								"end": 4121
+																							}
+																						}
+																					}
+																				}
+																			}
+																		},
+																		"dot": {
+																			"ws": {
+																				"first": {
+																					"start": 4121,
+																					"end": 4121
+																				},
+																				"rest": []
+																			},
+																			"token": {
+																				"start": 4121,
+																				"end": 4122
+																			}
+																		},
+																		"ident": {
+																			"NonKw": [
+																				{
+																					"first": {
+																						"start": 4122,
+																						"end": 4122
+																					},
+																					"rest": []
+																				},
+																				{
+																					"start": 4122,
+																					"end": 4123
+																				}
+																			]
+																		}
+																	}
+																}
+															},
+															"semi": {
+																"ws": {
+																	"first": {
+																		"start": 4123,
+																		"end": 4123
+																	},
+																	"rest": []
+																},
+																"token": {
+																	"start": 4123,
+																	"end": 4124
+																}
+															}
+														}
+													}
+												},
+												{
+													"Expression": {
+														"WithoutBlock": {
+															"expr": {
+																"attrs": [],
+																"inner": {
+																	"MethodCall": {
+																		"expr": {
+																			"WithBlock": {
+																				"attrs": [],
+																				"inner": {
+																					"Block": {
+																						"prefix": {
+																							"ws": {
+																								"first": {
+																									"start": 4124,
+																									"end": 4126
+																								},
+																								"rest": []
+																							},
+																							"token": {
+																								"start": 4126,
+																								"end": 4127
+																							}
+																						},
+																						"value": {
+																							"attrs": [],
+																							"inner": {
+																								"stmts": [],
+																								"trailing_expr": null
+																							}
+																						},
+																						"suffix": {
+																							"ws": {
+																								"first": {
+																									"start": 4127,
+																									"end": 4127
+																								},
+																								"rest": []
+																							},
+																							"token": {
+																								"start": 4127,
+																								"end": 4128
+																							}
+																						}
+																					}
+																				}
+																			}
+																		},
+																		"dot": {
+																			"ws": {
+																				"first": {
+																					"start": 4128,
+																					"end": 4128
+																				},
+																				"rest": []
+																			},
+																			"token": {
+																				"start": 4128,
+																				"end": 4129
+																			}
+																		},
+																		"segment": {
+																			"ident": {
+																				"Ident": {
+																					"NonKw": [
+																						{
+																							"first": {
+																								"start": 4129,
+																								"end": 4129
+																							},
+																							"rest": []
+																						},
+																						{
+																							"start": 4129,
+																							"end": 4130
+																						}
+																					]
+																				}
+																			},
+																			"generic": null
+																		},
+																		"params": {
+																			"prefix": {
+																				"ws": {
+																					"first": {
+																						"start": 4130,
+																						"end": 4130
+																					},
+																					"rest": []
+																				},
+																				"token": {
+																					"start": 4130,
+																					"end": 4131
+																				}
+																			},
+																			"value": null,
+																			"suffix": {
+																				"ws": {
+																					"first": {
+																						"start": 4131,
+																						"end": 4131
+																					},
+																					"rest": []
+																				},
+																				"token": {
+																					"start": 4131,
+																					"end": 4132
+																				}
+																			}
+																		}
+																	}
+																}
+															},
+															"semi": {
+																"ws": {
+																	"first": {
+																		"start": 4132,
+																		"end": 4132
+																	},
+																	"rest": []
+																},
+																"token": {
+																	"start": 4132,
+																	"end": 4133
+																}
+															}
+														}
+													}
+												},
+												{
+													"Expression": {
+														"WithoutBlock": {
+															"expr": {
+																"attrs": [],
+																"inner": {
+																	"Operator": {
+																		"TryPropagation": {
+																			"expr": {
+																				"WithBlock": {
+																					"attrs": [],
+																					"inner": {
+																						"Block": {
+																							"prefix": {
+																								"ws": {
+																									"first": {
+																										"start": 4133,
+																										"end": 4135
+																									},
+																									"rest": []
+																								},
+																								"token": {
+																									"start": 4135,
+																									"end": 4136
+																								}
+																							},
+																							"value": {
+																								"attrs": [],
+																								"inner": {
+																									"stmts": [],
+																									"trailing_expr": null
+																								}
+																							},
+																							"suffix": {
+																								"ws": {
+																									"first": {
+																										"start": 4136,
+																										"end": 4136
+																									},
+																									"rest": []
+																								},
+																								"token": {
+																									"start": 4136,
+																									"end": 4137
+																								}
+																							}
+																						}
+																					}
+																				}
+																			},
+																			"question": {
+																				"ws": {
+																					"first": {
+																						"start": 4137,
+																						"end": 4137
+																					},
+																					"rest": []
+																				},
+																				"token": {
+																					"start": 4137,
+																					"end": 4138
+																				}
+																			}
+																		}
+																	}
+																}
+															},
+															"semi": {
+																"ws": {
+																	"first": {
+																		"start": 4138,
+																		"end": 4138
+																	},
+																	"rest": []
+																},
+																"token": {
+																	"start": 4138,
+																	"end": 4139
+																}
 															}
 														}
 													}
 												}
-											}
+											],
+											"trailing_expr": null
 										}
 									},
 									"suffix": {
 										"ws": {
 											"first": {
-												"start": 4116,
-												"end": 4117
+												"start": 4139,
+												"end": 4140
 											},
 											"rest": []
 										},
 										"token": {
-											"start": 4117,
-											"end": 4118
+											"start": 4140,
+											"end": 4141
 										}
 									}
 								}
@@ -35592,8 +35921,8 @@
 	],
 	"suffix_ws": {
 		"first": {
-			"start": 4118,
-			"end": 4119
+			"start": 4141,
+			"end": 4142
 		},
 		"rest": []
 	},
