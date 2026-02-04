@@ -169,6 +169,16 @@ impl<T, P> PunctuatedTrailing<T, P> {
 		itertools::chain![self.punctuated.iter(), self.trailing.as_ref().map(Either::Right),]
 	}
 
+	/// Returns an iterator over all values
+	pub fn values(&self) -> impl Iterator<Item = &T> {
+		self.punctuated.values()
+	}
+
+	/// Returns a mutable iterator over all values
+	pub fn values_mut(&mut self) -> impl Iterator<Item = &mut T> {
+		self.punctuated.values_mut()
+	}
+
 	/// Formats this value
 	pub fn format(
 		&mut self,
