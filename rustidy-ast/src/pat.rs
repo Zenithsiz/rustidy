@@ -22,7 +22,7 @@ use {
 	rustidy_ast_literal::{ByteLiteral, LiteralExpression},
 	rustidy_ast_util::{AtLeast1, Identifier, Punctuated, PunctuatedTrailing, at_least, punct},
 	rustidy_format::Format,
-	rustidy_parse::Parse,
+	rustidy_parse::{Parse, ParsePeeked, ParserError},
 	rustidy_print::Print,
 };
 
@@ -311,10 +311,20 @@ pub struct LiteralPattern {
 	pub literal: LiteralExpression,
 }
 
+impl ParsePeeked<ByteLiteral> for LiteralPattern {
+	fn parse_from_with_peeked(_parser: &mut rustidy_parse::Parser, parsed: ByteLiteral) -> Result<Self, Self::Error> {
+		Ok(Self {
+			minus:   None,
+			literal: LiteralExpression::Byte(parsed),
+		})
+	}
+}
+
 /// `IdentifierPattern`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
+#[parse(error(name = Pat(ParserError::<PatternNoTopAlt>), transparent))]
 pub struct IdentifierPattern {
 	pub ref_:  Option<token::Ref>,
 	#[format(before_with(expr = Format::prefix_ws_set_single, if = self.ref_.is_some()))]
@@ -323,6 +333,21 @@ pub struct IdentifierPattern {
 	pub ident: Identifier,
 	#[format(before_with = Format::prefix_ws_set_single)]
 	pub rest:  Option<IdentifierPatternRest>,
+}
+
+impl ParsePeeked<(Option<token::Ref>, Option<token::Mut>, Identifier, token::At)> for IdentifierPattern {
+	fn parse_from_with_peeked(
+		parser: &mut rustidy_parse::Parser,
+		(ref_, mut_, ident, at): (Option<token::Ref>, Option<token::Mut>, Identifier, token::At),
+	) -> Result<Self, Self::Error> {
+		let pat = parser.parse::<PatternNoTopAlt>().map_err(Self::Error::Pat)?;
+		Ok(Self {
+			ref_,
+			mut_,
+			ident,
+			rest: Some(IdentifierPatternRest { at, pat: Box::new(pat) }),
+		})
+	}
 }
 
 #[derive(PartialEq, Eq, Debug)]

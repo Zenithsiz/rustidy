@@ -12,9 +12,9 @@ use {
 		with_attrs::{self, WithOuterAttributes},
 	},
 	rustidy_ast_literal::{LiteralExpression, RawStringLiteral, StringLiteral},
-	rustidy_ast_util::{Delimited, Identifier, PunctuatedTrailing, punct},
+	rustidy_ast_util::{Delimited, Follows, Identifier, PunctuatedTrailing, punct},
 	rustidy_format::Format,
-	rustidy_parse::Parse,
+	rustidy_parse::{Parse, ParsePeeked},
 	rustidy_print::Print,
 };
 
@@ -115,7 +115,7 @@ pub enum ItemSafety {
 #[parse(name = "function parameters")]
 pub enum FunctionParameters {
 	Full(FunctionParametersFull),
-	#[parse(peek = (SelfParam, Option::<token::Comma>, token::ParenClose))]
+	#[parse(peek = (SelfParam, Option::<token::Comma>, Follows::<token::ParenClose>))]
 	OnlySelf(FunctionParametersOnlySelf),
 }
 
@@ -126,6 +126,15 @@ pub struct FunctionParametersOnlySelf {
 	pub self_:          SelfParam,
 	#[format(before_with = Format::prefix_ws_remove)]
 	pub trailing_comma: Option<token::Comma>,
+}
+
+impl ParsePeeked<(SelfParam, Option<token::Comma>, Follows<token::ParenClose>)> for FunctionParametersOnlySelf {
+	fn parse_from_with_peeked(
+		_parser: &mut rustidy_parse::Parser,
+		(self_, trailing_comma, _): (SelfParam, Option<token::Comma>, Follows<token::ParenClose>),
+	) -> Result<Self, Self::Error> {
+		Ok(Self { self_, trailing_comma })
+	}
 }
 
 #[derive(PartialEq, Eq, Debug)]

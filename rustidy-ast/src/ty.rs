@@ -63,6 +63,7 @@ pub enum TypeInner {
 
 /// `TypeNoBounds`
 #[derive(PartialEq, Eq, Debug)]
+#[derive(derive_more::From)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub enum TypeNoBounds {

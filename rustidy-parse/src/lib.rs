@@ -399,6 +399,13 @@ impl<'a, 'input> Parser<'a, 'input> {
 		T::parse_from(self).map_err(|source| ParserError::new(source, AstRange::new(start_pos, self.cur_pos)))
 	}
 
+	/// Parses `T` from this parser with a peeked value
+	pub fn parse_with_peeked<T: ParsePeeked<U>, U>(&mut self, parsed: U) -> Result<T, ParserError<T>> {
+		let start_pos = self.cur_pos;
+		T::parse_from_with_peeked(self, parsed)
+			.map_err(|source| ParserError::new(source, AstRange::new(start_pos, self.cur_pos)))
+	}
+
 	/// Tries to parses `T` from this parser.
 	///
 	/// On error, nothing is modified.
@@ -529,6 +536,20 @@ impl From<&'static str> for ParserTag {
 pub struct ParserLoc {
 	pub line:   usize,
 	pub column: usize,
+}
+
+/// Types that may be parsed using a peek into itself
+pub trait ParsePeeked<T>: Parse {
+	fn parse_from_with_peeked(parser: &mut Parser, parsed: T) -> Result<Self, Self::Error>;
+}
+
+impl<T, U> ParsePeeked<U> for T
+where
+	T: Parse + From<U>,
+{
+	fn parse_from_with_peeked(_parser: &mut Parser, parsed: U) -> Result<Self, Self::Error> {
+		Ok(parsed.into())
+	}
 }
 
 /// Types that may be parsed from another

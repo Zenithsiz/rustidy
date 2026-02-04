@@ -80,6 +80,7 @@ struct VariantAttrs {
 	#[as_ref]
 	fields: darling::ast::Fields<VariantFieldAttrs>,
 
+	// TODO: We should rename this to `try` because we're no longer just peeking
 	#[darling(multiple)]
 	peek: Vec<PeekAttrs>,
 
@@ -220,42 +221,6 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 				// TODO: Support tags
 				let unknown_error_name = syn::Ident::new("Unknown", item_ident.span());
 
-				struct Peek<'a> {
-					variant:     &'a VariantAttrs,
-					ty:          &'a PeekAttrs,
-					err_variant: syn::Ident,
-				}
-				let peeks = variants
-					.iter()
-					.flat_map(|variant| {
-						variant.peek.iter().enumerate().map(|(idx, ty)| {
-							let err_variant =
-								syn::Ident::new(&format!("{}Peek{idx}", variant.ident), variant.ident.span());
-							Peek {
-								variant,
-								ty,
-								err_variant,
-							}
-						})
-					})
-					.collect::<Vec<_>>();
-				let parse_peeks = peeks.iter().map(|peek| {
-					let Peek {
-						variant,
-						ty: PeekAttrs(ty),
-						err_variant,
-					} = peek;
-					let variant_ident = &variant.ident;
-
-					quote! {
-						if parser.peek::<#ty>().map_err(#error_ident::#err_variant)?.is_ok()
-						{
-							let value = parser.parse().map_err(#error_ident::#variant_ident)?;
-							return Ok(Self::#variant_ident(value));
-						}
-					}
-				});
-
 				let variant_tys = variants
 					.iter()
 					.map(|variant| {
@@ -268,6 +233,44 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 						&field.ty
 					})
 					.collect::<Vec<_>>();
+
+				struct Peek<'a> {
+					variant:     &'a VariantAttrs,
+					variant_ty:  &'a syn::Type,
+					peek_ty:     &'a PeekAttrs,
+					err_variant: syn::Ident,
+				}
+				let peeks = itertools::izip!(variants, &variant_tys)
+					.flat_map(|(variant, variant_ty)| {
+						variant.peek.iter().enumerate().map(|(idx, ty)| {
+							let err_variant =
+								syn::Ident::new(&format!("{}Peek{idx}", variant.ident), variant.ident.span());
+							Peek {
+								variant,
+								variant_ty,
+								peek_ty: ty,
+								err_variant,
+							}
+						})
+					})
+					.collect::<Vec<_>>();
+				let parse_peeks = peeks.iter().map(|peek| {
+					let Peek {
+						variant,
+						variant_ty,
+						peek_ty: PeekAttrs(ty),
+						err_variant,
+					} = peek;
+					let variant_ident = &variant.ident;
+
+					quote! {
+						if let Ok(value) = parser.try_parse::<#ty>().map_err(#error_ident::#err_variant)?
+						{
+							let variant = parser.parse_with_peeked::<#variant_ty, #ty>(value).map_err(#error_ident::#variant_ident)?;
+							return Ok(Self::#variant_ident(variant));
+						}
+					}
+				});
 
 				let err_idents = variants
 					.iter()
@@ -342,20 +345,21 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 
 						let variant_ident = &variant.ident;
 						quote! {
-														#[parse_error(transparent)]
+							#[parse_error(transparent)]
 							#variant_ident(#ty),
 						}
 					})
 					.chain(peeks.iter().map(|peek| {
 						let Peek {
 							variant: _,
-							ty: PeekAttrs(ty),
+							variant_ty: _,
+							peek_ty: PeekAttrs(ty),
 							err_variant,
 						} = peek;
 						let err_ty = quote! { rustidy_parse::ParserError<#ty> };
 
 						quote! {
-														#[parse_error(transparent)]
+							#[parse_error(transparent)]
 							#err_variant(#err_ty),
 						}
 					}))
