@@ -37,6 +37,7 @@ impl AstStr {
 			AstStrRepr::AstRange(range) => range.len(),
 			AstStrRepr::String(s) => s.len(),
 			AstStrRepr::Char(ch) => ch.len_utf8(),
+			AstStrRepr::Spaces { len } => len,
 			AstStrRepr::Indentation { newlines, depth } => newlines + depth * config.indent.len(),
 			AstStrRepr::Join { ref lhs, ref rhs } => lhs.len(config) + rhs.len(config),
 			AstStrRepr::Dynamic(ref s) => s.len(),
@@ -50,7 +51,7 @@ impl AstStr {
 			AstStrRepr::AstRange(range) => crate::is_str_blank(range.str(input)),
 			AstStrRepr::String(s) => crate::is_str_blank(s),
 			AstStrRepr::Char(ch) => ch.is_ascii_whitespace(),
-			AstStrRepr::Indentation { .. } => true,
+			AstStrRepr::Spaces { .. } | AstStrRepr::Indentation { .. } => true,
 			AstStrRepr::Join { ref lhs, ref rhs } => lhs.is_blank(input) && rhs.is_blank(input),
 			AstStrRepr::Dynamic(ref s) => crate::is_str_blank(s),
 		}
@@ -79,6 +80,10 @@ impl AstStr {
 			AstStrRepr::AstRange(range) => output.push_str(range.str(input)),
 			AstStrRepr::String(s) => output.push_str(s),
 			AstStrRepr::Char(ch) => output.push(ch),
+			AstStrRepr::Spaces { len } =>
+				for _ in 0..len {
+					output.push(' ');
+				},
 			AstStrRepr::Indentation { newlines, depth } => {
 				for _ in 0..newlines {
 					output.push('\n');
@@ -107,7 +112,11 @@ impl AstStr {
 			AstStrRepr::Char(ch) => ch.to_string().into(),
 			AstStrRepr::Dynamic(ref s) => s.clone().into(),
 
-			AstStrRepr::Indentation { .. } | AstStrRepr::Join { .. } => {
+			// Special case these to avoid a `String` allocation
+			AstStrRepr::Spaces { len: 0 } => "".into(),
+			AstStrRepr::Spaces { len: 1 } => " ".into(),
+
+			AstStrRepr::Spaces { .. } | AstStrRepr::Indentation { .. } | AstStrRepr::Join { .. } => {
 				drop(repr);
 				let mut output = String::new();
 				self.write(config, input, &mut output);
@@ -141,6 +150,11 @@ pub enum AstStrRepr {
 	/// Single character
 	#[from]
 	Char(char),
+
+	/// Spaces
+	Spaces {
+		len: usize,
+	},
 
 	/// Indentation
 	#[from]

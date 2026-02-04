@@ -99,8 +99,8 @@ impl WhitespaceLike for Whitespace {
 		Self::format(self, ctx, FormatKind::Remove);
 	}
 
-	fn set_single(&mut self, ctx: &mut rustidy_format::Context) {
-		Self::format(self, ctx, FormatKind::Single);
+	fn set_spaces(&mut self, ctx: &mut rustidy_format::Context, len: usize) {
+		Self::format(self, ctx, FormatKind::Spaces { len });
 	}
 
 	fn set_indent(&mut self, ctx: &mut rustidy_format::Context, offset: isize, remove_if_empty: bool) {
@@ -153,7 +153,12 @@ impl Format for Whitespace {
 #[derive(strum::EnumIs)]
 enum FormatKind {
 	Remove,
-	Single,
+
+	Spaces {
+		/// Number of spaces
+		len: usize,
+	},
+
 	Indent {
 		/// Indentation offset
 		offset: isize,
@@ -200,7 +205,7 @@ impl FormatKind {
 	) -> AstStrRepr {
 		match self {
 			Self::Remove => "".into(),
-			Self::Single => " ".into(),
+			Self::Spaces { len } => AstStrRepr::Spaces { len },
 			Self::Indent {
 				offset,
 				remove_if_empty,
@@ -215,7 +220,7 @@ impl FormatKind {
 	/// Returns the string after a newline
 	fn after_newline_str(self, ctx: &mut rustidy_format::Context, cur_str: &AstStr, is_last: bool) -> AstStrRepr {
 		match self {
-			Self::Remove | Self::Single => "".into(),
+			Self::Remove | Self::Spaces { .. } => "".into(),
 			Self::Indent { offset, .. } => match is_last {
 				true => ctx.with_indent_offset(offset, |ctx| Self::indent_str(ctx)),
 				false => Self::indent_str_nl(ctx, cur_str, true),
@@ -227,7 +232,7 @@ impl FormatKind {
 	fn normal_str(self, ctx: &mut rustidy_format::Context, cur_str: &AstStr, is_last: bool) -> AstStrRepr {
 		match self {
 			Self::Remove => "".into(),
-			Self::Single => " ".into(),
+			Self::Spaces { len } => AstStrRepr::Spaces { len },
 			Self::Indent { offset, .. } => match is_last {
 				true => ctx.with_indent_offset(offset, |ctx| Self::indent_str_nl(ctx, cur_str, false)),
 				false => Self::indent_str_nl(ctx, cur_str, false),
@@ -432,7 +437,7 @@ mod tests {
 			.map(|case| {
 				[
 					(case.expected_remove, FormatKind::Remove),
-					(case.expected_set_single, FormatKind::Single),
+					(case.expected_set_single, FormatKind::Spaces { len: 1 }),
 					(case.expected_set_indent, FormatKind::Indent {
 						offset:          0,
 						remove_if_empty: false,

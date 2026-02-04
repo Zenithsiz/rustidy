@@ -36,8 +36,8 @@ pub trait WhitespaceLike: Format {
 	/// Removes this whitespace
 	fn remove(&mut self, ctx: &mut Context);
 
-	/// Sets this whitespace to a single space
-	fn set_single(&mut self, ctx: &mut Context);
+	/// Sets this whitespace to spaces
+	fn set_spaces(&mut self, ctx: &mut Context, len: usize);
 
 	/// Sets this whitespace to indentation.
 	fn set_indent(&mut self, ctx: &mut Context, offset: isize, remove_if_empty: bool);
@@ -113,12 +113,17 @@ pub trait Format {
 		);
 	}
 
+	/// Sets the prefix whitespace to spaces
+	fn prefix_ws_set_spaces(&mut self, ctx: &mut Context, len: usize) {
+		self.with_prefix_ws(ctx, &mut self::whitespace_visitor! {
+			capture(len: usize)
+			|ws, ctx| -> () => ws.set_spaces(ctx, *len)
+		});
+	}
+
 	/// Sets the prefix whitespace to a single space
 	fn prefix_ws_set_single(&mut self, ctx: &mut Context) {
-		self.with_prefix_ws(
-			ctx,
-			&mut self::whitespace_visitor! { |ws, ctx| -> () => ws.set_single(ctx) },
-		);
+		self.prefix_ws_set_spaces(ctx, 1);
 	}
 
 	/// Sets the prefix whitespace to an indentation
