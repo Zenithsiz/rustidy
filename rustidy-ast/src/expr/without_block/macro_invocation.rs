@@ -17,6 +17,9 @@ pub struct MacroInvocation {
 	pub path: SimplePath,
 	#[format(before_with = Format::prefix_ws_remove)]
 	pub not:  token::Not,
-	#[format(before_with = Format::prefix_ws_remove)]
+	#[format(before_with = match self.tree {
+		DelimTokenTree::Braces(_) => Format::prefix_ws_set_single,
+		_ => Format::prefix_ws_remove,
+	})]
 	pub tree: DelimTokenTree,
 }
