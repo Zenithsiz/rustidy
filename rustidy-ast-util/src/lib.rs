@@ -10,6 +10,7 @@ pub mod follows;
 pub mod ident;
 pub mod line;
 pub mod longest;
+pub mod not_follows;
 pub mod punct;
 pub mod whitespace;
 
@@ -21,6 +22,7 @@ pub use self::{
 	ident::{Identifier, IdentifierOrKeyword, NonKeywordIdentifier, RawIdentifier},
 	line::{RemainingBlockComment, RemainingLine},
 	longest::Longest,
+	not_follows::NotFollows,
 	punct::{Punctuated, PunctuatedTrailing},
 	whitespace::Whitespace,
 };
