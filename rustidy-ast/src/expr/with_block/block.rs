@@ -4,7 +4,7 @@
 use {
 	crate::{
 		expr::ExpressionWithoutBlock,
-		stmt::{ExpressionStatement, ExpressionStatementWithoutBlock, Statement},
+		stmt::{ExpressionStatement, ExpressionStatementWithBlock, ExpressionStatementWithoutBlock, Statement},
 		token,
 		util::Braced,
 		with_attrs::WithInnerAttributes,
@@ -59,6 +59,11 @@ impl Parse for Statements {
 	fn parse_from(parser: &mut Parser) -> Result<Self, Self::Error> {
 		let mut stmts = vec![];
 		let trailing_expr = loop {
+			if let Ok(expr) = parser.try_parse::<ExpressionStatementWithBlock>()? {
+				stmts.push(Statement::Expression(ExpressionStatement::WithBlock(expr)));
+				continue;
+			}
+
 			match parser.peek::<(ExpressionWithoutBlock, Option<token::Semi>)>()? {
 				Ok(((expr, semi), peek_expr_state)) => match semi {
 					Some(semi) => {
@@ -95,6 +100,9 @@ impl Parse for Statements {
 
 #[derive(derive_more::Debug, derive_more::From, ParseError)]
 pub enum StatementsError {
+	#[parse_error(transparent)]
+	ExpressionStatementWithBlock(ParserError<ExpressionStatementWithBlock>),
+
 	#[parse_error(transparent)]
 	ExpressionWithoutBlock(ParserError<(ExpressionWithoutBlock, Option<token::Semi>)>),
 
