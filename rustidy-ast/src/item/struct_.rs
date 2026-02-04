@@ -58,10 +58,31 @@ pub enum StructStructInner {
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
+#[format(and_with = Self::align_fields)]
 pub struct StructFields(
 	#[format(and_with = punct::format_trailing(Format::prefix_ws_set_cur_indent, Format::prefix_ws_remove))]
 	PunctuatedTrailing<StructField, token::Comma>,
 );
+
+impl StructFields {
+	/// Aligns all fields
+	pub fn align_fields(&mut self, ctx: &mut rustidy_format::Context) {
+		let Some(max_ident_len) = self
+			.0
+			.values()
+			.map(|field| field.0.inner.ident.non_ws_len(ctx.config()))
+			.max()
+		else {
+			return;
+		};
+
+		for field in self.0.values_mut() {
+			let ident_len = field.0.inner.ident.non_ws_len(ctx.config());
+			let ty_prefix_ws_len = 1 + max_ident_len - ident_len;
+			field.0.inner.ty.prefix_ws_set_spaces(ctx, ty_prefix_ws_len);
+		}
+	}
+}
 
 /// `StructField`
 #[derive(PartialEq, Eq, Debug)]
