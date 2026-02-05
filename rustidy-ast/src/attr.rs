@@ -166,7 +166,7 @@ pub struct DelimTokenTreeInner(#[parse(fatal)] Vec<TokenTree>);
 #[derive(Parse, Format, Print)]
 pub enum TokenTree {
 	Tree(DelimTokenTree),
-	Tokens(Vec<TokenNonDelimited>),
+	Token(TokenNonDelimited),
 }
 
 /// `Token` except delimiters
