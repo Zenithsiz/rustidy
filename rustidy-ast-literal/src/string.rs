@@ -30,19 +30,49 @@ pub struct StringLiteral {
 impl StringLiteral {
 	/// Returns the contents of this string.
 	///
-	/// This doesn't include the quotes or suffix
+	/// Doesn't include the quotes or suffix, and resolves any escapes
 	#[must_use]
 	pub fn contents<'input>(&self, input: &'input str, config: &Config) -> Cow<'input, str> {
-		let s = self.s.str(input, config);
-		match s {
-			Cow::Borrowed(s) => Cow::Borrowed(&s[..s.len() - 1][1..]),
-			Cow::Owned(mut s) => {
+		let mut s = self.s.str(input, config);
+
+		// Remove the quotes
+		match &mut s {
+			Cow::Borrowed(s) => *s = &s[..s.len() - 1][1..],
+			Cow::Owned(s) => {
 				s.pop();
 				s.remove(0);
-
-				Cow::Owned(s)
 			},
 		}
+
+		// Find and resolve any escapes
+		let mut cur_idx = 0;
+		while let Some(idx) = s[cur_idx..].find('\\') {
+			let s = Cow::to_mut(&mut s);
+			let replace_with = |s: &mut String, replacement| s.replace_range(idx..idx + 2, replacement);
+			match s[idx + 1..].chars().next() {
+				Some('n') => replace_with(s, "\n"),
+				Some('r') => replace_with(s, "\r"),
+				Some('t') => replace_with(s, "\t"),
+				Some('\\') => replace_with(s, "\\"),
+				Some('0') => replace_with(s, "\0"),
+				Some('\'') => replace_with(s, "\'"),
+				Some('"') => replace_with(s, "\""),
+				Some('\n') => replace_with(s, ""),
+
+				// TODO: Support hex and unicode escapes.
+				Some(escape_ch) => {
+					tracing::warn!("Unknown escape: '\\{escape_ch}'",);
+					cur_idx = idx + 1;
+				},
+				None => {
+					tracing::warn!("Expected character after `\\`, found EOF");
+					break;
+				},
+			}
+		}
+
+
+		s
 	}
 
 	fn parse(s: &mut &str) -> Result<(), StringLiteralError> {
@@ -68,5 +98,41 @@ impl StringLiteral {
 		*s = s.strip_prefix('"').ok_or(StringLiteralError::ExpectedEndQuote)?;
 
 		Ok(())
+	}
+}
+
+#[cfg(test)]
+mod tests {
+	use {super::*, rustidy_parse::Parser};
+
+	#[test]
+	fn contents() {
+		let cases = [
+			("\"\"", ""),
+			("\"\\n\"", "\n"),
+			("\"\\r\"", "\r"),
+			("\"\\t\"", "\t"),
+			("\"\\\\\"", "\\"),
+			("\"\\0\"", "\0"),
+			("\"\\'\"", "'"),
+			("\"\\\"\"", "\""),
+			("\"\\\n\"", ""),
+
+			("\"012\\r345\\t678\"", "012\r345\t678")
+		];
+
+		let config = Config::default();
+		for (input, contents_expected) in cases {
+			let mut parser = Parser::new(input, &config);
+			let literal = parser
+				.parse::<StringLiteral>()
+				.unwrap_or_else(|err| panic!("Unable to parse input case {input:?}: {err:?}"));
+
+			let contents_found = literal.contents(input, &config);
+			assert_eq!(
+				contents_found, contents_expected,
+				"Found wrong contents for string {input:?}"
+			);
+		}
 	}
 }
