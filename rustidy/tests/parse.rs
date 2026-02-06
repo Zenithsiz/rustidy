@@ -16,6 +16,8 @@ use {
 
 #[test]
 pub fn parse() {
+	let _logger = zutil_logger::Logger::new();
+
 	std::env::set_current_dir("..").expect("Unable to ascend a directory");
 	let tests_dir = Path::new("tests/parse/");
 	for test_dir in tests_dir.read_dir().expect("Unable to read tests directory") {
