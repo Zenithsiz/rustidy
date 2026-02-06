@@ -8,7 +8,7 @@ use {
 	rustidy_format::Format,
 	rustidy_parse::Parse,
 	rustidy_print::Print,
-	rustidy_util::{AstStr, Config},
+	rustidy_util::AstStr,
 	std::borrow::Cow,
 };
 
@@ -32,8 +32,8 @@ impl StringLiteral {
 	///
 	/// Doesn't include the quotes or suffix, and resolves any escapes
 	#[must_use]
-	pub fn contents<'input>(&self, input: &'input str, config: &Config) -> Cow<'input, str> {
-		let mut s = self.s.str(input, config);
+	pub fn contents<'input>(&self, input: &'input str) -> Cow<'input, str> {
+		let mut s = self.s.str(input);
 
 		// Remove the quotes
 		match &mut s {
@@ -117,18 +117,16 @@ mod tests {
 			("\"\\'\"", "'"),
 			("\"\\\"\"", "\""),
 			("\"\\\n\"", ""),
-
-			("\"012\\r345\\t678\"", "012\r345\t678")
+			("\"012\\r345\\t678\"", "012\r345\t678"),
 		];
 
-		let config = Config::default();
 		for (input, contents_expected) in cases {
-			let mut parser = Parser::new(input, &config);
+			let mut parser = Parser::new(input);
 			let literal = parser
 				.parse::<StringLiteral>()
 				.unwrap_or_else(|err| panic!("Unable to parse input case {input:?}: {err:?}"));
 
-			let contents_found = literal.contents(input, &config);
+			let contents_found = literal.contents(input);
 			assert_eq!(
 				contents_found, contents_expected,
 				"Found wrong contents for string {input:?}"

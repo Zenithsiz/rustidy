@@ -8,7 +8,6 @@ use {
 	rustidy_format::Format,
 	rustidy_parse::Parse,
 	rustidy_print::Print,
-	rustidy_util::Config,
 };
 
 /// `SimplePath`
@@ -26,7 +25,7 @@ pub struct SimplePath {
 impl SimplePath {
 	/// Returns if this path is the same as `path`.
 	#[must_use]
-	pub fn is_str(&self, input: &str, config: &Config, path: &str) -> bool {
+	pub fn is_str(&self, input: &str, path: &str) -> bool {
 		// Check for prefix
 		let (path, has_prefix) = match path.strip_prefix("::") {
 			Some(path) => (path, true),
@@ -44,7 +43,7 @@ impl SimplePath {
 				(None, None) => break,
 				(None, Some(_)) | (Some(_), None) => return false,
 				(Some(lhs), Some(rhs)) =>
-					if !lhs.is_str(input, config, rhs) {
+					if !lhs.is_str(input, rhs) {
 						return false;
 					},
 			}
@@ -70,13 +69,13 @@ pub enum SimplePathSegment {
 impl SimplePathSegment {
 	/// Returns if this segment is the same as `segment`.
 	#[must_use]
-	pub fn is_str(&self, input: &str, config: &Config, segment: &str) -> bool {
+	pub fn is_str(&self, input: &str, segment: &str) -> bool {
 		match self {
 			Self::Super(_) => segment == "super",
 			Self::SelfLower(_) => segment == "self",
 			Self::Crate(_) => segment == "crate",
 			Self::DollarCrate(_) => segment == "$crate",
-			Self::Ident(ident) => ident.is_str(input, config, segment),
+			Self::Ident(ident) => ident.is_str(input, segment),
 		}
 	}
 }

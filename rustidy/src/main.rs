@@ -129,7 +129,7 @@ fn format_file(
 		Some(file_path) => fs::read_to_string(file_path).context("Unable to read file")?,
 		None => io::read_to_string(io::stdin()).context("Unable to read stdin")?,
 	};
-	let mut parser = Parser::new(&input, config);
+	let mut parser = Parser::new(&input);
 	let mut crate_ = rustidy::parse(file_path.unwrap_or_else(|| Path::new("<stdin>")), &mut parser)
 		.context("Unable to parse file")?;
 
@@ -152,7 +152,7 @@ fn format_file(
 			}
 
 			// Then get it's path
-			let mod_path = self::mod_path(file_path, &input, config, &item.attrs, mod_)?;
+			let mod_path = self::mod_path(file_path, &input, &item.attrs, mod_)?;
 			files.push(mod_path);
 		}
 	}
@@ -162,7 +162,7 @@ fn format_file(
 	crate_.format(&mut ctx);
 
 	// Then output it to file
-	let mut print_fmt = PrintFmt::new(&input, config);
+	let mut print_fmt = PrintFmt::new(&input);
 	crate_.print(&mut print_fmt);
 	match file_path {
 		Some(file_path) => fs::write(file_path, print_fmt.output()).context("Unable to write file")?,
@@ -179,11 +179,10 @@ fn format_file(
 fn mod_path(
 	file_path: &Path,
 	input: &str,
-	config: &rustidy_util::Config,
 	attrs: impl IntoIterator<Item = &OuterAttrOrDocComment>,
 	mod_: &Module,
 ) -> Result<PathBuf, AppError> {
-	let path = match self::find_path_attr(input, config, attrs)? {
+	let path = match self::find_path_attr(input, attrs)? {
 		// If it had a `#[path = ...]` attribute, use that
 		Some(name) => file_path.with_file_name("").join(&*name),
 
@@ -191,11 +190,11 @@ fn mod_path(
 		None => {
 			let name = match &mod_.ident {
 				Identifier::Raw(ident) => {
-					super let ident = ident.1.str(input, config);
+					super let ident = ident.1.str(input);
 					let ident = ident.strip_prefix("r#").expect("Raw identified didn't start with `r#`");
 					Cow::Borrowed(ident)
 				},
-				Identifier::NonKw(ident) => ident.0.1.str(input, config),
+				Identifier::NonKw(ident) => ident.0.1.str(input),
 			};
 
 			// Try `<name>/mod.rs` first
@@ -229,12 +228,11 @@ fn mod_path(
 // TODO: Support `cfg_attr(..., path = ...)` and others?
 fn find_path_attr<'input>(
 	input: &'input str,
-	config: &rustidy_util::Config,
 	attrs: impl IntoIterator<Item = &OuterAttrOrDocComment>,
 ) -> Result<Option<Cow<'input, str>>, AppError> {
 	for attr in attrs {
 		let Some(attr) = attr.try_as_attr_ref() else { continue };
-		if !(attr.open.value.path.is_str(input, config, "path")) {
+		if !(attr.open.value.path.is_str(input, "path")) {
 			continue;
 		}
 		let expr = match &attr.open.value.input {
@@ -251,7 +249,7 @@ fn find_path_attr<'input>(
 		let name = match literal {
 			// Note: The rust compiler doesn't support c-strings or byte-strings here, only regular and raw strings,
 			//       so we also don't.
-			rustidy_ast_literal::LiteralExpression::String(s) => s.contents(input, config),
+			rustidy_ast_literal::LiteralExpression::String(s) => s.contents(input),
 			// TODO: Allow raw strings here
 			rustidy_ast_literal::LiteralExpression::RawString(_) =>
 				todo!("Raw strings in `#[path = ...]` attributes aren't currently supported"),

@@ -1,11 +1,14 @@
 //! Formatter configuration
 
+// Imports
+use std::sync::Arc;
+
 /// Formatter configuration
 #[derive(Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 pub struct Config {
 	/// Indentation string
-	pub indent:             String,
+	pub indent:             Arc<str>,
 	pub empty_line_spacing: EmptyLineSpacing,
 	pub max_use_tree_len:   usize,
 }
@@ -26,7 +29,7 @@ pub struct EmptyLineSpacing {
 impl Default for Config {
 	fn default() -> Self {
 		Self {
-			indent:             "\t".to_owned(),
+			indent:             "\t".into(),
 			empty_line_spacing: EmptyLineSpacing { min: 0, max: 2 },
 			max_use_tree_len:   75,
 		}

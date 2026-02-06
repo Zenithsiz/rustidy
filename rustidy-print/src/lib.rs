@@ -9,7 +9,7 @@ pub use rustidy_macros::Print;
 // Imports
 use {
 	core::marker::PhantomData,
-	rustidy_util::{ArenaData, ArenaIdx, AstStr, Config},
+	rustidy_util::{ArenaData, ArenaIdx, AstStr},
 };
 
 /// Printable types
@@ -79,7 +79,7 @@ tuple_impl! { 3, T0, T1, T2 }
 
 impl Print for AstStr {
 	fn print(&self, f: &mut PrintFmt) {
-		self.write(f.config, f.input, &mut f.output);
+		self.write(f.input, &mut f.output);
 	}
 }
 
@@ -90,20 +90,18 @@ impl<T: ArenaData<Data: Print>> Print for ArenaIdx<T> {
 }
 
 /// Print formatter
-pub struct PrintFmt<'a, 'input> {
+pub struct PrintFmt<'input> {
 	input:  &'input str,
 	output: String,
-	config: &'a Config,
 }
 
-impl<'a, 'input> PrintFmt<'a, 'input> {
+impl<'input> PrintFmt<'input> {
 	/// Creates a new formatter
 	#[must_use]
-	pub const fn new(input: &'input str, config: &'a Config) -> Self {
+	pub const fn new(input: &'input str) -> Self {
 		Self {
 			input,
 			output: String::new(),
-			config,
 		}
 	}
 

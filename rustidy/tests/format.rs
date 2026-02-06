@@ -23,14 +23,14 @@ pub fn format() {
 		let input_path = test_dir.join("input.rs");
 		let file = fs::read_to_string(&input_path).expect("Unable to read file");
 		let config = rustidy_util::Config::default();
-		let mut parser = Parser::new(&file, &config);
+		let mut parser = Parser::new(&file);
 
 		let mut input = rustidy::parse(&input_path, &mut parser).expect("Input did not fail");
 
 		let mut ctx = rustidy_format::Context::new(&file, &config);
 		input.format(&mut ctx);
 
-		let mut print_fmt = PrintFmt::new(&file, &config);
+		let mut print_fmt = PrintFmt::new(&file);
 		input.print(&mut print_fmt);
 		let found_output = print_fmt.output().to_owned();
 
@@ -38,7 +38,7 @@ pub fn format() {
 			let mut ctx = rustidy_format::Context::new(&file, &config);
 			input.format(&mut ctx);
 
-			let mut print_fmt = PrintFmt::new(&file, &config);
+			let mut print_fmt = PrintFmt::new(&file);
 			input.print(&mut print_fmt);
 
 			assert_eq!(

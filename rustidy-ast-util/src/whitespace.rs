@@ -9,6 +9,7 @@ use {
 	rustidy_parse::{Parse, Parser},
 	rustidy_print::Print,
 	rustidy_util::{Arena, ArenaData, ArenaIdx, AstStr, ast_str::AstStrRepr},
+	std::sync::Arc,
 };
 
 /// Whitespace
@@ -170,8 +171,9 @@ enum FormatKind {
 
 impl FormatKind {
 	/// Returns the indentation string, without a newline
-	const fn indent_str(ctx: &rustidy_format::Context) -> AstStrRepr {
+	fn indent_str(ctx: &rustidy_format::Context) -> AstStrRepr {
 		AstStrRepr::Indentation {
+			indent:   Arc::clone(&ctx.config().indent),
 			newlines: 0,
 			depth:    ctx.indent(),
 		}
@@ -190,6 +192,7 @@ impl FormatKind {
 		let newlines = newlines.clamp(min_newlines, max_newlines);
 
 		AstStrRepr::Indentation {
+			indent: Arc::clone(&ctx.config().indent),
 			newlines,
 			depth: ctx.indent(),
 		}
@@ -369,7 +372,7 @@ mod tests {
 		config: &Config,
 		kind: FormatKind,
 	) -> Result<(), AppError> {
-		let mut parser = Parser::new(source, fmt_config);
+		let mut parser = Parser::new(source);
 		let mut whitespace = parser
 			.parse::<Whitespace>()
 			.map_err(|err| err.to_app_error(&parser))
@@ -384,7 +387,7 @@ mod tests {
 		fmt_ctx.set_indent_depth(config.indent_depth);
 		whitespace.format(&mut fmt_ctx, kind);
 
-		let mut print_fmt = PrintFmt::new(source, fmt_config);
+		let mut print_fmt = PrintFmt::new(source);
 		whitespace.print(&mut print_fmt);
 		let output = print_fmt.output().to_owned();
 
@@ -403,7 +406,7 @@ mod tests {
 			fmt_ctx.set_indent_depth(config.indent_depth);
 			whitespace.format(&mut fmt_ctx, kind);
 
-			let mut print_fmt = PrintFmt::new(source, fmt_config);
+			let mut print_fmt = PrintFmt::new(source);
 			whitespace.print(&mut print_fmt);
 
 			let output_fmt = print_fmt.output().replace(' ', "·").replace('\t', "⭾");

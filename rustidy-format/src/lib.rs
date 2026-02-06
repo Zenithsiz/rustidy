@@ -64,7 +64,7 @@ pub trait Format {
 	/// Returns the length of this type
 	fn len(&mut self, ctx: &mut Context) -> usize {
 		let mut len = 0;
-		self.with_strings(ctx, &mut |s, _ctx| len += AstStr::len(s, ctx.config));
+		self.with_strings(ctx, &mut |s, _ctx| len += AstStr::len(s));
 		len
 	}
 
@@ -409,7 +409,7 @@ impl<'a, 'input> Context<'a, 'input> {
 	/// Returns the string of a string
 	#[must_use]
 	pub fn str(&mut self, s: &AstStr) -> Cow<'input, str> {
-		s.str(self.input, self.config)
+		s.str(self.input)
 	}
 
 	/// Returns the config

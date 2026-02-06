@@ -2,8 +2,8 @@
 
 // Imports
 use {
-	crate::{Arena, ArenaData, ArenaIdx, ArenaRef, AstRange, Config},
-	std::borrow::Cow,
+	crate::{Arena, ArenaData, ArenaIdx, ArenaRef, AstRange},
+	std::{borrow::Cow, sync::Arc},
 };
 
 /// Ast string
@@ -32,16 +32,26 @@ impl AstStr {
 
 	/// Returns the length of this string
 	#[must_use]
-	pub fn len(&self, config: &Config) -> usize {
+	pub fn len(&self) -> usize {
 		match *self.repr() {
 			AstStrRepr::AstRange(range) => range.len(),
 			AstStrRepr::String(s) => s.len(),
 			AstStrRepr::Char(ch) => ch.len_utf8(),
 			AstStrRepr::Spaces { len } => len,
-			AstStrRepr::Indentation { newlines, depth } => newlines + depth * config.indent.len(),
-			AstStrRepr::Join { ref lhs, ref rhs } => lhs.len(config) + rhs.len(config),
+			AstStrRepr::Indentation {
+				ref indent,
+				newlines,
+				depth,
+			} => newlines + depth * indent.len(),
+			AstStrRepr::Join { ref lhs, ref rhs } => lhs.len() + rhs.len(),
 			AstStrRepr::Dynamic(ref s) => s.len(),
 		}
+	}
+
+	/// Returns if this string is empty
+	#[must_use]
+	pub fn is_empty(&self) -> bool {
+		self.len() == 0
 	}
 
 	/// Returns if this string is blank
@@ -59,7 +69,7 @@ impl AstStr {
 
 	/// Returns if this string is equal to `other`
 	#[must_use]
-	pub fn is_str(&self, input: &str, config: &Config, other: &str) -> bool {
+	pub fn is_str(&self, input: &str, other: &str) -> bool {
 		let repr = self.repr();
 		match *repr {
 			AstStrRepr::AstRange(range) => range.str(input) == other,
@@ -69,13 +79,13 @@ impl AstStr {
 			// TODO: Properly implement these to avoid allocating a string
 			_ => {
 				drop(repr);
-				self.str(input, config) == other
+				self.str(input) == other
 			},
 		}
 	}
 
 	/// Writes this string
-	pub fn write(&self, config: &Config, input: &str, output: &mut String) {
+	pub fn write(&self, input: &str, output: &mut String) {
 		match *self.repr() {
 			AstStrRepr::AstRange(range) => output.push_str(range.str(input)),
 			AstStrRepr::String(s) => output.push_str(s),
@@ -84,17 +94,21 @@ impl AstStr {
 				for _ in 0..len {
 					output.push(' ');
 				},
-			AstStrRepr::Indentation { newlines, depth } => {
+			AstStrRepr::Indentation {
+				ref indent,
+				newlines,
+				depth,
+			} => {
 				for _ in 0..newlines {
 					output.push('\n');
 				}
 				for _ in 0..depth {
-					output.push_str(&config.indent);
+					output.push_str(indent);
 				}
 			},
 			AstStrRepr::Join { ref lhs, ref rhs } => {
-				lhs.write(config, input, output);
-				rhs.write(config, input, output);
+				lhs.write(input, output);
+				rhs.write(input, output);
 			},
 			AstStrRepr::Dynamic(ref s) => output.push_str(s),
 		}
@@ -104,7 +118,7 @@ impl AstStr {
 	// TODO: This can be somewhat expensive, should we replace it with
 	//       functions performing whatever checks the callers need instead?
 	#[must_use]
-	pub fn str<'input>(&self, input: &'input str, config: &Config) -> Cow<'input, str> {
+	pub fn str<'input>(&self, input: &'input str) -> Cow<'input, str> {
 		let repr = self.repr();
 		match *repr {
 			AstStrRepr::AstRange(range) => range.str(input).into(),
@@ -119,7 +133,7 @@ impl AstStr {
 			AstStrRepr::Spaces { .. } | AstStrRepr::Indentation { .. } | AstStrRepr::Join { .. } => {
 				drop(repr);
 				let mut output = String::new();
-				self.write(config, input, &mut output);
+				self.write(input, &mut output);
 				output.into()
 			},
 		}
@@ -159,6 +173,7 @@ pub enum AstStrRepr {
 	/// Indentation
 	#[from]
 	Indentation {
+		indent:   Arc<str>,
 		newlines: usize,
 		depth:    usize,
 	},

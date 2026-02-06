@@ -67,17 +67,12 @@ pub struct StructFields(
 impl StructFields {
 	/// Aligns all fields
 	pub fn align_fields(&mut self, ctx: &mut rustidy_format::Context) {
-		let Some(max_ident_len) = self
-			.0
-			.values()
-			.map(|field| field.0.inner.ident.non_ws_len(ctx.config()))
-			.max()
-		else {
+		let Some(max_ident_len) = self.0.values().map(|field| field.0.inner.ident.non_ws_len()).max() else {
 			return;
 		};
 
 		for field in self.0.values_mut() {
-			let ident_len = field.0.inner.ident.non_ws_len(ctx.config());
+			let ident_len = field.0.inner.ident.non_ws_len();
 			let ty_prefix_ws_len = 1 + max_ident_len - ident_len;
 			field.0.inner.ty.prefix_ws_set_spaces(ctx, ty_prefix_ws_len);
 		}

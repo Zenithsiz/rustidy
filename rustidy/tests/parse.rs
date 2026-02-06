@@ -10,7 +10,6 @@ use {
 	assert_json_diff::assert_json_eq,
 	rustidy_parse::Parser,
 	rustidy_print::{Print, PrintFmt},
-	rustidy_util::Config,
 	serde::Serialize,
 	std::{env, fs, path::Path},
 };
@@ -25,12 +24,11 @@ pub fn parse() {
 
 		let input_path = test_dir.join("input.rs");
 		let input_file = fs::read_to_string(&input_path).expect("Unable to read file");
-		let config = Config::default();
-		let mut parser = Parser::new(&input_file, &config);
+		let mut parser = Parser::new(&input_file);
 
 		let input = rustidy::parse(&input_path, &mut parser).expect("Unable to parse input");
 
-		let mut print_fmt = PrintFmt::new(&input_file, &config);
+		let mut print_fmt = PrintFmt::new(&input_file);
 		input.print(&mut print_fmt);
 		let input_printed = print_fmt.output();
 		assert_eq!(input_file, input_printed);

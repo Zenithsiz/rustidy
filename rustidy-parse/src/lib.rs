@@ -41,7 +41,7 @@ use {
 		mem,
 		ops::{Residual, Try},
 	},
-	rustidy_util::{ArenaData, ArenaIdx, AstPos, AstRange, AstStr, Config},
+	rustidy_util::{ArenaData, ArenaIdx, AstPos, AstRange, AstStr},
 	std::{borrow::Cow, fmt, str::pattern::Pattern},
 };
 
@@ -218,7 +218,7 @@ impl<T: ArenaData<Data: Parse>> Parse for ArenaIdx<T> {
 
 /// Parser
 #[derive(Debug)]
-pub struct Parser<'a, 'input> {
+pub struct Parser<'input> {
 	/// Input
 	input: &'input str,
 
@@ -228,19 +228,16 @@ pub struct Parser<'a, 'input> {
 	/// Tags
 	// Note: Always sorted by ast position.
 	tags: Vec<(AstPos, ParserTag)>,
-
-	config: &'a Config,
 }
 
-impl<'a, 'input> Parser<'a, 'input> {
+impl<'input> Parser<'input> {
 	/// Creates a new parser
 	#[must_use]
-	pub const fn new(input: &'input str, config: &'a Config) -> Self {
+	pub const fn new(input: &'input str) -> Self {
 		Self {
 			input,
 			cur_pos: AstPos::from_usize(0),
 			tags: vec![],
-			config,
 		}
 	}
 
@@ -311,7 +308,7 @@ impl<'a, 'input> Parser<'a, 'input> {
 	/// Returns the string of an range
 	#[must_use]
 	pub fn str(&mut self, s: &AstStr) -> Cow<'input, str> {
-		s.str(self.input, self.config)
+		s.str(self.input)
 	}
 
 	/// Returns if the parser is finished

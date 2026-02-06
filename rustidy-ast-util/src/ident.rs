@@ -11,7 +11,6 @@ use {
 	rustidy_format::Format,
 	rustidy_parse::{Parse, Parser},
 	rustidy_print::Print,
-	rustidy_util::Config,
 };
 
 /// `IDENTIFIER`
@@ -30,19 +29,19 @@ impl Identifier {
 	/// For raw identifiers, the `r#` prefix isn't included in
 	/// the comparison, so `r#abc` would return true for `"abc"`.
 	#[must_use]
-	pub fn is_str(&self, input: &str, config: &Config, ident: &str) -> bool {
+	pub fn is_str(&self, input: &str, ident: &str) -> bool {
 		match self {
 			Self::Raw(_) => todo!("Raw identifiers aren't fully implemented"),
-			Self::NonKw(this) => this.0.1.is_str(input, config, ident),
+			Self::NonKw(this) => this.0.1.is_str(input, ident),
 		}
 	}
 
 	/// Returns the identifier length not including whitespace
 	#[must_use]
-	pub fn non_ws_len(&self, config: &Config) -> usize {
+	pub fn non_ws_len(&self) -> usize {
 		match self {
-			Self::Raw(ident) => ident.1.len(config),
-			Self::NonKw(ident) => ident.0.1.len(config),
+			Self::Raw(ident) => ident.1.len(),
+			Self::NonKw(ident) => ident.0.1.len(),
 		}
 	}
 }
