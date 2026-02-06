@@ -3,6 +3,11 @@
 // Imports
 use {
 	super::attr::{InnerAttrOrDocComment, OuterAttrOrDocComment},
+	crate::{
+		attr::{AttrInput, DelimTokenTree, OuterAttribute, TokenNonDelimited, TokenTree},
+		token::{Punctuation, Token},
+	},
+	app_error::{AppError, bail},
 	rustidy_format::{Format, FormatFn},
 	rustidy_parse::{ParsableRecursive, Parse, Parser},
 	rustidy_print::Print,
@@ -12,8 +17,8 @@ use {
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
+#[format(with = Self::format_value)]
 pub struct WithOuterAttributes<T> {
-	#[format(and_with = rustidy_format::format_vec_each_with(Format::prefix_ws_set_cur_indent))]
 	pub attrs: Vec<OuterAttrOrDocComment>,
 	pub inner: T,
 }
@@ -30,6 +35,68 @@ impl<T> WithOuterAttributes<T> {
 			attrs: self.attrs,
 			inner: f(self.inner),
 		}
+	}
+}
+
+impl<T: Format> WithOuterAttributes<T> {
+	/// Formats the value
+	pub fn format_value(&mut self, ctx: &mut rustidy_format::Context) {
+		let mut ctx = ctx.sub_context();
+
+		for attr in &mut self.attrs {
+			attr.prefix_ws_set_cur_indent(&mut ctx);
+			attr.format(&mut ctx);
+
+			if let Some(attr) = attr.try_as_attr_ref() {
+				let is_path = |path| attr.open.value.path.is_str(ctx.input(), path);
+
+				if is_path("rustidy::config") &&
+					let Err(err) = Self::parse_config(attr, &mut ctx)
+				{
+					tracing::warn!("Malformed `#[rustidy::config(...)]` attribute: {err:?}");
+				}
+			}
+		}
+
+		self.inner.format(&mut ctx);
+	}
+
+	// TODO: We need to return the position for better error messages.
+	fn parse_config(attr: &OuterAttribute, ctx: &mut rustidy_format::Context) -> Result<(), AppError> {
+		let Some(AttrInput::DelimTokenTree(DelimTokenTree::Parens(input))) = &attr.open.value.input else {
+			bail!("Expected `rustidy::config([...])`");
+		};
+
+		let mut rest = input.value.0.iter();
+		while let Some(tt) = rest.next() {
+			let TokenTree::Token(TokenNonDelimited(Token::IdentOrKeyword(ident))) = tt else {
+				bail!("Expected an identifier");
+			};
+
+			enum ConfigField {
+				Ident,
+			}
+
+			let field = match ident.1.str(ctx.input()).as_str() {
+				"ident" => ConfigField::Ident,
+				ident => bail!("Unknown configuration: {ident:?}"),
+			};
+
+			let Some(TokenTree::Token(TokenNonDelimited(Token::Punctuation(Punctuation::Eq(_))))) = rest.next() else {
+				bail!("Expected `=`");
+			};
+
+			match field {
+				ConfigField::Ident => {
+					let Some(TokenTree::Token(TokenNonDelimited(Token::StringLiteral(literal)))) = rest.next() else {
+						bail!("Expected integer literal");
+					};
+					ctx.config_mut().indent = literal.contents(ctx.input()).into();
+				},
+			}
+		}
+
+		Ok(())
 	}
 }
 

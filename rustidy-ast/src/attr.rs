@@ -158,7 +158,7 @@ pub enum DelimTokenTree {
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
-pub struct DelimTokenTreeInner(#[parse(fatal)] Vec<TokenTree>);
+pub struct DelimTokenTreeInner(#[parse(fatal)] pub Vec<TokenTree>);
 
 /// `TokenTree`
 #[derive(PartialEq, Eq, Debug)]
@@ -173,4 +173,4 @@ pub enum TokenTree {
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
-pub struct TokenNonDelimited(#[parse(with_tag = "skip:Delimiters")] token::Token);
+pub struct TokenNonDelimited(#[parse(with_tag = "skip:Delimiters")] pub token::Token);

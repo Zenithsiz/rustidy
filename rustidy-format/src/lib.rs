@@ -385,7 +385,7 @@ impl<T: ArenaData<Data: Format>> Format for ArenaIdx<T> {
 /// Format context
 pub struct Context<'a, 'input> {
 	input:        &'input str,
-	config:       &'a Config,
+	config:       Cow<'a, Config>,
 	indent_depth: usize,
 }
 
@@ -395,7 +395,7 @@ impl<'a, 'input> Context<'a, 'input> {
 	pub const fn new(input: &'input str, config: &'a Config) -> Self {
 		Self {
 			input,
-			config,
+			config: Cow::Borrowed(config),
 			indent_depth: 0,
 		}
 	}
@@ -414,8 +414,14 @@ impl<'a, 'input> Context<'a, 'input> {
 
 	/// Returns the config
 	#[must_use]
-	pub const fn config(&self) -> &'a Config {
-		self.config
+	pub fn config(&self) -> &Config {
+		&self.config
+	}
+
+	/// Returns the config mutably
+	#[must_use]
+	pub fn config_mut(&mut self) -> &mut Config {
+		Cow::to_mut(&mut self.config)
 	}
 
 	/// Returns the indentation level
@@ -468,6 +474,17 @@ impl<'a, 'input> Context<'a, 'input> {
 	#[doc(hidden)]
 	pub const fn set_indent_depth(&mut self, indent_depth: usize) {
 		self.indent_depth = indent_depth;
+	}
+
+	/// Creates a sub-context.
+	///
+	/// Sub contexts have their own configuration
+	pub fn sub_context(&mut self) -> Context<'_, 'input> {
+		Context {
+			input:        self.input,
+			config:       Cow::Borrowed(&self.config),
+			indent_depth: self.indent_depth,
+		}
 	}
 }
 
