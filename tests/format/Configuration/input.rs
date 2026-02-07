@@ -23,4 +23,8 @@ mod b {
 	#![rustidy::config(ident = "  ")]
 
 	fn a() { a; b }
+
+	mod c {
+		#![rustidy::config(ident = "/*indent*/")]
+	}
 }

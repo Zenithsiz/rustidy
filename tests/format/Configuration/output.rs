@@ -38,4 +38,8 @@ mod b {
     a;
     b
   }
+
+  mod c {
+/*indent*//*indent*/#![rustidy::config(ident = "/*indent*/")]
+/*indent*/}
 }
