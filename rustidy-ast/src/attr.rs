@@ -1,10 +1,10 @@
 //! Attributes
 
 // Module
-pub mod with;
+mod with;
 
 // Exports
-pub use self::with::{WithInnerAttributes, WithOuterAttributes};
+pub use self::with::{BracedWithInnerAttributes, WithInnerAttributes, WithOuterAttributes};
 
 // Imports
 use {

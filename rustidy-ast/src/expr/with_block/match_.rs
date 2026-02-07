@@ -4,11 +4,10 @@
 use {
 	super::Conditions,
 	crate::{
+		attr::{self, BracedWithInnerAttributes, WithOuterAttributes},
 		expr::{Expression, ExpressionInner, ExpressionWithBlock, ExpressionWithoutBlock},
 		pat::Pattern,
 		token,
-		util::Braced,
-		attr::{self, WithInnerAttributes, WithOuterAttributes},
 	},
 	core::ops::ControlFlow,
 	rustidy_format::Format,
@@ -26,10 +25,8 @@ pub struct MatchExpression {
 	#[parse(fatal)]
 	#[format(before_with = Format::prefix_ws_set_single)]
 	pub scrutinee: Box<Scrutinee>,
-	#[format(indent)]
 	#[format(before_with = Format::prefix_ws_set_single)]
-	#[format(and_with = Braced::format_indent_if_non_blank)]
-	pub arms:      Braced<WithInnerAttributes<Option<MatchArms>>>,
+	pub arms:      BracedWithInnerAttributes<Option<MatchArms>>,
 }
 
 /// `Scrutinee`

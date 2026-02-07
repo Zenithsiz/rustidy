@@ -6,6 +6,7 @@ use {
 	crate::{
 		attr::{Attr, AttrInput, DelimTokenTree, TokenNonDelimited, TokenTree},
 		token::{Punctuation, Token},
+		util::Braced,
 	},
 	app_error::{AppError, bail},
 	rustidy_format::Format,
@@ -101,6 +102,18 @@ where
 		}
 	}
 }
+
+/// A braced type with inner attributes.
+#[derive(PartialEq, Eq, Debug)]
+#[derive(serde::Serialize, serde::Deserialize)]
+#[derive(Parse, Format, Print)]
+// TODO: Remove once rustc realizes that `Braced<WithInnerAttributes<T>>: Format => T: Format`
+#[format(with_where = "where T: Format")]
+pub struct BracedWithInnerAttributes<T>(
+	#[format(indent)]
+	#[format(and_with = Braced::format_indent_if_non_blank)]
+	pub Braced<WithInnerAttributes<T>>,
+);
 
 /// A type with inner attributes
 #[derive(PartialEq, Eq, Debug)]

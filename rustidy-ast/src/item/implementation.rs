@@ -7,10 +7,9 @@ use {
 		trait_::AssociatedItem,
 	},
 	crate::{
+		attr::BracedWithInnerAttributes,
 		token,
 		ty::{Type, TypePath},
-		util::Braced,
-		attr::WithInnerAttributes,
 	},
 	rustidy_format::Format,
 	rustidy_parse::Parse,
@@ -40,9 +39,7 @@ pub struct InherentImpl {
 	#[format(before_with = Format::prefix_ws_set_cur_indent)]
 	pub where_:   Option<WhereClause>,
 	#[format(before_with = Format::prefix_ws_set_single)]
-	#[format(indent)]
-	#[format(and_with = Braced::format_indent_if_non_blank)]
-	pub body:     Braced<ImplBody>,
+	pub body:     BracedWithInnerAttributes<ImplBody>,
 }
 
 /// `TraitImpl`
@@ -72,20 +69,13 @@ pub struct TraitImpl {
 	#[format(before_with = Format::prefix_ws_set_cur_indent)]
 	pub where_:   Option<WhereClause>,
 	#[format(before_with = Format::prefix_ws_set_single)]
-	#[format(indent)]
-	#[format(and_with = Braced::format_indent_if_non_blank)]
-	pub body:     Braced<ImplBody>,
+	pub body:     BracedWithInnerAttributes<ImplBody>,
 }
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
-pub struct ImplBody(pub WithInnerAttributes<ImplBodyInner>);
-
-#[derive(PartialEq, Eq, Debug)]
-#[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
-pub struct ImplBodyInner(
+pub struct ImplBody(
 	#[format(and_with = rustidy_format::format_vec_each_with_all(Format::prefix_ws_set_cur_indent))]
 	pub  Vec<AssociatedItem>,
 );

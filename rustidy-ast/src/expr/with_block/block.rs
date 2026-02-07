@@ -3,11 +3,10 @@
 // Imports
 use {
 	crate::{
+		attr::BracedWithInnerAttributes,
 		expr::ExpressionWithoutBlock,
 		stmt::{ExpressionStatement, ExpressionStatementWithBlock, ExpressionStatementWithoutBlock, Statement},
 		token,
-		util::Braced,
-		attr::WithInnerAttributes,
 	},
 	rustidy_ast_util::NotFollows,
 	rustidy_format::Format,
@@ -20,27 +19,18 @@ use {
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
+#[parse(name = "a block expression")]
+#[parse(skip_if_tag = "skip:BlockExpression")]
 #[expect(clippy::use_self, reason = "`Parse` derive macro doesn't support `Self`")]
 pub struct BlockExpression(pub ArenaIdx<BlockExpression>);
 
 impl ArenaData for BlockExpression {
-	type Data = BlockExpressionInner;
+	type Data = BracedWithInnerAttributes<Statements>;
 
 	const ARENA: &'static Arena<Self> = &TYPE_ARENA;
 }
 
 static TYPE_ARENA: Arena<BlockExpression> = Arena::new();
-
-#[derive(PartialEq, Eq, Debug)]
-#[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
-#[parse(name = "a block expression")]
-#[parse(skip_if_tag = "skip:BlockExpression")]
-pub struct BlockExpressionInner(
-	#[format(indent)]
-	#[format(and_with = Braced::format_indent_if_non_blank)]
-	pub Braced<WithInnerAttributes<Statements>>,
-);
 
 /// `Statements`
 #[derive(PartialEq, Eq, Debug)]

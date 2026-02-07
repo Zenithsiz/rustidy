@@ -11,9 +11,8 @@ use {
 		function::{GenericParams, TypeParamBounds, WhereClause},
 	},
 	crate::{
+		attr::{self, BracedWithInnerAttributes, WithOuterAttributes},
 		token,
-		util::Braced,
-		attr::{self, WithInnerAttributes, WithOuterAttributes},
 	},
 	rustidy_ast_util::Identifier,
 	rustidy_format::Format,
@@ -52,9 +51,7 @@ pub struct Trait {
 pub enum TraitBody {
 	// Note: Nightly-only
 	Eq(TraitBodyEq),
-	#[format(indent)]
-	#[format(and_with = Braced::format_indent_if_non_blank)]
-	Full(Braced<WithInnerAttributes<TraitBodyFull>>),
+	Full(BracedWithInnerAttributes<TraitBodyFull>),
 }
 
 #[derive(PartialEq, Eq, Debug)]

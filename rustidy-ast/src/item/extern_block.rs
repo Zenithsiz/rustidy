@@ -4,10 +4,9 @@
 use {
 	super::{Function, MacroInvocationSemi, StaticItem, TypeAlias, function::Abi},
 	crate::{
+		attr::{self, BracedWithInnerAttributes, WithOuterAttributes},
 		token,
-		util::Braced,
 		vis::Visibility,
-		attr::{self, WithInnerAttributes, WithOuterAttributes},
 	},
 	rustidy_format::Format,
 	rustidy_parse::Parse,
@@ -25,9 +24,7 @@ pub struct ExternBlock {
 	#[format(before_with = Format::prefix_ws_set_single)]
 	pub abi:     Option<Abi>,
 	#[format(before_with = Format::prefix_ws_set_single)]
-	#[format(indent)]
-	#[format(and_with = Braced::format_indent_if_non_blank)]
-	pub inner:   Braced<WithInnerAttributes<ExternBlockItems>>,
+	pub inner:   BracedWithInnerAttributes<ExternBlockItems>,
 }
 
 #[derive(PartialEq, Eq, Debug)]
