@@ -24,33 +24,38 @@ pub fn parse() {
 		let test_dir = test_dir.expect("Unable to read tests directory entry");
 		let test_dir = test_dir.path();
 
-		let input_path = test_dir.join("input.rs");
-		let input_file = fs::read_to_string(&input_path).expect("Unable to read file");
-		let mut parser = Parser::new(&input_file);
+		test_case(&test_dir);
+	}
+}
 
-		let input = rustidy::parse(&input_path, &mut parser).expect("Unable to parse input");
+/// Tests a case from a directory
+fn test_case(test_dir: &Path) {
+	let input_path = test_dir.join("input.rs");
+	let input_file = fs::read_to_string(&input_path).expect("Unable to read file");
+	let mut parser = Parser::new(&input_file);
 
-		let mut print_fmt = PrintFmt::new(&input_file);
-		input.print(&mut print_fmt);
-		let input_printed = print_fmt.output();
-		assert_eq!(input_file, input_printed);
+	let input = rustidy::parse(&input_path, &mut parser).expect("Unable to parse input");
 
-		let output_path = test_dir.join("output.json");
-		match env::var("UPDATE_AST_OUTPUT").is_ok_and(|value| !value.trim().is_empty()) {
-			true => {
-				let mut output = Vec::new();
-				let formatter = serde_json::ser::PrettyFormatter::with_indent(b"\t");
-				let mut serializer = serde_json::Serializer::with_formatter(&mut output, formatter);
-				input.serialize(&mut serializer).expect("Unable to serialize input");
+	let mut print_fmt = PrintFmt::new(&input_file);
+	input.print(&mut print_fmt);
+	let input_printed = print_fmt.output();
+	assert_eq!(input_file, input_printed);
 
-				fs::write(&output_path, &output).expect("Unable to update output");
-			},
-			false => {
-				let output = fs::read_to_string(output_path).expect("Unable to read output path");
-				let output = serde_json::from_str::<rustidy_ast::Crate>(&output).expect("Unable to deserialize output");
+	let output_path = test_dir.join("output.json");
+	match env::var("UPDATE_AST_OUTPUT").is_ok_and(|value| !value.trim().is_empty()) {
+		true => {
+			let mut output = Vec::new();
+			let formatter = serde_json::ser::PrettyFormatter::with_indent(b"\t");
+			let mut serializer = serde_json::Serializer::with_formatter(&mut output, formatter);
+			input.serialize(&mut serializer).expect("Unable to serialize input");
 
-				assert_json_eq!(input, output);
-			},
-		}
+			fs::write(&output_path, &output).expect("Unable to update output");
+		},
+		false => {
+			let output = fs::read_to_string(output_path).expect("Unable to read output path");
+			let output = serde_json::from_str::<rustidy_ast::Crate>(&output).expect("Unable to deserialize output");
+
+			assert_json_eq!(input, output);
+		},
 	}
 }

@@ -19,30 +19,35 @@ pub fn parse_error() {
 		let test_dir = test_dir.expect("Unable to read tests directory entry");
 		let test_dir = test_dir.path();
 
-		let input_path = test_dir.join("input.rs");
-		let file = fs::read_to_string(&input_path).expect("Unable to read file");
-		let mut parser = Parser::new(&file);
+		self::test_case(&test_dir);
+	}
+}
 
-		let err = rustidy::parse(&input_path, &mut parser).expect_err("Input did not fail");
-		let err = err.pretty().to_string();
+/// Tests a case from a directory
+fn test_case(test_dir: &Path) {
+	let input_path = test_dir.join("input.rs");
+	let file = fs::read_to_string(&input_path).expect("Unable to read file");
+	let mut parser = Parser::new(&file);
 
-		let output_path = test_dir.join("output.txt");
-		match env::var("UPDATE_ERROR_OUTPUT").is_ok_and(|value| !value.trim().is_empty()) {
-			true => {
-				let err = err + "\n";
-				fs::write(output_path, err).expect("Unable to update output");
-			},
-			false => {
-				let output = fs::read_to_string(output_path).expect("Unable to read output path");
-				let output = output.strip_suffix('\n').expect("Missing newline at the end of output");
+	let err = rustidy::parse(&input_path, &mut parser).expect_err("Input did not fail");
+	let err = err.pretty().to_string();
 
-				assert!(
-					err == output,
-					"Test {test_dir:?} output differed\n\nExpected:\n---\n{}\n---\n\nFound:\n---\n{}\n---",
-					output.replace(' ', "·").replace('\t', "⭾").replace('\n', "␤\n"),
-					err.replace(' ', "·").replace('\t', "⭾").replace('\n', "␤\n")
-				);
-			},
-		}
+	let output_path = test_dir.join("output.txt");
+	match env::var("UPDATE_ERROR_OUTPUT").is_ok_and(|value| !value.trim().is_empty()) {
+		true => {
+			let err = err + "\n";
+			fs::write(output_path, err).expect("Unable to update output");
+		},
+		false => {
+			let output = fs::read_to_string(output_path).expect("Unable to read output path");
+			let output = output.strip_suffix('\n').expect("Missing newline at the end of output");
+
+			assert!(
+				err == output,
+				"Test {test_dir:?} output differed\n\nExpected:\n---\n{}\n---\n\nFound:\n---\n{}\n---",
+				output.replace(' ', "·").replace('\t', "⭾").replace('\n', "␤\n"),
+				err.replace(' ', "·").replace('\t', "⭾").replace('\n', "␤\n")
+			);
+		},
 	}
 }
