@@ -30,7 +30,7 @@ mod a {
 }
 
 mod b {
-	#![a]
+  #![a]
   #![b]
   #![rustidy::config(ident = "  ")]
 

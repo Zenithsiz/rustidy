@@ -109,43 +109,39 @@ where
 #[derive(Parse, Format, Print)]
 // TODO: Remove once rustc realizes that `Braced<WithInnerAttributes<T>>: Format => T: Format`
 #[format(with_where = "where T: Format")]
+#[format(with = Self::format)]
 pub struct BracedWithInnerAttributes<T>(
 	#[format(indent)]
 	#[format(and_with = Braced::format_indent_if_non_blank)]
 	pub Braced<WithInnerAttributes<T>>,
 );
 
-/// A type with inner attributes
-#[derive(PartialEq, Eq, Debug)]
-#[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
-#[format(with = Self::format)]
-pub struct WithInnerAttributes<T> {
-	pub attrs: Vec<InnerAttrOrDocComment>,
-	pub inner: T,
-}
-
-impl<T: Format> WithInnerAttributes<T> {
+impl<T: Format> BracedWithInnerAttributes<T> {
 	fn format(&mut self, ctx: &mut rustidy_format::Context) {
-		// TODO: Ideally we'd also format the parent of this to avoid the very first whitespace
-		//       not being affected by this context.
-		let mut attr_value_ctx = ctx.sub_context();
-
-		for attr in &mut self.attrs {
+		let mut braced_ctx = ctx.sub_context();
+		for attr in &self.0.value.attrs {
 			if let Some(attr) = attr.try_as_attr_ref() &&
-				let Err(err) = self::update_config(&attr.attr.value, &mut attr_value_ctx)
+				let Err(err) = self::update_config(&attr.attr.value, &mut braced_ctx)
 			{
 				tracing::warn!("Malformed `#![rustidy::config(...)]` attribute: {err:?}");
 			}
 		}
 
-		for attr in &mut self.attrs {
-			attr.prefix_ws_set_cur_indent(&mut attr_value_ctx);
-			attr.format(&mut attr_value_ctx);
-		}
-
-		self.inner.format(&mut attr_value_ctx);
+		braced_ctx.with_indent(|braced_ctx| {
+			self.0.format(braced_ctx);
+			self.0.format_indent_if_non_blank(braced_ctx);
+		});
 	}
+}
+
+/// A type with inner attributes
+#[derive(PartialEq, Eq, Debug)]
+#[derive(serde::Serialize, serde::Deserialize)]
+#[derive(Parse, Format, Print)]
+pub struct WithInnerAttributes<T> {
+	#[format(and_with = rustidy_format::format_vec_each_with(Format::prefix_ws_set_cur_indent))]
+	pub attrs: Vec<InnerAttrOrDocComment>,
+	pub inner: T,
 }
 
 /// Updates the configuration based on an attribute
