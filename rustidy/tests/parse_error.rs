@@ -4,10 +4,7 @@
 #![expect(unused_crate_dependencies, reason = "They're used in other targets")]
 
 // Imports
-use {
-	rustidy_parse::Parser,
-	std::{env, fs, path::Path},
-};
+use std::{env, fs, path::Path};
 
 #[test]
 pub fn parse_error() {
@@ -25,11 +22,10 @@ pub fn parse_error() {
 
 /// Tests a case from a directory
 fn test_case(test_dir: &Path) {
-	let input_path = test_dir.join("input.rs");
-	let file = fs::read_to_string(&input_path).expect("Unable to read file");
-	let mut parser = Parser::new(&file);
+	let test_path = test_dir.join("input.rs");
+	let input = fs::read_to_string(&test_path).expect("Unable to read file");
 
-	let err = rustidy::parse(&input_path, &mut parser).expect_err("Input did not fail");
+	let err = rustidy::parse(&input, &test_path).expect_err("Input did not fail");
 	let err = err.pretty().to_string();
 
 	let output_path = test_dir.join("output.txt");

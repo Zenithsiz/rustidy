@@ -28,26 +28,25 @@ pub fn format() {
 
 /// Tests a case from a directory
 fn test_case(test_dir: &Path) {
-	let input_path = test_dir.join("input.rs");
-	let file = fs::read_to_string(&input_path).expect("Unable to read file");
+	let test_path = test_dir.join("input.rs");
+	let input = fs::read_to_string(&test_path).expect("Unable to read file");
+
+	let mut crate_ = rustidy::parse(&input, &test_path).expect("Input did not fail");
+
 	let config = rustidy_util::Config::default();
-	let mut parser = Parser::new(&file);
+	let mut ctx = rustidy_format::Context::new(&input, &config);
+	crate_.format(&mut ctx);
 
-	let mut input = rustidy::parse(&input_path, &mut parser).expect("Input did not fail");
-
-	let mut ctx = rustidy_format::Context::new(&file, &config);
-	input.format(&mut ctx);
-
-	let mut print_fmt = PrintFmt::new(&file);
-	input.print(&mut print_fmt);
+	let mut print_fmt = PrintFmt::new(&input);
+	crate_.print(&mut print_fmt);
 	let found_output = print_fmt.output().to_owned();
 
 	{
-		let mut ctx = rustidy_format::Context::new(&file, &config);
-		input.format(&mut ctx);
+		let mut ctx = rustidy_format::Context::new(&input, &config);
+		crate_.format(&mut ctx);
 
-		let mut print_fmt = PrintFmt::new(&file);
-		input.print(&mut print_fmt);
+		let mut print_fmt = PrintFmt::new(&input);
+		crate_.print(&mut print_fmt);
 
 		assert_eq!(
 			found_output,
@@ -70,6 +69,7 @@ fn test_case(test_dir: &Path) {
 				.find_map(|((idx, lhs), (_, rhs))| (lhs != rhs).then_some(idx))
 				.or_else(|| (found_output.len() != output.len()).then(|| usize::min(found_output.len(), output.len())))
 			{
+				let mut parser = Parser::new(&input);
 				parser.set_pos(AstPos::from_usize(idx));
 				parser.reverse_line();
 				let idx = parser.cur_pos().to_usize();

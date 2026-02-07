@@ -35,8 +35,11 @@ use {
 	std::path::Path,
 };
 
-/// Parses a file
-pub fn parse(file_path: &Path, parser: &mut Parser) -> Result<rustidy_ast::Crate, AppError> {
+/// Parses the input `input`.
+///
+/// `file` is only used for error reporting and does not have to exist.
+pub fn parse(input: &str, file: &Path) -> Result<rustidy_ast::Crate, AppError> {
+	let mut parser = Parser::new(input);
 	parser
 		.parse::<rustidy_ast::Crate>()
 		.map_err(|err| {
@@ -45,18 +48,19 @@ pub fn parse(file_path: &Path, parser: &mut Parser) -> Result<rustidy_ast::Crate
 			}
 			parser.reverse_whitespace();
 
-			err.to_app_error(parser)
-				.with_context(|| self::parser_error_ctx(file_path, parser))
+			err.to_app_error(&parser)
+				.with_context(|| self::parser_error_ctx(file, &parser))
 		})
 		.and_then(|ast| match parser.is_finished() {
 			true => Ok(ast),
 			false => Err(app_error!("Unexpected tokens at the end of file")
-				.with_context(|| self::parser_error_ctx(file_path, parser))),
+				.with_context(|| self::parser_error_ctx(file, &parser))),
 		})
 		.context("Unable to parse ast")
 }
 
-fn parser_error_ctx(file_path: &Path, parser: &Parser) -> String {
+/// Creates context for a parser error.
+fn parser_error_ctx(file: &Path, parser: &Parser) -> String {
 	let line = parser.cur_line();
 	let loc = parser.cur_loc();
 
@@ -68,5 +72,5 @@ fn parser_error_ctx(file_path: &Path, parser: &Parser) -> String {
 		})
 		.collect::<String>();
 
-	format!("Error at {}:{loc}:\n{line}\n{ident}^", file_path.display())
+	format!("Error at {}:{loc}:\n{line}\n{ident}^", file.display())
 }

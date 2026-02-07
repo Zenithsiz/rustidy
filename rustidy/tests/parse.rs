@@ -8,7 +8,6 @@
 // Imports
 use {
 	assert_json_diff::assert_json_eq,
-	rustidy_parse::Parser,
 	rustidy_print::{Print, PrintFmt},
 	serde::Serialize,
 	std::{env, fs, path::Path},
@@ -30,16 +29,14 @@ pub fn parse() {
 
 /// Tests a case from a directory
 fn test_case(test_dir: &Path) {
-	let input_path = test_dir.join("input.rs");
-	let input_file = fs::read_to_string(&input_path).expect("Unable to read file");
-	let mut parser = Parser::new(&input_file);
+	let test_path = test_dir.join("input.rs");
+	let input = fs::read_to_string(&test_path).expect("Unable to read file");
 
-	let input = rustidy::parse(&input_path, &mut parser).expect("Unable to parse input");
+	let crate_ = rustidy::parse(&input, &test_path).expect("Unable to parse input");
 
-	let mut print_fmt = PrintFmt::new(&input_file);
-	input.print(&mut print_fmt);
-	let input_printed = print_fmt.output();
-	assert_eq!(input_file, input_printed);
+	let mut print_fmt = PrintFmt::new(&input);
+	crate_.print(&mut print_fmt);
+	assert_eq!(input, print_fmt.output(), "Crate output was not the same as input");
 
 	let output_path = test_dir.join("output.json");
 	match env::var("UPDATE_AST_OUTPUT").is_ok_and(|value| !value.trim().is_empty()) {
@@ -47,7 +44,7 @@ fn test_case(test_dir: &Path) {
 			let mut output = Vec::new();
 			let formatter = serde_json::ser::PrettyFormatter::with_indent(b"\t");
 			let mut serializer = serde_json::Serializer::with_formatter(&mut output, formatter);
-			input.serialize(&mut serializer).expect("Unable to serialize input");
+			crate_.serialize(&mut serializer).expect("Unable to serialize input");
 
 			fs::write(&output_path, &output).expect("Unable to update output");
 		},
@@ -55,7 +52,7 @@ fn test_case(test_dir: &Path) {
 			let output = fs::read_to_string(output_path).expect("Unable to read output path");
 			let output = serde_json::from_str::<rustidy_ast::Crate>(&output).expect("Unable to deserialize output");
 
-			assert_json_eq!(input, output);
+			assert_json_eq!(crate_, output);
 		},
 	}
 }

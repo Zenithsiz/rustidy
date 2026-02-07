@@ -34,7 +34,6 @@ use {
 	},
 	rustidy_ast_util::Identifier,
 	rustidy_format::Format,
-	rustidy_parse::Parser,
 	rustidy_print::{Print, PrintFmt},
 	rustidy_util::Config,
 	std::{
@@ -129,9 +128,8 @@ fn format_file(
 		Some(file_path) => fs::read_to_string(file_path).context("Unable to read file")?,
 		None => io::read_to_string(io::stdin()).context("Unable to read stdin")?,
 	};
-	let mut parser = Parser::new(&input);
-	let mut crate_ = rustidy::parse(file_path.unwrap_or_else(|| Path::new("<stdin>")), &mut parser)
-		.context("Unable to parse file")?;
+	let mut crate_ =
+		rustidy::parse(&input, file_path.unwrap_or_else(|| Path::new("<stdin>"))).context("Unable to parse file")?;
 
 	// Queue modules for formatting.
 	if let Some(file_path) = file_path &&
