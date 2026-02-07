@@ -1,3 +1,7 @@
+#![a]
+#![b]
+#![rustidy::config(ident = "\t\t")]
+
 mod a {
 	fn a() {
 		a;
