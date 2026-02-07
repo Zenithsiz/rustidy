@@ -40,20 +40,21 @@ impl<T> WithOuterAttributes<T> {
 
 impl<T: Format> WithOuterAttributes<T> {
 	fn format(&mut self, ctx: &mut rustidy_format::Context) {
-		let mut ctx = ctx.sub_context();
-
 		for attr in &mut self.attrs {
-			attr.prefix_ws_set_cur_indent(&mut ctx);
-			attr.format(&mut ctx);
+			attr.prefix_ws_set_cur_indent(ctx);
+			attr.format(ctx);
+		}
 
+		let mut value_ctx = ctx.sub_context();
+		for attr in &mut self.attrs {
 			if let Some(attr) = attr.try_as_attr_ref() &&
-				let Err(err) = self::update_config(&attr.open.value, &mut ctx)
+				let Err(err) = self::update_config(&attr.open.value, &mut value_ctx)
 			{
 				tracing::warn!("Malformed `#[rustidy::config(...)]` attribute: {err:?}");
 			}
 		}
 
-		self.inner.format(&mut ctx);
+		self.inner.format(&mut value_ctx);
 	}
 }
 
@@ -113,20 +114,24 @@ pub struct WithInnerAttributes<T> {
 
 impl<T: Format> WithInnerAttributes<T> {
 	fn format(&mut self, ctx: &mut rustidy_format::Context) {
-		let mut ctx = ctx.sub_context();
+		// TODO: Ideally we'd also format the parent of this to avoid the very first whitespace
+		//       not being affected by this context.
+		let mut attr_value_ctx = ctx.sub_context();
 
 		for attr in &mut self.attrs {
 			if let Some(attr) = attr.try_as_attr_ref() &&
-				let Err(err) = self::update_config(&attr.attr.value, &mut ctx)
+				let Err(err) = self::update_config(&attr.attr.value, &mut attr_value_ctx)
 			{
 				tracing::warn!("Malformed `#![rustidy::config(...)]` attribute: {err:?}");
 			}
-
-			attr.prefix_ws_set_cur_indent(&mut ctx);
-			attr.format(&mut ctx);
 		}
 
-		self.inner.format(&mut ctx);
+		for attr in &mut self.attrs {
+			attr.prefix_ws_set_cur_indent(&mut attr_value_ctx);
+			attr.format(&mut attr_value_ctx);
+		}
+
+		self.inner.format(&mut attr_value_ctx);
 	}
 }
 

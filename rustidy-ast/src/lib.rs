@@ -57,6 +57,7 @@ use {
 };
 
 /// `Crate`
+// TODO: Parse the inner attributes here for `rustidy::config`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
