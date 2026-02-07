@@ -29,7 +29,7 @@ fn test_case(test_dir: &Path) {
 	let err = err.pretty().to_string();
 
 	let output_path = test_dir.join("output.txt");
-	match env::var("UPDATE_ERROR_OUTPUT").is_ok_and(|value| !value.trim().is_empty()) {
+	match env::var("RUSTIDY_PARSE_ERROR_UPDATE_OUTPUT").is_ok_and(|value| !value.trim().is_empty()) {
 		true => {
 			let err = err + "\n";
 			fs::write(output_path, err).expect("Unable to update output");

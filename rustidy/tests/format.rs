@@ -56,7 +56,7 @@ fn test_case(test_dir: &Path) {
 	}
 
 	let output_path = test_dir.join("output.rs");
-	match env::var("UPDATE_FORMAT_OUTPUT").is_ok_and(|value| !value.trim().is_empty()) {
+	match env::var("RUSTIDY_FORMAT_UPDATE_OUTPUT").is_ok_and(|value| !value.trim().is_empty()) {
 		true => {
 			fs::write(output_path, found_output).expect("Unable to update output");
 		},

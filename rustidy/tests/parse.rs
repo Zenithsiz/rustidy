@@ -39,7 +39,7 @@ fn test_case(test_dir: &Path) {
 	assert_eq!(input, print_fmt.output(), "Crate output was not the same as input");
 
 	let output_path = test_dir.join("output.json");
-	match env::var("UPDATE_AST_OUTPUT").is_ok_and(|value| !value.trim().is_empty()) {
+	match env::var("RUSTIDY_PARSE_UPDATE_OUTPUT").is_ok_and(|value| !value.trim().is_empty()) {
 		true => {
 			let mut output = Vec::new();
 			let formatter = serde_json::ser::PrettyFormatter::with_indent(b"\t");
