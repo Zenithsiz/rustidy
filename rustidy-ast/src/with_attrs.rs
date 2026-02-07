@@ -105,10 +105,29 @@ where
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
+#[format(with = Self::format)]
 pub struct WithInnerAttributes<T> {
-	#[format(and_with = rustidy_format::format_vec_each_with(Format::prefix_ws_set_cur_indent))]
 	pub attrs: Vec<InnerAttrOrDocComment>,
 	pub inner: T,
+}
+
+impl<T: Format> WithInnerAttributes<T> {
+	fn format(&mut self, ctx: &mut rustidy_format::Context) {
+		let mut ctx = ctx.sub_context();
+
+		for attr in &mut self.attrs {
+			if let Some(attr) = attr.try_as_attr_ref() &&
+				let Err(err) = self::update_config(&attr.attr.value, &mut ctx)
+			{
+				tracing::warn!("Malformed `#![rustidy::config(...)]` attribute: {err:?}");
+			}
+
+			attr.prefix_ws_set_cur_indent(&mut ctx);
+			attr.format(&mut ctx);
+		}
+
+		self.inner.format(&mut ctx);
+	}
 }
 
 /// Formats the value of a `WithOuterAttributes<T, _>` if at least 1 attribute exists

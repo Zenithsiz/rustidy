@@ -16,6 +16,7 @@ use {
 };
 
 #[derive(PartialEq, Eq, Debug)]
+#[derive(strum::EnumTryAs)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub enum InnerAttrOrDocComment {

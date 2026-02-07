@@ -24,3 +24,14 @@ mod a {
 /*indent*//*indent*/b;
 /*indent*/}
 }
+
+mod b {
+	#![a]
+	#![b]
+  #![rustidy::config(ident = "  ")]
+
+  fn a() {
+    a;
+    b
+  }
+}
