@@ -3,7 +3,7 @@
 // Features
 #![feature(exit_status_error)]
 // Lints
-#![expect(unused_crate_dependencies, reason = "They're used in other targets")]
+#![expect(unused_crate_dependencies, reason = "They're used in other tests")]
 
 // Imports
 use {

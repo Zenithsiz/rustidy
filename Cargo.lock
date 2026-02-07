@@ -442,7 +442,6 @@ name = "rustidy"
 version = "0.1.10"
 dependencies = [
  "app-error",
- "assert-json-diff",
  "clap",
  "rustidy-ast",
  "rustidy-ast-literal",
@@ -454,7 +453,6 @@ dependencies = [
  "rustidy-print",
  "rustidy-util",
  "serde",
- "serde_json",
  "toml",
  "tracing",
  "zutil-logger",
@@ -581,6 +579,23 @@ version = "0.1.0"
 dependencies = [
  "rustidy-macros",
  "rustidy-util",
+]
+
+[[package]]
+name = "rustidy-tests"
+version = "0.1.10"
+dependencies = [
+ "assert-json-diff",
+ "rustidy",
+ "rustidy-ast",
+ "rustidy-format",
+ "rustidy-parse",
+ "rustidy-print",
+ "rustidy-util",
+ "serde",
+ "serde_json",
+ "tracing",
+ "zutil-logger",
 ]
 
 [[package]]

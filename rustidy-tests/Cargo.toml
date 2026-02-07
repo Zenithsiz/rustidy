@@ -1,0 +1,27 @@
+[package]
+edition     = { workspace = true }
+name        = "rustidy-tests"
+description = { workspace = true }
+license     = { workspace = true }
+version     = { workspace = true }
+repository  = { workspace = true }
+publish     = { workspace = true }
+
+[dependencies]
+
+# Workspace
+rustidy        = { workspace = true }
+rustidy-ast    = { workspace = true }
+rustidy-format = { workspace = true }
+rustidy-parse  = { workspace = true }
+rustidy-print  = { workspace = true }
+rustidy-util   = { workspace = true }
+
+assert-json-diff = { workspace = true }
+serde            = { features = ["derive", "unstable"], workspace = true }
+serde_json       = { features = ["unbounded_depth"], workspace = true }
+tracing          = { workspace = true }
+zutil-logger     = { workspace = true }
+
+[lints]
+workspace = true
