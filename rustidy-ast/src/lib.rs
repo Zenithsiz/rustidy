@@ -56,13 +56,33 @@ use {
 };
 
 /// `Crate`
-// TODO: Parse the inner attributes here for `rustidy::config`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 #[parse(name = "a crate")]
+#[format(with = Self::format)]
+pub struct Crate(pub CrateInner);
+
+impl Crate {
+	fn format(&mut self, ctx: &mut rustidy_format::Context) {
+		let mut inner_ctx = ctx.sub_context();
+		for attr in &self.0.inner_attrs {
+			if let Some(attr) = attr.try_as_attr_ref() &&
+				let Err(err) = attr::update_config(&attr.attr.value, &mut inner_ctx)
+			{
+				tracing::warn!("Malformed `#![rustidy::config(...)]` attribute: {err:?}");
+			}
+		}
+
+		self.0.format(&mut inner_ctx);
+	}
+}
+
+#[derive(PartialEq, Eq, Debug)]
+#[derive(serde::Serialize, serde::Deserialize)]
+#[derive(Parse, Format, Print)]
 #[format(and_with = Self::format_first_inner_attr_or_item)]
-pub struct Crate {
+pub struct CrateInner {
 	pub shebang:               Option<Shebang>,
 	#[format(and_with = rustidy_format::format_vec_each_with_all(Format::prefix_ws_set_cur_indent))]
 	pub inner_attrs:           Vec<InnerAttrOrDocComment>,
@@ -73,7 +93,7 @@ pub struct Crate {
 	pub trailing_line_comment: Option<TrailingLineComment>,
 }
 
-impl Crate {
+impl CrateInner {
 	fn format_first_inner_attr_or_item(&mut self, ctx: &mut rustidy_format::Context) {
 		if let Some(attr) = self.inner_attrs.first_mut() {
 			attr.prefix_ws_remove(ctx);

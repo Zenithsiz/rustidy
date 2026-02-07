@@ -14,6 +14,8 @@ use {
 		token,
 		util::{Braced, Bracketed, Parenthesized},
 	},
+	crate::token::{Punctuation, Token},
+	app_error::{AppError, bail},
 	core::fmt::Debug,
 	rustidy_ast_util::{RemainingBlockComment, RemainingLine},
 	rustidy_format::{Format, FormatFn},
@@ -198,4 +200,48 @@ pub fn format_inner_value_non_empty<T>(f: impl FormatFn<T>) -> impl FormatFn<Wit
 			f(&mut with_attrs.inner, ctx);
 		}
 	}
+}
+
+/// Updates the configuration based on an attribute
+// TODO: We need to return the position for better error messages.
+pub fn update_config(attr: &Attr, ctx: &mut rustidy_format::Context) -> Result<(), AppError> {
+	// If this isn't a `rustidy::config` macro, we have nothing to update
+	if !attr.path.is_str(ctx.input(), "rustidy::config") {
+		return Ok(());
+	}
+
+	let Some(AttrInput::DelimTokenTree(DelimTokenTree::Parens(input))) = &attr.input else {
+		bail!("Expected `rustidy::config([...])`");
+	};
+
+	let mut rest = input.value.0.iter();
+	while let Some(tt) = rest.next() {
+		let TokenTree::Token(TokenNonDelimited(Token::IdentOrKeyword(ident))) = tt else {
+			bail!("Expected an identifier");
+		};
+
+		enum ConfigField {
+			Ident,
+		}
+
+		let field = match ident.1.str(ctx.input()).as_str() {
+			"ident" => ConfigField::Ident,
+			ident => bail!("Unknown configuration: {ident:?}"),
+		};
+
+		let Some(TokenTree::Token(TokenNonDelimited(Token::Punctuation(Punctuation::Eq(_))))) = rest.next() else {
+			bail!("Expected `=`");
+		};
+
+		match field {
+			ConfigField::Ident => {
+				let Some(TokenTree::Token(TokenNonDelimited(Token::StringLiteral(literal)))) = rest.next() else {
+					bail!("Expected integer literal");
+				};
+				ctx.config_mut().indent = literal.contents(ctx.input()).into();
+			},
+		}
+	}
+
+	Ok(())
 }

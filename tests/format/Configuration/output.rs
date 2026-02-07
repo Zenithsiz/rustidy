@@ -3,27 +3,27 @@
 #![rustidy::config(ident = "\t\t")]
 
 mod a {
-	fn a() {
-		a;
-		b;
-	}
+		fn a() {
+				a;
+				b;
+		}
 
-	#[rustidy::config(ident = "  ")]
-	fn a() {
+		#[rustidy::config(ident = "  ")]
+		fn a() {
     a;
     b;
   }
 
-	#[rustidy::config(ident = "/*indent*/")]
-	fn a() {
+		#[rustidy::config(ident = "/*indent*/")]
+		fn a() {
 /*indent*//*indent*/a;
 /*indent*//*indent*/b;
 /*indent*/}
 
-	#[rustidy::config(ident = "/*indent*/")]
-	#[a]
-	#[b]
-	fn a() {
+		#[rustidy::config(ident = "/*indent*/")]
+		#[a]
+		#[b]
+		fn a() {
 /*indent*//*indent*/a;
 /*indent*//*indent*/b;
 /*indent*/}
