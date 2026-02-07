@@ -125,6 +125,10 @@ struct Attrs {
 
 	#[darling(multiple)]
 	and_with_wrapper: Vec<AndWithWrapper>,
+
+	// TODO: Don't require the `where` token here.
+	#[darling(multiple)]
+	with_where: Vec<syn::WhereClause>,
 }
 
 pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream, AppError> {
@@ -139,7 +143,11 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 		darling::ast::Data::Struct(fields) => self::derive_struct(fields),
 	};
 
-	let impl_generics = util::with_bounds(&attrs, |ty| parse_quote! { #ty: rustidy_format::Format });
+	let mut impl_generics = util::with_bounds(&attrs, |ty| parse_quote! { #ty: rustidy_format::Format });
+	impl_generics
+		.make_where_clause()
+		.predicates
+		.extend(attrs.with_where.into_iter().flat_map(|clause| clause.predicates));
 	let (impl_generics, ty_generics, impl_where_clause) = impl_generics.split_for_impl();
 
 	let Impls {
