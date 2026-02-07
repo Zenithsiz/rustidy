@@ -442,20 +442,8 @@ name = "rustidy"
 version = "0.1.10"
 dependencies = [
  "app-error",
- "clap",
  "rustidy-ast",
- "rustidy-ast-literal",
- "rustidy-ast-tokens",
- "rustidy-ast-util",
- "rustidy-format",
- "rustidy-macros",
  "rustidy-parse",
- "rustidy-print",
- "rustidy-util",
- "serde",
- "toml",
- "tracing",
- "zutil-logger",
 ]
 
 [[package]]
@@ -526,6 +514,24 @@ dependencies = [
  "serde",
  "strum",
  "unicode-ident",
+]
+
+[[package]]
+name = "rustidy-bin"
+version = "0.1.10"
+dependencies = [
+ "app-error",
+ "clap",
+ "rustidy",
+ "rustidy-ast",
+ "rustidy-ast-literal",
+ "rustidy-ast-util",
+ "rustidy-format",
+ "rustidy-print",
+ "rustidy-util",
+ "toml",
+ "tracing",
+ "zutil-logger",
 ]
 
 [[package]]
