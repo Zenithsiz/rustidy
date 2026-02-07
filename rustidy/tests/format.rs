@@ -16,13 +16,22 @@ use {
 pub fn format() {
 	let _logger = zutil_logger::Logger::new();
 
-	std::env::set_current_dir("..").expect("Unable to ascend a directory");
+	env::set_current_dir("..").expect("Unable to ascend a directory");
 	let tests_dir = Path::new("tests/format/");
-	for test_dir in tests_dir.read_dir().expect("Unable to read tests directory") {
-		let test_dir = test_dir.expect("Unable to read tests directory entry");
-		let test_dir = test_dir.path();
+	match env::var_os("RUSTIDY_FORMAT_UPDATE_TESTS") {
+		Some(tests) => {
+			let tests = tests.to_str().expect("`RUSTIDY_FORMAT_UPDATE_TESTS` must be utf-8");
+			for test_dir in tests.split(':') {
+				self::test_case(Path::new(test_dir));
+			}
+		},
+		None =>
+			for test_dir in tests_dir.read_dir().expect("Unable to read tests directory") {
+				let test_dir = test_dir.expect("Unable to read tests directory entry");
+				let test_dir = test_dir.path();
 
-		self::test_case(&test_dir);
+				self::test_case(&test_dir);
+			},
 	}
 }
 
