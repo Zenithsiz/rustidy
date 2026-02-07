@@ -7,7 +7,7 @@ use {
 		stmt::{ExpressionStatement, ExpressionStatementWithBlock, ExpressionStatementWithoutBlock, Statement},
 		token,
 		util::Braced,
-		with_attrs::WithInnerAttributes,
+		attr::WithInnerAttributes,
 	},
 	rustidy_ast_util::NotFollows,
 	rustidy_format::Format,

@@ -14,10 +14,10 @@ pub use self::{
 use {
 	super::Expression,
 	crate::{
+		attr::{self, WithOuterAttributes},
 		lifetime::LifetimeOrLabel,
 		pat::Pattern,
 		token,
-		with_attrs::{self, WithOuterAttributes},
 	},
 	rustidy_ast_util::{Longest, Punctuated, punct},
 	rustidy_format::Format,
@@ -30,7 +30,7 @@ use {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct ExpressionWithBlock(
-	#[format(and_with = with_attrs::format_outer_value_non_empty(Format::prefix_ws_set_cur_indent))]
+	#[format(and_with = attr::format_outer_value_non_empty(Format::prefix_ws_set_cur_indent))]
 	pub  WithOuterAttributes<ExpressionWithBlockInner>,
 );
 

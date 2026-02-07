@@ -2,13 +2,13 @@
 
 // Imports
 use {
-	super::attr::{InnerAttrOrDocComment, OuterAttrOrDocComment},
+	super::{InnerAttrOrDocComment, OuterAttrOrDocComment},
 	crate::{
 		attr::{Attr, AttrInput, DelimTokenTree, TokenNonDelimited, TokenTree},
 		token::{Punctuation, Token},
 	},
 	app_error::{AppError, bail},
-	rustidy_format::{Format, FormatFn},
+	rustidy_format::Format,
 	rustidy_parse::{ParsableRecursive, Parse, Parser},
 	rustidy_print::Print,
 };
@@ -132,24 +132,6 @@ impl<T: Format> WithInnerAttributes<T> {
 		}
 
 		self.inner.format(&mut attr_value_ctx);
-	}
-}
-
-/// Formats the value of a `WithOuterAttributes<T, _>` if at least 1 attribute exists
-pub fn format_outer_value_non_empty<T>(f: impl FormatFn<T>) -> impl FormatFn<WithOuterAttributes<T>> {
-	move |with_attrs, ctx| {
-		if !with_attrs.attrs.is_empty() {
-			f(&mut with_attrs.inner, ctx);
-		}
-	}
-}
-
-/// Formats the value of a `WithInnerAttributes<T>` if at least 1 attribute exists
-pub fn format_inner_value_non_empty<T>(f: impl FormatFn<T>) -> impl FormatFn<WithInnerAttributes<T>> {
-	move |with_attrs, ctx| {
-		if !with_attrs.attrs.is_empty() {
-			f(&mut with_attrs.inner, ctx);
-		}
 	}
 }
 

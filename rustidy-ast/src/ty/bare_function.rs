@@ -7,7 +7,7 @@ use {
 		item::function::{ExternAbi, ForLifetimes},
 		token,
 		util::Parenthesized,
-		with_attrs::WithOuterAttributes,
+		attr::WithOuterAttributes,
 	},
 	rustidy_ast_util::{Identifier, Punctuated, PunctuatedTrailing, punct},
 	rustidy_format::Format,

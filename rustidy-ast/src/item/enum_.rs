@@ -11,7 +11,7 @@ use {
 		token,
 		util::{Braced, Parenthesized},
 		vis::Visibility,
-		with_attrs::{self, WithOuterAttributes},
+		attr::{self, WithOuterAttributes},
 	},
 	rustidy_ast_util::{Identifier, PunctuatedTrailing, punct},
 	rustidy_format::Format,
@@ -52,7 +52,7 @@ pub struct EnumVariants(
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct EnumVariant(
-	#[format(and_with = with_attrs::format_outer_value_non_empty(Format::prefix_ws_set_cur_indent))]
+	#[format(and_with = attr::format_outer_value_non_empty(Format::prefix_ws_set_cur_indent))]
 	pub  WithOuterAttributes<EnumVariantInner>,
 );
 

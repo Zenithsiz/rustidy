@@ -39,11 +39,10 @@ pub use self::{
 // Imports
 use {
 	super::{
-		attr::{DelimTokenTree, DelimTokenTreeInner, OuterAttrOrDocComment},
+		attr::{self, DelimTokenTree, DelimTokenTreeInner, OuterAttrOrDocComment, WithOuterAttributes},
 		token,
 		util::{Braced, Parenthesized},
 		vis::Visibility,
-		with_attrs::{self, WithOuterAttributes},
 	},
 	core::mem,
 	rustidy_ast_util::{Identifier, PunctuatedTrailing, punct},
@@ -97,7 +96,7 @@ impl Items {
 #[derive(Parse, Format, Print)]
 #[expect(clippy::use_self, reason = "`Parse` derive macro doesn't support `Self`")]
 pub struct Item(
-	#[format(and_with = rustidy_format::arena(with_attrs::format_outer_value_non_empty(Format::prefix_ws_set_cur_indent)))]
+	#[format(and_with = rustidy_format::arena(attr::format_outer_value_non_empty(Format::prefix_ws_set_cur_indent)))]
 	pub ArenaIdx<Item>,
 );
 

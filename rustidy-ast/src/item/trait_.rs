@@ -13,7 +13,7 @@ use {
 	crate::{
 		token,
 		util::Braced,
-		with_attrs::{self, WithInnerAttributes, WithOuterAttributes},
+		attr::{self, WithInnerAttributes, WithOuterAttributes},
 	},
 	rustidy_ast_util::Identifier,
 	rustidy_format::Format,
@@ -90,7 +90,7 @@ pub struct TraitColonBounds {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct AssociatedItem(
-	#[format(and_with = with_attrs::format_outer_value_non_empty(Format::prefix_ws_set_cur_indent))]
+	#[format(and_with = attr::format_outer_value_non_empty(Format::prefix_ws_set_cur_indent))]
 	pub  WithOuterAttributes<AssociatedItemInner>,
 );
 

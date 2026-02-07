@@ -7,7 +7,7 @@ use {
 		token,
 		util::Braced,
 		vis::Visibility,
-		with_attrs::{self, WithInnerAttributes, WithOuterAttributes},
+		attr::{self, WithInnerAttributes, WithOuterAttributes},
 	},
 	rustidy_format::Format,
 	rustidy_parse::Parse,
@@ -42,7 +42,7 @@ pub struct ExternBlockItems(
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct ExternalItem(
-	#[format(and_with = with_attrs::format_outer_value_non_empty(Format::prefix_ws_set_cur_indent))]
+	#[format(and_with = attr::format_outer_value_non_empty(Format::prefix_ws_set_cur_indent))]
 	pub  WithOuterAttributes<ExternalItemInner>,
 );
 

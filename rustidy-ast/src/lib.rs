@@ -40,7 +40,6 @@ pub mod token;
 pub mod ty;
 pub mod util;
 pub mod vis;
-pub mod with_attrs;
 
 // Imports
 use {

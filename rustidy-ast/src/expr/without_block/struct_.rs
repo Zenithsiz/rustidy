@@ -7,7 +7,7 @@ use {
 		expr::Expression,
 		token,
 		util::Braced,
-		with_attrs::{self, WithOuterAttributes},
+		attr::{self, WithOuterAttributes},
 	},
 	rustidy_ast_util::{Identifier, Punctuated, punct},
 	rustidy_format::Format,
@@ -70,7 +70,7 @@ pub struct StructExprFieldsEndBase {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct StructExprField(
-	#[format(and_with = with_attrs::format_outer_value_non_empty(Format::prefix_ws_set_cur_indent))]
+	#[format(and_with = attr::format_outer_value_non_empty(Format::prefix_ws_set_cur_indent))]
 	pub  WithOuterAttributes<StructExprFieldInner>,
 );
 

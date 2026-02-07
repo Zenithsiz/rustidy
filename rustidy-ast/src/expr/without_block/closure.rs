@@ -8,7 +8,7 @@ use {
 		pat::PatternNoTopAlt,
 		token,
 		ty::{Type, TypeNoBounds},
-		with_attrs::WithOuterAttributes,
+		attr::WithOuterAttributes,
 	},
 	rustidy_ast_util::{Delimited, PunctuatedTrailing, punct},
 	rustidy_format::Format,

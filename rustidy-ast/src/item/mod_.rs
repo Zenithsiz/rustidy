@@ -3,7 +3,7 @@
 // Imports
 use {
 	super::Items,
-	crate::{token, util::Braced, with_attrs::WithInnerAttributes},
+	crate::{token, util::Braced, attr::WithInnerAttributes},
 	rustidy_ast_util::Identifier,
 	rustidy_format::Format,
 	rustidy_parse::Parse,

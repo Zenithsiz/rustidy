@@ -9,7 +9,7 @@ use {
 		token,
 		ty::{Type, TypePath},
 		util::Parenthesized,
-		with_attrs::{self, WithOuterAttributes},
+		attr::{self, WithOuterAttributes},
 	},
 	rustidy_ast_literal::{LiteralExpression, RawStringLiteral, StringLiteral},
 	rustidy_ast_util::{Delimited, Follows, Identifier, PunctuatedTrailing, punct},
@@ -161,7 +161,7 @@ pub struct FunctionParametersFullSelf {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct FunctionParam(
-	#[format(and_with = with_attrs::format_outer_value_non_empty(Format::prefix_ws_set_single))]
+	#[format(and_with = attr::format_outer_value_non_empty(Format::prefix_ws_set_single))]
 	pub  WithOuterAttributes<FunctionParamInner>,
 );
 
@@ -279,7 +279,7 @@ pub struct GenericParamsInner(
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct GenericParam(
-	#[format(and_with = with_attrs::format_outer_value_non_empty(Format::prefix_ws_set_single))]
+	#[format(and_with = attr::format_outer_value_non_empty(Format::prefix_ws_set_single))]
 	pub  WithOuterAttributes<GenericParamInner>,
 );
 

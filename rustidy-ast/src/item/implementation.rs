@@ -10,7 +10,7 @@ use {
 		token,
 		ty::{Type, TypePath},
 		util::Braced,
-		with_attrs::WithInnerAttributes,
+		attr::WithInnerAttributes,
 	},
 	rustidy_format::Format,
 	rustidy_parse::Parse,

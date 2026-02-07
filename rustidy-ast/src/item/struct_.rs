@@ -9,7 +9,7 @@ use {
 		ty::Type,
 		util::{Braced, Parenthesized},
 		vis::Visibility,
-		with_attrs::{self, WithOuterAttributes},
+		attr::{self, WithOuterAttributes},
 	},
 	rustidy_ast_util::{Identifier, PunctuatedTrailing, punct},
 	rustidy_format::Format,
@@ -84,7 +84,7 @@ impl StructFields {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct StructField(
-	#[format(and_with = with_attrs::format_outer_value_non_empty(Format::prefix_ws_set_cur_indent))]
+	#[format(and_with = attr::format_outer_value_non_empty(Format::prefix_ws_set_cur_indent))]
 	pub  WithOuterAttributes<StructFieldInner>,
 );
 
@@ -147,7 +147,7 @@ pub struct TupleFields(
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct TupleField(
-	#[format(and_with = with_attrs::format_outer_value_non_empty(Format::prefix_ws_set_single))]
+	#[format(and_with = attr::format_outer_value_non_empty(Format::prefix_ws_set_single))]
 	pub  WithOuterAttributes<TupleFieldInner>,
 );
 

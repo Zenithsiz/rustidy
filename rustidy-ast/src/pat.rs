@@ -9,6 +9,7 @@ pub use self::range::RangePattern;
 // Imports
 use {
 	super::{
+		attr::WithOuterAttributes,
 		expr::{
 			MacroInvocation,
 			PathExpression,
@@ -16,7 +17,6 @@ use {
 		},
 		token,
 		util::{Braced, Bracketed, Parenthesized},
-		with_attrs::WithOuterAttributes,
 	},
 	core::fmt::Debug,
 	rustidy_ast_literal::{ByteLiteral, LiteralExpression},

@@ -8,7 +8,7 @@ use {
 		pat::Pattern,
 		token,
 		util::Braced,
-		with_attrs::{self, WithInnerAttributes, WithOuterAttributes},
+		attr::{self, WithInnerAttributes, WithOuterAttributes},
 	},
 	core::ops::ControlFlow,
 	rustidy_format::Format,
@@ -172,7 +172,7 @@ pub struct MatchArmWithExpr {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct MatchArm(
-	#[format(and_with = with_attrs::format_outer_value_non_empty(Format::prefix_ws_set_cur_indent))]
+	#[format(and_with = attr::format_outer_value_non_empty(Format::prefix_ws_set_cur_indent))]
 	pub  WithOuterAttributes<MatchArmInner>,
 );
 

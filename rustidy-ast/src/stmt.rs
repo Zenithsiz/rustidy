@@ -3,12 +3,12 @@
 // Imports
 use {
 	super::{
+		attr::{self, WithOuterAttributes},
 		expr::{BlockExpression, Expression, ExpressionWithBlock, ExpressionWithoutBlock},
 		item::Item,
 		pat::PatternNoTopAlt,
 		token,
 		ty::Type,
-		with_attrs::{self, WithOuterAttributes},
 	},
 	rustidy_format::Format,
 	rustidy_parse::Parse,
@@ -32,7 +32,7 @@ pub enum Statement {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct LetStatement(
-	#[format(and_with = with_attrs::format_outer_value_non_empty(Format::prefix_ws_set_cur_indent))]
+	#[format(and_with = attr::format_outer_value_non_empty(Format::prefix_ws_set_cur_indent))]
 	pub  WithOuterAttributes<LetStatementInner>,
 );
 
