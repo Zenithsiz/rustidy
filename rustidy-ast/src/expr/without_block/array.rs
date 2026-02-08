@@ -3,7 +3,7 @@
 // Imports
 use {
 	crate::{expr::Expression, token, util::Bracketed},
-	rustidy_ast_util::punct::{self, PunctuatedTrailing},
+	rustidy_ast_util::punct::PunctuatedTrailing,
 	rustidy_format::Format,
 	rustidy_parse::Parse,
 	rustidy_print::Print,
@@ -23,6 +23,10 @@ impl ArrayExpression {
 			Some(ArrayElements::Punctuated(values)) => {
 				ctx.with_indent(|ctx| {
 					let rows = ctx.config().array_expr_rows;
+
+					for comma in values.puncts_mut() {
+						comma.prefix_ws_remove(ctx);
+					}
 
 					let mut values = values.values_mut();
 					while let Some(first) = values.next() {
@@ -55,7 +59,6 @@ impl ArrayExpression {
 #[derive(Parse, Format, Print)]
 pub enum ArrayElements {
 	Repeat(ArrayElementsRepeat),
-	#[format(and_with = punct::format_trailing(Format::prefix_ws_set_single, Format::prefix_ws_remove))]
 	Punctuated(PunctuatedTrailing<Expression, token::Comma>),
 }
 

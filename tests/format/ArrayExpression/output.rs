@@ -5,22 +5,22 @@ fn a() {
 		3,
 		4,
 		5,
-		6
+		6,
 	];
 	#[rustidy::config(array_expr_rows = 2)]
 	let _ = [
 		1, 2,
 		3, 4,
-		5, 6
+		5, 6,
 	];
 	#[rustidy::config(array_expr_rows = 5)]
 	let _ = [
 		1, 2, 3, 4, 5,
-		6
+		6,
 	];
 	#[rustidy::config(array_expr_rows = 10)]
 	let _ = [
-		1, 2, 3, 4, 5, 6
+		1, 2, 3, 4, 5, 6,
 	];
 
 
@@ -42,7 +42,7 @@ fn a() {
 		},
 		F {
 			f
-		}
+		},
 	];
 	#[rustidy::config(array_expr_rows = 2)]
 	let _ = [
@@ -60,7 +60,7 @@ fn a() {
 			e
 		}, F {
 			f
-		}
+		},
 	];
 	#[rustidy::config(array_expr_rows = 5)]
 	let _ = [
@@ -77,7 +77,7 @@ fn a() {
 		},
 		F {
 			f
-		}
+		},
 	];
 	#[rustidy::config(array_expr_rows = 10)]
 	let _ = [
@@ -93,6 +93,6 @@ fn a() {
 			e
 		}, F {
 			f
-		}
+		},
 	];
 }
