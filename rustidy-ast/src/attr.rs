@@ -236,7 +236,7 @@ pub fn update_config(attr: &Attr, ctx: &mut rustidy_format::Context) -> Result<(
 		match field {
 			ConfigField::Indent => {
 				let Some(TokenTree::Token(TokenNonDelimited(Token::StringLiteral(literal)))) = rest.next() else {
-					bail!("Expected integer literal");
+					bail!("Expected string literal");
 				};
 				ctx.config_mut().indent = literal.contents(ctx.input()).into();
 			},
