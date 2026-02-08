@@ -45,6 +45,15 @@ pub trait Format {
 		len
 	}
 
+	/// Returns if this type is empty
+	fn is_empty(&mut self, ctx: &mut Context, exclude_prefix_ws: bool) -> bool {
+		self.with_strings(ctx, exclude_prefix_ws, &mut |s, _ctx| match AstStr::is_empty(s) {
+			true => ControlFlow::Continue(()),
+			false => ControlFlow::Break(()),
+		})
+		.is_continue()
+	}
+
 	/// Returns if this type is blank
 	fn is_blank(&mut self, ctx: &mut Context, exclude_prefix_ws: bool) -> bool {
 		self.with_strings(

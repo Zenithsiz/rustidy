@@ -278,8 +278,7 @@ fn derive_struct(fields: &darling::ast::Fields<FieldAttrs>) -> Impls<syn::Expr, 
 
 			// Otherwise, if this field wasn't empty, we have no more fields
 			// to check and we can return
-			// TODO: We should be checking if length != 0 here instead
-			if !rustidy_format::Format::is_blank(&mut self.#field_ident, ctx, false) {
+			if !rustidy_format::Format::is_empty(&mut self.#field_ident, ctx, false) {
 				return None;
 			}
 		}}
@@ -305,8 +304,7 @@ fn derive_struct_field(field_idx: usize, field: &FieldAttrs) -> Impls<syn::Expr,
 
 		// If this field wasn't empty, then we no longer exclude the prefix ws, since
 		// we already excluded it here.
-		// TODO: We should be checking if length != 0 here instead
-		if !rustidy_format::Format::is_blank(&mut self.#field_ident, ctx, false) {
+		if !rustidy_format::Format::is_empty(&mut self.#field_ident, ctx, false) {
 			exclude_prefix_ws = false;
 		}
 	}};
