@@ -1,6 +1,6 @@
 #![a]
 #![b]
-#![rustidy::config(ident = "\t\t")]
+#![rustidy::config(indent = "\t\t")]
 
 mod a {
 		fn a() {
@@ -8,19 +8,19 @@ mod a {
 				b;
 		}
 
-		#[rustidy::config(ident = "  ")]
+		#[rustidy::config(indent = "  ")]
 		fn a() {
     a;
     b;
   }
 
-		#[rustidy::config(ident = "/*indent*/")]
+		#[rustidy::config(indent = "/*indent*/")]
 		fn a() {
 /*indent*//*indent*/a;
 /*indent*//*indent*/b;
 /*indent*/}
 
-		#[rustidy::config(ident = "/*indent*/")]
+		#[rustidy::config(indent = "/*indent*/")]
 		#[a]
 		#[b]
 		fn a() {
@@ -32,7 +32,7 @@ mod a {
 mod b {
   #![a]
   #![b]
-  #![rustidy::config(ident = "  ")]
+  #![rustidy::config(indent = "  ")]
 
   fn a() {
     a;
@@ -40,6 +40,6 @@ mod b {
   }
 
   mod c {
-/*indent*//*indent*/#![rustidy::config(ident = "/*indent*/")]
+/*indent*//*indent*/#![rustidy::config(indent = "/*indent*/")]
 /*indent*/}
 }

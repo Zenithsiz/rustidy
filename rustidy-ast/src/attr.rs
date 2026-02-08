@@ -221,11 +221,11 @@ pub fn update_config(attr: &Attr, ctx: &mut rustidy_format::Context) -> Result<(
 		};
 
 		enum ConfigField {
-			Ident,
+			Indent,
 		}
 
 		let field = match ident.1.str(ctx.input()).as_str() {
-			"ident" => ConfigField::Ident,
+			"indent" => ConfigField::Indent,
 			ident => bail!("Unknown configuration: {ident:?}"),
 		};
 
@@ -234,7 +234,7 @@ pub fn update_config(attr: &Attr, ctx: &mut rustidy_format::Context) -> Result<(
 		};
 
 		match field {
-			ConfigField::Ident => {
+			ConfigField::Indent => {
 				let Some(TokenTree::Token(TokenNonDelimited(Token::StringLiteral(literal)))) = rest.next() else {
 					bail!("Expected integer literal");
 				};
