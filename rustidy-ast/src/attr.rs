@@ -242,12 +242,13 @@ pub fn update_config(attr: &Attr, ctx: &mut rustidy_format::Context) -> Result<(
 				};
 				ctx.config_mut().indent = literal.contents(ctx.input()).into();
 			},
+			// TODO: Should we allow resetting it to `None` again?
 			ConfigField::ArrayExprRows => {
 				let Some(TokenTree::Token(TokenNonDelimited(Token::IntegerLiteral(literal)))) = rest.next() else {
 					bail!("Expected integer literal");
 				};
 				let value = literal.value(ctx.input()).context("Unable to parse integer")?;
-				ctx.config_mut().array_expr_rows = value.try_into().expect("`u64` didn't fit into `usize`");
+				ctx.config_mut().array_expr_rows = Some(value.try_into().expect("`u64` didn't fit into `usize`"));
 			},
 		}
 

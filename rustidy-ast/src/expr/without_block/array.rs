@@ -33,7 +33,7 @@ impl ArrayExpression {
 						first.prefix_ws_set_cur_indent(ctx);
 						first.format(ctx);
 
-						for _ in 1..rows {
+						for _ in 1..rows.unwrap_or(1) {
 							let Some(value) = values.next() else { break };
 							value.prefix_ws_set_single(ctx);
 							value.format(ctx);
