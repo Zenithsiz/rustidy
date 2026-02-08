@@ -377,26 +377,6 @@ impl LineComment {
 	}
 }
 
-/// Trailing line comment ([`LineComment`] without a newline)
-#[derive(PartialEq, Eq, Debug)]
-#[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
-#[parse(error(name = NoComment, fmt = "Expected `//` (except `///` or `//!`)"))]
-pub struct TrailingLineComment(#[parse(try_update_with = Self::parse)] pub AstStr);
-
-impl TrailingLineComment {
-	fn parse(s: &mut &str) -> Result<(), TrailingLineCommentError> {
-		let is_doc_comment = (s.starts_with("///") && !s.starts_with("////")) || s.starts_with("//!");
-		match s.starts_with("//") && !is_doc_comment {
-			true => {
-				*s = &s[s.len()..];
-				Ok(())
-			},
-			false => Err(TrailingLineCommentError::NoComment),
-		}
-	}
-}
-
 /// Sets the whitespace to the current indentation
 pub fn set_indent(offset: isize, remove_if_empty: bool) -> impl Fn(&mut Whitespace, &mut rustidy_format::Context) {
 	move |ws, ctx| ws.set_indent(ctx, offset, remove_if_empty)

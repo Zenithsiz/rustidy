@@ -45,10 +45,7 @@ pub mod vis;
 use {
 	self::{attr::InnerAttrOrDocComment, item::Items, shebang::Shebang},
 	core::fmt::Debug,
-	rustidy_ast_util::{
-		Whitespace,
-		whitespace::{self, TrailingLineComment},
-	},
+	rustidy_ast_util::{Whitespace, whitespace},
 	rustidy_format::Format,
 	rustidy_parse::Parse,
 	rustidy_print::Print,
@@ -111,6 +108,26 @@ impl CrateInner {
 		if !s.ends_with('\n') {
 			s.push('\n');
 			trailing.0 = AstStr::new(AstStrRepr::Dynamic(s));
+		}
+	}
+}
+
+/// Trailing line comment
+#[derive(PartialEq, Eq, Debug)]
+#[derive(serde::Serialize, serde::Deserialize)]
+#[derive(Parse, Format, Print)]
+#[parse(error(name = NoComment, fmt = "Expected `//` (except `///` or `//!`)"))]
+pub struct TrailingLineComment(#[parse(try_update_with = Self::parse)] pub AstStr);
+
+impl TrailingLineComment {
+	fn parse(s: &mut &str) -> Result<(), TrailingLineCommentError> {
+		let is_doc_comment = (s.starts_with("///") && !s.starts_with("////")) || s.starts_with("//!");
+		match s.starts_with("//") && !is_doc_comment {
+			true => {
+				*s = &s[s.len()..];
+				Ok(())
+			},
+			false => Err(TrailingLineCommentError::NoComment),
 		}
 	}
 }
