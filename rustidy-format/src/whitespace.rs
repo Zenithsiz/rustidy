@@ -59,8 +59,13 @@ impl Format for Whitespace {
 	fn with_strings<O>(
 		&mut self,
 		ctx: &mut crate::Context,
+		exclude_prefix_ws: bool,
 		f: &mut impl FnMut(&mut AstStr, &mut crate::Context) -> ControlFlow<O>,
 	) -> ControlFlow<O> {
+		if exclude_prefix_ws {
+			return ControlFlow::Continue(());
+		}
+
 		let mut inner = self.0.get_mut();
 		f(&mut inner.first.0, ctx)?;
 		for (comment, pure) in &mut inner.rest {

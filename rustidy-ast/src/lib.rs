@@ -1,7 +1,7 @@
 //! Syntax tree
 
 // Features
-#![cfg_attr(doc, recursion_limit = "512")]
+#![recursion_limit = "512"]
 #![feature(
 	never_type,
 	decl_macro,

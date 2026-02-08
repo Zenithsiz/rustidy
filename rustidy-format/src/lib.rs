@@ -31,13 +31,14 @@ pub trait Format {
 	fn with_strings<O>(
 		&mut self,
 		ctx: &mut Context,
+		exclude_prefix_ws: bool,
 		f: &mut impl FnMut(&mut AstStr, &mut Context) -> ControlFlow<O>,
 	) -> ControlFlow<O>;
 
 	/// Returns the length of this type
-	fn len(&mut self, ctx: &mut Context) -> usize {
+	fn len(&mut self, ctx: &mut Context, exclude_prefix_ws: bool) -> usize {
 		let mut len = 0;
-		self.with_strings::<!>(ctx, &mut |s, _ctx| {
+		self.with_strings::<!>(ctx, exclude_prefix_ws, &mut |s, _ctx| {
 			len += AstStr::len(s);
 			ControlFlow::Continue(())
 		});
@@ -45,19 +46,16 @@ pub trait Format {
 	}
 
 	/// Returns if this type is blank
-	fn is_blank(&mut self, ctx: &mut Context) -> bool {
-		self.with_strings(ctx, &mut |s, ctx| match AstStr::is_blank(s, ctx.input) {
-			true => ControlFlow::Continue(()),
-			false => ControlFlow::Break(()),
-		})
+	fn is_blank(&mut self, ctx: &mut Context, exclude_prefix_ws: bool) -> bool {
+		self.with_strings(
+			ctx,
+			exclude_prefix_ws,
+			&mut |s, ctx| match AstStr::is_blank(s, ctx.input) {
+				true => ControlFlow::Continue(()),
+				false => ControlFlow::Break(()),
+			},
+		)
 		.is_continue()
-	}
-
-	/// Returns the length of this type without the prefix whitespace
-	fn len_without_prefix_ws(&mut self, ctx: &mut Context) -> usize {
-		let mut len = self.len(ctx);
-		self.with_prefix_ws(ctx, &mut |ws, ctx| len -= ws.len(ctx));
-		len
 	}
 
 	/// Formats this type
@@ -136,9 +134,10 @@ impl<T: Format> Format for &'_ mut T {
 	fn with_strings<O>(
 		&mut self,
 		ctx: &mut Context,
+		exclude_prefix_ws: bool,
 		f: &mut impl FnMut(&mut AstStr, &mut Context) -> ControlFlow<O>,
 	) -> ControlFlow<O> {
-		(**self).with_strings(ctx, f)
+		(**self).with_strings(ctx, exclude_prefix_ws, f)
 	}
 
 	fn format(&mut self, ctx: &mut Context) {
@@ -158,9 +157,10 @@ impl<T: Format> Format for Box<T> {
 	fn with_strings<O>(
 		&mut self,
 		ctx: &mut Context,
+		exclude_prefix_ws: bool,
 		f: &mut impl FnMut(&mut AstStr, &mut Context) -> ControlFlow<O>,
 	) -> ControlFlow<O> {
-		(**self).with_strings(ctx, f)
+		(**self).with_strings(ctx, exclude_prefix_ws, f)
 	}
 
 	fn format(&mut self, ctx: &mut Context) {
@@ -180,10 +180,11 @@ impl<T: Format> Format for Option<T> {
 	fn with_strings<O>(
 		&mut self,
 		ctx: &mut Context,
+		exclude_prefix_ws: bool,
 		f: &mut impl FnMut(&mut AstStr, &mut Context) -> ControlFlow<O>,
 	) -> ControlFlow<O> {
 		match self {
-			Some(value) => value.with_strings(ctx, f),
+			Some(value) => value.with_strings(ctx, exclude_prefix_ws, f),
 			None => ControlFlow::Continue(()),
 		}
 	}
@@ -210,10 +211,11 @@ impl<T: Format> Format for Vec<T> {
 	fn with_strings<O>(
 		&mut self,
 		ctx: &mut Context,
+		exclude_prefix_ws: bool,
 		f: &mut impl FnMut(&mut AstStr, &mut Context) -> ControlFlow<O>,
 	) -> ControlFlow<O> {
 		for value in self {
-			value.with_strings(ctx, f)?;
+			value.with_strings(ctx, exclude_prefix_ws, f)?;
 		}
 
 		ControlFlow::Continue(())
@@ -241,6 +243,7 @@ impl Format for ! {
 	fn with_strings<O>(
 		&mut self,
 		_ctx: &mut Context,
+		_exclude_prefix_ws: bool,
 		_f: &mut impl FnMut(&mut AstStr, &mut Context) -> ControlFlow<O>,
 	) -> ControlFlow<O> {
 		*self
@@ -263,6 +266,7 @@ impl<T> Format for PhantomData<T> {
 	fn with_strings<O>(
 		&mut self,
 		_ctx: &mut Context,
+		_exclude_prefix_ws: bool,
 		_f: &mut impl FnMut(&mut AstStr, &mut Context) -> ControlFlow<O>,
 	) -> ControlFlow<O> {
 		ControlFlow::Continue(())
@@ -283,6 +287,7 @@ impl Format for () {
 	fn with_strings<O>(
 		&mut self,
 		_ctx: &mut Context,
+		_exclude_prefix_ws: bool,
 		_f: &mut impl FnMut(&mut AstStr, &mut Context) -> ControlFlow<O>,
 	) -> ControlFlow<O> {
 		ControlFlow::Continue(())
@@ -312,10 +317,11 @@ macro tuple_impl ($N:literal, $($T:ident),* $(,)?) {
 		fn with_strings<O>(
 			&mut self,
 			ctx: &mut Context,
+			exclude_prefix_ws: bool,
 			f: &mut impl FnMut(&mut AstStr, &mut Context) -> ControlFlow<O>,
 		) -> ControlFlow<O> {
 			let ( $($T,)* ) = self;
-			${concat( Tuple, $N )} { $( $T, )* }.with_strings(ctx, f)
+			${concat( Tuple, $N )} { $( $T, )* }.with_strings(ctx, exclude_prefix_ws, f)
 		}
 
 		fn format(&mut self, ctx: &mut Context) {
@@ -342,6 +348,7 @@ impl Format for AstStr {
 	fn with_strings<O>(
 		&mut self,
 		ctx: &mut Context,
+		_exclude_prefix_ws: bool,
 		f: &mut impl FnMut(&mut Self, &mut Context) -> ControlFlow<O>,
 	) -> ControlFlow<O> {
 		f(self, ctx)
@@ -362,9 +369,10 @@ impl<T: ArenaData<Data: Format>> Format for ArenaIdx<T> {
 	fn with_strings<O>(
 		&mut self,
 		ctx: &mut Context,
+		exclude_prefix_ws: bool,
 		f: &mut impl FnMut(&mut AstStr, &mut Context) -> ControlFlow<O>,
 	) -> ControlFlow<O> {
-		self.get_mut().with_strings(ctx, f)
+		self.get_mut().with_strings(ctx, exclude_prefix_ws, f)
 	}
 
 	fn format(&mut self, ctx: &mut Context) {

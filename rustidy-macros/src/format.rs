@@ -184,6 +184,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 			fn with_strings<WITH_STRINGS_WS_O>(
 				&mut self,
 				ctx: &mut rustidy_format::Context,
+				mut exclude_prefix_ws: bool,
 				f: &mut impl FnMut(&mut rustidy_util::AstStr, &mut rustidy_format::Context) -> std::ops::ControlFlow<WITH_STRINGS_WS_O>,
 			) -> std::ops::ControlFlow<WITH_STRINGS_WS_O> {
 				#with_strings
@@ -210,7 +211,7 @@ fn derive_enum(variants: &[VariantAttrs]) -> Impls<syn::Expr, syn::Expr, syn::Ex
 		.map(|variant| {
 			let variant_ident = &variant.ident;
 			let with_strings =
-				parse_quote! { Self::#variant_ident(ref mut value) => rustidy_format::Format::with_strings(value, ctx, f), };
+				parse_quote! { Self::#variant_ident(ref mut value) => rustidy_format::Format::with_strings(value, ctx, exclude_prefix_ws, f), };
 
 			let format = self::derive_format(
 				parse_quote! { value },
@@ -277,7 +278,8 @@ fn derive_struct(fields: &darling::ast::Fields<FieldAttrs>) -> Impls<syn::Expr, 
 
 			// Otherwise, if this field wasn't empty, we have no more fields
 			// to check and we can return
-			if !rustidy_format::Format::is_blank(&mut self.#field_ident, ctx) {
+			// TODO: We should be checking if length != 0 here instead
+			if !rustidy_format::Format::is_blank(&mut self.#field_ident, ctx, false) {
 				return None;
 			}
 		}}
@@ -298,7 +300,16 @@ fn derive_struct(fields: &darling::ast::Fields<FieldAttrs>) -> Impls<syn::Expr, 
 fn derive_struct_field(field_idx: usize, field: &FieldAttrs) -> Impls<syn::Expr, syn::Expr, ()> {
 	let field_ident = util::field_member_access(field_idx, field);
 
-	let with_strings = parse_quote! { rustidy_format::Format::with_strings(&mut self.#field_ident, ctx, f)? };
+	let with_strings = parse_quote! {{
+		rustidy_format::Format::with_strings(&mut self.#field_ident, ctx, exclude_prefix_ws, f)?;
+
+		// If this field wasn't empty, then we no longer exclude the prefix ws, since
+		// we already excluded it here.
+		// TODO: We should be checking if length != 0 here instead
+		if !rustidy_format::Format::is_blank(&mut self.#field_ident, ctx, false) {
+			exclude_prefix_ws = false;
+		}
+	}};
 
 	let format = self::derive_format(
 		parse_quote! { &mut self.#field_ident },
