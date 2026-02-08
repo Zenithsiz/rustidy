@@ -21,16 +21,33 @@ impl ArrayExpression {
 	fn format(&mut self, ctx: &mut rustidy_format::Context) {
 		match &mut self.0.value {
 			Some(ArrayElements::Punctuated(values)) => {
-				ctx.with_indent(|ctx| {
-					let cols = ctx.config().array_expr_cols;
+				let cols = ctx.config().array_expr_cols;
 
+				// TODO: Size should also account for this
+				let is_single_line = match cols {
+					Some(cols) => cols >= values.values_len(),
+					None => false,
+				};
+
+				match is_single_line {
+					true => values.trailing = None,
+					false =>
+						if values.trailing.is_none() {
+							values.trailing = Some(token::Comma::new());
+						},
+				}
+
+				ctx.with_indent(|ctx| {
 					for comma in values.puncts_mut() {
 						comma.prefix_ws_remove(ctx);
 					}
 
 					let mut values = values.values_mut();
 					while let Some(first) = values.next() {
-						first.prefix_ws_set_cur_indent(ctx);
+						match is_single_line {
+							true => first.prefix_ws_remove(ctx),
+							false => first.prefix_ws_set_cur_indent(ctx),
+						}
 						first.format(ctx);
 
 						for _ in 1..cols.unwrap_or(1) {
@@ -41,7 +58,10 @@ impl ArrayExpression {
 					}
 				});
 
-				self.0.suffix.prefix_ws_set_cur_indent(ctx);
+				match is_single_line {
+					true => self.0.suffix.prefix_ws_remove(ctx),
+					false => self.0.suffix.prefix_ws_set_cur_indent(ctx),
+				}
 				self.0.suffix.format(ctx);
 			},
 
