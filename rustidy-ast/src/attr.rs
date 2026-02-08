@@ -241,6 +241,12 @@ pub fn update_config(attr: &Attr, ctx: &mut rustidy_format::Context) -> Result<(
 				ctx.config_mut().indent = literal.contents(ctx.input()).into();
 			},
 		}
+
+		match rest.next() {
+			Some(TokenTree::Token(TokenNonDelimited(Token::Punctuation(Punctuation::Comma(_))))) => (),
+			Some(_) => bail!("Expected `,`"),
+			None => break,
+		}
 	}
 
 	Ok(())
