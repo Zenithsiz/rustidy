@@ -10,6 +10,10 @@
 	iter_advance_by
 )]
 
+// Modules
+#[doc(hidden)]
+pub mod whitespace;
+
 // Exports
 pub use rustidy_macros::Format;
 

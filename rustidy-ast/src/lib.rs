@@ -45,11 +45,10 @@ pub mod vis;
 use {
 	self::{attr::InnerAttrOrDocComment, item::Items, shebang::Shebang},
 	core::fmt::Debug,
-	rustidy_ast_util::{Whitespace, whitespace},
-	rustidy_format::Format,
+	rustidy_format::{Format, WhitespaceLike},
 	rustidy_parse::Parse,
 	rustidy_print::Print,
-	rustidy_util::{AstStr, ast_str::AstStrRepr},
+	rustidy_util::{AstStr, Whitespace, ast_str::AstStrRepr},
 };
 
 /// `Crate`
@@ -79,18 +78,23 @@ impl Crate {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 #[format(and_with = Self::format_first_inner_attr_or_item)]
+#[format(and_with = Self::format_suffix_ws)]
 pub struct CrateInner {
 	pub shebang:               Option<Shebang>,
 	#[format(and_with = rustidy_format::format_vec_each_with_all(Format::prefix_ws_set_cur_indent))]
 	pub inner_attrs:           Vec<InnerAttrOrDocComment>,
 	pub items:                 Items,
-	#[format(and_with = whitespace::set_indent(0, self.shebang.is_none() && self.inner_attrs.is_empty() && self.items.0.is_empty()))]
 	pub suffix_ws:             Whitespace,
 	#[format(and_with = Self::format_trailing_line_comment)]
 	pub trailing_line_comment: Option<TrailingLineComment>,
 }
 
 impl CrateInner {
+	fn format_suffix_ws(&mut self, ctx: &mut rustidy_format::Context) {
+		let remove_if_empty = self.shebang.is_none() && self.inner_attrs.is_empty() && self.items.0.is_empty();
+		self.suffix_ws.set_indent(ctx, 0, remove_if_empty)
+	}
+
 	fn format_first_inner_attr_or_item(&mut self, ctx: &mut rustidy_format::Context) {
 		if let Some(attr) = self.inner_attrs.first_mut() {
 			attr.prefix_ws_remove(ctx);

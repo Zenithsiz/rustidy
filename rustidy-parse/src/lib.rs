@@ -16,6 +16,7 @@
 // Modules
 mod error;
 mod recursive;
+mod whitespace;
 
 // Exports
 pub use {

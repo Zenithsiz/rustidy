@@ -7,9 +7,10 @@
 
 use {
 	app_error::{AppError, Context, ensure},
-	rustidy_ast_util::{Whitespace, whitespace::FormatKind},
+	rustidy_format::whitespace::{self, FormatKind},
 	rustidy_parse::{ParseError, Parser},
 	rustidy_print::{Print, PrintFmt},
+	rustidy_util::Whitespace,
 };
 
 #[derive(Clone, Debug)]
@@ -37,7 +38,7 @@ fn test_case_with(
 
 	let mut fmt_ctx = rustidy_format::Context::new(source, fmt_config);
 	fmt_ctx.set_indent_depth(config.indent_depth);
-	whitespace.format(&mut fmt_ctx, kind);
+	whitespace::format(&mut whitespace, &mut fmt_ctx, kind);
 
 	let mut print_fmt = PrintFmt::new(source);
 	whitespace.print(&mut print_fmt);
@@ -56,7 +57,7 @@ fn test_case_with(
 	{
 		let mut fmt_ctx = rustidy_format::Context::new(source, fmt_config);
 		fmt_ctx.set_indent_depth(config.indent_depth);
-		whitespace.format(&mut fmt_ctx, kind);
+		whitespace::format(&mut whitespace, &mut fmt_ctx, kind);
 
 		let mut print_fmt = PrintFmt::new(source);
 		whitespace.print(&mut print_fmt);

@@ -12,7 +12,6 @@ pub mod line;
 pub mod longest;
 pub mod not_follows;
 pub mod punct;
-pub mod whitespace;
 
 // Exports
 pub use self::{
@@ -24,5 +23,4 @@ pub use self::{
 	longest::Longest,
 	not_follows::NotFollows,
 	punct::{Punctuated, PunctuatedTrailing},
-	whitespace::Whitespace,
 };

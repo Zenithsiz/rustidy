@@ -9,6 +9,7 @@ pub mod ast_pos;
 pub mod ast_range;
 pub mod ast_str;
 pub mod config;
+pub mod whitespace;
 
 // Exports
 pub use self::{
@@ -17,6 +18,7 @@ pub use self::{
 	ast_range::AstRange,
 	ast_str::AstStr,
 	config::Config,
+	whitespace::Whitespace,
 };
 
 /// Returns if a string is blank

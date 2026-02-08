@@ -3,10 +3,11 @@
 // Imports
 use {
 	crate::{path::SimplePath, token, util::Braced},
-	rustidy_ast_util::{Identifier, Punctuated, PunctuatedTrailing, Whitespace},
+	rustidy_ast_util::{Identifier, Punctuated, PunctuatedTrailing},
 	rustidy_format::{Format, WhitespaceLike},
 	rustidy_parse::Parse,
 	rustidy_print::Print,
+	rustidy_util::Whitespace,
 };
 
 /// `UseDeclaration`

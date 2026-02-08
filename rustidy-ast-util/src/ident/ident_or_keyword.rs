@@ -1,7 +1,12 @@
 //! Identifier or keyword
 
 // Imports
-use {crate::Whitespace, rustidy_format::Format, rustidy_parse::Parse, rustidy_print::Print, rustidy_util::AstStr};
+use {
+	rustidy_format::Format,
+	rustidy_parse::Parse,
+	rustidy_print::Print,
+	rustidy_util::{AstStr, Whitespace},
+};
 
 /// `IDENTIFIER_OR_KEYWORD`
 #[derive(PartialEq, Eq, Debug)]

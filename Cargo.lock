@@ -489,7 +489,6 @@ version = "0.1.0"
 dependencies = [
  "app-error",
  "derive_more",
- "rustidy-ast-util",
  "rustidy-format",
  "rustidy-parse",
  "rustidy-print",
@@ -506,13 +505,11 @@ dependencies = [
  "derive_more",
  "either",
  "itertools",
- "replace_with",
  "rustidy-format",
  "rustidy-parse",
  "rustidy-print",
  "rustidy-util",
  "serde",
- "strum",
  "unicode-ident",
 ]
 
@@ -550,8 +547,11 @@ dependencies = [
 name = "rustidy-format"
 version = "0.1.0"
 dependencies = [
+ "itertools",
+ "replace_with",
  "rustidy-macros",
  "rustidy-util",
+ "strum",
 ]
 
 [[package]]

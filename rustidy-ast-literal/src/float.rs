@@ -4,12 +4,11 @@
 use {
 	super::{Suffix, int::DecLiteral},
 	crate::SuffixNoE,
-	rustidy_ast_util::Whitespace,
 	rustidy_format::Format,
 	rustidy_macros::ParseError,
 	rustidy_parse::{Parse, Parser, ParserError},
 	rustidy_print::Print,
-	rustidy_util::AstStr,
+	rustidy_util::{AstStr, Whitespace},
 	std::fmt,
 };
 

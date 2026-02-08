@@ -3,11 +3,10 @@
 // Imports
 use {
 	super::SuffixNoE,
-	rustidy_ast_util::Whitespace,
 	rustidy_format::Format,
 	rustidy_parse::Parse,
 	rustidy_print::Print,
-	rustidy_util::AstStr,
+	rustidy_util::{AstStr, Whitespace},
 };
 
 /// `INTEGER_LITERAL`

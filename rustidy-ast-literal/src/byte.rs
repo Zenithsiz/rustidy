@@ -4,11 +4,10 @@
 use {
 	super::escape::ByteEscapeError,
 	crate::ByteEscape,
-	rustidy_ast_util::Whitespace,
 	rustidy_format::Format,
 	rustidy_parse::Parse,
 	rustidy_print::Print,
-	rustidy_util::AstStr,
+	rustidy_util::{AstStr, Whitespace},
 };
 
 /// `BYTE_LITERAL`
