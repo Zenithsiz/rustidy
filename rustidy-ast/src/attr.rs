@@ -15,7 +15,7 @@ use {
 		util::{Braced, Bracketed, Parenthesized},
 	},
 	crate::token::{Punctuation, Token},
-	app_error::{AppError, bail},
+	app_error::{AppError, Context, bail},
 	core::fmt::Debug,
 	rustidy_ast_util::{RemainingBlockComment, RemainingLine},
 	rustidy_format::{Format, FormatFn},
@@ -222,10 +222,12 @@ pub fn update_config(attr: &Attr, ctx: &mut rustidy_format::Context) -> Result<(
 
 		enum ConfigField {
 			Indent,
+			ArrayExprRows,
 		}
 
 		let field = match ident.1.str(ctx.input()).as_str() {
 			"indent" => ConfigField::Indent,
+			"array_expr_rows" => ConfigField::ArrayExprRows,
 			ident => bail!("Unknown configuration: {ident:?}"),
 		};
 
@@ -239,6 +241,13 @@ pub fn update_config(attr: &Attr, ctx: &mut rustidy_format::Context) -> Result<(
 					bail!("Expected string literal");
 				};
 				ctx.config_mut().indent = literal.contents(ctx.input()).into();
+			},
+			ConfigField::ArrayExprRows => {
+				let Some(TokenTree::Token(TokenNonDelimited(Token::IntegerLiteral(literal)))) = rest.next() else {
+					bail!("Expected integer literal");
+				};
+				let value = literal.value(ctx.input()).context("Unable to parse integer")?;
+				ctx.config_mut().array_expr_rows = value.try_into().expect("`u64` didn't fit into `usize`");
 			},
 		}
 

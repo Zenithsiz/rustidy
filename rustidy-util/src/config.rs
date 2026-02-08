@@ -11,6 +11,7 @@ pub struct Config {
 	pub indent:             Arc<str>,
 	pub empty_line_spacing: EmptyLineSpacing,
 	pub max_use_tree_len:   usize,
+	pub array_expr_rows:    usize,
 }
 
 /// Empty line spacing.
@@ -32,6 +33,7 @@ impl Default for Config {
 			indent:             "\t".into(),
 			empty_line_spacing: EmptyLineSpacing { min: 0, max: 2 },
 			max_use_tree_len:   75,
+			array_expr_rows:    1,
 		}
 	}
 }
