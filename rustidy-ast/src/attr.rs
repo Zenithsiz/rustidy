@@ -223,11 +223,13 @@ pub fn update_config(attr: &Attr, ctx: &mut rustidy_format::Context) -> Result<(
 		enum ConfigField {
 			Indent,
 			ArrayExprCols,
+			MaxArrayExprLen,
 		}
 
 		let field = match ident.1.str(ctx.input()).as_str() {
 			"indent" => ConfigField::Indent,
 			"array_expr_cols" => ConfigField::ArrayExprCols,
+			"max_array_expr_len" => ConfigField::MaxArrayExprLen,
 			ident => bail!("Unknown configuration: {ident:?}"),
 		};
 
@@ -249,6 +251,13 @@ pub fn update_config(attr: &Attr, ctx: &mut rustidy_format::Context) -> Result<(
 				};
 				let value = literal.value(ctx.input()).context("Unable to parse integer")?;
 				ctx.config_mut().array_expr_cols = Some(value.try_into().expect("`u64` didn't fit into `usize`"));
+			},
+			ConfigField::MaxArrayExprLen => {
+				let Some(TokenTree::Token(TokenNonDelimited(Token::IntegerLiteral(literal)))) = rest.next() else {
+					bail!("Expected integer literal");
+				};
+				let value = literal.value(ctx.input()).context("Unable to parse integer")?;
+				ctx.config_mut().max_array_expr_len = value.try_into().expect("`u64` didn't fit into `usize`");
 			},
 		}
 
