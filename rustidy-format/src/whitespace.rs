@@ -2,8 +2,7 @@
 
 // Imports
 use {
-	crate::{Format, WhitespaceLike},
-	core::any::Any,
+	crate::Format,
 	itertools::Itertools,
 	rustidy_util::{
 		AstStr,
@@ -13,11 +12,8 @@ use {
 	std::sync::Arc,
 };
 
-impl WhitespaceLike for Whitespace {
-	fn as_concrete<W: 'static>(&mut self) -> &mut W {
-		(self as &mut dyn Any).downcast_mut().expect("Wrong whitespace type")
-	}
-
+#[extend::ext(name = WhitespaceFormat)]
+pub impl Whitespace {
 	fn is_pure(&mut self, _ctx: &mut crate::Context) -> bool {
 		self.0.get().rest.is_empty()
 	}
@@ -75,12 +71,12 @@ impl Format for Whitespace {
 		// Note: By default no formatting is done
 	}
 
-	fn with_prefix_ws<V: crate::WhitespaceVisitor>(
+	fn with_prefix_ws<O>(
 		&mut self,
 		ctx: &mut crate::Context,
-		visitor: &mut V,
-	) -> Option<V::Output> {
-		Some(visitor.visit(self, ctx))
+		f: &mut impl FnMut(&mut Self, &mut crate::Context) -> O,
+	) -> Option<O> {
+		Some(f(self, ctx))
 	}
 }
 

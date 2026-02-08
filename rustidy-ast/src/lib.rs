@@ -45,7 +45,7 @@ pub mod vis;
 use {
 	self::{attr::InnerAttrOrDocComment, item::Items, shebang::Shebang},
 	core::fmt::Debug,
-	rustidy_format::{Format, WhitespaceLike},
+	rustidy_format::{Format, WhitespaceFormat},
 	rustidy_parse::Parse,
 	rustidy_print::Print,
 	rustidy_util::{AstStr, Whitespace, ast_str::AstStrRepr},
@@ -92,7 +92,7 @@ pub struct CrateInner {
 impl CrateInner {
 	fn format_suffix_ws(&mut self, ctx: &mut rustidy_format::Context) {
 		let remove_if_empty = self.shebang.is_none() && self.inner_attrs.is_empty() && self.items.0.is_empty();
-		self.suffix_ws.set_indent(ctx, 0, remove_if_empty)
+		self.suffix_ws.set_indent(ctx, 0, remove_if_empty);
 	}
 
 	fn format_first_inner_attr_or_item(&mut self, ctx: &mut rustidy_format::Context) {

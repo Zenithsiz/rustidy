@@ -15,54 +15,20 @@
 pub mod whitespace;
 
 // Exports
-pub use rustidy_macros::Format;
+pub use {self::whitespace::WhitespaceFormat, rustidy_macros::Format};
 
 // Imports
 use {
 	crate as rustidy_format,
 	core::marker::PhantomData,
-	rustidy_util::{ArenaData, ArenaIdx, AstStr, Config},
+	rustidy_util::{ArenaData, ArenaIdx, AstStr, Config, Whitespace},
 	std::borrow::Cow,
 };
-
-/// Whitespace-like for formatting
-// TODO: Once we move into our own crate, just rename this to `Whitespace`
-pub trait WhitespaceLike: Format {
-	/// Returns this whitespace as it's concrete type.
-	///
-	/// # Panics
-	/// Panics if `W` isn't the correct type.
-	fn as_concrete<W: 'static>(&mut self) -> &mut W;
-
-	/// Returns if this whitespace is pure
-	fn is_pure(&mut self, ctx: &mut Context) -> bool;
-
-	/// Removes this whitespace
-	fn remove(&mut self, ctx: &mut Context);
-
-	/// Sets this whitespace to spaces
-	fn set_spaces(&mut self, ctx: &mut Context, len: usize);
-
-	/// Sets this whitespace to indentation.
-	fn set_indent(&mut self, ctx: &mut Context, offset: isize, remove_if_empty: bool);
-
-	/// Joins another whitespace into this one as a suffix
-	fn join_suffix(&mut self, other: Self);
-
-	/// Joins another whitespace into this one as a prefix
-	fn join_prefix(&mut self, other: Self);
-}
-
-/// Whitespace visitor
-pub trait WhitespaceVisitor {
-	type Output;
-
-	fn visit<W: WhitespaceLike>(&mut self, whitespace: &mut W, context: &mut Context) -> Self::Output;
-}
 
 /// Formattable type
 pub trait Format {
 	/// Iterates over all strings in this type
+	// TODO: We should allow returning a `ControlFlow` here.
 	fn with_strings(&mut self, ctx: &mut Context, f: &mut impl FnMut(&mut AstStr, &mut Context));
 
 	/// Returns the length of this type
@@ -83,12 +49,7 @@ pub trait Format {
 	/// Returns the length of this type without the prefix whitespace
 	fn len_without_prefix_ws(&mut self, ctx: &mut Context) -> usize {
 		let mut len = self.len(ctx);
-		self.with_prefix_ws(ctx, &mut self::whitespace_visitor! {
-			generics<'a>
-			capture(len: &'a mut usize = &mut len)
-			|ws, ctx| -> () => **len -= ws.len(ctx)
-		});
-
+		self.with_prefix_ws(ctx, &mut |ws, ctx| len -= ws.len(ctx));
 		len
 	}
 
@@ -98,31 +59,26 @@ pub trait Format {
 	/// Uses the first whitespace of this type, if any.
 	///
 	/// Returns if successfully used.
-	fn with_prefix_ws<V: WhitespaceVisitor>(&mut self, ctx: &mut Context, visitor: &mut V) -> Option<V::Output>;
+	fn with_prefix_ws<O>(
+		&mut self,
+		ctx: &mut Context,
+		f: &mut impl FnMut(&mut Whitespace, &mut Context) -> O,
+	) -> Option<O>;
 
 	/// Returns if the prefix whitespace is pure
 	fn prefix_ws_is_pure(&mut self, ctx: &mut Context) -> bool {
-		self.with_prefix_ws(
-			ctx,
-			&mut self::whitespace_visitor! { |ws, ctx| -> bool => ws.is_pure(ctx) },
-		)
-		.unwrap_or(false)
+		self.with_prefix_ws(ctx, &mut |ws, ctx| ws.is_pure(ctx))
+			.unwrap_or(false)
 	}
 
 	/// Remove the prefix whitespace, if any
 	fn prefix_ws_remove(&mut self, ctx: &mut Context) {
-		self.with_prefix_ws(
-			ctx,
-			&mut self::whitespace_visitor! { |ws, ctx| -> () => ws.remove(ctx) },
-		);
+		self.with_prefix_ws(ctx, &mut |ws, ctx| ws.remove(ctx));
 	}
 
 	/// Sets the prefix whitespace to spaces
 	fn prefix_ws_set_spaces(&mut self, ctx: &mut Context, len: usize) {
-		self.with_prefix_ws(ctx, &mut self::whitespace_visitor! {
-			capture(len: usize)
-			|ws, ctx| -> () => ws.set_spaces(ctx, *len)
-		});
+		self.with_prefix_ws(ctx, &mut |ws, ctx| ws.set_spaces(ctx, len));
 	}
 
 	/// Sets the prefix whitespace to a single space
@@ -132,10 +88,7 @@ pub trait Format {
 
 	/// Sets the prefix whitespace to an indentation
 	fn prefix_ws_set_indent(&mut self, ctx: &mut Context, offset: isize, remove_if_empty: bool) {
-		self.with_prefix_ws(ctx, &mut self::whitespace_visitor! {
-			capture(offset: isize, remove_if_empty: bool)
-			|ws, ctx| -> () => ws.set_indent(ctx, *offset, *remove_if_empty)
-		});
+		self.with_prefix_ws(ctx, &mut |ws, ctx| ws.set_indent(ctx, offset, remove_if_empty));
 	}
 
 	/// Sets the prefix whitespace to the current indentation without removing if empty
@@ -147,14 +100,11 @@ pub trait Format {
 	///
 	/// # Panics
 	/// Panics if `W` isn't the concrete type of the whitespace of this type.
-	fn prefix_ws_join_suffix<W: WhitespaceLike + 'static>(&mut self, ctx: &mut Context, ws: W) -> Result<(), W> {
+	fn prefix_ws_join_suffix(&mut self, ctx: &mut Context, ws: Whitespace) -> Result<(), Whitespace> {
 		let mut new_ws = Some(ws);
 
-		trait WsBound = WhitespaceLike + 'static;
-		self.with_prefix_ws(ctx, &mut self::whitespace_visitor! {
-			generics<'a, Ws: WsBound>
-			capture(new_ws: &'a mut Option<Ws> = &mut new_ws)
-			|ws, _ctx| -> () => ws.as_concrete::<Ws>().join_suffix(new_ws.take().expect("Should exist"))
+		self.with_prefix_ws(ctx, &mut |ws, _ctx| {
+			ws.join_suffix(new_ws.take().expect("Should exist"));
 		});
 
 		match new_ws {
@@ -167,14 +117,11 @@ pub trait Format {
 	///
 	/// # Panics
 	/// Panics if `W` isn't the concrete type of the whitespace of this type.
-	fn prefix_ws_join_prefix<W: WhitespaceLike + 'static>(&mut self, ctx: &mut Context, ws: W) -> Result<(), W> {
+	fn prefix_ws_join_prefix(&mut self, ctx: &mut Context, ws: Whitespace) -> Result<(), Whitespace> {
 		let mut new_ws = Some(ws);
 
-		trait WsBound = WhitespaceLike + 'static;
-		self.with_prefix_ws(ctx, &mut self::whitespace_visitor! {
-			generics<'a, Ws: WsBound>
-			capture(new_ws: &'a mut Option<Ws> = &mut new_ws)
-			|ws, _ctx| -> () => ws.as_concrete::<Ws>().join_prefix(new_ws.take().expect("Should exist"))
+		self.with_prefix_ws(ctx, &mut |ws, _ctx| {
+			ws.join_prefix(new_ws.take().expect("Should exist"));
 		});
 
 		match new_ws {
@@ -183,47 +130,6 @@ pub trait Format {
 		}
 	}
 }
-
-macro whitespace_visitor(
-	$(
-		generics<
-			$($generic:tt $(: $bound:tt)?),* $(,)?
-		>
-	)?
-	$(
-		capture(
-			$(
-				$capture:ident: $CaptureTy:ty $( = $capture_expr:expr)?
-			),*
-
-			$(,)?
-		)
-	)?
-	| $whitespace:ident, $context:ident | -> $OutputTy:ty => $output:expr
-) {{
-	struct Visitor
-	$(<
-			$($generic,)*
-	>)?
-	{
-		$(
-			$(
-				$capture: $CaptureTy,
-			)*
-		)?
-	}
-
-	impl$(< $($generic $(: $bound)?,)* >)? WhitespaceVisitor for Visitor $(< $($generic,)* >)? {
-		type Output = $OutputTy;
-
-		fn visit<W: WhitespaceLike>(&mut self, $whitespace: &mut W, $context: &mut Context) -> Self::Output {
-			$( let Self { $( $capture, )* } = self; )?
-			$output
-		}
-	}
-
-	Visitor { $( $( $capture $(: $capture_expr)?, )* )? }
-}}
 
 impl<T: Format> Format for &'_ mut T {
 	fn with_strings(&mut self, ctx: &mut Context, f: &mut impl FnMut(&mut AstStr, &mut Context)) {
@@ -234,8 +140,12 @@ impl<T: Format> Format for &'_ mut T {
 		(**self).format(ctx);
 	}
 
-	fn with_prefix_ws<V: WhitespaceVisitor>(&mut self, ctx: &mut Context, visitor: &mut V) -> Option<V::Output> {
-		(**self).with_prefix_ws(ctx, visitor)
+	fn with_prefix_ws<O>(
+		&mut self,
+		ctx: &mut Context,
+		f: &mut impl FnMut(&mut Whitespace, &mut Context) -> O,
+	) -> Option<O> {
+		(**self).with_prefix_ws(ctx, f)
 	}
 }
 
@@ -248,8 +158,12 @@ impl<T: Format> Format for Box<T> {
 		(**self).format(ctx);
 	}
 
-	fn with_prefix_ws<V: WhitespaceVisitor>(&mut self, ctx: &mut Context, visitor: &mut V) -> Option<V::Output> {
-		(**self).with_prefix_ws(ctx, visitor)
+	fn with_prefix_ws<O>(
+		&mut self,
+		ctx: &mut Context,
+		f: &mut impl FnMut(&mut Whitespace, &mut Context) -> O,
+	) -> Option<O> {
+		(**self).with_prefix_ws(ctx, f)
 	}
 }
 
@@ -266,9 +180,13 @@ impl<T: Format> Format for Option<T> {
 		}
 	}
 
-	fn with_prefix_ws<V: WhitespaceVisitor>(&mut self, ctx: &mut Context, visitor: &mut V) -> Option<V::Output> {
+	fn with_prefix_ws<O>(
+		&mut self,
+		ctx: &mut Context,
+		f: &mut impl FnMut(&mut Whitespace, &mut Context) -> O,
+	) -> Option<O> {
 		match self {
-			Some(value) => value.with_prefix_ws(ctx, visitor),
+			Some(value) => value.with_prefix_ws(ctx, f),
 			_ => None,
 		}
 	}
@@ -287,9 +205,13 @@ impl<T: Format> Format for Vec<T> {
 		}
 	}
 
-	fn with_prefix_ws<V: WhitespaceVisitor>(&mut self, ctx: &mut Context, visitor: &mut V) -> Option<V::Output> {
+	fn with_prefix_ws<O>(
+		&mut self,
+		ctx: &mut Context,
+		f: &mut impl FnMut(&mut Whitespace, &mut Context) -> O,
+	) -> Option<O> {
 		match self.first_mut() {
-			Some(value) => value.with_prefix_ws(ctx, visitor),
+			Some(value) => value.with_prefix_ws(ctx, f),
 			None => None,
 		}
 	}
@@ -304,7 +226,11 @@ impl Format for ! {
 		*self
 	}
 
-	fn with_prefix_ws<V: WhitespaceVisitor>(&mut self, _ctx: &mut Context, _visitor: &mut V) -> Option<V::Output> {
+	fn with_prefix_ws<O>(
+		&mut self,
+		_ctx: &mut Context,
+		_f: &mut impl FnMut(&mut Whitespace, &mut Context) -> O,
+	) -> Option<O> {
 		*self
 	}
 }
@@ -314,7 +240,11 @@ impl<T> Format for PhantomData<T> {
 
 	fn format(&mut self, _ctx: &mut Context) {}
 
-	fn with_prefix_ws<V: WhitespaceVisitor>(&mut self, _ctx: &mut Context, _visitor: &mut V) -> Option<V::Output> {
+	fn with_prefix_ws<O>(
+		&mut self,
+		_ctx: &mut Context,
+		_f: &mut impl FnMut(&mut Whitespace, &mut Context) -> O,
+	) -> Option<O> {
 		None
 	}
 }
@@ -324,7 +254,11 @@ impl Format for () {
 
 	fn format(&mut self, _ctx: &mut Context) {}
 
-	fn with_prefix_ws<V: WhitespaceVisitor>(&mut self, _ctx: &mut Context, _visitor: &mut V) -> Option<V::Output> {
+	fn with_prefix_ws<O>(
+		&mut self,
+		_ctx: &mut Context,
+		_f: &mut impl FnMut(&mut Whitespace, &mut Context) -> O,
+	) -> Option<O> {
 		None
 	}
 }
@@ -349,9 +283,13 @@ macro tuple_impl ($N:literal, $($T:ident),* $(,)?) {
 			${concat( Tuple, $N )} { $( $T, )* }.format(ctx)
 		}
 
-		fn with_prefix_ws<V: WhitespaceVisitor>(&mut self, ctx: &mut Context, visitor: &mut V) -> Option<V::Output> {
+		fn with_prefix_ws<O>(
+			&mut self,
+			ctx: &mut Context,
+			f: &mut impl FnMut(&mut Whitespace, &mut Context) -> O,
+		) -> Option<O> {
 			let ( $($T,)* ) = self;
-			${concat( Tuple, $N )} { $( $T, )* }.with_prefix_ws(ctx, visitor)
+			${concat( Tuple, $N )} { $( $T, )* }.with_prefix_ws(ctx, f)
 		}
 	}
 }
@@ -367,7 +305,11 @@ impl Format for AstStr {
 
 	fn format(&mut self, _ctx: &mut Context) {}
 
-	fn with_prefix_ws<V: WhitespaceVisitor>(&mut self, _ctx: &mut Context, _visitor: &mut V) -> Option<V::Output> {
+	fn with_prefix_ws<O>(
+		&mut self,
+		_ctx: &mut Context,
+		_f: &mut impl FnMut(&mut Whitespace, &mut Context) -> O,
+	) -> Option<O> {
 		None
 	}
 }
@@ -381,8 +323,12 @@ impl<T: ArenaData<Data: Format>> Format for ArenaIdx<T> {
 		self.get_mut().format(ctx);
 	}
 
-	fn with_prefix_ws<V: WhitespaceVisitor>(&mut self, ctx: &mut Context, visitor: &mut V) -> Option<V::Output> {
-		self.get_mut().with_prefix_ws(ctx, visitor)
+	fn with_prefix_ws<O>(
+		&mut self,
+		ctx: &mut Context,
+		f: &mut impl FnMut(&mut Whitespace, &mut Context) -> O,
+	) -> Option<O> {
+		self.get_mut().with_prefix_ws(ctx, f)
 	}
 }
 

@@ -191,7 +191,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 			}
 
 			#[allow(unreachable_code)]
-			fn with_prefix_ws<WITH_PREFIX_WS_V: rustidy_format::WhitespaceVisitor>(&mut self, ctx: &mut rustidy_format::Context, visitor: &mut WITH_PREFIX_WS_V) -> Option<<WITH_PREFIX_WS_V as rustidy_format::WhitespaceVisitor>::Output> {
+			fn with_prefix_ws<WITH_PREFIX_WS_O>(&mut self, ctx: &mut rustidy_format::Context, f: &mut impl FnMut(&mut rustidy_util::Whitespace, &mut rustidy_format::Context) -> WITH_PREFIX_WS_O) -> Option<WITH_PREFIX_WS_O> {
 				#with_prefix_ws
 			}
 		}
@@ -221,7 +221,7 @@ fn derive_enum(variants: &[VariantAttrs]) -> Impls<syn::Expr, syn::Expr, syn::Ex
 			};
 
 			let with_prefix_ws =
-				parse_quote! { Self::#variant_ident(ref mut value) => value.with_prefix_ws(ctx, visitor), };
+				parse_quote! { Self::#variant_ident(ref mut value) => value.with_prefix_ws(ctx, f), };
 
 			Impls {
 				with_strings,
@@ -267,7 +267,7 @@ fn derive_struct(fields: &darling::ast::Fields<FieldAttrs>) -> Impls<syn::Expr, 
 
 		parse_quote! {{
 			// If we used the whitespace, return
-			if let Some(value) = rustidy_format::Format::with_prefix_ws(&mut self.#field_ident, ctx, visitor) {
+			if let Some(value) = rustidy_format::Format::with_prefix_ws(&mut self.#field_ident, ctx, f) {
 				return Some(value);
 			}
 
