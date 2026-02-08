@@ -105,6 +105,11 @@ impl<T, P> Punctuated<T, P> {
 		itertools::chain![[&mut self.first], self.rest.iter_mut().map(|(_, value)| value)]
 	}
 
+	/// Returns the number of values
+	pub const fn values_len(&self) -> usize {
+		1 + self.rest.len()
+	}
+
 	/// Returns an iterator over all punctuation
 	pub fn puncts(&self) -> impl Iterator<Item = &P> {
 		self.rest.iter().map(|(punct, _)| punct)
@@ -192,6 +197,11 @@ impl<T, P> PunctuatedTrailing<T, P> {
 	/// Returns a mutable iterator over all values
 	pub fn values_mut(&mut self) -> impl Iterator<Item = &mut T> {
 		self.punctuated.values_mut()
+	}
+
+	/// Returns the number of values
+	pub const fn values_len(&self) -> usize {
+		self.punctuated.values_len()
 	}
 
 	/// Returns an iterator over all punctuation
