@@ -67,6 +67,20 @@ impl AstStr {
 		}
 	}
 
+	/// Returns if this string has newlines
+	#[must_use]
+	pub fn has_newlines(&self, input: &str) -> bool {
+		match *self.repr() {
+			AstStrRepr::AstRange(range) => range.str(input).contains('\n'),
+			AstStrRepr::String(s) => s.contains('\n'),
+			AstStrRepr::Char(ch) => ch == '\n',
+			AstStrRepr::Spaces { .. } => false,
+			AstStrRepr::Indentation { newlines, .. } => newlines != 0,
+			AstStrRepr::Join { ref lhs, ref rhs } => lhs.has_newlines(input) && rhs.has_newlines(input),
+			AstStrRepr::Dynamic(ref s) => s.contains('\n'),
+		}
+	}
+
 	/// Returns if this string is equal to `other`
 	#[must_use]
 	pub fn is_str(&self, input: &str, other: &str) -> bool {

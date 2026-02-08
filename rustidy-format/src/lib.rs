@@ -67,6 +67,19 @@ pub trait Format {
 		.is_continue()
 	}
 
+	/// Returns if this type has newlines
+	fn has_newlines(&mut self, ctx: &mut Context, exclude_prefix_ws: bool) -> bool {
+		self.with_strings(
+			ctx,
+			exclude_prefix_ws,
+			&mut |s, ctx| match AstStr::has_newlines(s, ctx.input) {
+				true => ControlFlow::Break(()),
+				false => ControlFlow::Continue(()),
+			},
+		)
+		.is_break()
+	}
+
 	/// Formats this type
 	fn format(&mut self, ctx: &mut Context);
 
