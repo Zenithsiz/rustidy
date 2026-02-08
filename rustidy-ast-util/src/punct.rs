@@ -105,6 +105,16 @@ impl<T, P> Punctuated<T, P> {
 		itertools::chain![[&mut self.first], self.rest.iter_mut().map(|(_, value)| value)]
 	}
 
+	/// Returns an iterator over all punctuation
+	pub fn puncts(&self) -> impl Iterator<Item = &P> {
+		self.rest.iter().map(|(punct, _)| punct)
+	}
+
+	/// Returns a mutable iterator over all punctuation
+	pub fn puncts_mut(&mut self) -> impl Iterator<Item = &mut P> {
+		self.rest.iter_mut().map(|(punct, _)| punct)
+	}
+
 	/// Returns a mutable iterator over all punctuation
 	pub fn punct_mut(&mut self) -> impl Iterator<Item = &mut P> {
 		self.rest.iter_mut().map(|(punct, _)| punct)
@@ -177,6 +187,16 @@ impl<T, P> PunctuatedTrailing<T, P> {
 	/// Returns a mutable iterator over all values
 	pub fn values_mut(&mut self) -> impl Iterator<Item = &mut T> {
 		self.punctuated.values_mut()
+	}
+
+	/// Returns an iterator over all punctuation
+	pub fn puncts(&self) -> impl Iterator<Item = &P> {
+		itertools::chain![self.punctuated.puncts(), &self.trailing]
+	}
+
+	/// Returns a mutable iterator over all punctuation
+	pub fn puncts_mut(&mut self) -> impl Iterator<Item = &mut P> {
+		itertools::chain![self.punctuated.puncts_mut(), &mut self.trailing]
 	}
 
 	/// Formats this value
