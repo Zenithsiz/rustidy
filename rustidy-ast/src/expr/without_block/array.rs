@@ -22,7 +22,7 @@ impl ArrayExpression {
 		match &mut self.0.value {
 			Some(ArrayElements::Punctuated(values)) => {
 				ctx.with_indent(|ctx| {
-					let rows = ctx.config().array_expr_rows;
+					let cols = ctx.config().array_expr_cols;
 
 					for comma in values.puncts_mut() {
 						comma.prefix_ws_remove(ctx);
@@ -33,7 +33,7 @@ impl ArrayExpression {
 						first.prefix_ws_set_cur_indent(ctx);
 						first.format(ctx);
 
-						for _ in 1..rows.unwrap_or(1) {
+						for _ in 1..cols.unwrap_or(1) {
 							let Some(value) = values.next() else { break };
 							value.prefix_ws_set_single(ctx);
 							value.format(ctx);

@@ -222,12 +222,12 @@ pub fn update_config(attr: &Attr, ctx: &mut rustidy_format::Context) -> Result<(
 
 		enum ConfigField {
 			Indent,
-			ArrayExprRows,
+			ArrayExprCols,
 		}
 
 		let field = match ident.1.str(ctx.input()).as_str() {
 			"indent" => ConfigField::Indent,
-			"array_expr_rows" => ConfigField::ArrayExprRows,
+			"array_expr_cols" => ConfigField::ArrayExprCols,
 			ident => bail!("Unknown configuration: {ident:?}"),
 		};
 
@@ -243,12 +243,12 @@ pub fn update_config(attr: &Attr, ctx: &mut rustidy_format::Context) -> Result<(
 				ctx.config_mut().indent = literal.contents(ctx.input()).into();
 			},
 			// TODO: Should we allow resetting it to `None` again?
-			ConfigField::ArrayExprRows => {
+			ConfigField::ArrayExprCols => {
 				let Some(TokenTree::Token(TokenNonDelimited(Token::IntegerLiteral(literal)))) = rest.next() else {
 					bail!("Expected integer literal");
 				};
 				let value = literal.value(ctx.input()).context("Unable to parse integer")?;
-				ctx.config_mut().array_expr_rows = Some(value.try_into().expect("`u64` didn't fit into `usize`"));
+				ctx.config_mut().array_expr_cols = Some(value.try_into().expect("`u64` didn't fit into `usize`"));
 			},
 		}
 
