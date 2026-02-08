@@ -97,9 +97,6 @@ pub trait Format {
 	}
 
 	/// Joins a whitespace into this type's prefix whitespace as a suffix.
-	///
-	/// # Panics
-	/// Panics if `W` isn't the concrete type of the whitespace of this type.
 	fn prefix_ws_join_suffix(&mut self, ctx: &mut Context, ws: Whitespace) -> Result<(), Whitespace> {
 		let mut new_ws = Some(ws);
 
@@ -114,9 +111,6 @@ pub trait Format {
 	}
 
 	/// Joins a whitespace into this type's prefix whitespace as a prefix.
-	///
-	/// # Panics
-	/// Panics if `W` isn't the concrete type of the whitespace of this type.
 	fn prefix_ws_join_prefix(&mut self, ctx: &mut Context, ws: Whitespace) -> Result<(), Whitespace> {
 		let mut new_ws = Some(ws);
 
