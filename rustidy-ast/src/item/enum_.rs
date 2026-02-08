@@ -7,11 +7,11 @@ use {
 		struct_::{StructFields, TupleFields},
 	},
 	crate::{
+		attr::{self, WithOuterAttributes},
 		expr::Expression,
 		token,
 		util::{Braced, Parenthesized},
 		vis::Visibility,
-		attr::{self, WithOuterAttributes},
 	},
 	rustidy_ast_util::{Identifier, PunctuatedTrailing, punct},
 	rustidy_format::Format,

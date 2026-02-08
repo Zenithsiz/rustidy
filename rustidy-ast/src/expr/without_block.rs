@@ -48,8 +48,8 @@ pub use self::{
 use {
 	super::{Expression, ExpressionInner},
 	crate::{
-		token,
 		attr::{self, WithOuterAttributes},
+		token,
 	},
 	rustidy_ast_literal::{IntegerLiteral, LiteralExpression},
 	rustidy_format::Format,

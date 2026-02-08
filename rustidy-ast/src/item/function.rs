@@ -3,13 +3,13 @@
 // Imports
 use {
 	crate::{
+		attr::{self, WithOuterAttributes},
 		expr::BlockExpression,
 		lifetime::Lifetime,
 		pat::PatternNoTopAlt,
 		token,
 		ty::{Type, TypePath},
 		util::Parenthesized,
-		attr::{self, WithOuterAttributes},
 	},
 	rustidy_ast_literal::{LiteralExpression, RawStringLiteral, StringLiteral},
 	rustidy_ast_util::{Delimited, Follows, Identifier, PunctuatedTrailing, punct},

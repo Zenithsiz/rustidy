@@ -4,10 +4,10 @@
 use {
 	super::{TupleIndex, path::PathInExpression},
 	crate::{
+		attr::{self, WithOuterAttributes},
 		expr::Expression,
 		token,
 		util::Braced,
-		attr::{self, WithOuterAttributes},
 	},
 	rustidy_ast_util::{Identifier, Punctuated, punct},
 	rustidy_format::Format,

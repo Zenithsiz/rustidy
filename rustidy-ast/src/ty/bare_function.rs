@@ -4,10 +4,10 @@
 use {
 	super::{Type, TypeNoBounds},
 	crate::{
+		attr::WithOuterAttributes,
 		item::function::{ExternAbi, ForLifetimes},
 		token,
 		util::Parenthesized,
-		attr::WithOuterAttributes,
 	},
 	rustidy_ast_util::{Identifier, Punctuated, PunctuatedTrailing, punct},
 	rustidy_format::Format,

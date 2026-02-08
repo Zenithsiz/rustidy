@@ -4,12 +4,12 @@
 use {
 	super::function::{GenericParams, WhereClause},
 	crate::{
+		attr::{self, WithOuterAttributes},
 		expr::Expression,
 		token,
 		ty::Type,
 		util::{Braced, Parenthesized},
 		vis::Visibility,
-		attr::{self, WithOuterAttributes},
 	},
 	rustidy_ast_util::{Identifier, PunctuatedTrailing, punct},
 	rustidy_format::Format,

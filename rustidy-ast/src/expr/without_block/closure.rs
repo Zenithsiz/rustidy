@@ -4,11 +4,11 @@
 use {
 	super::ExpressionWithoutBlockInner,
 	crate::{
+		attr::WithOuterAttributes,
 		expr::{Expression, ExpressionInner},
 		pat::PatternNoTopAlt,
 		token,
 		ty::{Type, TypeNoBounds},
-		attr::WithOuterAttributes,
 	},
 	rustidy_ast_util::{Delimited, PunctuatedTrailing, punct},
 	rustidy_format::Format,
