@@ -2,11 +2,10 @@
 
 // Imports
 use {
-	crate::Punctuated,
 	core::any::Any,
 	itertools::Itertools,
 	rustidy_format::{Format, WhitespaceLike},
-	rustidy_parse::{Parse, Parser},
+	rustidy_parse::{Parse, ParseError, Parser, ParserError},
 	rustidy_print::Print,
 	rustidy_util::{Arena, ArenaData, ArenaIdx, AstStr, ast_str::AstStrRepr},
 	std::sync::Arc,
@@ -24,7 +23,7 @@ impl Whitespace {
 	/// Creates an empty whitespace
 	#[must_use]
 	pub fn empty() -> Self {
-		let inner = Punctuated {
+		let inner = WhitespaceInner {
 			first: PureWhitespace(AstStr::new("")),
 			rest:  vec![],
 		};
@@ -37,7 +36,7 @@ impl Whitespace {
 	fn parse_skip(parser: &mut Parser) -> Result<Option<Self>, WhitespaceError> {
 		Ok(parser.has_tag("skip:Whitespace").then(|| {
 			let s = parser.update_with(|_| ());
-			let inner = Punctuated {
+			let inner = WhitespaceInner {
 				first: PureWhitespace(s),
 				rest:  vec![],
 			};
@@ -80,7 +79,7 @@ impl Whitespace {
 }
 
 impl ArenaData for Whitespace {
-	type Data = Punctuated<PureWhitespace, Comment>;
+	type Data = WhitespaceInner;
 
 	const ARENA: &'static Arena<Self> = &ARENA;
 }
@@ -115,7 +114,11 @@ impl WhitespaceLike for Whitespace {
 		let mut lhs = self.0.get_mut();
 		let mut rhs = other.0.take();
 
-		let (_, lhs_last) = lhs.split_last_mut();
+		let lhs_last = match lhs.rest.last_mut() {
+			Some((_, last)) => last,
+			None => &mut lhs.first,
+		};
+
 		replace_with::replace_with_or_abort(&mut lhs_last.0, |lhs_last| AstStr::join(lhs_last, rhs.first.0));
 		lhs.rest.append(&mut rhs.rest);
 	}
@@ -134,7 +137,15 @@ impl Format for Whitespace {
 		ctx: &mut rustidy_format::Context,
 		f: &mut impl FnMut(&mut AstStr, &mut rustidy_format::Context),
 	) {
-		self.0.get_mut().with_strings(ctx, f);
+		let mut inner = self.0.get_mut();
+		f(&mut inner.first.0, ctx);
+		for (comment, pure) in &mut inner.rest {
+			match comment {
+				Comment::Line(comment) => f(&mut comment.0, ctx),
+				Comment::Block(comment) => f(&mut comment.0, ctx),
+			}
+			f(&mut pure.0, ctx);
+		}
 	}
 
 	fn format(&mut self, _ctx: &mut rustidy_format::Context) {
@@ -147,6 +158,44 @@ impl Format for Whitespace {
 		visitor: &mut V,
 	) -> Option<V::Output> {
 		Some(visitor.visit(self, ctx))
+	}
+}
+
+#[derive(PartialEq, Eq, Debug)]
+#[derive(serde::Serialize, serde::Deserialize)]
+pub struct WhitespaceInner {
+	first: PureWhitespace,
+	rest:  Vec<(Comment, PureWhitespace)>,
+}
+
+impl Parse for WhitespaceInner {
+	type Error = WhitespaceInnerError;
+
+	fn parse_from(parser: &mut Parser) -> Result<Self, Self::Error> {
+		let first = parser.parse::<PureWhitespace>()?;
+		let mut rest = vec![];
+		while let Ok(comment) = parser.try_parse::<Comment>()? {
+			let pure = parser.parse::<PureWhitespace>()?;
+			rest.push((comment, pure));
+		}
+
+		Ok(Self { first, rest })
+	}
+}
+
+#[derive(Debug, derive_more::From, ParseError)]
+pub enum WhitespaceInnerError {
+	Pure(ParserError<PureWhitespace>),
+	Comment(ParserError<Comment>),
+}
+
+impl Print for WhitespaceInner {
+	fn print(&self, f: &mut rustidy_print::PrintFmt) {
+		self.first.print(f);
+		for (comment, pure) in &self.rest {
+			comment.print(f);
+			pure.print(f);
+		}
 	}
 }
 
@@ -247,7 +296,7 @@ impl FormatKind {
 /// Pure whitespace
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Print)]
 pub struct PureWhitespace(#[parse(update_with = Self::parse)] pub AstStr);
 
 impl PureWhitespace {
@@ -260,7 +309,7 @@ impl PureWhitespace {
 #[derive(PartialEq, Eq, Debug)]
 #[derive(strum::EnumIs)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Print)]
 pub enum Comment {
 	Line(LineComment),
 	Block(BlockComment),
@@ -269,7 +318,7 @@ pub enum Comment {
 /// Block Comment
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Print)]
 #[parse(error(name = NoComment, fmt = "Expected `/*` (except `/*!` or `/**`)"))]
 #[parse(error(name = MissingCommentEnd, fmt = "Expected `*/` after `/*`", fatal))]
 pub struct BlockComment(#[parse(try_update_with = Self::parse)] pub AstStr);
@@ -307,7 +356,7 @@ impl BlockComment {
 /// Line comment
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Print)]
 #[parse(error(name = NoComment, fmt = "Expected `//` (except `///` or `//!`)"))]
 #[parse(error(name = Newline, fmt = "Expected newline after `//`"))]
 pub struct LineComment(#[parse(try_update_with = Self::parse)] pub AstStr);
