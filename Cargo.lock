@@ -591,9 +591,11 @@ dependencies = [
 name = "rustidy-tests"
 version = "0.1.10"
 dependencies = [
+ "app-error",
  "assert-json-diff",
  "rustidy",
  "rustidy-ast",
+ "rustidy-ast-util",
  "rustidy-format",
  "rustidy-parse",
  "rustidy-print",
