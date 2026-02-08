@@ -181,7 +181,11 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 	let output = quote! {
 		#[automatically_derived]
 		impl #impl_generics rustidy_format::Format for #item_ident #ty_generics #impl_where_clause {
-			fn with_strings(&mut self, ctx: &mut rustidy_format::Context, f: &mut impl FnMut(&mut rustidy_util::AstStr, &mut rustidy_format::Context)) {
+			fn with_strings<WITH_STRINGS_WS_O>(
+				&mut self,
+				ctx: &mut rustidy_format::Context,
+				f: &mut impl FnMut(&mut rustidy_util::AstStr, &mut rustidy_format::Context) -> std::ops::ControlFlow<WITH_STRINGS_WS_O>,
+			) -> std::ops::ControlFlow<WITH_STRINGS_WS_O> {
 				#with_strings
 			}
 
@@ -259,7 +263,7 @@ fn derive_struct(fields: &darling::ast::Fields<FieldAttrs>) -> Impls<syn::Expr, 
 		.map(|(field_idx, field)| self::derive_struct_field(field_idx, field))
 		.collect::<Impls<Vec<_>, Vec<_>, ()>>();
 
-	let with_strings = parse_quote! {{ #( #with_strings; )* }};
+	let with_strings = parse_quote! {{ #( #with_strings; )* std::ops::ControlFlow::Continue(()) }};
 	let format = parse_quote! {{ #( #format; )* }};
 
 	let with_prefix_ws_fields = fields.iter().enumerate().map(|(field_idx, field)| -> syn::Expr {
@@ -294,7 +298,7 @@ fn derive_struct(fields: &darling::ast::Fields<FieldAttrs>) -> Impls<syn::Expr, 
 fn derive_struct_field(field_idx: usize, field: &FieldAttrs) -> Impls<syn::Expr, syn::Expr, ()> {
 	let field_ident = util::field_member_access(field_idx, field);
 
-	let with_strings = parse_quote! { rustidy_format::Format::with_strings(&mut self.#field_ident, ctx, f) };
+	let with_strings = parse_quote! { rustidy_format::Format::with_strings(&mut self.#field_ident, ctx, f)? };
 
 	let format = self::derive_format(
 		parse_quote! { &mut self.#field_ident },

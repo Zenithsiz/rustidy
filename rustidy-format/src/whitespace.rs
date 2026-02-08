@@ -3,6 +3,7 @@
 // Imports
 use {
 	crate::Format,
+	core::ops::ControlFlow,
 	itertools::Itertools,
 	rustidy_util::{
 		AstStr,
@@ -55,16 +56,22 @@ pub impl Whitespace {
 }
 
 impl Format for Whitespace {
-	fn with_strings(&mut self, ctx: &mut crate::Context, f: &mut impl FnMut(&mut AstStr, &mut crate::Context)) {
+	fn with_strings<O>(
+		&mut self,
+		ctx: &mut crate::Context,
+		f: &mut impl FnMut(&mut AstStr, &mut crate::Context) -> ControlFlow<O>,
+	) -> ControlFlow<O> {
 		let mut inner = self.0.get_mut();
-		f(&mut inner.first.0, ctx);
+		f(&mut inner.first.0, ctx)?;
 		for (comment, pure) in &mut inner.rest {
 			match comment {
-				Comment::Line(comment) => f(&mut comment.0, ctx),
-				Comment::Block(comment) => f(&mut comment.0, ctx),
+				Comment::Line(comment) => f(&mut comment.0, ctx)?,
+				Comment::Block(comment) => f(&mut comment.0, ctx)?,
 			}
-			f(&mut pure.0, ctx);
+			f(&mut pure.0, ctx)?;
 		}
+
+		ControlFlow::Continue(())
 	}
 
 	fn format(&mut self, _ctx: &mut crate::Context) {

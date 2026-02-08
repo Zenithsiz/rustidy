@@ -20,7 +20,7 @@ pub use {self::whitespace::WhitespaceFormat, rustidy_macros::Format};
 // Imports
 use {
 	crate as rustidy_format,
-	core::marker::PhantomData,
+	core::{marker::PhantomData, ops::ControlFlow},
 	rustidy_util::{ArenaData, ArenaIdx, AstStr, Config, Whitespace},
 	std::borrow::Cow,
 };
@@ -28,22 +28,29 @@ use {
 /// Formattable type
 pub trait Format {
 	/// Iterates over all strings in this type
-	// TODO: We should allow returning a `ControlFlow` here.
-	fn with_strings(&mut self, ctx: &mut Context, f: &mut impl FnMut(&mut AstStr, &mut Context));
+	fn with_strings<O>(
+		&mut self,
+		ctx: &mut Context,
+		f: &mut impl FnMut(&mut AstStr, &mut Context) -> ControlFlow<O>,
+	) -> ControlFlow<O>;
 
 	/// Returns the length of this type
 	fn len(&mut self, ctx: &mut Context) -> usize {
 		let mut len = 0;
-		self.with_strings(ctx, &mut |s, _ctx| len += AstStr::len(s));
+		self.with_strings::<!>(ctx, &mut |s, _ctx| {
+			len += AstStr::len(s);
+			ControlFlow::Continue(())
+		});
 		len
 	}
 
 	/// Returns if this type is blank
 	fn is_blank(&mut self, ctx: &mut Context) -> bool {
-		let mut is_blank = true;
-		self.with_strings(ctx, &mut |s, ctx| is_blank &= AstStr::is_blank(s, ctx.input));
-
-		is_blank
+		self.with_strings(ctx, &mut |s, ctx| match AstStr::is_blank(s, ctx.input) {
+			true => ControlFlow::Continue(()),
+			false => ControlFlow::Break(()),
+		})
+		.is_continue()
 	}
 
 	/// Returns the length of this type without the prefix whitespace
@@ -126,8 +133,12 @@ pub trait Format {
 }
 
 impl<T: Format> Format for &'_ mut T {
-	fn with_strings(&mut self, ctx: &mut Context, f: &mut impl FnMut(&mut AstStr, &mut Context)) {
-		(**self).with_strings(ctx, f);
+	fn with_strings<O>(
+		&mut self,
+		ctx: &mut Context,
+		f: &mut impl FnMut(&mut AstStr, &mut Context) -> ControlFlow<O>,
+	) -> ControlFlow<O> {
+		(**self).with_strings(ctx, f)
 	}
 
 	fn format(&mut self, ctx: &mut Context) {
@@ -144,8 +155,12 @@ impl<T: Format> Format for &'_ mut T {
 }
 
 impl<T: Format> Format for Box<T> {
-	fn with_strings(&mut self, ctx: &mut Context, f: &mut impl FnMut(&mut AstStr, &mut Context)) {
-		(**self).with_strings(ctx, f);
+	fn with_strings<O>(
+		&mut self,
+		ctx: &mut Context,
+		f: &mut impl FnMut(&mut AstStr, &mut Context) -> ControlFlow<O>,
+	) -> ControlFlow<O> {
+		(**self).with_strings(ctx, f)
 	}
 
 	fn format(&mut self, ctx: &mut Context) {
@@ -162,9 +177,14 @@ impl<T: Format> Format for Box<T> {
 }
 
 impl<T: Format> Format for Option<T> {
-	fn with_strings(&mut self, ctx: &mut Context, f: &mut impl FnMut(&mut AstStr, &mut Context)) {
-		if let Some(value) = self {
-			value.with_strings(ctx, f);
+	fn with_strings<O>(
+		&mut self,
+		ctx: &mut Context,
+		f: &mut impl FnMut(&mut AstStr, &mut Context) -> ControlFlow<O>,
+	) -> ControlFlow<O> {
+		match self {
+			Some(value) => value.with_strings(ctx, f),
+			None => ControlFlow::Continue(()),
 		}
 	}
 
@@ -187,10 +207,16 @@ impl<T: Format> Format for Option<T> {
 }
 
 impl<T: Format> Format for Vec<T> {
-	fn with_strings(&mut self, ctx: &mut Context, f: &mut impl FnMut(&mut AstStr, &mut Context)) {
+	fn with_strings<O>(
+		&mut self,
+		ctx: &mut Context,
+		f: &mut impl FnMut(&mut AstStr, &mut Context) -> ControlFlow<O>,
+	) -> ControlFlow<O> {
 		for value in self {
-			value.with_strings(ctx, f);
+			value.with_strings(ctx, f)?;
 		}
+
+		ControlFlow::Continue(())
 	}
 
 	fn format(&mut self, ctx: &mut Context) {
@@ -212,7 +238,11 @@ impl<T: Format> Format for Vec<T> {
 }
 
 impl Format for ! {
-	fn with_strings(&mut self, _ctx: &mut Context, _f: &mut impl FnMut(&mut AstStr, &mut Context)) {
+	fn with_strings<O>(
+		&mut self,
+		_ctx: &mut Context,
+		_f: &mut impl FnMut(&mut AstStr, &mut Context) -> ControlFlow<O>,
+	) -> ControlFlow<O> {
 		*self
 	}
 
@@ -230,7 +260,13 @@ impl Format for ! {
 }
 
 impl<T> Format for PhantomData<T> {
-	fn with_strings(&mut self, _ctx: &mut Context, _f: &mut impl FnMut(&mut AstStr, &mut Context)) {}
+	fn with_strings<O>(
+		&mut self,
+		_ctx: &mut Context,
+		_f: &mut impl FnMut(&mut AstStr, &mut Context) -> ControlFlow<O>,
+	) -> ControlFlow<O> {
+		ControlFlow::Continue(())
+	}
 
 	fn format(&mut self, _ctx: &mut Context) {}
 
@@ -244,7 +280,13 @@ impl<T> Format for PhantomData<T> {
 }
 
 impl Format for () {
-	fn with_strings(&mut self, _ctx: &mut Context, _f: &mut impl FnMut(&mut AstStr, &mut Context)) {}
+	fn with_strings<O>(
+		&mut self,
+		_ctx: &mut Context,
+		_f: &mut impl FnMut(&mut AstStr, &mut Context) -> ControlFlow<O>,
+	) -> ControlFlow<O> {
+		ControlFlow::Continue(())
+	}
 
 	fn format(&mut self, _ctx: &mut Context) {}
 
@@ -267,7 +309,11 @@ macro tuple_impl ($N:literal, $($T:ident),* $(,)?) {
 	#[automatically_derived]
 	#[expect(non_snake_case)]
 	impl< $($T: Format,)* > Format for ( $($T,)* ) {
-		fn with_strings(&mut self, ctx: &mut Context, f: &mut impl FnMut(&mut AstStr, &mut Context)) {
+		fn with_strings<O>(
+			&mut self,
+			ctx: &mut Context,
+			f: &mut impl FnMut(&mut AstStr, &mut Context) -> ControlFlow<O>,
+		) -> ControlFlow<O> {
 			let ( $($T,)* ) = self;
 			${concat( Tuple, $N )} { $( $T, )* }.with_strings(ctx, f)
 		}
@@ -293,8 +339,12 @@ tuple_impl! { 2, T0, T1 }
 tuple_impl! { 3, T0, T1, T2 }
 
 impl Format for AstStr {
-	fn with_strings(&mut self, ctx: &mut Context, f: &mut impl FnMut(&mut Self, &mut Context)) {
-		f(self, ctx);
+	fn with_strings<O>(
+		&mut self,
+		ctx: &mut Context,
+		f: &mut impl FnMut(&mut Self, &mut Context) -> ControlFlow<O>,
+	) -> ControlFlow<O> {
+		f(self, ctx)
 	}
 
 	fn format(&mut self, _ctx: &mut Context) {}
@@ -309,8 +359,12 @@ impl Format for AstStr {
 }
 
 impl<T: ArenaData<Data: Format>> Format for ArenaIdx<T> {
-	fn with_strings(&mut self, ctx: &mut Context, f: &mut impl FnMut(&mut AstStr, &mut Context)) {
-		self.get_mut().with_strings(ctx, f);
+	fn with_strings<O>(
+		&mut self,
+		ctx: &mut Context,
+		f: &mut impl FnMut(&mut AstStr, &mut Context) -> ControlFlow<O>,
+	) -> ControlFlow<O> {
+		self.get_mut().with_strings(ctx, f)
 	}
 
 	fn format(&mut self, ctx: &mut Context) {
