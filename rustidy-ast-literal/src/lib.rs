@@ -8,7 +8,8 @@
 	anonymous_lifetime_in_impl_trait,
 	decl_macro,
 	is_ascii_octdigit,
-	trim_prefix_suffix
+	trim_prefix_suffix,
+	string_remove_matches
 )]
 
 // Modules
