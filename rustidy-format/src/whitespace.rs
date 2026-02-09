@@ -125,8 +125,8 @@ impl FormatKind {
 	/// Returns the indentation string, with a newline *before*
 	// TODO: Should we be checking for multiple newlines?
 	fn indent_str_nl(ctx: &mut crate::Context, cur_str: &AstStr, after_newline: bool) -> AstStrRepr {
-		let min_newlines = ctx.config().empty_line_spacing.min;
-		let max_newlines = ctx.config().empty_line_spacing.max;
+		let min_newlines = ctx.config().min_empty_lines;
+		let max_newlines = ctx.config().max_empty_lines;
 		let (min_newlines, max_newlines) = match after_newline {
 			true => (min_newlines, max_newlines),
 			false => (min_newlines + 1, max_newlines + 1),

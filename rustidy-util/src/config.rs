@@ -71,22 +71,10 @@ macro decl_config($Config:ident; $($field:ident : $T:ty = $default:expr),* $(,)?
 decl_config! {
 	Config;
 
-	indent:             Arc<str>         = "\t".into(),
-	empty_line_spacing: EmptyLineSpacing = EmptyLineSpacing { min: 0, max: 2 },
-	max_use_tree_len:   usize            = 75,
-	array_expr_cols:    Option<usize>    = None,
-	max_array_expr_len: usize            = 80,
-}
-
-/// Empty line spacing.
-///
-/// Keeps at least `min` empty lines in between consecutive things,
-/// and at most `max` (inclusive).
-// TODO: Should we allow this being different for items and statements?
-// TODO: Remove this and just flatten it into the config
-#[derive(PartialEq, Eq, Clone, Debug)]
-#[derive(serde::Serialize, serde::Deserialize)]
-pub struct EmptyLineSpacing {
-	pub min: usize,
-	pub max: usize,
+	indent            : Arc<str>      = "\t".into(),
+	min_empty_lines   : usize         = 0,
+	max_empty_lines   : usize         = 2,
+	max_use_tree_len  : usize         = 75,
+	array_expr_cols   : Option<usize> = None,
+	max_array_expr_len: usize         = 80,
 }
