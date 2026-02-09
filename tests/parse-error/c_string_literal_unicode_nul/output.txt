@@ -1,12 +1,12 @@
-Unable to parse ast
-└─Error at tests/parse-error/c_string_literal_unicode_nul/input.rs:2:28:
-  	let _ = c"\u{0_0_0_0_0_0_}";
-  	                          ^
-  └─Expected a crate at 1:1
-    └─Expected an item at 1:1
-      └─Expected a function at 1:1
-        └─Expected a block expression at 1:7
-          └─Expected a statement at 1:9
-            └─Expected a let statement at 1:9
-              └─Expected a C string literal at 2:9
-                └─Nul escape isn't allowed
+Error at tests/parse-error/c_string_literal_unicode_nul/input.rs:2:28:
+    |
+  2 | let _ = c"\u{0_0_0_0_0_0_}";
+    |                           ^
+└─Expected a crate at 1:1
+  └─Expected an item at 1:1
+    └─Expected a function at 1:1
+      └─Expected a block expression at 1:7
+        └─Expected a statement at 1:9
+          └─Expected a let statement at 1:9
+            └─Expected a C string literal at 2:9
+              └─Nul escape isn't allowed

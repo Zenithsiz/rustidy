@@ -95,17 +95,12 @@ fn run() -> Result<(), AppError> {
 	tracing::debug!(?config, "Configuration");
 
 	match args.files.is_empty() {
-		true => {
-			self::format_file(&config, None, None).context("Unable to format stdin")?;
-		},
+		true => self::format_file(&config, None, None)?,
 		false => {
 			let mut files = args.files;
 			while let Some(file_path) = files.pop() {
 				let start = Instant::now();
-
-				self::format_file(&config, Some(&mut files), Some(&file_path))
-					.with_context(|| format!("Unable to format {file_path:?}"))?;
-
+				self::format_file(&config, Some(&mut files), Some(&file_path))?;
 				let duration = start.elapsed();
 
 				tracing::info!("{file_path:?}: {duration:.2?}");
@@ -127,8 +122,7 @@ fn format_file(
 		Some(file_path) => fs::read_to_string(file_path).context("Unable to read file")?,
 		None => io::read_to_string(io::stdin()).context("Unable to read stdin")?,
 	};
-	let mut crate_ =
-		rustidy::parse(&input, file_path.unwrap_or_else(|| Path::new("<stdin>"))).context("Unable to parse file")?;
+	let mut crate_ = rustidy::parse(&input, file_path.unwrap_or_else(|| Path::new("<stdin>")))?;
 
 	// Queue modules for formatting.
 	if let Some(file_path) = file_path &&

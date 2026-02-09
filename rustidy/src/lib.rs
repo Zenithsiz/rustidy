@@ -28,7 +28,7 @@
 
 // Imports
 use {
-	app_error::{AppError, Context, app_error},
+	app_error::{AppError, app_error},
 	rustidy_parse::{ParseError, Parser},
 	std::path::Path,
 };
@@ -54,15 +54,16 @@ pub fn parse(input: &str, file: &Path) -> Result<rustidy_ast::Crate, AppError> {
 			false => Err(app_error!("Unexpected tokens at the end of file")
 				.with_context(|| self::parser_error_ctx(file, &parser))),
 		})
-		.context("Unable to parse ast")
 }
 
 /// Creates context for a parser error.
 fn parser_error_ctx(file: &Path, parser: &Parser) -> String {
 	let line = parser.cur_line();
+	let line_indent = line.find(|ch: char| !ch.is_ascii_whitespace()).unwrap_or(line.len());
+
 	let loc = parser.cur_loc();
 
-	let ident = line[..loc.column]
+	let indent = line[..loc.column][line_indent..]
 		.chars()
 		.map(|ch| match ch.is_whitespace() {
 			true => ch,
@@ -70,5 +71,10 @@ fn parser_error_ctx(file: &Path, parser: &Parser) -> String {
 		})
 		.collect::<String>();
 
-	format!("Error at {}:{loc}:\n{line}\n{ident}^", file.display())
+	format!(
+		"Error at {}:{loc}:\n    |\n{:>3} | {}\n    | {indent}^",
+		file.display(),
+		loc.line + 1,
+		&line[line_indent..]
+	)
 }

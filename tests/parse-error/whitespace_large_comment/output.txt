@@ -1,6 +1,6 @@
-Unable to parse ast
-└─Error at tests/parse-error/whitespace_large_comment/input.rs:11:3:
-  */
-    ^
-  └─Expected a crate at 1:1
-    └─Expected `*/` after `/*`
+Error at tests/parse-error/whitespace_large_comment/input.rs:11:3:
+    |
+ 11 | */
+    |   ^
+└─Expected a crate at 1:1
+  └─Expected `*/` after `/*`

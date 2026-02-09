@@ -1,12 +1,12 @@
-Unable to parse ast
-└─Error at tests/parse-error/char_literal_outside_range/input.rs:2:13:
-  	let _ = '\xFF';
-  	           ^
-  └─Expected a crate at 1:1
-    └─Expected an item at 1:1
-      └─Expected a function at 1:1
-        └─Expected a block expression at 1:7
-          └─Expected a statement at 1:9
-            └─Expected a let statement at 1:9
-              └─Expected a character literal at 2:9
-                └─Expected octal digit
+Error at tests/parse-error/char_literal_outside_range/input.rs:2:13:
+    |
+  2 | let _ = '\xFF';
+    |            ^
+└─Expected a crate at 1:1
+  └─Expected an item at 1:1
+    └─Expected a function at 1:1
+      └─Expected a block expression at 1:7
+        └─Expected a statement at 1:9
+          └─Expected a let statement at 1:9
+            └─Expected a character literal at 2:9
+              └─Expected octal digit

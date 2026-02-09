@@ -1,7 +1,7 @@
-Unable to parse ast
-└─Error at tests/parse-error/inner_attr_no_open_bracket/input.rs:2:3:
-  #!
-    ^
-  └─Expected a crate at 1:1
-    └─Expected an inner attribute at 1:1
-      └─Expected `[`
+Error at tests/parse-error/inner_attr_no_open_bracket/input.rs:2:3:
+    |
+  2 | #!
+    |   ^
+└─Expected a crate at 1:1
+  └─Expected an inner attribute at 1:1
+    └─Expected `[`

@@ -1,8 +1,8 @@
-Unable to parse ast
-└─Error at tests/parse-error/match_missing_comma_after_without_block/input.rs:2:8:
-  	a => b
-  	      ^
-  └─Expected a crate at 1:1
-    └─Expected an item at 1:1
-      └─Expected a match expression at 1:14
-        └─Expected `}`
+Error at tests/parse-error/match_missing_comma_after_without_block/input.rs:2:8:
+    |
+  2 | a => b
+    |       ^
+└─Expected a crate at 1:1
+  └─Expected an item at 1:1
+    └─Expected a match expression at 1:14
+      └─Expected `}`

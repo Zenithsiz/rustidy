@@ -1,110 +1,110 @@
-Unable to parse ast
-└─Error at tests/parse-error/lifetime_whitespace/input.rs:1:11:
-  type A = &'/**/a A;
-            ^
-  └─Expected a crate at 1:1
-    └─Expected an item at 1:1
-      └─Expected a type at 1:9
-        └─Multiple errors:
-          ├─Expected `impl`
-          ├─Expected a lifetime token at 1:9
-          │ └─Expected `'`
-          ├─Expected a lifetime token at 1:9
-          │ └─Expected `'`
-          ├─Expected `(`
-          ├─Expected `super`
-          ├─Expected `self`
-          ├─Expected `Self`
-          ├─Expected `crate`
-          ├─Expected `$crate`
-          ├─Expected an identifier at 1:9
-          │ └─Multiple errors:
-          │   ├─Expected `r#`
-          │   └─Expected `XID_START` or `_`
-          ├─Expected `use`
-          ├─Expected a macro invocation at 1:9
-          │ └─Expected a simple path at 1:9
-          │   └─Multiple errors:
-          │     ├─Expected `super`
-          │     ├─Expected `self`
-          │     ├─Expected `crate`
-          │     ├─Expected `$crate`
-          │     └─Expected an identifier at 1:9
-          │       └─Multiple errors:
-          │         ├─Expected `r#`
-          │         └─Expected `XID_START` or `_`
-          ├─Expected `super`
-          ├─Expected `self`
-          ├─Expected `Self`
-          ├─Expected `crate`
-          ├─Expected `$crate`
-          ├─Expected an identifier at 1:9
-          │ └─Multiple errors:
-          │   ├─Expected `r#`
-          │   └─Expected `XID_START` or `_`
-          ├─Expected `(`
-          ├─Expected `impl`
-          ├─Expected `(`
-          ├─Expected `super`
-          ├─Expected `self`
-          ├─Expected `Self`
-          ├─Expected `crate`
-          ├─Expected `$crate`
-          ├─Expected an identifier at 1:9
-          │ └─Multiple errors:
-          │   ├─Expected `r#`
-          │   └─Expected `XID_START` or `_`
-          ├─Expected a tuple type at 1:9
-          │ └─Expected `(`
-          ├─Expected `!`
-          ├─Expected `*`
-          ├─Expected a reference type at 1:9
-          │ └─Multiple errors:
-          │   ├─Expected a macro invocation at 1:11
-          │   │ └─Expected a simple path at 1:11
-          │   │   └─Multiple errors:
-          │   │     ├─Expected `super`
-          │   │     ├─Expected `self`
-          │   │     ├─Expected `crate`
-          │   │     ├─Expected `$crate`
-          │   │     └─Expected an identifier at 1:11
-          │   │       └─Multiple errors:
-          │   │         ├─Expected `r#`
-          │   │         └─Expected `XID_START` or `_`
-          │   ├─Expected `super`
-          │   ├─Expected `self`
-          │   ├─Expected `Self`
-          │   ├─Expected `crate`
-          │   ├─Expected `$crate`
-          │   ├─Expected an identifier at 1:11
-          │   │ └─Multiple errors:
-          │   │   ├─Expected `r#`
-          │   │   └─Expected `XID_START` or `_`
-          │   ├─Expected `(`
-          │   ├─Expected `impl`
-          │   ├─Expected `(`
-          │   ├─Expected `super`
-          │   ├─Expected `self`
-          │   ├─Expected `Self`
-          │   ├─Expected `crate`
-          │   ├─Expected `$crate`
-          │   ├─Expected an identifier at 1:11
-          │   │ └─Multiple errors:
-          │   │   ├─Expected `r#`
-          │   │   └─Expected `XID_START` or `_`
-          │   ├─Expected a tuple type at 1:11
-          │   │ └─Expected `(`
-          │   ├─Expected `!`
-          │   ├─Expected `*`
-          │   ├─Expected a reference type at 1:11
-          │   │ └─Expected `&`
-          │   ├─Expected `[`
-          │   ├─Expected `[`
-          │   ├─Expected `_`
-          │   ├─Expected `<`
-          │   └─Expected `fn`
-          ├─Expected `[`
-          ├─Expected `[`
-          ├─Expected `_`
-          ├─Expected `<`
-          └─Expected `fn`
+Error at tests/parse-error/lifetime_whitespace/input.rs:1:11:
+    |
+  1 | type A = &'/**/a A;
+    |           ^
+└─Expected a crate at 1:1
+  └─Expected an item at 1:1
+    └─Expected a type at 1:9
+      └─Multiple errors:
+        ├─Expected `impl`
+        ├─Expected a lifetime token at 1:9
+        │ └─Expected `'`
+        ├─Expected a lifetime token at 1:9
+        │ └─Expected `'`
+        ├─Expected `(`
+        ├─Expected `super`
+        ├─Expected `self`
+        ├─Expected `Self`
+        ├─Expected `crate`
+        ├─Expected `$crate`
+        ├─Expected an identifier at 1:9
+        │ └─Multiple errors:
+        │   ├─Expected `r#`
+        │   └─Expected `XID_START` or `_`
+        ├─Expected `use`
+        ├─Expected a macro invocation at 1:9
+        │ └─Expected a simple path at 1:9
+        │   └─Multiple errors:
+        │     ├─Expected `super`
+        │     ├─Expected `self`
+        │     ├─Expected `crate`
+        │     ├─Expected `$crate`
+        │     └─Expected an identifier at 1:9
+        │       └─Multiple errors:
+        │         ├─Expected `r#`
+        │         └─Expected `XID_START` or `_`
+        ├─Expected `super`
+        ├─Expected `self`
+        ├─Expected `Self`
+        ├─Expected `crate`
+        ├─Expected `$crate`
+        ├─Expected an identifier at 1:9
+        │ └─Multiple errors:
+        │   ├─Expected `r#`
+        │   └─Expected `XID_START` or `_`
+        ├─Expected `(`
+        ├─Expected `impl`
+        ├─Expected `(`
+        ├─Expected `super`
+        ├─Expected `self`
+        ├─Expected `Self`
+        ├─Expected `crate`
+        ├─Expected `$crate`
+        ├─Expected an identifier at 1:9
+        │ └─Multiple errors:
+        │   ├─Expected `r#`
+        │   └─Expected `XID_START` or `_`
+        ├─Expected a tuple type at 1:9
+        │ └─Expected `(`
+        ├─Expected `!`
+        ├─Expected `*`
+        ├─Expected a reference type at 1:9
+        │ └─Multiple errors:
+        │   ├─Expected a macro invocation at 1:11
+        │   │ └─Expected a simple path at 1:11
+        │   │   └─Multiple errors:
+        │   │     ├─Expected `super`
+        │   │     ├─Expected `self`
+        │   │     ├─Expected `crate`
+        │   │     ├─Expected `$crate`
+        │   │     └─Expected an identifier at 1:11
+        │   │       └─Multiple errors:
+        │   │         ├─Expected `r#`
+        │   │         └─Expected `XID_START` or `_`
+        │   ├─Expected `super`
+        │   ├─Expected `self`
+        │   ├─Expected `Self`
+        │   ├─Expected `crate`
+        │   ├─Expected `$crate`
+        │   ├─Expected an identifier at 1:11
+        │   │ └─Multiple errors:
+        │   │   ├─Expected `r#`
+        │   │   └─Expected `XID_START` or `_`
+        │   ├─Expected `(`
+        │   ├─Expected `impl`
+        │   ├─Expected `(`
+        │   ├─Expected `super`
+        │   ├─Expected `self`
+        │   ├─Expected `Self`
+        │   ├─Expected `crate`
+        │   ├─Expected `$crate`
+        │   ├─Expected an identifier at 1:11
+        │   │ └─Multiple errors:
+        │   │   ├─Expected `r#`
+        │   │   └─Expected `XID_START` or `_`
+        │   ├─Expected a tuple type at 1:11
+        │   │ └─Expected `(`
+        │   ├─Expected `!`
+        │   ├─Expected `*`
+        │   ├─Expected a reference type at 1:11
+        │   │ └─Expected `&`
+        │   ├─Expected `[`
+        │   ├─Expected `[`
+        │   ├─Expected `_`
+        │   ├─Expected `<`
+        │   └─Expected `fn`
+        ├─Expected `[`
+        ├─Expected `[`
+        ├─Expected `_`
+        ├─Expected `<`
+        └─Expected `fn`
