@@ -10,7 +10,7 @@ use {
 	},
 	rustidy_ast_util::NotFollows,
 	rustidy_format::Format,
-	rustidy_parse::{Parse, ParseError, Parser, ParserError},
+	rustidy_parse::{Parse, ParseError, Parser, ParserError, ParserTag},
 	rustidy_print::Print,
 	rustidy_util::{Arena, ArenaData, ArenaIdx},
 };
@@ -20,7 +20,7 @@ use {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 #[parse(name = "a block expression")]
-#[parse(skip_if_tag = "skip:BlockExpression")]
+#[parse(skip_if_tag = SkipBlockExpression)]
 #[expect(clippy::use_self, reason = "`Parse` derive macro doesn't support `Self`")]
 pub struct BlockExpression(pub ArenaIdx<BlockExpression>);
 
@@ -71,7 +71,7 @@ impl Parse for Statements {
 							ExpressionStatementWithoutBlock { expr, semi },
 						)));
 					},
-					None => match parser.with_tag("skip:ExpressionWithoutBlock", Parser::peek::<Statement>)? {
+					None => match parser.with_tag(ParserTag::SkipExpressionWithoutBlock, Parser::peek::<Statement>)? {
 						// Note: On macros, we want to ensure we parse a statement macro instead of expression macro,
 						//       since braced statement macros don't need a semi-colon, while expression ones do.
 						//       Since both have the same length, we prefer statements to expressions if they have
@@ -86,10 +86,11 @@ impl Parse for Statements {
 						},
 					},
 				},
-				Err(_) => match parser.with_tag("skip:ExpressionWithoutBlock", Parser::try_parse::<Statement>)? {
-					Ok(stmt) => stmts.push(stmt),
-					Err(_) => break None,
-				},
+				Err(_) =>
+					match parser.with_tag(ParserTag::SkipExpressionWithoutBlock, Parser::try_parse::<Statement>)? {
+						Ok(stmt) => stmts.push(stmt),
+						Err(_) => break None,
+					},
 			}
 		};
 

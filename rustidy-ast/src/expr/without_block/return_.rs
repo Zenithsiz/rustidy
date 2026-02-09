@@ -15,7 +15,7 @@ use {
 pub struct ReturnExpression {
 	pub return_: token::Return,
 	// TODO: This needs to be recursive...
-	#[parse(skip_if_tag = "skip:OptionalTrailingBlockExpression")]
+	#[parse(skip_if_tag = SkipOptionalTrailingBlockExpression)]
 	#[format(before_with = Format::prefix_ws_set_single)]
 	pub expr:    Option<Expression>,
 }

@@ -33,7 +33,7 @@ pub struct MatchExpression {
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
-pub struct Scrutinee(#[parse(with_tag = "skip:StructExpression")] Expression);
+pub struct Scrutinee(#[parse(with_tag = SkipStructExpression)] Expression);
 
 /// `MatchArms`
 #[derive(PartialEq, Eq, Debug)]

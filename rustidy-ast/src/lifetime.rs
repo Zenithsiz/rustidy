@@ -5,7 +5,7 @@ use {
 	super::token,
 	rustidy_ast_util::{IdentifierOrKeyword, NonKeywordIdentifier},
 	rustidy_format::Format,
-	rustidy_parse::{Parse, Parser},
+	rustidy_parse::{Parse, Parser, ParserTag},
 	rustidy_print::Print,
 };
 
@@ -43,7 +43,7 @@ pub enum LifetimeOrLabel {
 #[parse(and_try_with = Self::check_suffix_quote)]
 pub struct QuoteNotQuote<T> {
 	pub quote: token::Quote,
-	#[parse(with_tag = "skip:Whitespace")]
+	#[parse(with_tag = SkipWhitespace)]
 	pub value: T,
 }
 
@@ -52,7 +52,7 @@ impl<T: Parse> QuoteNotQuote<T> {
 		// If we parse a `'` right after the value, then this is actually a character literal
 		// and so we reject it.
 		if parser
-			.with_tag("skip:Whitespace", Parser::try_parse::<token::Quote>)
+			.with_tag(ParserTag::SkipWhitespace, Parser::try_parse::<token::Quote>)
 			.map_err(QuoteNotQuoteError::Quote)?
 			.is_ok()
 		{

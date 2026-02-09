@@ -263,11 +263,9 @@ fn parse<R: ParsableRecursive<R>>(parser: &mut Parser) -> Result<RecursiveWrappe
 							//       be parsed.
 							//       Despite that, this is a very inelegant way to perform this check, and we
 							//       should instead just make optional suffixes / base expressions aware of the
-							//       `skip:OptionalTrailingBlockExpression` tag and skip themselves or something
+							//       `SkipOptionalTrailingBlockExpression` tag and skip themselves or something
 							//       similar that doesn't involve us doing anything.
-							if tags
-								.iter()
-								.any(|tag| tag.name == "skip:OptionalTrailingBlockExpression") &&
+							if tags.contains(&ParserTag::SkipOptionalTrailingBlockExpression) &&
 								peek::<ParseBracesOpen>(parser, &tags)
 									.map_err(RecursiveWrapperError::BracesOpen)?
 									.is_ok()
@@ -347,7 +345,7 @@ impl Parse for ParseBracesOpen {
 	type Error = ();
 
 	fn parse_from(parser: &mut Parser) -> Result<Self, Self::Error> {
-		if parser.has_tag("skip:Delimiters") {
+		if parser.has_tag(ParserTag::SkipDelimiters) {
 			return Err(());
 		}
 

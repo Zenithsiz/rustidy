@@ -17,7 +17,7 @@ pub struct BreakExpression {
 	#[format(before_with = Format::prefix_ws_set_single)]
 	pub label:     Option<LifetimeOrLabel>,
 	// TODO: Do we need to be parse-recursive here?
-	#[parse(skip_if_tag = "skip:OptionalTrailingBlockExpression")]
+	#[parse(skip_if_tag = SkipOptionalTrailingBlockExpression)]
 	#[format(before_with = Format::prefix_ws_set_single)]
 	pub expr:      Option<Expression>,
 }

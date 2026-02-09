@@ -63,7 +63,7 @@ use {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, ParseRecursive, Format, Print)]
 #[parse(from = RecursiveWrapper::<ExpressionWithoutBlock, ExpressionInner>)]
-#[parse(skip_if_tag = "skip:ExpressionWithoutBlock")]
+#[parse(skip_if_tag = SkipExpressionWithoutBlock)]
 #[parse_recursive(root = ExpressionInner)]
 #[parse_recursive(transparent)]
 #[parse_recursive(into_root = ExpressionInner)]

@@ -12,7 +12,7 @@ use {
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
-pub struct Suffix(#[parse(with_tag = "skip:Whitespace")] IdentifierOrKeyword);
+pub struct Suffix(#[parse(with_tag = SkipWhitespace)] IdentifierOrKeyword);
 
 /// `SUFFIX_NO_E`
 #[derive(PartialEq, Eq, Debug)]

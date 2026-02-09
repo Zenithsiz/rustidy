@@ -2,7 +2,7 @@
 
 // Imports
 use {
-	crate::{self as rustidy_parse, Parse, ParseError, Parser, ParserError},
+	crate::{self as rustidy_parse, Parse, ParseError, Parser, ParserError, ParserTag},
 	rustidy_util::{
 		ArenaIdx,
 		whitespace::{BlockComment, Comment, LineComment, PureWhitespace, Whitespace, WhitespaceInner},
@@ -13,7 +13,7 @@ impl Parse for Whitespace {
 	type Error = WhitespaceError;
 
 	fn parse_from(parser: &mut Parser) -> Result<Self, Self::Error> {
-		if parser.has_tag("skip:Whitespace") {
+		if parser.has_tag(ParserTag::SkipWhitespace) {
 			let s = parser.update_with(|_| ());
 			let inner = WhitespaceInner {
 				first: PureWhitespace(s),

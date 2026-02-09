@@ -94,8 +94,8 @@ pub enum MacroMatcher {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub enum MacroMatch {
-	#[parse(with_tag = "skip:`$`")]
-	#[parse(with_tag = "skip:Delimiters")]
+	#[parse(with_tag = SkipTokenDollar)]
+	#[parse(with_tag = SkipDelimiters)]
 	Token(Token),
 
 	Matcher(MacroMatcher),
@@ -125,7 +125,7 @@ pub struct MacroMatchDollarIdent {
 #[derive(Parse, Format, Print)]
 pub enum MacroMatchDollarIdentInner {
 	Raw(RawIdentifier),
-	#[parse(with_tag = "skip:`crate`")]
+	#[parse(with_tag = SkipTokenCrate)]
 	IdentOrKw(IdentifierOrKeyword),
 	Underscore(token::Underscore),
 }
@@ -168,10 +168,10 @@ pub struct MacroMatchDollarRep {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct MacroRepSep(
-	#[parse(with_tag = "skip:Delimiters")]
-	#[parse(with_tag = "skip:`*`")]
-	#[parse(with_tag = "skip:`+`")]
-	#[parse(with_tag = "skip:`?`")]
+	#[parse(with_tag = SkipDelimiters)]
+	#[parse(with_tag = SkipTokenStar)]
+	#[parse(with_tag = SkipTokenPlus)]
+	#[parse(with_tag = SkipTokenQuestion)]
 	Token,
 );
 

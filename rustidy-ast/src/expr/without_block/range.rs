@@ -42,7 +42,7 @@ pub enum RangeExpression {
 #[parse_recursive(root = ExpressionInner)]
 #[parse_recursive(into_root = RangeExpression)]
 #[parse_recursive(kind = "fully")]
-#[parse_recursive(skip_if_tag = "skip:RangeExpr")]
+#[parse_recursive(skip_if_tag = SkipRangeExpr)]
 pub struct RangeExpr {
 	pub lhs:     Expression,
 	#[format(before_with = Format::prefix_ws_remove)]
@@ -58,7 +58,7 @@ pub struct RangeExpr {
 #[parse_recursive(root = ExpressionInner)]
 #[parse_recursive(into_root = RangeExpression)]
 #[parse_recursive(kind = "left")]
-#[parse_recursive(skip_if_tag = "skip:RangeFromExpr")]
+#[parse_recursive(skip_if_tag = SkipRangeFromExpr)]
 pub struct RangeFromExpr {
 	pub lhs:     Expression,
 	#[format(before_with = Format::prefix_ws_remove)]
@@ -92,7 +92,7 @@ pub struct RangeFullExpr(token::DotDot);
 #[parse_recursive(root = ExpressionInner)]
 #[parse_recursive(into_root = RangeExpression)]
 #[parse_recursive(kind = "fully")]
-#[parse_recursive(skip_if_tag = "skip:RangeInclusiveExpr")]
+#[parse_recursive(skip_if_tag = SkipRangeInclusiveExpr)]
 pub struct RangeInclusiveExpr {
 	pub lhs:        Expression,
 	#[format(before_with = Format::prefix_ws_remove)]

@@ -122,8 +122,8 @@ pub struct Conditions(Longest<LetChain, ConditionsExpr>);
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 struct ConditionsExpr(
-	#[parse(with_tag = "skip:StructExpression")]
-	#[parse(with_tag = "skip:OptionalTrailingBlockExpression")]
+	#[parse(with_tag = SkipStructExpression)]
+	#[parse(with_tag = SkipOptionalTrailingBlockExpression)]
 	Expression,
 );
 
@@ -142,14 +142,14 @@ pub struct LetChain(
 #[derive(Parse, Format, Print)]
 pub enum LetChainCondition {
 	Let(WithOuterAttributes<LetChainConditionLet>),
-	#[parse(with_tag = "skip:StructExpression")]
-	#[parse(with_tag = "skip:LazyBooleanExpression")]
-	#[parse(with_tag = "skip:RangeExpr")]
-	#[parse(with_tag = "skip:RangeFromExpr")]
-	#[parse(with_tag = "skip:RangeInclusiveExpr")]
-	#[parse(with_tag = "skip:AssignmentExpression")]
-	#[parse(with_tag = "skip:CompoundAssignmentExpression")]
-	#[parse(with_tag = "skip:OptionalTrailingBlockExpression")]
+	#[parse(with_tag = SkipStructExpression)]
+	#[parse(with_tag = SkipLazyBooleanExpression)]
+	#[parse(with_tag = SkipRangeExpr)]
+	#[parse(with_tag = SkipRangeFromExpr)]
+	#[parse(with_tag = SkipRangeInclusiveExpr)]
+	#[parse(with_tag = SkipAssignmentExpression)]
+	#[parse(with_tag = SkipCompoundAssignmentExpression)]
+	#[parse(with_tag = SkipOptionalTrailingBlockExpression)]
 	Expr(Expression),
 }
 
@@ -163,14 +163,14 @@ pub struct LetChainConditionLet {
 	pub pat:       Pattern,
 	#[format(before_with = Format::prefix_ws_set_single)]
 	pub eq:        token::Eq,
-	#[parse(with_tag = "skip:StructExpression")]
-	#[parse(with_tag = "skip:LazyBooleanExpression")]
-	#[parse(with_tag = "skip:RangeExpr")]
-	#[parse(with_tag = "skip:RangeFromExpr")]
-	#[parse(with_tag = "skip:RangeInclusiveExpr")]
-	#[parse(with_tag = "skip:AssignmentExpression")]
-	#[parse(with_tag = "skip:CompoundAssignmentExpression")]
-	#[parse(with_tag = "skip:OptionalTrailingBlockExpression")]
+	#[parse(with_tag = SkipStructExpression)]
+	#[parse(with_tag = SkipLazyBooleanExpression)]
+	#[parse(with_tag = SkipRangeExpr)]
+	#[parse(with_tag = SkipRangeFromExpr)]
+	#[parse(with_tag = SkipRangeInclusiveExpr)]
+	#[parse(with_tag = SkipAssignmentExpression)]
+	#[parse(with_tag = SkipCompoundAssignmentExpression)]
+	#[parse(with_tag = SkipOptionalTrailingBlockExpression)]
 	#[format(before_with = Format::prefix_ws_set_single)]
 	pub scrutinee: Box<Scrutinee>,
 }
@@ -215,8 +215,8 @@ pub struct IteratorLoopExpression {
 	pub pat:  Pattern,
 	#[format(before_with = Format::prefix_ws_set_single)]
 	pub in_:  token::In,
-	#[parse(with_tag = "skip:StructExpression")]
-	#[parse(with_tag = "skip:OptionalTrailingBlockExpression")]
+	#[parse(with_tag = SkipStructExpression)]
+	#[parse(with_tag = SkipOptionalTrailingBlockExpression)]
 	#[format(before_with = Format::prefix_ws_set_single)]
 	pub expr: Expression,
 	#[format(before_with = Format::prefix_ws_set_single)]

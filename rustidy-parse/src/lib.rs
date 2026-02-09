@@ -16,6 +16,7 @@
 // Modules
 mod error;
 mod recursive;
+mod tag;
 mod whitespace;
 
 // Exports
@@ -30,6 +31,7 @@ pub use {
 			RecursiveWrapper,
 			TryFromRecursiveRoot,
 		},
+		tag::ParserTag,
 	},
 	rustidy_macros::Parse,
 };
@@ -458,8 +460,9 @@ impl<'input> Parser<'input> {
 
 	/// Returns if this parser has a tag
 	#[must_use]
-	pub fn has_tag(&self, tag_name: &'static str) -> bool {
-		self.tags().any(|tag| tag.name == tag_name)
+	pub fn has_tag(&self, tag: impl Into<ParserTag>) -> bool {
+		let tag = tag.into();
+		self.tags().any(|cur_tag| cur_tag == tag)
 	}
 
 	/// Calls `f` with tags `tags` added to this parser
@@ -509,18 +512,6 @@ impl PeekState {
 	#[must_use]
 	pub fn ahead_of_or_equal(&self, other: &Self) -> bool {
 		self.cur_pos >= other.cur_pos
-	}
-}
-
-/// Parser tag
-#[derive(PartialEq, Eq, Clone, Copy, Debug)]
-pub struct ParserTag {
-	pub name: &'static str,
-}
-
-impl From<&'static str> for ParserTag {
-	fn from(name: &'static str) -> Self {
-		Self { name }
 	}
 }
 

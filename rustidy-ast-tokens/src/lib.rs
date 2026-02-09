@@ -24,7 +24,7 @@ pub macro decl_tokens(
 
 	$(
 		$TokenName:ident = $Token:literal
-		$( skip_if_tag $skip_if_tag:literal )?
+		$( skip_if_tag $skip_if_tag:ident )?
 		$( must_not_follow $must_not_follow:literal )*
 		;
 	)*
@@ -105,7 +105,7 @@ decl_tokens! {
 	Super = "super";
 	SelfLower = "self";
 	SelfUpper = "Self";
-	Crate = "crate" skip_if_tag "skip:`crate`";
+	Crate = "crate" skip_if_tag SkipTokenCrate;
 	DollarCrate = "$crate";
 
 	As = "as";
@@ -185,9 +185,9 @@ decl_tokens! {
 	OrOr = "||";
 	Not = '!' must_not_follow '=';
 	Tilde = '~';
-	Plus = '+' skip_if_tag "skip:`+`" must_not_follow '=';
+	Plus = '+' skip_if_tag SkipTokenPlus must_not_follow '=';
 	Minus = '-' must_not_follow '=' must_not_follow '>';
-	Star = '*' skip_if_tag "skip:`*`" must_not_follow '=';
+	Star = '*' skip_if_tag SkipTokenStar must_not_follow '=';
 	Slash = '/' must_not_follow '=';
 	Percent = '%' must_not_follow '=';
 	Caret = '^' must_not_follow '=';
@@ -219,17 +219,17 @@ decl_tokens! {
 	LArrow = "<-";
 	FatArrow = "=>";
 	Pound = '#';
-	Dollar = '$' skip_if_tag "skip:`$`";
-	Question = '?' skip_if_tag "skip:`?`";
+	Dollar = '$' skip_if_tag SkipTokenDollar;
+	Question = '?' skip_if_tag SkipTokenQuestion;
 	Underscore = '_';
 	Quote = '\'';
 	DoubleQuote = '"';
 
-	ParenOpen = '(' skip_if_tag "skip:Delimiters";
-	ParenClose = ')' skip_if_tag "skip:Delimiters";
-	BracketOpen = '[' skip_if_tag "skip:Delimiters";
-	BracketClose = ']' skip_if_tag "skip:Delimiters";
-	BracesOpen = '{' skip_if_tag "skip:Delimiters";
-	BracesClose = '}' skip_if_tag "skip:Delimiters";
+	ParenOpen = '(' skip_if_tag SkipDelimiters;
+	ParenClose = ')' skip_if_tag SkipDelimiters;
+	BracketOpen = '[' skip_if_tag SkipDelimiters;
+	BracketClose = ']' skip_if_tag SkipDelimiters;
+	BracesOpen = '{' skip_if_tag SkipDelimiters;
+	BracesClose = '}' skip_if_tag SkipDelimiters;
 
 }

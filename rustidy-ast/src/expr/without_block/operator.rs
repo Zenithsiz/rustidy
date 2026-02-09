@@ -191,7 +191,7 @@ pub enum ComparisonExpressionOp {
 #[parse_recursive(root = ExpressionInner)]
 #[parse_recursive(into_root = OperatorExpression)]
 #[parse_recursive(kind = "fully")]
-#[parse_recursive(skip_if_tag = "skip:LazyBooleanExpression")]
+#[parse_recursive(skip_if_tag = SkipLazyBooleanExpression)]
 pub struct LazyBooleanExpression {
 	pub lhs: Expression,
 	#[format(before_with = Format::prefix_ws_set_single)]
@@ -230,7 +230,7 @@ pub struct TypeCastExpression {
 #[parse_recursive(root = ExpressionInner)]
 #[parse_recursive(into_root = OperatorExpression)]
 #[parse_recursive(kind = "fully")]
-#[parse_recursive(skip_if_tag = "skip:AssignmentExpression")]
+#[parse_recursive(skip_if_tag = SkipAssignmentExpression)]
 pub struct AssignmentExpression {
 	pub lhs: Expression,
 	#[format(before_with = Format::prefix_ws_set_single)]
@@ -246,7 +246,7 @@ pub struct AssignmentExpression {
 #[parse_recursive(root = ExpressionInner)]
 #[parse_recursive(into_root = OperatorExpression)]
 #[parse_recursive(kind = "fully")]
-#[parse_recursive(skip_if_tag = "skip:CompoundAssignmentExpression")]
+#[parse_recursive(skip_if_tag = SkipCompoundAssignmentExpression)]
 pub struct CompoundAssignmentExpression {
 	pub lhs: Expression,
 	#[format(before_with = Format::prefix_ws_set_single)]

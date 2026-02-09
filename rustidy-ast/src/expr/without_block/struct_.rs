@@ -20,7 +20,7 @@ use {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 #[parse(name = "a struct expression")]
-#[parse(skip_if_tag = "skip:StructExpression")]
+#[parse(skip_if_tag = SkipStructExpression)]
 pub struct StructExpression {
 	pub path:  PathInExpression,
 	#[format(before_with = Format::prefix_ws_set_single)]
