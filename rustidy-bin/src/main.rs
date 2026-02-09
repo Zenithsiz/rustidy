@@ -92,6 +92,7 @@ fn run() -> Result<(), AppError> {
 		},
 		None => Config::default(),
 	};
+	tracing::debug!(?config, "Configuration");
 
 	match args.files.is_empty() {
 		true => {
