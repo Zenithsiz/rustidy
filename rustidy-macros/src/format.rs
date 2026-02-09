@@ -304,7 +304,7 @@ fn derive_struct_field(field_idx: usize, field: &FieldAttrs) -> Impls<syn::Expr,
 
 		// If this field wasn't empty, then we no longer exclude the prefix ws, since
 		// we already excluded it here.
-		if !rustidy_format::Format::is_empty(&mut self.#field_ident, ctx, false) {
+		if exclude_prefix_ws && !rustidy_format::Format::is_empty(&mut self.#field_ident, ctx, false) {
 			exclude_prefix_ws = false;
 		}
 	}};
