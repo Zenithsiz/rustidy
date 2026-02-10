@@ -1,7 +1,5 @@
 //! `derive(ParseError)`
 
-// TODO: Make this derive `std::{error::Error, fmt::Display}` instead of relying on thiserror.
-
 // Imports
 use {
 	crate::util,
