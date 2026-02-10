@@ -11,16 +11,17 @@
 )]
 
 // Modules
+mod tag;
 #[doc(hidden)]
 pub mod whitespace;
 
 // Exports
-pub use {self::whitespace::WhitespaceFormat, rustidy_macros::Format};
+pub use {self::whitespace::WhitespaceFormat, rustidy_macros::Format, tag::FormatTag};
 
 // Imports
 use {
 	crate as rustidy_format,
-	core::{marker::PhantomData, ops::ControlFlow},
+	core::{marker::PhantomData, mem, ops::ControlFlow},
 	rustidy_util::{ArenaData, ArenaIdx, AstStr, Config, Whitespace},
 	std::borrow::Cow,
 };
@@ -415,6 +416,7 @@ pub struct Context<'a, 'input> {
 	input:        &'input str,
 	config:       Cow<'a, Config>,
 	indent_depth: usize,
+	tags:         Cow<'a, [FormatTag]>,
 }
 
 impl<'a, 'input> Context<'a, 'input> {
@@ -425,6 +427,7 @@ impl<'a, 'input> Context<'a, 'input> {
 			input,
 			config: Cow::Borrowed(config),
 			indent_depth: 0,
+			tags: Cow::Owned(vec![]),
 		}
 	}
 
@@ -512,7 +515,51 @@ impl<'a, 'input> Context<'a, 'input> {
 			input:        self.input,
 			config:       Cow::Borrowed(&self.config),
 			indent_depth: self.indent_depth,
+			tags:         Cow::Borrowed(&self.tags),
 		}
+	}
+
+	/// Returns all tags
+	pub fn tags(&self) -> impl Iterator<Item = FormatTag> {
+		self.tags.iter().copied()
+	}
+
+	/// Returns if this context has a tag
+	#[must_use]
+	pub fn has_tag(&self, tag: impl Into<FormatTag>) -> bool {
+		let tag = tag.into();
+		self.tags().any(|cur_tag| cur_tag == tag)
+	}
+
+	/// Calls `f` with tags `tags` added to this context
+	pub fn with_tags<O>(&mut self, tags: impl IntoIterator<Item = FormatTag>, f: impl FnOnce(&mut Self) -> O) -> O {
+		let tags_len = self.tags.len();
+
+		for tag in tags {
+			self.tags.to_mut().push(tag);
+		}
+		let output = f(self);
+		if self.tags.len() != tags_len {
+			self.tags.to_mut().truncate(tags_len);
+		}
+
+		output
+	}
+
+	/// Calls `f` with tag `tag` added to this context
+	pub fn with_tag<O>(&mut self, tag: impl Into<FormatTag>, f: impl FnOnce(&mut Self) -> O) -> O {
+		self.with_tags([tag.into()], f)
+	}
+
+	/// Calls `f` with all tags removed.
+	pub fn without_tags<O>(&mut self, f: impl FnOnce(&mut Self) -> O) -> O {
+		// TODO: Just add an offset to the start of the new tags
+		//       to reduce an allocation?
+		let tags = mem::take(&mut self.tags);
+		let output = f(self);
+		self.tags = tags;
+
+		output
 	}
 }
 

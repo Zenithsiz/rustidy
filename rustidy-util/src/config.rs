@@ -77,4 +77,5 @@ decl_config! {
 	max_use_tree_len  : usize         = 75,
 	array_expr_cols   : Option<usize> = None,
 	max_array_expr_len: usize         = 80,
+	max_chain_len     : usize         = 50,
 }

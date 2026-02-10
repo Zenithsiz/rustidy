@@ -8,7 +8,7 @@ use {
 		util::Parenthesized,
 	},
 	rustidy_ast_util::{PunctuatedTrailing, punct},
-	rustidy_format::Format,
+	rustidy_format::{Format, FormatTag},
 	rustidy_parse::{Parse, ParseRecursive},
 	rustidy_print::Print,
 };
@@ -34,15 +34,25 @@ pub struct CallExpression {
 #[parse_recursive(root = ExpressionInner)]
 #[parse_recursive(into_root = ExpressionWithoutBlockInner)]
 #[parse_recursive(kind = "left")]
+#[format(with_tag(
+	tag = InsideChain,
+	if = self.len(ctx, true) >= ctx.config().max_chain_len,
+	skip_if_has_tag = true
+))]
 pub struct MethodCallExpression {
 	pub expr:    Expression,
-	#[format(before_with = Format::prefix_ws_remove)]
+	#[format(before_with = match ctx.has_tag(FormatTag::InsideChain) {
+		true => move |dot, ctx| Format::prefix_ws_set_indent(dot, ctx, 1, false),
+		false => Format::prefix_ws_remove,
+	})]
 	pub dot:     token::Dot,
 	#[format(before_with = Format::prefix_ws_remove)]
 	pub segment: PathExprSegment,
 	#[format(before_with = Format::prefix_ws_remove)]
 	#[format(and_with = Parenthesized::format_remove)]
-	pub params:  Parenthesized<Option<CallParams>>,
+	// TODO: Is it fine to remove *all* tags?
+	#[format(without_tags)]
+	pub params: Parenthesized<Option<CallParams>>,
 }
 
 /// `CallParams`

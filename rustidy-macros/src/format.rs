@@ -11,6 +11,16 @@ use {
 };
 
 #[derive(Debug, darling::FromMeta)]
+#[darling(from_expr = |expr| Ok(Self { tag: expr.clone(), cond: None, skip_if_has_tag: false }))]
+struct WithTag {
+	// TODO: This should be an `syn::Ident`, but we also need to support `from_expr`.
+	tag:             syn::Expr,
+	#[darling(rename = "if")]
+	cond:            Option<syn::Expr>,
+	skip_if_has_tag: bool,
+}
+
+#[derive(Debug, darling::FromMeta)]
 #[darling(from_expr = |expr| Ok(Self { expr: expr.clone(), cond: None, else_expr: None }))]
 struct AndWith {
 	expr:      syn::Expr,
@@ -80,6 +90,12 @@ struct VariantAttrs {
 
 	#[darling(multiple)]
 	and_with: Vec<AndWith>,
+
+	#[darling(multiple)]
+	with_tag: Vec<WithTag>,
+
+	#[darling(default)]
+	without_tags: bool,
 }
 
 #[derive(Debug, darling::FromField, derive_more::AsRef)]
@@ -100,6 +116,12 @@ struct FieldAttrs {
 
 	#[darling(multiple)]
 	and_with: Vec<AndWith>,
+
+	#[darling(multiple)]
+	with_tag: Vec<WithTag>,
+
+	#[darling(default)]
+	without_tags: bool,
 }
 
 #[derive(Debug, darling::FromDeriveInput, derive_more::AsRef)]
@@ -125,6 +147,12 @@ struct Attrs {
 
 	#[darling(multiple)]
 	and_with_wrapper: Vec<AndWithWrapper>,
+
+	#[darling(multiple)]
+	with_tag: Vec<WithTag>,
+
+	#[darling(default)]
+	without_tags: bool,
 
 	// TODO: Don't require the `where` token here.
 	#[darling(multiple)]
@@ -162,6 +190,8 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 		format,
 		&attrs.before_with,
 		&attrs.and_with,
+		&attrs.with_tag,
+		attrs.without_tags,
 		attrs.indent,
 	);
 
@@ -219,6 +249,8 @@ fn derive_enum(variants: &[VariantAttrs]) -> Impls<syn::Expr, syn::Expr, syn::Ex
 				parse_quote! { rustidy_format::Format::format(value, ctx) },
 				&variant.before_with,
 				&variant.and_with,
+				&variant.with_tag,
+				variant.without_tags,
 				variant.indent,
 			);
 			let format = parse_quote! {
@@ -315,6 +347,8 @@ fn derive_struct_field(field_idx: usize, field: &FieldAttrs) -> Impls<syn::Expr,
 		parse_quote! { rustidy_format::Format::format(&mut self.#field_ident, ctx) },
 		&field.before_with,
 		&field.and_with,
+		&field.with_tag,
+		field.without_tags,
 		field.indent,
 	);
 
@@ -336,12 +370,37 @@ fn derive_format(
 	default: syn::Expr,
 	before_with: &[AndWith],
 	and_with: &[AndWith],
+	with_tag: &[WithTag],
+	without_tags: bool,
 	indent: bool,
 ) -> syn::Expr {
 	let format: syn::Expr = match &with {
 		Some(with) => parse_quote! { (#with)(#value, ctx) },
 		None => default,
 	};
+	let mut format = match without_tags {
+		true => parse_quote! { ctx.without_tags(|ctx| #format) },
+		false => format,
+	};
+	for WithTag {
+		tag,
+		cond,
+		skip_if_has_tag,
+	} in with_tag
+	{
+		let cond = cond.clone().unwrap_or_else(|| parse_quote! { true });
+		let cond: syn::Expr = match skip_if_has_tag {
+			true => parse_quote! { ctx.has_tag(rustidy_format::FormatTag::#tag) || (#cond) },
+			false => parse_quote! { #cond },
+		};
+		format = parse_quote! {
+			match #cond {
+				true => ctx.with_tag(rustidy_format::FormatTag::#tag, |ctx| #format),
+				false => #format,
+			}
+		}
+	}
+
 	let before_with = before_with
 		.iter()
 		.map(|and_with| and_with.map(|expr| parse_quote! { (#expr)(#value, ctx) }).eval());
