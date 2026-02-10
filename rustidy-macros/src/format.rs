@@ -364,6 +364,7 @@ fn derive_struct_field(field_idx: usize, field: &FieldAttrs) -> Impls<syn::Expr,
 	clippy::needless_pass_by_value,
 	reason = "This signature is more ergonomic"
 )]
+#[expect(clippy::too_many_arguments, reason = "TODO")]
 fn derive_format(
 	value: syn::Expr,
 	with: &Option<syn::Expr>,
