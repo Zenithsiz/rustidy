@@ -25,7 +25,7 @@ pub macro decl_tokens(
 	$(
 		$TokenName:ident = $Token:literal
 		$( , skip_if_tag $skip_if_tag:expr )?
-		$( , must_not_follow $must_not_follow:literal )*
+		$( , must_not_follow $( $must_not_follow:literal ),* $(,)? )?
 		;
 	)*
 ) {
@@ -74,11 +74,13 @@ pub macro decl_tokens(
 				}
 
 				$(
-					// TODO: Different error message?
-					if parser.strip_prefix($must_not_follow).is_some() {
-						return Err(<Self as Parse>::Error::NotFound);
-					}
-				)*
+					$(
+						// TODO: Different error message?
+						if parser.strip_prefix($must_not_follow).is_some() {
+							return Err(<Self as Parse>::Error::NotFound);
+						}
+					)*
+				)?
 
 				Ok(())
 			}
@@ -172,7 +174,7 @@ decl_tokens! {
 	Vis = "vis";
 
 	// Punctuation
-	Eq = '=', must_not_follow '=', must_not_follow '>';
+	Eq = '=', must_not_follow '=', '>';
 	// TODO: This means we can't parse `let _:A<>=B`, despite it being
 	//       accepted by the compiler.
 	Lt = '<', must_not_follow '=';
@@ -186,14 +188,14 @@ decl_tokens! {
 	Not = '!', must_not_follow '=';
 	Tilde = '~';
 	Plus = '+', skip_if_tag ParserTag::SkipTokenPlus, must_not_follow '=';
-	Minus = '-', must_not_follow '=', must_not_follow '>';
+	Minus = '-', must_not_follow '=', '>';
 	Star = '*', skip_if_tag ParserTag::SkipTokenStar, must_not_follow '=';
 	Slash = '/', must_not_follow '=';
 	Percent = '%', must_not_follow '=';
 	Caret = '^', must_not_follow '=';
-	And = '&', must_not_follow '&', must_not_follow '=';
+	And = '&', must_not_follow '&', '=';
 	AndTy = '&';
-	Or = '|', must_not_follow '|', must_not_follow '=';
+	Or = '|', must_not_follow '|', '=';
 	Shl = "<<", must_not_follow '=';
 	Shr = ">>", must_not_follow '=';
 	PlusEq = "+=";
@@ -208,7 +210,7 @@ decl_tokens! {
 	ShrEq = ">>=";
 	At = '@';
 	Dot = '.', must_not_follow '.';
-	DotDot = "..", must_not_follow '.', must_not_follow '=';
+	DotDot = "..", must_not_follow '.', '=';
 	DotDotDot = "...";
 	DotDotEq = "..=";
 	Comma = ',';
