@@ -3,7 +3,7 @@
 // Imports
 use {
 	crate::util,
-	app_error::{AppError, Context},
+	app_error::{AppError, Context, app_error, ensure},
 	convert_case::Casing,
 	darling::FromDeriveInput,
 	itertools::Itertools,
@@ -23,34 +23,6 @@ struct ExtraErrorVariant {
 	transparent: bool,
 	#[darling(default)]
 	fatal:       bool,
-}
-
-impl quote::ToTokens for ExtraErrorVariant {
-	fn to_tokens(&self, tokens: &mut proc_macro2::TokenStream) {
-		let &Self {
-			ref name,
-			ref fmt,
-			transparent,
-			fatal,
-		} = self;
-
-		assert!(
-			transparent || fmt.is_some(),
-			"Must specify exactly one of `fmt` or `transparent`"
-		);
-		let attr = match fmt {
-			Some(fmt) => quote! { #[parse_error(fmt = #fmt)] },
-			None => quote! { #[parse_error(transparent)] },
-		};
-
-		let fatal = fatal.then(|| quote! { #[parse_error(fatal)] });
-		quote! {
-			#attr
-			#fatal
-			#name,
-		}
-		.to_tokens(tokens);
-	}
 }
 
 #[derive(Debug)]
@@ -198,7 +170,11 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 			};
 
 			let generics = &attrs.generics;
-			let extra_variants = &attrs.error;
+			let extra_variants = attrs
+				.error
+				.iter()
+				.map(self::derive_extra_error_variant)
+				.collect::<Result<Vec<_>, AppError>>()?;
 			let error_enum = quote! {
 				#[derive(derive_more::Debug, rustidy_parse::ParseError)]
 				pub enum #error_ident #generics {
@@ -207,7 +183,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 
 					#skip_if_tag_err_variant
 
-					#( #extra_variants )*
+					#( #extra_variants, )*
 				}
 			};
 
@@ -221,16 +197,16 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 
 				let variant_tys = variants
 					.iter()
-					.map(|variant| {
+					.map(|variant| try {
 						let field = variant
 							.fields
 							.iter()
 							.exactly_one()
-							.unwrap_or_else(|_| panic!("Enum variant must have a single field"));
+							.context("Enum variant must have a single field")?;
 
 						&field.ty
 					})
-					.collect::<Vec<_>>();
+					.collect::<Result<Vec<_>, AppError>>()?;
 
 				struct Peek<'a> {
 					variant:     &'a VariantAttrs,
@@ -385,7 +361,11 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 
 				// TODO: Figure out why using just `#error_generics` doesn't work here
 				let (impl_generics, _, where_clause) = error_generics.split_for_impl();
-				let extra_variants = &attrs.error;
+				let extra_variants = attrs
+					.error
+					.iter()
+					.map(self::derive_extra_error_variant)
+					.collect::<Result<Vec<_>, AppError>>()?;
 				let error_enum = quote! {
 					#[derive(derive_more::Debug, rustidy_parse::ParseError)]
 					pub enum #error_ident #impl_generics #where_clause {
@@ -397,7 +377,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 
 						#skip_if_tag_err_variant
 
-						#( #extra_variants )*
+						#( #extra_variants, )*
 					}
 				};
 
@@ -459,10 +439,10 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 					.collect::<Vec<_>>();
 
 				let parse_fields = itertools::izip!(&fields.fields, &error_names, &field_idents)
-					.map(|(field, error_name, field_ident)| {
+					.map(|(field, error_name, field_ident)| try {
 						let mut expr = match &field.try_update_with {
 							Some(expr) => {
-								assert!(
+								ensure!(
 									field.update_with.is_none(),
 									"Cannot specify both `update_with` and `try_update_with`."
 								);
@@ -509,7 +489,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 
 						quote! { let #field_ident = #expr #map_err #propagate_error; }
 					})
-					.collect::<Vec<_>>();
+					.collect::<Result<Vec<_>, AppError>>()?;
 
 				let body_res = match fields.style {
 					darling::ast::Style::Struct => quote! { Self { #field_idents } },
@@ -530,15 +510,14 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 					.iter()
 					.scan(false, |is_fatal, field| {
 						let is_cur_fatal = field.fatal;
-						assert!(
-							!(*is_fatal && is_cur_fatal),
-							"Cannot specify `#[parser(fatal)]` more than once"
-						);
+						if *is_fatal && is_cur_fatal {
+							return Some(Err(app_error!("Cannot specify `#[parser(fatal)]` more than once")));
+						}
 						*is_fatal |= is_cur_fatal;
 
-						Some(*is_fatal)
+						Some(Ok(*is_fatal))
 					})
-					.collect::<Vec<_>>();
+					.collect::<Result<Vec<_>, AppError>>()?;
 
 				let error_enum_variants = itertools::izip!(&fields.fields, &error_names, &field_tys, &fatal_fields)
 					.filter_map(|(field, error_name, field_ty, is_fatal)| {
@@ -570,7 +549,11 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 					|ty| parse_quote! { #ty: rustidy_parse::Parse },
 				);
 				let (impl_generics, _, where_clause) = error_generics.split_for_impl();
-				let extra_variants = &attrs.error;
+				let extra_variants = attrs
+					.error
+					.iter()
+					.map(self::derive_extra_error_variant)
+					.collect::<Result<Vec<_>, AppError>>()?;
 				let error_enum = quote! {
 					#[derive(derive_more::Debug, rustidy_parse::ParseError)]
 					pub enum #error_ident #impl_generics #where_clause {
@@ -578,7 +561,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 
 						#skip_if_tag_err_variant
 
-						#( #extra_variants )*
+						#( #extra_variants, )*
 					}
 				};
 
@@ -625,4 +608,29 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 	};
 
 	Ok(output.into())
+}
+
+fn derive_extra_error_variant(
+	&ExtraErrorVariant {
+		ref name,
+		ref fmt,
+		transparent,
+		fatal,
+	}: &ExtraErrorVariant,
+) -> Result<syn::Variant, AppError> {
+	ensure!(
+		transparent || fmt.is_some(),
+		"Must specify exactly one of `fmt` or `transparent`"
+	);
+	let attr = match fmt {
+		Some(fmt) => quote! { #[parse_error(fmt = #fmt)] },
+		None => quote! { #[parse_error(transparent)] },
+	};
+
+	let fatal = fatal.then(|| quote! { #[parse_error(fatal)] });
+	Ok(parse_quote! {
+		#attr
+		#fatal
+		#name
+	})
 }

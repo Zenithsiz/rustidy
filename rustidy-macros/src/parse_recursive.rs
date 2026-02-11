@@ -2,7 +2,7 @@
 
 // Imports
 use {
-	app_error::{AppError, Context},
+	app_error::{AppError, Context, bail, ensure},
 	darling::FromDeriveInput,
 	itertools::Itertools,
 	quote::quote,
@@ -152,19 +152,19 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 			let mut suffix_variants = recursive_variants.clone();
 			let suffix_match_arms = suffix_variants
 				.iter()
-				.map(|variant| {
+				.map(|variant| try {
 					let field = self::get_variant_as_unnamed_single(variant)
-						.expect("Enum variants must be tuple variants with a single field");
+						.context("Enum variants must be tuple variants with a single field")?;
 
 					let ty = &field.ty;
 					let variant_ident = &variant.ident;
 
 					quote! { #ident_suffix::#variant_ident(suffix) => Self::#variant_ident(<#ty as rustidy_parse::ParsableRecursive<#root_ty>>::join_suffix(root, suffix, parser)), }
 				})
-				.collect::<Vec<_>>();
+				.collect::<Result<Vec<_>, _>>()?;
 			for variant in &mut suffix_variants {
 				let field = self::get_variant_as_unnamed_single_mut(variant)
-					.expect("Enum variants must be tuple variants with a single field");
+					.context("Enum variants must be tuple variants with a single field")?;
 				let ty = &field.ty;
 				field.ty = parse_quote! { <#ty as rustidy_parse::ParsableRecursive<#root_ty>>::Suffix };
 			}
@@ -191,19 +191,19 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 			let mut prefix_variants = recursive_variants.clone();
 			let prefix_match_arms = prefix_variants
 				.iter()
-				.map(|variant| {
+				.map(|variant| try {
 					let field = self::get_variant_as_unnamed_single(variant)
-						.expect("Enum variants must be tuple variants with a single field");
+						.context("Enum variants must be tuple variants with a single field")?;
 
 					let ty = &field.ty;
 					let variant_ident = &variant.ident;
 
 					quote! { #ident_prefix::#variant_ident(prefix) => Self::#variant_ident(<#ty as rustidy_parse::ParsableRecursive<#root_ty>>::join_prefix(prefix, root, parser)), }
 				})
-				.collect::<Vec<_>>();
+				.collect::<Result<Vec<_>, AppError>>()?;
 			for variant in &mut prefix_variants {
 				let field = self::get_variant_as_unnamed_single_mut(variant)
-					.expect("Enum variants must be tuple variants with a single field");
+					.context("Enum variants must be tuple variants with a single field")?;
 				let ty = &field.ty;
 				field.ty = parse_quote! { <#ty as rustidy_parse::ParsableRecursive<#root_ty>>::Prefix };
 			}
@@ -229,19 +229,19 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 			let mut infix_variants = recursive_variants.clone();
 			let infix_match_arms = infix_variants
 				.iter()
-				.map(|variant| {
+				.map(|variant| try {
 					let field = self::get_variant_as_unnamed_single(variant)
-						.expect("Enum variants must be tuple variants with a single field");
+						.context("Enum variants must be tuple variants with a single field")?;
 
 					let ty = &field.ty;
 					let variant_ident = &variant.ident;
 
 					quote! { #ident_infix::#variant_ident(infix) => Self::#variant_ident(<#ty as rustidy_parse::ParsableRecursive<#root_ty>>::join_infix(lhs, infix, rhs, parser)), }
 				})
-				.collect::<Vec<_>>();
+				.collect::<Result<Vec<_>, AppError>>()?;
 			for variant in &mut infix_variants {
 				let field = self::get_variant_as_unnamed_single_mut(variant)
-					.expect("Enum variants must be tuple variants with a single field");
+					.context("Enum variants must be tuple variants with a single field")?;
 				let ty = &field.ty;
 				field.ty = parse_quote! { <#ty as rustidy_parse::ParsableRecursive<#root_ty>>::Infix };
 			}
@@ -268,19 +268,19 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 			let mut base_variants = recursive_variants.clone();
 			let mut base_match_arms = base_variants
 				.iter()
-				.map(|variant| {
+				.map(|variant| try {
 					let field = self::get_variant_as_unnamed_single(variant)
-						.expect("Enum variants must be tuple variants with a single field");
+						.context("Enum variants must be tuple variants with a single field")?;
 
 					let ty = &field.ty;
 					let variant_ident = &variant.ident;
 
 					quote! { #ident_base::#variant_ident(base) => Self::#variant_ident(<#ty as rustidy_parse::ParsableRecursive<#root_ty>>::from_base(base, parser)), }
 				})
-				.collect::<Vec<_>>();
+				.collect::<Result<Vec<_>, AppError>>()?;
 			for variant in &mut base_variants {
 				let field = self::get_variant_as_unnamed_single_mut(variant)
-					.expect("Enum variants must be tuple variants with a single field");
+					.context("Enum variants must be tuple variants with a single field")?;
 				let ty = &field.ty;
 				field.ty = parse_quote! { <#ty as rustidy_parse::ParsableRecursive<#root_ty>>::Base };
 			}
@@ -337,22 +337,23 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 			}
 		},
 		darling::ast::Data::Struct(fields) => {
-			let kind = attrs
-				.kind
-				.expect("Expected `#[parse_recursive(kind = <kind>)]` with `kind` equal to `left`, `right` or `fully`");
+			let kind = attrs.kind.context(
+				"Expected `#[parse_recursive(kind = <kind>)]` with `kind` equal to `left`, `right` or `fully`",
+			)?;
 
 			let (suffix_impl, suffix_ty) = match kind {
 				Kind::Left => {
-					let field = fields.iter().next().expect("Expected at least 1 field");
+					let field = fields.iter().next().context("Expected at least 1 field")?;
 					let suffix_fields = fields.iter().skip(1).collect::<Vec<_>>();
 
 					let join = match &fields.style {
 						darling::ast::Style::Struct => {
-							let field_ident = field.ident.as_ref().expect("Should have an ident");
+							let field_ident = field.ident.as_ref().context("Should have an ident")?;
 							let field_ty = &field.ty;
 							let suffix_fields_ident = suffix_fields
 								.iter()
-								.map(|field| field.ident.as_ref().expect("Should have an ident"));
+								.map(|field| field.ident.as_ref().context("Should have an ident"))
+								.collect::<Result<Vec<_>, _>>()?;
 
 							quote! {
 								Self {
@@ -361,7 +362,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 								}
 							}
 						},
-						darling::ast::Style::Tuple => panic!("Tuple structs aren't supported yet"),
+						darling::ast::Style::Tuple => bail!("Tuple structs aren't supported yet"),
 						darling::ast::Style::Unit => unreachable!(),
 					};
 
@@ -397,16 +398,17 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 
 			let (prefix_impl, prefix_ty) = match kind {
 				Kind::Right => {
-					let field = fields.iter().last().expect("Expected at least 1 field");
+					let field = fields.iter().last().context("Expected at least 1 field")?;
 					let prefix_fields = fields.iter().take(fields.len() - 1).collect::<Vec<_>>();
 
 					let join = match &fields.style {
 						darling::ast::Style::Struct => {
-							let field_ident = field.ident.as_ref().expect("Should have an ident");
+							let field_ident = field.ident.as_ref().context("Should have an ident")?;
 							let field_ty = &field.ty;
 							let prefix_fields_ident = prefix_fields
 								.iter()
-								.map(|field| field.ident.as_ref().expect("Should have an ident"));
+								.map(|field| field.ident.as_ref().context("Should have an ident"))
+								.collect::<Result<Vec<_>, _>>()?;
 
 							quote! {
 								Self {
@@ -415,7 +417,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 								}
 							}
 						},
-						darling::ast::Style::Tuple => panic!("Tuple structs aren't supported yet"),
+						darling::ast::Style::Tuple => bail!("Tuple structs aren't supported yet"),
 						darling::ast::Style::Unit => unreachable!(),
 					};
 
@@ -451,21 +453,22 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 
 			let (infix_impl, infix_ty) = match kind {
 				Kind::Fully => {
-					assert!(fields.len() >= 2, "Expected at least 2 fields");
-					let lhs_field = fields.iter().next().expect("Expected at least 2 field");
-					let rhs_field = fields.iter().last().expect("Expected at least 2 field");
+					ensure!(fields.len() >= 2, "Expected at least 2 fields");
+					let lhs_field = fields.iter().next().context("Expected at least 2 field")?;
+					let rhs_field = fields.iter().last().context("Expected at least 2 field")?;
 
 					let infix_fields = fields.iter().skip(1).take(fields.len() - 2).collect::<Vec<_>>();
 
 					let join = match &fields.style {
 						darling::ast::Style::Struct => {
-							let lhs_field_ident = lhs_field.ident.as_ref().expect("Should have an ident");
-							let rhs_field_ident = rhs_field.ident.as_ref().expect("Should have an ident");
+							let lhs_field_ident = lhs_field.ident.as_ref().context("Should have an ident")?;
+							let rhs_field_ident = rhs_field.ident.as_ref().context("Should have an ident")?;
 							let lhs_field_ty = &lhs_field.ty;
 							let rhs_field_ty = &rhs_field.ty;
 							let infix_fields_ident = infix_fields
 								.iter()
-								.map(|field| field.ident.as_ref().expect("Should have an ident"));
+								.map(|field| field.ident.as_ref().context("Should have an ident"))
+								.collect::<Result<Vec<_>, _>>()?;
 
 							quote! {
 								Self {
@@ -475,7 +478,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 								}
 							}
 						},
-						darling::ast::Style::Tuple => panic!("Tuple structs aren't supported yet"),
+						darling::ast::Style::Tuple => bail!("Tuple structs aren't supported yet"),
 						darling::ast::Style::Unit => unreachable!(),
 					};
 

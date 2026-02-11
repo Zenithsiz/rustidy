@@ -91,3 +91,23 @@ pub fn field_member_access<F: AsRef<Option<syn::Ident>>>(field_idx: usize, field
 		}),
 	}
 }
+
+/// Fallible `Iterator::unzip`.
+#[extend::ext(name = IteratorTryUnzip)]
+pub impl<A, B, E, I: IntoIterator<Item = Result<(A, B), E>>> I {
+	fn try_unzip<FromA, FromB>(self) -> Result<(FromA, FromB), E>
+	where
+		FromA: Default + Extend<A>,
+		FromB: Default + Extend<B>,
+	{
+		let mut a = FromA::default();
+		let mut b = FromB::default();
+		for item in self {
+			let item = item?;
+			a.extend_one(item.0);
+			b.extend_one(item.1);
+		}
+
+		Ok((a, b))
+	}
+}

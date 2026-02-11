@@ -3,9 +3,10 @@
 // Imports
 use {
 	crate::util,
-	app_error::{AppError, Context},
+	app_error::{AppError, Context, app_error, bail},
 	core::{iter, ops::Bound},
 	darling::FromDeriveInput,
+	itertools::Itertools,
 	quote::quote,
 	syn::parse_quote,
 };
@@ -195,13 +196,17 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 		attrs.indent,
 	);
 
-	let format_and_with_wrapper = attrs.and_with_wrapper.iter().map(|and_with_wrapper| {
-		let darling::ast::Data::Struct(fields) = &attrs.data else {
-			panic!("`#[format(and_with_wrapper(...))]` may only be used for structs");
-		};
+	let format_and_with_wrapper = attrs
+		.and_with_wrapper
+		.iter()
+		.map(|and_with_wrapper| {
+			let darling::ast::Data::Struct(fields) = &attrs.data else {
+				bail!("`#[format(and_with_wrapper(...))]` may only be used for structs");
+			};
 
-		self::derive_and_with_wrapper(fields, and_with_wrapper)
-	});
+			self::derive_and_with_wrapper(fields, and_with_wrapper)
+		})
+		.collect::<Result<Vec<_>, AppError>>()?;
 
 	let format: syn::Expr = parse_quote! {{
 		#format;
@@ -419,50 +424,59 @@ fn derive_format(
 	}
 }
 
-fn derive_and_with_wrapper(fields: &darling::ast::Fields<FieldAttrs>, and_with_wrapper: &AndWithWrapper) -> syn::Expr {
-	fn parse_expr(expr: &syn::Expr) -> syn::Member {
+fn derive_and_with_wrapper(
+	fields: &darling::ast::Fields<FieldAttrs>,
+	and_with_wrapper: &AndWithWrapper,
+) -> Result<syn::Expr, AppError> {
+	fn parse_expr(expr: &syn::Expr) -> Result<syn::Member, AppError> {
 		match expr {
-			syn::Expr::Path(field) if let Some(ident) = field.path.get_ident() => syn::Member::Named(ident.clone()),
+			syn::Expr::Path(field) if let Some(ident) = field.path.get_ident() => Ok(syn::Member::Named(ident.clone())),
 			syn::Expr::Lit(syn::ExprLit {
 				lit: syn::Lit::Int(lit),
 				..
-			}) => syn::Member::Unnamed(syn::Index {
-				index: lit.base10_parse().expect("Unable to parse integer literal"),
+			}) => Ok(syn::Member::Unnamed(syn::Index {
+				index: lit.base10_parse().context("Unable to parse integer literal")?,
 				span:  lit.span(),
-			}),
-			_ => panic!("Expected an identifier or integer literal"),
+			})),
+			_ => bail!("Expected an identifier or integer literal"),
 		}
 	}
 
-	fn find_field<'a>(fields: &'a darling::ast::Fields<FieldAttrs>, member: &syn::Member) -> (usize, &'a FieldAttrs) {
+	fn find_field<'a>(
+		fields: &'a darling::ast::Fields<FieldAttrs>,
+		member: &syn::Member,
+	) -> Result<(usize, &'a FieldAttrs), AppError> {
 		fields
 			.fields
 			.iter()
 			.enumerate()
-			.find(|&(field_idx, field)| match &field.ident {
+			.try_find(|&(field_idx, field)| match &field.ident {
 				Some(field_ident) => match member {
-					syn::Member::Named(ident) => field_ident == ident,
-					syn::Member::Unnamed(_) => panic!("Cannot use integer literal for named structs"),
+					syn::Member::Named(ident) => Ok::<_, AppError>(field_ident == ident),
+					syn::Member::Unnamed(_) => bail!("Cannot use integer literal for named structs"),
 				},
 				None => match member {
-					syn::Member::Named(_) => panic!("Cannot use identifier for unnamed structs"),
-					syn::Member::Unnamed(index) => index.index as usize == field_idx,
+					syn::Member::Named(_) => bail!("Cannot use identifier for unnamed structs"),
+					syn::Member::Unnamed(index) => Ok(index.index as usize == field_idx),
 				},
-			})
-			.unwrap_or_else(|| match member {
-				syn::Member::Named(ident) => panic!("Unknown field identifier: {ident}"),
-				syn::Member::Unnamed(index) => panic!("Unknown field index: {}", index.index),
+			})?
+			.ok_or_else(|| match member {
+				syn::Member::Named(ident) => app_error!("Unknown field identifier: {ident}"),
+				syn::Member::Unnamed(index) => app_error!("Unknown field index: {}", index.index),
 			})
 	}
 
 	let wrapper_field_idents = match &and_with_wrapper.fields {
-		syn::Expr::Array(expr) => expr.elems.iter().map(parse_expr).collect::<Vec<_>>(),
+		syn::Expr::Array(expr) => expr.elems.iter().map(parse_expr).collect::<Result<Vec<_>, AppError>>()?,
 		syn::Expr::Range(expr) => {
-			fn find_expr_idx(fields: &darling::ast::Fields<FieldAttrs>, expr: &syn::Expr) -> usize {
-				find_field(fields, &parse_expr(expr)).0
+			fn find_expr_idx(fields: &darling::ast::Fields<FieldAttrs>, expr: &syn::Expr) -> Result<usize, AppError> {
+				find_field(fields, &parse_expr(expr)?).map(|(idx, _)| idx)
 			}
 
-			let start_idx = expr.start.as_ref().map(|start| find_expr_idx(fields, start));
+			let start_idx = match &expr.start {
+				Some(start) => Some(find_expr_idx(fields, start)?),
+				None => None,
+			};
 			let start = match start_idx {
 				Some(start) => Bound::Included(start),
 				None => Bound::Unbounded,
@@ -470,8 +484,8 @@ fn derive_and_with_wrapper(fields: &darling::ast::Fields<FieldAttrs>, and_with_w
 
 			let end = match &expr.end {
 				Some(end) => match expr.limits {
-					syn::RangeLimits::HalfOpen(_) => Bound::Excluded(find_expr_idx(fields, end)),
-					syn::RangeLimits::Closed(_) => Bound::Included(find_expr_idx(fields, end)),
+					syn::RangeLimits::HalfOpen(_) => Bound::Excluded(find_expr_idx(fields, end)?),
+					syn::RangeLimits::Closed(_) => Bound::Included(find_expr_idx(fields, end)?),
 				},
 				None => Bound::Unbounded,
 			};
@@ -482,15 +496,16 @@ fn derive_and_with_wrapper(fields: &darling::ast::Fields<FieldAttrs>, and_with_w
 				.map(|(field_idx, field)| util::field_member_access(field_idx, field))
 				.collect()
 		},
-		_ => panic!("`#[and_with_wrapper(fields = ...)]` expects either an array of fields or a range"),
+		_ => bail!("`#[and_with_wrapper(fields = ...)]` expects either an array of fields or a range"),
 	};
 
 	let wrapper_field_tys = wrapper_field_idents
 		.iter()
-		.map(|wrapper_field_ident| &find_field(fields, wrapper_field_ident).1.ty)
-		.collect::<Vec<_>>();
+		.map(|wrapper_field_ident| find_field(fields, wrapper_field_ident))
+		.map_ok(|(_, field)| &field.ty)
+		.collect::<Result<Vec<_>, AppError>>()?;
 
-	and_with_wrapper
+	let expr = and_with_wrapper
 		.and_with
 		.map(|expr| {
 			let wrapper: syn::ItemStruct = match fields.style {
@@ -528,7 +543,9 @@ fn derive_and_with_wrapper(fields: &darling::ast::Fields<FieldAttrs>, and_with_w
 				(#expr)(&mut wrapper, ctx);
 			}}
 		})
-		.eval()
+		.eval();
+
+	Ok(expr)
 }
 
 #[derive(Default, Debug)]

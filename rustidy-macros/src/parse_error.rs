@@ -2,8 +2,8 @@
 
 // Imports
 use {
-	crate::util,
-	app_error::{AppError, Context},
+	crate::util::{self, IteratorTryUnzip},
+	app_error::{AppError, Context, bail, ensure},
 	darling::FromDeriveInput,
 	itertools::Itertools,
 	proc_macro2::Span,
@@ -88,19 +88,22 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 	let item_ident = &attrs.ident;
 
 	let is_item_transparent = attrs.transparent;
-	let transparent_field_access = is_item_transparent.then(|| {
-		let darling::ast::Data::Struct(fields) = &attrs.data else {
-			panic!("Cannot set `#[error(transparent)]` on enums or unions");
-		};
-		let field = fields
-			.fields
-			.iter()
-			.exactly_one()
-			.unwrap_or_else(|_| panic!("`#[error(transparent)]` is only supported for single-field structs"));
+	let transparent_field_access = match is_item_transparent {
+		true => {
+			let darling::ast::Data::Struct(fields) = &attrs.data else {
+				bail!("Cannot set `#[parse_error(transparent)]` on enums or unions");
+			};
+			let field = fields
+				.fields
+				.iter()
+				.exactly_one()
+				.context("`#[parse_error(transparent)]` is only supported for single-field structs")?;
 
-		let field_ident = util::field_member_access(0, field);
-		(field, quote! { self.#field_ident })
-	});
+			let field_ident = util::field_member_access(0, field);
+			Some((field, quote! { self.#field_ident }))
+		},
+		false => None,
+	};
 
 	let item_error_fmt = &attrs.fmt;
 
@@ -126,12 +129,12 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 				.map(|variant| {
 					let variant_ident = &variant.ident;
 
-					assert!(
+					ensure!(
 						!(variant.transparent && variant.multiple),
 						"Error variant cannot be transparent and multiple at the same time"
 					);
 
-					match variant.multiple {
+					let res = match variant.multiple {
 						true => {
 							let fields_ident = variant
 								.fields
@@ -140,9 +143,9 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 									variant_field
 										.ident
 										.as_ref()
-										.expect("`#[parse_error(multiple)]` is only supported on named variants")
+										.context("`#[parse_error(multiple)]` is only supported on named variants")
 								})
-								.collect::<Vec<_>>();
+								.collect::<Result<Vec<_>, _>>()?;
 
 							let variants_pos = fields_ident
 								.iter()
@@ -171,9 +174,10 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 						},
 						false => {
 							let field = match variant.transparent {
-								true => Some(variant.fields.iter().enumerate().exactly_one().unwrap_or_else(|_| {
-									panic!("Exactly 1 field must exist on `#[error(transparent)]` variants")
-								})),
+								true => {
+									let field = variant.fields.iter().enumerate().exactly_one().context("Exactly 1 field must exist on `#[parse_error(transparent)]` variants")?;
+									Some(field)
+								},
 								false => variant
 									.fields
 									.iter()
@@ -182,7 +186,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 										variant_field.source
 									})
 									.at_most_one()
-									.unwrap_or_else(|_| panic!("At most 1 field may have `#[error(source)]`")),
+									.context("At most 1 field may have `#[parse_error(source)]`")?,
 							};
 
 							let is_fatal = variant.fatal;
@@ -193,9 +197,9 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 										quote! { Self::#variant_ident { ref #field_ident, .. } => #field_ident.pos(), },
 									),
 									None => {
-										assert!(
+										ensure!(
 											field_idx == 0,
-											"Non-first unnamed `#[error(source)]` aren't supported yet"
+											"Non-first unnamed `#[parse_error(source)]` aren't supported yet"
 										);
 
 										let is_fatal =
@@ -213,9 +217,11 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 								},
 							}
 						},
-					}
+					};
+
+					Ok::<_, AppError>(res)
 				})
-				.unzip::<_, _, Vec<_>, Vec<_>>();
+				.try_unzip::<Vec<_>, Vec<_>>()?;
 
 			let is_fatal = quote! { match *self {
 				#(#is_fatal_variants)*
@@ -242,8 +248,10 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 
 					let output = match &*field_idents {
 						[] => {
-							assert!(!variant.transparent, "Empty variants may not be transparent");
-							let Fmt(msg) = variant.fmt.as_ref().expect("Expected `#[error(...)]`");
+							ensure!(!variant.transparent, "Empty variants may not be transparent");
+							let Fmt(msg) = variant.fmt.as_ref().context(
+								"Expected either `#[parse_error(transparent)]` or `#[parse_error(fmt = \"...\")]`",
+							)?;
 
 							quote! { app_error::AppError::msg(#msg) }
 						},
@@ -264,9 +272,9 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 						darling::ast::Style::Struct => quote! { { #( ref #field_idents, )* } },
 					};
 
-					quote! { Self::#variant_ident #pat => #output, }
+					Ok(quote! { Self::#variant_ident #pat => #output, })
 				})
-				.collect::<Vec<_>>();
+				.collect::<Result<Vec<_>, AppError>>()?;
 
 			let to_app_error = quote! {
 				match *self {
@@ -304,7 +312,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 				None => {
 					let Fmt(fmt) = item_error_fmt
 						.as_ref()
-						.expect("Expected either `#[error(transparent)]` or `#[error(\"...\")]`");
+						.context("Expected either `#[parse_error(transparent)]` or `#[parse_error(fmt = \"...\")]`")?;
 
 					let field_idents = fields
 						.fields
