@@ -42,3 +42,14 @@ fn chain() {
 		.e
 		.f;
 }
+
+
+fn closure_inside_call() {
+	let _ = a.f(|| {
+		let _ = a;
+	});
+
+	let _ = a.f(a, b, c, d, || {
+		let _ = a;
+	});
+}
