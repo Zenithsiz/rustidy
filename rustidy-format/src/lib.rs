@@ -463,11 +463,15 @@ impl<'a, 'input> Context<'a, 'input> {
 
 	/// Runs `f` with a further indentation level
 	pub fn with_indent<O>(&mut self, f: impl FnOnce(&mut Self) -> O) -> O {
-		self.indent_depth += 1;
-		let output = f(self);
-		self.indent_depth -= 1;
-		output
+		self.with_indent_offset(1, f)
 	}
+
+	/// Runs `f` with a further indentation level if `pred` is true
+	pub fn with_indent_if<O>(&mut self, pred: bool, f: impl FnOnce(&mut Self) -> O) -> O {
+		self.with_indent_offset_if(1, pred, f)
+	}
+
+	// TODO: Should `without_indent[_if]` be removed?
 
 	/// Runs `f` with one less indentation level
 	pub fn without_indent<O>(&mut self, f: impl for<'b> FnOnce(&'b mut Self) -> O) -> O {
