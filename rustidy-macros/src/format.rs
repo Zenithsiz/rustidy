@@ -12,6 +12,12 @@ use {
 };
 
 #[derive(Debug, darling::FromMeta)]
+#[darling(from_word = || Ok(Self { if_has_tag: None }))]
+struct Indent {
+	if_has_tag: Option<syn::Expr>,
+}
+
+#[derive(Debug, darling::FromMeta)]
 #[darling(from_expr = |expr| Ok(Self { tag: expr.clone(), cond: None, skip_if_has_tag: false }))]
 struct WithTag {
 	tag:             syn::Expr,
@@ -81,7 +87,7 @@ struct VariantAttrs {
 	fields: darling::ast::Fields<VariantFieldAttrs>,
 
 	#[darling(default)]
-	indent: bool,
+	indent: Option<Indent>,
 
 	with: Option<syn::Expr>,
 
@@ -107,7 +113,7 @@ struct FieldAttrs {
 	ty:    syn::Type,
 
 	#[darling(default)]
-	indent: bool,
+	indent: Option<Indent>,
 
 	with: Option<syn::Expr>,
 
@@ -135,7 +141,7 @@ struct Attrs {
 	data:     darling::ast::Data<VariantAttrs, FieldAttrs>,
 
 	#[darling(default)]
-	indent: bool,
+	indent: Option<Indent>,
 
 	with: Option<syn::Expr>,
 
@@ -192,7 +198,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 		&attrs.and_with,
 		&attrs.with_tag,
 		attrs.without_tags,
-		attrs.indent,
+		&attrs.indent,
 	);
 
 	let format_and_with_wrapper = attrs
@@ -255,7 +261,7 @@ fn derive_enum(variants: &[VariantAttrs]) -> Impls<syn::Expr, syn::Expr, syn::Ex
 				&variant.and_with,
 				&variant.with_tag,
 				variant.without_tags,
-				variant.indent,
+				&variant.indent,
 			);
 			let format = parse_quote! {
 				Self::#variant_ident(ref mut value) => #format,
@@ -353,7 +359,7 @@ fn derive_struct_field(field_idx: usize, field: &FieldAttrs) -> Impls<syn::Expr,
 		&field.and_with,
 		&field.with_tag,
 		field.without_tags,
-		field.indent,
+		&field.indent,
 	);
 
 	Impls {
@@ -377,7 +383,7 @@ fn derive_format(
 	and_with: &[AndWith],
 	with_tag: &[WithTag],
 	without_tags: bool,
-	indent: bool,
+	indent: &Option<Indent>,
 ) -> syn::Expr {
 	let format: syn::Expr = match &with {
 		Some(with) => parse_quote! { (#with)(#value, ctx) },
@@ -418,8 +424,11 @@ fn derive_format(
 		#( #and_with; )*
 	}};
 	match indent {
-		true => parse_quote! { ctx.with_indent(|ctx| #format) },
-		false => format,
+		Some(Indent { if_has_tag }) => match if_has_tag {
+			Some(cond) => parse_quote! { ctx.with_indent_if(ctx.has_tag(#cond), |ctx| #format) },
+			None => parse_quote! { ctx.with_indent(|ctx| #format) },
+		},
+		None => format,
 	}
 }
 
@@ -466,7 +475,11 @@ fn derive_and_with_wrapper(
 	}
 
 	let wrapper_field_idents = match &and_with_wrapper.fields {
-		syn::Expr::Array(expr) => expr.elems.iter().map(parse_expr).collect::<Result<Vec<_>, AppError>>()?,
+		syn::Expr::Array(expr) => expr
+			.elems
+			.iter()
+			.map(parse_expr)
+			.collect::<Result<Vec<_>, AppError>>()?,
 		syn::Expr::Range(expr) => {
 			fn find_expr_idx(fields: &darling::ast::Fields<FieldAttrs>, expr: &syn::Expr) -> Result<usize, AppError> {
 				find_field(fields, &parse_expr(expr)?).map(|(idx, _)| idx)
