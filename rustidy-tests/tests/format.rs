@@ -71,14 +71,13 @@ fn test_case(test_dir: &Path) {
 		},
 		false => {
 			let output = fs::read_to_string(&output_path).expect("Unable to read output path");
-
 			if let Some(idx) = found_output
 				.char_indices()
 				.zip(output.char_indices())
 				.find_map(|((idx, lhs), (_, rhs))| (lhs != rhs).then_some(idx))
 				.or_else(|| (found_output.len() != output.len()).then(|| usize::min(found_output.len(), output.len())))
 			{
-				let mut parser = Parser::new(&input);
+				let mut parser = Parser::new(&found_output);
 				parser.set_pos(AstPos::from_usize(idx));
 				parser.reverse_line();
 				let idx = parser.cur_pos().to_usize();
