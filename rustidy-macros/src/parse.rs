@@ -62,7 +62,7 @@ struct VariantAttrs {
 	box_error: bool,
 
 	#[darling(multiple)]
-	with_tag: Vec<syn::Ident>,
+	with_tag: Vec<syn::Expr>,
 }
 
 #[derive(Debug, darling::FromField, derive_more::AsRef)]
@@ -77,7 +77,7 @@ struct FieldAttrs {
 	without_tags: bool,
 
 	#[darling(multiple)]
-	with_tag: Vec<syn::Ident>,
+	with_tag: Vec<syn::Expr>,
 
 	update_with:     Option<syn::Expr>,
 	try_update_with: Option<syn::Expr>,
@@ -89,7 +89,7 @@ struct FieldAttrs {
 	fatal: bool,
 
 	// TODO: We should allow multiple here
-	skip_if_tag: Option<syn::Ident>,
+	skip_if_tag: Option<syn::Expr>,
 }
 
 #[derive(Debug, darling::FromDeriveInput, derive_more::AsRef)]
@@ -113,7 +113,7 @@ struct Attrs {
 	#[darling(multiple)]
 	error:       Vec<ExtraErrorVariant>,
 	// TODO: We should allow multiple here
-	skip_if_tag: Option<syn::Ident>,
+	skip_if_tag: Option<syn::Expr>,
 }
 
 pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream, AppError> {
@@ -137,7 +137,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 	let skip_if_tag_err_variant_ident = syn::Ident::new("Tag", Span::mixed_site());
 	let skip_if_tag_expr = attrs.skip_if_tag.as_ref().map(|tag| {
 		quote! {
-			if parser.has_tag(rustidy_parse::ParserTag::#tag) {
+			if parser.has_tag(#tag) {
 				return Err(#error_ident::#skip_if_tag_err_variant_ident);
 			}
 		}
@@ -145,7 +145,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 
 	let skip_if_tag_err_variant = attrs.skip_if_tag.as_ref().map(|tag| {
 		quote! {
-			#[parse_error(fmt("Tag `{:?}` was present", rustidy_parse::ParserTag::#tag))]
+			#[parse_error(fmt("Tag `{:?}` was present", #tag))]
 			#skip_if_tag_err_variant_ident,
 		}
 	});
@@ -266,7 +266,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 						}
 
 						for tag in &variant.with_tag {
-							expr = quote! { parser.with_tag(rustidy_parse::ParserTag::#tag, |parser| #expr) };
+							expr = quote! { parser.with_tag(#tag, |parser| #expr) };
 						}
 
 						let box_error = match variant.box_error {
@@ -431,7 +431,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 						let tag = field.skip_if_tag.as_ref()?;
 						let exists_name = &skip_if_tag_exists_name[tag];
 						Some(quote! {
-							let #exists_name = parser.has_tag(rustidy_parse::ParserTag::#tag);
+							let #exists_name = parser.has_tag(#tag);
 						})
 					})
 					.collect::<Vec<_>>();
@@ -468,7 +468,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 						}
 
 						for tag in &field.with_tag {
-							expr = quote! { parser.with_tag(rustidy_parse::ParserTag::#tag, |parser| #expr) };
+							expr = quote! { parser.with_tag(#tag, |parser| #expr) };
 						}
 
 						let map_err = error_name.as_ref().map(|error_name| {

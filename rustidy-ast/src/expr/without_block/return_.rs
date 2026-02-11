@@ -4,7 +4,7 @@
 use {
 	crate::{expr::Expression, token},
 	rustidy_format::Format,
-	rustidy_parse::Parse,
+	rustidy_parse::{Parse, ParserTag},
 	rustidy_print::Print,
 };
 
@@ -15,7 +15,7 @@ use {
 pub struct ReturnExpression {
 	pub return_: token::Return,
 	// TODO: This needs to be recursive...
-	#[parse(skip_if_tag = SkipOptionalTrailingBlockExpression)]
+	#[parse(skip_if_tag = ParserTag::SkipOptionalTrailingBlockExpression)]
 	#[format(before_with = Format::prefix_ws_set_single)]
 	pub expr:    Option<Expression>,
 }

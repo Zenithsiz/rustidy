@@ -14,7 +14,6 @@ use {
 #[derive(Debug, darling::FromMeta)]
 #[darling(from_expr = |expr| Ok(Self { tag: expr.clone(), cond: None, skip_if_has_tag: false }))]
 struct WithTag {
-	// TODO: This should be an `syn::Ident`, but we also need to support `from_expr`.
 	tag:             syn::Expr,
 	#[darling(rename = "if")]
 	cond:            Option<syn::Expr>,
@@ -396,12 +395,12 @@ fn derive_format(
 	{
 		let cond = cond.clone().unwrap_or_else(|| parse_quote! { true });
 		let cond: syn::Expr = match skip_if_has_tag {
-			true => parse_quote! { ctx.has_tag(rustidy_format::FormatTag::#tag) || (#cond) },
+			true => parse_quote! { ctx.has_tag(#tag) || (#cond) },
 			false => parse_quote! { #cond },
 		};
 		format = parse_quote! {
 			match #cond {
-				true => ctx.with_tag(rustidy_format::FormatTag::#tag, |ctx| #format),
+				true => ctx.with_tag(#tag, |ctx| #format),
 				false => #format,
 			}
 		}

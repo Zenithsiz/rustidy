@@ -43,7 +43,7 @@ pub enum LifetimeOrLabel {
 #[parse(and_try_with = Self::check_suffix_quote)]
 pub struct QuoteNotQuote<T> {
 	pub quote: token::Quote,
-	#[parse(with_tag = SkipWhitespace)]
+	#[parse(with_tag = ParserTag::SkipWhitespace)]
 	pub value: T,
 }
 

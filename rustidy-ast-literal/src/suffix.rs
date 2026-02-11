@@ -4,7 +4,7 @@
 use {
 	rustidy_ast_util::IdentifierOrKeyword,
 	rustidy_format::Format,
-	rustidy_parse::{Parse, Parser},
+	rustidy_parse::{Parse, Parser, ParserTag},
 	rustidy_print::Print,
 };
 
@@ -12,7 +12,7 @@ use {
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
-pub struct Suffix(#[parse(with_tag = SkipWhitespace)] IdentifierOrKeyword);
+pub struct Suffix(#[parse(with_tag = ParserTag::SkipWhitespace)] IdentifierOrKeyword);
 
 /// `SUFFIX_NO_E`
 #[derive(PartialEq, Eq, Debug)]

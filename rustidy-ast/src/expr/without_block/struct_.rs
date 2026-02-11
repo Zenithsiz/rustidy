@@ -11,7 +11,7 @@ use {
 	},
 	rustidy_ast_util::{Identifier, Punctuated, punct},
 	rustidy_format::Format,
-	rustidy_parse::Parse,
+	rustidy_parse::{Parse, ParserTag},
 	rustidy_print::Print,
 };
 
@@ -20,7 +20,7 @@ use {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 #[parse(name = "a struct expression")]
-#[parse(skip_if_tag = SkipStructExpression)]
+#[parse(skip_if_tag = ParserTag::SkipStructExpression)]
 pub struct StructExpression {
 	pub path:  PathInExpression,
 	#[format(before_with = Format::prefix_ws_set_single)]

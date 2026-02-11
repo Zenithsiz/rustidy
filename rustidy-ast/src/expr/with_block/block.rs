@@ -20,7 +20,7 @@ use {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 #[parse(name = "a block expression")]
-#[parse(skip_if_tag = SkipBlockExpression)]
+#[parse(skip_if_tag = ParserTag::SkipBlockExpression)]
 #[expect(clippy::use_self, reason = "`Parse` derive macro doesn't support `Self`")]
 pub struct BlockExpression(pub ArenaIdx<BlockExpression>);
 

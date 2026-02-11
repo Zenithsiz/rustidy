@@ -12,7 +12,7 @@
 // Imports
 use {
 	rustidy_format::Format,
-	rustidy_parse::{Parse, Parser},
+	rustidy_parse::{Parse, Parser, ParserTag},
 	rustidy_print::Print,
 	rustidy_util::{AstStr, Whitespace},
 };
@@ -24,8 +24,8 @@ pub macro decl_tokens(
 
 	$(
 		$TokenName:ident = $Token:literal
-		$( skip_if_tag $skip_if_tag:ident )?
-		$( must_not_follow $must_not_follow:literal )*
+		$( , skip_if_tag $skip_if_tag:expr )?
+		$( , must_not_follow $must_not_follow:literal )*
 		;
 	)*
 ) {
@@ -105,7 +105,7 @@ decl_tokens! {
 	Super = "super";
 	SelfLower = "self";
 	SelfUpper = "Self";
-	Crate = "crate" skip_if_tag SkipTokenCrate;
+	Crate = "crate", skip_if_tag ParserTag::SkipTokenCrate;
 	DollarCrate = "$crate";
 
 	As = "as";
@@ -172,30 +172,30 @@ decl_tokens! {
 	Vis = "vis";
 
 	// Punctuation
-	Eq = '=' must_not_follow '=' must_not_follow '>';
+	Eq = '=', must_not_follow '=', must_not_follow '>';
 	// TODO: This means we can't parse `let _:A<>=B`, despite it being
 	//       accepted by the compiler.
-	Lt = '<' must_not_follow '=';
+	Lt = '<', must_not_follow '=';
 	Le = "<=";
 	EqEq = "==";
 	Ne = "!=";
 	Ge = ">=";
-	Gt = '>' must_not_follow '=';
+	Gt = '>', must_not_follow '=';
 	AndAnd = "&&";
 	OrOr = "||";
-	Not = '!' must_not_follow '=';
+	Not = '!', must_not_follow '=';
 	Tilde = '~';
-	Plus = '+' skip_if_tag SkipTokenPlus must_not_follow '=';
-	Minus = '-' must_not_follow '=' must_not_follow '>';
-	Star = '*' skip_if_tag SkipTokenStar must_not_follow '=';
-	Slash = '/' must_not_follow '=';
-	Percent = '%' must_not_follow '=';
-	Caret = '^' must_not_follow '=';
-	And = '&' must_not_follow '&' must_not_follow '=';
+	Plus = '+', skip_if_tag ParserTag::SkipTokenPlus, must_not_follow '=';
+	Minus = '-', must_not_follow '=', must_not_follow '>';
+	Star = '*', skip_if_tag ParserTag::SkipTokenStar, must_not_follow '=';
+	Slash = '/', must_not_follow '=';
+	Percent = '%', must_not_follow '=';
+	Caret = '^', must_not_follow '=';
+	And = '&', must_not_follow '&', must_not_follow '=';
 	AndTy = '&';
-	Or = '|' must_not_follow '|' must_not_follow '=';
-	Shl = "<<" must_not_follow '=';
-	Shr = ">>" must_not_follow '=';
+	Or = '|', must_not_follow '|', must_not_follow '=';
+	Shl = "<<", must_not_follow '=';
+	Shr = ">>", must_not_follow '=';
 	PlusEq = "+=";
 	MinusEq = "-=";
 	StarEq = "*=";
@@ -207,29 +207,29 @@ decl_tokens! {
 	ShlEq = "<<=";
 	ShrEq = ">>=";
 	At = '@';
-	Dot = '.' must_not_follow '.';
-	DotDot = ".." must_not_follow '.' must_not_follow '=';
+	Dot = '.', must_not_follow '.';
+	DotDot = "..", must_not_follow '.', must_not_follow '=';
 	DotDotDot = "...";
 	DotDotEq = "..=";
 	Comma = ',';
 	Semi = ';';
-	Colon = ':' must_not_follow ':';
+	Colon = ':', must_not_follow ':';
 	PathSep = "::";
 	RArrow = "->";
 	LArrow = "<-";
 	FatArrow = "=>";
 	Pound = '#';
-	Dollar = '$' skip_if_tag SkipTokenDollar;
-	Question = '?' skip_if_tag SkipTokenQuestion;
+	Dollar = '$', skip_if_tag ParserTag::SkipTokenDollar;
+	Question = '?', skip_if_tag ParserTag::SkipTokenQuestion;
 	Underscore = '_';
 	Quote = '\'';
 	DoubleQuote = '"';
 
-	ParenOpen = '(' skip_if_tag SkipDelimiters;
-	ParenClose = ')' skip_if_tag SkipDelimiters;
-	BracketOpen = '[' skip_if_tag SkipDelimiters;
-	BracketClose = ']' skip_if_tag SkipDelimiters;
-	BracesOpen = '{' skip_if_tag SkipDelimiters;
-	BracesClose = '}' skip_if_tag SkipDelimiters;
+	ParenOpen = '(', skip_if_tag ParserTag::SkipDelimiters;
+	ParenClose = ')', skip_if_tag ParserTag::SkipDelimiters;
+	BracketOpen = '[', skip_if_tag ParserTag::SkipDelimiters;
+	BracketClose = ']', skip_if_tag ParserTag::SkipDelimiters;
+	BracesOpen = '{', skip_if_tag ParserTag::SkipDelimiters;
+	BracesClose = '}', skip_if_tag ParserTag::SkipDelimiters;
 
 }

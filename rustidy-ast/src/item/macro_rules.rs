@@ -9,7 +9,7 @@ use {
 	},
 	rustidy_ast_util::{AtLeast1, Identifier, IdentifierOrKeyword, PunctuatedTrailing, RawIdentifier},
 	rustidy_format::Format,
-	rustidy_parse::Parse,
+	rustidy_parse::{Parse, ParserTag},
 	rustidy_print::Print,
 };
 
@@ -94,8 +94,8 @@ pub enum MacroMatcher {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub enum MacroMatch {
-	#[parse(with_tag = SkipTokenDollar)]
-	#[parse(with_tag = SkipDelimiters)]
+	#[parse(with_tag = ParserTag::SkipTokenDollar)]
+	#[parse(with_tag = ParserTag::SkipDelimiters)]
 	Token(Token),
 
 	Matcher(MacroMatcher),
@@ -125,7 +125,7 @@ pub struct MacroMatchDollarIdent {
 #[derive(Parse, Format, Print)]
 pub enum MacroMatchDollarIdentInner {
 	Raw(RawIdentifier),
-	#[parse(with_tag = SkipTokenCrate)]
+	#[parse(with_tag = ParserTag::SkipTokenCrate)]
 	IdentOrKw(IdentifierOrKeyword),
 	Underscore(token::Underscore),
 }
@@ -168,10 +168,10 @@ pub struct MacroMatchDollarRep {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct MacroRepSep(
-	#[parse(with_tag = SkipDelimiters)]
-	#[parse(with_tag = SkipTokenStar)]
-	#[parse(with_tag = SkipTokenPlus)]
-	#[parse(with_tag = SkipTokenQuestion)]
+	#[parse(with_tag = ParserTag::SkipDelimiters)]
+	#[parse(with_tag = ParserTag::SkipTokenStar)]
+	#[parse(with_tag = ParserTag::SkipTokenPlus)]
+	#[parse(with_tag = ParserTag::SkipTokenQuestion)]
 	Token,
 );
 

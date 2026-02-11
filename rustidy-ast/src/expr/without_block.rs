@@ -53,7 +53,7 @@ use {
 	},
 	rustidy_ast_literal::{IntegerLiteral, LiteralExpression},
 	rustidy_format::Format,
-	rustidy_parse::{Parse, ParseRecursive, RecursiveWrapper},
+	rustidy_parse::{Parse, ParseRecursive, ParserTag, RecursiveWrapper},
 	rustidy_print::Print,
 };
 
@@ -63,7 +63,7 @@ use {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, ParseRecursive, Format, Print)]
 #[parse(from = RecursiveWrapper::<ExpressionWithoutBlock, ExpressionInner>)]
-#[parse(skip_if_tag = SkipExpressionWithoutBlock)]
+#[parse(skip_if_tag = ParserTag::SkipExpressionWithoutBlock)]
 #[parse_recursive(root = ExpressionInner)]
 #[parse_recursive(transparent)]
 #[parse_recursive(into_root = ExpressionInner)]

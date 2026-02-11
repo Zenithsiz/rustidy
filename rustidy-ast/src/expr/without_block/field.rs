@@ -20,7 +20,7 @@ use {
 #[parse_recursive(into_root = ExpressionWithoutBlockInner)]
 #[parse_recursive(kind = "left")]
 #[format(with_tag(
-	tag = InsideChain,
+	tag = FormatTag::InsideChain,
 	if = self.len(ctx, true) >= ctx.config().max_chain_len,
 	skip_if_has_tag = true
 ))]

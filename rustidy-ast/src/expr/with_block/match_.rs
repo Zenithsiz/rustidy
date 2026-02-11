@@ -11,7 +11,7 @@ use {
 	},
 	core::ops::ControlFlow,
 	rustidy_format::Format,
-	rustidy_parse::{FromRecursiveRoot, Parse, ParseError, Parser, ParserError},
+	rustidy_parse::{FromRecursiveRoot, Parse, ParseError, Parser, ParserError, ParserTag},
 	rustidy_print::Print,
 };
 
@@ -33,7 +33,7 @@ pub struct MatchExpression {
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
-pub struct Scrutinee(#[parse(with_tag = SkipStructExpression)] Expression);
+pub struct Scrutinee(#[parse(with_tag = ParserTag::SkipStructExpression)] Expression);
 
 /// `MatchArms`
 #[derive(PartialEq, Eq, Debug)]

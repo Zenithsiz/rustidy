@@ -35,7 +35,7 @@ pub struct CallExpression {
 #[parse_recursive(into_root = ExpressionWithoutBlockInner)]
 #[parse_recursive(kind = "left")]
 #[format(with_tag(
-	tag = InsideChain,
+	tag = FormatTag::InsideChain,
 	if = self.len(ctx, true) >= ctx.config().max_chain_len,
 	skip_if_has_tag = true
 ))]
@@ -52,7 +52,7 @@ pub struct MethodCallExpression {
 	#[format(and_with = Parenthesized::format_remove)]
 	// TODO: Is it fine to remove *all* tags?
 	#[format(without_tags)]
-	pub params: Parenthesized<Option<CallParams>>,
+	pub params:  Parenthesized<Option<CallParams>>,
 }
 
 /// `CallParams`

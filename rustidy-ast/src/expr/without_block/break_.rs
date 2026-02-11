@@ -4,7 +4,7 @@
 use {
 	crate::{expr::Expression, lifetime::LifetimeOrLabel, token},
 	rustidy_format::Format,
-	rustidy_parse::Parse,
+	rustidy_parse::{Parse, ParserTag},
 	rustidy_print::Print,
 };
 
@@ -17,7 +17,7 @@ pub struct BreakExpression {
 	#[format(before_with = Format::prefix_ws_set_single)]
 	pub label:     Option<LifetimeOrLabel>,
 	// TODO: Do we need to be parse-recursive here?
-	#[parse(skip_if_tag = SkipOptionalTrailingBlockExpression)]
+	#[parse(skip_if_tag = ParserTag::SkipOptionalTrailingBlockExpression)]
 	#[format(before_with = Format::prefix_ws_set_single)]
 	pub expr:      Option<Expression>,
 }

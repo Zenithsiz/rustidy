@@ -19,7 +19,7 @@ use {
 	core::fmt::Debug,
 	rustidy_ast_util::{RemainingBlockComment, RemainingLine},
 	rustidy_format::{Format, FormatFn},
-	rustidy_parse::Parse,
+	rustidy_parse::{Parse, ParserTag},
 	rustidy_print::Print,
 };
 
@@ -182,7 +182,7 @@ pub enum TokenTree {
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
-pub struct TokenNonDelimited(#[parse(with_tag = SkipDelimiters)] pub token::Token);
+pub struct TokenNonDelimited(#[parse(with_tag = ParserTag::SkipDelimiters)] pub token::Token);
 
 /// Formats the value of a `WithOuterAttributes<T, _>` if at least 1 attribute exists
 pub fn format_outer_value_non_empty<T>(f: impl FormatFn<T>) -> impl FormatFn<WithOuterAttributes<T>> {

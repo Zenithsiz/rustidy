@@ -90,7 +90,7 @@ struct Attrs {
 	root:        syn::TypePath,
 	into_root:   Option<syn::TypePath>,
 	// TODO: We should allow multiple here
-	skip_if_tag: Option<syn::Ident>,
+	skip_if_tag: Option<syn::Expr>,
 
 	kind: Option<Kind>,
 }
