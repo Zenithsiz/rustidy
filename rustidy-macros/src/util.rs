@@ -111,3 +111,39 @@ pub impl<A, B, E, I: IntoIterator<Item = Result<(A, B), E>>> I {
 		Ok((a, b))
 	}
 }
+
+#[derive(Debug)]
+pub struct Fmt {
+	pub parts: Vec<syn::Expr>,
+}
+
+impl darling::FromMeta for Fmt {
+	fn from_expr(expr: &syn::Expr) -> darling::Result<Self> {
+		Ok(Self {
+			parts: vec![expr.clone()],
+		})
+	}
+
+	fn from_list(items: &[darling::ast::NestedMeta]) -> darling::Result<Self> {
+		let parts = items
+			.iter()
+			.map(|meta| match meta {
+				darling::ast::NestedMeta::Meta(meta) => match meta {
+					syn::Meta::Path(path) => Ok(syn::Expr::Path(syn::ExprPath {
+						attrs: vec![],
+						qself: None,
+						path:  path.clone(),
+					})),
+					syn::Meta::List(_) => todo!("Expected a literal or path"),
+					syn::Meta::NameValue(_) => todo!("Expected a literal or path"),
+				},
+				darling::ast::NestedMeta::Lit(lit) => Ok(syn::Expr::Lit(syn::ExprLit {
+					attrs: vec![],
+					lit:   lit.clone(),
+				})),
+			})
+			.collect::<Result<Vec<_>, darling::Error>>()?;
+
+		Ok(Self { parts })
+	}
+}

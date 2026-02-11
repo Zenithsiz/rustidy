@@ -33,7 +33,7 @@ pub macro decl_tokens(
 		#[derive(PartialEq, Eq, Debug)]
 		#[derive(serde::Serialize, serde::Deserialize)]
 		#[derive(Parse, Format, Print)]
-		#[parse(error(name = NotFound, fmt = concat!("Expected `", $Token, "`")))]
+		#[parse(error(name = NotFound, fmt("Expected `{}`", $Token)))]
 		#[parse(error(name = FollowsXid, fmt = "Token ends with `XID_CONTINUE` and follows `XID_START` or `_`"))]
 		$(
 			#[parse(skip_if_tag = $skip_if_tag)]

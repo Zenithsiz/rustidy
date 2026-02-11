@@ -107,7 +107,7 @@ impl NonNulByteEscape {
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
-#[parse(error(name = Escape, fmt = "Expected `\\u{XXXXX}`"))]
+#[parse(error(name = Escape, fmt = "Expected `\\u{{XXXXX}}`"))]
 #[parse(error(name = TooManyDigits, fmt = "Expected at most 6 digits", fatal))]
 pub struct UnicodeEscape(#[parse(try_update_with = Self::parse)] pub AstStr);
 

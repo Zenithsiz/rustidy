@@ -2,7 +2,7 @@
 
 // Imports
 use {
-	crate::util::{self, IteratorTryUnzip},
+	crate::util::{self, Fmt, IteratorTryUnzip},
 	app_error::{AppError, Context, bail, ensure},
 	darling::FromDeriveInput,
 	itertools::Itertools,
@@ -10,16 +10,6 @@ use {
 	quote::quote,
 	syn::parse_quote,
 };
-
-// TODO: Just use `#[darling(with = "darling::util::parse_expr::preserve_str_literal")]` instead of this.
-#[derive(Debug)]
-struct Fmt(syn::Expr);
-
-impl darling::FromMeta for Fmt {
-	fn from_expr(expr: &syn::Expr) -> darling::Result<Self> {
-		Ok(Self(expr.clone()))
-	}
-}
 
 #[derive(Debug, darling::FromField, derive_more::AsRef)]
 #[darling(attributes(parse_error))]
@@ -249,11 +239,16 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 					let output = match &*field_idents {
 						[] => {
 							ensure!(!variant.transparent, "Empty variants may not be transparent");
-							let Fmt(msg) = variant.fmt.as_ref().context(
+							let Fmt { parts } = variant.fmt.as_ref().context(
 								"Expected either `#[parse_error(transparent)]` or `#[parse_error(fmt = \"...\")]`",
 							)?;
 
-							quote! { app_error::AppError::msg(#msg) }
+							quote! {
+								match format_args!(#( #parts, )*).as_str() {
+									Some(fmt) => app_error::AppError::msg(fmt),
+									None => app_error::AppError::fmt(format!(#( #parts, )*)),
+								}
+							}
 						},
 						[field_ident] => {
 							quote! { rustidy_parse::ParseError::to_app_error(#field_ident, parser) }
@@ -310,7 +305,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 					quote! { #field_access.to_app_error(parser) }
 				},
 				None => {
-					let Fmt(fmt) = item_error_fmt
+					let Fmt { parts } = item_error_fmt
 						.as_ref()
 						.context("Expected either `#[parse_error(transparent)]` or `#[parse_error(fmt = \"...\")]`")?;
 
@@ -325,9 +320,9 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 					quote! {
 						let Self { #( #field_idents, )* } = self;
 
-						match format_args!(#fmt).as_str() {
+						match format_args!(#( #parts, )*).as_str() {
 							Some(fmt) => app_error::AppError::msg(fmt),
-							None => app_error::AppError::fmt(format!(#fmt)),
+							None => app_error::AppError::fmt(format!(#( #parts, )*)),
 						}
 					}
 				},

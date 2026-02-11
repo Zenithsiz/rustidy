@@ -2,7 +2,7 @@
 
 // Imports
 use {
-	crate::util,
+	crate::util::{self, Fmt},
 	app_error::{AppError, Context, app_error, ensure},
 	convert_case::Casing,
 	darling::FromDeriveInput,
@@ -17,8 +17,7 @@ use {
 struct ExtraErrorVariant {
 	// Note: This would ideally be `syn::Variant`, but darling doesn't support that
 	name:        syn::Expr,
-	#[darling(with = "darling::util::parse_expr::preserve_str_literal", map = "Some")]
-	fmt:         Option<syn::Expr>,
+	fmt:         Option<Fmt>,
 	#[darling(default)]
 	transparent: bool,
 	#[darling(default)]
@@ -145,9 +144,8 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 	});
 
 	let skip_if_tag_err_variant = attrs.skip_if_tag.as_ref().map(|tag| {
-		let fmt_msg = format!("Tag `{tag}` was present");
 		quote! {
-			#[parse_error(fmt = #fmt_msg)]
+			#[parse_error(fmt("Tag `{:?}` was present", rustidy_parse::ParserTag::#tag))]
 			#skip_if_tag_err_variant_ident,
 		}
 	});
@@ -623,7 +621,7 @@ fn derive_extra_error_variant(
 		"Must specify exactly one of `fmt` or `transparent`"
 	);
 	let attr = match fmt {
-		Some(fmt) => quote! { #[parse_error(fmt = #fmt)] },
+		Some(Fmt { parts }) => quote! { #[parse_error(fmt( #( #parts ),* ))] },
 		None => quote! { #[parse_error(transparent)] },
 	};
 
