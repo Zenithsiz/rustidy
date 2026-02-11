@@ -52,6 +52,7 @@ pub struct MethodCallExpression {
 	#[format(and_with = Parenthesized::format_remove)]
 	// TODO: Is it fine to remove *all* tags?
 	#[format(without_tags)]
+	#[format(indent(if_has_tag = FormatTag::InsideChain))]
 	pub params:  Parenthesized<Option<CallParams>>,
 }
 

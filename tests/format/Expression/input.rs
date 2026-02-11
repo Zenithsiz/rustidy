@@ -12,4 +12,9 @@ fn chain() {
 
 	#[rustidy::config(max_chain_len = 6)]
 	let _ = a.b.c.d(a.b.c).e.f;
+
+	#[rustidy::config(max_chain_len = 0)]
+	let _ = a.b.c.d(|| {
+		let _ = 5;
+	}).e.f;
 }
