@@ -40,7 +40,7 @@ fn test_case(test_dir: &Path) {
 	let test_path = test_dir.join("input.rs");
 	let input = fs::read_to_string(&test_path).expect("Unable to read file");
 
-	let mut crate_ = rustidy::parse(&input, &test_path).expect("Input did not fail");
+	let mut crate_ = rustidy::parse(&input, &test_path).expect("Unable to parse input");
 
 	let config = rustidy_util::Config::default();
 	let mut ctx = rustidy_format::Context::new(&input, &config);
