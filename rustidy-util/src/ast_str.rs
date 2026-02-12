@@ -134,7 +134,7 @@ pub enum AstStrRepr {
 }
 
 impl AstStrRepr {
-	/// Returns the length of this string
+	/// Returns the length of this representation
 	#[must_use]
 	pub fn len(&self) -> usize {
 		match *self {
@@ -152,13 +152,13 @@ impl AstStrRepr {
 		}
 	}
 
-	/// Returns if this string is empty
+	/// Returns if this representation is empty
 	#[must_use]
 	pub fn is_empty(&self) -> bool {
 		self.len() == 0
 	}
 
-	/// Returns if this string is blank
+	/// Returns if this representation is blank
 	#[must_use]
 	pub fn is_blank(&self, input: &str) -> bool {
 		match *self {
@@ -171,7 +171,7 @@ impl AstStrRepr {
 		}
 	}
 
-	/// Returns if this string has newlines
+	/// Returns if this representation has newlines
 	#[must_use]
 	pub fn has_newlines(&self, input: &str) -> bool {
 		match *self {
@@ -185,7 +185,7 @@ impl AstStrRepr {
 		}
 	}
 
-	/// Returns if this string is equal to `other`
+	/// Returns if this representation is equal to `other`
 	#[must_use]
 	pub fn is_str(&self, input: &str, other: &str) -> bool {
 		match *self {
@@ -198,7 +198,7 @@ impl AstStrRepr {
 		}
 	}
 
-	/// Writes this string
+	/// Writes this representation
 	pub fn write(&self, input: &str, output: &mut String) {
 		match *self {
 			Self::AstRange(range) => output.push_str(range.str(input)),
