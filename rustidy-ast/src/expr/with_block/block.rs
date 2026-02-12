@@ -37,7 +37,7 @@ static TYPE_ARENA: Arena<BlockExpression> = Arena::new();
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Format, Print)]
 pub struct Statements {
-	#[format(and_with = rustidy_format::format_vec_each_with_all(Format::prefix_ws_set_cur_indent))]
+	#[format(and_with = rustidy_format::format_vec_each_with(Format::prefix_ws_set_cur_indent))]
 	pub stmts:         Vec<Statement>,
 	#[format(before_with(expr = Format::prefix_ws_set_cur_indent, if = !self.stmts.is_empty()))]
 	pub trailing_expr: Option<ExpressionWithoutBlock>,
