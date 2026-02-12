@@ -61,8 +61,7 @@ impl<T, L, R> Delimited<T, L, R> {
 		match self.value.is_blank(ctx, false) {
 			true => {
 				self.value.format(ctx, &mut Whitespace::remove);
-				self.suffix
-					.format(ctx, &mut Whitespace::set_prev_indent_remove_if_empty);
+				self.suffix.format(ctx, &mut Whitespace::set_prev_indent_remove_if_pure);
 			},
 			false => {
 				self.value.format(ctx, &mut Whitespace::set_cur_indent);

@@ -13,50 +13,57 @@ use {
 	std::sync::Arc,
 };
 
-// TODO: This needs documentation since we removed `Format::prefix_ws_*`.
 #[extend::ext(name = WhitespaceFormat)]
 pub impl Whitespace {
+	/// Returns if this whitespace only contains pure whitespace
 	fn is_pure(&mut self, _ctx: &mut crate::Context) -> bool {
 		self.0.get().rest.is_empty()
 	}
 
+	/// Does nothing
 	fn preserve(&mut self, _ctx: &mut crate::Context) {}
 
+	/// Removes this whitespace
 	fn remove(&mut self, ctx: &mut crate::Context) {
 		self::format(self, ctx, FormatKind::Remove);
 	}
 
+	/// Sets this whitespace to `len` spaces.
 	fn set_spaces(&mut self, ctx: &mut crate::Context, len: usize) {
 		self::format(self, ctx, FormatKind::Spaces { len });
 	}
 
+	/// Sets this whitespace to a single space.
 	fn set_single(&mut self, ctx: &mut crate::Context) {
 		self.set_spaces(ctx, 1);
 	}
 
-	fn set_indent(&mut self, ctx: &mut crate::Context, offset: isize, remove_if_empty: bool) {
-		self::format(self, ctx, FormatKind::Indent {
-			offset,
-			remove_if_empty,
-		});
+	/// Sets this whitespace to `offset` indentation, removing it if pure and `remove_if_pure`.
+	fn set_indent(&mut self, ctx: &mut crate::Context, offset: isize, remove_if_pure: bool) {
+		self::format(self, ctx, FormatKind::Indent { offset, remove_if_pure });
 	}
 
+	/// Sets this whitespace to the current indentation indentation
 	fn set_cur_indent(&mut self, ctx: &mut crate::Context) {
 		self.set_indent(ctx, 0, false);
 	}
 
+	/// Sets this whitespace to the previous indentation indentation
 	fn set_prev_indent(&mut self, ctx: &mut crate::Context) {
 		self.set_indent(ctx, -1, false);
 	}
 
-	fn set_prev_indent_remove_if_empty(&mut self, ctx: &mut crate::Context) {
+	/// Sets this whitespace to the previous indentation indentation, removing it if pure and `remove_if_pure`.
+	fn set_prev_indent_remove_if_pure(&mut self, ctx: &mut crate::Context) {
 		self.set_indent(ctx, -1, true);
 	}
 
+	/// Sets this whitespace to the next indentation indentation
 	fn set_next_indent(&mut self, ctx: &mut crate::Context) {
 		self.set_indent(ctx, 1, false);
 	}
 
+	/// Joins `other` to this whitespace as a suffix
 	fn join_suffix(&mut self, other: Self) {
 		let mut lhs = self.0.get_mut();
 		let mut rhs = other.0.take();
@@ -70,6 +77,7 @@ pub impl Whitespace {
 		lhs.rest.append(&mut rhs.rest);
 	}
 
+	/// Joins `other` to this whitespace as a prefix
 	fn join_prefix(&mut self, mut other: Self) {
 		replace_with::replace_with_or_abort(self, |this| {
 			other.join_suffix(this);
@@ -122,8 +130,8 @@ pub enum FormatKind {
 		/// Indentation offset
 		offset: isize,
 
-		/// Remove if no comments exist
-		remove_if_empty: bool,
+		/// Remove if the whitespace is pure
+		remove_if_pure: bool,
 	},
 }
 
@@ -161,10 +169,7 @@ impl FormatKind {
 		match self {
 			Self::Remove => "".into(),
 			Self::Spaces { len } => AstStrRepr::Spaces { len },
-			Self::Indent {
-				offset,
-				remove_if_empty,
-			} => match remove_if_empty && is_last {
+			Self::Indent { offset, remove_if_pure } => match remove_if_pure && is_last {
 				true => "".into(),
 				false =>
 					ctx.with_indent_offset_if(offset, is_last, |ctx| Self::indent_str_nl(ctx, cur_str, after_newline)),

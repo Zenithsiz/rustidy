@@ -95,16 +95,16 @@ fn test_cases_with(
 				(case.expected_remove, FormatKind::Remove),
 				(case.expected_set_single, FormatKind::Spaces { len: 1 }),
 				(case.expected_set_indent, FormatKind::Indent {
-					offset:          0,
-					remove_if_empty: false,
+					offset:         0,
+					remove_if_pure: false,
 				}),
 				(case.expected_set_prev_indent, FormatKind::Indent {
-					offset:          -1,
-					remove_if_empty: false,
+					offset:         -1,
+					remove_if_pure: false,
 				}),
 				(case.expected_set_prev_indent_or_remove, FormatKind::Indent {
-					offset:          -1,
-					remove_if_empty: true,
+					offset:         -1,
+					remove_if_pure: true,
 				}),
 			]
 			.into_iter()
