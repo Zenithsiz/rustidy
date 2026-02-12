@@ -65,12 +65,22 @@ impl AstStr {
 		self.repr().write(input, output);
 	}
 
+	/// Returns the string of this string, if it comes from the input (or is static)
+	#[must_use]
+	pub fn str_input<'input>(&self, input: &'input str) -> Option<&'input str> {
+		self.repr().str_input(input)
+	}
+
 	/// Returns the string of this string
 	// TODO: This can be somewhat expensive, should we replace it with
 	//       functions performing whatever checks the callers need instead?
 	#[must_use]
 	pub fn str<'input>(&self, input: &'input str) -> Cow<'input, str> {
-		self.repr().str(input)
+		let repr = self.repr();
+		match repr.str_input(input) {
+			Some(s) => s.into(),
+			None => repr.str(input).into_owned().into(),
+		}
 	}
 }
 
@@ -218,22 +228,41 @@ impl AstStrRepr {
 		}
 	}
 
-	/// Returns the string of this string
-	// TODO: This can be somewhat expensive, should we replace it with
-	//       functions performing whatever checks the callers need instead?
+	/// Returns the string of this representation, if it comes from the input (or is static).
 	#[must_use]
-	pub fn str<'input>(&self, input: &'input str) -> Cow<'input, str> {
-		match *self {
-			Self::AstRange(range) => range.str(input).into(),
-			Self::String(s) => s.into(),
-			Self::Char(ch) => ch.to_string().into(),
-			Self::Dynamic(ref s) => s.clone().into(),
+	pub fn str_input<'input>(&self, input: &'input str) -> Option<&'input str> {
+		match self {
+			Self::AstRange(range) => Some(range.str(input)),
+			Self::String(s) => Some(s),
 
 			// Special case these to avoid a `String` allocation
 			Self::Spaces { len: 0 } => "".into(),
 			Self::Spaces { len: 1 } => " ".into(),
 
-			Self::Spaces { .. } | Self::Indentation { .. } | Self::Join { .. } => {
+			_ => None,
+		}
+	}
+
+	/// Returns the string of this representation, if it's cheap to get it
+	#[must_use]
+	pub fn str_cheap<'a>(&'a self, input: &'a str) -> Option<&'a str> {
+		match self.str_input(input) {
+			Some(s) => Some(s),
+			None => match self {
+				Self::Dynamic(s) => Some(s),
+				_ => None,
+			},
+		}
+	}
+
+	/// Returns a string of this representation
+	// TODO: This can be somewhat expensive, should we replace it with
+	//       functions performing whatever checks the callers need instead?
+	#[must_use]
+	pub fn str<'a>(&'a self, input: &'a str) -> Cow<'a, str> {
+		match self.str_cheap(input) {
+			Some(s) => s.into(),
+			None => {
 				let mut output = String::new();
 				self.write(input, &mut output);
 				output.into()
