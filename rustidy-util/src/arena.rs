@@ -77,6 +77,9 @@ impl<T> ArenaSlot<T> {
 }
 
 /// Arena reference
+#[derive(derive_more::Debug)]
+#[debug("{:?}", &**self)]
+#[debug(bounds(T::Data: fmt::Debug))]
 pub struct ArenaRef<'a, T: ?Sized + ArenaData> {
 	value:   Option<T::Data>,
 	idx:     usize,
@@ -102,6 +105,9 @@ impl<T: ?Sized + ArenaData> Drop for ArenaRef<'_, T> {
 }
 
 /// Arena mutable reference
+#[derive(derive_more::Debug)]
+#[debug("{:?}", &**self)]
+#[debug(bounds(T::Data: fmt::Debug))]
 pub struct ArenaRefMut<'a, T: ?Sized + ArenaData> {
 	value:   Option<T::Data>,
 	idx:     usize,
