@@ -10,7 +10,8 @@ use {
 	rustidy_ast_util::Identifier,
 	rustidy_format::{Format, WhitespaceFormat},
 	rustidy_parse::Parse,
-	rustidy_print::Print, rustidy_util::Whitespace,
+	rustidy_print::Print,
+	rustidy_util::Whitespace,
 };
 
 /// `Union`

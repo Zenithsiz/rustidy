@@ -5,7 +5,8 @@ use {
 	crate::{expr::BlockExpression, token},
 	rustidy_format::{Format, WhitespaceFormat},
 	rustidy_parse::Parse,
-	rustidy_print::Print, rustidy_util::Whitespace,
+	rustidy_print::Print,
+	rustidy_util::Whitespace,
 };
 
 /// `AsyncBlockExpression`

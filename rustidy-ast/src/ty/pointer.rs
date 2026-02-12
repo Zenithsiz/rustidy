@@ -1,7 +1,14 @@
 //! Tuple type
 
 // Imports
-use {super::TypeNoBounds, crate::token, rustidy_format::{Format, WhitespaceFormat}, rustidy_parse::Parse, rustidy_print::Print, rustidy_util::Whitespace};
+use {
+	super::TypeNoBounds,
+	crate::token,
+	rustidy_format::{Format, WhitespaceFormat},
+	rustidy_parse::Parse,
+	rustidy_print::Print,
+	rustidy_util::Whitespace,
+};
 
 /// `RawPointerType`
 #[derive(PartialEq, Eq, Debug)]

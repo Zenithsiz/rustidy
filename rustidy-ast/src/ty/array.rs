@@ -6,7 +6,8 @@ use {
 	crate::{expr::Expression, token, util::Bracketed},
 	rustidy_format::{Format, WhitespaceFormat},
 	rustidy_parse::Parse,
-	rustidy_print::Print, rustidy_util::Whitespace,
+	rustidy_print::Print,
+	rustidy_util::Whitespace,
 };
 
 /// `ArrayType`

@@ -58,7 +58,11 @@ pub enum IntegerLiteralInner {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 #[parse(error(name = StartDigit, fmt = "Expected 0-9"))]
-pub struct DecLiteral(#[parse(try_update_with = Self::parse)] #[format(str)] pub AstStr);
+pub struct DecLiteral(
+	#[parse(try_update_with = Self::parse)]
+	#[format(str)]
+	pub AstStr,
+);
 
 impl DecLiteral {
 	fn parse(s: &mut &str) -> Result<(), DecLiteralError> {
@@ -77,7 +81,11 @@ impl DecLiteral {
 #[derive(Parse, Format, Print)]
 #[parse(error(name = Start0B, fmt = "Expected `0b`"))]
 #[parse(error(name = Digit, fmt = "Expected 0 or 1"))]
-pub struct BinLiteral(#[parse(try_update_with = Self::parse)] #[format(str)] pub AstStr);
+pub struct BinLiteral(
+	#[parse(try_update_with = Self::parse)]
+	#[format(str)]
+	pub AstStr,
+);
 
 impl BinLiteral {
 	fn parse(s: &mut &str) -> Result<(), BinLiteralError> {
@@ -98,7 +106,11 @@ impl BinLiteral {
 #[derive(Parse, Format, Print)]
 #[parse(error(name = Start0O, fmt = "Expected `0o`"))]
 #[parse(error(name = Digit, fmt = "Expected 0-7"))]
-pub struct OctLiteral(#[parse(try_update_with = Self::parse)] #[format(str)] pub AstStr);
+pub struct OctLiteral(
+	#[parse(try_update_with = Self::parse)]
+	#[format(str)]
+	pub AstStr,
+);
 
 impl OctLiteral {
 	fn parse(s: &mut &str) -> Result<(), OctLiteralError> {
@@ -119,7 +131,11 @@ impl OctLiteral {
 #[derive(Parse, Format, Print)]
 #[parse(error(name = Start0X, fmt = "Expected `0x`"))]
 #[parse(error(name = Digit, fmt = "Expected 0-9 or a-f"))]
-pub struct HexLiteral(#[parse(try_update_with = Self::parse)] #[format(str)] pub AstStr);
+pub struct HexLiteral(
+	#[parse(try_update_with = Self::parse)]
+	#[format(str)]
+	pub AstStr,
+);
 
 impl HexLiteral {
 	fn parse(s: &mut &str) -> Result<(), HexLiteralError> {

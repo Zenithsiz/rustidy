@@ -9,7 +9,8 @@ use {
 	},
 	rustidy_format::{Format, WhitespaceFormat},
 	rustidy_parse::ParseRecursive,
-	rustidy_print::Print, rustidy_util::Whitespace,
+	rustidy_print::Print,
+	rustidy_util::Whitespace,
 };
 
 /// `AwaitExpression`

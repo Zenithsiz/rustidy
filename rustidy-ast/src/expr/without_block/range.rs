@@ -10,7 +10,8 @@ use {
 	},
 	rustidy_format::{Format, WhitespaceFormat},
 	rustidy_parse::{Parse, ParseRecursive, ParserTag},
-	rustidy_print::Print, rustidy_util::Whitespace,
+	rustidy_print::Print,
+	rustidy_util::Whitespace,
 };
 
 /// `RangeExpression`

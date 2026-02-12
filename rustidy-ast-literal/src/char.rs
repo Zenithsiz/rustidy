@@ -24,7 +24,9 @@ use {
 #[parse(error(name = EndQuote, fmt = "Expected `'` after `'`"))]
 pub struct CharLiteral(
 	#[format(whitespace)] pub Whitespace,
-	#[parse(try_update_with = Self::parse)] #[format(str)] pub AstStr,
+	#[parse(try_update_with = Self::parse)]
+	#[format(str)]
+	pub AstStr,
 );
 
 impl CharLiteral {

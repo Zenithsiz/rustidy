@@ -51,7 +51,8 @@ use {
 	rustidy_ast_literal::{IntegerLiteral, LiteralExpression},
 	rustidy_format::{Format, WhitespaceFormat},
 	rustidy_parse::{Parse, ParseRecursive, ParserTag, RecursiveWrapper},
-	rustidy_print::Print, rustidy_util::Whitespace,
+	rustidy_print::Print,
+	rustidy_util::Whitespace,
 };
 
 /// `ExpressionWithoutBlock`
