@@ -535,6 +535,16 @@ impl<'a, 'input> Context<'a, 'input> {
 		self.tags().any(|cur_tag| cur_tag == tag)
 	}
 
+	/// Returns if this context has a tag and removes it
+	#[must_use]
+	pub fn take_tag(&mut self, tag: impl Into<FormatTag>) -> bool {
+		let tag = tag.into();
+
+		let prev_len = self.tags.len();
+		self.tags.retain(|cur_tag| *cur_tag != tag);
+		self.tags.len() != prev_len
+	}
+
 	/// Calls `f` with tags `tags` added to this context
 	pub fn with_tags<O>(&mut self, tags: impl IntoIterator<Item = FormatTag>, f: impl FnOnce(&mut Self) -> O) -> O {
 		let tags_len = self.tags.len();
@@ -553,6 +563,14 @@ impl<'a, 'input> Context<'a, 'input> {
 	/// Calls `f` with tag `tag` added to this context
 	pub fn with_tag<O>(&mut self, tag: impl Into<FormatTag>, f: impl FnOnce(&mut Self) -> O) -> O {
 		self.with_tags([tag.into()], f)
+	}
+
+	/// Calls `f` with tag `tag` added to this context if `pred` is true
+	pub fn with_tag_if<O>(&mut self, pred: bool, tag: impl Into<FormatTag>, f: impl FnOnce(&mut Self) -> O) -> O {
+		match pred {
+			true => self.with_tag(tag, f),
+			false => f(self),
+		}
 	}
 
 	/// Calls `f` with all tags removed.
