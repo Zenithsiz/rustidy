@@ -19,6 +19,17 @@ impl AstStr {
 		Self(ArenaIdx::new(repr.into()))
 	}
 
+	/// Replaces this ast string
+	pub fn replace(&mut self, input: &str, new_repr: impl Into<AstStrRepr>) {
+		let mut cur_repr = self.0.get_mut();
+		let new_repr = new_repr.into();
+
+		// TODO: Should we only check if it's cheap to do so?
+		if !cur_repr.is_str_eq_to(&new_repr, input) {
+			*cur_repr = new_repr;
+		}
+	}
+
 	/// Joins two strings
 	pub fn join(self, other: Self) -> Self {
 		Self(ArenaIdx::new(AstStrRepr::Join { lhs: self, rhs: other }))
@@ -92,7 +103,7 @@ impl ArenaData for AstStr {
 
 static ARENA: Arena<AstStr> = Arena::new();
 
-#[derive(Debug)]
+#[derive(PartialEq, Eq, Debug)]
 #[derive(derive_more::From)]
 #[derive(serde::Serialize)]
 #[serde(untagged)]
@@ -156,6 +167,24 @@ impl AstStrRepr {
 	#[must_use]
 	pub fn is_empty(&self) -> bool {
 		self.len() == 0
+	}
+
+	/// Returns if this repr has the same string as another
+	#[must_use]
+	pub fn is_str_eq_to(&self, other: &Self, input: &str) -> bool {
+		match (self, other) {
+			// If they're equal, we're done
+			(lhs, rhs) if lhs == rhs => true,
+
+			// If one of them can be cheaply represented as a string, compare it.
+			(lhs, rhs) if let Some(lhs) = lhs.str_cheap(input) => rhs.is_str(input, lhs),
+			(lhs, rhs) if let Some(rhs) = rhs.str_cheap(input) => lhs.is_str(input, rhs),
+
+			// Otherwise, turn one of them into a string and compare.
+			// TODO: This is expensive, ensure we only get
+			//       here for very rare representations
+			_ => self.is_str(input, &other.str(input)),
+		}
 	}
 
 	/// Returns if this representation is blank

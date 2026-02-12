@@ -201,7 +201,7 @@ pub fn format(ws: &mut Whitespace, ctx: &mut crate::Context, kind: FormatKind) {
 	let after_newline = is_after_newline(&inner.first.0.repr(), ctx);
 
 	let prefix_str = kind.prefix_str(ctx, &inner.first.0, inner.rest.is_empty(), after_newline);
-	inner.first.0 = AstStr::new(prefix_str);
+	inner.first.0.replace(ctx.input, prefix_str);
 
 	for (pos, (comment, ws)) in inner.rest.iter_mut().with_position() {
 		let is_last = matches!(pos, itertools::Position::Last | itertools::Position::Only);
@@ -209,6 +209,6 @@ pub fn format(ws: &mut Whitespace, ctx: &mut crate::Context, kind: FormatKind) {
 			true => kind.after_newline_str(ctx, &ws.0, is_last),
 			false => kind.normal_str(ctx, &ws.0, is_last),
 		};
-		ws.0 = AstStr::new(ws_str);
+		ws.0.replace(ctx.input, ws_str);
 	}
 }

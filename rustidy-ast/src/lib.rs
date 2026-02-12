@@ -111,7 +111,7 @@ impl CrateInner {
 		// Add the newline at the end of the trailing comment if it didn't have one already
 		if !s.ends_with('\n') {
 			s.push('\n');
-			trailing.0 = AstStr::new(AstStrRepr::Dynamic(s));
+			trailing.0.replace(ctx.input(), AstStrRepr::Dynamic(s));
 		}
 	}
 }

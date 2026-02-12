@@ -20,6 +20,13 @@ impl Whitespace {
 
 		Self(idx)
 	}
+
+	/// Clears this whitespace
+	pub fn clear(&mut self, input: &str) {
+		let mut inner = self.0.get_mut();
+		inner.first.0.replace(input, "");
+		inner.rest.clear();
+	}
 }
 
 impl ArenaData for Whitespace {
