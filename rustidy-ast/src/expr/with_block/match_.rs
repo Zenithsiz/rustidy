@@ -4,7 +4,7 @@
 use {
 	super::Conditions,
 	crate::{
-		attr::{self, BracedWithInnerAttributes, WithOuterAttributes},
+		attr::{BracedWithInnerAttributes, WithOuterAttributes},
 		expr::{Expression, ExpressionInner, ExpressionWithBlock, ExpressionWithoutBlock},
 		pat::Pattern,
 		token,
@@ -169,7 +169,6 @@ pub struct MatchArmWithExpr {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct MatchArm(
-	#[format(and_with = attr::format_outer_value_non_empty(Format::prefix_ws_set_cur_indent))]
 	pub  WithOuterAttributes<MatchArmInner>,
 );
 

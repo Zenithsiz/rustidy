@@ -4,7 +4,7 @@
 use {
 	super::function::{GenericParams, WhereClause},
 	crate::{
-		attr::{self, WithOuterAttributes},
+		attr::WithOuterAttributes,
 		expr::Expression,
 		token,
 		ty::Type,
@@ -83,10 +83,7 @@ impl StructFields {
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
-pub struct StructField(
-	#[format(and_with = attr::format_outer_value_non_empty(Format::prefix_ws_set_cur_indent))]
-	pub  WithOuterAttributes<StructFieldInner>,
-);
+pub struct StructField(pub WithOuterAttributes<StructFieldInner>);
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
@@ -146,10 +143,7 @@ pub struct TupleFields(
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
-pub struct TupleField(
-	#[format(and_with = attr::format_outer_value_non_empty(Format::prefix_ws_set_single))]
-	pub  WithOuterAttributes<TupleFieldInner>,
-);
+pub struct TupleField(pub WithOuterAttributes<TupleFieldInner>);
 
 /// `TupleFieldInner`
 #[derive(PartialEq, Eq, Debug)]

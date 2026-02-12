@@ -9,13 +9,13 @@ mod a {
 		}
 
 		#[rustidy::config(indent = "  ")]
-		fn a() {
+  fn a() {
     a;
     b;
   }
 
 		#[rustidy::config(indent = "/*indent*/")]
-		fn a() {
+/*indent*/fn a() {
 /*indent*//*indent*/a;
 /*indent*//*indent*/b;
 /*indent*/}
@@ -23,7 +23,7 @@ mod a {
 		#[rustidy::config(indent = "/*indent*/")]
 		#[a]
 		#[b]
-		fn a() {
+/*indent*/fn a() {
 /*indent*//*indent*/a;
 /*indent*//*indent*/b;
 /*indent*/}

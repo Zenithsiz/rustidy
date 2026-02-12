@@ -48,7 +48,7 @@ pub use self::{
 use {
 	super::{Expression, ExpressionInner},
 	crate::{
-		attr::{self, WithOuterAttributes},
+		attr::{WithOuterAttributes},
 		token,
 	},
 	rustidy_ast_literal::{IntegerLiteral, LiteralExpression},
@@ -68,7 +68,6 @@ use {
 #[parse_recursive(transparent)]
 #[parse_recursive(into_root = ExpressionInner)]
 pub struct ExpressionWithoutBlock(
-	#[format(and_with = attr::format_outer_value_non_empty(Format::prefix_ws_set_cur_indent))]
 	pub  WithOuterAttributes<ExpressionWithoutBlockInner>,
 );
 

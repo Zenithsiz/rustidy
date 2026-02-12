@@ -3,7 +3,7 @@
 // Imports
 use {
 	super::{
-		attr::{self, WithOuterAttributes},
+		attr::WithOuterAttributes,
 		expr::{BlockExpression, Expression, ExpressionWithBlock, ExpressionWithoutBlock},
 		item::Item,
 		pat::PatternNoTopAlt,
@@ -31,10 +31,7 @@ pub enum Statement {
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
-pub struct LetStatement(
-	#[format(and_with = attr::format_outer_value_non_empty(Format::prefix_ws_set_cur_indent))]
-	pub  WithOuterAttributes<LetStatementInner>,
-);
+pub struct LetStatement(pub WithOuterAttributes<LetStatementInner>);
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]

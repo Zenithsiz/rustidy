@@ -11,7 +11,7 @@ use {
 		function::{GenericParams, TypeParamBounds, WhereClause},
 	},
 	crate::{
-		attr::{self, BracedWithInnerAttributes, WithOuterAttributes},
+		attr::{BracedWithInnerAttributes, WithOuterAttributes},
 		token,
 	},
 	rustidy_ast_util::Identifier,
@@ -86,10 +86,7 @@ pub struct TraitColonBounds {
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
-pub struct AssociatedItem(
-	#[format(and_with = attr::format_outer_value_non_empty(Format::prefix_ws_set_cur_indent))]
-	pub  WithOuterAttributes<AssociatedItemInner>,
-);
+pub struct AssociatedItem(pub WithOuterAttributes<AssociatedItemInner>);
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]

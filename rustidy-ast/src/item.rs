@@ -39,7 +39,7 @@ pub use self::{
 // Imports
 use {
 	super::{
-		attr::{self, DelimTokenTree, DelimTokenTreeInner, OuterAttrOrDocComment, WithOuterAttributes},
+		attr::{DelimTokenTree, DelimTokenTreeInner, OuterAttrOrDocComment, WithOuterAttributes},
 		token,
 		util::{Braced, Parenthesized},
 		vis::Visibility,
@@ -95,10 +95,7 @@ impl Items {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 #[expect(clippy::use_self, reason = "`Parse` derive macro doesn't support `Self`")]
-pub struct Item(
-	#[format(and_with = rustidy_format::arena(attr::format_outer_value_non_empty(Format::prefix_ws_set_cur_indent)))]
-	pub ArenaIdx<Item>,
-);
+pub struct Item(pub ArenaIdx<Item>);
 
 impl Item {
 	#[expect(clippy::result_large_err, reason = "TODO")]

@@ -50,6 +50,11 @@ impl<T: Format> WithOuterAttributes<T> {
 			}
 		}
 
+		if !self.attrs.is_empty() {
+			// TODO: This should be customizable, but we need to use `value_ctx`,
+			//       so we can't just let the user do it later easily.
+			self.inner.prefix_ws_set_cur_indent(&mut value_ctx);
+		}
 		self.inner.format(&mut value_ctx);
 	}
 }

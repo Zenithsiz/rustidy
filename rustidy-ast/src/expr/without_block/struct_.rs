@@ -4,7 +4,7 @@
 use {
 	super::{TupleIndex, path::PathInExpression},
 	crate::{
-		attr::{self, WithOuterAttributes},
+		attr::{WithOuterAttributes},
 		expr::Expression,
 		token,
 		util::Braced,
@@ -70,7 +70,6 @@ pub struct StructExprFieldsEndBase {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct StructExprField(
-	#[format(and_with = attr::format_outer_value_non_empty(Format::prefix_ws_set_cur_indent))]
 	pub  WithOuterAttributes<StructExprFieldInner>,
 );
 

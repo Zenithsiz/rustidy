@@ -7,7 +7,7 @@ use {
 		struct_::{StructFields, TupleFields},
 	},
 	crate::{
-		attr::{self, WithOuterAttributes},
+		attr::{WithOuterAttributes},
 		expr::Expression,
 		token,
 		util::{Braced, Parenthesized},
@@ -52,7 +52,6 @@ pub struct EnumVariants(
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct EnumVariant(
-	#[format(and_with = attr::format_outer_value_non_empty(Format::prefix_ws_set_cur_indent))]
 	pub  WithOuterAttributes<EnumVariantInner>,
 );
 

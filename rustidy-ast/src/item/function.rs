@@ -3,7 +3,7 @@
 // Imports
 use {
 	crate::{
-		attr::{self, WithOuterAttributes},
+		attr::WithOuterAttributes,
 		expr::BlockExpression,
 		lifetime::Lifetime,
 		pat::PatternNoTopAlt,
@@ -160,10 +160,7 @@ pub struct FunctionParametersFullSelf {
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
-pub struct FunctionParam(
-	#[format(and_with = attr::format_outer_value_non_empty(Format::prefix_ws_set_single))]
-	pub  WithOuterAttributes<FunctionParamInner>,
-);
+pub struct FunctionParam(pub WithOuterAttributes<FunctionParamInner>);
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
@@ -278,10 +275,7 @@ pub struct GenericParamsInner(
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
-pub struct GenericParam(
-	#[format(and_with = attr::format_outer_value_non_empty(Format::prefix_ws_set_single))]
-	pub  WithOuterAttributes<GenericParamInner>,
-);
+pub struct GenericParam(pub WithOuterAttributes<GenericParamInner>);
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]

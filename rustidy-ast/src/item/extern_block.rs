@@ -4,7 +4,7 @@
 use {
 	super::{Function, MacroInvocationSemi, StaticItem, TypeAlias, function::Abi},
 	crate::{
-		attr::{self, BracedWithInnerAttributes, WithOuterAttributes},
+		attr::{BracedWithInnerAttributes, WithOuterAttributes},
 		token,
 		vis::Visibility,
 	},
@@ -38,10 +38,7 @@ pub struct ExternBlockItems(
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
-pub struct ExternalItem(
-	#[format(and_with = attr::format_outer_value_non_empty(Format::prefix_ws_set_cur_indent))]
-	pub  WithOuterAttributes<ExternalItemInner>,
-);
+pub struct ExternalItem(pub WithOuterAttributes<ExternalItemInner>);
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
