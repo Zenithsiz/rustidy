@@ -60,7 +60,7 @@ pub struct EnumVariant(
 #[derive(Parse, Format, Print)]
 pub struct EnumVariantInner {
 	pub vis:          Option<Visibility>,
-	#[format(before_with = Format::prefix_ws_set_single)]
+	#[format(before_with(expr = Format::prefix_ws_set_single, if = self.vis.is_some()))]
 	pub ident:        Identifier,
 	pub kind:         Option<EnumVariantKind>,
 	#[format(before_with = Format::prefix_ws_set_single)]
