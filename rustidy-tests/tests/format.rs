@@ -8,7 +8,6 @@
 // Imports
 use {
 	app_error::{AppError, Context, ensure},
-	rustidy_format::Format,
 	rustidy_parse::Parser,
 	rustidy_print::{Print, PrintFmt},
 	rustidy_util::AstPos,
@@ -48,16 +47,14 @@ fn test_case(test_dir: &Path) -> Result<(), AppError> {
 	let mut crate_ = rustidy::parse(&input, &test_path).context("Unable to parse input")?;
 
 	let config = rustidy_util::Config::default();
-	let mut ctx = rustidy_format::Context::new(&input, &config);
-	crate_.format(&mut ctx);
+	rustidy::format(&input, &config, &mut crate_);
 
 	let mut print_fmt = PrintFmt::new(&input);
 	crate_.print(&mut print_fmt);
 	let found_output = print_fmt.output().to_owned();
 
 	{
-		let mut ctx = rustidy_format::Context::new(&input, &config);
-		crate_.format(&mut ctx);
+		rustidy::format(&input, &config, &mut crate_);
 
 		let mut print_fmt = PrintFmt::new(&input);
 		crate_.print(&mut print_fmt);

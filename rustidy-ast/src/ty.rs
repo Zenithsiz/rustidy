@@ -29,10 +29,10 @@ use {
 		token,
 		util::Parenthesized,
 	},
-	rustidy_format::Format,
+	rustidy_format::{Format, WhitespaceFormat},
 	rustidy_parse::Parse,
 	rustidy_print::Print,
-	rustidy_util::{Arena, ArenaData, ArenaIdx},
+	rustidy_util::{Arena, ArenaData, ArenaIdx, Whitespace},
 };
 
 /// `Type`
@@ -103,16 +103,16 @@ pub struct NeverType(token::Not);
 #[parse(name = "a reference type")]
 pub struct ReferenceType {
 	pub ref_:     token::AndTy,
-	#[format(before_with = Format::prefix_ws_remove)]
+	#[format(prefix_ws = Whitespace::remove)]
 	pub lifetime: Option<Lifetime>,
-	#[format(and_with = match self.lifetime.is_some() {
-		true => Format::prefix_ws_set_single,
-		false => Format::prefix_ws_remove,
+	#[format(prefix_ws = match self.lifetime.is_some() {
+		true => Whitespace::set_single,
+		false => Whitespace::remove,
 	})]
 	pub mut_:     Option<token::Mut>,
-	#[format(and_with = match self.lifetime.is_some() || self.mut_.is_some() {
-		true => Format::prefix_ws_set_single,
-		false => Format::prefix_ws_remove,
+	#[format(prefix_ws = match self.lifetime.is_some() || self.mut_.is_some() {
+		true => Whitespace::set_single,
+		false => Whitespace::remove,
 	})]
 	pub ty:       Box<TypeNoBounds>,
 }
@@ -129,7 +129,7 @@ pub struct InferredType(token::Underscore);
 #[derive(Parse, Format, Print)]
 pub struct ImplTraitTypeOneBound {
 	pub impl_: token::Impl,
-	#[format(before_with = Format::prefix_ws_set_single)]
+	#[format(prefix_ws = Whitespace::set_single)]
 	pub bound: TraitBound,
 }
 
@@ -139,7 +139,7 @@ pub struct ImplTraitTypeOneBound {
 #[derive(Parse, Format, Print)]
 pub struct TraitObjectTypeOneBound {
 	pub dyn_:  Option<token::Dyn>,
-	#[format(before_with(expr = Format::prefix_ws_set_single, if = self.dyn_.is_some()))]
+	#[format(prefix_ws(expr = Whitespace::set_single, if = self.dyn_.is_some()))]
 	pub bound: TraitBound,
 }
 
@@ -149,7 +149,7 @@ pub struct TraitObjectTypeOneBound {
 #[derive(Parse, Format, Print)]
 pub struct ImplTraitType {
 	pub impl_: token::Impl,
-	#[format(before_with = Format::prefix_ws_set_single)]
+	#[format(prefix_ws = Whitespace::set_single)]
 	pub bound: TypeParamBounds,
 }
 
@@ -159,6 +159,6 @@ pub struct ImplTraitType {
 #[derive(Parse, Format, Print)]
 pub struct TraitObjectType {
 	pub dyn_:  Option<token::Dyn>,
-	#[format(before_with(expr = Format::prefix_ws_set_single, if = self.dyn_.is_some()))]
+	#[format(prefix_ws(expr = Whitespace::set_single, if = self.dyn_.is_some()))]
 	pub bound: TypeParamBounds,
 }

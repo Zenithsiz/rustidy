@@ -29,9 +29,18 @@
 // Imports
 use {
 	app_error::{AppError, app_error},
+	rustidy_ast::Crate,
+	rustidy_format::Format,
 	rustidy_parse::{ParseError, Parser},
+	rustidy_util::Config,
 	std::path::Path,
 };
+
+/// Formats the crate `crate_`.
+pub fn format(input: &str, config: &Config, crate_: &mut Crate) {
+	let mut ctx = rustidy_format::Context::new(input, config);
+	crate_.format(&mut ctx, &mut |_, _| panic!("Crate should not use prefix whitespace"));
+}
 
 /// Parses the input `input`.
 ///

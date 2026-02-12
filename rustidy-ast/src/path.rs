@@ -5,9 +5,10 @@ use {
 	super::token,
 	core::fmt::Debug,
 	rustidy_ast_util::{Identifier, Punctuated, punct},
-	rustidy_format::Format,
+	rustidy_format::{Format, WhitespaceFormat},
 	rustidy_parse::Parse,
 	rustidy_print::Print,
+	rustidy_util::Whitespace,
 };
 
 /// `SimplePath`
@@ -17,12 +18,20 @@ use {
 #[parse(name = "a simple path")]
 pub struct SimplePath {
 	pub prefix:   Option<token::PathSep>,
-	#[format(before_with(expr = Format::prefix_ws_remove, if = self.prefix.is_some()))]
-	#[format(and_with = punct::format(Format::prefix_ws_remove, Format::prefix_ws_remove))]
+	#[format(prefix_ws(expr = Whitespace::remove, if = self.prefix.is_some()))]
+	#[format(and_with = punct::format(Whitespace::remove, Whitespace::remove))]
 	pub segments: Punctuated<SimplePathSegment, token::PathSep>,
 }
 
 impl SimplePath {
+	// TODO: Remove once `UseDecl` no longer needs this
+	pub const fn prefix_ws(&mut self) -> &mut Whitespace {
+		match &mut self.prefix {
+			Some(prefix) => &mut prefix.ws,
+			None => self.segments.first.prefix_ws(),
+		}
+	}
+
 	/// Returns if this path is the same as `path`.
 	#[must_use]
 	pub fn is_str(&self, input: &str, path: &str) -> bool {
@@ -67,6 +76,20 @@ pub enum SimplePathSegment {
 }
 
 impl SimplePathSegment {
+	// TODO: Remove once `UseDecl` no longer needs this
+	pub const fn prefix_ws(&mut self) -> &mut Whitespace {
+		match self {
+			Self::Super(super_) => &mut super_.ws,
+			Self::SelfLower(self_lower) => &mut self_lower.ws,
+			Self::Crate(crate_) => &mut crate_.ws,
+			Self::DollarCrate(dollar_crate) => &mut dollar_crate.ws,
+			Self::Ident(ident) => match ident {
+				Identifier::Raw(ident) => &mut ident.0,
+				Identifier::NonKw(ident) => &mut ident.0.0,
+			},
+		}
+	}
+
 	/// Returns if this segment is the same as `segment`.
 	#[must_use]
 	pub fn is_str(&self, input: &str, segment: &str) -> bool {

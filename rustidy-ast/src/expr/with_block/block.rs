@@ -9,10 +9,10 @@ use {
 		token,
 	},
 	rustidy_ast_util::NotFollows,
-	rustidy_format::Format,
+	rustidy_format::{Format, WhitespaceFormat},
 	rustidy_parse::{Parse, ParseError, Parser, ParserError, ParserTag},
 	rustidy_print::Print,
-	rustidy_util::{Arena, ArenaData, ArenaIdx},
+	rustidy_util::{Arena, ArenaData, ArenaIdx, Whitespace},
 };
 
 /// `BlockExpression`
@@ -37,9 +37,9 @@ static TYPE_ARENA: Arena<BlockExpression> = Arena::new();
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Format, Print)]
 pub struct Statements {
-	#[format(and_with = rustidy_format::format_vec_each_with(Format::prefix_ws_set_cur_indent))]
+	#[format(and_with = rustidy_format::format_vec(Whitespace::set_cur_indent))]
 	pub stmts:         Vec<Statement>,
-	#[format(before_with(expr = Format::prefix_ws_set_cur_indent, if = !self.stmts.is_empty()))]
+	#[format(prefix_ws(expr = Whitespace::set_cur_indent, if = !self.stmts.is_empty()))]
 	pub trailing_expr: Option<ExpressionWithoutBlock>,
 }
 

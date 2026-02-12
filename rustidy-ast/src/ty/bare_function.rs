@@ -10,9 +10,10 @@ use {
 		util::Parenthesized,
 	},
 	rustidy_ast_util::{Identifier, Punctuated, PunctuatedTrailing, punct},
-	rustidy_format::Format,
+	rustidy_format::{Format, WhitespaceFormat},
 	rustidy_parse::Parse,
 	rustidy_print::Print,
+	rustidy_util::Whitespace,
 };
 
 /// `BareFunctionType`
@@ -21,15 +22,15 @@ use {
 #[derive(Parse, Format, Print)]
 pub struct BareFunctionType {
 	pub for_lifetimes: Option<ForLifetimes>,
-	#[format(before_with(expr = Format::prefix_ws_set_single, if = self.for_lifetimes.is_some()))]
+	#[format(prefix_ws(expr = Whitespace::set_single, if = self.for_lifetimes.is_some()))]
 	pub qualifiers:    Option<FunctionTypeQualifiers>,
-	#[format(before_with(expr = Format::prefix_ws_set_single, if = self.for_lifetimes.is_some() || self.qualifiers.is_some()))]
+	#[format(prefix_ws(expr = Whitespace::set_single, if = self.for_lifetimes.is_some() || self.qualifiers.is_some()))]
 	pub fn_:           token::Fn,
 	#[parse(fatal)]
-	#[format(before_with = Format::prefix_ws_remove)]
+	#[format(prefix_ws = Whitespace::remove)]
 	#[format(and_with = Parenthesized::format_remove)]
 	pub params:        Parenthesized<Option<FunctionParametersMaybeNamedVariadic>>,
-	#[format(before_with = Format::prefix_ws_set_single)]
+	#[format(prefix_ws = Whitespace::set_single)]
 	pub ret:           Option<BareFunctionReturnType>,
 }
 
@@ -39,7 +40,7 @@ pub struct BareFunctionType {
 #[derive(Parse, Format, Print)]
 pub struct FunctionTypeQualifiers {
 	pub unsafe_: Option<token::Unsafe>,
-	#[format(before_with(expr = Format::prefix_ws_set_single, if = self.unsafe_.is_some()))]
+	#[format(prefix_ws(expr = Whitespace::set_single, if = self.unsafe_.is_some()))]
 	pub extern_: Option<ExternAbi>,
 }
 
@@ -57,7 +58,7 @@ pub enum FunctionParametersMaybeNamedVariadic {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct MaybeNamedFunctionParameters(
-	#[format(and_with = punct::format_trailing(Format::prefix_ws_set_single, Format::prefix_ws_remove))]
+	#[format(and_with = punct::format_trailing(Whitespace::set_single, Whitespace::remove))]
 	PunctuatedTrailing<MaybeNamedParam, token::Comma>,
 );
 
@@ -72,7 +73,7 @@ pub struct MaybeNamedParam(pub WithOuterAttributes<MaybeNamedParamInner>);
 #[derive(Parse, Format, Print)]
 pub struct MaybeNamedParamInner {
 	pub name: Option<MaybeNamedParamInnerName>,
-	#[format(before_with(expr = Format::prefix_ws_set_single, if = self.name.is_some()))]
+	#[format(prefix_ws(expr = Whitespace::set_single, if = self.name.is_some()))]
 	pub ty:   Box<Type>,
 }
 
@@ -81,7 +82,7 @@ pub struct MaybeNamedParamInner {
 #[derive(Parse, Format, Print)]
 pub struct MaybeNamedParamInnerName {
 	pub inner: MaybeNamedParamInnerNameInner,
-	#[format(before_with = Format::prefix_ws_remove)]
+	#[format(prefix_ws = Whitespace::remove)]
 	pub colon: token::Colon,
 }
 
@@ -101,11 +102,11 @@ pub struct MaybeNamedFunctionParametersVariadic {
 	// TODO: `fn(...)` is accepted by the rust compiler, but
 	//       the reference demands at least 1 argument, should
 	//       we allow it?
-	#[format(and_with = punct::format(Format::prefix_ws_set_single, Format::prefix_ws_remove))]
+	#[format(and_with = punct::format(Whitespace::set_single, Whitespace::remove))]
 	pub params:   Punctuated<MaybeNamedParam, token::Comma>,
-	#[format(before_with = Format::prefix_ws_remove)]
+	#[format(prefix_ws = Whitespace::remove)]
 	pub comma:    token::Comma,
-	#[format(before_with = Format::prefix_ws_set_single)]
+	#[format(prefix_ws = Whitespace::set_single)]
 	pub variadic: WithOuterAttributes<token::DotDotDot>,
 }
 
@@ -115,6 +116,6 @@ pub struct MaybeNamedFunctionParametersVariadic {
 #[derive(Parse, Format, Print)]
 pub struct BareFunctionReturnType {
 	pub arrow: token::RArrow,
-	#[format(before_with = Format::prefix_ws_set_single)]
+	#[format(prefix_ws = Whitespace::set_single)]
 	pub ty:    Box<TypeNoBounds>,
 }

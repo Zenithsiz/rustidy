@@ -1,7 +1,7 @@
 //! Extern crate
 
 // Imports
-use {crate::token, rustidy_ast_util::Identifier, rustidy_format::Format, rustidy_parse::Parse, rustidy_print::Print};
+use {crate::token, rustidy_ast_util::Identifier, rustidy_format::{Format, WhitespaceFormat}, rustidy_parse::Parse, rustidy_print::Print, rustidy_util::Whitespace};
 
 /// `ExternCrate`
 #[derive(PartialEq, Eq, Debug)]
@@ -10,13 +10,13 @@ use {crate::token, rustidy_ast_util::Identifier, rustidy_format::Format, rustidy
 #[parse(name = "extern crate")]
 pub struct ExternCrate {
 	pub extern_:   token::Extern,
-	#[format(before_with = Format::prefix_ws_set_single)]
+	#[format(prefix_ws = Whitespace::set_single)]
 	pub crate_:    token::Crate,
-	#[format(before_with = Format::prefix_ws_set_single)]
+	#[format(prefix_ws = Whitespace::set_single)]
 	pub crate_ref: CrateRef,
-	#[format(before_with = Format::prefix_ws_set_single)]
+	#[format(prefix_ws = Whitespace::set_single)]
 	pub as_clause: Option<AsClause>,
-	#[format(before_with = Format::prefix_ws_remove)]
+	#[format(prefix_ws = Whitespace::remove)]
 	pub semi:      token::Semi,
 }
 
@@ -35,7 +35,7 @@ pub enum CrateRef {
 #[derive(Parse, Format, Print)]
 pub struct AsClause {
 	pub as_:  token::As,
-	#[format(before_with = Format::prefix_ws_set_single)]
+	#[format(prefix_ws = Whitespace::set_single)]
 	pub name: AsClauseName,
 }
 

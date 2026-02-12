@@ -8,9 +8,9 @@ use {
 		util::{Braced, Bracketed, Parenthesized},
 	},
 	rustidy_ast_util::{AtLeast1, Identifier, IdentifierOrKeyword, PunctuatedTrailing, RawIdentifier},
-	rustidy_format::Format,
+	rustidy_format::{Format, WhitespaceFormat},
 	rustidy_parse::{Parse, ParserTag},
-	rustidy_print::Print,
+	rustidy_print::Print, rustidy_util::Whitespace,
 };
 
 /// `MacroRulesDefinition`
@@ -20,11 +20,11 @@ use {
 pub struct MacroRulesDefinition {
 	pub macro_rules: token::MacroRules,
 	#[parse(fatal)]
-	#[format(before_with = Format::prefix_ws_remove)]
+	#[format(prefix_ws = Whitespace::remove)]
 	pub not:         token::Not,
-	#[format(before_with = Format::prefix_ws_set_single)]
+	#[format(prefix_ws = Whitespace::set_single)]
 	pub ident:       Identifier,
-	#[format(before_with = Format::prefix_ws_set_single)]
+	#[format(prefix_ws = Whitespace::set_single)]
 	#[format(indent)]
 	pub def:         MacroRulesDef,
 }

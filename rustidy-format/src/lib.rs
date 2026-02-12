@@ -81,76 +81,8 @@ pub trait Format {
 		.is_break()
 	}
 
-	/// Formats this type
-	fn format(&mut self, ctx: &mut Context);
-
-	/// Uses the first whitespace of this type, if any.
-	///
-	/// Returns if successfully used.
-	fn with_prefix_ws<O>(
-		&mut self,
-		ctx: &mut Context,
-		f: &mut impl FnMut(&mut Whitespace, &mut Context) -> O,
-	) -> Option<O>;
-
-	/// Returns if the prefix whitespace is pure
-	fn prefix_ws_is_pure(&mut self, ctx: &mut Context) -> bool {
-		self.with_prefix_ws(ctx, &mut |ws, ctx| ws.is_pure(ctx))
-			.unwrap_or(false)
-	}
-
-	/// Remove the prefix whitespace, if any
-	fn prefix_ws_remove(&mut self, ctx: &mut Context) {
-		self.with_prefix_ws(ctx, &mut |ws, ctx| ws.remove(ctx));
-	}
-
-	/// Sets the prefix whitespace to spaces
-	fn prefix_ws_set_spaces(&mut self, ctx: &mut Context, len: usize) {
-		self.with_prefix_ws(ctx, &mut |ws, ctx| ws.set_spaces(ctx, len));
-	}
-
-	/// Sets the prefix whitespace to a single space
-	fn prefix_ws_set_single(&mut self, ctx: &mut Context) {
-		self.prefix_ws_set_spaces(ctx, 1);
-	}
-
-	/// Sets the prefix whitespace to an indentation
-	fn prefix_ws_set_indent(&mut self, ctx: &mut Context, offset: isize, remove_if_empty: bool) {
-		self.with_prefix_ws(ctx, &mut |ws, ctx| ws.set_indent(ctx, offset, remove_if_empty));
-	}
-
-	/// Sets the prefix whitespace to the current indentation without removing if empty
-	fn prefix_ws_set_cur_indent(&mut self, ctx: &mut Context) {
-		self.prefix_ws_set_indent(ctx, 0, false);
-	}
-
-	/// Joins a whitespace into this type's prefix whitespace as a suffix.
-	fn prefix_ws_join_suffix(&mut self, ctx: &mut Context, ws: Whitespace) -> Result<(), Whitespace> {
-		let mut new_ws = Some(ws);
-
-		self.with_prefix_ws(ctx, &mut |ws, _ctx| {
-			ws.join_suffix(new_ws.take().expect("Should exist"));
-		});
-
-		match new_ws {
-			Some(ws) => Err(ws),
-			None => Ok(()),
-		}
-	}
-
-	/// Joins a whitespace into this type's prefix whitespace as a prefix.
-	fn prefix_ws_join_prefix(&mut self, ctx: &mut Context, ws: Whitespace) -> Result<(), Whitespace> {
-		let mut new_ws = Some(ws);
-
-		self.with_prefix_ws(ctx, &mut |ws, _ctx| {
-			ws.join_prefix(new_ws.take().expect("Should exist"));
-		});
-
-		match new_ws {
-			Some(ws) => Err(ws),
-			None => Ok(()),
-		}
-	}
+	/// Formats this type, using `prefix_ws` to format it's prefix whitespace, if any.
+	fn format(&mut self, ctx: &mut Context, prefix_ws: &mut impl FormatFn<Whitespace>);
 }
 
 impl<T: Format> Format for &'_ mut T {
@@ -163,16 +95,8 @@ impl<T: Format> Format for &'_ mut T {
 		(**self).with_strings(ctx, exclude_prefix_ws, f)
 	}
 
-	fn format(&mut self, ctx: &mut Context) {
-		(**self).format(ctx);
-	}
-
-	fn with_prefix_ws<O>(
-		&mut self,
-		ctx: &mut Context,
-		f: &mut impl FnMut(&mut Whitespace, &mut Context) -> O,
-	) -> Option<O> {
-		(**self).with_prefix_ws(ctx, f)
+	fn format(&mut self, ctx: &mut Context, prefix_ws: &mut impl FormatFn<Whitespace>) {
+		(**self).format(ctx, prefix_ws);
 	}
 }
 
@@ -186,16 +110,8 @@ impl<T: Format> Format for Box<T> {
 		(**self).with_strings(ctx, exclude_prefix_ws, f)
 	}
 
-	fn format(&mut self, ctx: &mut Context) {
-		(**self).format(ctx);
-	}
-
-	fn with_prefix_ws<O>(
-		&mut self,
-		ctx: &mut Context,
-		f: &mut impl FnMut(&mut Whitespace, &mut Context) -> O,
-	) -> Option<O> {
-		(**self).with_prefix_ws(ctx, f)
+	fn format(&mut self, ctx: &mut Context, prefix_ws: &mut impl FormatFn<Whitespace>) {
+		(**self).format(ctx, prefix_ws);
 	}
 }
 
@@ -212,20 +128,9 @@ impl<T: Format> Format for Option<T> {
 		}
 	}
 
-	fn format(&mut self, ctx: &mut Context) {
+	fn format(&mut self, ctx: &mut Context, prefix_ws: &mut impl FormatFn<Whitespace>) {
 		if let Some(value) = self {
-			value.format(ctx);
-		}
-	}
-
-	fn with_prefix_ws<O>(
-		&mut self,
-		ctx: &mut Context,
-		f: &mut impl FnMut(&mut Whitespace, &mut Context) -> O,
-	) -> Option<O> {
-		match self {
-			Some(value) => value.with_prefix_ws(ctx, f),
-			_ => None,
+			value.format(ctx, prefix_ws);
 		}
 	}
 }
@@ -244,20 +149,14 @@ impl<T: Format> Format for Vec<T> {
 		ControlFlow::Continue(())
 	}
 
-	fn format(&mut self, ctx: &mut Context) {
-		for value in self {
-			value.format(ctx);
-		}
-	}
+	fn format(&mut self, ctx: &mut Context, prefix_ws: &mut impl FormatFn<Whitespace>) {
+		let [first, rest @ ..] = &mut **self else {
+			return;
+		};
 
-	fn with_prefix_ws<O>(
-		&mut self,
-		ctx: &mut Context,
-		f: &mut impl FnMut(&mut Whitespace, &mut Context) -> O,
-	) -> Option<O> {
-		match self.first_mut() {
-			Some(value) => value.with_prefix_ws(ctx, f),
-			None => None,
+		first.format(ctx, prefix_ws);
+		for value in rest {
+			value.format(ctx, &mut Whitespace::preserve);
 		}
 	}
 }
@@ -272,15 +171,7 @@ impl Format for ! {
 		*self
 	}
 
-	fn format(&mut self, _ctx: &mut Context) {
-		*self
-	}
-
-	fn with_prefix_ws<O>(
-		&mut self,
-		_ctx: &mut Context,
-		_f: &mut impl FnMut(&mut Whitespace, &mut Context) -> O,
-	) -> Option<O> {
+	fn format(&mut self, _ctx: &mut Context, _prefix_ws: &mut impl FormatFn<Whitespace>) {
 		*self
 	}
 }
@@ -295,15 +186,7 @@ impl<T> Format for PhantomData<T> {
 		ControlFlow::Continue(())
 	}
 
-	fn format(&mut self, _ctx: &mut Context) {}
-
-	fn with_prefix_ws<O>(
-		&mut self,
-		_ctx: &mut Context,
-		_f: &mut impl FnMut(&mut Whitespace, &mut Context) -> O,
-	) -> Option<O> {
-		None
-	}
+	fn format(&mut self, _ctx: &mut Context, _prefix_ws: &mut impl FormatFn<Whitespace>) {}
 }
 
 impl Format for () {
@@ -316,15 +199,7 @@ impl Format for () {
 		ControlFlow::Continue(())
 	}
 
-	fn format(&mut self, _ctx: &mut Context) {}
-
-	fn with_prefix_ws<O>(
-		&mut self,
-		_ctx: &mut Context,
-		_f: &mut impl FnMut(&mut Whitespace, &mut Context) -> O,
-	) -> Option<O> {
-		None
-	}
+	fn format(&mut self, _ctx: &mut Context, _prefix_ws: &mut impl FormatFn<Whitespace>) {}
 }
 
 macro tuple_impl ($N:literal, $($T:ident),* $(,)?) {
@@ -347,18 +222,9 @@ macro tuple_impl ($N:literal, $($T:ident),* $(,)?) {
 			${concat( Tuple, $N )} { $( $T, )* }.with_strings(ctx, exclude_prefix_ws, f)
 		}
 
-		fn format(&mut self, ctx: &mut Context) {
+		fn format(&mut self, ctx: &mut Context, prefix_ws: &mut impl FormatFn<Whitespace>) {
 			let ( $($T,)* ) = self;
-			${concat( Tuple, $N )} { $( $T, )* }.format(ctx)
-		}
-
-		fn with_prefix_ws<O>(
-			&mut self,
-			ctx: &mut Context,
-			f: &mut impl FnMut(&mut Whitespace, &mut Context) -> O,
-		) -> Option<O> {
-			let ( $($T,)* ) = self;
-			${concat( Tuple, $N )} { $( $T, )* }.with_prefix_ws(ctx, f)
+			${concat( Tuple, $N )} { $( $T, )* }.format(ctx, prefix_ws)
 		}
 	}
 }
@@ -377,15 +243,7 @@ impl Format for AstStr {
 		f(self, ctx)
 	}
 
-	fn format(&mut self, _ctx: &mut Context) {}
-
-	fn with_prefix_ws<O>(
-		&mut self,
-		_ctx: &mut Context,
-		_f: &mut impl FnMut(&mut Whitespace, &mut Context) -> O,
-	) -> Option<O> {
-		None
-	}
+	fn format(&mut self, _ctx: &mut Context, _prefix_ws: &mut impl FormatFn<Whitespace>) {}
 }
 
 impl<T: ArenaData<Data: Format>> Format for ArenaIdx<T> {
@@ -398,16 +256,8 @@ impl<T: ArenaData<Data: Format>> Format for ArenaIdx<T> {
 		self.get_mut().with_strings(ctx, exclude_prefix_ws, f)
 	}
 
-	fn format(&mut self, ctx: &mut Context) {
-		self.get_mut().format(ctx);
-	}
-
-	fn with_prefix_ws<O>(
-		&mut self,
-		ctx: &mut Context,
-		f: &mut impl FnMut(&mut Whitespace, &mut Context) -> O,
-	) -> Option<O> {
-		self.get_mut().with_prefix_ws(ctx, f)
+	fn format(&mut self, ctx: &mut Context, prefix_ws: &mut impl FormatFn<Whitespace>) {
+		self.get_mut().format(ctx, prefix_ws);
 	}
 }
 
@@ -586,10 +436,10 @@ impl<'a, 'input> Context<'a, 'input> {
 }
 
 /// A formatting function
-pub trait FormatFn<T: ?Sized> = Fn(&mut T, &mut Context);
+pub trait FormatFn<T: ?Sized> = FnMut(&mut T, &mut Context);
 
 /// Formats an arena value
-pub fn arena<T: ArenaData>(f: impl FormatFn<T::Data>) -> impl FormatFn<ArenaIdx<T>> {
+pub fn arena<T: ArenaData>(mut f: impl FormatFn<T::Data>) -> impl FormatFn<ArenaIdx<T>> {
 	move |idx, ctx| {
 		let mut value = idx.get_mut();
 		f(&mut value, ctx);
@@ -597,7 +447,7 @@ pub fn arena<T: ArenaData>(f: impl FormatFn<T::Data>) -> impl FormatFn<ArenaIdx<
 }
 
 /// Formats an `Option<Self>` with `f` if it is `Some`.
-pub fn format_option_with<T>(f: impl FormatFn<T>) -> impl FormatFn<Option<T>> {
+pub fn format_option_with<T>(mut f: impl FormatFn<T>) -> impl FormatFn<Option<T>> {
 	move |value, ctx| {
 		if let Some(value) = value {
 			f(value, ctx);
@@ -605,22 +455,13 @@ pub fn format_option_with<T>(f: impl FormatFn<T>) -> impl FormatFn<Option<T>> {
 	}
 }
 
-/// Formats *all* items of a `Vec<T>` with `f`
-pub fn format_vec_each_with_all<T>(f: impl FormatFn<T>) -> impl FormatFn<Vec<T>> {
+/// Formats each non-first value of a vector
+pub fn format_vec<T: Format>(mut prefix_ws: impl FormatFn<Whitespace>) -> impl FormatFn<Vec<T>> {
 	move |values, ctx| {
-		for value in values {
-			f(value, ctx);
-		}
-	}
-}
+		let [_first, rest @ ..] = &mut **values else { return };
 
-/// Formats a `Vec<T>` (except the first element) with `f`
-pub fn format_vec_each_with<T>(f: impl FormatFn<T>) -> impl FormatFn<Vec<T>> {
-	move |values, ctx| {
-		if let Some(values) = values.get_mut(1..) {
-			for value in values {
-				f(value, ctx);
-			}
+		for value in rest {
+			value.format(ctx, &mut prefix_ws);
 		}
 	}
 }

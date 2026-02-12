@@ -10,9 +10,10 @@ use {
 		token,
 		ty::Type,
 	},
-	rustidy_format::Format,
+	rustidy_format::{Format, WhitespaceFormat},
 	rustidy_parse::Parse,
 	rustidy_print::Print,
+	rustidy_util::Whitespace,
 };
 
 /// `Statement`
@@ -39,16 +40,16 @@ pub struct LetStatement(pub WithOuterAttributes<LetStatementInner>);
 #[parse(name = "a let statement")]
 pub struct LetStatementInner {
 	pub super_: Option<token::Super>,
-	#[format(before_with(expr = Format::prefix_ws_set_single, if = self.super_.is_some()))]
+	#[format(prefix_ws(expr = Whitespace::set_single, if = self.super_.is_some()))]
 	pub let_:   token::Let,
 	#[parse(fatal)]
-	#[format(before_with = Format::prefix_ws_set_single)]
+	#[format(prefix_ws = Whitespace::set_single)]
 	pub pat:    PatternNoTopAlt,
-	#[format(before_with = Format::prefix_ws_remove)]
+	#[format(prefix_ws = Whitespace::remove)]
 	pub ty:     Option<LetStatementTy>,
-	#[format(before_with = Format::prefix_ws_set_single)]
+	#[format(prefix_ws = Whitespace::set_single)]
 	pub eq:     Option<LetStatementEq>,
-	#[format(before_with = Format::prefix_ws_remove)]
+	#[format(prefix_ws = Whitespace::remove)]
 	pub semi:   token::Semi,
 }
 
@@ -58,7 +59,7 @@ pub struct LetStatementInner {
 pub struct LetStatementTy {
 	pub colon: token::Colon,
 	#[parse(fatal)]
-	#[format(before_with = Format::prefix_ws_set_single)]
+	#[format(prefix_ws = Whitespace::set_single)]
 	pub ty:    Type,
 }
 
@@ -76,7 +77,7 @@ pub enum LetStatementEq {
 pub struct LetStatementEqNormal {
 	pub eq:   token::Eq,
 	#[parse(fatal)]
-	#[format(before_with = Format::prefix_ws_set_single)]
+	#[format(prefix_ws = Whitespace::set_single)]
 	pub expr: Expression,
 }
 
@@ -85,13 +86,13 @@ pub struct LetStatementEqNormal {
 #[derive(Parse, Format, Print)]
 pub struct LetStatementEqElse {
 	pub eq:        token::Eq,
-	#[format(before_with = Format::prefix_ws_set_single)]
+	#[format(prefix_ws = Whitespace::set_single)]
 	// TODO: Except `LazyBooleanExpression` and ending with `}`.
 	pub expr: Expression,
-	#[format(before_with = Format::prefix_ws_set_single)]
+	#[format(prefix_ws = Whitespace::set_single)]
 	pub else_:     token::Else,
 	#[parse(fatal)]
-	#[format(before_with = Format::prefix_ws_set_single)]
+	#[format(prefix_ws = Whitespace::set_single)]
 	pub else_expr: BlockExpression,
 }
 
@@ -109,7 +110,7 @@ pub enum ExpressionStatement {
 #[derive(Parse, Format, Print)]
 pub struct ExpressionStatementWithoutBlock {
 	pub expr: ExpressionWithoutBlock,
-	#[format(before_with = Format::prefix_ws_remove)]
+	#[format(prefix_ws = Whitespace::remove)]
 	pub semi: token::Semi,
 }
 
@@ -118,6 +119,6 @@ pub struct ExpressionStatementWithoutBlock {
 #[derive(Parse, Format, Print)]
 pub struct ExpressionStatementWithBlock {
 	pub expr: ExpressionWithBlock,
-	#[format(before_with = Format::prefix_ws_remove)]
+	#[format(prefix_ws = Whitespace::remove)]
 	pub semi: Option<token::Semi>,
 }

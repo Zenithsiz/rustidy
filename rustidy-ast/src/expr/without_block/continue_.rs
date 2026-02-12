@@ -3,9 +3,9 @@
 // Imports
 use {
 	crate::{lifetime::LifetimeOrLabel, token},
-	rustidy_format::Format,
+	rustidy_format::{Format, WhitespaceFormat},
 	rustidy_parse::Parse,
-	rustidy_print::Print,
+	rustidy_print::Print, rustidy_util::Whitespace,
 };
 
 /// `ContinueExpression`
@@ -14,6 +14,6 @@ use {
 #[derive(Parse, Format, Print)]
 pub struct ContinueExpression {
 	pub continue_: token::Continue,
-	#[format(before_with = Format::prefix_ws_set_single)]
+	#[format(prefix_ws = Whitespace::set_single)]
 	pub label:     Option<LifetimeOrLabel>,
 }

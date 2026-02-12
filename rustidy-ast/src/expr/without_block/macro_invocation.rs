@@ -3,9 +3,10 @@
 // Imports
 use {
 	crate::{attr::DelimTokenTree, path::SimplePath, token},
-	rustidy_format::Format,
+	rustidy_format::{Format, WhitespaceFormat},
 	rustidy_parse::Parse,
 	rustidy_print::Print,
+	rustidy_util::Whitespace,
 };
 
 /// `MacroInvocation`
@@ -15,11 +16,11 @@ use {
 #[parse(name = "a macro invocation")]
 pub struct MacroInvocation {
 	pub path: SimplePath,
-	#[format(before_with = Format::prefix_ws_remove)]
+	#[format(prefix_ws = Whitespace::remove)]
 	pub not:  token::Not,
-	#[format(before_with = match self.tree {
-		DelimTokenTree::Braces(_) => Format::prefix_ws_set_single,
-		_ => Format::prefix_ws_remove,
+	#[format(prefix_ws = match self.tree {
+		DelimTokenTree::Braces(_) => Whitespace::set_single,
+		_ => Whitespace::remove,
 	})]
 	pub tree: DelimTokenTree,
 }

@@ -10,9 +10,10 @@ use {
 		token,
 	},
 	core::ops::ControlFlow,
-	rustidy_format::Format,
+	rustidy_format::{Format, WhitespaceFormat},
 	rustidy_parse::{FromRecursiveRoot, Parse, ParseError, Parser, ParserError, ParserTag},
 	rustidy_print::Print,
+	rustidy_util::Whitespace,
 };
 
 /// `MatchExpression`
@@ -23,9 +24,9 @@ use {
 pub struct MatchExpression {
 	pub match_:    token::Match,
 	#[parse(fatal)]
-	#[format(before_with = Format::prefix_ws_set_single)]
+	#[format(prefix_ws = Whitespace::set_single)]
 	pub scrutinee: Box<Scrutinee>,
-	#[format(before_with = Format::prefix_ws_set_single)]
+	#[format(prefix_ws = Whitespace::set_single)]
 	pub arms:      BracedWithInnerAttributes<Option<MatchArms>>,
 }
 
@@ -40,7 +41,7 @@ pub struct Scrutinee(#[parse(with_tag = ParserTag::SkipStructExpression)] Expres
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Format, Print)]
 pub struct MatchArms {
-	#[format(and_with = rustidy_format::format_vec_each_with_all(Format::prefix_ws_set_cur_indent))]
+	#[format(and_with = rustidy_format::format_vec(Whitespace::set_cur_indent))]
 	pub arms: Vec<MatchArmWithExpr>,
 }
 
@@ -156,11 +157,11 @@ pub enum MatchArmsError {
 #[derive(Parse, Format, Print)]
 pub struct MatchArmWithExpr {
 	pub arm:            MatchArm,
-	#[format(before_with = Format::prefix_ws_set_single)]
+	#[format(prefix_ws = Whitespace::set_single)]
 	pub arrow:          token::FatArrow,
-	#[format(before_with = Format::prefix_ws_set_single)]
+	#[format(prefix_ws = Whitespace::set_single)]
 	pub expr:           Expression,
-	#[format(before_with = Format::prefix_ws_remove)]
+	#[format(prefix_ws = Whitespace::remove)]
 	pub trailing_comma: Option<token::Comma>,
 }
 
@@ -168,9 +169,7 @@ pub struct MatchArmWithExpr {
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
-pub struct MatchArm(
-	pub  WithOuterAttributes<MatchArmInner>,
-);
+pub struct MatchArm(pub WithOuterAttributes<MatchArmInner>);
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
@@ -178,7 +177,7 @@ pub struct MatchArm(
 #[parse(name = "a match arm")]
 pub struct MatchArmInner {
 	pub pat:   Pattern,
-	#[format(before_with = Format::prefix_ws_set_single)]
+	#[format(prefix_ws = Whitespace::set_single)]
 	pub guard: Option<MatchArmGuard>,
 }
 
@@ -191,6 +190,6 @@ pub struct MatchArmGuard {
 	// TODO: The reference says this is just an expression, but
 	//       that means we don't parse `Some(...) if let ...`, so
 	//       instead we allow any conditions.
-	#[format(before_with = Format::prefix_ws_set_single)]
+	#[format(prefix_ws = Whitespace::set_single)]
 	pub cond: Conditions,
 }

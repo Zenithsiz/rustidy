@@ -18,9 +18,10 @@ use {
 	app_error::{AppError, Context, bail},
 	core::fmt::Debug,
 	rustidy_ast_util::{RemainingBlockComment, RemainingLine},
-	rustidy_format::Format,
+	rustidy_format::{Format, WhitespaceFormat},
 	rustidy_parse::{Parse, ParserTag},
 	rustidy_print::Print,
+	rustidy_util::Whitespace,
 };
 
 #[derive(PartialEq, Eq, Debug)]
@@ -39,10 +40,10 @@ pub enum InnerAttrOrDocComment {
 #[parse(name = "an inner attribute")]
 pub struct InnerAttribute {
 	pub pound: token::Pound,
-	#[format(before_with = Format::prefix_ws_remove)]
+	#[format(prefix_ws = Whitespace::remove)]
 	pub not:   token::Not,
 	#[parse(fatal)]
-	#[format(before_with = Format::prefix_ws_remove)]
+	#[format(prefix_ws = Whitespace::remove)]
 	#[format(and_with = Bracketed::format_remove)]
 	pub attr:  Bracketed<Attr>,
 }
@@ -90,7 +91,7 @@ pub enum OuterAttrOrDocComment {
 #[derive(Parse, Format, Print)]
 pub struct OuterAttribute {
 	pub pound: token::Pound,
-	#[format(before_with = Format::prefix_ws_remove)]
+	#[format(prefix_ws = Whitespace::remove)]
 	#[format(and_with = Bracketed::format_remove)]
 	pub open:  Bracketed<Attr>,
 }
@@ -132,6 +133,7 @@ pub struct OuterBlockDoc {
 pub struct Attr {
 	// TODO: Unsafe attribute
 	pub path:  SimplePath,
+	#[format(prefix_ws = Whitespace::preserve)]
 	pub input: Option<AttrInput>,
 }
 
@@ -140,9 +142,9 @@ pub struct Attr {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub enum AttrInput {
-	#[format(before_with = Format::prefix_ws_remove)]
+	#[format(prefix_ws = Whitespace::remove)]
 	DelimTokenTree(DelimTokenTree),
-	#[format(before_with = Format::prefix_ws_set_single)]
+	#[format(prefix_ws = Whitespace::set_single)]
 	EqExpr(AttrInputEqExpr),
 }
 
@@ -151,7 +153,7 @@ pub enum AttrInput {
 #[derive(Parse, Format, Print)]
 pub struct AttrInputEqExpr {
 	pub eq:   token::Eq,
-	#[format(before_with = Format::prefix_ws_set_single)]
+	#[format(prefix_ws = Whitespace::set_single)]
 	pub expr: Expression,
 }
 

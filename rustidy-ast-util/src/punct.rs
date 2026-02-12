@@ -6,6 +6,7 @@ use {
 	rustidy_format::{Format, FormatFn},
 	rustidy_parse::Parse,
 	rustidy_print::Print,
+	rustidy_util::Whitespace,
 };
 
 /// Punctuated type `T`, separated by `P`
@@ -129,15 +130,15 @@ impl<T, P> Punctuated<T, P> {
 	pub fn format(
 		&mut self,
 		ctx: &mut rustidy_format::Context,
-		format_value: impl FormatFn<T>,
-		format_punct: impl FormatFn<P>,
+		value_prefix_ws: &mut impl FormatFn<Whitespace>,
+		punct_prefix_ws: &mut impl FormatFn<Whitespace>,
 	) where
 		T: Format,
 		P: Format,
 	{
 		for (punct, value) in &mut self.rest {
-			format_punct(punct, ctx);
-			format_value(value, ctx);
+			punct.format(ctx, punct_prefix_ws);
+			value.format(ctx, value_prefix_ws);
 		}
 	}
 }
@@ -218,15 +219,15 @@ impl<T, P> PunctuatedTrailing<T, P> {
 	pub fn format(
 		&mut self,
 		ctx: &mut rustidy_format::Context,
-		format_value: impl FormatFn<T>,
-		format_punct: impl FormatFn<P>,
+		value_prefix_ws: &mut impl FormatFn<Whitespace>,
+		punct_prefix_ws: &mut impl FormatFn<Whitespace>,
 	) where
 		T: Format,
 		P: Format,
 	{
-		self.punctuated.format(ctx, &format_value, &format_punct);
+		self.punctuated.format(ctx, value_prefix_ws, punct_prefix_ws);
 		if let Some(trailing) = &mut self.trailing {
-			format_punct(trailing, ctx);
+			trailing.format(ctx, punct_prefix_ws);
 		}
 	}
 }
@@ -271,16 +272,16 @@ impl<'a, T, P> Iterator for SplitLastMut<'a, T, P> {
 
 /// Formats a punctuated
 pub fn format<T: Format, P: Format>(
-	format_value: impl FormatFn<T>,
-	format_punct: impl FormatFn<P>,
+	mut value_prefix_ws: impl FormatFn<Whitespace>,
+	mut punct_prefix_ws: impl FormatFn<Whitespace>,
 ) -> impl FormatFn<Punctuated<T, P>> {
-	move |punct, ctx| punct.format(ctx, &format_value, &format_punct)
+	move |punct, ctx| punct.format(ctx, &mut value_prefix_ws, &mut punct_prefix_ws)
 }
 
 /// Formats a punctuated trailing
 pub fn format_trailing<T: Format, P: Format>(
-	format_value: impl FormatFn<T>,
-	format_punct: impl FormatFn<P>,
+	mut value_prefix_ws: impl FormatFn<Whitespace>,
+	mut punct_prefix_ws: impl FormatFn<Whitespace>,
 ) -> impl FormatFn<PunctuatedTrailing<T, P>> {
-	move |punct, ctx| punct.format(ctx, &format_value, &format_punct)
+	move |punct, ctx| punct.format(ctx, &mut value_prefix_ws, &mut punct_prefix_ws)
 }

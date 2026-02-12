@@ -12,9 +12,10 @@ use {
 		vis::Visibility,
 	},
 	rustidy_ast_util::{Identifier, PunctuatedTrailing, punct},
-	rustidy_format::Format,
+	rustidy_format::{Format, WhitespaceFormat},
 	rustidy_parse::Parse,
 	rustidy_print::Print,
+	rustidy_util::Whitespace,
 };
 
 /// `Struct`
@@ -32,11 +33,11 @@ pub enum Struct {
 #[derive(Parse, Format, Print)]
 pub struct StructStruct {
 	pub struct_:  token::Struct,
-	#[format(before_with = Format::prefix_ws_set_single)]
+	#[format(prefix_ws = Whitespace::set_single)]
 	pub ident:    Identifier,
-	#[format(before_with = Format::prefix_ws_remove)]
+	#[format(prefix_ws = Whitespace::remove)]
 	pub generics: Option<GenericParams>,
-	#[format(before_with = Format::prefix_ws_set_cur_indent)]
+	#[format(prefix_ws = Whitespace::set_cur_indent)]
 	pub where_:   Option<WhereClause>,
 	pub inner:    StructStructInner,
 }
@@ -46,11 +47,11 @@ pub struct StructStruct {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub enum StructStructInner {
-	#[format(before_with = Format::prefix_ws_set_single)]
+	#[format(prefix_ws = Whitespace::set_single)]
 	#[format(indent)]
 	#[format(and_with = Braced::format_indent_if_non_blank)]
 	Fields(Braced<Option<StructFields>>),
-	#[format(before_with = Format::prefix_ws_remove)]
+	#[format(prefix_ws = Whitespace::remove)]
 	Semi(token::Semi),
 }
 
@@ -60,7 +61,7 @@ pub enum StructStructInner {
 #[derive(Parse, Format, Print)]
 #[format(and_with = Self::align_fields)]
 pub struct StructFields(
-	#[format(and_with = punct::format_trailing(Format::prefix_ws_set_cur_indent, Format::prefix_ws_remove))]
+	#[format(and_with = punct::format_trailing(Whitespace::set_cur_indent, Whitespace::remove))]
 	PunctuatedTrailing<StructField, token::Comma>,
 );
 
@@ -74,7 +75,9 @@ impl StructFields {
 		for field in self.0.values_mut() {
 			let ident_len = field.0.inner.ident.non_ws_len();
 			let ty_prefix_ws_len = 1 + max_ident_len - ident_len;
-			field.0.inner.ty.prefix_ws_set_spaces(ctx, ty_prefix_ws_len);
+			field.0.inner.ty.format(ctx, &mut |ws: &mut Whitespace, ctx| {
+				ws.set_spaces(ctx, ty_prefix_ws_len);
+			});
 		}
 	}
 }
@@ -90,14 +93,14 @@ pub struct StructField(pub WithOuterAttributes<StructFieldInner>);
 #[derive(Parse, Format, Print)]
 pub struct StructFieldInner {
 	pub vis:   Option<Visibility>,
-	#[format(before_with(expr = Format::prefix_ws_set_single, if = self.vis.is_some()))]
+	#[format(prefix_ws(expr = Whitespace::set_single, if = self.vis.is_some()))]
 	pub ident: Identifier,
-	#[format(before_with = Format::prefix_ws_remove)]
+	#[format(prefix_ws = Whitespace::remove)]
 	pub colon: token::Colon,
-	#[format(before_with = Format::prefix_ws_set_single)]
+	#[format(prefix_ws = Whitespace::set_single)]
 	pub ty:    Type,
 	// Note: Nightly-only
-	#[format(before_with = Format::prefix_ws_set_single)]
+	#[format(prefix_ws = Whitespace::set_single)]
 	pub eq:    Option<StructFieldEq>,
 }
 
@@ -106,7 +109,7 @@ pub struct StructFieldInner {
 #[derive(Parse, Format, Print)]
 pub struct StructFieldEq {
 	pub eq:   token::Eq,
-	#[format(before_with = Format::prefix_ws_set_single)]
+	#[format(prefix_ws = Whitespace::set_single)]
 	pub expr: Expression,
 }
 
@@ -116,17 +119,17 @@ pub struct StructFieldEq {
 #[derive(Parse, Format, Print)]
 pub struct TupleStruct {
 	pub struct_:  token::Struct,
-	#[format(before_with = Format::prefix_ws_set_single)]
+	#[format(prefix_ws = Whitespace::set_single)]
 	pub ident:    Identifier,
-	#[format(before_with = Format::prefix_ws_remove)]
+	#[format(prefix_ws = Whitespace::remove)]
 	pub generics: Option<GenericParams>,
-	#[format(before_with = Format::prefix_ws_remove)]
+	#[format(prefix_ws = Whitespace::remove)]
 	#[format(and_with = Parenthesized::format_remove)]
 	pub fields:   Parenthesized<Option<TupleFields>>,
 	#[parse(fatal)]
-	#[format(before_with = Format::prefix_ws_set_cur_indent)]
+	#[format(prefix_ws = Whitespace::set_cur_indent)]
 	pub where_:   Option<WhereClause>,
-	#[format(before_with = Format::prefix_ws_remove)]
+	#[format(prefix_ws = Whitespace::remove)]
 	pub semi:     token::Semi,
 }
 
@@ -135,7 +138,7 @@ pub struct TupleStruct {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct TupleFields(
-	#[format(and_with = punct::format_trailing(Format::prefix_ws_set_single, Format::prefix_ws_remove))]
+	#[format(and_with = punct::format_trailing(Whitespace::set_single, Whitespace::remove))]
 	PunctuatedTrailing<TupleField, token::Comma>,
 );
 
@@ -151,6 +154,6 @@ pub struct TupleField(pub WithOuterAttributes<TupleFieldInner>);
 #[derive(Parse, Format, Print)]
 pub struct TupleFieldInner {
 	pub vis: Option<Visibility>,
-	#[format(before_with(expr = Format::prefix_ws_set_single, if = self.vis.is_some()))]
+	#[format(prefix_ws(expr = Whitespace::set_single, if = self.vis.is_some()))]
 	pub ty:  Type,
 }

@@ -4,9 +4,10 @@
 use {
 	crate::{expr::Expression, token, util::Parenthesized},
 	rustidy_ast_util::{AtLeast1, at_least},
-	rustidy_format::Format,
+	rustidy_format::{Format, WhitespaceFormat},
 	rustidy_parse::Parse,
 	rustidy_print::Print,
+	rustidy_util::Whitespace,
 };
 
 /// `TupleExpression`
@@ -20,9 +21,9 @@ pub struct TupleExpression(#[format(and_with = Parenthesized::format_remove)] Pa
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct TupleElements {
-	#[format(and_with = at_least::format(Format::prefix_ws_set_single))]
+	#[format(and_with = at_least::format(Whitespace::set_single))]
 	pub exprs: AtLeast1<TupleElementsInner>,
-	#[format(before_with = Format::prefix_ws_set_single)]
+	#[format(prefix_ws = Whitespace::set_single)]
 	pub last:  Option<Expression>,
 }
 
@@ -31,6 +32,6 @@ pub struct TupleElements {
 #[derive(Parse, Format, Print)]
 pub struct TupleElementsInner {
 	pub expr:  Expression,
-	#[format(before_with = Format::prefix_ws_remove)]
+	#[format(prefix_ws = Whitespace::remove)]
 	pub comma: token::Comma,
 }

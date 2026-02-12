@@ -7,16 +7,17 @@ use {
 		struct_::{StructFields, TupleFields},
 	},
 	crate::{
-		attr::{WithOuterAttributes},
+		attr::WithOuterAttributes,
 		expr::Expression,
 		token,
 		util::{Braced, Parenthesized},
 		vis::Visibility,
 	},
 	rustidy_ast_util::{Identifier, PunctuatedTrailing, punct},
-	rustidy_format::Format,
+	rustidy_format::{Format, WhitespaceFormat},
 	rustidy_parse::Parse,
 	rustidy_print::Print,
+	rustidy_util::Whitespace,
 };
 
 /// `Enumeration`
@@ -26,13 +27,13 @@ use {
 pub struct Enumeration {
 	pub enum_:    token::Enum,
 	#[parse(fatal)]
-	#[format(before_with = Format::prefix_ws_set_single)]
+	#[format(prefix_ws = Whitespace::set_single)]
 	pub ident:    Identifier,
-	#[format(before_with = Format::prefix_ws_remove)]
+	#[format(prefix_ws = Whitespace::remove)]
 	pub generic:  Option<GenericParams>,
-	#[format(before_with = Format::prefix_ws_set_cur_indent)]
+	#[format(prefix_ws = Whitespace::set_cur_indent)]
 	pub where_:   Option<WhereClause>,
-	#[format(before_with = Format::prefix_ws_set_single)]
+	#[format(prefix_ws = Whitespace::set_single)]
 	#[format(indent)]
 	#[format(and_with = Braced::format_indent_if_non_blank)]
 	pub variants: Braced<Option<EnumVariants>>,
@@ -43,7 +44,7 @@ pub struct Enumeration {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct EnumVariants(
-	#[format(and_with = punct::format_trailing(Format::prefix_ws_set_cur_indent, Format::prefix_ws_remove))]
+	#[format(and_with = punct::format_trailing(Whitespace::set_cur_indent, Whitespace::remove))]
 	pub  PunctuatedTrailing<EnumVariant, token::Comma>,
 );
 
@@ -51,19 +52,17 @@ pub struct EnumVariants(
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
-pub struct EnumVariant(
-	pub  WithOuterAttributes<EnumVariantInner>,
-);
+pub struct EnumVariant(pub WithOuterAttributes<EnumVariantInner>);
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct EnumVariantInner {
 	pub vis:          Option<Visibility>,
-	#[format(before_with(expr = Format::prefix_ws_set_single, if = self.vis.is_some()))]
+	#[format(prefix_ws(expr = Whitespace::set_single, if = self.vis.is_some()))]
 	pub ident:        Identifier,
 	pub kind:         Option<EnumVariantKind>,
-	#[format(before_with = Format::prefix_ws_set_single)]
+	#[format(prefix_ws = Whitespace::set_single)]
 	pub discriminant: Option<EnumVariantDiscriminant>,
 }
 
@@ -71,9 +70,9 @@ pub struct EnumVariantInner {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub enum EnumVariantKind {
-	#[format(before_with = Format::prefix_ws_remove)]
+	#[format(prefix_ws = Whitespace::remove)]
 	Tuple(EnumVariantTuple),
-	#[format(before_with = Format::prefix_ws_set_single)]
+	#[format(prefix_ws = Whitespace::set_single)]
 	Struct(EnumVariantStruct),
 }
 
@@ -99,6 +98,6 @@ pub struct EnumVariantStruct(
 #[derive(Parse, Format, Print)]
 pub struct EnumVariantDiscriminant {
 	pub eq:   token::Eq,
-	#[format(before_with = Format::prefix_ws_set_single)]
+	#[format(prefix_ws = Whitespace::set_single)]
 	pub expr: Expression,
 }

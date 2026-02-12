@@ -7,9 +7,10 @@ use {
 		attr::{InnerDocComment, OuterDocComment},
 		util::Braced,
 	},
-	rustidy_format::{Format, FormatTag},
+	rustidy_format::{Format, FormatFn, FormatTag, WhitespaceFormat},
 	rustidy_parse::{ParsableRecursive, Parse, Parser},
 	rustidy_print::Print,
+	rustidy_util::Whitespace,
 };
 
 /// A type with outer attributes
@@ -38,15 +39,17 @@ impl<T> WithOuterAttributes<T> {
 }
 
 impl<T: Format> WithOuterAttributes<T> {
-	fn format(&mut self, ctx: &mut rustidy_format::Context) {
+	fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: &mut impl FormatFn<Whitespace>) {
 		let mut is_after_newline = false;
+		let mut has_prefix_ws = true;
 		for attr in &mut self.attrs {
-			ctx.with_tag_if(is_after_newline, FormatTag::AfterNewline, |ctx| {
-				attr.prefix_ws_set_cur_indent(ctx);
-				attr.format(ctx);
+			ctx.with_tag_if(is_after_newline, FormatTag::AfterNewline, |ctx| match has_prefix_ws {
+				true => attr.format(ctx, prefix_ws),
+				false => attr.format(ctx, &mut Whitespace::set_cur_indent),
 			});
 
 			is_after_newline = matches!(attr, OuterAttrOrDocComment::DocComment(OuterDocComment::Line(_)));
+			has_prefix_ws = false;
 		}
 
 		let mut value_ctx = ctx.sub_context();
@@ -60,12 +63,11 @@ impl<T: Format> WithOuterAttributes<T> {
 
 
 		value_ctx.with_tag_if(is_after_newline, FormatTag::AfterNewline, |ctx| {
-			if !self.attrs.is_empty() {
-				// TODO: This should be customizable, but we need to use `value_ctx`,
-				//       so we can't just let the user do it later easily.
-				self.inner.prefix_ws_set_cur_indent(ctx);
+			match has_prefix_ws {
+				true => self.inner.format(ctx, prefix_ws),
+				// TODO: The user should be able to choose this
+				false => self.inner.format(ctx, &mut Whitespace::set_cur_indent),
 			}
-			self.inner.format(ctx);
 		});
 	}
 }
@@ -124,7 +126,9 @@ where
 pub struct BracedWithInnerAttributes<T>(Braced<WithInnerAttributes<T>>);
 
 impl<T: Format> BracedWithInnerAttributes<T> {
-	fn format(&mut self, ctx: &mut rustidy_format::Context) {
+	fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: &mut impl FormatFn<Whitespace>) {
+		self.0.prefix.format(ctx, prefix_ws);
+
 		let mut ctx = ctx.sub_context();
 		for attr in &self.0.value.attrs {
 			if let Some(attr) = attr.try_as_attr_ref() &&
@@ -135,26 +139,22 @@ impl<T: Format> BracedWithInnerAttributes<T> {
 		}
 
 		ctx.with_indent(|ctx| {
-			self.0.prefix.format(ctx);
-
 			let mut is_after_newline = false;
 			for attr in &mut self.0.value.attrs {
 				ctx.with_tag_if(is_after_newline, FormatTag::AfterNewline, |ctx| {
-					attr.prefix_ws_set_cur_indent(ctx);
-					attr.format(ctx);
+					attr.format(ctx, &mut Whitespace::set_cur_indent);
 				});
 
 				is_after_newline = matches!(attr, InnerAttrOrDocComment::DocComment(InnerDocComment::Line(_)));
 			}
 
 			ctx.with_tag_if(is_after_newline, FormatTag::AfterNewline, |ctx| {
+				self.0.value.inner.format(ctx, &mut Whitespace::set_cur_indent);
 				let is_value_blank = self.0.value.is_blank(ctx, true);
 
-				self.0.value.inner.prefix_ws_set_cur_indent(ctx);
-				self.0.suffix.prefix_ws_set_indent(ctx, -1, is_value_blank);
-
-				self.0.value.inner.format(ctx);
-				self.0.suffix.format(ctx);
+				self.0.suffix.format(ctx, &mut |ws: &mut Whitespace, ctx| {
+					ws.set_indent(ctx, -1, is_value_blank);
+				});
 			});
 		});
 	}
@@ -164,7 +164,7 @@ impl<T: Format> BracedWithInnerAttributes<T> {
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
-#[format(with = |_, _| panic!("This type shouldn't be formatted manually"))]
+#[format(with = |_, _, _| panic!("This type shouldn't be formatted manually"))]
 struct WithInnerAttributes<T> {
 	pub attrs: Vec<InnerAttrOrDocComment>,
 	pub inner: T,

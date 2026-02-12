@@ -7,9 +7,10 @@ use {
 		token,
 	},
 	rustidy_ast_util::Identifier,
-	rustidy_format::{Format, FormatTag},
+	rustidy_format::{Format, FormatTag, WhitespaceFormat},
 	rustidy_parse::ParseRecursive,
 	rustidy_print::Print,
+	rustidy_util::Whitespace,
 };
 
 /// `FieldExpression`
@@ -26,11 +27,11 @@ use {
 ))]
 pub struct FieldExpression {
 	pub expr:  Expression,
-	#[format(before_with = match ctx.has_tag(FormatTag::InsideChain) {
-		true => move |dot, ctx| Format::prefix_ws_set_indent(dot, ctx, 1, false),
-		false => Format::prefix_ws_remove,
+	#[format(prefix_ws = match ctx.has_tag(FormatTag::InsideChain) {
+		true => Whitespace::set_next_indent,
+		false => Whitespace::remove,
 	})]
 	pub dot:   token::Dot,
-	#[format(before_with = Format::prefix_ws_remove)]
+	#[format(prefix_ws = Whitespace::remove)]
 	pub ident: Identifier,
 }

@@ -11,9 +11,10 @@ use {
 		ty::{Type, TypeNoBounds},
 	},
 	rustidy_ast_util::{Delimited, PunctuatedTrailing, punct},
-	rustidy_format::Format,
+	rustidy_format::{Format, WhitespaceFormat},
 	rustidy_parse::{Parse, ParseRecursive},
 	rustidy_print::Print,
+	rustidy_util::Whitespace,
 };
 
 #[derive(PartialEq, Eq, Debug)]
@@ -24,15 +25,15 @@ use {
 #[parse_recursive(kind = "right")]
 pub struct ClosureExpression {
 	pub async_: Option<token::Async>,
-	#[format(before_with(expr = Format::prefix_ws_set_single, if = self.async_.is_some()))]
+	#[format(prefix_ws(expr = Whitespace::set_single, if = self.async_.is_some()))]
 	pub move_:  Option<token::Move>,
-	#[format(before_with(expr = Format::prefix_ws_set_single, if = self.async_.is_some() || self.move_.is_some()))]
+	#[format(prefix_ws(expr = Whitespace::set_single, if = self.async_.is_some() || self.move_.is_some()))]
 	pub params: ClosureParams,
-	#[format(before_with = Format::prefix_ws_set_single)]
+	#[format(prefix_ws = Whitespace::set_single)]
 	pub ret:    Option<ClosureRet>,
 	// TODO: If we parsed a return type, we should error
 	//       if this isn't a block expression.
-	#[format(before_with = Format::prefix_ws_set_single)]
+	#[format(prefix_ws = Whitespace::set_single)]
 	pub expr:   Expression,
 }
 
@@ -51,7 +52,7 @@ pub enum ClosureParams {
 pub struct ClosureRet {
 	pub arrow: token::RArrow,
 	#[parse(fatal)]
-	#[format(before_with = Format::prefix_ws_set_single)]
+	#[format(prefix_ws = Whitespace::set_single)]
 	pub ty:    TypeNoBounds,
 }
 
@@ -60,7 +61,7 @@ pub struct ClosureRet {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct ClosureParameters(
-	#[format(and_with = punct::format_trailing(Format::prefix_ws_set_single, Format::prefix_ws_remove))]
+	#[format(and_with = punct::format_trailing(Whitespace::set_single, Whitespace::remove))]
 	pub  PunctuatedTrailing<ClosureParameter, token::Comma>,
 );
 
@@ -75,7 +76,7 @@ pub struct ClosureParameter(pub WithOuterAttributes<ClosureParameterInner>);
 #[derive(Parse, Format, Print)]
 pub struct ClosureParameterInner {
 	pub pat: PatternNoTopAlt,
-	#[format(before_with = Format::prefix_ws_remove)]
+	#[format(prefix_ws = Whitespace::remove)]
 	pub ty:  Option<ClosureParameterInnerTy>,
 }
 
@@ -84,6 +85,6 @@ pub struct ClosureParameterInner {
 #[derive(Parse, Format, Print)]
 pub struct ClosureParameterInnerTy {
 	pub colon: token::Colon,
-	#[format(before_with = Format::prefix_ws_set_single)]
+	#[format(prefix_ws = Whitespace::set_single)]
 	pub ty:    Type,
 }

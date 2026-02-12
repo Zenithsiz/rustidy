@@ -454,7 +454,9 @@ version = "0.1.10"
 dependencies = [
  "app-error",
  "rustidy-ast",
+ "rustidy-format",
  "rustidy-parse",
+ "rustidy-util",
 ]
 
 [[package]]
@@ -534,7 +536,6 @@ dependencies = [
  "rustidy-ast",
  "rustidy-ast-literal",
  "rustidy-ast-util",
- "rustidy-format",
  "rustidy-print",
  "rustidy-util",
  "toml",

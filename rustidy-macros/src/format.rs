@@ -26,7 +26,7 @@ struct WithTag {
 	skip_if_has_tag: bool,
 }
 
-#[derive(Debug, darling::FromMeta)]
+#[derive(Clone, Debug, darling::FromMeta)]
 #[darling(from_expr = |expr| Ok(Self { expr: expr.clone(), cond: None, else_expr: None }))]
 struct AndWith {
 	expr:      syn::Expr,
@@ -43,6 +43,15 @@ impl AndWith {
 			expr:      f(&self.expr),
 			cond:      self.cond.clone(),
 			else_expr: self.else_expr.as_ref().map(f),
+		}
+	}
+
+	/// Sets the else expression in this and-with
+	pub fn with_else(&self, else_expr: syn::Expr) -> Self {
+		Self {
+			expr:      self.expr.clone(),
+			cond:      self.cond.clone(),
+			else_expr: Some(else_expr),
 		}
 	}
 
@@ -91,6 +100,9 @@ struct VariantAttrs {
 
 	with: Option<syn::Expr>,
 
+	#[darling(default)]
+	prefix_ws: Option<AndWith>,
+
 	#[darling(multiple)]
 	before_with: Vec<AndWith>,
 
@@ -117,6 +129,9 @@ struct FieldAttrs {
 
 	with: Option<syn::Expr>,
 
+	#[darling(default)]
+	prefix_ws: Option<AndWith>,
+
 	#[darling(multiple)]
 	before_with: Vec<AndWith>,
 
@@ -128,6 +143,12 @@ struct FieldAttrs {
 
 	#[darling(default)]
 	without_tags: bool,
+
+	#[darling(default)]
+	whitespace: bool,
+
+	#[darling(default)]
+	str: bool,
 }
 
 #[derive(Debug, darling::FromDeriveInput, derive_more::AsRef)]
@@ -184,14 +205,12 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 		.extend(attrs.with_where.into_iter().flat_map(|clause| clause.predicates));
 	let (impl_generics, ty_generics, impl_where_clause) = impl_generics.split_for_impl();
 
-	let Impls {
-		with_strings,
-		format,
-		with_prefix_ws,
-	} = impls;
+	let Impls { with_strings, format } = impls;
 
 	let format = self::derive_format(
 		parse_quote! { self },
+		|expr| expr,
+		None,
 		&attrs.with,
 		format,
 		&attrs.before_with,
@@ -231,13 +250,8 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 			}
 
 			#[coverage(on)]
-			fn format(&mut self, ctx: &mut rustidy_format::Context) {
+			fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: &mut impl rustidy_format::FormatFn<rustidy_util::Whitespace>) {
 				#format;
-			}
-
-			#[allow(unreachable_code)]
-			fn with_prefix_ws<WITH_PREFIX_WS_O>(&mut self, ctx: &mut rustidy_format::Context, f: &mut impl FnMut(&mut rustidy_util::Whitespace, &mut rustidy_format::Context) -> WITH_PREFIX_WS_O) -> Option<WITH_PREFIX_WS_O> {
-				#with_prefix_ws
 			}
 		}
 	};
@@ -245,7 +259,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 	Ok(output.into())
 }
 
-fn derive_enum(variants: &[VariantAttrs]) -> Impls<syn::Expr, syn::Expr, syn::Expr> {
+fn derive_enum(variants: &[VariantAttrs]) -> Impls<syn::Expr, syn::Expr> {
 	let variant_impls = variants
 		.iter()
 		.map(|variant| {
@@ -253,10 +267,26 @@ fn derive_enum(variants: &[VariantAttrs]) -> Impls<syn::Expr, syn::Expr, syn::Ex
 			let with_strings =
 				parse_quote! { Self::#variant_ident(ref mut value) => rustidy_format::Format::with_strings(value, ctx, exclude_prefix_ws, f), };
 
+			let prefix_ws: syn::Expr = match &variant.prefix_ws {
+				Some(prefix_ws) => match prefix_ws.cond.is_some() && prefix_ws.else_expr.is_none() {
+					true => prefix_ws.with_else(parse_quote! { *prefix_ws }).eval(),
+					false => prefix_ws.eval(),
+				},
+				None => parse_quote! { *prefix_ws },
+			};
+
+			let format = parse_quote! { match #prefix_ws {
+				ref mut prefix_ws => rustidy_format::Format::format(value, ctx, prefix_ws)
+			}};
+
 			let format = self::derive_format(
 				parse_quote! { value },
+				|expr| parse_quote! { match #prefix_ws {
+					ref mut prefix_ws => #expr,
+				}},
+				None,
 				&variant.with,
-				parse_quote! { rustidy_format::Format::format(value, ctx) },
+				format,
 				&variant.before_with,
 				&variant.and_with,
 				&variant.with_tag,
@@ -267,78 +297,38 @@ fn derive_enum(variants: &[VariantAttrs]) -> Impls<syn::Expr, syn::Expr, syn::Ex
 				Self::#variant_ident(ref mut value) => #format,
 			};
 
-			let with_prefix_ws =
-				parse_quote! { Self::#variant_ident(ref mut value) => value.with_prefix_ws(ctx, f), };
-
 			Impls {
 				with_strings,
 				format,
-				with_prefix_ws,
 			}
 		})
-		.collect::<Impls<Vec<syn::Arm>, Vec<syn::Arm>, Vec<syn::Arm>>>();
+		.collect::<Impls<Vec<syn::Arm>, Vec<syn::Arm>>>();
 
 
-	let Impls {
-		with_strings,
-		format,
-		with_prefix_ws,
-	} = variant_impls;
+	let Impls { with_strings, format } = variant_impls;
 	let with_strings = parse_quote! { match *self { #( #with_strings )* } };
 	let format = parse_quote! { match *self { #( #format )* } };
-	let with_prefix_ws = parse_quote! { match *self { #( #with_prefix_ws )* } };
 
-	Impls {
-		with_strings,
-		format,
-		with_prefix_ws,
-	}
+	Impls { with_strings, format }
 }
 
-fn derive_struct(fields: &darling::ast::Fields<FieldAttrs>) -> Impls<syn::Expr, syn::Expr, syn::Expr> {
-	let Impls {
-		with_strings,
-		format,
-		with_prefix_ws: (),
-	} = fields
+fn derive_struct(fields: &darling::ast::Fields<FieldAttrs>) -> Impls<syn::Expr, syn::Expr> {
+	let Impls { with_strings, format } = fields
 		.iter()
 		.enumerate()
 		.map(|(field_idx, field)| self::derive_struct_field(field_idx, field))
-		.collect::<Impls<Vec<_>, Vec<_>, ()>>();
+		.collect::<Impls<Vec<_>, Vec<_>>>();
 
 	let with_strings = parse_quote! {{ #( #with_strings; )* std::ops::ControlFlow::Continue(()) }};
-	let format = parse_quote! {{ #( #format; )* }};
-
-	let with_prefix_ws_fields = fields.iter().enumerate().map(|(field_idx, field)| -> syn::Expr {
-		let field_ident = util::field_member_access(field_idx, field);
-
-		parse_quote! {{
-			// If we used the whitespace, return
-			if let Some(value) = rustidy_format::Format::with_prefix_ws(&mut self.#field_ident, ctx, f) {
-				return Some(value);
-			}
-
-			// Otherwise, if this field wasn't empty, we have no more fields
-			// to check and we can return
-			if !rustidy_format::Format::is_empty(&mut self.#field_ident, ctx, false) {
-				return None;
-			}
-		}}
-	});
-	let with_prefix_ws = parse_quote! {{
-		#( #with_prefix_ws_fields; )*
-
-		None
+	let format = parse_quote! {{
+		let mut has_prefix_ws = true;
+		#( #format; )*
 	}};
 
-	Impls {
-		with_strings,
-		format,
-		with_prefix_ws,
-	}
+	Impls { with_strings, format }
 }
 
-fn derive_struct_field(field_idx: usize, field: &FieldAttrs) -> Impls<syn::Expr, syn::Expr, ()> {
+fn derive_struct_field(field_idx: usize, field: &FieldAttrs) -> Impls<syn::Expr, syn::Expr> {
 	let field_ident = util::field_member_access(field_idx, field);
 
 	let with_strings = parse_quote! {{
@@ -351,10 +341,56 @@ fn derive_struct_field(field_idx: usize, field: &FieldAttrs) -> Impls<syn::Expr,
 		}
 	}};
 
+	let with_prefix_ws = |expr| match field.str {
+		true => expr,
+		false => match &field.prefix_ws {
+			Some(prefix_ws) => {
+				let prefix_ws = match prefix_ws.cond.is_some() && prefix_ws.else_expr.is_none() {
+					true => prefix_ws.with_else(parse_quote! { *prefix_ws }),
+					false => prefix_ws.clone(),
+				};
+
+				prefix_ws
+					.map(|prefix_ws| {
+						parse_quote! { match #prefix_ws {
+							ref mut prefix_ws => #expr,
+						}}
+					})
+					.eval()
+			},
+			None => parse_quote! { match has_prefix_ws {
+				true => #expr,
+				// TODO: Ideally here we'd panic once we ensure
+				//       the caller can always provide a prefix whitespace.
+				false => {
+					let prefix_ws = &mut <rustidy_util::Whitespace as rustidy_format::WhitespaceFormat>::preserve;
+					#expr;
+				},
+			}},
+		},
+	};
+
+	let format = match field.str {
+		true => parse_quote! { () },
+		false => parse_quote! { rustidy_format::Format::format(&mut self.#field_ident, ctx, prefix_ws) },
+	};
+
+	let after_format = match field.whitespace {
+		true => parse_quote! { has_prefix_ws = false },
+		false => parse_quote! {
+			// TODO: Make `format` return this so we don't have to recurse back into the type
+			if has_prefix_ws && !rustidy_format::Format::is_empty(&mut self.#field_ident, ctx, false) {
+				has_prefix_ws = false;
+			}
+		},
+	};
+
 	let format = self::derive_format(
 		parse_quote! { &mut self.#field_ident },
+		with_prefix_ws,
+		Some(after_format),
 		&field.with,
-		parse_quote! { rustidy_format::Format::format(&mut self.#field_ident, ctx) },
+		format,
 		&field.before_with,
 		&field.and_with,
 		&field.with_tag,
@@ -362,11 +398,7 @@ fn derive_struct_field(field_idx: usize, field: &FieldAttrs) -> Impls<syn::Expr,
 		&field.indent,
 	);
 
-	Impls {
-		with_strings,
-		format,
-		with_prefix_ws: (),
-	}
+	Impls { with_strings, format }
 }
 
 #[expect(
@@ -377,6 +409,8 @@ fn derive_struct_field(field_idx: usize, field: &FieldAttrs) -> Impls<syn::Expr,
 #[expect(clippy::too_many_arguments, reason = "TODO")]
 fn derive_format(
 	value: syn::Expr,
+	with_prefix_ws: impl Fn(syn::Expr) -> syn::Expr,
+	after_format: Option<syn::Expr>,
 	with: &Option<syn::Expr>,
 	default: syn::Expr,
 	before_with: &[AndWith],
@@ -386,9 +420,22 @@ fn derive_format(
 	indent: &Option<Indent>,
 ) -> syn::Expr {
 	let format: syn::Expr = match &with {
-		Some(with) => parse_quote! { (#with)(#value, ctx) },
+		Some(with) => parse_quote! { (#with)(#value, ctx, prefix_ws) },
 		None => default,
 	};
+	let format = with_prefix_ws(format);
+
+	// TODO: Document the order in which we parse all attributes, since
+	//       it's not in declaration order (although maybe it should?).
+	let and_with = and_with
+		.iter()
+		.map(|and_with| and_with.map(|expr| parse_quote! { (#expr)(#value, ctx) }).eval());
+	let format: syn::Expr = parse_quote! {{
+		#format;
+		#( #and_with; )*
+	}};
+
+
 	let mut format = match without_tags {
 		true => parse_quote! { ctx.without_tags(|ctx| #format) },
 		false => format,
@@ -412,24 +459,23 @@ fn derive_format(
 		}
 	}
 
-	let before_with = before_with
-		.iter()
-		.map(|and_with| and_with.map(|expr| parse_quote! { (#expr)(#value, ctx) }).eval());
-	let and_with = and_with
-		.iter()
-		.map(|and_with| and_with.map(|expr| parse_quote! { (#expr)(#value, ctx) }).eval());
-	let format: syn::Expr = parse_quote! {{
-		#( #before_with; )*
-		#format;
-		#( #and_with; )*
-	}};
-	match indent {
+	let format = match indent {
 		Some(Indent { if_has_tag }) => match if_has_tag {
 			Some(cond) => parse_quote! { ctx.with_indent_if(ctx.has_tag(#cond), |ctx| #format) },
 			None => parse_quote! { ctx.with_indent(|ctx| #format) },
 		},
 		None => format,
-	}
+	};
+
+	let before_with = before_with
+		.iter()
+		.map(|and_with| and_with.map(|expr| parse_quote! { (#expr)(#value, ctx) }).eval());
+	parse_quote! {{
+		#( #before_with; )*
+		#format;
+
+		#after_format;
+	}}
 }
 
 fn derive_and_with_wrapper(
@@ -561,24 +607,21 @@ fn derive_and_with_wrapper(
 }
 
 #[derive(Default, Debug)]
-struct Impls<WithStrings, Format, PrefixWs> {
-	with_strings:   WithStrings,
-	format:         Format,
-	with_prefix_ws: PrefixWs,
+struct Impls<WithStrings, Format> {
+	with_strings: WithStrings,
+	format:       Format,
 }
 
-impl<T0, T1, T2, A0, A1, A2> FromIterator<Impls<A0, A1, A2>> for Impls<T0, T1, T2>
+impl<T0, T1, A0, A1> FromIterator<Impls<A0, A1>> for Impls<T0, T1>
 where
 	T0: Default + Extend<A0>,
 	T1: Default + Extend<A1>,
-	T2: Default + Extend<A2>,
 {
-	fn from_iter<I: IntoIterator<Item = Impls<A0, A1, A2>>>(iter: I) -> Self {
+	fn from_iter<I: IntoIterator<Item = Impls<A0, A1>>>(iter: I) -> Self {
 		let mut output = Self::default();
 		for impls in iter {
 			output.with_strings.extend_one(impls.with_strings);
 			output.format.extend_one(impls.format);
-			output.with_prefix_ws.extend_one(impls.with_prefix_ws);
 		}
 
 		output

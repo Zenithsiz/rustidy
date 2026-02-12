@@ -19,8 +19,10 @@ use {
 #[parse(error(name = NonAscii, fmt = "Found non-ascii characters"))]
 #[parse(error(name = ExpectedEndQuote, fmt = "Expected `\"` after `br\"`", fatal))]
 pub struct RawByteStringLiteral {
+	#[format(whitespace)]
 	pub ws:     Whitespace,
 	#[parse(try_update_with = Self::parse)]
+	#[format(str)]
 	pub s:      AstStr,
 	pub suffix: Option<Suffix>,
 }

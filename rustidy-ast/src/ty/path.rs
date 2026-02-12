@@ -7,9 +7,10 @@ use {
 		token,
 	},
 	rustidy_ast_util::{Punctuated, punct},
-	rustidy_format::Format,
+	rustidy_format::{Format, WhitespaceFormat},
 	rustidy_parse::Parse,
 	rustidy_print::Print,
+	rustidy_util::Whitespace,
 };
 
 /// `TypePath`
@@ -18,8 +19,8 @@ use {
 #[derive(Parse, Format, Print)]
 pub struct TypePath {
 	pub prefix:   Option<token::PathSep>,
-	#[format(before_with(expr = Format::prefix_ws_remove, if = self.prefix.is_some()))]
-	#[format(and_with = punct::format(Format::prefix_ws_remove, Format::prefix_ws_remove))]
+	#[format(prefix_ws(expr = Whitespace::remove, if = self.prefix.is_some()))]
+	#[format(and_with = punct::format(Whitespace::remove, Whitespace::remove))]
 	pub segments: Punctuated<TypePathSegment, token::PathSep>,
 }
 
@@ -29,7 +30,7 @@ pub struct TypePath {
 #[derive(Parse, Format, Print)]
 pub struct TypePathSegment {
 	pub path:     PathIdentSegment,
-	#[format(before_with = Format::prefix_ws_remove)]
+	#[format(prefix_ws = Whitespace::remove)]
 	pub generics: Option<TypePathSegmentGenerics>,
 }
 
@@ -38,7 +39,7 @@ pub struct TypePathSegment {
 #[derive(Parse, Format, Print)]
 pub struct TypePathSegmentGenerics {
 	pub sep:   Option<token::PathSep>,
-	#[format(before_with(expr = Format::prefix_ws_remove, if = self.sep.is_some()))]
+	#[format(prefix_ws(expr = Whitespace::remove, if = self.sep.is_some()))]
 	pub inner: GenericArgsOrTypePathFn,
 }
 

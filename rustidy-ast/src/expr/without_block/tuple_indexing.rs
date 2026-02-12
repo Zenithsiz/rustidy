@@ -6,9 +6,9 @@ use {
 		expr::{Expression, ExpressionInner},
 		token,
 	},
-	rustidy_format::Format,
+	rustidy_format::{Format, WhitespaceFormat},
 	rustidy_parse::ParseRecursive,
-	rustidy_print::Print,
+	rustidy_print::Print, rustidy_util::Whitespace,
 };
 
 /// `TupleIndexingExpression`
@@ -20,8 +20,8 @@ use {
 #[parse_recursive(kind = "left")]
 pub struct TupleIndexingExpression {
 	pub expr:  Expression,
-	#[format(before_with = Format::prefix_ws_remove)]
+	#[format(prefix_ws = Whitespace::remove)]
 	pub dot:   token::Dot,
-	#[format(before_with = Format::prefix_ws_remove)]
+	#[format(prefix_ws = Whitespace::remove)]
 	pub ident: TupleIndex,
 }

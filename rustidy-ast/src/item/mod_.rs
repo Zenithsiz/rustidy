@@ -5,9 +5,10 @@ use {
 	super::Items,
 	crate::{attr::BracedWithInnerAttributes, token},
 	rustidy_ast_util::Identifier,
-	rustidy_format::Format,
+	rustidy_format::{Format, WhitespaceFormat},
 	rustidy_parse::Parse,
 	rustidy_print::Print,
+	rustidy_util::Whitespace,
 };
 
 /// `Module`
@@ -17,14 +18,14 @@ use {
 #[parse(name = "module declaration")]
 pub struct Module {
 	pub unsafe_: Option<token::Unsafe>,
-	#[format(before_with(expr = Format::prefix_ws_set_single, if = self.unsafe_.is_some()))]
+	#[format(prefix_ws(expr = Whitespace::set_single, if = self.unsafe_.is_some()))]
 	pub mod_:    token::Mod,
 	#[parse(fatal)]
-	#[format(before_with = Format::prefix_ws_set_single)]
+	#[format(prefix_ws = Whitespace::set_single)]
 	pub ident:   Identifier,
-	#[format(and_with = match self.inner.is_none() {
-		true => Format::prefix_ws_remove,
-		false => Format::prefix_ws_set_single,
+	#[format(prefix_ws = match self.inner.is_none() {
+		true => Whitespace::remove,
+		false => Whitespace::set_single,
 	})]
 	pub inner:   ModuleInner,
 }

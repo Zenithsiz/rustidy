@@ -45,7 +45,7 @@ pub mod vis;
 use {
 	self::{attr::InnerAttrOrDocComment, item::Items, shebang::Shebang},
 	core::fmt::Debug,
-	rustidy_format::{Format, WhitespaceFormat},
+	rustidy_format::{Format, FormatFn, WhitespaceFormat},
 	rustidy_parse::Parse,
 	rustidy_print::Print,
 	rustidy_util::{AstStr, Whitespace, ast_str::AstStrRepr},
@@ -60,7 +60,7 @@ use {
 pub struct Crate(pub CrateInner);
 
 impl Crate {
-	fn format(&mut self, ctx: &mut rustidy_format::Context) {
+	fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: &mut impl FormatFn<Whitespace>) {
 		let mut inner_ctx = ctx.sub_context();
 		for attr in &self.0.inner_attrs {
 			if let Some(attr) = attr.try_as_attr_ref() &&
@@ -71,7 +71,7 @@ impl Crate {
 		}
 
 		// TODO: This also needs to set `FormatTag::AfterNewline` for `items`.
-		self.0.format(&mut inner_ctx);
+		self.0.format(&mut inner_ctx, prefix_ws);
 	}
 }
 
@@ -82,10 +82,15 @@ impl Crate {
 #[format(and_with = Self::format_suffix_ws)]
 pub struct CrateInner {
 	pub shebang:               Option<Shebang>,
-	#[format(and_with = rustidy_format::format_vec_each_with_all(Format::prefix_ws_set_cur_indent))]
+	#[format(prefix_ws = Whitespace::set_cur_indent)]
+	#[format(and_with = rustidy_format::format_vec(Whitespace::set_cur_indent))]
 	pub inner_attrs:           Vec<InnerAttrOrDocComment>,
+	#[format(prefix_ws = Whitespace::set_cur_indent)]
 	pub items:                 Items,
+	#[format(prefix_ws = Whitespace::preserve)]
+	#[format(whitespace)]
 	pub suffix_ws:             Whitespace,
+	#[format(prefix_ws = Whitespace::preserve)]
 	#[format(and_with = Self::format_trailing_line_comment)]
 	pub trailing_line_comment: Option<TrailingLineComment>,
 }
@@ -98,9 +103,9 @@ impl CrateInner {
 
 	fn format_first_inner_attr_or_item(&mut self, ctx: &mut rustidy_format::Context) {
 		if let Some(attr) = self.inner_attrs.first_mut() {
-			attr.prefix_ws_remove(ctx);
+			attr.format(ctx, &mut Whitespace::remove);
 		} else if let Some(item) = self.items.0.first_mut() {
-			item.prefix_ws_remove(ctx);
+			item.format(ctx, &mut Whitespace::remove);
 		}
 	}
 
@@ -122,7 +127,11 @@ impl CrateInner {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 #[parse(error(name = NoComment, fmt = "Expected `//` (except `///` or `//!`)"))]
-pub struct TrailingLineComment(#[parse(try_update_with = Self::parse)] pub AstStr);
+pub struct TrailingLineComment(
+	#[parse(try_update_with = Self::parse)]
+	#[format(str)]
+	pub AstStr,
+);
 
 impl TrailingLineComment {
 	fn parse(s: &mut &str) -> Result<(), TrailingLineCommentError> {

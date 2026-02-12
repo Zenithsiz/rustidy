@@ -4,9 +4,10 @@
 use {
 	super::Type,
 	crate::{token, util::Parenthesized},
-	rustidy_format::Format,
+	rustidy_format::{Format, WhitespaceFormat},
 	rustidy_parse::Parse,
 	rustidy_print::Print,
+	rustidy_util::Whitespace,
 };
 
 /// `TupleType`
@@ -31,13 +32,13 @@ impl TupleTypeInner {
 			return;
 		};
 
-		first_comma.prefix_ws_remove(ctx);
+		first_comma.format(ctx, &mut Whitespace::remove);
 		for (ty, comma) in tys {
-			ty.prefix_ws_set_single(ctx);
-			comma.prefix_ws_remove(ctx);
+			ty.format(ctx, &mut Whitespace::set_single);
+			comma.format(ctx, &mut Whitespace::remove);
 		}
 		if let Some(end_ty) = &mut self.end {
-			end_ty.prefix_ws_set_single(ctx);
+			end_ty.format(ctx, &mut Whitespace::set_single);
 		}
 	}
 }

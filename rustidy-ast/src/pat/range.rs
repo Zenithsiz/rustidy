@@ -4,9 +4,9 @@
 use {
 	super::LiteralPattern,
 	crate::{expr::PathExpression, token},
-	rustidy_format::Format,
+	rustidy_format::{Format, WhitespaceFormat},
 	rustidy_parse::Parse,
-	rustidy_print::Print,
+	rustidy_print::Print, rustidy_util::Whitespace,
 };
 
 /// `RangePattern`
@@ -27,9 +27,9 @@ pub enum RangePattern {
 #[derive(Parse, Format, Print)]
 pub struct RangeExclusivePattern {
 	lhs:     RangePatternBound,
-	#[format(before_with = Format::prefix_ws_remove)]
+	#[format(prefix_ws = Whitespace::remove)]
 	dot_dot: token::DotDot,
-	#[format(before_with = Format::prefix_ws_remove)]
+	#[format(prefix_ws = Whitespace::remove)]
 	rhs:     RangePatternBound,
 }
 
@@ -38,9 +38,9 @@ pub struct RangeExclusivePattern {
 #[derive(Parse, Format, Print)]
 pub struct RangeInclusivePattern {
 	lhs:        RangePatternBound,
-	#[format(before_with = Format::prefix_ws_remove)]
+	#[format(prefix_ws = Whitespace::remove)]
 	dot_dot_eq: token::DotDotEq,
-	#[format(before_with = Format::prefix_ws_remove)]
+	#[format(prefix_ws = Whitespace::remove)]
 	rhs:        RangePatternBound,
 }
 
@@ -49,7 +49,7 @@ pub struct RangeInclusivePattern {
 #[derive(Parse, Format, Print)]
 pub struct RangeFromPattern {
 	lhs:     RangePatternBound,
-	#[format(before_with = Format::prefix_ws_remove)]
+	#[format(prefix_ws = Whitespace::remove)]
 	dot_dot: token::DotDot,
 }
 
@@ -58,7 +58,7 @@ pub struct RangeFromPattern {
 #[derive(Parse, Format, Print)]
 pub struct RangeToExclusivePattern {
 	dot_dot: token::DotDot,
-	#[format(before_with = Format::prefix_ws_remove)]
+	#[format(prefix_ws = Whitespace::remove)]
 	rhs:     RangePatternBound,
 }
 
@@ -67,7 +67,7 @@ pub struct RangeToExclusivePattern {
 #[derive(Parse, Format, Print)]
 pub struct RangeToInclusivePattern {
 	dot_dot_eq: token::DotDotEq,
-	#[format(before_with = Format::prefix_ws_remove)]
+	#[format(prefix_ws = Whitespace::remove)]
 	rhs:        RangePatternBound,
 }
 
@@ -76,9 +76,9 @@ pub struct RangeToInclusivePattern {
 #[derive(Parse, Format, Print)]
 pub struct ObsoleteRangePattern {
 	lhs:         RangePatternBound,
-	#[format(before_with = Format::prefix_ws_remove)]
+	#[format(prefix_ws = Whitespace::remove)]
 	dot_dot_dot: token::DotDotDot,
-	#[format(before_with = Format::prefix_ws_remove)]
+	#[format(prefix_ws = Whitespace::remove)]
 	rhs:         RangePatternBound,
 }
 

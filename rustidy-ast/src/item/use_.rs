@@ -18,9 +18,9 @@ use {
 pub struct UseDeclaration {
 	pub use_: token::Use,
 	#[parse(fatal)]
-	#[format(before_with = Format::prefix_ws_set_single)]
+	#[format(prefix_ws = Whitespace::set_single)]
 	pub tree: UseTree,
-	#[format(before_with = Format::prefix_ws_remove)]
+	#[format(prefix_ws = Whitespace::remove)]
 	pub semi: token::Semi,
 }
 
@@ -77,7 +77,7 @@ impl UseTree {
 #[derive(Parse, Format, Print)]
 pub struct UseTreeGlob {
 	pub prefix: Option<UseTreeGlobPrefix>,
-	#[format(before_with(expr = Format::prefix_ws_remove, if = self.prefix.is_some()))]
+	#[format(prefix_ws(expr = Whitespace::remove, if = self.prefix.is_some()))]
 	pub glob:   token::Star,
 }
 
@@ -86,7 +86,7 @@ pub struct UseTreeGlob {
 #[derive(Parse, Format, Print)]
 pub struct UseTreeGlobPrefix {
 	pub path: Option<SimplePath>,
-	#[format(before_with(expr = Format::prefix_ws_remove, if = self.path.is_some()))]
+	#[format(prefix_ws(expr = Whitespace::remove, if = self.path.is_some()))]
 	pub sep:  token::PathSep,
 }
 
@@ -96,7 +96,7 @@ pub struct UseTreeGlobPrefix {
 #[format(before_with = Self::flatten)]
 pub struct UseTreeGroup {
 	pub prefix: Option<UseTreeGroupPrefix>,
-	#[format(before_with(expr = Format::prefix_ws_remove, if = self.prefix.is_some()))]
+	#[format(prefix_ws(expr = Whitespace::remove, if = self.prefix.is_some()))]
 	#[format(indent)]
 	#[format(and_with = Self::format_tree)]
 	pub tree:   Braced<Option<PunctuatedTrailing<Box<UseTree>, token::Comma>>>,
@@ -112,7 +112,7 @@ impl UseTreeGroup {
 		}
 	}
 
-	pub fn flatten(&mut self, ctx: &mut rustidy_format::Context) {
+	pub fn flatten(&mut self, _ctx: &mut rustidy_format::Context) {
 		replace_with::replace_with_or_abort(&mut self.tree.value, |trees| {
 			let mut trees = trees?;
 			let mut trees_first = Some((token::Comma::new(), trees.punctuated.first));
@@ -156,9 +156,28 @@ impl UseTreeGroup {
 			}
 
 			new_trees.pop().map(|(first_comma, mut first)| {
-				first
-					.prefix_ws_join_prefix(ctx, first_comma.ws)
-					.expect("Should have prefix whitespace");
+				// TODO: Do this during formatting so we have access to the prefix whitespace more easily.
+				let first_prefix_ws = match &mut *first {
+					UseTree::Glob(use_tree) => match &mut use_tree.prefix {
+						Some(prefix) => match &mut prefix.path {
+							Some(path) => path.prefix_ws(),
+							None => &mut prefix.sep.ws,
+						},
+						None => &mut use_tree.glob.ws,
+					},
+					UseTree::Group(use_tree) => match &mut use_tree.prefix {
+						Some(prefix) => match &mut prefix.path {
+							Some(path) => match &mut path.prefix {
+								Some(prefix) => &mut prefix.ws,
+								None => path.segments.first.prefix_ws(),
+							},
+							None => &mut prefix.sep.ws,
+						},
+						None => &mut use_tree.tree.prefix.ws,
+					},
+					UseTree::Simple(use_tree) => &mut use_tree.path.prefix_ws(),
+				};
+				first_prefix_ws.join_prefix(first_comma.ws);
 
 				new_trees.reverse();
 				PunctuatedTrailing {
@@ -175,7 +194,7 @@ impl UseTreeGroup {
 	) {
 		if let Some(punct) = &mut tree.value {
 			punct.trailing = None;
-			punct.format(ctx, Format::prefix_ws_set_single, Format::prefix_ws_remove);
+			punct.format(ctx, &mut Whitespace::set_single, &mut Whitespace::remove);
 		}
 		tree.format_remove(ctx);
 	}
@@ -192,7 +211,7 @@ impl UseTreeGroup {
 					punct.trailing = Some(token::Comma::new());
 				}
 
-				punct.format(ctx, Format::prefix_ws_set_cur_indent, Format::prefix_ws_remove);
+				punct.format(ctx, &mut Whitespace::set_cur_indent, &mut Whitespace::remove);
 			}
 
 			tree.format_indent_if_non_blank(ctx);
@@ -205,7 +224,7 @@ impl UseTreeGroup {
 #[derive(Parse, Format, Print)]
 pub struct UseTreeGroupPrefix {
 	pub path: Option<SimplePath>,
-	#[format(before_with(expr = Format::prefix_ws_remove, if = self.path.is_some()))]
+	#[format(prefix_ws(expr = Whitespace::remove, if = self.path.is_some()))]
 	pub sep:  token::PathSep,
 }
 
@@ -214,7 +233,7 @@ pub struct UseTreeGroupPrefix {
 #[derive(Parse, Format, Print)]
 pub struct UseTreeSimple {
 	pub path: SimplePath,
-	#[format(before_with = Format::prefix_ws_set_single)]
+	#[format(prefix_ws = Whitespace::set_single)]
 	pub as_:  Option<UseTreeSimpleAs>,
 }
 
@@ -224,7 +243,7 @@ pub struct UseTreeSimple {
 pub struct UseTreeSimpleAs {
 	pub as_:   token::As,
 	#[parse(fatal)]
-	#[format(before_with = Format::prefix_ws_set_single)]
+	#[format(prefix_ws = Whitespace::set_single)]
 	pub value: UseTreeSimpleAsValue,
 }
 

@@ -2,7 +2,7 @@
 
 // Imports
 use {
-	crate::{Format, FormatTag},
+	crate::{Format, FormatFn, FormatTag},
 	core::ops::ControlFlow,
 	itertools::Itertools,
 	rustidy_util::{
@@ -13,11 +13,14 @@ use {
 	std::sync::Arc,
 };
 
+// TODO: This needs documentation since we removed `Format::prefix_ws_*`.
 #[extend::ext(name = WhitespaceFormat)]
 pub impl Whitespace {
 	fn is_pure(&mut self, _ctx: &mut crate::Context) -> bool {
 		self.0.get().rest.is_empty()
 	}
+
+	fn preserve(&mut self, _ctx: &mut crate::Context) {}
 
 	fn remove(&mut self, ctx: &mut crate::Context) {
 		self::format(self, ctx, FormatKind::Remove);
@@ -27,11 +30,31 @@ pub impl Whitespace {
 		self::format(self, ctx, FormatKind::Spaces { len });
 	}
 
+	fn set_single(&mut self, ctx: &mut crate::Context) {
+		self.set_spaces(ctx, 1);
+	}
+
 	fn set_indent(&mut self, ctx: &mut crate::Context, offset: isize, remove_if_empty: bool) {
 		self::format(self, ctx, FormatKind::Indent {
 			offset,
 			remove_if_empty,
 		});
+	}
+
+	fn set_cur_indent(&mut self, ctx: &mut crate::Context) {
+		self.set_indent(ctx, 0, false);
+	}
+
+	fn set_prev_indent(&mut self, ctx: &mut crate::Context) {
+		self.set_indent(ctx, -1, false);
+	}
+
+	fn set_prev_indent_remove_if_empty(&mut self, ctx: &mut crate::Context) {
+		self.set_indent(ctx, -1, true);
+	}
+
+	fn set_next_indent(&mut self, ctx: &mut crate::Context) {
+		self.set_indent(ctx, 1, false);
 	}
 
 	fn join_suffix(&mut self, other: Self) {
@@ -79,16 +102,8 @@ impl Format for Whitespace {
 		ControlFlow::Continue(())
 	}
 
-	fn format(&mut self, _ctx: &mut crate::Context) {
-		// Note: By default no formatting is done
-	}
-
-	fn with_prefix_ws<O>(
-		&mut self,
-		ctx: &mut crate::Context,
-		f: &mut impl FnMut(&mut Self, &mut crate::Context) -> O,
-	) -> Option<O> {
-		Some(f(self, ctx))
+	fn format(&mut self, ctx: &mut crate::Context, prefix_ws: &mut impl FormatFn<Self>) {
+		prefix_ws(self, ctx);
 	}
 }
 

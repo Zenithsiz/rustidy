@@ -3,9 +3,9 @@
 // Imports
 use {
 	crate::{expr::Expression, token},
-	rustidy_format::Format,
+	rustidy_format::{Format, WhitespaceFormat},
 	rustidy_parse::{Parse, ParserTag},
-	rustidy_print::Print,
+	rustidy_print::Print, rustidy_util::Whitespace,
 };
 
 /// `ReturnExpression`
@@ -16,6 +16,6 @@ pub struct ReturnExpression {
 	pub return_: token::Return,
 	// TODO: This needs to be recursive...
 	#[parse(skip_if_tag = ParserTag::SkipOptionalTrailingBlockExpression)]
-	#[format(before_with = Format::prefix_ws_set_single)]
+	#[format(prefix_ws = Whitespace::set_single)]
 	pub expr:    Option<Expression>,
 }

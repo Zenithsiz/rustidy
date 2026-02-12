@@ -4,9 +4,9 @@
 use {
 	super::Type,
 	crate::{expr::Expression, token, util::Bracketed},
-	rustidy_format::Format,
+	rustidy_format::{Format, WhitespaceFormat},
 	rustidy_parse::Parse,
-	rustidy_print::Print,
+	rustidy_print::Print, rustidy_util::Whitespace,
 };
 
 /// `ArrayType`
@@ -20,8 +20,8 @@ pub struct ArrayType(#[format(and_with = Bracketed::format_remove)] Bracketed<Ar
 #[derive(Parse, Format, Print)]
 pub struct ArrayTypeInner {
 	pub ty:   Box<Type>,
-	#[format(before_with = Format::prefix_ws_remove)]
+	#[format(prefix_ws = Whitespace::remove)]
 	pub semi: token::Semi,
-	#[format(before_with = Format::prefix_ws_set_single)]
+	#[format(prefix_ws = Whitespace::set_single)]
 	pub expr: Expression,
 }

@@ -5,6 +5,7 @@ use {
 	rustidy_format::{Format, FormatFn},
 	rustidy_parse::Parse,
 	rustidy_print::Print,
+	rustidy_util::Whitespace,
 };
 
 #[derive(PartialEq, Eq, Debug)]
@@ -16,10 +17,10 @@ pub struct AtLeast1<T> {
 }
 
 /// Formats all non-first elements of `AtLeast1<T>`
-pub fn format<T>(f: impl FormatFn<T>) -> impl FormatFn<AtLeast1<T>> {
+pub fn format<T: Format>(mut prefix_ws: impl FormatFn<Whitespace>) -> impl FormatFn<AtLeast1<T>> {
 	move |at_least, ctx| {
 		for value in &mut at_least.rest {
-			f(value, ctx);
+			value.format(ctx, &mut prefix_ws);
 		}
 	}
 }

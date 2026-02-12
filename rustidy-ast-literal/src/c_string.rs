@@ -24,8 +24,10 @@ use {
 #[parse(error(name = StringContinue(StringContinueError), transparent))]
 #[parse(error(name = ExpectedEndQuote, fmt = "Expected `\"` after `c\"`", fatal))]
 pub struct CStringLiteral {
+	#[format(whitespace)]
 	pub ws:     Whitespace,
 	#[parse(try_update_with = Self::parse)]
+	#[format(str)]
 	pub s:      AstStr,
 	pub suffix: Option<Suffix>,
 }

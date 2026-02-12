@@ -1,7 +1,12 @@
 //! Delimited
 
 // Imports
-use {rustidy_format::Format, rustidy_parse::Parse, rustidy_print::Print};
+use {
+	rustidy_format::{Format, WhitespaceFormat},
+	rustidy_parse::Parse,
+	rustidy_print::Print,
+	rustidy_util::Whitespace,
+};
 
 /// A value `T` delimited by prefix `L` and suffix `R`
 #[derive(PartialEq, Eq, Debug)]
@@ -37,12 +42,12 @@ impl<T, L, R> Delimited<T, L, R> {
 	{
 		match self.value.is_blank(ctx, false) {
 			true => {
-				self.value.prefix_ws_set_single(ctx);
-				self.suffix.prefix_ws_remove(ctx);
+				self.value.format(ctx, &mut Whitespace::set_single);
+				self.suffix.format(ctx, &mut Whitespace::remove);
 			},
 			false => {
-				self.value.prefix_ws_set_single(ctx);
-				self.suffix.prefix_ws_set_single(ctx);
+				self.value.format(ctx, &mut Whitespace::set_single);
+				self.suffix.format(ctx, &mut Whitespace::set_single);
 			},
 		}
 	}
@@ -55,12 +60,13 @@ impl<T, L, R> Delimited<T, L, R> {
 	{
 		match self.value.is_blank(ctx, false) {
 			true => {
-				self.value.prefix_ws_remove(ctx);
-				self.suffix.prefix_ws_set_indent(ctx, -1, true);
+				self.value.format(ctx, &mut Whitespace::remove);
+				self.suffix
+					.format(ctx, &mut Whitespace::set_prev_indent_remove_if_empty);
 			},
 			false => {
-				self.value.prefix_ws_set_indent(ctx, 0, false);
-				self.suffix.prefix_ws_set_indent(ctx, -1, false);
+				self.value.format(ctx, &mut Whitespace::set_cur_indent);
+				self.suffix.format(ctx, &mut Whitespace::set_prev_indent);
 			},
 		}
 	}
@@ -71,7 +77,7 @@ impl<T, L, R> Delimited<T, L, R> {
 		T: Format,
 		R: Format,
 	{
-		self.value.prefix_ws_remove(ctx);
-		self.suffix.prefix_ws_remove(ctx);
+		self.value.format(ctx, &mut Whitespace::remove);
+		self.suffix.format(ctx, &mut Whitespace::remove);
 	}
 }

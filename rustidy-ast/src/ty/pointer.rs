@@ -1,7 +1,7 @@
 //! Tuple type
 
 // Imports
-use {super::TypeNoBounds, crate::token, rustidy_format::Format, rustidy_parse::Parse, rustidy_print::Print};
+use {super::TypeNoBounds, crate::token, rustidy_format::{Format, WhitespaceFormat}, rustidy_parse::Parse, rustidy_print::Print, rustidy_util::Whitespace};
 
 /// `RawPointerType`
 #[derive(PartialEq, Eq, Debug)]
@@ -9,9 +9,9 @@ use {super::TypeNoBounds, crate::token, rustidy_format::Format, rustidy_parse::P
 #[derive(Parse, Format, Print)]
 pub struct RawPointerType {
 	pub star: token::Star,
-	#[format(before_with = Format::prefix_ws_remove)]
+	#[format(prefix_ws = Whitespace::remove)]
 	pub kind: RawPointerTypeKind,
-	#[format(before_with = Format::prefix_ws_set_single)]
+	#[format(prefix_ws = Whitespace::set_single)]
 	pub ty:   Box<TypeNoBounds>,
 }
 

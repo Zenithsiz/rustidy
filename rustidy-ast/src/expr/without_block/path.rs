@@ -12,9 +12,10 @@ use {
 		util::Parenthesized,
 	},
 	rustidy_ast_util::{AtLeast1, Delimited, Identifier, Longest, Punctuated, PunctuatedTrailing, at_least, punct},
-	rustidy_format::Format,
+	rustidy_format::{Format, WhitespaceFormat},
 	rustidy_parse::Parse,
 	rustidy_print::Print,
+	rustidy_util::Whitespace,
 };
 
 /// `PathExpression`
@@ -32,8 +33,8 @@ pub enum PathExpression {
 #[derive(Parse, Format, Print)]
 pub struct PathInExpression {
 	pub prefix:   Option<token::PathSep>,
-	#[format(before_with(expr = Format::prefix_ws_remove, if = self.prefix.is_some()))]
-	#[format(and_with = punct::format(Format::prefix_ws_remove, Format::prefix_ws_remove))]
+	#[format(prefix_ws(expr = Whitespace::remove, if = self.prefix.is_some()))]
+	#[format(and_with = punct::format(Whitespace::remove, Whitespace::remove))]
 	pub segments: Punctuated<PathExprSegment, token::PathSep>,
 }
 
@@ -43,7 +44,7 @@ pub struct PathInExpression {
 #[derive(Parse, Format, Print)]
 pub struct PathExprSegment {
 	pub ident:   PathIdentSegment,
-	#[format(before_with = Format::prefix_ws_remove)]
+	#[format(prefix_ws = Whitespace::remove)]
 	pub generic: Option<PathExprSegmentGenericArgs>,
 }
 
@@ -52,7 +53,7 @@ pub struct PathExprSegment {
 #[derive(Parse, Format, Print)]
 pub struct PathExprSegmentGenericArgs {
 	pub sep:     token::PathSep,
-	#[format(before_with = Format::prefix_ws_remove)]
+	#[format(prefix_ws = Whitespace::remove)]
 	pub generic: GenericArgs,
 }
 
@@ -82,7 +83,7 @@ pub struct GenericArgs(
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct GenericArgsInner(
-	#[format(and_with = punct::format_trailing(Format::prefix_ws_set_single, Format::prefix_ws_remove))]
+	#[format(and_with = punct::format_trailing(Whitespace::set_single, Whitespace::remove))]
 	pub  PunctuatedTrailing<GenericArg, token::Comma>,
 );
 
@@ -117,12 +118,12 @@ pub enum GenericArgsConst {
 #[derive(Parse, Format, Print)]
 pub struct GenericArgsBinding {
 	pub ident:    Identifier,
-	#[format(before_with = Format::prefix_ws_remove)]
+	#[format(prefix_ws = Whitespace::remove)]
 	pub generics: Option<Box<GenericArgs>>,
-	#[format(before_with = Format::prefix_ws_set_single)]
+	#[format(prefix_ws = Whitespace::set_single)]
 	pub eq:       token::Eq,
 	#[parse(fatal)]
-	#[format(before_with = Format::prefix_ws_set_single)]
+	#[format(prefix_ws = Whitespace::set_single)]
 	pub ty:       Box<Type>,
 }
 
@@ -132,12 +133,12 @@ pub struct GenericArgsBinding {
 #[derive(Parse, Format, Print)]
 pub struct GenericArgsBounds {
 	pub ident:    Identifier,
-	#[format(before_with = Format::prefix_ws_remove)]
+	#[format(prefix_ws = Whitespace::remove)]
 	pub generics: Option<Box<GenericArgs>>,
-	#[format(before_with = Format::prefix_ws_remove)]
+	#[format(prefix_ws = Whitespace::remove)]
 	pub colon:    token::Colon,
 	#[parse(fatal)]
-	#[format(before_with = Format::prefix_ws_set_single)]
+	#[format(prefix_ws = Whitespace::set_single)]
 	pub ty:       Box<TypeParamBounds>,
 }
 
@@ -148,7 +149,7 @@ pub struct GenericArgsBounds {
 pub struct TypePathFn {
 	#[format(and_with = Parenthesized::format_remove)]
 	pub inputs: Parenthesized<Option<TypePathFnInputs>>,
-	#[format(before_with = Format::prefix_ws_set_single)]
+	#[format(prefix_ws = Whitespace::set_single)]
 	pub ret:    Option<TypePathFnRet>,
 }
 
@@ -157,7 +158,7 @@ pub struct TypePathFn {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct TypePathFnInputs(
-	#[format(and_with = punct::format_trailing(Format::prefix_ws_remove, Format::prefix_ws_remove))]
+	#[format(and_with = punct::format_trailing(Whitespace::remove, Whitespace::remove))]
 	PunctuatedTrailing<Box<Type>, token::Comma>,
 );
 
@@ -166,7 +167,7 @@ pub struct TypePathFnInputs(
 #[derive(Parse, Format, Print)]
 pub struct TypePathFnRet {
 	pub arrow: token::RArrow,
-	#[format(before_with = Format::prefix_ws_set_single)]
+	#[format(prefix_ws = Whitespace::set_single)]
 	pub ty:    Box<TypeNoBounds>,
 }
 
@@ -176,8 +177,8 @@ pub struct TypePathFnRet {
 #[derive(Parse, Format, Print)]
 pub struct QualifiedPathInExpression {
 	pub qualified: QualifiedPathType,
-	#[format(before_with = Format::prefix_ws_remove)]
-	#[format(and_with = at_least::format(Format::prefix_ws_remove))]
+	#[format(prefix_ws = Whitespace::remove)]
+	#[format(and_with = at_least::format(Whitespace::remove))]
 	pub segments:  AtLeast1<QualifiedPathInExpressionSegment>,
 }
 
@@ -186,7 +187,7 @@ pub struct QualifiedPathInExpression {
 #[derive(Parse, Format, Print)]
 pub struct QualifiedPathInExpressionSegment {
 	sep:     token::PathSep,
-	#[format(before_with = Format::prefix_ws_remove)]
+	#[format(prefix_ws = Whitespace::remove)]
 	segment: PathExprSegment,
 }
 
@@ -203,7 +204,7 @@ pub struct QualifiedPathType(
 #[derive(Parse, Format, Print)]
 pub struct QualifiedPathTypeInner {
 	pub ty:  Box<Type>,
-	#[format(before_with = Format::prefix_ws_set_single)]
+	#[format(prefix_ws = Whitespace::set_single)]
 	pub as_: Option<QualifiedPathTypeAs>,
 }
 
@@ -212,7 +213,7 @@ pub struct QualifiedPathTypeInner {
 #[derive(Parse, Format, Print)]
 pub struct QualifiedPathTypeAs {
 	pub as_: token::As,
-	#[format(before_with = Format::prefix_ws_set_single)]
+	#[format(prefix_ws = Whitespace::set_single)]
 	pub ty:  TypePath,
 }
 

@@ -5,9 +5,10 @@ use {
 	super::path::TypePathSegment,
 	crate::{expr::without_block::path::QualifiedPathType, token},
 	rustidy_ast_util::{AtLeast1, at_least},
-	rustidy_format::Format,
+	rustidy_format::{Format, WhitespaceFormat},
 	rustidy_parse::Parse,
 	rustidy_print::Print,
+	rustidy_util::Whitespace,
 };
 
 /// `QualifiedPathInType`
@@ -16,8 +17,8 @@ use {
 #[derive(Parse, Format, Print)]
 pub struct QualifiedPathInType {
 	pub qualified: QualifiedPathType,
-	#[format(before_with = Format::prefix_ws_remove)]
-	#[format(and_with = at_least::format(Format::prefix_ws_remove))]
+	#[format(prefix_ws = Whitespace::remove)]
+	#[format(and_with = at_least::format(Whitespace::remove))]
 	pub segments:  AtLeast1<QualifiedPathInTypeSegment>,
 }
 
@@ -26,6 +27,6 @@ pub struct QualifiedPathInType {
 #[derive(Parse, Format, Print)]
 pub struct QualifiedPathInTypeSegment {
 	pub sep:     token::PathSep,
-	#[format(before_with = Format::prefix_ws_remove)]
+	#[format(prefix_ws = Whitespace::remove)]
 	pub segment: TypePathSegment,
 }

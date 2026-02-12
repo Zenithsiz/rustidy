@@ -18,8 +18,10 @@ use {
 #[parse(error(name = StartQuote, fmt = "Expected `r\"`"))]
 #[parse(error(name = ExpectedEndQuote, fmt = "Expected `\"` after `r\"`", fatal))]
 pub struct RawStringLiteral {
+	#[format(whitespace)]
 	pub ws:     Whitespace,
 	#[parse(try_update_with = Self::parse)]
+	#[format(str)]
 	pub s:      AstStr,
 	pub suffix: Option<Suffix>,
 }

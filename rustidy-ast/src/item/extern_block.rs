@@ -8,9 +8,10 @@ use {
 		token,
 		vis::Visibility,
 	},
-	rustidy_format::Format,
+	rustidy_format::{Format, WhitespaceFormat},
 	rustidy_parse::Parse,
 	rustidy_print::Print,
+	rustidy_util::Whitespace,
 };
 
 /// `ExternBlock`
@@ -19,11 +20,11 @@ use {
 #[derive(Parse, Format, Print)]
 pub struct ExternBlock {
 	pub unsafe_: Option<token::Unsafe>,
-	#[format(before_with(expr = Format::prefix_ws_set_single, if = self.unsafe_.is_some()))]
+	#[format(prefix_ws(expr = Whitespace::set_single, if = self.unsafe_.is_some()))]
 	pub extern_: token::Extern,
-	#[format(before_with = Format::prefix_ws_set_single)]
+	#[format(prefix_ws = Whitespace::set_single)]
 	pub abi:     Option<Abi>,
-	#[format(before_with = Format::prefix_ws_set_single)]
+	#[format(prefix_ws = Whitespace::set_single)]
 	pub inner:   BracedWithInnerAttributes<ExternBlockItems>,
 }
 
@@ -31,7 +32,7 @@ pub struct ExternBlock {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct ExternBlockItems(
-	#[format(and_with = rustidy_format::format_vec_each_with_all(Format::prefix_ws_set_cur_indent))] Vec<ExternalItem>,
+	#[format(and_with = rustidy_format::format_vec(Whitespace::set_cur_indent))] Vec<ExternalItem>,
 );
 
 /// `ExternalItem`
@@ -56,7 +57,7 @@ pub enum ExternalItemInner {
 #[derive(Parse, Format, Print)]
 pub struct ExternalItemStatic {
 	pub vis:     Option<Visibility>,
-	#[format(before_with(expr = Format::prefix_ws_set_single, if = self.vis.is_some()))]
+	#[format(prefix_ws(expr = Whitespace::set_single, if = self.vis.is_some()))]
 	pub static_: StaticItem,
 }
 
@@ -65,7 +66,7 @@ pub struct ExternalItemStatic {
 #[derive(Parse, Format, Print)]
 pub struct ExternalItemFunction {
 	pub vis:      Option<Visibility>,
-	#[format(before_with(expr = Format::prefix_ws_set_single, if = self.vis.is_some()))]
+	#[format(prefix_ws(expr = Whitespace::set_single, if = self.vis.is_some()))]
 	pub function: Function,
 }
 
@@ -74,6 +75,6 @@ pub struct ExternalItemFunction {
 #[derive(Parse, Format, Print)]
 pub struct ExternalItemTypeAlias {
 	pub vis:   Option<Visibility>,
-	#[format(before_with(expr = Format::prefix_ws_set_single, if = self.vis.is_some()))]
+	#[format(prefix_ws(expr = Whitespace::set_single, if = self.vis.is_some()))]
 	pub alias: TypeAlias,
 }

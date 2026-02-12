@@ -19,9 +19,11 @@ use {
 #[parse(error(name = StartQuote, fmt = "Expected `\"`"))]
 #[parse(error(name = ExpectedEndQuote, fmt = "Expected `\"` after `\"`", fatal))]
 pub struct StringLiteral {
+	#[format(whitespace)]
 	pub ws:     Whitespace,
 	// TODO: Split this into the two quotes and the contents?
 	#[parse(try_update_with = Self::parse)]
+	#[format(str)]
 	pub s:      AstStr,
 	pub suffix: Option<Suffix>,
 }

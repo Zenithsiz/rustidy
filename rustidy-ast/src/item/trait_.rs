@@ -15,9 +15,10 @@ use {
 		token,
 	},
 	rustidy_ast_util::Identifier,
-	rustidy_format::Format,
+	rustidy_format::{Format, WhitespaceFormat},
 	rustidy_parse::Parse,
 	rustidy_print::Print,
+	rustidy_util::Whitespace,
 };
 
 /// `Trait`
@@ -28,20 +29,20 @@ use {
 pub struct Trait {
 	pub unsafe_:  Option<token::Unsafe>,
 	// Note: Nightly-only
-	#[format(before_with(expr = Format::prefix_ws_set_single, if = self.unsafe_.is_some()))]
+	#[format(prefix_ws(expr = Whitespace::set_single, if = self.unsafe_.is_some()))]
 	pub auto:     Option<token::Auto>,
-	#[format(before_with(expr = Format::prefix_ws_set_single, if = self.unsafe_.is_some() || self.auto.is_some()))]
+	#[format(prefix_ws(expr = Whitespace::set_single, if = self.unsafe_.is_some() || self.auto.is_some()))]
 	pub trait_:   token::Trait,
 	#[parse(fatal)]
-	#[format(before_with = Format::prefix_ws_set_single)]
+	#[format(prefix_ws = Whitespace::set_single)]
 	pub ident:    Identifier,
-	#[format(before_with = Format::prefix_ws_remove)]
+	#[format(prefix_ws = Whitespace::remove)]
 	pub generics: Option<GenericParams>,
-	#[format(before_with = Format::prefix_ws_remove)]
+	#[format(prefix_ws = Whitespace::remove)]
 	pub bounds:   Option<TraitColonBounds>,
-	#[format(before_with = Format::prefix_ws_set_cur_indent)]
+	#[format(prefix_ws = Whitespace::set_cur_indent)]
 	pub where_:   Option<WhereClause>,
-	#[format(before_with = Format::prefix_ws_set_single)]
+	#[format(prefix_ws = Whitespace::set_single)]
 	pub body:     TraitBody,
 }
 
@@ -59,9 +60,9 @@ pub enum TraitBody {
 #[derive(Parse, Format, Print)]
 pub struct TraitBodyEq {
 	pub eq:     token::Eq,
-	#[format(before_with = Format::prefix_ws_set_single)]
+	#[format(prefix_ws = Whitespace::set_single)]
 	pub bounds: Option<TypeParamBounds>,
-	#[format(before_with = Format::prefix_ws_remove)]
+	#[format(prefix_ws = Whitespace::remove)]
 	pub semi:   token::Semi,
 }
 
@@ -69,8 +70,7 @@ pub struct TraitBodyEq {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct TraitBodyFull(
-	#[format(and_with = rustidy_format::format_vec_each_with_all(Format::prefix_ws_set_cur_indent))]
-	pub  Vec<AssociatedItem>,
+	#[format(and_with = rustidy_format::format_vec(Whitespace::set_cur_indent))] pub Vec<AssociatedItem>,
 );
 
 #[derive(PartialEq, Eq, Debug)]
@@ -78,7 +78,7 @@ pub struct TraitBodyFull(
 #[derive(Parse, Format, Print)]
 pub struct TraitColonBounds {
 	pub colon:  token::Colon,
-	#[format(before_with = Format::prefix_ws_set_single)]
+	#[format(prefix_ws = Whitespace::set_single)]
 	pub bounds: Option<TypeParamBounds>,
 }
 
@@ -101,7 +101,7 @@ pub enum AssociatedItemInner {
 #[derive(Parse, Format, Print)]
 pub struct AssociatedItemVis {
 	pub vis:   Option<Visibility>,
-	#[format(before_with(expr = Format::prefix_ws_set_single, if = self.vis.is_some()))]
+	#[format(prefix_ws(expr = Whitespace::set_single, if = self.vis.is_some()))]
 	pub inner: AssociatedItemVisInner,
 }
 

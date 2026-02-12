@@ -7,9 +7,9 @@ use {
 		expr::{Expression, ExpressionInner},
 		token,
 	},
-	rustidy_format::Format,
+	rustidy_format::{Format, WhitespaceFormat},
 	rustidy_parse::ParseRecursive,
-	rustidy_print::Print,
+	rustidy_print::Print, rustidy_util::Whitespace,
 };
 
 /// `AwaitExpression`
@@ -21,8 +21,8 @@ use {
 #[parse_recursive(kind = "left")]
 pub struct AwaitExpression {
 	pub expr:   Expression,
-	#[format(before_with = Format::prefix_ws_remove)]
+	#[format(prefix_ws = Whitespace::remove)]
 	pub dot:    token::Dot,
-	#[format(before_with = Format::prefix_ws_remove)]
+	#[format(prefix_ws = Whitespace::remove)]
 	pub await_: token::Await,
 }
