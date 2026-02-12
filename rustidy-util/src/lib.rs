@@ -9,6 +9,7 @@ pub mod ast_pos;
 pub mod ast_range;
 pub mod ast_str;
 pub mod config;
+pub mod oob;
 pub mod whitespace;
 
 // Exports
@@ -18,6 +19,7 @@ pub use self::{
 	ast_range::AstRange,
 	ast_str::AstStr,
 	config::Config,
+	oob::Oob,
 	whitespace::Whitespace,
 };
 

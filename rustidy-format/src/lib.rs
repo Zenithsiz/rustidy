@@ -22,7 +22,7 @@ pub use {self::whitespace::WhitespaceFormat, rustidy_macros::Format, tag::Format
 use {
 	crate as rustidy_format,
 	core::{marker::PhantomData, mem, ops::ControlFlow},
-	rustidy_util::{ArenaData, ArenaIdx, AstStr, Config, Whitespace},
+	rustidy_util::{ArenaData, ArenaIdx, AstStr, Config, Oob, Whitespace},
 	std::borrow::Cow,
 };
 
@@ -416,7 +416,7 @@ pub struct Context<'a, 'input> {
 	input:        &'input str,
 	config:       Cow<'a, Config>,
 	indent_depth: usize,
-	tags:         Cow<'a, [FormatTag]>,
+	tags:         Oob<'a, Vec<FormatTag>>,
 }
 
 impl<'a, 'input> Context<'a, 'input> {
@@ -427,7 +427,7 @@ impl<'a, 'input> Context<'a, 'input> {
 			input,
 			config: Cow::Borrowed(config),
 			indent_depth: 0,
-			tags: Cow::Owned(vec![]),
+			tags: Oob::Owned(vec![]),
 		}
 	}
 
@@ -519,7 +519,7 @@ impl<'a, 'input> Context<'a, 'input> {
 			input:        self.input,
 			config:       Cow::Borrowed(&self.config),
 			indent_depth: self.indent_depth,
-			tags:         Cow::Borrowed(&self.tags),
+			tags:         Oob::Borrowed(&mut self.tags),
 		}
 	}
 
@@ -540,11 +540,11 @@ impl<'a, 'input> Context<'a, 'input> {
 		let tags_len = self.tags.len();
 
 		for tag in tags {
-			self.tags.to_mut().push(tag);
+			self.tags.push(tag);
 		}
 		let output = f(self);
 		if self.tags.len() != tags_len {
-			self.tags.to_mut().truncate(tags_len);
+			self.tags.truncate(tags_len);
 		}
 
 		output
@@ -559,9 +559,9 @@ impl<'a, 'input> Context<'a, 'input> {
 	pub fn without_tags<O>(&mut self, f: impl FnOnce(&mut Self) -> O) -> O {
 		// TODO: Just add an offset to the start of the new tags
 		//       to reduce an allocation?
-		let tags = mem::take(&mut self.tags);
+		let tags = mem::take(&mut *self.tags);
 		let output = f(self);
-		self.tags = tags;
+		*self.tags = tags;
 
 		output
 	}
