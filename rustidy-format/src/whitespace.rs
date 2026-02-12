@@ -2,7 +2,7 @@
 
 // Imports
 use {
-	crate::Format,
+	crate::{Format, FormatTag},
 	core::ops::ControlFlow,
 	itertools::Itertools,
 	rustidy_util::{
@@ -187,18 +187,7 @@ pub fn format(ws: &mut Whitespace, ctx: &mut crate::Context, kind: FormatKind) {
 
 	// Note: If we're whitespace after a line doc comment, then we have a newline
 	//       prior to us that we need to take into account.
-	// TODO: Using the input to check this isn't ideal and is just a hack, since it
-	//       could have changed already. Ideally we'd need some `Format::with_strings_before` or alike.
-	//       This even breaks when the same whitespace gets formatted multiple time, since we'll
-	//       stop being a range.
-	fn is_after_newline(repr: &AstStrRepr, ctx: &mut crate::Context) -> bool {
-		match *repr {
-			AstStrRepr::AstRange(ref range) => range.str_before(ctx.input()).ends_with('\n'),
-			AstStrRepr::Join { ref lhs, .. } => is_after_newline(&lhs.repr(), ctx),
-			_ => false,
-		}
-	}
-	let after_newline = is_after_newline(&inner.first.0.repr(), ctx);
+	let after_newline = ctx.take_tag(FormatTag::AfterNewline);
 
 	let prefix_str = kind.prefix_str(ctx, &inner.first.0, inner.rest.is_empty(), after_newline);
 	inner.first.0.replace(ctx.input, prefix_str);

@@ -70,6 +70,7 @@ impl Crate {
 			}
 		}
 
+		// TODO: This also needs to set `FormatTag::AfterNewline` for `items`.
 		self.0.format(&mut inner_ctx);
 	}
 }

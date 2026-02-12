@@ -29,3 +29,41 @@ fn closure_inside_call() {
 		let _ = a;
 	});
 }
+
+fn doc_comment_newline() {
+	fn a() {
+		//! A1
+		#![a]
+		//! A2
+		#![a]
+		let _ = a;
+	}
+	
+	fn b() {
+		//! B1
+		#![b]
+		//! B2
+		let _ = b;
+	}
+
+	fn c() {
+		//! C1
+		#![c]
+		//! C2
+	}
+
+	pub enum A {
+		/// B1
+		#[b]
+		/// B2
+		#[c]
+		B,
+
+		/// C1
+		#[c]
+		/// C2
+		#[c]
+		/// C3
+		C,
+	}
+}

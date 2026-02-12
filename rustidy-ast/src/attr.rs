@@ -4,7 +4,7 @@
 mod with;
 
 // Exports
-pub use self::with::{BracedWithInnerAttributes, WithInnerAttributes, WithOuterAttributes};
+pub use self::with::{BracedWithInnerAttributes, WithOuterAttributes};
 
 // Imports
 use {
@@ -97,6 +97,7 @@ pub struct OuterAttribute {
 
 /// Outer Doc comment
 #[derive(PartialEq, Eq, Debug)]
+#[derive(strum::EnumTryAs)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub enum OuterDocComment {
