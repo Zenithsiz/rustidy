@@ -1,10 +1,13 @@
 //! Format tests
 
+// Features
+#![feature(yeet_expr)]
 // Lints
 #![expect(unused_crate_dependencies, reason = "They're used in other tests")]
 
 // Imports
 use {
+	app_error::{AppError, Context, ensure},
 	rustidy_format::Format,
 	rustidy_parse::Parser,
 	rustidy_print::{Print, PrintFmt},
@@ -13,34 +16,36 @@ use {
 };
 
 #[test]
-pub fn format() {
+pub fn format() -> Result<(), AppError> {
 	let _logger = zutil_logger::Logger::new();
 
-	env::set_current_dir("..").expect("Unable to ascend a directory");
+	env::set_current_dir("..").context("Unable to ascend a directory")?;
 	let tests_dir = Path::new("tests/format/");
 	match env::var_os("RUSTIDY_FORMAT_UPDATE_TESTS") {
 		Some(tests) => {
-			let tests = tests.to_str().expect("`RUSTIDY_FORMAT_UPDATE_TESTS` must be utf-8");
+			let tests = tests.to_str().context("`RUSTIDY_FORMAT_UPDATE_TESTS` must be utf-8")?;
 			for test_dir in tests.split(':') {
-				self::test_case(Path::new(test_dir));
+				self::test_case(Path::new(test_dir)).with_context(|| format!("Test {test_dir:?} failed"))?;
 			}
 		},
 		None =>
-			for test_dir in tests_dir.read_dir().expect("Unable to read tests directory") {
-				let test_dir = test_dir.expect("Unable to read tests directory entry");
+			for test_dir in tests_dir.read_dir().context("Unable to read tests directory")? {
+				let test_dir = test_dir.context("Unable to read tests directory entry")?;
 				let test_dir = test_dir.path();
 
-				self::test_case(&test_dir);
+				self::test_case(&test_dir).with_context(|| format!("Test {test_dir:?} failed"))?;
 			},
 	}
+
+	Ok(())
 }
 
 /// Tests a case from a directory
-fn test_case(test_dir: &Path) {
+fn test_case(test_dir: &Path) -> Result<(), AppError> {
 	let test_path = test_dir.join("input.rs");
-	let input = fs::read_to_string(&test_path).expect("Unable to read file");
+	let input = fs::read_to_string(&test_path).context("Unable to read file")?;
 
-	let mut crate_ = rustidy::parse(&input, &test_path).expect("Unable to parse input");
+	let mut crate_ = rustidy::parse(&input, &test_path).context("Unable to parse input")?;
 
 	let config = rustidy_util::Config::default();
 	let mut ctx = rustidy_format::Context::new(&input, &config);
@@ -57,9 +62,8 @@ fn test_case(test_dir: &Path) {
 		let mut print_fmt = PrintFmt::new(&input);
 		crate_.print(&mut print_fmt);
 
-		assert_eq!(
-			found_output,
-			print_fmt.output(),
+		ensure!(
+			found_output == print_fmt.output(),
 			"Formatting twice did not yield the same output"
 		);
 	}
@@ -67,10 +71,10 @@ fn test_case(test_dir: &Path) {
 	let output_path = test_dir.join("output.rs");
 	match env::var("RUSTIDY_FORMAT_UPDATE_OUTPUT").is_ok_and(|value| !value.trim().is_empty()) {
 		true => {
-			fs::write(output_path, found_output).expect("Unable to update output");
+			fs::write(output_path, found_output).context("Unable to update output")?;
 		},
 		false => {
-			let output = fs::read_to_string(&output_path).expect("Unable to read output path");
+			let output = fs::read_to_string(&output_path).context("Unable to read output path")?;
 			if let Some(idx) = found_output
 				.char_indices()
 				.zip(output.char_indices())
@@ -88,9 +92,9 @@ fn test_case(test_dir: &Path) {
 				let found_len = found_output[idx..]
 					.find('\n')
 					.map_or_else(|| found_output[idx..].len(), |idx| idx + 1);
-				assert!(
+				ensure!(
 					found_output == output,
-					"Test {test_dir:?} differed at {}:{}\n\nExpected:\n---\n{}\n---\n\nFound:\n---\n{}\n---",
+					"Found differences at {}:{}\n\nExpected:\n---\n{}\n---\n\nFound:\n---\n{}\n---",
 					output_path.display(),
 					parser.cur_loc(),
 					output[idx..][..len]
@@ -105,4 +109,6 @@ fn test_case(test_dir: &Path) {
 			}
 		},
 	}
+
+	Ok(())
 }
