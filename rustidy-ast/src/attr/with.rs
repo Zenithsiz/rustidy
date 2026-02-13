@@ -7,7 +7,7 @@ use {
 		attr::{InnerDocComment, OuterDocComment},
 		util::Braced,
 	},
-	rustidy_format::{Format, FormatFn, FormatTag, WhitespaceFormat},
+	rustidy_format::{Format, FormatFn, FormatTag, Formattable, WhitespaceFormat},
 	rustidy_parse::{ParsableRecursive, Parse, Parser},
 	rustidy_print::Print,
 	rustidy_util::Whitespace,
@@ -121,7 +121,7 @@ where
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 // TODO: Remove once rustc realizes that `Braced<WithInnerAttributes<T>>: Format => T: Format`
-#[format(with_where = "where T: Format")]
+#[format(with_where_format = "where T: Format")]
 #[format(with = Self::format)]
 pub struct BracedWithInnerAttributes<T>(Braced<WithInnerAttributes<T>>);
 

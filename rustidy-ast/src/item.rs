@@ -46,7 +46,7 @@ use {
 	},
 	core::{mem, ops::ControlFlow},
 	rustidy_ast_util::{Identifier, PunctuatedTrailing, punct},
-	rustidy_format::{Format, WhitespaceFormat},
+	rustidy_format::{Format, Formattable, WhitespaceFormat},
 	rustidy_parse::Parse,
 	rustidy_print::Print,
 	rustidy_util::{Arena, ArenaData, ArenaIdx, Whitespace},

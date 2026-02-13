@@ -183,7 +183,7 @@ struct Attrs {
 
 	// TODO: Don't require the `where` token here.
 	#[darling(multiple)]
-	with_where: Vec<syn::WhereClause>,
+	with_where_format: Vec<syn::WhereClause>,
 }
 
 pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream, AppError> {
@@ -197,13 +197,6 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 		darling::ast::Data::Enum(variants) => self::derive_enum(variants),
 		darling::ast::Data::Struct(fields) => self::derive_struct(fields),
 	};
-
-	let mut impl_generics = util::with_bounds(&attrs, |ty| parse_quote! { #ty: rustidy_format::Format });
-	impl_generics
-		.make_where_clause()
-		.predicates
-		.extend(attrs.with_where.into_iter().flat_map(|clause| clause.predicates));
-	let (impl_generics, ty_generics, impl_where_clause) = impl_generics.split_for_impl();
 
 	let Impls { with_strings, format } = impls;
 
@@ -237,23 +230,46 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 		#( #format_and_with_wrapper; )*
 	}};
 
-	let output = quote! {
-		#[automatically_derived]
-		impl #impl_generics rustidy_format::Format for #item_ident #ty_generics #impl_where_clause {
-			fn with_strings<WITH_STRINGS_WS_O>(
-				&mut self,
-				ctx: &mut rustidy_format::Context,
-				mut exclude_prefix_ws: bool,
-				f: &mut impl FnMut(&mut rustidy_util::AstStr, &mut rustidy_format::Context) -> std::ops::ControlFlow<WITH_STRINGS_WS_O>,
-			) -> std::ops::ControlFlow<WITH_STRINGS_WS_O> {
-				#with_strings
-			}
-
-			#[coverage(on)]
-			fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: &mut impl rustidy_format::FormatFn<rustidy_util::Whitespace>) {
-				#format;
+	let formattable_impl = {
+		let impl_generics = util::with_bounds(&attrs, |ty| parse_quote! { #ty: rustidy_format::Formattable });
+		let (impl_generics, ty_generics, impl_where_clause) = impl_generics.split_for_impl();
+		quote! {
+			#[automatically_derived]
+			impl #impl_generics rustidy_format::Formattable for #item_ident #ty_generics #impl_where_clause {
+				fn with_strings<WITH_STRINGS_WS_O>(
+					&mut self,
+					ctx: &mut rustidy_format::Context,
+					mut exclude_prefix_ws: bool,
+					f: &mut impl FnMut(&mut rustidy_util::AstStr, &mut rustidy_format::Context) -> std::ops::ControlFlow<WITH_STRINGS_WS_O>,
+				) -> std::ops::ControlFlow<WITH_STRINGS_WS_O> {
+					#with_strings
+				}
 			}
 		}
+	};
+
+	let format_impl = {
+		let mut impl_generics = util::with_bounds(&attrs, |ty| parse_quote! { #ty: rustidy_format::Format });
+		impl_generics
+			.make_where_clause()
+			.predicates
+			.extend(attrs.with_where_format.into_iter().flat_map(|clause| clause.predicates));
+
+		let (impl_generics, ty_generics, impl_where_clause) = impl_generics.split_for_impl();
+		quote! {
+			#[automatically_derived]
+			impl #impl_generics rustidy_format::Format for #item_ident #ty_generics #impl_where_clause {
+				#[coverage(on)]
+				fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: &mut impl rustidy_format::FormatFn<rustidy_util::Whitespace>) {
+					#format;
+				}
+			}
+		}
+	};
+
+	let output = quote! {
+		#formattable_impl
+		#format_impl
 	};
 
 	Ok(output.into())
@@ -265,7 +281,7 @@ fn derive_enum(variants: &[VariantAttrs]) -> Impls<syn::Expr, syn::Expr> {
 		.map(|variant| {
 			let variant_ident = &variant.ident;
 			let with_strings =
-				parse_quote! { Self::#variant_ident(ref mut value) => rustidy_format::Format::with_strings(value, ctx, exclude_prefix_ws, f), };
+				parse_quote! { Self::#variant_ident(ref mut value) => rustidy_format::Formattable::with_strings(value, ctx, exclude_prefix_ws, f), };
 
 			let prefix_ws: syn::Expr = match &variant.prefix_ws {
 				Some(prefix_ws) => match prefix_ws.cond.is_some() && prefix_ws.else_expr.is_none() {
@@ -332,11 +348,11 @@ fn derive_struct_field(field_idx: usize, field: &FieldAttrs) -> Impls<syn::Expr,
 	let field_ident = util::field_member_access(field_idx, field);
 
 	let with_strings = parse_quote! {{
-		rustidy_format::Format::with_strings(&mut self.#field_ident, ctx, exclude_prefix_ws, f)?;
+		rustidy_format::Formattable::with_strings(&mut self.#field_ident, ctx, exclude_prefix_ws, f)?;
 
 		// If this field wasn't empty, then we no longer exclude the prefix ws, since
 		// we already excluded it here.
-		if exclude_prefix_ws && !rustidy_format::Format::is_empty(&mut self.#field_ident, ctx, false) {
+		if exclude_prefix_ws && !rustidy_format::Formattable::is_empty(&mut self.#field_ident, ctx, false) {
 			exclude_prefix_ws = false;
 		}
 	}};
@@ -379,7 +395,7 @@ fn derive_struct_field(field_idx: usize, field: &FieldAttrs) -> Impls<syn::Expr,
 		true => parse_quote! { has_prefix_ws = false },
 		false => parse_quote! {
 			// TODO: Make `format` return this so we don't have to recurse back into the type
-			if has_prefix_ws && !rustidy_format::Format::is_empty(&mut self.#field_ident, ctx, false) {
+			if has_prefix_ws && !rustidy_format::Formattable::is_empty(&mut self.#field_ident, ctx, false) {
 				has_prefix_ws = false;
 			}
 		},

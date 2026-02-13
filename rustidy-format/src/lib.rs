@@ -26,8 +26,8 @@ use {
 	std::borrow::Cow,
 };
 
-/// Formattable type
-pub trait Format {
+/// Formattable types
+pub trait Formattable {
 	/// Iterates over all strings in this type
 	fn with_strings<O>(
 		&mut self,
@@ -80,12 +80,15 @@ pub trait Format {
 		)
 		.is_break()
 	}
+}
 
+/// Type formatting
+pub trait Format: Formattable {
 	/// Formats this type, using `prefix_ws` to format it's prefix whitespace, if any.
 	fn format(&mut self, ctx: &mut Context, prefix_ws: &mut impl FormatFn<Whitespace>);
 }
 
-impl<T: Format> Format for &'_ mut T {
+impl<T: Formattable> Formattable for &'_ mut T {
 	fn with_strings<O>(
 		&mut self,
 		ctx: &mut Context,
@@ -94,28 +97,32 @@ impl<T: Format> Format for &'_ mut T {
 	) -> ControlFlow<O> {
 		(**self).with_strings(ctx, exclude_prefix_ws, f)
 	}
+}
 
+impl<T: Format> Format for &'_ mut T {
 	fn format(&mut self, ctx: &mut Context, prefix_ws: &mut impl FormatFn<Whitespace>) {
 		(**self).format(ctx, prefix_ws);
+	}
+}
+
+impl<T: Formattable> Formattable for Box<T> {
+	fn with_strings<O>(
+		&mut self,
+		ctx: &mut Context,
+		exclude_prefix_ws: bool,
+		f: &mut impl FnMut(&mut AstStr, &mut Context) -> ControlFlow<O>,
+	) -> ControlFlow<O> {
+		(**self).with_strings(ctx, exclude_prefix_ws, f)
 	}
 }
 
 impl<T: Format> Format for Box<T> {
-	fn with_strings<O>(
-		&mut self,
-		ctx: &mut Context,
-		exclude_prefix_ws: bool,
-		f: &mut impl FnMut(&mut AstStr, &mut Context) -> ControlFlow<O>,
-	) -> ControlFlow<O> {
-		(**self).with_strings(ctx, exclude_prefix_ws, f)
-	}
-
 	fn format(&mut self, ctx: &mut Context, prefix_ws: &mut impl FormatFn<Whitespace>) {
 		(**self).format(ctx, prefix_ws);
 	}
 }
 
-impl<T: Format> Format for Option<T> {
+impl<T: Formattable> Formattable for Option<T> {
 	fn with_strings<O>(
 		&mut self,
 		ctx: &mut Context,
@@ -127,7 +134,9 @@ impl<T: Format> Format for Option<T> {
 			None => ControlFlow::Continue(()),
 		}
 	}
+}
 
+impl<T: Format> Format for Option<T> {
 	fn format(&mut self, ctx: &mut Context, prefix_ws: &mut impl FormatFn<Whitespace>) {
 		if let Some(value) = self {
 			value.format(ctx, prefix_ws);
@@ -135,7 +144,7 @@ impl<T: Format> Format for Option<T> {
 	}
 }
 
-impl<T: Format> Format for Vec<T> {
+impl<T: Formattable> Formattable for Vec<T> {
 	fn with_strings<O>(
 		&mut self,
 		ctx: &mut Context,
@@ -148,7 +157,9 @@ impl<T: Format> Format for Vec<T> {
 
 		ControlFlow::Continue(())
 	}
+}
 
+impl<T: Format> Format for Vec<T> {
 	fn format(&mut self, ctx: &mut Context, prefix_ws: &mut impl FormatFn<Whitespace>) {
 		let [first, rest @ ..] = &mut **self else {
 			return;
@@ -161,7 +172,7 @@ impl<T: Format> Format for Vec<T> {
 	}
 }
 
-impl Format for ! {
+impl Formattable for ! {
 	fn with_strings<O>(
 		&mut self,
 		_ctx: &mut Context,
@@ -170,13 +181,15 @@ impl Format for ! {
 	) -> ControlFlow<O> {
 		*self
 	}
+}
 
+impl Format for ! {
 	fn format(&mut self, _ctx: &mut Context, _prefix_ws: &mut impl FormatFn<Whitespace>) {
 		*self
 	}
 }
 
-impl<T> Format for PhantomData<T> {
+impl<T> Formattable for PhantomData<T> {
 	fn with_strings<O>(
 		&mut self,
 		_ctx: &mut Context,
@@ -185,11 +198,13 @@ impl<T> Format for PhantomData<T> {
 	) -> ControlFlow<O> {
 		ControlFlow::Continue(())
 	}
+}
 
+impl<T> Format for PhantomData<T> {
 	fn format(&mut self, _ctx: &mut Context, _prefix_ws: &mut impl FormatFn<Whitespace>) {}
 }
 
-impl Format for () {
+impl Formattable for () {
 	fn with_strings<O>(
 		&mut self,
 		_ctx: &mut Context,
@@ -198,7 +213,9 @@ impl Format for () {
 	) -> ControlFlow<O> {
 		ControlFlow::Continue(())
 	}
+}
 
+impl Format for () {
 	fn format(&mut self, _ctx: &mut Context, _prefix_ws: &mut impl FormatFn<Whitespace>) {}
 }
 
@@ -211,7 +228,7 @@ macro tuple_impl ($N:literal, $($T:ident),* $(,)?) {
 
 	#[automatically_derived]
 	#[expect(non_snake_case)]
-	impl< $($T: Format,)* > Format for ( $($T,)* ) {
+	impl< $($T: Formattable,)* > Formattable for ( $($T,)* ) {
 		fn with_strings<O>(
 			&mut self,
 			ctx: &mut Context,
@@ -221,7 +238,11 @@ macro tuple_impl ($N:literal, $($T:ident),* $(,)?) {
 			let ( $($T,)* ) = self;
 			${concat( Tuple, $N )} { $( $T, )* }.with_strings(ctx, exclude_prefix_ws, f)
 		}
+	}
 
+	#[automatically_derived]
+	#[expect(non_snake_case)]
+	impl< $($T: Format,)* > Format for ( $($T,)* ) {
 		fn format(&mut self, ctx: &mut Context, prefix_ws: &mut impl FormatFn<Whitespace>) {
 			let ( $($T,)* ) = self;
 			${concat( Tuple, $N )} { $( $T, )* }.format(ctx, prefix_ws)
@@ -233,7 +254,7 @@ tuple_impl! { 1, T0 }
 tuple_impl! { 2, T0, T1 }
 tuple_impl! { 3, T0, T1, T2 }
 
-impl Format for AstStr {
+impl Formattable for AstStr {
 	fn with_strings<O>(
 		&mut self,
 		ctx: &mut Context,
@@ -242,11 +263,13 @@ impl Format for AstStr {
 	) -> ControlFlow<O> {
 		f(self, ctx)
 	}
+}
 
+impl Format for AstStr {
 	fn format(&mut self, _ctx: &mut Context, _prefix_ws: &mut impl FormatFn<Whitespace>) {}
 }
 
-impl<T: ArenaData<Data: Format>> Format for ArenaIdx<T> {
+impl<T: ArenaData<Data: Formattable>> Formattable for ArenaIdx<T> {
 	fn with_strings<O>(
 		&mut self,
 		ctx: &mut Context,
@@ -255,7 +278,9 @@ impl<T: ArenaData<Data: Format>> Format for ArenaIdx<T> {
 	) -> ControlFlow<O> {
 		self.get_mut().with_strings(ctx, exclude_prefix_ws, f)
 	}
+}
 
+impl<T: ArenaData<Data: Format>> Format for ArenaIdx<T> {
 	fn format(&mut self, ctx: &mut Context, prefix_ws: &mut impl FormatFn<Whitespace>) {
 		self.get_mut().format(ctx, prefix_ws);
 	}

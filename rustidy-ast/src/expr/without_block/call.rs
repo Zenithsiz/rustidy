@@ -8,7 +8,7 @@ use {
 		util::Parenthesized,
 	},
 	rustidy_ast_util::{PunctuatedTrailing, punct},
-	rustidy_format::{Format, FormatTag, WhitespaceFormat},
+	rustidy_format::{Format, FormatTag, Formattable, WhitespaceFormat},
 	rustidy_parse::{Parse, ParseRecursive},
 	rustidy_print::Print,
 	rustidy_util::Whitespace,

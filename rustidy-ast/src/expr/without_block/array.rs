@@ -4,7 +4,7 @@
 use {
 	crate::{expr::Expression, token, util::Bracketed},
 	rustidy_ast_util::punct::PunctuatedTrailing,
-	rustidy_format::{Format, FormatFn, WhitespaceFormat},
+	rustidy_format::{Format, FormatFn, Formattable, WhitespaceFormat},
 	rustidy_parse::Parse,
 	rustidy_print::Print,
 	rustidy_util::Whitespace,
