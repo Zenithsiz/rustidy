@@ -12,11 +12,10 @@ use proc_macro2::Span;
 pub fn with_enum_bounds<V, F>(
 	mut generics: syn::Generics,
 	variants: &[V],
-	create_bound: impl Fn(&syn::Type) -> syn::WherePredicate,
+	create_bound: impl Fn(&V, &F) -> syn::WherePredicate,
 ) -> syn::Generics
 where
 	V: AsRef<darling::ast::Fields<F>>,
-	F: AsRef<syn::Type>,
 {
 	// If we have no generic parameters, just return them
 	if generics.params.is_empty() {
@@ -27,7 +26,7 @@ where
 	let where_clause = generics.make_where_clause();
 	for variant in variants {
 		for field in variant.as_ref().iter() {
-			where_clause.predicates.push(create_bound(field.as_ref()));
+			where_clause.predicates.push(create_bound(variant, field));
 		}
 	}
 
@@ -40,11 +39,8 @@ where
 pub fn with_struct_bounds<F>(
 	mut generics: syn::Generics,
 	fields: &[F],
-	create_bound: impl Fn(&syn::Type) -> syn::WherePredicate,
-) -> syn::Generics
-where
-	F: AsRef<syn::Type>,
-{
+	create_bound: impl Fn(&F) -> syn::WherePredicate,
+) -> syn::Generics {
 	// If we have no generic parameters, just return them
 	if generics.params.is_empty() {
 		return generics;
@@ -53,7 +49,7 @@ where
 	// Add each field's type
 	let where_clause = generics.make_where_clause();
 	for field in fields {
-		where_clause.predicates.push(create_bound(field.as_ref()));
+		where_clause.predicates.push(create_bound(field));
 	}
 
 	generics
@@ -71,8 +67,10 @@ where
 {
 	let generics = <A as AsRef<syn::Generics>>::as_ref(attrs).clone();
 	match <A as AsRef<darling::ast::Data<V, F>>>::as_ref(attrs) {
-		darling::ast::Data::Enum(variants) => self::with_enum_bounds(generics, variants, create_bound),
-		darling::ast::Data::Struct(fields) => self::with_struct_bounds(generics, &fields.fields, create_bound),
+		darling::ast::Data::Enum(variants) =>
+			self::with_enum_bounds(generics, variants, |_, field| create_bound(field.as_ref())),
+		darling::ast::Data::Struct(fields) =>
+			self::with_struct_bounds(generics, &fields.fields, |field| create_bound(field.as_ref())),
 	}
 }
 

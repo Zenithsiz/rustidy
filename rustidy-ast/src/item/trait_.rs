@@ -70,7 +70,7 @@ pub struct TraitBodyEq {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct TraitBodyFull(
-	#[format(and_with = rustidy_format::format_vec(Whitespace::set_cur_indent))] pub Vec<AssociatedItem>,
+	#[format(args = rustidy_format::VecArgs::from_prefix_ws(Whitespace::set_cur_indent))] pub Vec<AssociatedItem>,
 );
 
 #[derive(PartialEq, Eq, Debug)]

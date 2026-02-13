@@ -9,7 +9,8 @@
 	if_let_guard,
 	yeet_expr,
 	try_find,
-	try_blocks
+	try_blocks,
+	super_let
 )]
 // Lints
 #![expect(clippy::needless_continue, reason = "Macro-generated code")]

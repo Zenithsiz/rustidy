@@ -17,7 +17,7 @@ use {
 	crate::token::{Punctuation, Token},
 	app_error::{AppError, Context, bail},
 	core::fmt::Debug,
-	rustidy_ast_util::{RemainingBlockComment, RemainingLine},
+	rustidy_ast_util::{RemainingBlockComment, RemainingLine, delimited},
 	rustidy_format::{Format, WhitespaceFormat},
 	rustidy_parse::{Parse, ParserTag},
 	rustidy_print::Print,
@@ -44,7 +44,7 @@ pub struct InnerAttribute {
 	pub not:   token::Not,
 	#[parse(fatal)]
 	#[format(prefix_ws = Whitespace::remove)]
-	#[format(and_with = Bracketed::format_remove)]
+	#[format(args = delimited::FmtArgs::remove((), (), ()))]
 	pub attr:  Bracketed<Attr>,
 }
 
@@ -92,7 +92,7 @@ pub enum OuterAttrOrDocComment {
 pub struct OuterAttribute {
 	pub pound: token::Pound,
 	#[format(prefix_ws = Whitespace::remove)]
-	#[format(and_with = Bracketed::format_remove)]
+	#[format(args = delimited::FmtArgs::remove((), (), ()))]
 	pub open:  Bracketed<Attr>,
 }
 
@@ -162,15 +162,22 @@ pub struct AttrInputEqExpr {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub enum DelimTokenTree {
+	#[format(args = delimited::FmtArgs::preserve((), (), ()))]
 	Parens(Parenthesized<DelimTokenTreeInner>),
+	#[format(args = delimited::FmtArgs::preserve((), (), ()))]
 	Brackets(Bracketed<DelimTokenTreeInner>),
+	#[format(args = delimited::FmtArgs::preserve((), (), ()))]
 	Braces(Braced<DelimTokenTreeInner>),
 }
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
-pub struct DelimTokenTreeInner(#[parse(fatal)] pub Vec<TokenTree>);
+pub struct DelimTokenTreeInner(
+	#[parse(fatal)]
+	#[format(args = rustidy_format::VecArgs::from_prefix_ws(Whitespace::preserve))]
+	pub Vec<TokenTree>,
+);
 
 /// `TokenTree`
 #[derive(PartialEq, Eq, Debug)]

@@ -11,16 +11,23 @@ use {
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
+#[format(args(ty = "FmtArgs<W>", generic = "W: FormatFn<Whitespace>"))]
+#[format(where_format = "where T: Format<()>")]
+// TODO: Support arguments for `T`
 pub struct AtLeast1<T> {
+	#[format(args = ())]
 	pub first: T,
+	#[format(args = rustidy_format::VecArgs::from_prefix_ws(args.rest_prefix_ws))]
 	pub rest:  Vec<T>,
 }
 
-/// Formats all non-first elements of `AtLeast1<T>`
-pub fn format<T: Format>(mut prefix_ws: impl FormatFn<Whitespace>) -> impl FormatFn<AtLeast1<T>> {
-	move |at_least, ctx| {
-		for value in &mut at_least.rest {
-			value.format(ctx, &mut prefix_ws);
-		}
+/// Formatting arguments
+pub struct FmtArgs<W> {
+	pub rest_prefix_ws: W,
+}
+
+impl<W> FmtArgs<W> {
+	pub const fn from_prefix_ws(rest_prefix_ws: W) -> Self {
+		Self { rest_prefix_ws }
 	}
 }

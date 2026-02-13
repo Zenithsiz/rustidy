@@ -12,6 +12,17 @@ use {
 };
 
 #[derive(Debug, darling::FromMeta)]
+// TODO: Something better than this...
+#[darling(from_expr = |expr| Ok(Self { ty: parse_quote! { #expr }, generics: vec![] }))]
+struct ArgsTy {
+	ty: syn::Type,
+
+	#[darling(multiple)]
+	#[darling(rename = "generic")]
+	generics: Vec<syn::TypeParam>,
+}
+
+#[derive(Debug, darling::FromMeta)]
 #[darling(from_word = || Ok(Self { if_has_tag: None }))]
 struct Indent {
 	if_has_tag: Option<syn::Expr>,
@@ -114,6 +125,8 @@ struct VariantAttrs {
 
 	#[darling(default)]
 	without_tags: bool,
+
+	args: Option<syn::Expr>,
 }
 
 #[derive(Debug, darling::FromField, derive_more::AsRef)]
@@ -143,6 +156,8 @@ struct FieldAttrs {
 
 	#[darling(default)]
 	without_tags: bool,
+
+	args: Option<syn::Expr>,
 
 	#[darling(default)]
 	whitespace: bool,
@@ -181,6 +196,11 @@ struct Attrs {
 	#[darling(default)]
 	without_tags: bool,
 
+	args: Option<ArgsTy>,
+
+	// TODO: Don't require the `where` token here.
+	where_format: Option<syn::WhereClause>,
+
 	// TODO: Don't require the `where` token here.
 	#[darling(multiple)]
 	with_where_format: Vec<syn::WhereClause>,
@@ -210,6 +230,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 		&attrs.and_with,
 		&attrs.with_tag,
 		attrs.without_tags,
+		&None,
 		&attrs.indent,
 	);
 
@@ -248,19 +269,64 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 		}
 	};
 
+	let args_ty = match &attrs.args {
+		Some(args) => args.ty.clone(),
+		None => parse_quote! { () },
+	};
+
 	let format_impl = {
-		let mut impl_generics = util::with_bounds(&attrs, |ty| parse_quote! { #ty: rustidy_format::Format });
+		let mut impl_generics = match attrs.where_format {
+			Some(where_) => {
+				let mut generics = attrs.generics.clone();
+				generics.where_clause = Some(where_);
+				generics
+			},
+			None => match attrs.with.is_some() {
+				true => attrs.generics.clone(),
+				false => {
+					let generics = attrs.generics.clone();
+					match &attrs.data {
+						darling::ast::Data::Enum(variants) =>
+							util::with_enum_bounds(generics, variants, |variant, field| {
+								let ty = &field.ty;
+								match variant.args.is_some() {
+									true => parse_quote! { #ty: },
+									false => parse_quote! { #ty: rustidy_format::Format<#args_ty> },
+								}
+							}),
+						darling::ast::Data::Struct(fields) =>
+							util::with_struct_bounds(generics, &fields.fields, |field| {
+								let ty = &field.ty;
+								match field.args.is_some() {
+									true => parse_quote! { #ty: },
+									false => parse_quote! { #ty: rustidy_format::Format<#args_ty> },
+								}
+							}),
+					}
+				},
+			},
+		};
 		impl_generics
 			.make_where_clause()
 			.predicates
 			.extend(attrs.with_where_format.into_iter().flat_map(|clause| clause.predicates));
 
-		let (impl_generics, ty_generics, impl_where_clause) = impl_generics.split_for_impl();
+		let (_, ty_generics, impl_where_clause) = impl_generics.split_for_impl();
+		let (impl_generics, ..) = {
+			super let mut impl_generics = impl_generics.clone();
+			if let Some(args) = &attrs.args {
+				for generic in &args.generics {
+					impl_generics.params.push(syn::GenericParam::Type(generic.clone()));
+				}
+			}
+			impl_generics.split_for_impl()
+		};
+
 		quote! {
 			#[automatically_derived]
-			impl #impl_generics rustidy_format::Format for #item_ident #ty_generics #impl_where_clause {
+			impl #impl_generics rustidy_format::Format<#args_ty> for #item_ident #ty_generics #impl_where_clause {
 				#[coverage(on)]
-				fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: &mut impl rustidy_format::FormatFn<rustidy_util::Whitespace>) {
+				fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: &mut impl rustidy_format::FormatFn<rustidy_util::Whitespace>, args: &mut #args_ty) {
 					#format;
 				}
 			}
@@ -292,7 +358,7 @@ fn derive_enum(variants: &[VariantAttrs]) -> Impls<syn::Expr, syn::Expr> {
 			};
 
 			let format = parse_quote! { match #prefix_ws {
-				ref mut prefix_ws => rustidy_format::Format::format(value, ctx, prefix_ws)
+				ref mut prefix_ws => rustidy_format::Format::format(value, ctx, prefix_ws, args)
 			}};
 
 			let format = self::derive_format(
@@ -307,6 +373,7 @@ fn derive_enum(variants: &[VariantAttrs]) -> Impls<syn::Expr, syn::Expr> {
 				&variant.and_with,
 				&variant.with_tag,
 				variant.without_tags,
+				&variant.args,
 				&variant.indent,
 			);
 			let format = parse_quote! {
@@ -388,7 +455,7 @@ fn derive_struct_field(field_idx: usize, field: &FieldAttrs) -> Impls<syn::Expr,
 
 	let format = match field.str {
 		true => parse_quote! { () },
-		false => parse_quote! { rustidy_format::Format::format(&mut self.#field_ident, ctx, prefix_ws) },
+		false => parse_quote! { rustidy_format::Format::format(&mut self.#field_ident, ctx, prefix_ws, args) },
 	};
 
 	let after_format = match field.whitespace {
@@ -411,6 +478,7 @@ fn derive_struct_field(field_idx: usize, field: &FieldAttrs) -> Impls<syn::Expr,
 		&field.and_with,
 		&field.with_tag,
 		field.without_tags,
+		&field.args,
 		&field.indent,
 	);
 
@@ -433,16 +501,25 @@ fn derive_format(
 	and_with: &[AndWith],
 	with_tag: &[WithTag],
 	without_tags: bool,
+	args: &Option<syn::Expr>,
 	indent: &Option<Indent>,
 ) -> syn::Expr {
+	// TODO: Document the order in which we parse all attributes, since
+	//       it's not in declaration order (although maybe it should?).
+
 	let format: syn::Expr = match &with {
-		Some(with) => parse_quote! { (#with)(#value, ctx, prefix_ws) },
+		Some(with) => parse_quote! { (#with)(#value, ctx, prefix_ws, args) },
 		None => default,
+	};
+	let format = match args {
+		Some(args) => parse_quote! {{
+			let mut args = &mut #args;
+			#format;
+		}},
+		None => format,
 	};
 	let format = with_prefix_ws(format);
 
-	// TODO: Document the order in which we parse all attributes, since
-	//       it's not in declaration order (although maybe it should?).
 	let and_with = and_with
 		.iter()
 		.map(|and_with| and_with.map(|expr| parse_quote! { (#expr)(#value, ctx) }).eval());
@@ -494,6 +571,7 @@ fn derive_format(
 	}}
 }
 
+// TODO: Remove this
 fn derive_and_with_wrapper(
 	fields: &darling::ast::Fields<FieldAttrs>,
 	and_with_wrapper: &AndWithWrapper,

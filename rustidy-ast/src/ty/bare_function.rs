@@ -9,7 +9,7 @@ use {
 		token,
 		util::Parenthesized,
 	},
-	rustidy_ast_util::{Identifier, Punctuated, PunctuatedTrailing, punct},
+	rustidy_ast_util::{Identifier, Punctuated, PunctuatedTrailing, delimited, punct},
 	rustidy_format::{Format, WhitespaceFormat},
 	rustidy_parse::Parse,
 	rustidy_print::Print,
@@ -28,7 +28,7 @@ pub struct BareFunctionType {
 	pub fn_:           token::Fn,
 	#[parse(fatal)]
 	#[format(prefix_ws = Whitespace::remove)]
-	#[format(and_with = Parenthesized::format_remove)]
+	#[format(args = delimited::FmtArgs::remove((), (), ()))]
 	pub params:        Parenthesized<Option<FunctionParametersMaybeNamedVariadic>>,
 	#[format(prefix_ws = Whitespace::set_single)]
 	pub ret:           Option<BareFunctionReturnType>,
@@ -58,7 +58,7 @@ pub enum FunctionParametersMaybeNamedVariadic {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct MaybeNamedFunctionParameters(
-	#[format(and_with = punct::format_trailing(Whitespace::set_single, Whitespace::remove))]
+	#[format(args = punct::FmtArgs::new(Whitespace::set_single, Whitespace::remove))]
 	PunctuatedTrailing<MaybeNamedParam, token::Comma>,
 );
 
@@ -102,7 +102,7 @@ pub struct MaybeNamedFunctionParametersVariadic {
 	// TODO: `fn(...)` is accepted by the rust compiler, but
 	//       the reference demands at least 1 argument, should
 	//       we allow it?
-	#[format(and_with = punct::format(Whitespace::set_single, Whitespace::remove))]
+	#[format(args = punct::FmtArgs::new(Whitespace::set_single, Whitespace::remove))]
 	pub params:   Punctuated<MaybeNamedParam, token::Comma>,
 	#[format(prefix_ws = Whitespace::remove)]
 	pub comma:    token::Comma,

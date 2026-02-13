@@ -4,7 +4,7 @@
 use {
 	super::{TupleIndex, path::PathInExpression},
 	crate::{attr::WithOuterAttributes, expr::Expression, token, util::Braced},
-	rustidy_ast_util::{Identifier, Punctuated, punct},
+	rustidy_ast_util::{Identifier, Punctuated, delimited, punct},
 	rustidy_format::{Format, WhitespaceFormat},
 	rustidy_parse::{Parse, ParserTag},
 	rustidy_print::Print,
@@ -21,7 +21,7 @@ pub struct StructExpression {
 	pub path:  PathInExpression,
 	#[format(prefix_ws = Whitespace::set_single)]
 	#[format(indent)]
-	#[format(and_with = Braced::format_indent_if_non_blank)]
+	#[format(args = delimited::FmtArgs::indent_if_non_blank((), (), ()))]
 	pub inner: Braced<Option<StructExpressionInner>>,
 }
 
@@ -38,7 +38,7 @@ pub enum StructExpressionInner {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct StructExprFields {
-	#[format(and_with = punct::format(Whitespace::set_cur_indent, Whitespace::remove))]
+	#[format(args = punct::FmtArgs::new(Whitespace::set_cur_indent, Whitespace::remove))]
 	pub fields: Punctuated<StructExprField, token::Comma>,
 	#[format(prefix_ws = Whitespace::remove)]
 	pub end:    Option<StructExprFieldsEnd>,

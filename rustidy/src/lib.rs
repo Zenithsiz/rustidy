@@ -39,7 +39,11 @@ use {
 /// Formats the crate `crate_`.
 pub fn format(input: &str, config: &Config, crate_: &mut Crate) {
 	let mut ctx = rustidy_format::Context::new(input, config);
-	crate_.format(&mut ctx, &mut |_, _| panic!("Crate should not use prefix whitespace"));
+	crate_.format(
+		&mut ctx,
+		&mut |_, _| panic!("Crate should not use prefix whitespace"),
+		&mut (),
+	);
 }
 
 /// Parses the input `input`.

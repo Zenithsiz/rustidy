@@ -18,7 +18,7 @@ use {
 pub struct QualifiedPathInType {
 	pub qualified: QualifiedPathType,
 	#[format(prefix_ws = Whitespace::remove)]
-	#[format(and_with = at_least::format(Whitespace::remove))]
+	#[format(args = at_least::FmtArgs::from_prefix_ws(Whitespace::remove))]
 	pub segments:  AtLeast1<QualifiedPathInTypeSegment>,
 }
 

@@ -3,7 +3,7 @@
 // Imports
 use {
 	crate::{expr::Expression, token, util::Bracketed},
-	rustidy_ast_util::punct::PunctuatedTrailing,
+	rustidy_ast_util::punct::{PunctuatedRest, PunctuatedTrailing},
 	rustidy_format::{Format, FormatFn, Formattable, WhitespaceFormat},
 	rustidy_parse::Parse,
 	rustidy_print::Print,
@@ -25,20 +25,16 @@ impl ArrayExpression {
 		ctx: &mut rustidy_format::Context,
 		prefix_ws: &mut impl FormatFn<Whitespace>,
 	) {
-		values.punctuated.first.format(ctx, prefix_ws);
-		for (comma, value) in &mut values.punctuated.rest {
-			comma.format(ctx, &mut Whitespace::remove);
-			comma.format(ctx, &mut Whitespace::remove);
-
-			value.format(ctx, &mut Whitespace::set_single);
-			value.format(ctx, &mut Whitespace::set_single);
+		values.punctuated.first.format(ctx, prefix_ws, &mut ());
+		for PunctuatedRest { punct: comma, value } in &mut values.punctuated.rest {
+			comma.format(ctx, &mut Whitespace::remove, &mut ());
+			value.format(ctx, &mut Whitespace::set_single, &mut ());
 		}
 
-		values.trailing.format(ctx, &mut Whitespace::remove);
-		values.trailing.format(ctx, &mut Whitespace::remove);
+		values.trailing.format(ctx, &mut Whitespace::remove, &mut ());
 	}
 
-	fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: &mut impl FormatFn<Whitespace>) {
+	fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: &mut impl FormatFn<Whitespace>, (): &mut ()) {
 		match &mut self.0.value {
 			Some(ArrayElements::Punctuated(values)) => {
 				Self::format_single_line(values, ctx, prefix_ws);
@@ -59,11 +55,10 @@ impl ArrayExpression {
 					// If we fit, remove whitespace after the `[` and before the `]`.
 					// Also remove the trailing comma.
 					true => {
-						values.punctuated.first.format(ctx, &mut Whitespace::remove);
+						values.punctuated.first.format(ctx, &mut Whitespace::remove, &mut ());
 						values.trailing = None;
 
-						self.0.suffix.format(ctx, &mut Whitespace::remove);
-						self.0.suffix.format(ctx, &mut Whitespace::remove);
+						self.0.suffix.format(ctx, &mut Whitespace::remove, &mut ());
 					},
 
 					false => {
@@ -73,12 +68,10 @@ impl ArrayExpression {
 							loop {
 								let mut row_values = (&mut values_iter).take(cols.unwrap_or(1));
 								let Some(first) = row_values.next() else { break };
-								first.format(ctx, &mut Whitespace::set_cur_indent);
-								first.format(ctx, &mut Whitespace::set_cur_indent);
+								first.format(ctx, &mut Whitespace::set_cur_indent, &mut ());
 
 								for value in row_values {
-									value.format(ctx, &mut Whitespace::set_single);
-									value.format(ctx, &mut Whitespace::set_single);
+									value.format(ctx, &mut Whitespace::set_single, &mut ());
 								}
 							}
 							drop(values_iter);
@@ -90,16 +83,16 @@ impl ArrayExpression {
 						});
 
 						// Finally, close the indentation on the `]`
-						self.0.suffix.format(ctx, &mut Whitespace::set_cur_indent);
-						self.0.suffix.format(ctx, &mut Whitespace::set_cur_indent);
+						self.0.suffix.format(ctx, &mut Whitespace::set_cur_indent, &mut ());
 					},
 				}
 			},
 
-			Some(ArrayElements::Repeat(_)) | None => {
-				self.0.format_remove(ctx);
-				self.0.format(ctx, &mut Whitespace::remove);
+			Some(ArrayElements::Repeat(repeat)) => {
+				repeat.format(ctx, &mut Whitespace::remove, &mut ());
 			},
+
+			None => (),
 		}
 	}
 }
@@ -108,6 +101,7 @@ impl ArrayExpression {
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
+#[format(with = |_, _, _, (): &mut ()| panic!("This type shouldn't be formatted manually"))]
 pub enum ArrayElements {
 	Repeat(ArrayElementsRepeat),
 	Punctuated(PunctuatedTrailing<Expression, token::Comma>),

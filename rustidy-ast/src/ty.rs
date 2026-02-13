@@ -29,6 +29,7 @@ use {
 		token,
 		util::Parenthesized,
 	},
+	rustidy_ast_util::delimited,
 	rustidy_format::{Format, WhitespaceFormat},
 	rustidy_parse::Parse,
 	rustidy_print::Print,
@@ -88,7 +89,9 @@ pub enum TypeNoBounds {
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
-pub struct ParenthesizedPath(#[format(and_with = Parenthesized::format_single_if_non_blank)] Parenthesized<Box<Type>>);
+pub struct ParenthesizedPath(
+	#[format(args = delimited::FmtArgs::single_if_non_blank((), (), ()))] Parenthesized<Box<Type>>,
+);
 
 /// `NeverType`
 #[derive(PartialEq, Eq, Debug)]

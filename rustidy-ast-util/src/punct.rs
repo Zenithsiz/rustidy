@@ -13,9 +13,19 @@ use {
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
+#[format(args(
+	ty = "FmtArgs<WT, WP>",
+	generic = "WT: FormatFn<Whitespace>",
+	generic = "WP: FormatFn<Whitespace>"
+))]
+#[format(where_format = "where T: Format<()>, P: Format<()>")]
+// TODO: Support arguments for `T` and `P`
 pub struct Punctuated<T, P> {
+	#[format(args = ())]
 	pub first: T,
-	pub rest:  Vec<(P, T)>,
+	#[format(prefix_ws = { args.punct })]
+	#[format(args = rustidy_format::VecArgs::new(args.punct, args.value))]
+	pub rest:  Vec<PunctuatedRest<T, P>>,
 }
 
 impl<T, P> Punctuated<T, P> {
@@ -29,7 +39,7 @@ impl<T, P> Punctuated<T, P> {
 
 	/// Pushes a punctuation and value onto this punctuated
 	pub fn push(&mut self, punct: P, value: T) {
-		self.rest.push((punct, value));
+		self.rest.push(PunctuatedRest { punct, value });
 	}
 
 	/// Pushes a value onto this punctuated, with a default punctuated
@@ -49,7 +59,9 @@ impl<T, P> Punctuated<T, P> {
 	) {
 		(
 			&mut self.first,
-			self.rest.iter_mut().map(|(punct, value)| (punct, value)),
+			self.rest
+				.iter_mut()
+				.map(|PunctuatedRest { punct, value }| (punct, value)),
 		)
 	}
 
@@ -57,7 +69,7 @@ impl<T, P> Punctuated<T, P> {
 	pub fn split_last_mut(&mut self) -> (SplitLastMut<'_, T, P>, &mut T) {
 		let mut rest = self.rest.iter_mut();
 		match rest.next_back() {
-			Some((punct, value)) => {
+			Some(PunctuatedRest { punct, value }) => {
 				let iter = SplitLastMut {
 					next_value: Some(&mut self.first),
 					last_punct: Some(punct),
@@ -82,7 +94,7 @@ impl<T, P> Punctuated<T, P> {
 			[Either::Left(&self.first)],
 			self.rest
 				.iter()
-				.flat_map(|(punct, value)| [Either::Right(punct), Either::Left(value)])
+				.flat_map(|PunctuatedRest { punct, value }| [Either::Right(punct), Either::Left(value)])
 		]
 	}
 
@@ -92,18 +104,24 @@ impl<T, P> Punctuated<T, P> {
 			[Either::Left(&mut self.first)],
 			self.rest
 				.iter_mut()
-				.flat_map(|(punct, value)| [Either::Right(punct), Either::Left(value)])
+				.flat_map(|PunctuatedRest { punct, value }| [Either::Right(punct), Either::Left(value)])
 		]
 	}
 
 	/// Returns an iterator over all values
 	pub fn values(&self) -> impl Iterator<Item = &T> {
-		itertools::chain![[&self.first], self.rest.iter().map(|(_, value)| value)]
+		itertools::chain![
+			[&self.first],
+			self.rest.iter().map(|PunctuatedRest { value, .. }| value)
+		]
 	}
 
 	/// Returns a mutable iterator over all values
 	pub fn values_mut(&mut self) -> impl Iterator<Item = &mut T> {
-		itertools::chain![[&mut self.first], self.rest.iter_mut().map(|(_, value)| value)]
+		itertools::chain![
+			[&mut self.first],
+			self.rest.iter_mut().map(|PunctuatedRest { value, .. }| value)
+		]
 	}
 
 	/// Returns the number of values
@@ -113,33 +131,17 @@ impl<T, P> Punctuated<T, P> {
 
 	/// Returns an iterator over all punctuation
 	pub fn puncts(&self) -> impl Iterator<Item = &P> {
-		self.rest.iter().map(|(punct, _)| punct)
+		self.rest.iter().map(|PunctuatedRest { punct, .. }| punct)
 	}
 
 	/// Returns a mutable iterator over all punctuation
 	pub fn puncts_mut(&mut self) -> impl Iterator<Item = &mut P> {
-		self.rest.iter_mut().map(|(punct, _)| punct)
+		self.rest.iter_mut().map(|PunctuatedRest { punct, .. }| punct)
 	}
 
 	/// Returns a mutable iterator over all punctuation
 	pub fn punct_mut(&mut self) -> impl Iterator<Item = &mut P> {
-		self.rest.iter_mut().map(|(punct, _)| punct)
-	}
-
-	/// Formats this value
-	pub fn format(
-		&mut self,
-		ctx: &mut rustidy_format::Context,
-		value_prefix_ws: &mut impl FormatFn<Whitespace>,
-		punct_prefix_ws: &mut impl FormatFn<Whitespace>,
-	) where
-		T: Format,
-		P: Format,
-	{
-		for (punct, value) in &mut self.rest {
-			punct.format(ctx, punct_prefix_ws);
-			value.format(ctx, value_prefix_ws);
-		}
+		self.rest.iter_mut().map(|PunctuatedRest { punct, .. }| punct)
 	}
 }
 
@@ -147,8 +149,16 @@ impl<T, P> Punctuated<T, P> {
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
+#[format(args(
+	ty = "FmtArgs<WT, WP>",
+	generic = "WT: FormatFn<Whitespace>",
+	generic = "WP: FormatFn<Whitespace>"
+))]
+#[format(where_format = "where T: Format<()>, P: Format<()>")]
 pub struct PunctuatedTrailing<T, P> {
 	pub punctuated: Punctuated<T, P>,
+	#[format(prefix_ws = args.punct)]
+	#[format(args = ())]
 	pub trailing:   Option<P>,
 }
 
@@ -214,22 +224,6 @@ impl<T, P> PunctuatedTrailing<T, P> {
 	pub fn puncts_mut(&mut self) -> impl Iterator<Item = &mut P> {
 		itertools::chain![self.punctuated.puncts_mut(), &mut self.trailing]
 	}
-
-	/// Formats this value
-	pub fn format(
-		&mut self,
-		ctx: &mut rustidy_format::Context,
-		value_prefix_ws: &mut impl FormatFn<Whitespace>,
-		punct_prefix_ws: &mut impl FormatFn<Whitespace>,
-	) where
-		T: Format,
-		P: Format,
-	{
-		self.punctuated.format(ctx, value_prefix_ws, punct_prefix_ws);
-		if let Some(trailing) = &mut self.trailing {
-			trailing.format(ctx, punct_prefix_ws);
-		}
-	}
 }
 
 /// Iterator for [`Punctuated::split_last_mut`]
@@ -241,7 +235,7 @@ pub struct SplitLastMut<'a, T, P> {
 	last_punct: Option<&'a mut P>,
 
 	/// Rest of the slice
-	rest: std::slice::IterMut<'a, (P, T)>,
+	rest: std::slice::IterMut<'a, PunctuatedRest<T, P>>,
 }
 
 impl<'a, T, P> Iterator for SplitLastMut<'a, T, P> {
@@ -255,7 +249,7 @@ impl<'a, T, P> Iterator for SplitLastMut<'a, T, P> {
 		let punct = match self.rest.next() {
 			// If there's still something in the slice, save the value
 			// for the next iteration
-			Some((punct, value)) => {
+			Some(PunctuatedRest { punct, value }) => {
 				self.next_value = Some(value);
 				punct
 			},
@@ -270,18 +264,27 @@ impl<'a, T, P> Iterator for SplitLastMut<'a, T, P> {
 	}
 }
 
-/// Formats a punctuated
-pub fn format<T: Format, P: Format>(
-	mut value_prefix_ws: impl FormatFn<Whitespace>,
-	mut punct_prefix_ws: impl FormatFn<Whitespace>,
-) -> impl FormatFn<Punctuated<T, P>> {
-	move |punct, ctx| punct.format(ctx, &mut value_prefix_ws, &mut punct_prefix_ws)
+#[derive(PartialEq, Eq, Debug)]
+#[derive(serde::Serialize, serde::Deserialize)]
+#[derive(Parse, Format, Print)]
+#[format(args(ty = "WT", generic = "WT: FormatFn<Whitespace>"))]
+#[format(where_format = "where T: Format<()>, P: Format<()>")]
+pub struct PunctuatedRest<T, P> {
+	#[format(args = ())]
+	pub punct: P,
+	#[format(prefix_ws = *args)]
+	#[format(args = ())]
+	pub value: T,
 }
 
-/// Formats a punctuated trailing
-pub fn format_trailing<T: Format, P: Format>(
-	mut value_prefix_ws: impl FormatFn<Whitespace>,
-	mut punct_prefix_ws: impl FormatFn<Whitespace>,
-) -> impl FormatFn<PunctuatedTrailing<T, P>> {
-	move |punct, ctx| punct.format(ctx, &mut value_prefix_ws, &mut punct_prefix_ws)
+/// Formatting arguments
+pub struct FmtArgs<WT, WP> {
+	pub value: WT,
+	pub punct: WP,
+}
+
+impl<WT, WP> FmtArgs<WT, WP> {
+	pub const fn new(value: WT, punct: WP) -> Self {
+		Self { value, punct }
+	}
 }

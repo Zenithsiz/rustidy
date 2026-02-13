@@ -7,7 +7,16 @@ use {
 		token::{self, Token},
 		util::{Braced, Bracketed, Parenthesized},
 	},
-	rustidy_ast_util::{AtLeast1, Identifier, IdentifierOrKeyword, PunctuatedTrailing, RawIdentifier},
+	rustidy_ast_util::{
+		AtLeast1,
+		Identifier,
+		IdentifierOrKeyword,
+		PunctuatedTrailing,
+		RawIdentifier,
+		at_least,
+		delimited,
+		punct,
+	},
 	rustidy_format::{Format, WhitespaceFormat},
 	rustidy_parse::{Parse, ParserTag},
 	rustidy_print::Print,
@@ -44,6 +53,7 @@ pub enum MacroRulesDef {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct MacroRulesDefParens {
+	#[format(args = delimited::FmtArgs::preserve((), (), ()))]
 	pub rules: Parenthesized<MacroRules>,
 	pub semi:  token::Semi,
 }
@@ -52,6 +62,7 @@ pub struct MacroRulesDefParens {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct MacroRulesDefBrackets {
+	#[format(args = delimited::FmtArgs::preserve((), (), ()))]
 	pub rules: Bracketed<MacroRules>,
 	pub semi:  token::Semi,
 }
@@ -60,6 +71,7 @@ pub struct MacroRulesDefBrackets {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct MacroRulesDefBraces {
+	#[format(args = delimited::FmtArgs::preserve((), (), ()))]
 	pub rules: Braced<MacroRules>,
 }
 
@@ -67,7 +79,10 @@ pub struct MacroRulesDefBraces {
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
-pub struct MacroRules(PunctuatedTrailing<MacroRule, token::Semi>);
+pub struct MacroRules(
+	#[format(args = punct::FmtArgs::new(Whitespace::preserve, Whitespace::preserve))]
+	PunctuatedTrailing<MacroRule, token::Semi>,
+);
 
 /// `MacroRule`
 #[derive(PartialEq, Eq, Debug)]
@@ -85,10 +100,20 @@ pub struct MacroRule {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub enum MacroMatcher {
-	Parens(Parenthesized<Vec<MacroMatch>>),
-	Brackets(Bracketed<Vec<MacroMatch>>),
-	Braces(Braced<Vec<MacroMatch>>),
+	#[format(args = delimited::FmtArgs::preserve((), (), ()))]
+	Parens(Parenthesized<MacroMatcherMatches>),
+	#[format(args = delimited::FmtArgs::preserve((), (), ()))]
+	Brackets(Bracketed<MacroMatcherMatches>),
+	#[format(args = delimited::FmtArgs::preserve((), (), ()))]
+	Braces(Braced<MacroMatcherMatches>),
 }
+
+#[derive(PartialEq, Eq, Debug)]
+#[derive(serde::Serialize, serde::Deserialize)]
+#[derive(Parse, Format, Print)]
+pub struct MacroMatcherMatches(
+	#[format(args = rustidy_format::VecArgs::from_prefix_ws(Whitespace::preserve))] Vec<MacroMatch>,
+);
 
 /// `MacroMatch`
 #[derive(PartialEq, Eq, Debug)]
@@ -158,11 +183,19 @@ pub enum MacroFragSpec {
 #[derive(Parse, Format, Print)]
 pub struct MacroMatchDollarRep {
 	pub dollar:  token::Dollar,
-	pub matches: Parenthesized<AtLeast1<Box<MacroMatch>>>,
+	#[format(args = delimited::FmtArgs::preserve((), (), ()))]
+	pub matches: Parenthesized<MacroMatchDollarRepMatches>,
 	#[parse(fatal)]
 	pub rep_sep: Option<MacroRepSep>,
 	pub rep_op:  MacroRepOp,
 }
+
+#[derive(PartialEq, Eq, Debug)]
+#[derive(serde::Serialize, serde::Deserialize)]
+#[derive(Parse, Format, Print)]
+pub struct MacroMatchDollarRepMatches(
+	#[format(args = at_least::FmtArgs::from_prefix_ws(Whitespace::preserve))] pub AtLeast1<Box<MacroMatch>>,
+);
 
 /// `MacroRepSep`
 #[derive(PartialEq, Eq, Debug)]

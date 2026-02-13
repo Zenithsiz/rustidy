@@ -11,7 +11,17 @@ use {
 		ty::{Type, TypeNoBounds, TypePath, path::TypePathSegment},
 		util::Parenthesized,
 	},
-	rustidy_ast_util::{AtLeast1, Delimited, Identifier, Longest, Punctuated, PunctuatedTrailing, at_least, punct},
+	rustidy_ast_util::{
+		AtLeast1,
+		Delimited,
+		Identifier,
+		Longest,
+		Punctuated,
+		PunctuatedTrailing,
+		at_least,
+		delimited,
+		punct,
+	},
 	rustidy_format::{Format, WhitespaceFormat},
 	rustidy_parse::Parse,
 	rustidy_print::Print,
@@ -34,7 +44,7 @@ pub enum PathExpression {
 pub struct PathInExpression {
 	pub prefix:   Option<token::PathSep>,
 	#[format(prefix_ws(expr = Whitespace::remove, if = self.prefix.is_some()))]
-	#[format(and_with = punct::format(Whitespace::remove, Whitespace::remove))]
+	#[format(args = punct::FmtArgs::new(Whitespace::remove, Whitespace::remove))]
 	pub segments: Punctuated<PathExprSegment, token::PathSep>,
 }
 
@@ -76,14 +86,15 @@ pub enum PathIdentSegment {
 #[derive(Parse, Format, Print)]
 #[parse(name = "generic arguments")]
 pub struct GenericArgs(
-	#[format(and_with = Delimited::format_remove)] pub Delimited<Option<GenericArgsInner>, token::Lt, token::Gt>,
+	#[format(args = delimited::FmtArgs::remove((), (), ()))]
+	pub  Delimited<Option<GenericArgsInner>, token::Lt, token::Gt>,
 );
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct GenericArgsInner(
-	#[format(and_with = punct::format_trailing(Whitespace::set_single, Whitespace::remove))]
+	#[format(args = punct::FmtArgs::new(Whitespace::set_single, Whitespace::remove))]
 	pub  PunctuatedTrailing<GenericArg, token::Comma>,
 );
 
@@ -147,7 +158,7 @@ pub struct GenericArgsBounds {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct TypePathFn {
-	#[format(and_with = Parenthesized::format_remove)]
+	#[format(args = delimited::FmtArgs::remove((), (), ()))]
 	pub inputs: Parenthesized<Option<TypePathFnInputs>>,
 	#[format(prefix_ws = Whitespace::set_single)]
 	pub ret:    Option<TypePathFnRet>,
@@ -158,7 +169,7 @@ pub struct TypePathFn {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct TypePathFnInputs(
-	#[format(and_with = punct::format_trailing(Whitespace::remove, Whitespace::remove))]
+	#[format(args = punct::FmtArgs::new(Whitespace::remove, Whitespace::remove))]
 	PunctuatedTrailing<Box<Type>, token::Comma>,
 );
 
@@ -178,7 +189,7 @@ pub struct TypePathFnRet {
 pub struct QualifiedPathInExpression {
 	pub qualified: QualifiedPathType,
 	#[format(prefix_ws = Whitespace::remove)]
-	#[format(and_with = at_least::format(Whitespace::remove))]
+	#[format(args = at_least::FmtArgs::from_prefix_ws(Whitespace::remove))]
 	pub segments:  AtLeast1<QualifiedPathInExpressionSegment>,
 }
 
@@ -196,7 +207,7 @@ pub struct QualifiedPathInExpressionSegment {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct QualifiedPathType(
-	#[format(and_with = Delimited::format_remove)] Delimited<QualifiedPathTypeInner, token::Lt, token::Gt>,
+	#[format(args = delimited::FmtArgs::remove((), (), ()))] Delimited<QualifiedPathTypeInner, token::Lt, token::Gt>,
 );
 
 #[derive(PartialEq, Eq, Debug)]

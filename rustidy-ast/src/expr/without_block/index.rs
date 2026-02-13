@@ -7,6 +7,7 @@ use {
 		expr::{Expression, ExpressionInner},
 		util::Bracketed,
 	},
+	rustidy_ast_util::delimited,
 	rustidy_format::{Format, WhitespaceFormat},
 	rustidy_parse::ParseRecursive,
 	rustidy_print::Print,
@@ -23,6 +24,6 @@ use {
 pub struct IndexExpression {
 	pub expr:  Expression,
 	#[format(prefix_ws = Whitespace::remove)]
-	#[format(and_with = Bracketed::format_remove)]
+	#[format(args = delimited::FmtArgs::remove((), (), ()))]
 	pub index: Bracketed<Expression>,
 }

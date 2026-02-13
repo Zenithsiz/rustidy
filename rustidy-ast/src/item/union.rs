@@ -7,7 +7,7 @@ use {
 		struct_::StructFields,
 	},
 	crate::{token, util::Braced},
-	rustidy_ast_util::Identifier,
+	rustidy_ast_util::{Identifier, delimited},
 	rustidy_format::{Format, WhitespaceFormat},
 	rustidy_parse::Parse,
 	rustidy_print::Print,
@@ -29,6 +29,6 @@ pub struct Union {
 	pub where_:   Option<WhereClause>,
 	#[format(prefix_ws = Whitespace::set_single)]
 	#[format(indent)]
-	#[format(and_with = Braced::format_indent_if_non_blank)]
+	#[format(args = delimited::FmtArgs::indent_if_non_blank((), (), ()))]
 	pub fields:   Braced<Option<StructFields>>,
 }

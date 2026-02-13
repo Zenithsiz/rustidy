@@ -19,7 +19,7 @@ use {
 pub struct SimplePath {
 	pub prefix:   Option<token::PathSep>,
 	#[format(prefix_ws(expr = Whitespace::remove, if = self.prefix.is_some()))]
-	#[format(and_with = punct::format(Whitespace::remove, Whitespace::remove))]
+	#[format(args = punct::FmtArgs::new(Whitespace::remove, Whitespace::remove))]
 	pub segments: Punctuated<SimplePathSegment, token::PathSep>,
 }
 

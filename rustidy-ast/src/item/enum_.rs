@@ -13,7 +13,7 @@ use {
 		util::{Braced, Parenthesized},
 		vis::Visibility,
 	},
-	rustidy_ast_util::{Identifier, PunctuatedTrailing, punct},
+	rustidy_ast_util::{Identifier, PunctuatedTrailing, delimited, punct},
 	rustidy_format::{Format, WhitespaceFormat},
 	rustidy_parse::Parse,
 	rustidy_print::Print,
@@ -35,7 +35,7 @@ pub struct Enumeration {
 	pub where_:   Option<WhereClause>,
 	#[format(prefix_ws = Whitespace::set_single)]
 	#[format(indent)]
-	#[format(and_with = Braced::format_indent_if_non_blank)]
+	#[format(args = delimited::FmtArgs::indent_if_non_blank((), (), ()))]
 	pub variants: Braced<Option<EnumVariants>>,
 }
 
@@ -44,7 +44,7 @@ pub struct Enumeration {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct EnumVariants(
-	#[format(and_with = punct::format_trailing(Whitespace::set_cur_indent, Whitespace::remove))]
+	#[format(args = punct::FmtArgs::new(Whitespace::set_cur_indent, Whitespace::remove))]
 	pub  PunctuatedTrailing<EnumVariant, token::Comma>,
 );
 
@@ -80,7 +80,9 @@ pub enum EnumVariantKind {
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
-pub struct EnumVariantTuple(#[format(and_with = Parenthesized::format_remove)] pub Parenthesized<Option<TupleFields>>);
+pub struct EnumVariantTuple(
+	#[format(args = delimited::FmtArgs::remove((), (), ()))] pub Parenthesized<Option<TupleFields>>,
+);
 
 /// `EnumVariantStruct`
 #[derive(PartialEq, Eq, Debug)]
@@ -88,7 +90,7 @@ pub struct EnumVariantTuple(#[format(and_with = Parenthesized::format_remove)] p
 #[derive(Parse, Format, Print)]
 pub struct EnumVariantStruct(
 	#[format(indent)]
-	#[format(and_with = Braced::format_indent_if_non_blank)]
+	#[format(args = delimited::FmtArgs::indent_if_non_blank((), (), ()))]
 	pub Braced<Option<StructFields>>,
 );
 

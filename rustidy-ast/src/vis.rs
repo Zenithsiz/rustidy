@@ -3,6 +3,7 @@
 // Imports
 use {
 	super::{path::SimplePath, token, util::Parenthesized},
+	rustidy_ast_util::delimited,
 	rustidy_format::{Format, WhitespaceFormat},
 	rustidy_parse::Parse,
 	rustidy_print::Print,
@@ -16,7 +17,7 @@ use {
 pub struct Visibility {
 	pub pub_: token::Pub,
 	#[format(prefix_ws = Whitespace::remove)]
-	#[format(and_with = rustidy_format::format_option_with(Parenthesized::format_remove))]
+	#[format(args = delimited::FmtArgs::remove((), (), ()))]
 	pub path: Option<Parenthesized<VisibilityPath>>,
 }
 

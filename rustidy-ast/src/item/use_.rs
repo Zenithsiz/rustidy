@@ -3,8 +3,14 @@
 // Imports
 use {
 	crate::{path::SimplePath, token, util::Braced},
-	rustidy_ast_util::{Identifier, Punctuated, PunctuatedTrailing},
-	rustidy_format::{Format, Formattable, WhitespaceFormat},
+	rustidy_ast_util::{
+		Identifier,
+		Punctuated,
+		PunctuatedTrailing,
+		delimited,
+		punct::{self, PunctuatedRest},
+	},
+	rustidy_format::{Format, FormatFn, Formattable, WhitespaceFormat},
 	rustidy_parse::Parse,
 	rustidy_print::Print,
 	rustidy_util::Whitespace,
@@ -98,7 +104,7 @@ pub struct UseTreeGroup {
 	pub prefix: Option<UseTreeGroupPrefix>,
 	#[format(prefix_ws(expr = Whitespace::remove, if = self.prefix.is_some()))]
 	#[format(indent)]
-	#[format(and_with = Self::format_tree)]
+	#[format(with = Self::format_tree)]
 	pub tree:   Braced<Option<PunctuatedTrailing<Box<UseTree>, token::Comma>>>,
 }
 
@@ -115,21 +121,27 @@ impl UseTreeGroup {
 	pub fn flatten(&mut self, _ctx: &mut rustidy_format::Context) {
 		replace_with::replace_with_or_abort(&mut self.tree.value, |trees| {
 			let mut trees = trees?;
-			let mut trees_first = Some((token::Comma::new(), trees.punctuated.first));
+			let mut trees_first = Some(PunctuatedRest {
+				punct: token::Comma::new(),
+				value: trees.punctuated.first,
+			});
 			let mut sub_trees = vec![];
-			let mut new_trees: Vec<(token::Comma, _)> = vec![];
+			let mut new_trees: Vec<PunctuatedRest<_, token::Comma>> = vec![];
 			let mut trailing_comma = trees.trailing;
 
 			// Note: We process the trees backwards to ensure that we always have
 			//       somewhere to add the whitespace of the braces we're removing.
-			while let Some((mut comma, tree)) = sub_trees
+			while let Some(PunctuatedRest {
+				punct: mut comma,
+				value: tree,
+			}) = sub_trees
 				.pop()
 				.or_else(|| trees.punctuated.rest.pop())
 				.or_else(|| trees_first.take())
 			{
 				// Joins a prefix whitespace to the latest whitespace we have
 				let mut latest_ws_join_prefix = |ws: Whitespace| match new_trees.last_mut() {
-					Some((last_comma, _)) => last_comma.ws.join_prefix(ws),
+					Some(PunctuatedRest { punct: last_comma, .. }) => last_comma.ws.join_prefix(ws),
 					None => match &mut trailing_comma {
 						Some(trailing_comma) => trailing_comma.ws.join_prefix(ws),
 						None => self.tree.suffix.ws.join_prefix(ws),
@@ -143,78 +155,111 @@ impl UseTreeGroup {
 						match group.tree.value {
 							Some(trees) => {
 								comma.ws.join_prefix(group.tree.prefix.ws);
-								sub_trees.push((comma, trees.punctuated.first));
-								for (comma, tree) in trees.punctuated.rest {
-									sub_trees.push((comma, tree));
+								sub_trees.push(PunctuatedRest {
+									punct: comma,
+									value: trees.punctuated.first,
+								});
+								for rest in trees.punctuated.rest {
+									sub_trees.push(rest);
 								}
 							},
 							None => latest_ws_join_prefix(group.tree.prefix.ws),
 						}
 					},
-					_ => new_trees.push((comma, tree)),
+					_ => new_trees.push(PunctuatedRest {
+						punct: comma,
+						value: tree,
+					}),
 				}
 			}
 
-			new_trees.pop().map(|(first_comma, mut first)| {
-				// TODO: Do this during formatting so we have access to the prefix whitespace more easily.
-				let first_prefix_ws = match &mut *first {
-					UseTree::Glob(use_tree) => match &mut use_tree.prefix {
-						Some(prefix) => match &mut prefix.path {
-							Some(path) => path.prefix_ws(),
-							None => &mut prefix.sep.ws,
-						},
-						None => &mut use_tree.glob.ws,
-					},
-					UseTree::Group(use_tree) => match &mut use_tree.prefix {
-						Some(prefix) => match &mut prefix.path {
-							Some(path) => match &mut path.prefix {
-								Some(prefix) => &mut prefix.ws,
-								None => path.segments.first.prefix_ws(),
+			new_trees.pop().map(
+				|PunctuatedRest {
+				     punct: first_comma,
+				     value: mut first,
+				 }| {
+					// TODO: Do this during formatting so we have access to the prefix whitespace more easily.
+					let first_prefix_ws = match &mut *first {
+						UseTree::Glob(use_tree) => match &mut use_tree.prefix {
+							Some(prefix) => match &mut prefix.path {
+								Some(path) => path.prefix_ws(),
+								None => &mut prefix.sep.ws,
 							},
-							None => &mut prefix.sep.ws,
+							None => &mut use_tree.glob.ws,
 						},
-						None => &mut use_tree.tree.prefix.ws,
-					},
-					UseTree::Simple(use_tree) => &mut use_tree.path.prefix_ws(),
-				};
-				first_prefix_ws.join_prefix(first_comma.ws);
+						UseTree::Group(use_tree) => match &mut use_tree.prefix {
+							Some(prefix) => match &mut prefix.path {
+								Some(path) => match &mut path.prefix {
+									Some(prefix) => &mut prefix.ws,
+									None => path.segments.first.prefix_ws(),
+								},
+								None => &mut prefix.sep.ws,
+							},
+							None => &mut use_tree.tree.prefix.ws,
+						},
+						UseTree::Simple(use_tree) => &mut use_tree.path.prefix_ws(),
+					};
+					first_prefix_ws.join_prefix(first_comma.ws);
 
-				new_trees.reverse();
-				PunctuatedTrailing {
-					punctuated: Punctuated { first, rest: new_trees },
-					trailing:   trailing_comma,
-				}
-			})
+					new_trees.reverse();
+					PunctuatedTrailing {
+						punctuated: Punctuated { first, rest: new_trees },
+						trailing:   trailing_comma,
+					}
+				},
+			)
 		});
 	}
 
 	fn format_tree_compact(
 		tree: &mut Braced<Option<PunctuatedTrailing<Box<UseTree>, token::Comma>>>,
 		ctx: &mut rustidy_format::Context,
+		prefix_ws: &mut impl FormatFn<Whitespace>,
 	) {
 		if let Some(punct) = &mut tree.value {
 			punct.trailing = None;
-			punct.format(ctx, &mut Whitespace::set_single, &mut Whitespace::remove);
 		}
-		tree.format_remove(ctx);
+		tree.format(
+			ctx,
+			prefix_ws,
+			&mut delimited::FmtArgs::remove(
+				(),
+				punct::FmtArgs {
+					value: Whitespace::set_single,
+					punct: Whitespace::remove,
+				},
+				(),
+			),
+		);
 	}
 
 	fn format_tree(
 		tree: &mut Braced<Option<PunctuatedTrailing<Box<UseTree>, token::Comma>>>,
 		ctx: &mut rustidy_format::Context,
+		prefix_ws: &mut impl FormatFn<Whitespace>,
+		(): &mut (),
 	) {
-		Self::format_tree_compact(tree, ctx);
+		Self::format_tree_compact(tree, ctx, prefix_ws);
 
 		if tree.len(ctx, true) > ctx.config().max_use_tree_len {
-			if let Some(punct) = &mut tree.value {
-				if punct.trailing.is_none() {
-					punct.trailing = Some(token::Comma::new());
-				}
-
-				punct.format(ctx, &mut Whitespace::set_cur_indent, &mut Whitespace::remove);
+			if let Some(punct) = &mut tree.value &&
+				punct.trailing.is_none()
+			{
+				punct.trailing = Some(token::Comma::new());
 			}
 
-			tree.format_indent_if_non_blank(ctx);
+			tree.format(
+				ctx,
+				prefix_ws,
+				&mut delimited::FmtArgs::indent_if_non_blank(
+					(),
+					punct::FmtArgs {
+						value: Whitespace::set_cur_indent,
+						punct: Whitespace::remove,
+					},
+					(),
+				),
+			);
 		}
 	}
 }

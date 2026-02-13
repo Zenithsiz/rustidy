@@ -12,7 +12,7 @@ use {
 		util::Parenthesized,
 	},
 	rustidy_ast_literal::{LiteralExpression, RawStringLiteral, StringLiteral},
-	rustidy_ast_util::{Delimited, Follows, Identifier, PunctuatedTrailing, punct},
+	rustidy_ast_util::{Delimited, Follows, Identifier, PunctuatedTrailing, delimited, punct},
 	rustidy_format::{Format, WhitespaceFormat},
 	rustidy_parse::{Parse, ParsePeeked},
 	rustidy_print::Print,
@@ -34,7 +34,7 @@ pub struct Function {
 	#[format(prefix_ws = Whitespace::remove)]
 	pub generics:   Option<GenericParams>,
 	#[format(prefix_ws = Whitespace::remove)]
-	#[format(and_with = Parenthesized::format_remove)]
+	#[format(args = delimited::FmtArgs::remove((), (), ()))]
 	pub params:     Parenthesized<Option<FunctionParameters>>,
 	#[format(prefix_ws = Whitespace::set_single)]
 	pub ret:        Option<FunctionReturnType>,
@@ -144,7 +144,7 @@ impl ParsePeeked<(SelfParam, Option<token::Comma>, Follows<token::ParenClose>)> 
 pub struct FunctionParametersFull {
 	pub self_: Option<FunctionParametersFullSelf>,
 	#[format(prefix_ws(expr = Whitespace::set_single, if = self.self_.is_some()))]
-	#[format(and_with = punct::format_trailing(Whitespace::set_single, Whitespace::remove))]
+	#[format(args = punct::FmtArgs::new(Whitespace::set_single, Whitespace::remove))]
 	pub rest:  PunctuatedTrailing<FunctionParam, token::Comma>,
 }
 
@@ -259,7 +259,8 @@ pub struct FunctionReturnType {
 #[derive(Parse, Format, Print)]
 #[parse(name = "generic parameters")]
 pub struct GenericParams(
-	#[format(and_with = Delimited::format_remove)] pub Delimited<Option<GenericParamsInner>, token::Lt, token::Gt>,
+	#[format(args = delimited::FmtArgs::remove((), (), ()))]
+	pub  Delimited<Option<GenericParamsInner>, token::Lt, token::Gt>,
 );
 
 #[derive(PartialEq, Eq, Debug)]
@@ -267,7 +268,7 @@ pub struct GenericParams(
 #[derive(Parse, Format, Print)]
 #[parse(name = "generic parameters")]
 pub struct GenericParamsInner(
-	#[format(and_with = punct::format_trailing(Whitespace::set_single, Whitespace::remove))]
+	#[format(args = punct::FmtArgs::new(Whitespace::set_single, Whitespace::remove))]
 	pub  PunctuatedTrailing<GenericParam, token::Comma>,
 );
 
@@ -311,7 +312,7 @@ pub struct LifetimeParamBounds {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct LifetimeBounds(
-	#[format(and_with = punct::format_trailing(Whitespace::set_single, Whitespace::set_single))]
+	#[format(args = punct::FmtArgs::new(Whitespace::set_single, Whitespace::set_single))]
 	PunctuatedTrailing<Lifetime, token::Plus>,
 );
 
@@ -351,7 +352,7 @@ pub struct TypeParamEqType {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct TypeParamBounds(
-	#[format(and_with = punct::format_trailing(Whitespace::set_single, Whitespace::set_single))]
+	#[format(args = punct::FmtArgs::new(Whitespace::set_single, Whitespace::set_single))]
 	pub  PunctuatedTrailing<TypeParamBound, token::Plus>,
 );
 
@@ -370,6 +371,7 @@ pub enum TypeParamBound {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub enum TraitBound {
+	#[format(args = delimited::FmtArgs::preserve((), (), ()))]
 	Parenthesized(Parenthesized<TraitBoundInner>),
 	Normal(TraitBoundInner),
 }
@@ -386,8 +388,8 @@ pub struct TraitBoundInner {
 impl TraitBoundInner {
 	fn format_prefix(&mut self, ctx: &mut rustidy_format::Context) {
 		match self.prefix {
-			Some(TraitBoundInnerPrefix::Question(_)) => self.path.format(ctx, &mut Whitespace::remove),
-			Some(TraitBoundInnerPrefix::ForLifetimes(_)) => self.path.format(ctx, &mut Whitespace::set_single),
+			Some(TraitBoundInnerPrefix::Question(_)) => self.path.format(ctx, &mut Whitespace::remove, &mut ()),
+			Some(TraitBoundInnerPrefix::ForLifetimes(_)) => self.path.format(ctx, &mut Whitespace::set_single, &mut ()),
 			None => (),
 		}
 	}
@@ -411,7 +413,7 @@ pub struct WhereClause {
 	//       but the compiler accepts it, so we do to.
 	#[format(prefix_ws = Whitespace::set_cur_indent)]
 	#[format(indent)]
-	#[format(and_with = rustidy_format::format_option_with(punct::format_trailing(Whitespace::set_cur_indent, Whitespace::remove)))]
+	#[format(args = punct::FmtArgs::new(Whitespace::set_cur_indent, Whitespace::remove))]
 	pub items:  Option<PunctuatedTrailing<WhereClauseItem, token::Comma>>,
 }
 
@@ -519,12 +521,18 @@ pub struct UseBound {
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
-pub struct UseBoundGenericArgs(pub Delimited<UseBoundGenericArgsInner, token::Lt, token::Gt>);
+pub struct UseBoundGenericArgs(
+	#[format(args = delimited::FmtArgs::preserve((), (), ()))]
+	pub  Delimited<UseBoundGenericArgsInner, token::Lt, token::Gt>,
+);
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
-pub struct UseBoundGenericArgsInner(pub PunctuatedTrailing<UseBoundGenericArg, token::Comma>);
+pub struct UseBoundGenericArgsInner(
+	#[format(args = punct::FmtArgs::new(Whitespace::preserve, Whitespace::preserve))]
+	pub  PunctuatedTrailing<UseBoundGenericArg, token::Comma>,
+);
 
 /// `UseBoundGenericArg`
 #[derive(PartialEq, Eq, Debug)]

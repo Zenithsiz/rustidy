@@ -7,7 +7,7 @@ use {
 		token,
 		util::Parenthesized,
 	},
-	rustidy_ast_util::{PunctuatedTrailing, punct},
+	rustidy_ast_util::{PunctuatedTrailing, delimited, punct},
 	rustidy_format::{Format, FormatTag, Formattable, WhitespaceFormat},
 	rustidy_parse::{Parse, ParseRecursive},
 	rustidy_print::Print,
@@ -24,7 +24,7 @@ use {
 pub struct CallExpression {
 	pub expr:   Expression,
 	#[format(prefix_ws = Whitespace::remove)]
-	#[format(and_with = Parenthesized::format_remove)]
+	#[format(args = delimited::FmtArgs::remove((), (), ()))]
 	pub params: Parenthesized<Option<CallParams>>,
 }
 
@@ -50,7 +50,7 @@ pub struct MethodCallExpression {
 	#[format(prefix_ws = Whitespace::remove)]
 	pub segment: PathExprSegment,
 	#[format(prefix_ws = Whitespace::remove)]
-	#[format(and_with = Parenthesized::format_remove)]
+	#[format(args = delimited::FmtArgs::remove((), (), ()))]
 	// TODO: Is it fine to remove *all* tags?
 	#[format(without_tags)]
 	#[format(indent(if_has_tag = FormatTag::InsideChain))]
@@ -62,6 +62,6 @@ pub struct MethodCallExpression {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct CallParams(
-	#[format(and_with = punct::format_trailing(Whitespace::set_single, Whitespace::remove))]
+	#[format(args = punct::FmtArgs::new(Whitespace::set_single, Whitespace::remove))]
 	pub  PunctuatedTrailing<Expression, token::Comma>,
 );

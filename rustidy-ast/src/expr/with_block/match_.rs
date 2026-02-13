@@ -41,7 +41,7 @@ pub struct Scrutinee(#[parse(with_tag = ParserTag::SkipStructExpression)] Expres
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Format, Print)]
 pub struct MatchArms {
-	#[format(and_with = rustidy_format::format_vec(Whitespace::set_cur_indent))]
+	#[format(args = rustidy_format::VecArgs::from_prefix_ws(Whitespace::set_cur_indent))]
 	pub arms: Vec<MatchArmWithExpr>,
 }
 

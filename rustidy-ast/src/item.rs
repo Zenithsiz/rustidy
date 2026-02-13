@@ -45,7 +45,7 @@ use {
 		vis::Visibility,
 	},
 	core::{mem, ops::ControlFlow},
-	rustidy_ast_util::{Identifier, PunctuatedTrailing, punct},
+	rustidy_ast_util::{Identifier, PunctuatedTrailing, delimited, punct},
 	rustidy_format::{Format, Formattable, WhitespaceFormat},
 	rustidy_parse::Parse,
 	rustidy_print::Print,
@@ -56,7 +56,7 @@ use {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 #[format(before_with = Self::merge_use)]
-pub struct Items(#[format(and_with = rustidy_format::format_vec(Whitespace::set_cur_indent))] pub Vec<Item>);
+pub struct Items(#[format(args = rustidy_format::VecArgs::from_prefix_ws(Whitespace::set_cur_indent))] pub Vec<Item>);
 
 impl Items {
 	pub fn merge_use(&mut self, ctx: &mut rustidy_format::Context) {
@@ -233,11 +233,11 @@ pub enum DeclMacroBody {
 #[derive(Parse, Format, Print)]
 pub struct DeclMacroBodyInline {
 	#[format(indent)]
-	#[format(and_with = Parenthesized::format_indent_if_non_blank)]
+	#[format(args = delimited::FmtArgs::indent_if_non_blank((), (), ()))]
 	pub args: Parenthesized<DelimTokenTreeInner>,
 	#[format(prefix_ws = Whitespace::set_single)]
 	#[format(indent)]
-	#[format(and_with = Braced::format_indent_if_non_blank)]
+	#[format(args = delimited::FmtArgs::indent_if_non_blank((), (), ()))]
 	pub body: Braced<DelimTokenTreeInner>,
 }
 
@@ -246,7 +246,7 @@ pub struct DeclMacroBodyInline {
 #[derive(Parse, Format, Print)]
 pub struct DeclMacroBodyBranches(
 	#[format(indent)]
-	#[format(and_with = Braced::format_indent_if_non_blank)]
+	#[format(args = delimited::FmtArgs::indent_if_non_blank((), (), ()))]
 	pub Braced<DeclMacroBodyBranchesInner>,
 );
 
@@ -254,7 +254,7 @@ pub struct DeclMacroBodyBranches(
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct DeclMacroBodyBranchesInner(
-	#[format(and_with = punct::format_trailing(Whitespace::set_cur_indent, Whitespace::remove))]
+	#[format(args = punct::FmtArgs::new(Whitespace::set_cur_indent, Whitespace::remove))]
 	pub  PunctuatedTrailing<DeclMacroBranch, token::Comma>,
 );
 
@@ -285,7 +285,7 @@ pub enum DeclMacroBranchExtra {
 pub struct DeclMacroBranchAttr {
 	pub attr: token::Attr,
 	#[format(prefix_ws = Whitespace::remove)]
-	#[format(and_with = Parenthesized::format_remove)]
+	#[format(args = delimited::FmtArgs::remove((), (), ()))]
 	pub args: Parenthesized<DelimTokenTreeInner>,
 }
 
@@ -295,6 +295,6 @@ pub struct DeclMacroBranchAttr {
 pub struct DeclMacroBranchDerive {
 	pub derive: token::Derive,
 	#[format(prefix_ws = Whitespace::remove)]
-	#[format(and_with = Parenthesized::format_remove)]
+	#[format(args = delimited::FmtArgs::remove((), (), ()))]
 	pub args:   Parenthesized<()>,
 }

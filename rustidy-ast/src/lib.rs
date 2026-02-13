@@ -60,7 +60,7 @@ use {
 pub struct Crate(pub CrateInner);
 
 impl Crate {
-	fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: &mut impl FormatFn<Whitespace>) {
+	fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: &mut impl FormatFn<Whitespace>, _args: &mut ()) {
 		let mut inner_ctx = ctx.sub_context();
 		for attr in &self.0.inner_attrs {
 			if let Some(attr) = attr.try_as_attr_ref() &&
@@ -71,7 +71,7 @@ impl Crate {
 		}
 
 		// TODO: This also needs to set `FormatTag::AfterNewline` for `items`.
-		self.0.format(&mut inner_ctx, prefix_ws);
+		self.0.format(&mut inner_ctx, prefix_ws, &mut ());
 	}
 }
 
@@ -83,7 +83,7 @@ impl Crate {
 pub struct CrateInner {
 	pub shebang:               Option<Shebang>,
 	#[format(prefix_ws = Whitespace::set_cur_indent)]
-	#[format(and_with = rustidy_format::format_vec(Whitespace::set_cur_indent))]
+	#[format(args = rustidy_format::VecArgs::from_prefix_ws(Whitespace::set_cur_indent))]
 	pub inner_attrs:           Vec<InnerAttrOrDocComment>,
 	#[format(prefix_ws = Whitespace::set_cur_indent)]
 	pub items:                 Items,
@@ -103,9 +103,9 @@ impl CrateInner {
 
 	fn format_first_inner_attr_or_item(&mut self, ctx: &mut rustidy_format::Context) {
 		if let Some(attr) = self.inner_attrs.first_mut() {
-			attr.format(ctx, &mut Whitespace::remove);
+			attr.format(ctx, &mut Whitespace::remove, &mut ());
 		} else if let Some(item) = self.items.0.first_mut() {
-			item.format(ctx, &mut Whitespace::remove);
+			item.format(ctx, &mut Whitespace::remove, &mut ());
 		}
 	}
 

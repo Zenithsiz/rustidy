@@ -351,11 +351,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 					})
 					.collect::<Vec<_>>();
 
-				let error_generics = util::with_enum_bounds(
-					attrs.generics.clone(),
-					variants,
-					|ty| parse_quote! { #ty: rustidy_parse::Parse },
-				);
+				let error_generics = util::with_bounds(&attrs, |ty| parse_quote! { #ty: rustidy_parse::Parse });
 
 				// TODO: Figure out why using just `#error_generics` doesn't work here
 				let (impl_generics, _, where_clause) = error_generics.split_for_impl();
@@ -541,11 +537,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 					.collect::<Vec<_>>();
 
 				// TODO: Figure out why using just `#error_generics` doesn't work here
-				let error_generics = util::with_struct_bounds(
-					attrs.generics.clone(),
-					&fields.fields,
-					|ty| parse_quote! { #ty: rustidy_parse::Parse },
-				);
+				let error_generics = util::with_bounds(&attrs, |ty| parse_quote! { #ty: rustidy_parse::Parse });
 				let (impl_generics, _, where_clause) = error_generics.split_for_impl();
 				let extra_variants = attrs
 					.error

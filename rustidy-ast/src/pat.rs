@@ -20,7 +20,7 @@ use {
 	},
 	core::fmt::Debug,
 	rustidy_ast_literal::{ByteLiteral, LiteralExpression},
-	rustidy_ast_util::{AtLeast1, Identifier, Punctuated, PunctuatedTrailing, at_least, punct},
+	rustidy_ast_util::{AtLeast1, Identifier, Punctuated, PunctuatedTrailing, at_least, delimited, punct},
 	rustidy_format::{Format, WhitespaceFormat},
 	rustidy_parse::{Parse, ParsePeeked, ParserError},
 	rustidy_print::Print,
@@ -35,7 +35,7 @@ use {
 pub struct Pattern {
 	pub top_alt: Option<token::Or>,
 	#[format(prefix_ws(expr = Whitespace::set_single, if = self.top_alt.is_some()))]
-	#[format(and_with = punct::format(Whitespace::set_single, Whitespace::set_single))]
+	#[format(args = punct::FmtArgs::new(Whitespace::set_single, Whitespace::set_single))]
 	pub inner:   Punctuated<PatternNoTopAlt, token::Or>,
 }
 
@@ -89,20 +89,20 @@ pub struct RestPattern(token::DotDot);
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
-pub struct GroupedPattern(#[format(and_with = Parenthesized::format_remove)] Parenthesized<Box<Pattern>>);
+pub struct GroupedPattern(#[format(args = delimited::FmtArgs::remove((), (), ()))] Parenthesized<Box<Pattern>>);
 
 /// `SlicePattern`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
-pub struct SlicePattern(#[format(and_with = Bracketed::format_remove)] Bracketed<Option<SlicePatternItems>>);
+pub struct SlicePattern(#[format(args = delimited::FmtArgs::remove((), (), ()))] Bracketed<Option<SlicePatternItems>>);
 
 /// `SlicePatternItems`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct SlicePatternItems(
-	#[format(and_with = punct::format_trailing(Whitespace::set_single, Whitespace::remove))]
+	#[format(args = punct::FmtArgs::new(Whitespace::set_single, Whitespace::remove))]
 	PunctuatedTrailing<Box<Pattern>, token::Comma>,
 );
 
@@ -143,7 +143,7 @@ pub struct StructPattern {
 	pub top:   PathInExpression,
 	#[format(indent)]
 	#[format(prefix_ws = Whitespace::set_single)]
-	#[format(and_with = Braced::format_indent_if_non_blank)]
+	#[format(args = delimited::FmtArgs::indent_if_non_blank((), (), ()))]
 	pub items: Braced<Option<StructPatternElements>>,
 }
 
@@ -179,7 +179,7 @@ pub struct StructPatternElementsFieldsEtCetera {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct StructPatternFields(
-	#[format(and_with = punct::format(Whitespace::set_cur_indent, Whitespace::remove))]
+	#[format(args = punct::FmtArgs::new(Whitespace::set_cur_indent, Whitespace::remove))]
 	Punctuated<StructPatternField, token::Comma>,
 );
 
@@ -244,7 +244,7 @@ pub struct StructPatternEtCetera(token::DotDot);
 pub struct TupleStructPattern {
 	pub top:   PathInExpression,
 	#[format(prefix_ws = Whitespace::remove)]
-	#[format(and_with = Parenthesized::format_remove)]
+	#[format(args = delimited::FmtArgs::remove((), (), ()))]
 	pub items: Parenthesized<Option<TupleStructItems>>,
 }
 
@@ -253,7 +253,7 @@ pub struct TupleStructPattern {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct TupleStructItems(
-	#[format(and_with = punct::format_trailing(Whitespace::set_single, Whitespace::remove))]
+	#[format(args = punct::FmtArgs::new(Whitespace::set_single, Whitespace::remove))]
 	pub  PunctuatedTrailing<Box<Pattern>, token::Comma>,
 );
 
@@ -261,7 +261,9 @@ pub struct TupleStructItems(
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
-pub struct TuplePattern(#[format(and_with = Parenthesized::format_remove)] Parenthesized<Option<TuplePatternItems>>);
+pub struct TuplePattern(
+	#[format(args = delimited::FmtArgs::remove((), (), ()))] Parenthesized<Option<TuplePatternItems>>,
+);
 
 /// `TuplePatternItems`
 #[derive(PartialEq, Eq, Debug)]
@@ -288,7 +290,7 @@ pub struct TupleItemsPat {
 pub struct TupleItemsPats {
 	pub first:          Box<Pattern>,
 	#[format(prefix_ws = Whitespace::remove)]
-	#[format(and_with = at_least::format(Whitespace::remove))]
+	#[format(args = at_least::FmtArgs::from_prefix_ws(Whitespace::remove))]
 	pub rest:           AtLeast1<TupleItemsPatsPat>,
 	#[format(prefix_ws = Whitespace::remove)]
 	pub trailing_comma: Option<token::Comma>,

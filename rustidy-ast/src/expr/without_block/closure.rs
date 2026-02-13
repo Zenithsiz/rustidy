@@ -10,7 +10,7 @@ use {
 		token,
 		ty::{Type, TypeNoBounds},
 	},
-	rustidy_ast_util::{Delimited, PunctuatedTrailing, punct},
+	rustidy_ast_util::{Delimited, PunctuatedTrailing, delimited, punct},
 	rustidy_format::{Format, WhitespaceFormat},
 	rustidy_parse::{Parse, ParseRecursive},
 	rustidy_print::Print,
@@ -42,7 +42,7 @@ pub struct ClosureExpression {
 #[derive(Parse, Format, Print)]
 pub enum ClosureParams {
 	NoParams(token::OrOr),
-	#[format(and_with = Delimited::format_remove)]
+	#[format(args = delimited::FmtArgs::remove((), (), ()))]
 	WithParams(Delimited<Option<ClosureParameters>, token::Or, token::Or>),
 }
 
@@ -61,7 +61,7 @@ pub struct ClosureRet {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct ClosureParameters(
-	#[format(and_with = punct::format_trailing(Whitespace::set_single, Whitespace::remove))]
+	#[format(args = punct::FmtArgs::new(Whitespace::set_single, Whitespace::remove))]
 	pub  PunctuatedTrailing<ClosureParameter, token::Comma>,
 );
 

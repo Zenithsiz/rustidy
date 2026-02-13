@@ -18,6 +18,7 @@ use {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 #[format(with = Self::format)]
+#[format(where_format = "where T: Format<()>")]
 pub struct WithOuterAttributes<T> {
 	pub attrs: Vec<OuterAttrOrDocComment>,
 	pub inner: T,
@@ -38,14 +39,17 @@ impl<T> WithOuterAttributes<T> {
 	}
 }
 
-impl<T: Format> WithOuterAttributes<T> {
-	fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: &mut impl FormatFn<Whitespace>) {
+impl<T> WithOuterAttributes<T> {
+	fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: &mut impl FormatFn<Whitespace>, args: &mut ())
+	where
+		T: Format<()>,
+	{
 		let mut is_after_newline = false;
 		let mut has_prefix_ws = true;
 		for attr in &mut self.attrs {
 			ctx.with_tag_if(is_after_newline, FormatTag::AfterNewline, |ctx| match has_prefix_ws {
-				true => attr.format(ctx, prefix_ws),
-				false => attr.format(ctx, &mut Whitespace::set_cur_indent),
+				true => attr.format(ctx, prefix_ws, &mut ()),
+				false => attr.format(ctx, &mut Whitespace::set_cur_indent, &mut ()),
 			});
 
 			is_after_newline = matches!(attr, OuterAttrOrDocComment::DocComment(OuterDocComment::Line(_)));
@@ -64,9 +68,9 @@ impl<T: Format> WithOuterAttributes<T> {
 
 		value_ctx.with_tag_if(is_after_newline, FormatTag::AfterNewline, |ctx| {
 			match has_prefix_ws {
-				true => self.inner.format(ctx, prefix_ws),
+				true => self.inner.format(ctx, prefix_ws, args),
 				// TODO: The user should be able to choose this
-				false => self.inner.format(ctx, &mut Whitespace::set_cur_indent),
+				false => self.inner.format(ctx, &mut Whitespace::set_cur_indent, args),
 			}
 		});
 	}
@@ -121,13 +125,16 @@ where
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 // TODO: Remove once rustc realizes that `Braced<WithInnerAttributes<T>>: Format => T: Format`
-#[format(with_where_format = "where T: Format")]
+#[format(with_where_format = "where T: Format<()>")]
 #[format(with = Self::format)]
 pub struct BracedWithInnerAttributes<T>(Braced<WithInnerAttributes<T>>);
 
-impl<T: Format> BracedWithInnerAttributes<T> {
-	fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: &mut impl FormatFn<Whitespace>) {
-		self.0.prefix.format(ctx, prefix_ws);
+impl<T> BracedWithInnerAttributes<T> {
+	fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: &mut impl FormatFn<Whitespace>, args: &mut ())
+	where
+		T: Format<()>,
+	{
+		self.0.prefix.format(ctx, prefix_ws, &mut ());
 
 		let mut ctx = ctx.sub_context();
 		for attr in &self.0.value.attrs {
@@ -142,19 +149,23 @@ impl<T: Format> BracedWithInnerAttributes<T> {
 			let mut is_after_newline = false;
 			for attr in &mut self.0.value.attrs {
 				ctx.with_tag_if(is_after_newline, FormatTag::AfterNewline, |ctx| {
-					attr.format(ctx, &mut Whitespace::set_cur_indent);
+					attr.format(ctx, &mut Whitespace::set_cur_indent, &mut ());
 				});
 
 				is_after_newline = matches!(attr, InnerAttrOrDocComment::DocComment(InnerDocComment::Line(_)));
 			}
 
 			ctx.with_tag_if(is_after_newline, FormatTag::AfterNewline, |ctx| {
-				self.0.value.inner.format(ctx, &mut Whitespace::set_cur_indent);
+				self.0.value.inner.format(ctx, &mut Whitespace::set_cur_indent, args);
 				let is_value_blank = self.0.value.is_blank(ctx, true);
 
-				self.0.suffix.format(ctx, &mut |ws: &mut Whitespace, ctx| {
-					ws.set_indent(ctx, -1, is_value_blank);
-				});
+				self.0.suffix.format(
+					ctx,
+					&mut |ws: &mut Whitespace, ctx| {
+						ws.set_indent(ctx, -1, is_value_blank);
+					},
+					&mut (),
+				);
 			});
 		});
 	}
@@ -164,7 +175,8 @@ impl<T: Format> BracedWithInnerAttributes<T> {
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
-#[format(with = |_, _, _| panic!("This type shouldn't be formatted manually"))]
+#[format(with = |_, _, _, (): &mut ()| panic!("This type shouldn't be formatted manually"))]
+#[format(where_format = "where T: Format<()>")]
 struct WithInnerAttributes<T> {
 	pub attrs: Vec<InnerAttrOrDocComment>,
 	pub inner: T,

@@ -3,6 +3,7 @@
 // Imports
 use {
 	crate::{expr::Expression, util::Parenthesized},
+	rustidy_ast_util::delimited,
 	rustidy_format::Format,
 	rustidy_parse::Parse,
 	rustidy_print::Print,
@@ -12,4 +13,4 @@ use {
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
-pub struct GroupedExpression(#[format(and_with = Parenthesized::format_remove)] Parenthesized<Expression>);
+pub struct GroupedExpression(#[format(args = delimited::FmtArgs::remove((), (), ()))] Parenthesized<Expression>);
