@@ -48,37 +48,38 @@ pub trait Formattable {
 
 	/// Returns if this type is empty
 	fn is_empty(&mut self, ctx: &mut Context, exclude_prefix_ws: bool) -> bool {
-		self.with_strings(ctx, exclude_prefix_ws, &mut |s, _ctx| match AstStr::is_empty(s) {
-			true => ControlFlow::Continue(()),
-			false => ControlFlow::Break(()),
-		})
-		.is_continue()
+		fn is_empty(s: &mut AstStr, _ctx: &mut Context<'_, '_>) -> ControlFlow<()> {
+			match AstStr::is_empty(s) {
+				true => ControlFlow::Continue(()),
+				false => ControlFlow::Break(()),
+			}
+		}
+
+		self.with_strings(ctx, exclude_prefix_ws, &mut is_empty).is_continue()
 	}
 
 	/// Returns if this type is blank
 	fn is_blank(&mut self, ctx: &mut Context, exclude_prefix_ws: bool) -> bool {
-		self.with_strings(
-			ctx,
-			exclude_prefix_ws,
-			&mut |s, ctx| match AstStr::is_blank(s, ctx.input) {
+		fn is_blank(s: &mut AstStr, ctx: &mut Context<'_, '_>) -> ControlFlow<()> {
+			match AstStr::is_blank(s, ctx.input) {
 				true => ControlFlow::Continue(()),
 				false => ControlFlow::Break(()),
-			},
-		)
-		.is_continue()
+			}
+		}
+
+		self.with_strings(ctx, exclude_prefix_ws, &mut is_blank).is_continue()
 	}
 
 	/// Returns if this type has newlines
 	fn has_newlines(&mut self, ctx: &mut Context, exclude_prefix_ws: bool) -> bool {
-		self.with_strings(
-			ctx,
-			exclude_prefix_ws,
-			&mut |s, ctx| match AstStr::has_newlines(s, ctx.input) {
+		fn has_newlines(s: &mut AstStr, ctx: &mut Context<'_, '_>) -> ControlFlow<()> {
+			match AstStr::has_newlines(s, ctx.input) {
 				true => ControlFlow::Break(()),
 				false => ControlFlow::Continue(()),
-			},
-		)
-		.is_break()
+			}
+		}
+
+		self.with_strings(ctx, exclude_prefix_ws, &mut has_newlines).is_break()
 	}
 }
 
