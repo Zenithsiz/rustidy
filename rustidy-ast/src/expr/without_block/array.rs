@@ -23,18 +23,18 @@ impl ArrayExpression {
 	fn format_single_line(
 		values: &mut PunctuatedTrailing<Expression, token::Comma>,
 		ctx: &mut rustidy_format::Context,
-		prefix_ws: &mut impl WsFmtFn,
+		prefix_ws: &impl WsFmtFn,
 	) {
 		values.punctuated.first.format(ctx, prefix_ws, &mut ());
 		for PunctuatedRest { punct: comma, value } in &mut values.punctuated.rest {
-			comma.format(ctx, &mut Whitespace::remove, &mut ());
-			value.format(ctx, &mut Whitespace::set_single, &mut ());
+			comma.format(ctx, &Whitespace::remove, &mut ());
+			value.format(ctx, &Whitespace::set_single, &mut ());
 		}
 
-		values.trailing.format(ctx, &mut Whitespace::remove, &mut ());
+		values.trailing.format(ctx, &Whitespace::remove, &mut ());
 	}
 
-	fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: &mut impl WsFmtFn, (): &mut ()) {
+	fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: &impl WsFmtFn, (): &mut ()) {
 		match &mut self.0.value {
 			Some(ArrayElements::Punctuated(values)) => {
 				Self::format_single_line(values, ctx, prefix_ws);
@@ -55,10 +55,10 @@ impl ArrayExpression {
 					// If we fit, remove whitespace after the `[` and before the `]`.
 					// Also remove the trailing comma.
 					true => {
-						values.punctuated.first.format(ctx, &mut Whitespace::remove, &mut ());
+						values.punctuated.first.format(ctx, &Whitespace::remove, &mut ());
 						values.trailing = None;
 
-						self.0.suffix.format(ctx, &mut Whitespace::remove, &mut ());
+						self.0.suffix.format(ctx, &Whitespace::remove, &mut ());
 					},
 
 					false => {
@@ -68,10 +68,10 @@ impl ArrayExpression {
 							loop {
 								let mut row_values = (&mut values_iter).take(cols.unwrap_or(1));
 								let Some(first) = row_values.next() else { break };
-								first.format(ctx, &mut Whitespace::set_cur_indent, &mut ());
+								first.format(ctx, &Whitespace::set_cur_indent, &mut ());
 
 								for value in row_values {
-									value.format(ctx, &mut Whitespace::set_single, &mut ());
+									value.format(ctx, &Whitespace::set_single, &mut ());
 								}
 							}
 							drop(values_iter);
@@ -83,13 +83,13 @@ impl ArrayExpression {
 						});
 
 						// Finally, close the indentation on the `]`
-						self.0.suffix.format(ctx, &mut Whitespace::set_cur_indent, &mut ());
+						self.0.suffix.format(ctx, &Whitespace::set_cur_indent, &mut ());
 					},
 				}
 			},
 
 			Some(ArrayElements::Repeat(repeat)) => {
-				repeat.format(ctx, &mut Whitespace::remove, &mut ());
+				repeat.format(ctx, &Whitespace::remove, &mut ());
 			},
 
 			None => (),

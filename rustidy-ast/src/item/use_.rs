@@ -214,7 +214,7 @@ impl UseTreeGroup {
 	fn format_tree_compact(
 		tree: &mut Braced<Option<PunctuatedTrailing<Box<UseTree>, token::Comma>>>,
 		ctx: &mut rustidy_format::Context,
-		prefix_ws: &mut impl WsFmtFn,
+		prefix_ws: &impl WsFmtFn,
 	) {
 		if let Some(punct) = &mut tree.value {
 			punct.trailing = None;
@@ -236,7 +236,7 @@ impl UseTreeGroup {
 	fn format_tree(
 		tree: &mut Braced<Option<PunctuatedTrailing<Box<UseTree>, token::Comma>>>,
 		ctx: &mut rustidy_format::Context,
-		prefix_ws: &mut impl WsFmtFn,
+		prefix_ws: &impl WsFmtFn,
 		(): &mut (),
 	) {
 		Self::format_tree_compact(tree, ctx, prefix_ws);

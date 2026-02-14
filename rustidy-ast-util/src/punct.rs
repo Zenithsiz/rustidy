@@ -18,8 +18,8 @@ use {
 pub struct Punctuated<T, P> {
 	#[format(args = ())]
 	pub first: T,
-	#[format(prefix_ws = { args.punct })]
-	#[format(args = rustidy_format::VecArgs::new(args.punct, args.value))]
+	#[format(prefix_ws = &args.punct)]
+	#[format(args = rustidy_format::VecArgs::new(&args.punct, &args.value))]
 	pub rest:  Vec<PunctuatedRest<T, P>>,
 }
 

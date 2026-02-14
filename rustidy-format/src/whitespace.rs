@@ -112,7 +112,7 @@ impl Formattable for Whitespace {
 }
 
 impl Format<()> for Whitespace {
-	fn format(&mut self, ctx: &mut crate::Context, prefix_ws: &mut impl WsFmtFn, _args: &mut ()) {
+	fn format(&mut self, ctx: &mut crate::Context, prefix_ws: &impl WsFmtFn, _args: &mut ()) {
 		prefix_ws(self, ctx);
 	}
 }

@@ -28,15 +28,15 @@ pub struct Delimited<T, L, R> {
 	// TODO: Should we always remove all tags here?
 	#[parse(without_tags)]
 	#[format(prefix_ws = match self.value.is_blank(ctx, false) {
-		true => args.value_empty,
-		false => args.value_non_empty,
+		true => &args.value_empty,
+		false => &args.value_non_empty,
 	})]
 	#[format(args = args.value_args)]
 	pub value: T,
 
 	#[format(prefix_ws = match self.value.is_blank(ctx, false) {
-		true => args.suffix_empty,
-		false => args.suffix_non_empty,
+		true => &args.suffix_empty,
+		false => &args.suffix_non_empty,
 	})]
 	#[format(args = args.suffix_args)]
 	pub suffix: R,

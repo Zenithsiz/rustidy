@@ -28,18 +28,18 @@ pub struct TupleTypeInner {
 }
 
 impl TupleTypeInner {
-	fn format_tys(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: &mut impl WsFmtFn, _args: &mut ()) {
+	fn format_tys(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: &impl WsFmtFn, _args: &mut ()) {
 		let [(first_ty, first_comma), tys @ ..] = &mut *self.tys else {
 			self.end.format(ctx, prefix_ws, &mut ());
 			return;
 		};
 
 		first_ty.format(ctx, prefix_ws, &mut ());
-		first_comma.format(ctx, &mut Whitespace::remove, &mut ());
+		first_comma.format(ctx, &Whitespace::remove, &mut ());
 		for (ty, comma) in tys {
-			ty.format(ctx, &mut Whitespace::set_single, &mut ());
-			comma.format(ctx, &mut Whitespace::remove, &mut ());
+			ty.format(ctx, &Whitespace::set_single, &mut ());
+			comma.format(ctx, &Whitespace::remove, &mut ());
 		}
-		self.end.format(ctx, &mut Whitespace::set_single, &mut ());
+		self.end.format(ctx, &Whitespace::set_single, &mut ());
 	}
 }

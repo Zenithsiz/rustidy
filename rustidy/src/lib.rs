@@ -41,7 +41,7 @@ pub fn format(input: &str, config: &Config, crate_: &mut Crate) {
 	let mut ctx = rustidy_format::Context::new(input, config);
 	crate_.format(
 		&mut ctx,
-		&mut |_, _| panic!("Crate should not use prefix whitespace"),
+		&|_, _| panic!("Crate should not use prefix whitespace"),
 		&mut (),
 	);
 }

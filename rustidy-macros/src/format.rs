@@ -326,7 +326,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 			#[automatically_derived]
 			impl #impl_generics rustidy_format::Format<#args_ty> for #item_ident #ty_generics #impl_where_clause {
 				#[coverage(on)]
-				fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: &mut impl rustidy_format::WsFmtFn, args: &mut #args_ty) {
+				fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: &impl rustidy_format::WsFmtFn, args: &mut #args_ty) {
 					#format;
 				}
 			}
@@ -358,13 +358,13 @@ fn derive_enum(variants: &[VariantAttrs]) -> Impls<syn::Expr, syn::Expr> {
 			};
 
 			let format = parse_quote! { match #prefix_ws {
-				ref mut prefix_ws => rustidy_format::Format::format(value, ctx, prefix_ws, args)
+				ref prefix_ws => rustidy_format::Format::format(value, ctx, prefix_ws, args)
 			}};
 
 			let format = self::derive_format(
 				parse_quote! { value },
 				|expr| parse_quote! { match #prefix_ws {
-					ref mut prefix_ws => #expr,
+					ref prefix_ws => #expr,
 				}},
 				None,
 				&variant.with,
@@ -436,7 +436,7 @@ fn derive_struct_field(field_idx: usize, field: &FieldAttrs) -> Impls<syn::Expr,
 				prefix_ws
 					.map(|prefix_ws| {
 						parse_quote! { match #prefix_ws {
-							ref mut prefix_ws => #expr,
+							ref prefix_ws => #expr,
 						}}
 					})
 					.eval()

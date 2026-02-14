@@ -60,7 +60,7 @@ use {
 pub struct Crate(pub CrateInner);
 
 impl Crate {
-	fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: &mut impl WsFmtFn, _args: &mut ()) {
+	fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: &impl WsFmtFn, _args: &mut ()) {
 		let mut inner_ctx = ctx.sub_context();
 		for attr in &self.0.inner_attrs {
 			if let Some(attr) = attr.try_as_attr_ref() &&
@@ -103,9 +103,9 @@ impl CrateInner {
 
 	fn format_first_inner_attr_or_item(&mut self, ctx: &mut rustidy_format::Context) {
 		if let Some(attr) = self.inner_attrs.first_mut() {
-			attr.format(ctx, &mut Whitespace::remove, &mut ());
+			attr.format(ctx, &Whitespace::remove, &mut ());
 		} else if let Some(item) = self.items.0.first_mut() {
-			item.format(ctx, &mut Whitespace::remove, &mut ());
+			item.format(ctx, &Whitespace::remove, &mut ());
 		}
 	}
 

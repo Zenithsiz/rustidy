@@ -388,8 +388,8 @@ pub struct TraitBoundInner {
 impl TraitBoundInner {
 	fn format_prefix(&mut self, ctx: &mut rustidy_format::Context) {
 		match self.prefix {
-			Some(TraitBoundInnerPrefix::Question(_)) => self.path.format(ctx, &mut Whitespace::remove, &mut ()),
-			Some(TraitBoundInnerPrefix::ForLifetimes(_)) => self.path.format(ctx, &mut Whitespace::set_single, &mut ()),
+			Some(TraitBoundInnerPrefix::Question(_)) => self.path.format(ctx, &Whitespace::remove, &mut ()),
+			Some(TraitBoundInnerPrefix::ForLifetimes(_)) => self.path.format(ctx, &Whitespace::set_single, &mut ()),
 			None => (),
 		}
 	}

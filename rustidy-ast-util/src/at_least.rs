@@ -16,7 +16,7 @@ use {
 pub struct AtLeast1<T> {
 	#[format(args = ())]
 	pub first: T,
-	#[format(args = rustidy_format::VecArgs::from_prefix_ws(args.rest_prefix_ws))]
+	#[format(args = rustidy_format::VecArgs::from_prefix_ws(&args.rest_prefix_ws))]
 	pub rest:  Vec<T>,
 }
 

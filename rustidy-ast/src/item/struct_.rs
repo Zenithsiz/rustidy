@@ -77,7 +77,7 @@ impl StructFields {
 			let ty_prefix_ws_len = 1 + max_ident_len - ident_len;
 			field.0.inner.ty.format(
 				ctx,
-				&mut |ws: &mut Whitespace, ctx| {
+				&|ws: &mut Whitespace, ctx| {
 					ws.set_spaces(ctx, ty_prefix_ws_len);
 				},
 				&mut (),
