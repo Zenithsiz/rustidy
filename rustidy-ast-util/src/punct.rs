@@ -16,7 +16,6 @@ use {
 #[format(where_format = "where T: Format<()>, P: Format<()>")]
 // TODO: Support arguments for `T` and `P`
 pub struct Punctuated<T, P> {
-	#[format(args = ())]
 	pub first: T,
 	#[format(prefix_ws = &args.punct)]
 	#[format(args = rustidy_format::VecArgs::new(&args.punct, &args.value))]
@@ -147,9 +146,9 @@ impl<T, P> Punctuated<T, P> {
 #[format(args(ty = "FmtArgs<WT, WP>", generic = "WT: WsFmtFn", generic = "WP: WsFmtFn"))]
 #[format(where_format = "where T: Format<()>, P: Format<()>")]
 pub struct PunctuatedTrailing<T, P> {
+	#[format(args = *args)]
 	pub punctuated: Punctuated<T, P>,
 	#[format(prefix_ws = args.punct)]
-	#[format(args = ())]
 	pub trailing:   Option<P>,
 }
 
@@ -261,10 +260,8 @@ impl<'a, T, P> Iterator for SplitLastMut<'a, T, P> {
 #[format(args(ty = "WT", generic = "WT: WsFmtFn"))]
 #[format(where_format = "where T: Format<()>, P: Format<()>")]
 pub struct PunctuatedRest<T, P> {
-	#[format(args = ())]
 	pub punct: P,
 	#[format(prefix_ws = *args)]
-	#[format(args = ())]
 	pub value: T,
 }
 

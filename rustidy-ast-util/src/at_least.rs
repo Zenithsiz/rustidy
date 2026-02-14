@@ -14,7 +14,6 @@ use {
 #[format(where_format = "where T: Format<()>")]
 // TODO: Support arguments for `T`
 pub struct AtLeast1<T> {
-	#[format(args = ())]
 	pub first: T,
 	#[format(args = rustidy_format::VecArgs::from_prefix_ws(&args.rest_prefix_ws))]
 	pub rest:  Vec<T>,

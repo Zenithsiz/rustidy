@@ -230,7 +230,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 		&attrs.and_with,
 		&attrs.with_tag,
 		attrs.without_tags,
-		&None,
+		Args::Skip,
 		&attrs.indent,
 	);
 
@@ -373,7 +373,7 @@ fn derive_enum(variants: &[VariantAttrs]) -> Impls<syn::Expr, syn::Expr> {
 				&variant.and_with,
 				&variant.with_tag,
 				variant.without_tags,
-				&variant.args,
+				Args::Set(variant.args.clone()),
 				&variant.indent,
 			);
 			let format = parse_quote! {
@@ -478,11 +478,16 @@ fn derive_struct_field(field_idx: usize, field: &FieldAttrs) -> Impls<syn::Expr,
 		&field.and_with,
 		&field.with_tag,
 		field.without_tags,
-		&field.args,
+		Args::Set(field.args.clone()),
 		&field.indent,
 	);
 
 	Impls { with_strings, format }
+}
+
+enum Args {
+	Skip,
+	Set(Option<syn::Expr>),
 }
 
 #[expect(
@@ -501,7 +506,7 @@ fn derive_format(
 	and_with: &[AndWith],
 	with_tag: &[WithTag],
 	without_tags: bool,
-	args: &Option<syn::Expr>,
+	args: Args,
 	indent: &Option<Indent>,
 ) -> syn::Expr {
 	// TODO: Document the order in which we parse all attributes, since
@@ -512,11 +517,14 @@ fn derive_format(
 		None => default,
 	};
 	let format = match args {
-		Some(args) => parse_quote! {{
-			let mut args = &mut #args;
-			#format;
-		}},
-		None => format,
+		Args::Skip => format,
+		Args::Set(args) => {
+			let args = args.unwrap_or_else(|| parse_quote! { () });
+			parse_quote! {{
+				let mut args = &mut #args;
+				#format;
+			}}
+		},
 	};
 	let format = with_prefix_ws(format);
 
