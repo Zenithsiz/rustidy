@@ -2,7 +2,7 @@
 
 // Imports
 use {
-	rustidy_format::{Format, FormatFn, WhitespaceFormat},
+	rustidy_format::{Format, WhitespaceFormat, WsFmtFn},
 	rustidy_parse::Parse,
 	rustidy_print::Print,
 	rustidy_util::Whitespace,
@@ -14,8 +14,8 @@ use {
 #[derive(Parse, Format, Print)]
 #[format(args(
 	ty = "FmtArgs<WT, WR, AL, AT, AR>",
-	generic = "WT: FormatFn<Whitespace>",
-	generic = "WR: FormatFn<Whitespace>",
+	generic = "WT: WsFmtFn",
+	generic = "WR: WsFmtFn",
 	generic = "AL",
 	generic = "AT",
 	generic = "AR",

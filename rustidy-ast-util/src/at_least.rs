@@ -2,16 +2,15 @@
 
 // Imports
 use {
-	rustidy_format::{Format, FormatFn},
+	rustidy_format::{Format, WsFmtFn},
 	rustidy_parse::Parse,
 	rustidy_print::Print,
-	rustidy_util::Whitespace,
 };
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
-#[format(args(ty = "FmtArgs<W>", generic = "W: FormatFn<Whitespace>"))]
+#[format(args(ty = "FmtArgs<W>", generic = "W: WsFmtFn"))]
 #[format(where_format = "where T: Format<()>")]
 // TODO: Support arguments for `T`
 pub struct AtLeast1<T> {

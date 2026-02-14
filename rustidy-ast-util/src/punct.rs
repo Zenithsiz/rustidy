@@ -3,21 +3,16 @@
 // Imports
 use {
 	either::Either,
-	rustidy_format::{Format, FormatFn},
+	rustidy_format::{Format, WsFmtFn},
 	rustidy_parse::Parse,
 	rustidy_print::Print,
-	rustidy_util::Whitespace,
 };
 
 /// Punctuated type `T`, separated by `P`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
-#[format(args(
-	ty = "FmtArgs<WT, WP>",
-	generic = "WT: FormatFn<Whitespace>",
-	generic = "WP: FormatFn<Whitespace>"
-))]
+#[format(args(ty = "FmtArgs<WT, WP>", generic = "WT: WsFmtFn", generic = "WP: WsFmtFn"))]
 #[format(where_format = "where T: Format<()>, P: Format<()>")]
 // TODO: Support arguments for `T` and `P`
 pub struct Punctuated<T, P> {
@@ -149,11 +144,7 @@ impl<T, P> Punctuated<T, P> {
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
-#[format(args(
-	ty = "FmtArgs<WT, WP>",
-	generic = "WT: FormatFn<Whitespace>",
-	generic = "WP: FormatFn<Whitespace>"
-))]
+#[format(args(ty = "FmtArgs<WT, WP>", generic = "WT: WsFmtFn", generic = "WP: WsFmtFn"))]
 #[format(where_format = "where T: Format<()>, P: Format<()>")]
 pub struct PunctuatedTrailing<T, P> {
 	pub punctuated: Punctuated<T, P>,
@@ -267,7 +258,7 @@ impl<'a, T, P> Iterator for SplitLastMut<'a, T, P> {
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
-#[format(args(ty = "WT", generic = "WT: FormatFn<Whitespace>"))]
+#[format(args(ty = "WT", generic = "WT: WsFmtFn"))]
 #[format(where_format = "where T: Format<()>, P: Format<()>")]
 pub struct PunctuatedRest<T, P> {
 	#[format(args = ())]

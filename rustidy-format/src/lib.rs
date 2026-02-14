@@ -85,7 +85,7 @@ pub trait Formattable {
 /// Type formatting
 pub trait Format<Args>: Formattable {
 	/// Formats this type, using `prefix_ws` to format it's prefix whitespace, if any.
-	fn format(&mut self, ctx: &mut Context, prefix_ws: &mut impl FormatFn<Whitespace>, args: &mut Args);
+	fn format(&mut self, ctx: &mut Context, prefix_ws: &mut impl WsFmtFn, args: &mut Args);
 }
 
 impl<T: Formattable> Formattable for &'_ mut T {
@@ -100,7 +100,7 @@ impl<T: Formattable> Formattable for &'_ mut T {
 }
 
 impl<T: Format<Args>, Args> Format<Args> for &'_ mut T {
-	fn format(&mut self, ctx: &mut Context, prefix_ws: &mut impl FormatFn<Whitespace>, args: &mut Args) {
+	fn format(&mut self, ctx: &mut Context, prefix_ws: &mut impl WsFmtFn, args: &mut Args) {
 		(**self).format(ctx, prefix_ws, args);
 	}
 }
@@ -117,7 +117,7 @@ impl<T: Formattable> Formattable for Box<T> {
 }
 
 impl<T: Format<Args>, Args> Format<Args> for Box<T> {
-	fn format(&mut self, ctx: &mut Context, prefix_ws: &mut impl FormatFn<Whitespace>, args: &mut Args) {
+	fn format(&mut self, ctx: &mut Context, prefix_ws: &mut impl WsFmtFn, args: &mut Args) {
 		(**self).format(ctx, prefix_ws, args);
 	}
 }
@@ -137,7 +137,7 @@ impl<T: Formattable> Formattable for Option<T> {
 }
 
 impl<T: Format<Args>, Args> Format<Args> for Option<T> {
-	fn format(&mut self, ctx: &mut Context, prefix_ws: &mut impl FormatFn<Whitespace>, args: &mut Args) {
+	fn format(&mut self, ctx: &mut Context, prefix_ws: &mut impl WsFmtFn, args: &mut Args) {
 		if let Some(value) = self {
 			value.format(ctx, prefix_ws, args);
 		}
@@ -162,9 +162,9 @@ impl<T: Formattable> Formattable for Vec<T> {
 impl<T, W, A> Format<VecArgs<W, A>> for Vec<T>
 where
 	T: Format<A>,
-	W: FormatFn<Whitespace>,
+	W: WsFmtFn,
 {
-	fn format(&mut self, ctx: &mut Context, prefix_ws: &mut impl FormatFn<Whitespace>, args: &mut VecArgs<W, A>) {
+	fn format(&mut self, ctx: &mut Context, prefix_ws: &mut impl WsFmtFn, args: &mut VecArgs<W, A>) {
 		let [first, rest @ ..] = &mut **self else {
 			return;
 		};
@@ -209,7 +209,7 @@ impl Formattable for ! {
 }
 
 impl Format<()> for ! {
-	fn format(&mut self, _ctx: &mut Context, _prefix_ws: &mut impl FormatFn<Whitespace>, (): &mut ()) {
+	fn format(&mut self, _ctx: &mut Context, _prefix_ws: &mut impl WsFmtFn, (): &mut ()) {
 		*self
 	}
 }
@@ -226,7 +226,7 @@ impl<T> Formattable for PhantomData<T> {
 }
 
 impl<T> Format<()> for PhantomData<T> {
-	fn format(&mut self, _ctx: &mut Context, _prefix_ws: &mut impl FormatFn<Whitespace>, (): &mut ()) {}
+	fn format(&mut self, _ctx: &mut Context, _prefix_ws: &mut impl WsFmtFn, (): &mut ()) {}
 }
 
 impl Formattable for () {
@@ -241,7 +241,7 @@ impl Formattable for () {
 }
 
 impl Format<()> for () {
-	fn format(&mut self, _ctx: &mut Context, _prefix_ws: &mut impl FormatFn<Whitespace>, (): &mut ()) {}
+	fn format(&mut self, _ctx: &mut Context, _prefix_ws: &mut impl WsFmtFn, (): &mut ()) {}
 }
 
 macro tuple_impl ($N:literal, $($T:ident),* $(,)?) {
@@ -268,7 +268,7 @@ macro tuple_impl ($N:literal, $($T:ident),* $(,)?) {
 	#[automatically_derived]
 	#[expect(non_snake_case)]
 	impl< $($T: Format<()>,)*> Format<()> for ( $($T,)* ) {
-		fn format(&mut self, ctx: &mut Context, prefix_ws: &mut impl FormatFn<Whitespace>, args: &mut ()) {
+		fn format(&mut self, ctx: &mut Context, prefix_ws: &mut impl WsFmtFn, args: &mut ()) {
 			let ( $($T,)* ) = self;
 			${concat( Tuple, $N )} { $( $T, )* }.format(ctx, prefix_ws, args)
 		}
@@ -291,7 +291,7 @@ impl Formattable for AstStr {
 }
 
 impl Format<()> for AstStr {
-	fn format(&mut self, _ctx: &mut Context, _prefix_ws: &mut impl FormatFn<Whitespace>, (): &mut ()) {}
+	fn format(&mut self, _ctx: &mut Context, _prefix_ws: &mut impl WsFmtFn, (): &mut ()) {}
 }
 
 impl<T: ArenaData<Data: Formattable>> Formattable for ArenaIdx<T> {
@@ -306,7 +306,7 @@ impl<T: ArenaData<Data: Formattable>> Formattable for ArenaIdx<T> {
 }
 
 impl<T: ArenaData<Data: Format<Args>>, Args> Format<Args> for ArenaIdx<T> {
-	fn format(&mut self, ctx: &mut Context, prefix_ws: &mut impl FormatFn<Whitespace>, args: &mut Args) {
+	fn format(&mut self, ctx: &mut Context, prefix_ws: &mut impl WsFmtFn, args: &mut Args) {
 		self.get_mut().format(ctx, prefix_ws, args);
 	}
 }
@@ -485,23 +485,6 @@ impl<'a, 'input> Context<'a, 'input> {
 	}
 }
 
-/// A formatting function
-// TODO: Not that we require `Copy`, we should pass around `impl FormatFn` instead of `&mut impl FormatFn`.
-pub trait FormatFn<T: ?Sized> = FnMut(&mut T, &mut Context) + Copy;
-
-/// Formats an arena value
-pub fn arena<T: ArenaData>(mut f: impl FormatFn<T::Data>) -> impl FormatFn<ArenaIdx<T>> {
-	move |idx, ctx| {
-		let mut value = idx.get_mut();
-		f(&mut value, ctx);
-	}
-}
-
-/// Formats an `Option<Self>` with `f` if it is `Some`.
-pub fn format_option_with<T>(mut f: impl FormatFn<T>) -> impl FormatFn<Option<T>> {
-	move |value, ctx| {
-		if let Some(value) = value {
-			f(value, ctx);
-		}
-	}
-}
+/// A whitespace formatting function
+// TODO: Since we require `Copy`, don't pass around `&mut impl WsFmtFn` and instead just pass `impl WsFmtFn`
+pub trait WsFmtFn = FnMut(&mut Whitespace, &mut Context) + Copy;

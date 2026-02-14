@@ -10,7 +10,7 @@ use {
 		delimited,
 		punct::{self, PunctuatedRest},
 	},
-	rustidy_format::{Format, FormatFn, Formattable, WhitespaceFormat},
+	rustidy_format::{Format, Formattable, WhitespaceFormat, WsFmtFn},
 	rustidy_parse::Parse,
 	rustidy_print::Print,
 	rustidy_util::Whitespace,
@@ -214,7 +214,7 @@ impl UseTreeGroup {
 	fn format_tree_compact(
 		tree: &mut Braced<Option<PunctuatedTrailing<Box<UseTree>, token::Comma>>>,
 		ctx: &mut rustidy_format::Context,
-		prefix_ws: &mut impl FormatFn<Whitespace>,
+		prefix_ws: &mut impl WsFmtFn,
 	) {
 		if let Some(punct) = &mut tree.value {
 			punct.trailing = None;
@@ -236,7 +236,7 @@ impl UseTreeGroup {
 	fn format_tree(
 		tree: &mut Braced<Option<PunctuatedTrailing<Box<UseTree>, token::Comma>>>,
 		ctx: &mut rustidy_format::Context,
-		prefix_ws: &mut impl FormatFn<Whitespace>,
+		prefix_ws: &mut impl WsFmtFn,
 		(): &mut (),
 	) {
 		Self::format_tree_compact(tree, ctx, prefix_ws);

@@ -326,7 +326,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 			#[automatically_derived]
 			impl #impl_generics rustidy_format::Format<#args_ty> for #item_ident #ty_generics #impl_where_clause {
 				#[coverage(on)]
-				fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: &mut impl rustidy_format::FormatFn<rustidy_util::Whitespace>, args: &mut #args_ty) {
+				fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: &mut impl rustidy_format::WsFmtFn, args: &mut #args_ty) {
 					#format;
 				}
 			}

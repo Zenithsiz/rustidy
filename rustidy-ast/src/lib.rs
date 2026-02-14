@@ -45,7 +45,7 @@ pub mod vis;
 use {
 	self::{attr::InnerAttrOrDocComment, item::Items, shebang::Shebang},
 	core::fmt::Debug,
-	rustidy_format::{Format, FormatFn, WhitespaceFormat},
+	rustidy_format::{Format, WhitespaceFormat, WsFmtFn},
 	rustidy_parse::Parse,
 	rustidy_print::Print,
 	rustidy_util::{AstStr, Whitespace, ast_str::AstStrRepr},
@@ -60,7 +60,7 @@ use {
 pub struct Crate(pub CrateInner);
 
 impl Crate {
-	fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: &mut impl FormatFn<Whitespace>, _args: &mut ()) {
+	fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: &mut impl WsFmtFn, _args: &mut ()) {
 		let mut inner_ctx = ctx.sub_context();
 		for attr in &self.0.inner_attrs {
 			if let Some(attr) = attr.try_as_attr_ref() &&

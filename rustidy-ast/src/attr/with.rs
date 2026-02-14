@@ -7,7 +7,7 @@ use {
 		attr::{InnerDocComment, OuterDocComment},
 		util::Braced,
 	},
-	rustidy_format::{Format, FormatFn, FormatTag, Formattable, WhitespaceFormat},
+	rustidy_format::{Format, FormatTag, Formattable, WhitespaceFormat, WsFmtFn},
 	rustidy_parse::{ParsableRecursive, Parse, Parser},
 	rustidy_print::Print,
 	rustidy_util::Whitespace,
@@ -40,7 +40,7 @@ impl<T> WithOuterAttributes<T> {
 }
 
 impl<T> WithOuterAttributes<T> {
-	fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: &mut impl FormatFn<Whitespace>, args: &mut ())
+	fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: &mut impl WsFmtFn, args: &mut ())
 	where
 		T: Format<()>,
 	{
@@ -130,7 +130,7 @@ where
 pub struct BracedWithInnerAttributes<T>(Braced<WithInnerAttributes<T>>);
 
 impl<T> BracedWithInnerAttributes<T> {
-	fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: &mut impl FormatFn<Whitespace>, args: &mut ())
+	fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: &mut impl WsFmtFn, args: &mut ())
 	where
 		T: Format<()>,
 	{

@@ -4,7 +4,7 @@
 use {
 	crate::{expr::Expression, token, util::Bracketed},
 	rustidy_ast_util::punct::{PunctuatedRest, PunctuatedTrailing},
-	rustidy_format::{Format, FormatFn, Formattable, WhitespaceFormat},
+	rustidy_format::{Format, Formattable, WhitespaceFormat, WsFmtFn},
 	rustidy_parse::Parse,
 	rustidy_print::Print,
 	rustidy_util::Whitespace,
@@ -23,7 +23,7 @@ impl ArrayExpression {
 	fn format_single_line(
 		values: &mut PunctuatedTrailing<Expression, token::Comma>,
 		ctx: &mut rustidy_format::Context,
-		prefix_ws: &mut impl FormatFn<Whitespace>,
+		prefix_ws: &mut impl WsFmtFn,
 	) {
 		values.punctuated.first.format(ctx, prefix_ws, &mut ());
 		for PunctuatedRest { punct: comma, value } in &mut values.punctuated.rest {
@@ -34,7 +34,7 @@ impl ArrayExpression {
 		values.trailing.format(ctx, &mut Whitespace::remove, &mut ());
 	}
 
-	fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: &mut impl FormatFn<Whitespace>, (): &mut ()) {
+	fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: &mut impl WsFmtFn, (): &mut ()) {
 		match &mut self.0.value {
 			Some(ArrayElements::Punctuated(values)) => {
 				Self::format_single_line(values, ctx, prefix_ws);

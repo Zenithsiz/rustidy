@@ -5,7 +5,7 @@ use {
 	super::Type,
 	crate::{token, util::Parenthesized},
 	rustidy_ast_util::delimited,
-	rustidy_format::{Format, FormatFn, WhitespaceFormat},
+	rustidy_format::{Format, WhitespaceFormat, WsFmtFn},
 	rustidy_parse::Parse,
 	rustidy_print::Print,
 	rustidy_util::Whitespace,
@@ -28,12 +28,7 @@ pub struct TupleTypeInner {
 }
 
 impl TupleTypeInner {
-	fn format_tys(
-		&mut self,
-		ctx: &mut rustidy_format::Context,
-		prefix_ws: &mut impl FormatFn<Whitespace>,
-		_args: &mut (),
-	) {
+	fn format_tys(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: &mut impl WsFmtFn, _args: &mut ()) {
 		let [(first_ty, first_comma), tys @ ..] = &mut *self.tys else {
 			self.end.format(ctx, prefix_ws, &mut ());
 			return;
