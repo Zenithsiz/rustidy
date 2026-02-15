@@ -166,21 +166,30 @@ where
 	W: WsFmtFn,
 {
 	fn format(&mut self, ctx: &mut Context, prefix_ws: &impl WsFmtFn, args: &mut VecArgs<W, A>) {
-		let [first, rest @ ..] = &mut **self else {
-			return;
-		};
+		// Note: Due to the way we're parsed, the first element will never be non-empty,
+		//       but it's possible for the caller to create this value during formatting
+		//       and have that not be true, so we always check.
+		let mut has_prefix_ws = true;
+		for value in self {
+			match has_prefix_ws {
+				true => value.format(ctx, prefix_ws, &mut args.args),
+				false => value.format(ctx, &args.rest_prefix_ws, &mut args.args),
+			}
 
-		first.format(ctx, prefix_ws, &mut args.args);
-		for value in rest {
-			value.format(ctx, &args.rest_prefix_ws, &mut args.args);
+			if has_prefix_ws && !value.is_empty(ctx, false) {
+				has_prefix_ws = false;
+			}
 		}
 	}
 }
 
 /// Arguments for formatting a [`Vec<T>`]
 pub struct VecArgs<W, A> {
+	/// Whitespace formatter for the rest of the vector
 	rest_prefix_ws: W,
-	args:           A,
+
+	/// Arguments for the rest of the vector
+	args: A,
 }
 
 impl<W, A> VecArgs<W, A> {
