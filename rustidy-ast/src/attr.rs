@@ -175,7 +175,7 @@ pub enum DelimTokenTree {
 #[derive(Parse, Format, Print)]
 pub struct DelimTokenTreeInner(
 	#[parse(fatal)]
-	#[format(args = rustidy_format::VecArgs::from_prefix_ws(Whitespace::preserve))]
+	#[format(args = rustidy_format::vec::Args::from_prefix_ws(Whitespace::preserve))]
 	pub Vec<TokenTree>,
 );
 

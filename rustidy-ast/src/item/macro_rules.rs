@@ -112,7 +112,7 @@ pub enum MacroMatcher {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct MacroMatcherMatches(
-	#[format(args = rustidy_format::VecArgs::from_prefix_ws(Whitespace::preserve))] Vec<MacroMatch>,
+	#[format(args = rustidy_format::vec::Args::from_prefix_ws(Whitespace::preserve))] Vec<MacroMatch>,
 );
 
 /// `MacroMatch`

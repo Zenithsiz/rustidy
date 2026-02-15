@@ -56,7 +56,7 @@ use {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 #[format(before_with = Self::merge_use)]
-pub struct Items(#[format(args = rustidy_format::VecArgs::from_prefix_ws(Whitespace::set_cur_indent))] pub Vec<Item>);
+pub struct Items(#[format(args = rustidy_format::vec::Args::from_prefix_ws(Whitespace::set_cur_indent))] pub Vec<Item>);
 
 impl Items {
 	pub fn merge_use(&mut self, ctx: &mut rustidy_format::Context) {

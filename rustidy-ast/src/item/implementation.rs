@@ -77,5 +77,5 @@ pub struct TraitImpl {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct ImplBody(
-	#[format(args = rustidy_format::VecArgs::from_prefix_ws(Whitespace::set_cur_indent))] pub Vec<AssociatedItem>,
+	#[format(args = rustidy_format::vec::Args::from_prefix_ws(Whitespace::set_cur_indent))] pub Vec<AssociatedItem>,
 );
