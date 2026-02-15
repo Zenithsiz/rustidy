@@ -125,7 +125,7 @@ struct ConditionsExpr(
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct LetChain(
-	#[format(args = punct::args(Whitespace::SINGLE, Whitespace::SINGLE))]
+	#[format(args = punct::fmt(Whitespace::SINGLE, Whitespace::SINGLE))]
 	pub  Punctuated<LetChainCondition, token::AndAnd>,
 );
 

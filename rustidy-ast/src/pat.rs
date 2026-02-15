@@ -35,7 +35,7 @@ use {
 pub struct Pattern {
 	pub top_alt: Option<token::Or>,
 	#[format(prefix_ws(expr = Whitespace::SINGLE, if = self.top_alt.is_some()))]
-	#[format(args = punct::args(Whitespace::SINGLE, Whitespace::SINGLE))]
+	#[format(args = punct::fmt(Whitespace::SINGLE, Whitespace::SINGLE))]
 	pub inner:   Punctuated<PatternNoTopAlt, token::Or>,
 }
 
@@ -102,8 +102,7 @@ pub struct SlicePattern(#[format(args = delimited::FmtArgs::remove((), (), ()))]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct SlicePatternItems(
-	#[format(args = punct::args(Whitespace::SINGLE, Whitespace::REMOVE))]
-	PunctuatedTrailing<Box<Pattern>, token::Comma>,
+	#[format(args = punct::fmt(Whitespace::SINGLE, Whitespace::REMOVE))] PunctuatedTrailing<Box<Pattern>, token::Comma>,
 );
 
 /// `PathPattern`
@@ -179,7 +178,7 @@ pub struct StructPatternElementsFieldsEtCetera {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct StructPatternFields(
-	#[format(args = punct::args(Whitespace::CUR_INDENT, Whitespace::REMOVE))]
+	#[format(args = punct::fmt(Whitespace::CUR_INDENT, Whitespace::REMOVE))]
 	Punctuated<StructPatternField, token::Comma>,
 );
 
@@ -253,7 +252,7 @@ pub struct TupleStructPattern {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct TupleStructItems(
-	#[format(args = punct::args(Whitespace::SINGLE, Whitespace::REMOVE))]
+	#[format(args = punct::fmt(Whitespace::SINGLE, Whitespace::REMOVE))]
 	pub  PunctuatedTrailing<Box<Pattern>, token::Comma>,
 );
 
@@ -290,7 +289,7 @@ pub struct TupleItemsPat {
 pub struct TupleItemsPats {
 	pub first:          Box<Pattern>,
 	#[format(prefix_ws = Whitespace::REMOVE)]
-	#[format(args = at_least::args_prefix_ws(Whitespace::REMOVE))]
+	#[format(args = at_least::fmt_prefix_ws(Whitespace::REMOVE))]
 	pub rest:           AtLeast1<TupleItemsPatsPat>,
 	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub trailing_comma: Option<token::Comma>,

@@ -58,7 +58,7 @@ pub enum FunctionParametersMaybeNamedVariadic {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct MaybeNamedFunctionParameters(
-	#[format(args = punct::args(Whitespace::SINGLE, Whitespace::REMOVE))]
+	#[format(args = punct::fmt(Whitespace::SINGLE, Whitespace::REMOVE))]
 	PunctuatedTrailing<MaybeNamedParam, token::Comma>,
 );
 
@@ -102,7 +102,7 @@ pub struct MaybeNamedFunctionParametersVariadic {
 	// TODO: `fn(...)` is accepted by the rust compiler, but
 	//       the reference demands at least 1 argument, should
 	//       we allow it?
-	#[format(args = punct::args(Whitespace::SINGLE, Whitespace::REMOVE))]
+	#[format(args = punct::fmt(Whitespace::SINGLE, Whitespace::REMOVE))]
 	pub params:   Punctuated<MaybeNamedParam, token::Comma>,
 	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub comma:    token::Comma,

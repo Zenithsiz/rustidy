@@ -61,7 +61,7 @@ pub enum StructStructInner {
 #[derive(Parse, Format, Print)]
 #[format(and_with = Self::align_fields)]
 pub struct StructFields(
-	#[format(args = punct::args(Whitespace::CUR_INDENT, Whitespace::REMOVE))]
+	#[format(args = punct::fmt(Whitespace::CUR_INDENT, Whitespace::REMOVE))]
 	PunctuatedTrailing<StructField, token::Comma>,
 );
 
@@ -137,7 +137,7 @@ pub struct TupleStruct {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct TupleFields(
-	#[format(args = punct::args(Whitespace::SINGLE, Whitespace::REMOVE))] PunctuatedTrailing<TupleField, token::Comma>,
+	#[format(args = punct::fmt(Whitespace::SINGLE, Whitespace::REMOVE))] PunctuatedTrailing<TupleField, token::Comma>,
 );
 
 /// `TupleField`

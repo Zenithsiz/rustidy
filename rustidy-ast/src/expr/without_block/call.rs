@@ -62,6 +62,6 @@ pub struct MethodCallExpression {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct CallParams(
-	#[format(args = punct::args(Whitespace::SINGLE, Whitespace::REMOVE))]
+	#[format(args = punct::fmt(Whitespace::SINGLE, Whitespace::REMOVE))]
 	pub  PunctuatedTrailing<Expression, token::Comma>,
 );

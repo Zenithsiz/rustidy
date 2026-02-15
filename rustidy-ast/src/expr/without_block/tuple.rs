@@ -23,7 +23,7 @@ pub struct TupleExpression(
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct TupleElements {
-	#[format(args = at_least::args_prefix_ws(Whitespace::SINGLE))]
+	#[format(args = at_least::fmt_prefix_ws(Whitespace::SINGLE))]
 	pub exprs: AtLeast1<TupleElementsInner>,
 	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub last:  Option<Expression>,

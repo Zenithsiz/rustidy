@@ -38,7 +38,7 @@ pub enum StructExpressionInner {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct StructExprFields {
-	#[format(args = punct::args(Whitespace::CUR_INDENT, Whitespace::REMOVE))]
+	#[format(args = punct::fmt(Whitespace::CUR_INDENT, Whitespace::REMOVE))]
 	pub fields: Punctuated<StructExprField, token::Comma>,
 	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub end:    Option<StructExprFieldsEnd>,

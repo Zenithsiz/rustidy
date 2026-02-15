@@ -61,7 +61,7 @@ pub struct ClosureRet {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct ClosureParameters(
-	#[format(args = punct::args(Whitespace::SINGLE, Whitespace::REMOVE))]
+	#[format(args = punct::fmt(Whitespace::SINGLE, Whitespace::REMOVE))]
 	pub  PunctuatedTrailing<ClosureParameter, token::Comma>,
 );
 

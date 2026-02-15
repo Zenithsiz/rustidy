@@ -144,7 +144,7 @@ impl ParsePeeked<(SelfParam, Option<token::Comma>, Follows<token::ParenClose>)> 
 pub struct FunctionParametersFull {
 	pub self_: Option<FunctionParametersFullSelf>,
 	#[format(prefix_ws(expr = Whitespace::SINGLE, if = self.self_.is_some()))]
-	#[format(args = punct::args(Whitespace::SINGLE, Whitespace::REMOVE))]
+	#[format(args = punct::fmt(Whitespace::SINGLE, Whitespace::REMOVE))]
 	pub rest:  PunctuatedTrailing<FunctionParam, token::Comma>,
 }
 
@@ -268,7 +268,7 @@ pub struct GenericParams(
 #[derive(Parse, Format, Print)]
 #[parse(name = "generic parameters")]
 pub struct GenericParamsInner(
-	#[format(args = punct::args(Whitespace::SINGLE, Whitespace::REMOVE))]
+	#[format(args = punct::fmt(Whitespace::SINGLE, Whitespace::REMOVE))]
 	pub  PunctuatedTrailing<GenericParam, token::Comma>,
 );
 
@@ -312,7 +312,7 @@ pub struct LifetimeParamBounds {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct LifetimeBounds(
-	#[format(args = punct::args(Whitespace::SINGLE, Whitespace::SINGLE))] PunctuatedTrailing<Lifetime, token::Plus>,
+	#[format(args = punct::fmt(Whitespace::SINGLE, Whitespace::SINGLE))] PunctuatedTrailing<Lifetime, token::Plus>,
 );
 
 /// `TypeParam`
@@ -351,7 +351,7 @@ pub struct TypeParamEqType {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct TypeParamBounds(
-	#[format(args = punct::args(Whitespace::SINGLE, Whitespace::SINGLE))]
+	#[format(args = punct::fmt(Whitespace::SINGLE, Whitespace::SINGLE))]
 	pub  PunctuatedTrailing<TypeParamBound, token::Plus>,
 );
 
@@ -405,7 +405,7 @@ pub struct WhereClause {
 	//       but the compiler accepts it, so we do to.
 	#[format(prefix_ws = Whitespace::CUR_INDENT)]
 	#[format(indent)]
-	#[format(args = punct::args(Whitespace::CUR_INDENT, Whitespace::REMOVE))]
+	#[format(args = punct::fmt(Whitespace::CUR_INDENT, Whitespace::REMOVE))]
 	pub items:  Option<PunctuatedTrailing<WhereClauseItem, token::Comma>>,
 }
 
@@ -522,7 +522,7 @@ pub struct UseBoundGenericArgs(
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct UseBoundGenericArgsInner(
-	#[format(args = punct::args(Whitespace::PRESERVE, Whitespace::PRESERVE))]
+	#[format(args = punct::fmt(Whitespace::PRESERVE, Whitespace::PRESERVE))]
 	pub  PunctuatedTrailing<UseBoundGenericArg, token::Comma>,
 );
 

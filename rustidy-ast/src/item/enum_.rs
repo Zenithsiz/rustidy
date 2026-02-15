@@ -44,7 +44,7 @@ pub struct Enumeration {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct EnumVariants(
-	#[format(args = punct::args(Whitespace::CUR_INDENT, Whitespace::REMOVE))]
+	#[format(args = punct::fmt(Whitespace::CUR_INDENT, Whitespace::REMOVE))]
 	pub  PunctuatedTrailing<EnumVariant, token::Comma>,
 );
 

@@ -272,6 +272,6 @@ pub struct FmtArgs {
 }
 
 #[must_use]
-pub const fn args(value: WhitespaceConfig, punct: WhitespaceConfig) -> FmtArgs {
+pub const fn fmt(value: WhitespaceConfig, punct: WhitespaceConfig) -> FmtArgs {
 	FmtArgs { value, punct }
 }
