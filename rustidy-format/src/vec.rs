@@ -54,17 +54,15 @@ pub struct Args<W, A> {
 	args: A,
 }
 
-impl<W, A> Args<W, A> {
-	pub const fn new(rest_prefix_ws: W, args: A) -> Self {
-		Self { rest_prefix_ws, args }
-	}
+/// Creates vector arguments
+pub const fn args<W, A>(rest_prefix_ws: W, args: A) -> Args<W, A> {
+	Args { rest_prefix_ws, args }
 }
 
-impl<W> Args<W, ()> {
-	pub const fn from_prefix_ws(rest_prefix_ws: W) -> Self {
-		Self {
-			rest_prefix_ws,
-			args: (),
-		}
+/// Creates vector arguments from just the prefix whitespace
+pub const fn args_prefix_ws<W>(rest_prefix_ws: W) -> Args<W, ()> {
+	Args {
+		rest_prefix_ws,
+		args: (),
 	}
 }

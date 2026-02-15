@@ -32,7 +32,7 @@ pub struct ExternBlock {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct ExternBlockItems(
-	#[format(args = rustidy_format::vec::Args::from_prefix_ws(Whitespace::set_cur_indent))] Vec<ExternalItem>,
+	#[format(args = rustidy_format::vec::args_prefix_ws(Whitespace::set_cur_indent))] Vec<ExternalItem>,
 );
 
 /// `ExternalItem`

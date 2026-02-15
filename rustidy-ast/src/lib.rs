@@ -83,7 +83,7 @@ impl Crate {
 pub struct CrateInner {
 	pub shebang:               Option<Shebang>,
 	#[format(prefix_ws = Whitespace::set_cur_indent)]
-	#[format(args = rustidy_format::vec::Args::from_prefix_ws(Whitespace::set_cur_indent))]
+	#[format(args = rustidy_format::vec::args_prefix_ws(Whitespace::set_cur_indent))]
 	pub inner_attrs:           Vec<InnerAttrOrDocComment>,
 	#[format(prefix_ws = Whitespace::set_cur_indent)]
 	pub items:                 Items,
