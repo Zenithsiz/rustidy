@@ -44,7 +44,7 @@ pub enum PathExpression {
 pub struct PathInExpression {
 	pub prefix:   Option<token::PathSep>,
 	#[format(prefix_ws(expr = Whitespace::REMOVE, if = self.prefix.is_some()))]
-	#[format(args = punct::FmtArgs::new(Whitespace::REMOVE, Whitespace::REMOVE))]
+	#[format(args = punct::args(Whitespace::REMOVE, Whitespace::REMOVE))]
 	pub segments: Punctuated<PathExprSegment, token::PathSep>,
 }
 
@@ -94,7 +94,7 @@ pub struct GenericArgs(
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct GenericArgsInner(
-	#[format(args = punct::FmtArgs::new(Whitespace::SINGLE, Whitespace::REMOVE))]
+	#[format(args = punct::args(Whitespace::SINGLE, Whitespace::REMOVE))]
 	pub  PunctuatedTrailing<GenericArg, token::Comma>,
 );
 
@@ -169,8 +169,7 @@ pub struct TypePathFn {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct TypePathFnInputs(
-	#[format(args = punct::FmtArgs::new(Whitespace::REMOVE, Whitespace::REMOVE))]
-	PunctuatedTrailing<Box<Type>, token::Comma>,
+	#[format(args = punct::args(Whitespace::REMOVE, Whitespace::REMOVE))] PunctuatedTrailing<Box<Type>, token::Comma>,
 );
 
 #[derive(PartialEq, Eq, Debug)]
@@ -189,7 +188,7 @@ pub struct TypePathFnRet {
 pub struct QualifiedPathInExpression {
 	pub qualified: QualifiedPathType,
 	#[format(prefix_ws = Whitespace::REMOVE)]
-	#[format(args = at_least::FmtArgs::from_prefix_ws(Whitespace::REMOVE))]
+	#[format(args = at_least::args_prefix_ws(Whitespace::REMOVE))]
 	pub segments:  AtLeast1<QualifiedPathInExpressionSegment>,
 }
 

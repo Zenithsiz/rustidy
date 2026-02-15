@@ -271,9 +271,7 @@ pub struct FmtArgs {
 	pub punct: WhitespaceConfig,
 }
 
-impl FmtArgs {
-	#[must_use]
-	pub const fn new(value: WhitespaceConfig, punct: WhitespaceConfig) -> Self {
-		Self { value, punct }
-	}
+#[must_use]
+pub const fn args(value: WhitespaceConfig, punct: WhitespaceConfig) -> FmtArgs {
+	FmtArgs { value, punct }
 }

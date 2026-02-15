@@ -80,7 +80,7 @@ pub struct MacroRulesDefBraces {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct MacroRules(
-	#[format(args = punct::FmtArgs::new(Whitespace::PRESERVE, Whitespace::PRESERVE))]
+	#[format(args = punct::args(Whitespace::PRESERVE, Whitespace::PRESERVE))]
 	PunctuatedTrailing<MacroRule, token::Semi>,
 );
 
@@ -194,7 +194,7 @@ pub struct MacroMatchDollarRep {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct MacroMatchDollarRepMatches(
-	#[format(args = at_least::FmtArgs::from_prefix_ws(Whitespace::PRESERVE))] pub AtLeast1<Box<MacroMatch>>,
+	#[format(args = at_least::args_prefix_ws(Whitespace::PRESERVE))] pub AtLeast1<Box<MacroMatch>>,
 );
 
 /// `MacroRepSep`

@@ -24,9 +24,7 @@ pub struct FmtArgs {
 	pub rest_prefix_ws: WhitespaceConfig,
 }
 
-impl FmtArgs {
-	#[must_use]
-	pub const fn from_prefix_ws(rest_prefix_ws: WhitespaceConfig) -> Self {
-		Self { rest_prefix_ws }
-	}
+#[must_use]
+pub const fn args_prefix_ws(rest_prefix_ws: WhitespaceConfig) -> FmtArgs {
+	FmtArgs { rest_prefix_ws }
 }

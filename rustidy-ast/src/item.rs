@@ -254,7 +254,7 @@ pub struct DeclMacroBodyBranches(
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct DeclMacroBodyBranchesInner(
-	#[format(args = punct::FmtArgs::new(Whitespace::CUR_INDENT, Whitespace::REMOVE))]
+	#[format(args = punct::args(Whitespace::CUR_INDENT, Whitespace::REMOVE))]
 	pub  PunctuatedTrailing<DeclMacroBranch, token::Comma>,
 );
 
