@@ -10,7 +10,7 @@ use {
 		delimited,
 		punct::{self, PunctuatedRest},
 	},
-	rustidy_format::{Format, Formattable, WhitespaceFormat, WsFmtFn},
+	rustidy_format::{Format, Formattable, WhitespaceConfig, WhitespaceFormat},
 	rustidy_parse::Parse,
 	rustidy_print::Print,
 	rustidy_util::Whitespace,
@@ -24,9 +24,9 @@ use {
 pub struct UseDeclaration {
 	pub use_: token::Use,
 	#[parse(fatal)]
-	#[format(prefix_ws = Whitespace::set_single)]
+	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub tree: UseTree,
-	#[format(prefix_ws = Whitespace::remove)]
+	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub semi: token::Semi,
 }
 
@@ -83,7 +83,7 @@ impl UseTree {
 #[derive(Parse, Format, Print)]
 pub struct UseTreeGlob {
 	pub prefix: Option<UseTreeGlobPrefix>,
-	#[format(prefix_ws(expr = Whitespace::remove, if = self.prefix.is_some()))]
+	#[format(prefix_ws(expr = Whitespace::REMOVE, if = self.prefix.is_some()))]
 	pub glob:   token::Star,
 }
 
@@ -92,7 +92,7 @@ pub struct UseTreeGlob {
 #[derive(Parse, Format, Print)]
 pub struct UseTreeGlobPrefix {
 	pub path: Option<SimplePath>,
-	#[format(prefix_ws(expr = Whitespace::remove, if = self.path.is_some()))]
+	#[format(prefix_ws(expr = Whitespace::REMOVE, if = self.path.is_some()))]
 	pub sep:  token::PathSep,
 }
 
@@ -102,7 +102,7 @@ pub struct UseTreeGlobPrefix {
 #[format(before_with = Self::flatten)]
 pub struct UseTreeGroup {
 	pub prefix: Option<UseTreeGroupPrefix>,
-	#[format(prefix_ws(expr = Whitespace::remove, if = self.prefix.is_some()))]
+	#[format(prefix_ws(expr = Whitespace::REMOVE, if = self.prefix.is_some()))]
 	#[format(indent)]
 	#[format(with = Self::format_tree)]
 	pub tree:   Braced<Option<PunctuatedTrailing<Box<UseTree>, token::Comma>>>,
@@ -214,7 +214,7 @@ impl UseTreeGroup {
 	fn format_tree_compact(
 		tree: &mut Braced<Option<PunctuatedTrailing<Box<UseTree>, token::Comma>>>,
 		ctx: &mut rustidy_format::Context,
-		prefix_ws: &impl WsFmtFn,
+		prefix_ws: WhitespaceConfig,
 	) {
 		if let Some(punct) = &mut tree.value {
 			punct.trailing = None;
@@ -225,8 +225,8 @@ impl UseTreeGroup {
 			&mut delimited::FmtArgs::remove(
 				(),
 				punct::FmtArgs {
-					value: Whitespace::set_single,
-					punct: Whitespace::remove,
+					value: Whitespace::SINGLE,
+					punct: Whitespace::REMOVE,
 				},
 				(),
 			),
@@ -236,7 +236,7 @@ impl UseTreeGroup {
 	fn format_tree(
 		tree: &mut Braced<Option<PunctuatedTrailing<Box<UseTree>, token::Comma>>>,
 		ctx: &mut rustidy_format::Context,
-		prefix_ws: &impl WsFmtFn,
+		prefix_ws: WhitespaceConfig,
 		(): &mut (),
 	) {
 		Self::format_tree_compact(tree, ctx, prefix_ws);
@@ -254,8 +254,8 @@ impl UseTreeGroup {
 				&mut delimited::FmtArgs::indent_if_non_blank(
 					(),
 					punct::FmtArgs {
-						value: Whitespace::set_cur_indent,
-						punct: Whitespace::remove,
+						value: Whitespace::CUR_INDENT,
+						punct: Whitespace::REMOVE,
 					},
 					(),
 				),
@@ -269,7 +269,7 @@ impl UseTreeGroup {
 #[derive(Parse, Format, Print)]
 pub struct UseTreeGroupPrefix {
 	pub path: Option<SimplePath>,
-	#[format(prefix_ws(expr = Whitespace::remove, if = self.path.is_some()))]
+	#[format(prefix_ws(expr = Whitespace::REMOVE, if = self.path.is_some()))]
 	pub sep:  token::PathSep,
 }
 
@@ -278,7 +278,7 @@ pub struct UseTreeGroupPrefix {
 #[derive(Parse, Format, Print)]
 pub struct UseTreeSimple {
 	pub path: SimplePath,
-	#[format(prefix_ws = Whitespace::set_single)]
+	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub as_:  Option<UseTreeSimpleAs>,
 }
 
@@ -288,7 +288,7 @@ pub struct UseTreeSimple {
 pub struct UseTreeSimpleAs {
 	pub as_:   token::As,
 	#[parse(fatal)]
-	#[format(prefix_ws = Whitespace::set_single)]
+	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub value: UseTreeSimpleAsValue,
 }
 

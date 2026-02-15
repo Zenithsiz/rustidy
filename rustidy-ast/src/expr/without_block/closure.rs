@@ -25,15 +25,15 @@ use {
 #[parse_recursive(kind = "right")]
 pub struct ClosureExpression {
 	pub async_: Option<token::Async>,
-	#[format(prefix_ws(expr = Whitespace::set_single, if = self.async_.is_some()))]
+	#[format(prefix_ws(expr = Whitespace::SINGLE, if = self.async_.is_some()))]
 	pub move_:  Option<token::Move>,
-	#[format(prefix_ws(expr = Whitespace::set_single, if = self.async_.is_some() || self.move_.is_some()))]
+	#[format(prefix_ws(expr = Whitespace::SINGLE, if = self.async_.is_some() || self.move_.is_some()))]
 	pub params: ClosureParams,
-	#[format(prefix_ws = Whitespace::set_single)]
+	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub ret:    Option<ClosureRet>,
 	// TODO: If we parsed a return type, we should error
 	//       if this isn't a block expression.
-	#[format(prefix_ws = Whitespace::set_single)]
+	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub expr:   Expression,
 }
 
@@ -52,7 +52,7 @@ pub enum ClosureParams {
 pub struct ClosureRet {
 	pub arrow: token::RArrow,
 	#[parse(fatal)]
-	#[format(prefix_ws = Whitespace::set_single)]
+	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub ty:    TypeNoBounds,
 }
 
@@ -61,7 +61,7 @@ pub struct ClosureRet {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct ClosureParameters(
-	#[format(args = punct::FmtArgs::new(Whitespace::set_single, Whitespace::remove))]
+	#[format(args = punct::FmtArgs::new(Whitespace::SINGLE, Whitespace::REMOVE))]
 	pub  PunctuatedTrailing<ClosureParameter, token::Comma>,
 );
 
@@ -76,7 +76,7 @@ pub struct ClosureParameter(pub WithOuterAttributes<ClosureParameterInner>);
 #[derive(Parse, Format, Print)]
 pub struct ClosureParameterInner {
 	pub pat: PatternNoTopAlt,
-	#[format(prefix_ws = Whitespace::remove)]
+	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub ty:  Option<ClosureParameterInnerTy>,
 }
 
@@ -85,6 +85,6 @@ pub struct ClosureParameterInner {
 #[derive(Parse, Format, Print)]
 pub struct ClosureParameterInnerTy {
 	pub colon: token::Colon,
-	#[format(prefix_ws = Whitespace::set_single)]
+	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub ty:    Type,
 }

@@ -30,11 +30,11 @@ use {
 pub struct MacroRulesDefinition {
 	pub macro_rules: token::MacroRules,
 	#[parse(fatal)]
-	#[format(prefix_ws = Whitespace::remove)]
+	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub not:         token::Not,
-	#[format(prefix_ws = Whitespace::set_single)]
+	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub ident:       Identifier,
-	#[format(prefix_ws = Whitespace::set_single)]
+	#[format(prefix_ws = Whitespace::SINGLE)]
 	#[format(indent)]
 	pub def:         MacroRulesDef,
 }
@@ -80,7 +80,7 @@ pub struct MacroRulesDefBraces {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct MacroRules(
-	#[format(args = punct::FmtArgs::new(Whitespace::preserve, Whitespace::preserve))]
+	#[format(args = punct::FmtArgs::new(Whitespace::PRESERVE, Whitespace::PRESERVE))]
 	PunctuatedTrailing<MacroRule, token::Semi>,
 );
 
@@ -112,7 +112,7 @@ pub enum MacroMatcher {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct MacroMatcherMatches(
-	#[format(args = rustidy_format::vec::args_prefix_ws(Whitespace::preserve))] Vec<MacroMatch>,
+	#[format(args = rustidy_format::vec::args_prefix_ws(Whitespace::PRESERVE))] Vec<MacroMatch>,
 );
 
 /// `MacroMatch`
@@ -194,7 +194,7 @@ pub struct MacroMatchDollarRep {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct MacroMatchDollarRepMatches(
-	#[format(args = at_least::FmtArgs::from_prefix_ws(Whitespace::preserve))] pub AtLeast1<Box<MacroMatch>>,
+	#[format(args = at_least::FmtArgs::from_prefix_ws(Whitespace::PRESERVE))] pub AtLeast1<Box<MacroMatch>>,
 );
 
 /// `MacroRepSep`

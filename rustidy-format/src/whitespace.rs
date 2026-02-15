@@ -2,7 +2,7 @@
 
 // Imports
 use {
-	crate::{Format, FormatTag, Formattable, WsFmtFn},
+	crate::{Format, FormatTag, Formattable, WhitespaceConfig},
 	core::ops::ControlFlow,
 	itertools::Itertools,
 	rustidy_util::{
@@ -15,52 +15,53 @@ use {
 
 #[extend::ext(name = WhitespaceFormat)]
 pub impl Whitespace {
+	const CUR_INDENT: WhitespaceConfig = WhitespaceConfig {
+		format: Some(WhitespaceFormatKind::Indent {
+			offset:         0,
+			remove_if_pure: false,
+		}),
+	};
+	const NEXT_INDENT: WhitespaceConfig = WhitespaceConfig {
+		format: Some(WhitespaceFormatKind::Indent {
+			offset:         1,
+			remove_if_pure: false,
+		}),
+	};
+	const PRESERVE: WhitespaceConfig = WhitespaceConfig { format: None };
+	const PREV_INDENT: WhitespaceConfig = WhitespaceConfig {
+		format: Some(WhitespaceFormatKind::Indent {
+			offset:         -1,
+			remove_if_pure: false,
+		}),
+	};
+	const PREV_INDENT_REMOVE_IF_PURE: WhitespaceConfig = WhitespaceConfig {
+		format: Some(WhitespaceFormatKind::Indent {
+			offset:         -1,
+			remove_if_pure: true,
+		}),
+	};
+	const REMOVE: WhitespaceConfig = WhitespaceConfig {
+		format: Some(WhitespaceFormatKind::Remove),
+	};
+	const SINGLE: WhitespaceConfig = WhitespaceConfig {
+		format: Some(WhitespaceFormatKind::Spaces { len: 1 }),
+	};
+
+	fn spaces(len: usize) -> WhitespaceConfig {
+		WhitespaceConfig {
+			format: Some(WhitespaceFormatKind::Spaces { len }),
+		}
+	}
+
+	fn indent(offset: isize, remove_if_pure: bool) -> WhitespaceConfig {
+		WhitespaceConfig {
+			format: Some(WhitespaceFormatKind::Indent { offset, remove_if_pure }),
+		}
+	}
+
 	/// Returns if this whitespace only contains pure whitespace
 	fn is_pure(&mut self, _ctx: &mut crate::Context) -> bool {
 		self.0.get().rest.is_empty()
-	}
-
-	/// Does nothing
-	fn preserve(&mut self, _ctx: &mut crate::Context) {}
-
-	/// Removes this whitespace
-	fn remove(&mut self, ctx: &mut crate::Context) {
-		self::format(self, ctx, FormatKind::Remove);
-	}
-
-	/// Sets this whitespace to `len` spaces.
-	fn set_spaces(&mut self, ctx: &mut crate::Context, len: usize) {
-		self::format(self, ctx, FormatKind::Spaces { len });
-	}
-
-	/// Sets this whitespace to a single space.
-	fn set_single(&mut self, ctx: &mut crate::Context) {
-		self.set_spaces(ctx, 1);
-	}
-
-	/// Sets this whitespace to `offset` indentation, removing it if pure and `remove_if_pure`.
-	fn set_indent(&mut self, ctx: &mut crate::Context, offset: isize, remove_if_pure: bool) {
-		self::format(self, ctx, FormatKind::Indent { offset, remove_if_pure });
-	}
-
-	/// Sets this whitespace to the current indentation indentation
-	fn set_cur_indent(&mut self, ctx: &mut crate::Context) {
-		self.set_indent(ctx, 0, false);
-	}
-
-	/// Sets this whitespace to the previous indentation indentation
-	fn set_prev_indent(&mut self, ctx: &mut crate::Context) {
-		self.set_indent(ctx, -1, false);
-	}
-
-	/// Sets this whitespace to the previous indentation indentation, removing it if pure and `remove_if_pure`.
-	fn set_prev_indent_remove_if_pure(&mut self, ctx: &mut crate::Context) {
-		self.set_indent(ctx, -1, true);
-	}
-
-	/// Sets this whitespace to the next indentation indentation
-	fn set_next_indent(&mut self, ctx: &mut crate::Context) {
-		self.set_indent(ctx, 1, false);
 	}
 
 	/// Joins `other` to this whitespace as a suffix
@@ -112,15 +113,19 @@ impl Formattable for Whitespace {
 }
 
 impl Format<()> for Whitespace {
-	fn format(&mut self, ctx: &mut crate::Context, prefix_ws: &impl WsFmtFn, _args: &mut ()) {
-		prefix_ws(self, ctx);
+	fn format(&mut self, ctx: &mut crate::Context, prefix_ws: WhitespaceConfig, _args: &mut ()) {
+		let Some(format) = prefix_ws.format else {
+			return;
+		};
+
+		self::format(self, ctx, format);
 	}
 }
 
 #[derive(Clone, Copy, Debug)]
 #[derive(strum::EnumIs)]
 #[doc(hidden)]
-pub enum FormatKind {
+pub enum WhitespaceFormatKind {
 	Remove,
 
 	Spaces {
@@ -137,7 +142,7 @@ pub enum FormatKind {
 	},
 }
 
-impl FormatKind {
+impl WhitespaceFormatKind {
 	/// Returns the indentation string, without a newline
 	fn indent_str(ctx: &crate::Context) -> AstStrRepr {
 		AstStrRepr::Indentation {
@@ -204,7 +209,7 @@ impl FormatKind {
 }
 
 #[doc(hidden)]
-pub fn format(ws: &mut Whitespace, ctx: &mut crate::Context, kind: FormatKind) {
+pub fn format(ws: &mut Whitespace, ctx: &mut crate::Context, kind: WhitespaceFormatKind) {
 	let mut inner = ws.0.get_mut();
 
 	// Note: If we're whitespace after a line doc comment, then we have a newline

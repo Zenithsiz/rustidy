@@ -23,7 +23,7 @@ use {
 #[parse_recursive(kind = "left")]
 pub struct CallExpression {
 	pub expr:   Expression,
-	#[format(prefix_ws = Whitespace::remove)]
+	#[format(prefix_ws = Whitespace::REMOVE)]
 	#[format(args = delimited::FmtArgs::remove((), (), ()))]
 	pub params: Parenthesized<Option<CallParams>>,
 }
@@ -43,13 +43,13 @@ pub struct CallExpression {
 pub struct MethodCallExpression {
 	pub expr:    Expression,
 	#[format(prefix_ws = match ctx.has_tag(FormatTag::InsideChain) {
-		true => Whitespace::set_next_indent,
-		false => Whitespace::remove,
+		true => Whitespace::NEXT_INDENT,
+		false => Whitespace::REMOVE,
 	})]
 	pub dot:     token::Dot,
-	#[format(prefix_ws = Whitespace::remove)]
+	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub segment: PathExprSegment,
-	#[format(prefix_ws = Whitespace::remove)]
+	#[format(prefix_ws = Whitespace::REMOVE)]
 	#[format(args = delimited::FmtArgs::remove((), (), ()))]
 	// TODO: Is it fine to remove *all* tags?
 	#[format(without_tags)]
@@ -62,6 +62,6 @@ pub struct MethodCallExpression {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct CallParams(
-	#[format(args = punct::FmtArgs::new(Whitespace::set_single, Whitespace::remove))]
+	#[format(args = punct::FmtArgs::new(Whitespace::SINGLE, Whitespace::REMOVE))]
 	pub  PunctuatedTrailing<Expression, token::Comma>,
 );

@@ -210,7 +210,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 
 	let format = self::derive_format(
 		parse_quote! { self },
-		|expr| expr,
+		None,
 		None,
 		&attrs.with,
 		format,
@@ -297,7 +297,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 			#[automatically_derived]
 			impl #impl_generics rustidy_format::Format<#args_ty> for #item_ident #ty_generics #impl_where_clause {
 				#[coverage(on)]
-				fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: &impl rustidy_format::WsFmtFn, args: &mut #args_ty) {
+				fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: rustidy_format::WhitespaceConfig, args: &mut #args_ty) {
 					#format;
 				}
 			}
@@ -320,23 +320,18 @@ fn derive_enum(variants: &[VariantAttrs]) -> Impls<syn::Expr, syn::Expr> {
 			let with_strings =
 				parse_quote! { Self::#variant_ident(ref mut value) => rustidy_format::Formattable::with_strings(value, ctx, exclude_prefix_ws, f), };
 
-			let prefix_ws: syn::Expr = match &variant.prefix_ws {
+			let prefix_ws = match &variant.prefix_ws {
 				Some(prefix_ws) => match prefix_ws.cond.is_some() && prefix_ws.else_expr.is_none() {
-					true => prefix_ws.with_else(parse_quote! { *prefix_ws }).eval(),
-					false => prefix_ws.eval(),
+					true => Some(prefix_ws.with_else(parse_quote! { prefix_ws }).eval()),
+					false => Some(prefix_ws.eval()),
 				},
-				None => parse_quote! { *prefix_ws },
+				None => None,
 			};
 
-			let format = parse_quote! { match #prefix_ws {
-				ref prefix_ws => rustidy_format::Format::format(value, ctx, prefix_ws, args)
-			}};
-
+			let format = parse_quote! { rustidy_format::Format::format(value, ctx, prefix_ws, args) };
 			let format = self::derive_format(
 				parse_quote! { value },
-				|expr| parse_quote! { match #prefix_ws {
-					ref prefix_ws => #expr,
-				}},
+				prefix_ws,
 				None,
 				&variant.with,
 				format,
@@ -395,32 +390,19 @@ fn derive_struct_field(field_idx: usize, field: &FieldAttrs) -> Impls<syn::Expr,
 		}
 	}};
 
-	let with_prefix_ws = |expr| match field.str {
-		true => expr,
+	let prefix_ws = match field.str {
+		true => None,
 		false => match &field.prefix_ws {
-			Some(prefix_ws) => {
-				let prefix_ws = match prefix_ws.cond.is_some() && prefix_ws.else_expr.is_none() {
-					true => prefix_ws.with_else(parse_quote! { *prefix_ws }),
-					false => prefix_ws.clone(),
-				};
-
-				prefix_ws
-					.map(|prefix_ws| {
-						parse_quote! { match #prefix_ws {
-							ref prefix_ws => #expr,
-						}}
-					})
-					.eval()
+			Some(prefix_ws) => match prefix_ws.cond.is_some() && prefix_ws.else_expr.is_none() {
+				true => Some(prefix_ws.with_else(parse_quote! { prefix_ws }).eval()),
+				false => Some(prefix_ws.eval()),
 			},
-			None => parse_quote! { match has_prefix_ws {
-				true => #expr,
+			None => Some(parse_quote! { match has_prefix_ws {
+				true => prefix_ws,
 				// TODO: Ideally here we'd panic once we ensure
 				//       the caller can always provide a prefix whitespace.
-				false => {
-					let prefix_ws = &mut <rustidy_util::Whitespace as rustidy_format::WhitespaceFormat>::preserve;
-					#expr;
-				},
-			}},
+				false => <rustidy_util::Whitespace as rustidy_format::WhitespaceFormat>::PRESERVE,
+			}}),
 		},
 	};
 
@@ -441,7 +423,7 @@ fn derive_struct_field(field_idx: usize, field: &FieldAttrs) -> Impls<syn::Expr,
 
 	let format = self::derive_format(
 		parse_quote! { &mut self.#field_ident },
-		with_prefix_ws,
+		prefix_ws,
 		Some(after_format),
 		&field.with,
 		format,
@@ -469,7 +451,7 @@ enum Args {
 #[expect(clippy::too_many_arguments, reason = "TODO")]
 fn derive_format(
 	value: syn::Expr,
-	with_prefix_ws: impl Fn(syn::Expr) -> syn::Expr,
+	prefix_ws: Option<syn::Expr>,
 	after_format: Option<syn::Expr>,
 	with: &Option<syn::Expr>,
 	default: syn::Expr,
@@ -497,7 +479,13 @@ fn derive_format(
 			}}
 		},
 	};
-	let format = with_prefix_ws(format);
+	let format = match prefix_ws {
+		Some(prefix_ws) => parse_quote! {{
+			let prefix_ws = #prefix_ws;
+			#format;
+		}},
+		None => format,
+	};
 
 	let and_with = and_with
 		.iter()

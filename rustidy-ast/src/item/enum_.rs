@@ -27,13 +27,13 @@ use {
 pub struct Enumeration {
 	pub enum_:    token::Enum,
 	#[parse(fatal)]
-	#[format(prefix_ws = Whitespace::set_single)]
+	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub ident:    Identifier,
-	#[format(prefix_ws = Whitespace::remove)]
+	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub generic:  Option<GenericParams>,
-	#[format(prefix_ws = Whitespace::set_cur_indent)]
+	#[format(prefix_ws = Whitespace::CUR_INDENT)]
 	pub where_:   Option<WhereClause>,
-	#[format(prefix_ws = Whitespace::set_single)]
+	#[format(prefix_ws = Whitespace::SINGLE)]
 	#[format(indent)]
 	#[format(args = delimited::FmtArgs::indent_if_non_blank((), (), ()))]
 	pub variants: Braced<Option<EnumVariants>>,
@@ -44,7 +44,7 @@ pub struct Enumeration {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct EnumVariants(
-	#[format(args = punct::FmtArgs::new(Whitespace::set_cur_indent, Whitespace::remove))]
+	#[format(args = punct::FmtArgs::new(Whitespace::CUR_INDENT, Whitespace::REMOVE))]
 	pub  PunctuatedTrailing<EnumVariant, token::Comma>,
 );
 
@@ -59,10 +59,10 @@ pub struct EnumVariant(pub WithOuterAttributes<EnumVariantInner>);
 #[derive(Parse, Format, Print)]
 pub struct EnumVariantInner {
 	pub vis:          Option<Visibility>,
-	#[format(prefix_ws(expr = Whitespace::set_single, if = self.vis.is_some()))]
+	#[format(prefix_ws(expr = Whitespace::SINGLE, if = self.vis.is_some()))]
 	pub ident:        Identifier,
 	pub kind:         Option<EnumVariantKind>,
-	#[format(prefix_ws = Whitespace::set_single)]
+	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub discriminant: Option<EnumVariantDiscriminant>,
 }
 
@@ -70,9 +70,9 @@ pub struct EnumVariantInner {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub enum EnumVariantKind {
-	#[format(prefix_ws = Whitespace::remove)]
+	#[format(prefix_ws = Whitespace::REMOVE)]
 	Tuple(EnumVariantTuple),
-	#[format(prefix_ws = Whitespace::set_single)]
+	#[format(prefix_ws = Whitespace::SINGLE)]
 	Struct(EnumVariantStruct),
 }
 
@@ -100,6 +100,6 @@ pub struct EnumVariantStruct(
 #[derive(Parse, Format, Print)]
 pub struct EnumVariantDiscriminant {
 	pub eq:   token::Eq,
-	#[format(prefix_ws = Whitespace::set_single)]
+	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub expr: Expression,
 }

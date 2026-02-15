@@ -20,11 +20,11 @@ use {
 #[derive(Parse, Format, Print)]
 pub struct ExternBlock {
 	pub unsafe_: Option<token::Unsafe>,
-	#[format(prefix_ws(expr = Whitespace::set_single, if = self.unsafe_.is_some()))]
+	#[format(prefix_ws(expr = Whitespace::SINGLE, if = self.unsafe_.is_some()))]
 	pub extern_: token::Extern,
-	#[format(prefix_ws = Whitespace::set_single)]
+	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub abi:     Option<Abi>,
-	#[format(prefix_ws = Whitespace::set_single)]
+	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub inner:   BracedWithInnerAttributes<ExternBlockItems>,
 }
 
@@ -32,7 +32,7 @@ pub struct ExternBlock {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct ExternBlockItems(
-	#[format(args = rustidy_format::vec::args_prefix_ws(Whitespace::set_cur_indent))] Vec<ExternalItem>,
+	#[format(args = rustidy_format::vec::args_prefix_ws(Whitespace::CUR_INDENT))] Vec<ExternalItem>,
 );
 
 /// `ExternalItem`
@@ -57,7 +57,7 @@ pub enum ExternalItemInner {
 #[derive(Parse, Format, Print)]
 pub struct ExternalItemStatic {
 	pub vis:     Option<Visibility>,
-	#[format(prefix_ws(expr = Whitespace::set_single, if = self.vis.is_some()))]
+	#[format(prefix_ws(expr = Whitespace::SINGLE, if = self.vis.is_some()))]
 	pub static_: StaticItem,
 }
 
@@ -66,7 +66,7 @@ pub struct ExternalItemStatic {
 #[derive(Parse, Format, Print)]
 pub struct ExternalItemFunction {
 	pub vis:      Option<Visibility>,
-	#[format(prefix_ws(expr = Whitespace::set_single, if = self.vis.is_some()))]
+	#[format(prefix_ws(expr = Whitespace::SINGLE, if = self.vis.is_some()))]
 	pub function: Function,
 }
 
@@ -75,6 +75,6 @@ pub struct ExternalItemFunction {
 #[derive(Parse, Format, Print)]
 pub struct ExternalItemTypeAlias {
 	pub vis:   Option<Visibility>,
-	#[format(prefix_ws(expr = Whitespace::set_single, if = self.vis.is_some()))]
+	#[format(prefix_ws(expr = Whitespace::SINGLE, if = self.vis.is_some()))]
 	pub alias: TypeAlias,
 }

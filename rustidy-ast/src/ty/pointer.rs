@@ -16,9 +16,9 @@ use {
 #[derive(Parse, Format, Print)]
 pub struct RawPointerType {
 	pub star: token::Star,
-	#[format(prefix_ws = Whitespace::remove)]
+	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub kind: RawPointerTypeKind,
-	#[format(prefix_ws = Whitespace::set_single)]
+	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub ty:   Box<TypeNoBounds>,
 }
 

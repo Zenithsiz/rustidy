@@ -21,8 +21,8 @@ use {
 #[parse_recursive(kind = "left")]
 pub struct TupleIndexingExpression {
 	pub expr:  Expression,
-	#[format(prefix_ws = Whitespace::remove)]
+	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub dot:   token::Dot,
-	#[format(prefix_ws = Whitespace::remove)]
+	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub ident: TupleIndex,
 }

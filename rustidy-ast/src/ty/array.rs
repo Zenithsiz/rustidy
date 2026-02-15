@@ -22,8 +22,8 @@ pub struct ArrayType(#[format(args = delimited::FmtArgs::remove((), (), ()))] Br
 #[derive(Parse, Format, Print)]
 pub struct ArrayTypeInner {
 	pub ty:   Box<Type>,
-	#[format(prefix_ws = Whitespace::remove)]
+	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub semi: token::Semi,
-	#[format(prefix_ws = Whitespace::set_single)]
+	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub expr: Expression,
 }

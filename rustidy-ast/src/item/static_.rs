@@ -17,19 +17,19 @@ use {
 #[derive(Parse, Format, Print)]
 pub struct StaticItem {
 	pub safety:  Option<ItemSafety>,
-	#[format(prefix_ws(expr = Whitespace::set_single, if = self.safety.is_some()))]
+	#[format(prefix_ws(expr = Whitespace::SINGLE, if = self.safety.is_some()))]
 	pub static_: token::Static,
-	#[format(prefix_ws = Whitespace::set_single)]
+	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub mut_:    Option<token::Mut>,
-	#[format(prefix_ws = Whitespace::set_single)]
+	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub ident:   Identifier,
-	#[format(prefix_ws = Whitespace::remove)]
+	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub colon:   token::Colon,
-	#[format(prefix_ws = Whitespace::set_single)]
+	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub ty:      Type,
-	#[format(prefix_ws = Whitespace::set_single)]
+	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub value:   Option<StaticItemValue>,
-	#[format(prefix_ws = Whitespace::remove)]
+	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub semi:    token::Semi,
 }
 
@@ -38,6 +38,6 @@ pub struct StaticItem {
 #[derive(Parse, Format, Print)]
 pub struct StaticItemValue {
 	pub eq:    token::Eq,
-	#[format(prefix_ws = Whitespace::set_single)]
+	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub value: Expression,
 }

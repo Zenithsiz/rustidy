@@ -28,10 +28,10 @@ use {
 pub struct FieldExpression {
 	pub expr:  Expression,
 	#[format(prefix_ws = match ctx.has_tag(FormatTag::InsideChain) {
-		true => Whitespace::set_next_indent,
-		false => Whitespace::remove,
+		true => Whitespace::NEXT_INDENT,
+		false => Whitespace::REMOVE,
 	})]
 	pub dot:   token::Dot,
-	#[format(prefix_ws = Whitespace::remove)]
+	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub ident: Identifier,
 }

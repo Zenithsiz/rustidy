@@ -19,7 +19,7 @@ use {
 #[parse(skip_if_tag = ParserTag::SkipStructExpression)]
 pub struct StructExpression {
 	pub path:  PathInExpression,
-	#[format(prefix_ws = Whitespace::set_single)]
+	#[format(prefix_ws = Whitespace::SINGLE)]
 	#[format(indent)]
 	#[format(args = delimited::FmtArgs::indent_if_non_blank((), (), ()))]
 	pub inner: Braced<Option<StructExpressionInner>>,
@@ -38,9 +38,9 @@ pub enum StructExpressionInner {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct StructExprFields {
-	#[format(args = punct::FmtArgs::new(Whitespace::set_cur_indent, Whitespace::remove))]
+	#[format(args = punct::FmtArgs::new(Whitespace::CUR_INDENT, Whitespace::REMOVE))]
 	pub fields: Punctuated<StructExprField, token::Comma>,
-	#[format(prefix_ws = Whitespace::remove)]
+	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub end:    Option<StructExprFieldsEnd>,
 }
 
@@ -57,7 +57,7 @@ pub enum StructExprFieldsEnd {
 #[derive(Parse, Format, Print)]
 pub struct StructExprFieldsEndBase {
 	pub comma: token::Comma,
-	#[format(prefix_ws = Whitespace::set_single)]
+	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub base:  StructBase,
 }
 
@@ -80,9 +80,9 @@ pub enum StructExprFieldInner {
 #[derive(Parse, Format, Print)]
 pub struct StructExprFieldInnerWithExpr {
 	pub start: StructExprFieldInnerWithExprStart,
-	#[format(prefix_ws = Whitespace::remove)]
+	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub colon: token::Colon,
-	#[format(prefix_ws = Whitespace::set_single)]
+	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub expr:  Expression,
 }
 
@@ -100,6 +100,6 @@ pub enum StructExprFieldInnerWithExprStart {
 #[derive(Parse, Format, Print)]
 pub struct StructBase {
 	pub dot_dot: token::DotDot,
-	#[format(prefix_ws = Whitespace::remove)]
+	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub expr:    Expression,
 }

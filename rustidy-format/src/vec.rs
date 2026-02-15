@@ -2,7 +2,7 @@
 
 // Imports
 use {
-	crate::{Context, Format, Formattable, WsFmtFn},
+	crate::{Context, Format, Formattable, WhitespaceConfig},
 	core::ops::ControlFlow,
 	rustidy_util::AstStr,
 };
@@ -22,12 +22,11 @@ impl<T: Formattable> Formattable for Vec<T> {
 	}
 }
 
-impl<T, W, A> Format<Args<W, A>> for Vec<T>
+impl<T, A> Format<Args<A>> for Vec<T>
 where
 	T: Format<A>,
-	W: WsFmtFn,
 {
-	fn format(&mut self, ctx: &mut Context, prefix_ws: &impl WsFmtFn, args: &mut Args<W, A>) {
+	fn format(&mut self, ctx: &mut Context, prefix_ws: WhitespaceConfig, args: &mut Args<A>) {
 		// Note: Due to the way we're parsed, the first element will never be non-empty,
 		//       but it's possible for the caller to create this value during formatting
 		//       and have that not be true, so we always check.
@@ -35,7 +34,7 @@ where
 		for value in self {
 			match has_prefix_ws {
 				true => value.format(ctx, prefix_ws, &mut args.args),
-				false => value.format(ctx, &args.rest_prefix_ws, &mut args.args),
+				false => value.format(ctx, args.rest_prefix_ws, &mut args.args),
 			}
 
 			if has_prefix_ws && !value.is_empty(ctx, false) {
@@ -46,21 +45,22 @@ where
 }
 
 /// Arguments for formatting a [`Vec<T>`]
-pub struct Args<W, A> {
+pub struct Args<A> {
 	/// Whitespace formatter for the rest of the vector
-	rest_prefix_ws: W,
+	rest_prefix_ws: WhitespaceConfig,
 
 	/// Arguments for the rest of the vector
 	args: A,
 }
 
 /// Creates vector arguments
-pub const fn args<W, A>(rest_prefix_ws: W, args: A) -> Args<W, A> {
+pub const fn args<A>(rest_prefix_ws: WhitespaceConfig, args: A) -> Args<A> {
 	Args { rest_prefix_ws, args }
 }
 
 /// Creates vector arguments from just the prefix whitespace
-pub const fn args_prefix_ws<W>(rest_prefix_ws: W) -> Args<W, ()> {
+#[must_use]
+pub const fn args_prefix_ws(rest_prefix_ws: WhitespaceConfig) -> Args<()> {
 	Args {
 		rest_prefix_ws,
 		args: (),

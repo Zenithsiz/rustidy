@@ -24,9 +24,9 @@ use {
 pub struct MatchExpression {
 	pub match_:    token::Match,
 	#[parse(fatal)]
-	#[format(prefix_ws = Whitespace::set_single)]
+	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub scrutinee: Box<Scrutinee>,
-	#[format(prefix_ws = Whitespace::set_single)]
+	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub arms:      BracedWithInnerAttributes<Option<MatchArms>>,
 }
 
@@ -41,7 +41,7 @@ pub struct Scrutinee(#[parse(with_tag = ParserTag::SkipStructExpression)] Expres
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Format, Print)]
 pub struct MatchArms {
-	#[format(args = rustidy_format::vec::args_prefix_ws(Whitespace::set_cur_indent))]
+	#[format(args = rustidy_format::vec::args_prefix_ws(Whitespace::CUR_INDENT))]
 	pub arms: Vec<MatchArmWithExpr>,
 }
 
@@ -157,11 +157,11 @@ pub enum MatchArmsError {
 #[derive(Parse, Format, Print)]
 pub struct MatchArmWithExpr {
 	pub arm:            MatchArm,
-	#[format(prefix_ws = Whitespace::set_single)]
+	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub arrow:          token::FatArrow,
-	#[format(prefix_ws = Whitespace::set_single)]
+	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub expr:           Expression,
-	#[format(prefix_ws = Whitespace::remove)]
+	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub trailing_comma: Option<token::Comma>,
 }
 
@@ -177,7 +177,7 @@ pub struct MatchArm(pub WithOuterAttributes<MatchArmInner>);
 #[parse(name = "a match arm")]
 pub struct MatchArmInner {
 	pub pat:   Pattern,
-	#[format(prefix_ws = Whitespace::set_single)]
+	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub guard: Option<MatchArmGuard>,
 }
 
@@ -190,6 +190,6 @@ pub struct MatchArmGuard {
 	// TODO: The reference says this is just an expression, but
 	//       that means we don't parse `Some(...) if let ...`, so
 	//       instead we allow any conditions.
-	#[format(prefix_ws = Whitespace::set_single)]
+	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub cond: Conditions,
 }

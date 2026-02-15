@@ -2,7 +2,7 @@
 
 // Imports
 use {
-	rustidy_format::{Format, WsFmtFn},
+	rustidy_format::{Format, WhitespaceConfig},
 	rustidy_parse::Parse,
 	rustidy_print::Print,
 };
@@ -10,22 +10,23 @@ use {
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
-#[format(args(ty = "FmtArgs<W>", generic = "W: WsFmtFn"))]
+#[format(args(ty = "FmtArgs"))]
 #[format(where_format = "where T: Format<()>")]
 // TODO: Support arguments for `T`
 pub struct AtLeast1<T> {
 	pub first: T,
-	#[format(args = rustidy_format::vec::args_prefix_ws(&args.rest_prefix_ws))]
+	#[format(args = rustidy_format::vec::args_prefix_ws(args.rest_prefix_ws))]
 	pub rest:  Vec<T>,
 }
 
 /// Formatting arguments
-pub struct FmtArgs<W> {
-	pub rest_prefix_ws: W,
+pub struct FmtArgs {
+	pub rest_prefix_ws: WhitespaceConfig,
 }
 
-impl<W> FmtArgs<W> {
-	pub const fn from_prefix_ws(rest_prefix_ws: W) -> Self {
+impl FmtArgs {
+	#[must_use]
+	pub const fn from_prefix_ws(rest_prefix_ws: WhitespaceConfig) -> Self {
 		Self { rest_prefix_ws }
 	}
 }

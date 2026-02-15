@@ -7,7 +7,7 @@
 
 use {
 	app_error::{AppError, Context, ensure},
-	rustidy_format::whitespace::{self, FormatKind},
+	rustidy_format::whitespace::{self, WhitespaceFormatKind},
 	rustidy_parse::{ParseError, Parser},
 	rustidy_print::{Print, PrintFmt},
 	rustidy_util::Whitespace,
@@ -23,7 +23,7 @@ fn test_case_with(
 	expected: &str,
 	fmt_config: &rustidy_util::Config,
 	config: &Config,
-	kind: FormatKind,
+	kind: WhitespaceFormatKind,
 ) -> Result<(), AppError> {
 	let mut parser = Parser::new(source);
 	let mut whitespace = parser
@@ -92,17 +92,17 @@ fn test_cases_with(
 		.into_iter()
 		.map(|case| {
 			[
-				(case.expected_remove, FormatKind::Remove),
-				(case.expected_set_single, FormatKind::Spaces { len: 1 }),
-				(case.expected_set_indent, FormatKind::Indent {
+				(case.expected_remove, WhitespaceFormatKind::Remove),
+				(case.expected_set_single, WhitespaceFormatKind::Spaces { len: 1 }),
+				(case.expected_set_indent, WhitespaceFormatKind::Indent {
 					offset:         0,
 					remove_if_pure: false,
 				}),
-				(case.expected_set_prev_indent, FormatKind::Indent {
+				(case.expected_set_prev_indent, WhitespaceFormatKind::Indent {
 					offset:         -1,
 					remove_if_pure: false,
 				}),
-				(case.expected_set_prev_indent_or_remove, FormatKind::Indent {
+				(case.expected_set_prev_indent_or_remove, WhitespaceFormatKind::Indent {
 					offset:         -1,
 					remove_if_pure: true,
 				}),

@@ -106,16 +106,16 @@ pub struct NeverType(token::Not);
 #[parse(name = "a reference type")]
 pub struct ReferenceType {
 	pub ref_:     token::AndTy,
-	#[format(prefix_ws = Whitespace::remove)]
+	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub lifetime: Option<Lifetime>,
 	#[format(prefix_ws = match self.lifetime.is_some() {
-		true => Whitespace::set_single,
-		false => Whitespace::remove,
+		true => Whitespace::SINGLE,
+		false => Whitespace::REMOVE,
 	})]
 	pub mut_:     Option<token::Mut>,
 	#[format(prefix_ws = match self.lifetime.is_some() || self.mut_.is_some() {
-		true => Whitespace::set_single,
-		false => Whitespace::remove,
+		true => Whitespace::SINGLE,
+		false => Whitespace::REMOVE,
 	})]
 	pub ty:       Box<TypeNoBounds>,
 }
@@ -132,7 +132,7 @@ pub struct InferredType(token::Underscore);
 #[derive(Parse, Format, Print)]
 pub struct ImplTraitTypeOneBound {
 	pub impl_: token::Impl,
-	#[format(prefix_ws = Whitespace::set_single)]
+	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub bound: TraitBound,
 }
 
@@ -142,7 +142,7 @@ pub struct ImplTraitTypeOneBound {
 #[derive(Parse, Format, Print)]
 pub struct TraitObjectTypeOneBound {
 	pub dyn_:  Option<token::Dyn>,
-	#[format(prefix_ws(expr = Whitespace::set_single, if = self.dyn_.is_some()))]
+	#[format(prefix_ws(expr = Whitespace::SINGLE, if = self.dyn_.is_some()))]
 	pub bound: TraitBound,
 }
 
@@ -152,7 +152,7 @@ pub struct TraitObjectTypeOneBound {
 #[derive(Parse, Format, Print)]
 pub struct ImplTraitType {
 	pub impl_: token::Impl,
-	#[format(prefix_ws = Whitespace::set_single)]
+	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub bound: TypeParamBounds,
 }
 
@@ -162,6 +162,6 @@ pub struct ImplTraitType {
 #[derive(Parse, Format, Print)]
 pub struct TraitObjectType {
 	pub dyn_:  Option<token::Dyn>,
-	#[format(prefix_ws(expr = Whitespace::set_single, if = self.dyn_.is_some()))]
+	#[format(prefix_ws(expr = Whitespace::SINGLE, if = self.dyn_.is_some()))]
 	pub bound: TypeParamBounds,
 }

@@ -13,17 +13,21 @@
 // Modules
 mod tag;
 pub mod vec;
-#[doc(hidden)]
 pub mod whitespace;
 
 // Exports
-pub use {self::whitespace::WhitespaceFormat, rustidy_macros::Format, tag::FormatTag};
+pub use {
+	self::whitespace::WhitespaceFormat,
+	rustidy_macros::Format,
+	tag::FormatTag,
+	whitespace::WhitespaceFormatKind,
+};
 
 // Imports
 use {
 	crate as rustidy_format,
 	core::{marker::PhantomData, mem, ops::ControlFlow},
-	rustidy_util::{ArenaData, ArenaIdx, AstStr, Config, Oob, Whitespace},
+	rustidy_util::{ArenaData, ArenaIdx, AstStr, Config, Oob},
 	std::borrow::Cow,
 };
 
@@ -87,7 +91,7 @@ pub trait Formattable {
 /// Type formatting
 pub trait Format<Args>: Formattable {
 	/// Formats this type, using `prefix_ws` to format it's prefix whitespace, if any.
-	fn format(&mut self, ctx: &mut Context, prefix_ws: &impl WsFmtFn, args: &mut Args);
+	fn format(&mut self, ctx: &mut Context, prefix_ws: WhitespaceConfig, args: &mut Args);
 }
 
 impl<T: Formattable> Formattable for &'_ mut T {
@@ -102,7 +106,7 @@ impl<T: Formattable> Formattable for &'_ mut T {
 }
 
 impl<T: Format<Args>, Args> Format<Args> for &'_ mut T {
-	fn format(&mut self, ctx: &mut Context, prefix_ws: &impl WsFmtFn, args: &mut Args) {
+	fn format(&mut self, ctx: &mut Context, prefix_ws: WhitespaceConfig, args: &mut Args) {
 		(**self).format(ctx, prefix_ws, args);
 	}
 }
@@ -119,7 +123,7 @@ impl<T: Formattable> Formattable for Box<T> {
 }
 
 impl<T: Format<Args>, Args> Format<Args> for Box<T> {
-	fn format(&mut self, ctx: &mut Context, prefix_ws: &impl WsFmtFn, args: &mut Args) {
+	fn format(&mut self, ctx: &mut Context, prefix_ws: WhitespaceConfig, args: &mut Args) {
 		(**self).format(ctx, prefix_ws, args);
 	}
 }
@@ -139,7 +143,7 @@ impl<T: Formattable> Formattable for Option<T> {
 }
 
 impl<T: Format<Args>, Args> Format<Args> for Option<T> {
-	fn format(&mut self, ctx: &mut Context, prefix_ws: &impl WsFmtFn, args: &mut Args) {
+	fn format(&mut self, ctx: &mut Context, prefix_ws: WhitespaceConfig, args: &mut Args) {
 		if let Some(value) = self {
 			value.format(ctx, prefix_ws, args);
 		}
@@ -158,7 +162,7 @@ impl Formattable for ! {
 }
 
 impl Format<()> for ! {
-	fn format(&mut self, _ctx: &mut Context, _prefix_ws: &impl WsFmtFn, (): &mut ()) {
+	fn format(&mut self, _ctx: &mut Context, _prefix_ws: WhitespaceConfig, (): &mut ()) {
 		*self
 	}
 }
@@ -175,7 +179,7 @@ impl<T> Formattable for PhantomData<T> {
 }
 
 impl<T> Format<()> for PhantomData<T> {
-	fn format(&mut self, _ctx: &mut Context, _prefix_ws: &impl WsFmtFn, (): &mut ()) {}
+	fn format(&mut self, _ctx: &mut Context, _prefix_ws: WhitespaceConfig, (): &mut ()) {}
 }
 
 impl Formattable for () {
@@ -190,7 +194,7 @@ impl Formattable for () {
 }
 
 impl Format<()> for () {
-	fn format(&mut self, _ctx: &mut Context, _prefix_ws: &impl WsFmtFn, (): &mut ()) {}
+	fn format(&mut self, _ctx: &mut Context, _prefix_ws: WhitespaceConfig, (): &mut ()) {}
 }
 
 macro tuple_impl ($N:literal, $($T:ident),* $(,)?) {
@@ -217,7 +221,7 @@ macro tuple_impl ($N:literal, $($T:ident),* $(,)?) {
 	#[automatically_derived]
 	#[expect(non_snake_case)]
 	impl< $($T: Format<()>,)*> Format<()> for ( $($T,)* ) {
-		fn format(&mut self, ctx: &mut Context, prefix_ws: &impl WsFmtFn, args: &mut ()) {
+		fn format(&mut self, ctx: &mut Context, prefix_ws: WhitespaceConfig, args: &mut ()) {
 			let ( $($T,)* ) = self;
 			${concat( Tuple, $N )} { $( $T, )* }.format(ctx, prefix_ws, args)
 		}
@@ -240,7 +244,7 @@ impl Formattable for AstStr {
 }
 
 impl Format<()> for AstStr {
-	fn format(&mut self, _ctx: &mut Context, _prefix_ws: &impl WsFmtFn, (): &mut ()) {}
+	fn format(&mut self, _ctx: &mut Context, _prefix_ws: WhitespaceConfig, (): &mut ()) {}
 }
 
 impl<T: ArenaData<Data: Formattable>> Formattable for ArenaIdx<T> {
@@ -255,7 +259,7 @@ impl<T: ArenaData<Data: Formattable>> Formattable for ArenaIdx<T> {
 }
 
 impl<T: ArenaData<Data: Format<Args>>, Args> Format<Args> for ArenaIdx<T> {
-	fn format(&mut self, ctx: &mut Context, prefix_ws: &impl WsFmtFn, args: &mut Args) {
+	fn format(&mut self, ctx: &mut Context, prefix_ws: WhitespaceConfig, args: &mut Args) {
 		self.get_mut().format(ctx, prefix_ws, args);
 	}
 }
@@ -434,5 +438,8 @@ impl<'a, 'input> Context<'a, 'input> {
 	}
 }
 
-/// A whitespace formatting function
-pub trait WsFmtFn = Fn(&mut Whitespace, &mut Context);
+/// Whitespace formatting configuration
+#[derive(Clone, Copy)]
+pub struct WhitespaceConfig {
+	format: Option<WhitespaceFormatKind>,
+}

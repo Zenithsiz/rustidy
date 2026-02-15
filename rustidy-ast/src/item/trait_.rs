@@ -29,20 +29,20 @@ use {
 pub struct Trait {
 	pub unsafe_:  Option<token::Unsafe>,
 	// Note: Nightly-only
-	#[format(prefix_ws(expr = Whitespace::set_single, if = self.unsafe_.is_some()))]
+	#[format(prefix_ws(expr = Whitespace::SINGLE, if = self.unsafe_.is_some()))]
 	pub auto:     Option<token::Auto>,
-	#[format(prefix_ws(expr = Whitespace::set_single, if = self.unsafe_.is_some() || self.auto.is_some()))]
+	#[format(prefix_ws(expr = Whitespace::SINGLE, if = self.unsafe_.is_some() || self.auto.is_some()))]
 	pub trait_:   token::Trait,
 	#[parse(fatal)]
-	#[format(prefix_ws = Whitespace::set_single)]
+	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub ident:    Identifier,
-	#[format(prefix_ws = Whitespace::remove)]
+	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub generics: Option<GenericParams>,
-	#[format(prefix_ws = Whitespace::remove)]
+	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub bounds:   Option<TraitColonBounds>,
-	#[format(prefix_ws = Whitespace::set_cur_indent)]
+	#[format(prefix_ws = Whitespace::CUR_INDENT)]
 	pub where_:   Option<WhereClause>,
-	#[format(prefix_ws = Whitespace::set_single)]
+	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub body:     TraitBody,
 }
 
@@ -60,9 +60,9 @@ pub enum TraitBody {
 #[derive(Parse, Format, Print)]
 pub struct TraitBodyEq {
 	pub eq:     token::Eq,
-	#[format(prefix_ws = Whitespace::set_single)]
+	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub bounds: Option<TypeParamBounds>,
-	#[format(prefix_ws = Whitespace::remove)]
+	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub semi:   token::Semi,
 }
 
@@ -70,7 +70,7 @@ pub struct TraitBodyEq {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct TraitBodyFull(
-	#[format(args = rustidy_format::vec::args_prefix_ws(Whitespace::set_cur_indent))] pub Vec<AssociatedItem>,
+	#[format(args = rustidy_format::vec::args_prefix_ws(Whitespace::CUR_INDENT))] pub Vec<AssociatedItem>,
 );
 
 #[derive(PartialEq, Eq, Debug)]
@@ -78,7 +78,7 @@ pub struct TraitBodyFull(
 #[derive(Parse, Format, Print)]
 pub struct TraitColonBounds {
 	pub colon:  token::Colon,
-	#[format(prefix_ws = Whitespace::set_single)]
+	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub bounds: Option<TypeParamBounds>,
 }
 
@@ -101,7 +101,7 @@ pub enum AssociatedItemInner {
 #[derive(Parse, Format, Print)]
 pub struct AssociatedItemVis {
 	pub vis:   Option<Visibility>,
-	#[format(prefix_ws(expr = Whitespace::set_single, if = self.vis.is_some()))]
+	#[format(prefix_ws(expr = Whitespace::SINGLE, if = self.vis.is_some()))]
 	pub inner: AssociatedItemVisInner,
 }
 

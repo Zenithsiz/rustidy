@@ -40,10 +40,10 @@ pub enum InnerAttrOrDocComment {
 #[parse(name = "an inner attribute")]
 pub struct InnerAttribute {
 	pub pound: token::Pound,
-	#[format(prefix_ws = Whitespace::remove)]
+	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub not:   token::Not,
 	#[parse(fatal)]
-	#[format(prefix_ws = Whitespace::remove)]
+	#[format(prefix_ws = Whitespace::REMOVE)]
 	#[format(args = delimited::FmtArgs::remove((), (), ()))]
 	pub attr:  Bracketed<Attr>,
 }
@@ -91,7 +91,7 @@ pub enum OuterAttrOrDocComment {
 #[derive(Parse, Format, Print)]
 pub struct OuterAttribute {
 	pub pound: token::Pound,
-	#[format(prefix_ws = Whitespace::remove)]
+	#[format(prefix_ws = Whitespace::REMOVE)]
 	#[format(args = delimited::FmtArgs::remove((), (), ()))]
 	pub open:  Bracketed<Attr>,
 }
@@ -133,7 +133,7 @@ pub struct OuterBlockDoc {
 pub struct Attr {
 	// TODO: Unsafe attribute
 	pub path:  SimplePath,
-	#[format(prefix_ws = Whitespace::preserve)]
+	#[format(prefix_ws = Whitespace::PRESERVE)]
 	pub input: Option<AttrInput>,
 }
 
@@ -142,9 +142,9 @@ pub struct Attr {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub enum AttrInput {
-	#[format(prefix_ws = Whitespace::remove)]
+	#[format(prefix_ws = Whitespace::REMOVE)]
 	DelimTokenTree(DelimTokenTree),
-	#[format(prefix_ws = Whitespace::set_single)]
+	#[format(prefix_ws = Whitespace::SINGLE)]
 	EqExpr(AttrInputEqExpr),
 }
 
@@ -153,7 +153,7 @@ pub enum AttrInput {
 #[derive(Parse, Format, Print)]
 pub struct AttrInputEqExpr {
 	pub eq:   token::Eq,
-	#[format(prefix_ws = Whitespace::set_single)]
+	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub expr: Expression,
 }
 
@@ -175,7 +175,7 @@ pub enum DelimTokenTree {
 #[derive(Parse, Format, Print)]
 pub struct DelimTokenTreeInner(
 	#[parse(fatal)]
-	#[format(args = rustidy_format::vec::args_prefix_ws(Whitespace::preserve))]
+	#[format(args = rustidy_format::vec::args_prefix_ws(Whitespace::PRESERVE))]
 	pub Vec<TokenTree>,
 );
 

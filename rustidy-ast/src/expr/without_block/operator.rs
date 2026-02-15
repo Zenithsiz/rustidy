@@ -54,7 +54,7 @@ pub enum OperatorExpression {
 #[parse_recursive(kind = "left")]
 pub struct TryPropagationExpression {
 	pub expr:     Expression,
-	#[format(prefix_ws = Whitespace::remove)]
+	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub question: token::Question,
 }
 
@@ -67,11 +67,11 @@ pub struct TryPropagationExpression {
 #[parse_recursive(kind = "right")]
 pub struct BorrowExpression {
 	pub ref_: BorrowExpressionKindRef,
-	#[format(prefix_ws = Whitespace::remove)]
+	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub rest: Option<BorrowExpressionKindRest>,
 	#[format(prefix_ws = match self.rest.is_some() {
-		true => Whitespace::set_single,
-		false => Whitespace::remove,
+		true => Whitespace::SINGLE,
+		false => Whitespace::REMOVE,
 	})]
 	pub expr: Expression,
 }
@@ -102,7 +102,7 @@ pub enum BorrowExpressionKindRest {
 #[parse_recursive(kind = "right")]
 pub struct DereferenceExpression {
 	pub star: token::Star,
-	#[format(prefix_ws = Whitespace::remove)]
+	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub expr: Expression,
 }
 
@@ -115,7 +115,7 @@ pub struct DereferenceExpression {
 #[parse_recursive(kind = "right")]
 pub struct NegationExpression {
 	pub token: NegationExpressionToken,
-	#[format(prefix_ws = Whitespace::remove)]
+	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub expr:  Expression,
 }
 
@@ -136,9 +136,9 @@ pub enum NegationExpressionToken {
 #[parse_recursive(kind = "fully")]
 pub struct ArithmeticOrLogicalExpression {
 	pub lhs: Expression,
-	#[format(prefix_ws = Whitespace::set_single)]
+	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub op:  ArithmeticOrLogicalExpressionOp,
-	#[format(prefix_ws = Whitespace::set_single)]
+	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub rhs: Expression,
 }
 
@@ -167,9 +167,9 @@ pub enum ArithmeticOrLogicalExpressionOp {
 #[parse_recursive(kind = "fully")]
 pub struct ComparisonExpression {
 	pub lhs: Expression,
-	#[format(prefix_ws = Whitespace::set_single)]
+	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub op:  ComparisonExpressionOp,
-	#[format(prefix_ws = Whitespace::set_single)]
+	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub rhs: Expression,
 }
 
@@ -195,9 +195,9 @@ pub enum ComparisonExpressionOp {
 #[parse_recursive(skip_if_tag = ParserTag::SkipLazyBooleanExpression)]
 pub struct LazyBooleanExpression {
 	pub lhs: Expression,
-	#[format(prefix_ws = Whitespace::set_single)]
+	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub op:  LazyBooleanExpressionOp,
-	#[format(prefix_ws = Whitespace::set_single)]
+	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub rhs: Expression,
 }
 
@@ -218,9 +218,9 @@ pub enum LazyBooleanExpressionOp {
 #[parse_recursive(kind = "left")]
 pub struct TypeCastExpression {
 	pub lhs: Expression,
-	#[format(prefix_ws = Whitespace::set_single)]
+	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub as_: token::As,
-	#[format(prefix_ws = Whitespace::set_single)]
+	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub ty:  TypeNoBounds,
 }
 
@@ -234,9 +234,9 @@ pub struct TypeCastExpression {
 #[parse_recursive(skip_if_tag = ParserTag::SkipAssignmentExpression)]
 pub struct AssignmentExpression {
 	pub lhs: Expression,
-	#[format(prefix_ws = Whitespace::set_single)]
+	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub eq:  token::Eq,
-	#[format(prefix_ws = Whitespace::set_single)]
+	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub rhs: Expression,
 }
 
@@ -250,9 +250,9 @@ pub struct AssignmentExpression {
 #[parse_recursive(skip_if_tag = ParserTag::SkipCompoundAssignmentExpression)]
 pub struct CompoundAssignmentExpression {
 	pub lhs: Expression,
-	#[format(prefix_ws = Whitespace::set_single)]
+	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub op:  CompoundAssignmentExpressionOp,
-	#[format(prefix_ws = Whitespace::set_single)]
+	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub rhs: Expression,
 }
 

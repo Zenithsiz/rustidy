@@ -7,7 +7,7 @@ use {
 		attr::{InnerDocComment, OuterDocComment},
 		util::Braced,
 	},
-	rustidy_format::{Format, FormatTag, Formattable, WhitespaceFormat, WsFmtFn},
+	rustidy_format::{Format, FormatTag, Formattable, WhitespaceConfig, WhitespaceFormat},
 	rustidy_parse::{ParsableRecursive, Parse, Parser},
 	rustidy_print::Print,
 	rustidy_util::Whitespace,
@@ -40,7 +40,7 @@ impl<T> WithOuterAttributes<T> {
 }
 
 impl<T> WithOuterAttributes<T> {
-	fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: &impl WsFmtFn, args: &mut ())
+	fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: WhitespaceConfig, args: &mut ())
 	where
 		T: Format<()>,
 	{
@@ -49,7 +49,7 @@ impl<T> WithOuterAttributes<T> {
 		for attr in &mut self.attrs {
 			ctx.with_tag_if(is_after_newline, FormatTag::AfterNewline, |ctx| match has_prefix_ws {
 				true => attr.format(ctx, prefix_ws, &mut ()),
-				false => attr.format(ctx, &Whitespace::set_cur_indent, &mut ()),
+				false => attr.format(ctx, Whitespace::CUR_INDENT, &mut ()),
 			});
 
 			is_after_newline = matches!(attr, OuterAttrOrDocComment::DocComment(OuterDocComment::Line(_)));
@@ -70,7 +70,7 @@ impl<T> WithOuterAttributes<T> {
 			match has_prefix_ws {
 				true => self.inner.format(ctx, prefix_ws, args),
 				// TODO: The user should be able to choose this
-				false => self.inner.format(ctx, &Whitespace::set_cur_indent, args),
+				false => self.inner.format(ctx, Whitespace::CUR_INDENT, args),
 			}
 		});
 	}
@@ -130,7 +130,7 @@ where
 pub struct BracedWithInnerAttributes<T>(Braced<WithInnerAttributes<T>>);
 
 impl<T> BracedWithInnerAttributes<T> {
-	fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: &impl WsFmtFn, args: &mut ())
+	fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: WhitespaceConfig, args: &mut ())
 	where
 		T: Format<()>,
 	{
@@ -149,23 +149,18 @@ impl<T> BracedWithInnerAttributes<T> {
 			let mut is_after_newline = false;
 			for attr in &mut self.0.value.attrs {
 				ctx.with_tag_if(is_after_newline, FormatTag::AfterNewline, |ctx| {
-					attr.format(ctx, &Whitespace::set_cur_indent, &mut ());
+					attr.format(ctx, Whitespace::CUR_INDENT, &mut ());
 				});
 
 				is_after_newline = matches!(attr, InnerAttrOrDocComment::DocComment(InnerDocComment::Line(_)));
 			}
 
 			ctx.with_tag_if(is_after_newline, FormatTag::AfterNewline, |ctx| {
-				self.0.value.inner.format(ctx, &Whitespace::set_cur_indent, args);
+				self.0.value.inner.format(ctx, Whitespace::CUR_INDENT, args);
 				let is_value_blank = self.0.value.is_blank(ctx, true);
 
-				self.0.suffix.format(
-					ctx,
-					&|ws: &mut Whitespace, ctx| {
-						ws.set_indent(ctx, -1, is_value_blank);
-					},
-					&mut (),
-				);
+				let prefix_ws = Whitespace::indent(-1, is_value_blank);
+				self.0.suffix.format(ctx, prefix_ws, &mut ());
 			});
 		});
 	}

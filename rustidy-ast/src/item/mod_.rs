@@ -18,14 +18,14 @@ use {
 #[parse(name = "module declaration")]
 pub struct Module {
 	pub unsafe_: Option<token::Unsafe>,
-	#[format(prefix_ws(expr = Whitespace::set_single, if = self.unsafe_.is_some()))]
+	#[format(prefix_ws(expr = Whitespace::SINGLE, if = self.unsafe_.is_some()))]
 	pub mod_:    token::Mod,
 	#[parse(fatal)]
-	#[format(prefix_ws = Whitespace::set_single)]
+	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub ident:   Identifier,
 	#[format(prefix_ws = match self.inner.is_none() {
-		true => Whitespace::remove,
-		false => Whitespace::set_single,
+		true => Whitespace::REMOVE,
+		false => Whitespace::SINGLE,
 	})]
 	pub inner:   ModuleInner,
 }

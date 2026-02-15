@@ -3,7 +3,7 @@
 // Imports
 use {
 	either::Either,
-	rustidy_format::{Format, WsFmtFn},
+	rustidy_format::{Format, WhitespaceConfig},
 	rustidy_parse::Parse,
 	rustidy_print::Print,
 };
@@ -12,13 +12,13 @@ use {
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
-#[format(args(ty = "FmtArgs<WT, WP>", generic = "WT: WsFmtFn", generic = "WP: WsFmtFn"))]
+#[format(args(ty = "FmtArgs"))]
 #[format(where_format = "where T: Format<()>, P: Format<()>")]
 // TODO: Support arguments for `T` and `P`
 pub struct Punctuated<T, P> {
 	pub first: T,
-	#[format(prefix_ws = &args.punct)]
-	#[format(args = rustidy_format::vec::args(&args.punct, &args.value))]
+	#[format(prefix_ws = args.punct)]
+	#[format(args = rustidy_format::vec::args(args.punct, args.value))]
 	pub rest:  Vec<PunctuatedRest<T, P>>,
 }
 
@@ -143,7 +143,7 @@ impl<T, P> Punctuated<T, P> {
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
-#[format(args(ty = "FmtArgs<WT, WP>", generic = "WT: WsFmtFn", generic = "WP: WsFmtFn"))]
+#[format(args(ty = "FmtArgs"))]
 #[format(where_format = "where T: Format<()>, P: Format<()>")]
 pub struct PunctuatedTrailing<T, P> {
 	#[format(args = *args)]
@@ -257,7 +257,7 @@ impl<'a, T, P> Iterator for SplitLastMut<'a, T, P> {
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
-#[format(args(ty = "WT", generic = "WT: WsFmtFn"))]
+#[format(args(ty = "WhitespaceConfig"))]
 #[format(where_format = "where T: Format<()>, P: Format<()>")]
 pub struct PunctuatedRest<T, P> {
 	pub punct: P,
@@ -266,13 +266,14 @@ pub struct PunctuatedRest<T, P> {
 }
 
 /// Formatting arguments
-pub struct FmtArgs<WT, WP> {
-	pub value: WT,
-	pub punct: WP,
+pub struct FmtArgs {
+	pub value: WhitespaceConfig,
+	pub punct: WhitespaceConfig,
 }
 
-impl<WT, WP> FmtArgs<WT, WP> {
-	pub const fn new(value: WT, punct: WP) -> Self {
+impl FmtArgs {
+	#[must_use]
+	pub const fn new(value: WhitespaceConfig, punct: WhitespaceConfig) -> Self {
 		Self { value, punct }
 	}
 }

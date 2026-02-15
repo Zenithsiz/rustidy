@@ -23,9 +23,9 @@ pub struct TupleExpression(
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct TupleElements {
-	#[format(args = at_least::FmtArgs::from_prefix_ws(Whitespace::set_single))]
+	#[format(args = at_least::FmtArgs::from_prefix_ws(Whitespace::SINGLE))]
 	pub exprs: AtLeast1<TupleElementsInner>,
-	#[format(prefix_ws = Whitespace::set_single)]
+	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub last:  Option<Expression>,
 }
 
@@ -34,6 +34,6 @@ pub struct TupleElements {
 #[derive(Parse, Format, Print)]
 pub struct TupleElementsInner {
 	pub expr:  Expression,
-	#[format(prefix_ws = Whitespace::remove)]
+	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub comma: token::Comma,
 }

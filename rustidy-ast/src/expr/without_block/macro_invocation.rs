@@ -16,11 +16,11 @@ use {
 #[parse(name = "a macro invocation")]
 pub struct MacroInvocation {
 	pub path: SimplePath,
-	#[format(prefix_ws = Whitespace::remove)]
+	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub not:  token::Not,
 	#[format(prefix_ws = match self.tree {
-		DelimTokenTree::Braces(_) => Whitespace::set_single,
-		_ => Whitespace::remove,
+		DelimTokenTree::Braces(_) => Whitespace::SINGLE,
+		_ => Whitespace::REMOVE,
 	})]
 	pub tree: DelimTokenTree,
 }

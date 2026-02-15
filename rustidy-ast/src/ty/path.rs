@@ -19,8 +19,8 @@ use {
 #[derive(Parse, Format, Print)]
 pub struct TypePath {
 	pub prefix:   Option<token::PathSep>,
-	#[format(prefix_ws(expr = Whitespace::remove, if = self.prefix.is_some()))]
-	#[format(args = punct::FmtArgs::new(Whitespace::remove, Whitespace::remove))]
+	#[format(prefix_ws(expr = Whitespace::REMOVE, if = self.prefix.is_some()))]
+	#[format(args = punct::FmtArgs::new(Whitespace::REMOVE, Whitespace::REMOVE))]
 	pub segments: Punctuated<TypePathSegment, token::PathSep>,
 }
 
@@ -30,7 +30,7 @@ pub struct TypePath {
 #[derive(Parse, Format, Print)]
 pub struct TypePathSegment {
 	pub path:     PathIdentSegment,
-	#[format(prefix_ws = Whitespace::remove)]
+	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub generics: Option<TypePathSegmentGenerics>,
 }
 
@@ -39,7 +39,7 @@ pub struct TypePathSegment {
 #[derive(Parse, Format, Print)]
 pub struct TypePathSegmentGenerics {
 	pub sep:   Option<token::PathSep>,
-	#[format(prefix_ws(expr = Whitespace::remove, if = self.sep.is_some()))]
+	#[format(prefix_ws(expr = Whitespace::REMOVE, if = self.sep.is_some()))]
 	pub inner: GenericArgsOrTypePathFn,
 }
 

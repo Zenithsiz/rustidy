@@ -46,9 +46,9 @@ pub enum RangeExpression {
 #[parse_recursive(skip_if_tag = ParserTag::SkipRangeExpr)]
 pub struct RangeExpr {
 	pub lhs:     Expression,
-	#[format(prefix_ws = Whitespace::remove)]
+	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub dot_dot: token::DotDot,
-	#[format(prefix_ws = Whitespace::remove)]
+	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub rhs:     Expression,
 }
 
@@ -62,7 +62,7 @@ pub struct RangeExpr {
 #[parse_recursive(skip_if_tag = ParserTag::SkipRangeFromExpr)]
 pub struct RangeFromExpr {
 	pub lhs:     Expression,
-	#[format(prefix_ws = Whitespace::remove)]
+	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub dot_dot: token::DotDot,
 }
 
@@ -75,7 +75,7 @@ pub struct RangeFromExpr {
 #[parse_recursive(kind = "right")]
 pub struct RangeToExpr {
 	pub dot_dot: token::DotDot,
-	#[format(prefix_ws = Whitespace::remove)]
+	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub rhs:     Expression,
 }
 
@@ -96,9 +96,9 @@ pub struct RangeFullExpr(token::DotDot);
 #[parse_recursive(skip_if_tag = ParserTag::SkipRangeInclusiveExpr)]
 pub struct RangeInclusiveExpr {
 	pub lhs:        Expression,
-	#[format(prefix_ws = Whitespace::remove)]
+	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub dot_dot_eq: token::DotDotEq,
-	#[format(prefix_ws = Whitespace::remove)]
+	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub rhs:        Expression,
 }
 
@@ -111,6 +111,6 @@ pub struct RangeInclusiveExpr {
 #[parse_recursive(kind = "right")]
 pub struct RangeToInclusiveExpr {
 	pub dot_dot_eq: token::DotDotEq,
-	#[format(prefix_ws = Whitespace::remove)]
+	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub rhs:        Expression,
 }

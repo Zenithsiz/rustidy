@@ -43,8 +43,8 @@ pub enum PathExpression {
 #[derive(Parse, Format, Print)]
 pub struct PathInExpression {
 	pub prefix:   Option<token::PathSep>,
-	#[format(prefix_ws(expr = Whitespace::remove, if = self.prefix.is_some()))]
-	#[format(args = punct::FmtArgs::new(Whitespace::remove, Whitespace::remove))]
+	#[format(prefix_ws(expr = Whitespace::REMOVE, if = self.prefix.is_some()))]
+	#[format(args = punct::FmtArgs::new(Whitespace::REMOVE, Whitespace::REMOVE))]
 	pub segments: Punctuated<PathExprSegment, token::PathSep>,
 }
 
@@ -54,7 +54,7 @@ pub struct PathInExpression {
 #[derive(Parse, Format, Print)]
 pub struct PathExprSegment {
 	pub ident:   PathIdentSegment,
-	#[format(prefix_ws = Whitespace::remove)]
+	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub generic: Option<PathExprSegmentGenericArgs>,
 }
 
@@ -63,7 +63,7 @@ pub struct PathExprSegment {
 #[derive(Parse, Format, Print)]
 pub struct PathExprSegmentGenericArgs {
 	pub sep:     token::PathSep,
-	#[format(prefix_ws = Whitespace::remove)]
+	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub generic: GenericArgs,
 }
 
@@ -94,7 +94,7 @@ pub struct GenericArgs(
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct GenericArgsInner(
-	#[format(args = punct::FmtArgs::new(Whitespace::set_single, Whitespace::remove))]
+	#[format(args = punct::FmtArgs::new(Whitespace::SINGLE, Whitespace::REMOVE))]
 	pub  PunctuatedTrailing<GenericArg, token::Comma>,
 );
 
@@ -129,12 +129,12 @@ pub enum GenericArgsConst {
 #[derive(Parse, Format, Print)]
 pub struct GenericArgsBinding {
 	pub ident:    Identifier,
-	#[format(prefix_ws = Whitespace::remove)]
+	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub generics: Option<Box<GenericArgs>>,
-	#[format(prefix_ws = Whitespace::set_single)]
+	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub eq:       token::Eq,
 	#[parse(fatal)]
-	#[format(prefix_ws = Whitespace::set_single)]
+	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub ty:       Box<Type>,
 }
 
@@ -144,12 +144,12 @@ pub struct GenericArgsBinding {
 #[derive(Parse, Format, Print)]
 pub struct GenericArgsBounds {
 	pub ident:    Identifier,
-	#[format(prefix_ws = Whitespace::remove)]
+	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub generics: Option<Box<GenericArgs>>,
-	#[format(prefix_ws = Whitespace::remove)]
+	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub colon:    token::Colon,
 	#[parse(fatal)]
-	#[format(prefix_ws = Whitespace::set_single)]
+	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub ty:       Box<TypeParamBounds>,
 }
 
@@ -160,7 +160,7 @@ pub struct GenericArgsBounds {
 pub struct TypePathFn {
 	#[format(args = delimited::FmtArgs::remove((), (), ()))]
 	pub inputs: Parenthesized<Option<TypePathFnInputs>>,
-	#[format(prefix_ws = Whitespace::set_single)]
+	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub ret:    Option<TypePathFnRet>,
 }
 
@@ -169,7 +169,7 @@ pub struct TypePathFn {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct TypePathFnInputs(
-	#[format(args = punct::FmtArgs::new(Whitespace::remove, Whitespace::remove))]
+	#[format(args = punct::FmtArgs::new(Whitespace::REMOVE, Whitespace::REMOVE))]
 	PunctuatedTrailing<Box<Type>, token::Comma>,
 );
 
@@ -178,7 +178,7 @@ pub struct TypePathFnInputs(
 #[derive(Parse, Format, Print)]
 pub struct TypePathFnRet {
 	pub arrow: token::RArrow,
-	#[format(prefix_ws = Whitespace::set_single)]
+	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub ty:    Box<TypeNoBounds>,
 }
 
@@ -188,8 +188,8 @@ pub struct TypePathFnRet {
 #[derive(Parse, Format, Print)]
 pub struct QualifiedPathInExpression {
 	pub qualified: QualifiedPathType,
-	#[format(prefix_ws = Whitespace::remove)]
-	#[format(args = at_least::FmtArgs::from_prefix_ws(Whitespace::remove))]
+	#[format(prefix_ws = Whitespace::REMOVE)]
+	#[format(args = at_least::FmtArgs::from_prefix_ws(Whitespace::REMOVE))]
 	pub segments:  AtLeast1<QualifiedPathInExpressionSegment>,
 }
 
@@ -198,7 +198,7 @@ pub struct QualifiedPathInExpression {
 #[derive(Parse, Format, Print)]
 pub struct QualifiedPathInExpressionSegment {
 	sep:     token::PathSep,
-	#[format(prefix_ws = Whitespace::remove)]
+	#[format(prefix_ws = Whitespace::REMOVE)]
 	segment: PathExprSegment,
 }
 
@@ -215,7 +215,7 @@ pub struct QualifiedPathType(
 #[derive(Parse, Format, Print)]
 pub struct QualifiedPathTypeInner {
 	pub ty:  Box<Type>,
-	#[format(prefix_ws = Whitespace::set_single)]
+	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub as_: Option<QualifiedPathTypeAs>,
 }
 
@@ -224,7 +224,7 @@ pub struct QualifiedPathTypeInner {
 #[derive(Parse, Format, Print)]
 pub struct QualifiedPathTypeAs {
 	pub as_: token::As,
-	#[format(prefix_ws = Whitespace::set_single)]
+	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub ty:  TypePath,
 }
 

@@ -45,7 +45,7 @@ pub mod vis;
 use {
 	self::{attr::InnerAttrOrDocComment, item::Items, shebang::Shebang},
 	core::fmt::Debug,
-	rustidy_format::{Format, WhitespaceFormat, WsFmtFn},
+	rustidy_format::{Format, WhitespaceConfig, WhitespaceFormat},
 	rustidy_parse::Parse,
 	rustidy_print::Print,
 	rustidy_util::{AstStr, Whitespace, ast_str::AstStrRepr},
@@ -60,7 +60,7 @@ use {
 pub struct Crate(pub CrateInner);
 
 impl Crate {
-	fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: &impl WsFmtFn, _args: &mut ()) {
+	fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: WhitespaceConfig, _args: &mut ()) {
 		let mut inner_ctx = ctx.sub_context();
 		for attr in &self.0.inner_attrs {
 			if let Some(attr) = attr.try_as_attr_ref() &&
@@ -79,33 +79,27 @@ impl Crate {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 #[format(and_with = Self::format_first_inner_attr_or_item)]
-#[format(and_with = Self::format_suffix_ws)]
 pub struct CrateInner {
 	pub shebang:               Option<Shebang>,
-	#[format(prefix_ws = Whitespace::set_cur_indent)]
-	#[format(args = rustidy_format::vec::args_prefix_ws(Whitespace::set_cur_indent))]
+	#[format(prefix_ws = Whitespace::CUR_INDENT)]
+	#[format(args = rustidy_format::vec::args_prefix_ws(Whitespace::CUR_INDENT))]
 	pub inner_attrs:           Vec<InnerAttrOrDocComment>,
-	#[format(prefix_ws = Whitespace::set_cur_indent)]
+	#[format(prefix_ws = Whitespace::CUR_INDENT)]
 	pub items:                 Items,
-	#[format(prefix_ws = Whitespace::preserve)]
+	#[format(prefix_ws = Whitespace::indent(0, self.shebang.is_none() && self.inner_attrs.is_empty() && self.items.0.is_empty()))]
 	#[format(whitespace)]
 	pub suffix_ws:             Whitespace,
-	#[format(prefix_ws = Whitespace::preserve)]
+	#[format(prefix_ws = Whitespace::PRESERVE)]
 	#[format(and_with = Self::format_trailing_line_comment)]
 	pub trailing_line_comment: Option<TrailingLineComment>,
 }
 
 impl CrateInner {
-	fn format_suffix_ws(&mut self, ctx: &mut rustidy_format::Context) {
-		let remove_if_pure = self.shebang.is_none() && self.inner_attrs.is_empty() && self.items.0.is_empty();
-		self.suffix_ws.set_indent(ctx, 0, remove_if_pure);
-	}
-
 	fn format_first_inner_attr_or_item(&mut self, ctx: &mut rustidy_format::Context) {
 		if let Some(attr) = self.inner_attrs.first_mut() {
-			attr.format(ctx, &Whitespace::remove, &mut ());
+			attr.format(ctx, Whitespace::REMOVE, &mut ());
 		} else if let Some(item) = self.items.0.first_mut() {
-			item.format(ctx, &Whitespace::remove, &mut ());
+			item.format(ctx, Whitespace::REMOVE, &mut ());
 		}
 	}
 

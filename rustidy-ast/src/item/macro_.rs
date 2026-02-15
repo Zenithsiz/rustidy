@@ -30,12 +30,12 @@ pub enum MacroInvocationSemi {
 #[derive(Parse, Format, Print)]
 pub struct MacroInvocationSemiParens {
 	pub path:   SimplePath,
-	#[format(prefix_ws = Whitespace::remove)]
+	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub not:    token::Not,
-	#[format(prefix_ws = Whitespace::remove)]
+	#[format(prefix_ws = Whitespace::REMOVE)]
 	#[format(args = delimited::FmtArgs::preserve((), (), ()))]
 	pub tokens: Parenthesized<MacroInvocationSemiTokens>,
-	#[format(prefix_ws = Whitespace::remove)]
+	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub semi:   token::Semi,
 }
 
@@ -44,12 +44,12 @@ pub struct MacroInvocationSemiParens {
 #[derive(Parse, Format, Print)]
 pub struct MacroInvocationSemiBrackets {
 	pub path:   SimplePath,
-	#[format(prefix_ws = Whitespace::remove)]
+	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub not:    token::Not,
-	#[format(prefix_ws = Whitespace::remove)]
+	#[format(prefix_ws = Whitespace::REMOVE)]
 	#[format(args = delimited::FmtArgs::preserve((), (), ()))]
 	pub tokens: Bracketed<MacroInvocationSemiTokens>,
-	#[format(prefix_ws = Whitespace::remove)]
+	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub semi:   token::Semi,
 }
 
@@ -58,9 +58,9 @@ pub struct MacroInvocationSemiBrackets {
 #[derive(Parse, Format, Print)]
 pub struct MacroInvocationSemiBraces {
 	pub path:   SimplePath,
-	#[format(prefix_ws = Whitespace::remove)]
+	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub not:    token::Not,
-	#[format(prefix_ws = Whitespace::set_single)]
+	#[format(prefix_ws = Whitespace::SINGLE)]
 	#[format(args = delimited::FmtArgs::preserve((), (), ()))]
 	pub tokens: Braced<MacroInvocationSemiTokens>,
 }
@@ -69,5 +69,5 @@ pub struct MacroInvocationSemiBraces {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct MacroInvocationSemiTokens(
-	#[format(args = rustidy_format::vec::args_prefix_ws(Whitespace::preserve))] Vec<TokenTree>,
+	#[format(args = rustidy_format::vec::args_prefix_ws(Whitespace::PRESERVE))] Vec<TokenTree>,
 );

@@ -17,8 +17,8 @@ use {
 #[derive(Parse, Format, Print)]
 pub struct QualifiedPathInType {
 	pub qualified: QualifiedPathType,
-	#[format(prefix_ws = Whitespace::remove)]
-	#[format(args = at_least::FmtArgs::from_prefix_ws(Whitespace::remove))]
+	#[format(prefix_ws = Whitespace::REMOVE)]
+	#[format(args = at_least::FmtArgs::from_prefix_ws(Whitespace::REMOVE))]
 	pub segments:  AtLeast1<QualifiedPathInTypeSegment>,
 }
 
@@ -27,6 +27,6 @@ pub struct QualifiedPathInType {
 #[derive(Parse, Format, Print)]
 pub struct QualifiedPathInTypeSegment {
 	pub sep:     token::PathSep,
-	#[format(prefix_ws = Whitespace::remove)]
+	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub segment: TypePathSegment,
 }

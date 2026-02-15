@@ -18,17 +18,17 @@ use {
 pub struct TypeAlias {
 	pub type_:    token::Type,
 	#[parse(fatal)]
-	#[format(prefix_ws = Whitespace::set_single)]
+	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub ident:    Identifier,
-	#[format(prefix_ws = Whitespace::remove)]
+	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub generics: Option<GenericParams>,
-	#[format(prefix_ws = Whitespace::remove)]
+	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub bounds:   Option<TypeAliasBounds>,
-	#[format(prefix_ws = Whitespace::set_cur_indent)]
+	#[format(prefix_ws = Whitespace::CUR_INDENT)]
 	pub where_:   Option<WhereClause>,
-	#[format(prefix_ws = Whitespace::set_single)]
+	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub eq:       Option<TypeAliasEq>,
-	#[format(prefix_ws = Whitespace::remove)]
+	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub semi:     token::Semi,
 }
 
@@ -37,7 +37,7 @@ pub struct TypeAlias {
 #[derive(Parse, Format, Print)]
 pub struct TypeAliasBounds {
 	pub colon:  token::Colon,
-	#[format(prefix_ws = Whitespace::set_single)]
+	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub bounds: TypeParamBounds,
 }
 
@@ -47,8 +47,8 @@ pub struct TypeAliasBounds {
 pub struct TypeAliasEq {
 	pub eq:     token::Eq,
 	#[parse(fatal)]
-	#[format(prefix_ws = Whitespace::set_single)]
+	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub ty:     Type,
-	#[format(prefix_ws = Whitespace::set_cur_indent)]
+	#[format(prefix_ws = Whitespace::CUR_INDENT)]
 	pub where_: Option<WhereClause>,
 }

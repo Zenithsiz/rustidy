@@ -28,9 +28,9 @@ pub enum RangePattern {
 #[derive(Parse, Format, Print)]
 pub struct RangeExclusivePattern {
 	lhs:     RangePatternBound,
-	#[format(prefix_ws = Whitespace::remove)]
+	#[format(prefix_ws = Whitespace::REMOVE)]
 	dot_dot: token::DotDot,
-	#[format(prefix_ws = Whitespace::remove)]
+	#[format(prefix_ws = Whitespace::REMOVE)]
 	rhs:     RangePatternBound,
 }
 
@@ -39,9 +39,9 @@ pub struct RangeExclusivePattern {
 #[derive(Parse, Format, Print)]
 pub struct RangeInclusivePattern {
 	lhs:        RangePatternBound,
-	#[format(prefix_ws = Whitespace::remove)]
+	#[format(prefix_ws = Whitespace::REMOVE)]
 	dot_dot_eq: token::DotDotEq,
-	#[format(prefix_ws = Whitespace::remove)]
+	#[format(prefix_ws = Whitespace::REMOVE)]
 	rhs:        RangePatternBound,
 }
 
@@ -50,7 +50,7 @@ pub struct RangeInclusivePattern {
 #[derive(Parse, Format, Print)]
 pub struct RangeFromPattern {
 	lhs:     RangePatternBound,
-	#[format(prefix_ws = Whitespace::remove)]
+	#[format(prefix_ws = Whitespace::REMOVE)]
 	dot_dot: token::DotDot,
 }
 
@@ -59,7 +59,7 @@ pub struct RangeFromPattern {
 #[derive(Parse, Format, Print)]
 pub struct RangeToExclusivePattern {
 	dot_dot: token::DotDot,
-	#[format(prefix_ws = Whitespace::remove)]
+	#[format(prefix_ws = Whitespace::REMOVE)]
 	rhs:     RangePatternBound,
 }
 
@@ -68,7 +68,7 @@ pub struct RangeToExclusivePattern {
 #[derive(Parse, Format, Print)]
 pub struct RangeToInclusivePattern {
 	dot_dot_eq: token::DotDotEq,
-	#[format(prefix_ws = Whitespace::remove)]
+	#[format(prefix_ws = Whitespace::REMOVE)]
 	rhs:        RangePatternBound,
 }
 
@@ -77,9 +77,9 @@ pub struct RangeToInclusivePattern {
 #[derive(Parse, Format, Print)]
 pub struct ObsoleteRangePattern {
 	lhs:         RangePatternBound,
-	#[format(prefix_ws = Whitespace::remove)]
+	#[format(prefix_ws = Whitespace::REMOVE)]
 	dot_dot_dot: token::DotDotDot,
-	#[format(prefix_ws = Whitespace::remove)]
+	#[format(prefix_ws = Whitespace::REMOVE)]
 	rhs:         RangePatternBound,
 }
 

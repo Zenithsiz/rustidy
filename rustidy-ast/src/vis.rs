@@ -16,7 +16,7 @@ use {
 #[derive(Parse, Format, Print)]
 pub struct Visibility {
 	pub pub_: token::Pub,
-	#[format(prefix_ws = Whitespace::remove)]
+	#[format(prefix_ws = Whitespace::REMOVE)]
 	#[format(args = delimited::FmtArgs::remove((), (), ()))]
 	pub path: Option<Parenthesized<VisibilityPath>>,
 }
@@ -37,6 +37,6 @@ pub enum VisibilityPath {
 pub struct VisibilityPathIn {
 	pub in_:  token::In,
 	#[parse(fatal)]
-	#[format(prefix_ws = Whitespace::set_single)]
+	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub path: SimplePath,
 }
