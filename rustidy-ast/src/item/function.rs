@@ -379,20 +379,13 @@ pub enum TraitBound {
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
-#[format(and_with = Self::format_prefix)]
 pub struct TraitBoundInner {
 	pub prefix: Option<TraitBoundInnerPrefix>,
+	#[format(prefix_ws(if = let Some(prefix) = &self.prefix, expr = match prefix {
+		TraitBoundInnerPrefix::Question(_) => Whitespace::remove,
+		TraitBoundInnerPrefix::ForLifetimes(_) => Whitespace::set_single,
+	}))]
 	pub path:   TypePath,
-}
-
-impl TraitBoundInner {
-	fn format_prefix(&mut self, ctx: &mut rustidy_format::Context) {
-		match self.prefix {
-			Some(TraitBoundInnerPrefix::Question(_)) => self.path.format(ctx, &Whitespace::remove, &mut ()),
-			Some(TraitBoundInnerPrefix::ForLifetimes(_)) => self.path.format(ctx, &Whitespace::set_single, &mut ()),
-			None => (),
-		}
-	}
 }
 
 #[derive(PartialEq, Eq, Debug)]
