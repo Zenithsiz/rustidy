@@ -48,12 +48,13 @@ pub impl Whitespace {
 	};
 
 	fn spaces(len: usize) -> WhitespaceConfig {
+		let len = u16::try_from(len).expect("Cannot format more than 2^16 spaces");
 		WhitespaceConfig {
 			format: Some(WhitespaceFormatKind::Spaces { len }),
 		}
 	}
 
-	fn indent(offset: isize, remove_if_pure: bool) -> WhitespaceConfig {
+	fn indent(offset: i16, remove_if_pure: bool) -> WhitespaceConfig {
 		WhitespaceConfig {
 			format: Some(WhitespaceFormatKind::Indent { offset, remove_if_pure }),
 		}
@@ -130,12 +131,12 @@ pub enum WhitespaceFormatKind {
 
 	Spaces {
 		/// Number of spaces
-		len: usize,
+		len: u16,
 	},
 
 	Indent {
 		/// Indentation offset
-		offset: isize,
+		offset: i16,
 
 		/// Remove if the whitespace is pure
 		remove_if_pure: bool,

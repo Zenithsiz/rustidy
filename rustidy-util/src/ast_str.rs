@@ -122,7 +122,7 @@ pub enum AstStrRepr {
 
 	/// Spaces
 	Spaces {
-		len: usize,
+		len: u16,
 	},
 
 	/// Indentation
@@ -152,7 +152,7 @@ impl AstStrRepr {
 			Self::AstRange(range) => range.len(),
 			Self::String(s) => s.len(),
 			Self::Char(ch) => ch.len_utf8(),
-			Self::Spaces { len } => len,
+			Self::Spaces { len } => usize::from(len),
 			Self::Indentation {
 				ref indent,
 				newlines,

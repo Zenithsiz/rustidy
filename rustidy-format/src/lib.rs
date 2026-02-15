@@ -7,7 +7,8 @@
 	coverage_attribute,
 	macro_metavar_expr_concat,
 	trait_alias,
-	iter_advance_by
+	iter_advance_by,
+	const_block_items
 )]
 
 // Modules
@@ -338,9 +339,9 @@ impl<'a, 'input> Context<'a, 'input> {
 	}
 
 	/// Runs `f` with an indentation offset of `offset`
-	pub fn with_indent_offset<O>(&mut self, offset: isize, f: impl for<'b> FnOnce(&'b mut Self) -> O) -> O {
+	pub fn with_indent_offset<O>(&mut self, offset: i16, f: impl for<'b> FnOnce(&'b mut Self) -> O) -> O {
 		let prev_depth = self.indent_depth;
-		self.indent_depth = prev_depth.saturating_add_signed(offset);
+		self.indent_depth = prev_depth.saturating_add_signed(isize::from(offset));
 		let output = f(self);
 		self.indent_depth = prev_depth;
 		output
@@ -349,7 +350,7 @@ impl<'a, 'input> Context<'a, 'input> {
 	/// Runs `f` with an indentation offset of `offset` if `pred` is true
 	pub fn with_indent_offset_if<O>(
 		&mut self,
-		offset: isize,
+		offset: i16,
 		pred: bool,
 		f: impl for<'b> FnOnce(&'b mut Self) -> O,
 	) -> O {
@@ -443,3 +444,5 @@ impl<'a, 'input> Context<'a, 'input> {
 pub struct WhitespaceConfig {
 	format: Option<WhitespaceFormatKind>,
 }
+
+const { assert!(size_of::<WhitespaceConfig>() <= 8) }
