@@ -24,7 +24,7 @@ use {
 pub struct CallExpression {
 	pub expr:   Expression,
 	#[format(prefix_ws = Whitespace::REMOVE)]
-	#[format(args = delimited::FmtArgs::remove((), (), ()))]
+	#[format(args = delimited::fmt_remove((), (), ()))]
 	pub params: Parenthesized<Option<CallParams>>,
 }
 
@@ -50,7 +50,7 @@ pub struct MethodCallExpression {
 	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub segment: PathExprSegment,
 	#[format(prefix_ws = Whitespace::REMOVE)]
-	#[format(args = delimited::FmtArgs::remove((), (), ()))]
+	#[format(args = delimited::fmt_remove((), (), ()))]
 	// TODO: Is it fine to remove *all* tags?
 	#[format(without_tags)]
 	#[format(indent(if_has_tag = FormatTag::InsideChain))]

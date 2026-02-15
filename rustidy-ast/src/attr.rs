@@ -44,7 +44,7 @@ pub struct InnerAttribute {
 	pub not:   token::Not,
 	#[parse(fatal)]
 	#[format(prefix_ws = Whitespace::REMOVE)]
-	#[format(args = delimited::FmtArgs::remove((), (), ()))]
+	#[format(args = delimited::fmt_remove((), (), ()))]
 	pub attr:  Bracketed<Attr>,
 }
 
@@ -92,7 +92,7 @@ pub enum OuterAttrOrDocComment {
 pub struct OuterAttribute {
 	pub pound: token::Pound,
 	#[format(prefix_ws = Whitespace::REMOVE)]
-	#[format(args = delimited::FmtArgs::remove((), (), ()))]
+	#[format(args = delimited::fmt_remove((), (), ()))]
 	pub open:  Bracketed<Attr>,
 }
 
@@ -162,11 +162,11 @@ pub struct AttrInputEqExpr {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub enum DelimTokenTree {
-	#[format(args = delimited::FmtArgs::preserve((), (), ()))]
+	#[format(args = delimited::fmt_preserve((), (), ()))]
 	Parens(Parenthesized<DelimTokenTreeInner>),
-	#[format(args = delimited::FmtArgs::preserve((), (), ()))]
+	#[format(args = delimited::fmt_preserve((), (), ()))]
 	Brackets(Bracketed<DelimTokenTreeInner>),
-	#[format(args = delimited::FmtArgs::preserve((), (), ()))]
+	#[format(args = delimited::fmt_preserve((), (), ()))]
 	Braces(Braced<DelimTokenTreeInner>),
 }
 

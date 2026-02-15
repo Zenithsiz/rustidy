@@ -53,7 +53,7 @@ pub enum MacroRulesDef {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct MacroRulesDefParens {
-	#[format(args = delimited::FmtArgs::preserve((), (), ()))]
+	#[format(args = delimited::fmt_preserve((), (), ()))]
 	pub rules: Parenthesized<MacroRules>,
 	pub semi:  token::Semi,
 }
@@ -62,7 +62,7 @@ pub struct MacroRulesDefParens {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct MacroRulesDefBrackets {
-	#[format(args = delimited::FmtArgs::preserve((), (), ()))]
+	#[format(args = delimited::fmt_preserve((), (), ()))]
 	pub rules: Bracketed<MacroRules>,
 	pub semi:  token::Semi,
 }
@@ -71,7 +71,7 @@ pub struct MacroRulesDefBrackets {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct MacroRulesDefBraces {
-	#[format(args = delimited::FmtArgs::preserve((), (), ()))]
+	#[format(args = delimited::fmt_preserve((), (), ()))]
 	pub rules: Braced<MacroRules>,
 }
 
@@ -99,11 +99,11 @@ pub struct MacroRule {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub enum MacroMatcher {
-	#[format(args = delimited::FmtArgs::preserve((), (), ()))]
+	#[format(args = delimited::fmt_preserve((), (), ()))]
 	Parens(Parenthesized<MacroMatcherMatches>),
-	#[format(args = delimited::FmtArgs::preserve((), (), ()))]
+	#[format(args = delimited::fmt_preserve((), (), ()))]
 	Brackets(Bracketed<MacroMatcherMatches>),
-	#[format(args = delimited::FmtArgs::preserve((), (), ()))]
+	#[format(args = delimited::fmt_preserve((), (), ()))]
 	Braces(Braced<MacroMatcherMatches>),
 }
 
@@ -182,7 +182,7 @@ pub enum MacroFragSpec {
 #[derive(Parse, Format, Print)]
 pub struct MacroMatchDollarRep {
 	pub dollar:  token::Dollar,
-	#[format(args = delimited::FmtArgs::preserve((), (), ()))]
+	#[format(args = delimited::fmt_preserve((), (), ()))]
 	pub matches: Parenthesized<MacroMatchDollarRepMatches>,
 	#[parse(fatal)]
 	pub rep_sep: Option<MacroRepSep>,

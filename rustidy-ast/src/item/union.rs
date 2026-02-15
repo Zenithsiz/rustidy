@@ -29,6 +29,6 @@ pub struct Union {
 	pub where_:   Option<WhereClause>,
 	#[format(prefix_ws = Whitespace::SINGLE)]
 	#[format(indent)]
-	#[format(args = delimited::FmtArgs::indent_if_non_blank((), (), ()))]
+	#[format(args = delimited::fmt_indent_if_non_blank((), (), ()))]
 	pub fields:   Braced<Option<StructFields>>,
 }

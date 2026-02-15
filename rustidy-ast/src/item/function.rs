@@ -34,7 +34,7 @@ pub struct Function {
 	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub generics:   Option<GenericParams>,
 	#[format(prefix_ws = Whitespace::REMOVE)]
-	#[format(args = delimited::FmtArgs::remove((), (), ()))]
+	#[format(args = delimited::fmt_remove((), (), ()))]
 	pub params:     Parenthesized<Option<FunctionParameters>>,
 	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub ret:        Option<FunctionReturnType>,
@@ -259,7 +259,7 @@ pub struct FunctionReturnType {
 #[derive(Parse, Format, Print)]
 #[parse(name = "generic parameters")]
 pub struct GenericParams(
-	#[format(args = delimited::FmtArgs::remove((), (), ()))]
+	#[format(args = delimited::fmt_remove((), (), ()))]
 	pub  Delimited<Option<GenericParamsInner>, token::Lt, token::Gt>,
 );
 
@@ -370,7 +370,7 @@ pub enum TypeParamBound {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub enum TraitBound {
-	#[format(args = delimited::FmtArgs::preserve((), (), ()))]
+	#[format(args = delimited::fmt_preserve((), (), ()))]
 	Parenthesized(Parenthesized<TraitBoundInner>),
 	Normal(TraitBoundInner),
 }
@@ -514,7 +514,7 @@ pub struct UseBound {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct UseBoundGenericArgs(
-	#[format(args = delimited::FmtArgs::preserve((), (), ()))]
+	#[format(args = delimited::fmt_preserve((), (), ()))]
 	pub  Delimited<UseBoundGenericArgsInner, token::Lt, token::Gt>,
 );
 

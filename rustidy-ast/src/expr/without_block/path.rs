@@ -86,7 +86,7 @@ pub enum PathIdentSegment {
 #[derive(Parse, Format, Print)]
 #[parse(name = "generic arguments")]
 pub struct GenericArgs(
-	#[format(args = delimited::FmtArgs::remove((), (), ()))]
+	#[format(args = delimited::fmt_remove((), (), ()))]
 	pub  Delimited<Option<GenericArgsInner>, token::Lt, token::Gt>,
 );
 
@@ -158,7 +158,7 @@ pub struct GenericArgsBounds {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct TypePathFn {
-	#[format(args = delimited::FmtArgs::remove((), (), ()))]
+	#[format(args = delimited::fmt_remove((), (), ()))]
 	pub inputs: Parenthesized<Option<TypePathFnInputs>>,
 	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub ret:    Option<TypePathFnRet>,
@@ -206,7 +206,7 @@ pub struct QualifiedPathInExpressionSegment {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct QualifiedPathType(
-	#[format(args = delimited::FmtArgs::remove((), (), ()))] Delimited<QualifiedPathTypeInner, token::Lt, token::Gt>,
+	#[format(args = delimited::fmt_remove((), (), ()))] Delimited<QualifiedPathTypeInner, token::Lt, token::Gt>,
 );
 
 #[derive(PartialEq, Eq, Debug)]

@@ -42,7 +42,7 @@ pub struct ClosureExpression {
 #[derive(Parse, Format, Print)]
 pub enum ClosureParams {
 	NoParams(token::OrOr),
-	#[format(args = delimited::FmtArgs::remove((), (), ()))]
+	#[format(args = delimited::fmt_remove((), (), ()))]
 	WithParams(Delimited<Option<ClosureParameters>, token::Or, token::Or>),
 }
 

@@ -16,7 +16,7 @@ use {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 #[parse(name = "a tuple type")]
-pub struct TupleType(#[format(args = delimited::FmtArgs::remove((), (), ()))] Parenthesized<Option<TupleTypeInner>>);
+pub struct TupleType(#[format(args = delimited::fmt_remove((), (), ()))] Parenthesized<Option<TupleTypeInner>>);
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]

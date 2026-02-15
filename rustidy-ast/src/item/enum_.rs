@@ -35,7 +35,7 @@ pub struct Enumeration {
 	pub where_:   Option<WhereClause>,
 	#[format(prefix_ws = Whitespace::SINGLE)]
 	#[format(indent)]
-	#[format(args = delimited::FmtArgs::indent_if_non_blank((), (), ()))]
+	#[format(args = delimited::fmt_indent_if_non_blank((), (), ()))]
 	pub variants: Braced<Option<EnumVariants>>,
 }
 
@@ -81,7 +81,7 @@ pub enum EnumVariantKind {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct EnumVariantTuple(
-	#[format(args = delimited::FmtArgs::remove((), (), ()))] pub Parenthesized<Option<TupleFields>>,
+	#[format(args = delimited::fmt_remove((), (), ()))] pub Parenthesized<Option<TupleFields>>,
 );
 
 /// `EnumVariantStruct`
@@ -90,7 +90,7 @@ pub struct EnumVariantTuple(
 #[derive(Parse, Format, Print)]
 pub struct EnumVariantStruct(
 	#[format(indent)]
-	#[format(args = delimited::FmtArgs::indent_if_non_blank((), (), ()))]
+	#[format(args = delimited::fmt_indent_if_non_blank((), (), ()))]
 	pub Braced<Option<StructFields>>,
 );
 

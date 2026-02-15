@@ -33,7 +33,7 @@ pub struct MacroInvocationSemiParens {
 	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub not:    token::Not,
 	#[format(prefix_ws = Whitespace::REMOVE)]
-	#[format(args = delimited::FmtArgs::preserve((), (), ()))]
+	#[format(args = delimited::fmt_preserve((), (), ()))]
 	pub tokens: Parenthesized<MacroInvocationSemiTokens>,
 	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub semi:   token::Semi,
@@ -47,7 +47,7 @@ pub struct MacroInvocationSemiBrackets {
 	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub not:    token::Not,
 	#[format(prefix_ws = Whitespace::REMOVE)]
-	#[format(args = delimited::FmtArgs::preserve((), (), ()))]
+	#[format(args = delimited::fmt_preserve((), (), ()))]
 	pub tokens: Bracketed<MacroInvocationSemiTokens>,
 	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub semi:   token::Semi,
@@ -61,7 +61,7 @@ pub struct MacroInvocationSemiBraces {
 	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub not:    token::Not,
 	#[format(prefix_ws = Whitespace::SINGLE)]
-	#[format(args = delimited::FmtArgs::preserve((), (), ()))]
+	#[format(args = delimited::fmt_preserve((), (), ()))]
 	pub tokens: Braced<MacroInvocationSemiTokens>,
 }
 

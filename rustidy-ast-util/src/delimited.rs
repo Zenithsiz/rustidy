@@ -63,64 +63,70 @@ pub struct FmtArgs<AL, AT, AR> {
 	pub suffix_args: AR,
 }
 
-impl<AL, AT, AR> FmtArgs<AL, AT, AR> {
-	#[must_use]
-	pub const fn preserve(prefix_args: AL, value_args: AT, suffix_args: AR) -> Self {
-		Self {
-			value_non_empty: Whitespace::PRESERVE,
-			suffix_non_empty: Whitespace::PRESERVE,
+#[must_use]
+pub const fn fmt_preserve<AL, AT, AR>(prefix_args: AL, value_args: AT, suffix_args: AR) -> FmtArgs<AL, AT, AR> {
+	FmtArgs {
+		value_non_empty: Whitespace::PRESERVE,
+		suffix_non_empty: Whitespace::PRESERVE,
 
-			value_empty: Whitespace::PRESERVE,
-			suffix_empty: Whitespace::PRESERVE,
+		value_empty: Whitespace::PRESERVE,
+		suffix_empty: Whitespace::PRESERVE,
 
-			prefix_args,
-			value_args,
-			suffix_args,
-		}
+		prefix_args,
+		value_args,
+		suffix_args,
 	}
+}
 
-	#[must_use]
-	pub const fn single_if_non_blank(prefix_args: AL, value_args: AT, suffix_args: AR) -> Self {
-		Self {
-			value_non_empty: Whitespace::SINGLE,
-			suffix_non_empty: Whitespace::SINGLE,
+#[must_use]
+pub const fn fmt_single_if_non_blank<AL, AT, AR>(
+	prefix_args: AL,
+	value_args: AT,
+	suffix_args: AR,
+) -> FmtArgs<AL, AT, AR> {
+	FmtArgs {
+		value_non_empty: Whitespace::SINGLE,
+		suffix_non_empty: Whitespace::SINGLE,
 
-			value_empty: Whitespace::REMOVE,
-			suffix_empty: Whitespace::SINGLE,
+		value_empty: Whitespace::REMOVE,
+		suffix_empty: Whitespace::SINGLE,
 
-			prefix_args,
-			value_args,
-			suffix_args,
-		}
+		prefix_args,
+		value_args,
+		suffix_args,
 	}
+}
 
-	#[must_use]
-	pub const fn indent_if_non_blank(prefix_args: AL, value_args: AT, suffix_args: AR) -> Self {
-		Self {
-			value_non_empty: Whitespace::CUR_INDENT,
-			suffix_non_empty: Whitespace::PREV_INDENT,
+#[must_use]
+pub const fn fmt_indent_if_non_blank<AL, AT, AR>(
+	prefix_args: AL,
+	value_args: AT,
+	suffix_args: AR,
+) -> FmtArgs<AL, AT, AR> {
+	FmtArgs {
+		value_non_empty: Whitespace::CUR_INDENT,
+		suffix_non_empty: Whitespace::PREV_INDENT,
 
-			value_empty: Whitespace::REMOVE,
-			suffix_empty: Whitespace::PREV_INDENT_REMOVE_IF_PURE,
+		value_empty: Whitespace::REMOVE,
+		suffix_empty: Whitespace::PREV_INDENT_REMOVE_IF_PURE,
 
-			prefix_args,
-			value_args,
-			suffix_args,
-		}
+		prefix_args,
+		value_args,
+		suffix_args,
 	}
+}
 
-	#[must_use]
-	pub const fn remove(prefix_args: AL, value_args: AT, suffix_args: AR) -> Self {
-		Self {
-			value_non_empty: Whitespace::REMOVE,
-			suffix_non_empty: Whitespace::REMOVE,
+#[must_use]
+pub const fn fmt_remove<AL, AT, AR>(prefix_args: AL, value_args: AT, suffix_args: AR) -> FmtArgs<AL, AT, AR> {
+	FmtArgs {
+		value_non_empty: Whitespace::REMOVE,
+		suffix_non_empty: Whitespace::REMOVE,
 
-			value_empty: Whitespace::REMOVE,
-			suffix_empty: Whitespace::REMOVE,
+		value_empty: Whitespace::REMOVE,
+		suffix_empty: Whitespace::REMOVE,
 
-			prefix_args,
-			value_args,
-			suffix_args,
-		}
+		prefix_args,
+		value_args,
+		suffix_args,
 	}
 }
