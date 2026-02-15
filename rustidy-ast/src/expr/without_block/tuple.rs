@@ -15,7 +15,7 @@ use {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct TupleExpression(
-	#[format(args = delimited::fmt_remove((), (), ()))] Parenthesized<Option<TupleElements>>,
+	#[format(args = delimited::fmt_remove())] Parenthesized<Option<TupleElements>>,
 );
 
 /// `TupleElements`

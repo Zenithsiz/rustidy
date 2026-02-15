@@ -90,7 +90,7 @@ pub enum TypeNoBounds {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct ParenthesizedPath(
-	#[format(args = delimited::fmt_single_if_non_blank((), (), ()))] Parenthesized<Box<Type>>,
+	#[format(args = delimited::fmt_single_if_non_blank())] Parenthesized<Box<Type>>,
 );
 
 /// `NeverType`

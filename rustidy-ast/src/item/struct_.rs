@@ -49,7 +49,7 @@ pub struct StructStruct {
 pub enum StructStructInner {
 	#[format(prefix_ws = Whitespace::SINGLE)]
 	#[format(indent)]
-	#[format(args = delimited::fmt_indent_if_non_blank((), (), ()))]
+	#[format(args = delimited::fmt_indent_if_non_blank())]
 	Fields(Braced<Option<StructFields>>),
 	#[format(prefix_ws = Whitespace::REMOVE)]
 	Semi(token::Semi),
@@ -123,7 +123,7 @@ pub struct TupleStruct {
 	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub generics: Option<GenericParams>,
 	#[format(prefix_ws = Whitespace::REMOVE)]
-	#[format(args = delimited::fmt_remove((), (), ()))]
+	#[format(args = delimited::fmt_remove())]
 	pub fields:   Parenthesized<Option<TupleFields>>,
 	#[parse(fatal)]
 	#[format(prefix_ws = Whitespace::CUR_INDENT)]

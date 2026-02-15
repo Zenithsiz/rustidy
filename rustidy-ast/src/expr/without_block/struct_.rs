@@ -21,7 +21,7 @@ pub struct StructExpression {
 	pub path:  PathInExpression,
 	#[format(prefix_ws = Whitespace::SINGLE)]
 	#[format(indent)]
-	#[format(args = delimited::fmt_indent_if_non_blank((), (), ()))]
+	#[format(args = delimited::fmt_indent_if_non_blank())]
 	pub inner: Braced<Option<StructExpressionInner>>,
 }
 

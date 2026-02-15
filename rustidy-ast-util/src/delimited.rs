@@ -64,7 +64,7 @@ pub struct FmtArgs<AL, AT, AR> {
 }
 
 #[must_use]
-pub const fn fmt_preserve<AL, AT, AR>(prefix_args: AL, value_args: AT, suffix_args: AR) -> FmtArgs<AL, AT, AR> {
+pub const fn fmt_preserve_with<AL, AT, AR>(prefix_args: AL, value_args: AT, suffix_args: AR) -> FmtArgs<AL, AT, AR> {
 	FmtArgs {
 		value_non_empty: Whitespace::PRESERVE,
 		suffix_non_empty: Whitespace::PRESERVE,
@@ -78,8 +78,15 @@ pub const fn fmt_preserve<AL, AT, AR>(prefix_args: AL, value_args: AT, suffix_ar
 	}
 }
 
+// TODO: Use a builder for most of these?
+
 #[must_use]
-pub const fn fmt_single_if_non_blank<AL, AT, AR>(
+pub const fn fmt_preserve() -> FmtArgs<(), (), ()> {
+	self::fmt_preserve_with((), (), ())
+}
+
+#[must_use]
+pub const fn fmt_single_if_non_blank_with<AL, AT, AR>(
 	prefix_args: AL,
 	value_args: AT,
 	suffix_args: AR,
@@ -98,7 +105,12 @@ pub const fn fmt_single_if_non_blank<AL, AT, AR>(
 }
 
 #[must_use]
-pub const fn fmt_indent_if_non_blank<AL, AT, AR>(
+pub const fn fmt_single_if_non_blank() -> FmtArgs<(), (), ()> {
+	self::fmt_single_if_non_blank_with((), (), ())
+}
+
+#[must_use]
+pub const fn fmt_indent_if_non_blank_with<AL, AT, AR>(
 	prefix_args: AL,
 	value_args: AT,
 	suffix_args: AR,
@@ -117,7 +129,12 @@ pub const fn fmt_indent_if_non_blank<AL, AT, AR>(
 }
 
 #[must_use]
-pub const fn fmt_remove<AL, AT, AR>(prefix_args: AL, value_args: AT, suffix_args: AR) -> FmtArgs<AL, AT, AR> {
+pub const fn fmt_indent_if_non_blank() -> FmtArgs<(), (), ()> {
+	self::fmt_indent_if_non_blank_with((), (), ())
+}
+
+#[must_use]
+pub const fn fmt_remove_with<AL, AT, AR>(prefix_args: AL, value_args: AT, suffix_args: AR) -> FmtArgs<AL, AT, AR> {
 	FmtArgs {
 		value_non_empty: Whitespace::REMOVE,
 		suffix_non_empty: Whitespace::REMOVE,
@@ -129,4 +146,9 @@ pub const fn fmt_remove<AL, AT, AR>(prefix_args: AL, value_args: AT, suffix_args
 		value_args,
 		suffix_args,
 	}
+}
+
+#[must_use]
+pub const fn fmt_remove() -> FmtArgs<(), (), ()> {
+	self::fmt_remove_with((), (), ())
 }

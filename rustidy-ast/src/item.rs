@@ -233,11 +233,11 @@ pub enum DeclMacroBody {
 #[derive(Parse, Format, Print)]
 pub struct DeclMacroBodyInline {
 	#[format(indent)]
-	#[format(args = delimited::fmt_indent_if_non_blank((), (), ()))]
+	#[format(args = delimited::fmt_indent_if_non_blank())]
 	pub args: Parenthesized<DelimTokenTreeInner>,
 	#[format(prefix_ws = Whitespace::SINGLE)]
 	#[format(indent)]
-	#[format(args = delimited::fmt_indent_if_non_blank((), (), ()))]
+	#[format(args = delimited::fmt_indent_if_non_blank())]
 	pub body: Braced<DelimTokenTreeInner>,
 }
 
@@ -246,7 +246,7 @@ pub struct DeclMacroBodyInline {
 #[derive(Parse, Format, Print)]
 pub struct DeclMacroBodyBranches(
 	#[format(indent)]
-	#[format(args = delimited::fmt_indent_if_non_blank((), (), ()))]
+	#[format(args = delimited::fmt_indent_if_non_blank())]
 	pub Braced<DeclMacroBodyBranchesInner>,
 );
 
@@ -285,7 +285,7 @@ pub enum DeclMacroBranchExtra {
 pub struct DeclMacroBranchAttr {
 	pub attr: token::Attr,
 	#[format(prefix_ws = Whitespace::REMOVE)]
-	#[format(args = delimited::fmt_remove((), (), ()))]
+	#[format(args = delimited::fmt_remove())]
 	pub args: Parenthesized<DelimTokenTreeInner>,
 }
 
@@ -295,6 +295,6 @@ pub struct DeclMacroBranchAttr {
 pub struct DeclMacroBranchDerive {
 	pub derive: token::Derive,
 	#[format(prefix_ws = Whitespace::REMOVE)]
-	#[format(args = delimited::fmt_remove((), (), ()))]
+	#[format(args = delimited::fmt_remove())]
 	pub args:   Parenthesized<()>,
 }

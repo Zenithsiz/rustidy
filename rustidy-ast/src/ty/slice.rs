@@ -14,4 +14,4 @@ use {
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
-pub struct SliceType(#[format(args = delimited::fmt_remove((), (), ()))] Bracketed<Box<Type>>);
+pub struct SliceType(#[format(args = delimited::fmt_remove())] Bracketed<Box<Type>>);
