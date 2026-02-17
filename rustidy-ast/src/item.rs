@@ -44,7 +44,7 @@ use {
 		util::{Braced, Parenthesized},
 		vis::Visibility,
 	},
-	core::{mem, ops::ControlFlow},
+	core::mem,
 	rustidy_ast_util::{Identifier, PunctuatedTrailing, delimited, punct},
 	rustidy_format::{Format, Formattable, WhitespaceFormat},
 	rustidy_parse::Parse,
@@ -118,19 +118,8 @@ impl Item {
 	) -> Result<UseDeclaration, Self> {
 		self.0
 			.try_take_map(|mut item| {
-				// TODO: Do this during formatting so we have access to the prefix whitespace more easily.
-				let mut seen_first = false;
-				let is_prefix_ws_impure = item.with_strings(ctx, false, &mut |s, ctx| {
-					if !seen_first {
-						seen_first = true;
-						return ControlFlow::Continue(());
-					}
-
-					let s = s.str(ctx.input());
-					ControlFlow::Break(s.starts_with("/*") || s.starts_with("//"))
-				});
-
-				if is_prefix_ws_impure == ControlFlow::Break(true) {
+				// Note: If no prefix whitespace exists, we can merge them anyway.
+				if matches!(item.prefix_ws_is_pure(ctx), Some(false)) {
 					return Err(item);
 				}
 				if !item.attrs.is_empty() {
