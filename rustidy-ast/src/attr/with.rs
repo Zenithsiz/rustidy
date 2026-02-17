@@ -175,14 +175,15 @@ impl<A, T: Format<A>> Format<FmtArgs<A>> for BracedWithInnerAttributes<T> {
 			}
 
 			ctx.with_tag_if(is_after_newline, FormatTag::AfterNewline, |ctx| {
-				self.0
+				let value_output = self
+					.0
 					.value
 					.inner
-					.format(ctx, Whitespace::CUR_INDENT, &mut args.inner_args)
-					.append_to(&mut output);
-				let is_value_blank = self.0.value.is_blank(ctx, true);
+					.format(ctx, Whitespace::CUR_INDENT, &mut args.inner_args);
+				value_output.append_to(&mut output);
 
-				let prefix_ws = Whitespace::indent(-1, is_value_blank);
+				let remove_if_pure = self.0.value.attrs.is_empty() && value_output.is_empty;
+				let prefix_ws = Whitespace::indent(-1, remove_if_pure);
 				self.0.suffix.format(ctx, prefix_ws, &mut ()).append_to(&mut output);
 			});
 		});
