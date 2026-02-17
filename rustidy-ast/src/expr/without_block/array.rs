@@ -20,17 +20,22 @@ pub struct ArrayExpression(Bracketed<Option<ArrayElements>>);
 impl ArrayExpression {
 	/// Formats all `values` within a single-line.
 	fn format_single_line(
+		prefix: &mut token::BracketOpen,
 		values: &mut PunctuatedTrailing<Expression, token::Comma>,
+		suffix: &mut token::BracketClose,
 		ctx: &mut rustidy_format::Context,
 		prefix_ws: WhitespaceConfig,
 	) {
-		values.punctuated.first.format(ctx, prefix_ws, &mut ());
+		prefix.format(ctx, prefix_ws, &mut ());
+		values.punctuated.first.format(ctx, Whitespace::REMOVE, &mut ());
 		for PunctuatedRest { punct: comma, value } in &mut values.punctuated.rest {
 			comma.format(ctx, Whitespace::REMOVE, &mut ());
 			value.format(ctx, Whitespace::SINGLE, &mut ());
 		}
 
-		values.trailing.format(ctx, Whitespace::REMOVE, &mut ());
+		// TODO: Should we preserve the original comma by returning it?
+		values.trailing = None;
+		suffix.format(ctx, Whitespace::REMOVE, &mut ());
 	}
 }
 
@@ -38,7 +43,7 @@ impl Format<()> for ArrayExpression {
 	fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: WhitespaceConfig, (): &mut ()) {
 		match &mut self.0.value {
 			Some(ArrayElements::Punctuated(values)) => {
-				Self::format_single_line(values, ctx, prefix_ws);
+				Self::format_single_line(&mut self.0.prefix, values, &mut self.0.suffix, ctx, prefix_ws);
 
 				// Then check if we can fit into a single line.
 				// Note: If the user specified a number of columns, only
@@ -52,16 +57,9 @@ impl Format<()> for ArrayExpression {
 						None => values.len(ctx, true) <= ctx.config().max_array_expr_len,
 					};
 
+				// If we don't fit in a single line, format it multi-line
 				match is_single_line {
-					// If we fit, remove whitespace after the `[` and before the `]`.
-					// Also remove the trailing comma.
-					true => {
-						values.punctuated.first.format(ctx, Whitespace::REMOVE, &mut ());
-						values.trailing = None;
-
-						self.0.suffix.format(ctx, Whitespace::REMOVE, &mut ());
-					},
-
+					true => (),
 					false => {
 						ctx.with_indent(|ctx| {
 							// Format the first value in each column as indentation
@@ -77,10 +75,10 @@ impl Format<()> for ArrayExpression {
 							}
 							drop(values_iter);
 
-							// Then add a trailing comma if we had none
 							if values.trailing.is_none() {
 								values.trailing = Some(token::Comma::new());
 							}
+							values.trailing.format(ctx, Whitespace::REMOVE, &mut ());
 						});
 
 						// Finally, close the indentation on the `]`
@@ -90,7 +88,9 @@ impl Format<()> for ArrayExpression {
 			},
 
 			Some(ArrayElements::Repeat(repeat)) => {
+				self.0.prefix.format(ctx, prefix_ws, &mut ());
 				repeat.format(ctx, Whitespace::REMOVE, &mut ());
+				self.0.suffix.format(ctx, Whitespace::REMOVE, &mut ());
 			},
 
 			None => (),
