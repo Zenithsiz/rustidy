@@ -39,7 +39,13 @@ impl<T> WithOuterAttributes<T> {
 }
 
 impl<T: Format<()>> Format<()> for WithOuterAttributes<T> {
-	fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: WhitespaceConfig, args: &mut ()) {
+	fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: WhitespaceConfig, (): &mut ()) {
+		self.format(ctx, prefix_ws, &mut FmtArgs { inner_args: () });
+	}
+}
+
+impl<A, T: Format<A>> Format<FmtArgs<A>> for WithOuterAttributes<T> {
+	fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: WhitespaceConfig, args: &mut FmtArgs<A>) {
 		let mut is_after_newline = false;
 		let mut has_prefix_ws = true;
 		for attr in &mut self.attrs {
@@ -64,9 +70,9 @@ impl<T: Format<()>> Format<()> for WithOuterAttributes<T> {
 
 		value_ctx.with_tag_if(is_after_newline, FormatTag::AfterNewline, |ctx| {
 			match has_prefix_ws {
-				true => self.inner.format(ctx, prefix_ws, args),
+				true => self.inner.format(ctx, prefix_ws, &mut args.inner_args),
 				// TODO: The user should be able to choose this
-				false => self.inner.format(ctx, Whitespace::CUR_INDENT, args),
+				false => self.inner.format(ctx, Whitespace::CUR_INDENT, &mut args.inner_args),
 			}
 		});
 	}
@@ -124,7 +130,13 @@ where
 pub struct BracedWithInnerAttributes<T>(Braced<WithInnerAttributes<T>>);
 
 impl<T: Format<()>> Format<()> for BracedWithInnerAttributes<T> {
-	fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: WhitespaceConfig, _args: &mut ()) {
+	fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: WhitespaceConfig, (): &mut ()) {
+		self.format(ctx, prefix_ws, &mut FmtArgs { inner_args: () });
+	}
+}
+
+impl<A, T: Format<A>> Format<FmtArgs<A>> for BracedWithInnerAttributes<T> {
+	fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: WhitespaceConfig, args: &mut FmtArgs<A>) {
 		self.0.prefix.format(ctx, prefix_ws, &mut ());
 
 		let mut ctx = ctx.sub_context();
@@ -147,7 +159,10 @@ impl<T: Format<()>> Format<()> for BracedWithInnerAttributes<T> {
 			}
 
 			ctx.with_tag_if(is_after_newline, FormatTag::AfterNewline, |ctx| {
-				self.0.value.inner.format(ctx, Whitespace::CUR_INDENT, &mut ());
+				self.0
+					.value
+					.inner
+					.format(ctx, Whitespace::CUR_INDENT, &mut args.inner_args);
 				let is_value_blank = self.0.value.is_blank(ctx, true);
 
 				let prefix_ws = Whitespace::indent(-1, is_value_blank);
@@ -165,4 +180,14 @@ impl<T: Format<()>> Format<()> for BracedWithInnerAttributes<T> {
 struct WithInnerAttributes<T> {
 	pub attrs: Vec<InnerAttrOrDocComment>,
 	pub inner: T,
+}
+
+/// Formatting arguments
+pub struct FmtArgs<A> {
+	pub inner_args: A,
+}
+
+#[must_use]
+pub const fn fmt<A>(inner_args: A) -> FmtArgs<A> {
+	FmtArgs { inner_args }
 }

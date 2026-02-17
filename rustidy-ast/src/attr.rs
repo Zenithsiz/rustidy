@@ -1,7 +1,7 @@
 //! Attributes
 
 // Module
-mod with;
+pub mod with;
 
 // Exports
 pub use self::with::{BracedWithInnerAttributes, WithOuterAttributes};
