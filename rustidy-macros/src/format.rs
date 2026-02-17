@@ -36,37 +36,28 @@ struct WithTag {
 }
 
 #[derive(Clone, Debug, darling::FromMeta)]
-#[darling(from_expr = |expr| Ok(Self { expr: expr.clone(), cond: None, else_expr: None }))]
+#[darling(from_expr = |expr| Ok(Self { expr: expr.clone(), cond: None }))]
 struct AndWith {
-	expr:      syn::Expr,
+	expr: syn::Expr,
 	#[darling(rename = "if")]
-	cond:      Option<syn::Expr>,
-	#[darling(rename = "else")]
-	else_expr: Option<syn::Expr>,
+	cond: Option<syn::Expr>,
 }
 
 impl AndWith {
 	/// Maps the expressions in this and-with
 	pub fn map(&self, mut f: impl FnMut(&syn::Expr) -> syn::Expr) -> Self {
 		Self {
-			expr:      f(&self.expr),
-			cond:      self.cond.clone(),
-			else_expr: self.else_expr.as_ref().map(f),
+			expr: f(&self.expr),
+			cond: self.cond.clone(),
 		}
 	}
 
-	/// Sets the else expression in this and-with
-	pub fn with_else(&self, else_expr: syn::Expr) -> Self {
-		Self {
-			expr:      self.expr.clone(),
-			cond:      self.cond.clone(),
-			else_expr: Some(else_expr),
-		}
-	}
-
-	/// Evaluates this and-with
-	pub fn eval(&self) -> syn::Expr {
-		let Self { expr, cond, else_expr } = self;
+	/// Evaluates this and-with.
+	///
+	/// If this contains an `if` condition, then `else_expr` will be used
+	/// when that fails.
+	pub fn eval(&self, else_expr: Option<syn::Expr>) -> syn::Expr {
+		let Self { expr, cond } = self;
 		match cond {
 			Some(cond) => match else_expr {
 				Some(else_expr) => parse_quote! {
@@ -315,13 +306,7 @@ fn derive_enum(variants: &[VariantAttrs]) -> Impls<syn::Expr, syn::Expr, syn::Ex
 			let with_strings =
 				parse_quote! { Self::#variant_ident(ref mut value) => rustidy_format::Formattable::with_strings(value, ctx, exclude_prefix_ws, f), };
 
-			let prefix_ws = match &variant.prefix_ws {
-				Some(prefix_ws) => match prefix_ws.cond.is_some() && prefix_ws.else_expr.is_none() {
-					true => Some(prefix_ws.with_else(parse_quote! { prefix_ws }).eval()),
-					false => Some(prefix_ws.eval()),
-				},
-				None => None,
-			};
+			let prefix_ws = variant.prefix_ws.as_ref().map(|prefix_ws| prefix_ws.eval(Some(parse_quote! { prefix_ws })));
 
 			let format = parse_quote! { rustidy_format::Format::format(value, ctx, prefix_ws, args) };
 			let format = self::derive_format(
@@ -430,10 +415,7 @@ fn derive_struct_field(field_idx: usize, field: &FieldAttrs) -> Impls<syn::Expr,
 	let prefix_ws = match field.str {
 		true => None,
 		false => match &field.prefix_ws {
-			Some(prefix_ws) => match prefix_ws.cond.is_some() && prefix_ws.else_expr.is_none() {
-				true => Some(prefix_ws.with_else(parse_quote! { prefix_ws }).eval()),
-				false => Some(prefix_ws.eval()),
-			},
+			Some(prefix_ws) => Some(prefix_ws.eval(Some(parse_quote! { prefix_ws }))),
 			None => Some(parse_quote! { match has_prefix_ws {
 				true => prefix_ws,
 				// TODO: Ideally here we'd panic once we ensure
@@ -559,7 +541,7 @@ fn derive_format(
 
 	let before_with = before_with
 		.iter()
-		.map(|and_with| and_with.map(|expr| parse_quote! { (#expr)(#value, ctx) }).eval());
+		.map(|and_with| and_with.map(|expr| parse_quote! { (#expr)(#value, ctx) }).eval(None));
 	parse_quote! {{
 		#( #before_with; )*
 		#format;
