@@ -2,7 +2,7 @@
 
 // Imports
 use {
-	rustidy_format::{Format, Formattable, WhitespaceConfig, WhitespaceFormat},
+	rustidy_format::{Format, FormatOutput, Formattable, WhitespaceConfig, WhitespaceFormat},
 	rustidy_parse::Parse,
 	rustidy_print::Print,
 	rustidy_util::Whitespace,
@@ -11,27 +11,14 @@ use {
 /// A value `T` delimited by prefix `L` and suffix `R`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Formattable, Format, Print)]
-#[format(args(ty = "FmtArgs<AL, AT, AR>", generic = "AL", generic = "AT", generic = "AR",))]
-#[format(where_format = "where L: Format<AL>, T: Format<AT>, R: Format<AR>")]
+#[derive(Parse, Formattable, Print)]
 pub struct Delimited<T, L, R> {
-	#[format(args = args.prefix_args)]
 	pub prefix: L,
 
 	// TODO: Should we always remove all tags here?
 	#[parse(without_tags)]
-	#[format(prefix_ws = match self.value.is_blank(ctx, false) {
-		true => args.value_empty,
-		false => args.value_non_empty,
-	})]
-	#[format(args = args.value_args)]
 	pub value: T,
 
-	#[format(prefix_ws = match self.value.is_blank(ctx, false) {
-		true => args.suffix_empty,
-		false => args.suffix_non_empty,
-	})]
-	#[format(args = args.suffix_args)]
 	pub suffix: R,
 }
 
@@ -50,13 +37,49 @@ impl<T, L, R> Delimited<T, L, R> {
 	}
 }
 
-/// Formatting arguments
-pub struct FmtArgs<AL, AT, AR> {
-	pub value_non_empty:  WhitespaceConfig,
-	pub suffix_non_empty: WhitespaceConfig,
+impl<T, L, R, AL, AT, AR> Format<FmtArgs<AL, AT, AR>> for Delimited<T, L, R>
+where
+	L: Format<AL>,
+	T: Format<AT>,
+	R: Format<AR>,
+{
+	fn format(
+		&mut self,
+		ctx: &mut rustidy_format::Context,
+		prefix_ws: WhitespaceConfig,
+		args: &mut FmtArgs<AL, AT, AR>,
+	) -> FormatOutput {
+		// TODO: Should we handle the case of the prefix being empty and needing to
+		//       pass the prefix whitespace along?
+		let mut output = self.prefix.format(ctx, prefix_ws, &mut args.prefix_args);
 
-	pub value_empty:  WhitespaceConfig,
-	pub suffix_empty: WhitespaceConfig,
+		let value_output = self.value.format(ctx, args.value_non_blank, &mut args.value_args);
+		let value_output = match value_output.is_blank {
+			true => self.value.format(ctx, args.value_blank, &mut args.value_args),
+			false => value_output,
+		};
+		value_output.append_to(&mut output);
+
+		let suffix_prefix_ws = match value_output.is_blank {
+			true => args.suffix_blank,
+			false => args.suffix_non_blank,
+		};
+		self.suffix
+			.format(ctx, suffix_prefix_ws, &mut args.suffix_args)
+			.append_to(&mut output);
+
+		output
+	}
+}
+
+/// Formatting arguments
+// TODO: Switch order of generics to `T, L, R` like `Delimited`.
+pub struct FmtArgs<AL, AT, AR> {
+	pub value_non_blank:  WhitespaceConfig,
+	pub suffix_non_blank: WhitespaceConfig,
+
+	pub value_blank:  WhitespaceConfig,
+	pub suffix_blank: WhitespaceConfig,
 
 	pub prefix_args: AL,
 	pub value_args:  AT,
@@ -66,11 +89,11 @@ pub struct FmtArgs<AL, AT, AR> {
 #[must_use]
 pub const fn fmt_preserve_with<AL, AT, AR>(prefix_args: AL, value_args: AT, suffix_args: AR) -> FmtArgs<AL, AT, AR> {
 	FmtArgs {
-		value_non_empty: Whitespace::PRESERVE,
-		suffix_non_empty: Whitespace::PRESERVE,
+		value_non_blank: Whitespace::PRESERVE,
+		suffix_non_blank: Whitespace::PRESERVE,
 
-		value_empty: Whitespace::PRESERVE,
-		suffix_empty: Whitespace::PRESERVE,
+		value_blank: Whitespace::PRESERVE,
+		suffix_blank: Whitespace::PRESERVE,
 
 		prefix_args,
 		value_args,
@@ -92,11 +115,11 @@ pub const fn fmt_single_if_non_blank_with<AL, AT, AR>(
 	suffix_args: AR,
 ) -> FmtArgs<AL, AT, AR> {
 	FmtArgs {
-		value_non_empty: Whitespace::SINGLE,
-		suffix_non_empty: Whitespace::SINGLE,
+		value_non_blank: Whitespace::SINGLE,
+		suffix_non_blank: Whitespace::SINGLE,
 
-		value_empty: Whitespace::REMOVE,
-		suffix_empty: Whitespace::SINGLE,
+		value_blank: Whitespace::REMOVE,
+		suffix_blank: Whitespace::SINGLE,
 
 		prefix_args,
 		value_args,
@@ -116,11 +139,11 @@ pub const fn fmt_indent_if_non_blank_with<AL, AT, AR>(
 	suffix_args: AR,
 ) -> FmtArgs<AL, AT, AR> {
 	FmtArgs {
-		value_non_empty: Whitespace::CUR_INDENT,
-		suffix_non_empty: Whitespace::PREV_INDENT,
+		value_non_blank: Whitespace::CUR_INDENT,
+		suffix_non_blank: Whitespace::PREV_INDENT,
 
-		value_empty: Whitespace::REMOVE,
-		suffix_empty: Whitespace::PREV_INDENT_REMOVE_IF_PURE,
+		value_blank: Whitespace::REMOVE,
+		suffix_blank: Whitespace::PREV_INDENT_REMOVE_IF_PURE,
 
 		prefix_args,
 		value_args,
@@ -136,11 +159,11 @@ pub const fn fmt_indent_if_non_blank() -> FmtArgs<(), (), ()> {
 #[must_use]
 pub const fn fmt_remove_with<AL, AT, AR>(prefix_args: AL, value_args: AT, suffix_args: AR) -> FmtArgs<AL, AT, AR> {
 	FmtArgs {
-		value_non_empty: Whitespace::REMOVE,
-		suffix_non_empty: Whitespace::REMOVE,
+		value_non_blank: Whitespace::REMOVE,
+		suffix_non_blank: Whitespace::REMOVE,
 
-		value_empty: Whitespace::REMOVE,
-		suffix_empty: Whitespace::REMOVE,
+		value_blank: Whitespace::REMOVE,
+		suffix_blank: Whitespace::REMOVE,
 
 		prefix_args,
 		value_args,

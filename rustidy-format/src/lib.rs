@@ -78,18 +78,6 @@ pub trait Formattable {
 		exclude_prefix_ws: bool,
 		f: &mut impl FnMut(&mut AstStr, &mut Context) -> ControlFlow<O>,
 	) -> ControlFlow<O, bool>;
-
-	/// Returns if this type is blank
-	fn is_blank(&mut self, ctx: &mut Context, exclude_prefix_ws: bool) -> bool {
-		fn is_blank(s: &mut AstStr, ctx: &mut Context<'_, '_>) -> ControlFlow<()> {
-			match AstStr::is_blank(s, ctx.input) {
-				true => ControlFlow::Continue(()),
-				false => ControlFlow::Break(()),
-			}
-		}
-
-		self.with_strings(ctx, exclude_prefix_ws, &mut is_blank).is_continue()
-	}
 }
 
 /// Formatting output
@@ -104,6 +92,9 @@ pub struct FormatOutput {
 
 	/// Whether the type was empty
 	pub is_empty: bool,
+
+	/// Whether the type was blank
+	pub is_blank: bool,
 
 	/// Whether the type has newlines
 	pub has_newlines: bool,
@@ -135,6 +126,7 @@ impl FormatOutput {
 			},
 			len:           lhs.len + rhs.len,
 			is_empty:      lhs.is_empty && rhs.is_empty,
+			is_blank:      lhs.is_blank && rhs.is_blank,
 			has_newlines:  lhs.has_newlines || rhs.has_newlines,
 		}
 	}
@@ -160,6 +152,7 @@ impl Default for FormatOutput {
 			prefix_ws_len: None,
 			len:           0,
 			is_empty:      true,
+			is_blank:      true,
 			has_newlines:  false,
 		}
 	}

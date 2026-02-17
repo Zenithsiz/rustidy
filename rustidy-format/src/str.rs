@@ -15,6 +15,7 @@ pub impl AstStr {
 			prefix_ws_len: None,
 			len:           s.len(),
 			is_empty:      s.is_empty(),
+			is_blank:      s.is_blank(ctx.input),
 			has_newlines:  s.has_newlines(ctx.input),
 		}
 	}
