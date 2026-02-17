@@ -263,16 +263,16 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 						util::with_enum_bounds(generics, variants, |variant, field| {
 							let ty = &field.ty;
 							match variant.args.is_some() {
-								true => parse_quote! { #ty: },
-								false => parse_quote! { #ty: rustidy_format::Format<#args_ty> },
+								true => parse_quote! { #ty: rustidy_format::Formattable },
+								false => parse_quote! { #ty: rustidy_format::Format<()> },
 							}
 						}),
 					darling::ast::Data::Struct(fields) =>
 						util::with_struct_bounds(generics, &fields.fields, |field| {
 							let ty = &field.ty;
 							match field.args.is_some() {
-								true => parse_quote! { #ty: },
-								false => parse_quote! { #ty: rustidy_format::Format<#args_ty> },
+								true => parse_quote! { #ty: rustidy_format::Formattable },
+								false => parse_quote! { #ty: rustidy_format::Format<()> },
 							}
 						}),
 				}

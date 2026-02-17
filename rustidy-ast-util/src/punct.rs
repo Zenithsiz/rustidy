@@ -258,7 +258,6 @@ impl<'a, T, P> Iterator for SplitLastMut<'a, T, P> {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 #[format(args(ty = "WhitespaceConfig"))]
-#[format(where_format = "where T: Format<()>, P: Format<()>")]
 pub struct PunctuatedRest<T, P> {
 	pub punct: P,
 	#[format(prefix_ws = *args)]

@@ -11,7 +11,6 @@ use {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 #[format(args(ty = "FmtArgs"))]
-#[format(where_format = "where T: Format<()>")]
 // TODO: Support arguments for `T`
 pub struct AtLeast1<T> {
 	pub first: T,
