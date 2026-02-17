@@ -22,7 +22,6 @@ use {
 pub struct ByteLiteral(
 	#[format(whitespace)] pub Whitespace,
 	#[parse(try_update_with = Self::parse)]
-	#[format(str)]
 	pub AstStr,
 );
 

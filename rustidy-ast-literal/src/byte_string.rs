@@ -27,7 +27,6 @@ pub struct ByteStringLiteral {
 	#[format(whitespace)]
 	pub ws:     Whitespace,
 	#[parse(try_update_with = Self::parse)]
-	#[format(str)]
 	pub s:      AstStr,
 	pub suffix: Option<Suffix>,
 }

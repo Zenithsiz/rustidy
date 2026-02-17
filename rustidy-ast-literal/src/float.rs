@@ -107,7 +107,6 @@ pub enum FloatLiteralError {
 #[parse(error(name = Digit, fmt = "Expected a digit"))]
 pub struct FloatExponent(
 	#[parse(try_update_with = Self::parse)]
-	#[format(str)]
 	pub AstStr,
 );
 

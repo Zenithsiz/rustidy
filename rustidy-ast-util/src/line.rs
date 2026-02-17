@@ -15,7 +15,6 @@ use {
 #[parse(name = "remaining characters in line")]
 pub struct RemainingLine(
 	#[parse(update_with = Self::parse)]
-	#[format(str)]
 	pub AstStr,
 );
 
@@ -38,7 +37,6 @@ impl RemainingLine {
 #[parse(error(name = MissingCommentEnd, fmt = "Expected `*/` after `/*`", fatal))]
 pub struct RemainingBlockComment(
 	#[parse(try_update_with = Self::parse)]
-	#[format(str)]
 	pub AstStr,
 );
 

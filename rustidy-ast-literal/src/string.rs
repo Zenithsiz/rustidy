@@ -23,7 +23,6 @@ pub struct StringLiteral {
 	pub ws:     Whitespace,
 	// TODO: Split this into the two quotes and the contents?
 	#[parse(try_update_with = Self::parse)]
-	#[format(str)]
 	pub s:      AstStr,
 	pub suffix: Option<Suffix>,
 }

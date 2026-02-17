@@ -137,10 +137,6 @@ struct FieldAttrs {
 
 	#[darling(default)]
 	whitespace: bool,
-
-	// TODO: Remove this?
-	#[darling(default)]
-	str: bool,
 }
 
 #[derive(Debug, darling::FromDeriveInput, derive_more::AsRef)]
@@ -306,17 +302,14 @@ fn derive_struct(fields: &darling::ast::Fields<FieldAttrs>) -> syn::Expr {
 fn derive_struct_field(field_idx: usize, field: &FieldAttrs) -> syn::Expr {
 	let field_ident = util::field_member_access(field_idx, field);
 
-	let prefix_ws = match field.str {
-		true => None,
-		false => match &field.prefix_ws {
-			Some(prefix_ws) => Some(prefix_ws.eval(Some(parse_quote! { prefix_ws }))),
-			None => Some(parse_quote! { match has_prefix_ws {
-				true => prefix_ws,
-				// TODO: Ideally here we'd panic once we ensure
-				//       the caller can always provide a prefix whitespace.
-				false => <rustidy_util::Whitespace as rustidy_format::WhitespaceFormat>::PRESERVE,
-			}}),
-		},
+	let prefix_ws = match &field.prefix_ws {
+		Some(prefix_ws) => Some(prefix_ws.eval(Some(parse_quote! { prefix_ws }))),
+		None => Some(parse_quote! { match has_prefix_ws {
+			true => prefix_ws,
+			// TODO: Ideally here we'd panic once we ensure
+			//       the caller can always provide a prefix whitespace.
+			false => <rustidy_util::Whitespace as rustidy_format::WhitespaceFormat>::PRESERVE,
+		}}),
 	};
 
 	let format = parse_quote! { rustidy_format::Format::format(&mut self.#field_ident, ctx, prefix_ws, args) };

@@ -16,7 +16,6 @@ use {
 #[parse(error(name = Shebang, fmt = "Expected a `#!`"))]
 pub struct Shebang(
 	#[parse(try_update_with = Self::parse)]
-	#[format(str)]
 	pub AstStr,
 );
 

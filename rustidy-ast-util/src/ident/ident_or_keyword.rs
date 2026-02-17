@@ -17,7 +17,6 @@ use {
 pub struct IdentifierOrKeyword(
 	#[format(whitespace)] pub Whitespace,
 	#[parse(try_update_with = Self::parse)]
-	#[format(str)]
 	pub AstStr,
 );
 
@@ -50,7 +49,6 @@ impl IdentifierOrKeyword {
 pub struct RawIdentifier(
 	#[format(whitespace)] pub Whitespace,
 	#[parse(try_update_with = Self::parse)]
-	#[format(str)]
 	pub AstStr,
 );
 

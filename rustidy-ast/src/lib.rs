@@ -131,7 +131,6 @@ impl CrateInner {
 #[parse(error(name = NoComment, fmt = "Expected `//` (except `///` or `//!`)"))]
 pub struct TrailingLineComment(
 	#[parse(try_update_with = Self::parse)]
-	#[format(str)]
 	pub AstStr,
 );
 

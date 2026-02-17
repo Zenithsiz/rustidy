@@ -44,7 +44,6 @@ pub macro decl_tokens(
 			pub $ws: Whitespace,
 
 			#[parse(try_update_with = Self::parse)]
-			#[format(str)]
 			pub $token: AstStr,
 		}
 
