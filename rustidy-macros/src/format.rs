@@ -187,10 +187,6 @@ struct Attrs {
 	// TODO: Don't require the `where` token here.
 	where_format: Option<syn::WhereClause>,
 
-	// TODO: Don't require the `where` token here.
-	#[darling(multiple)]
-	with_where_format: Vec<syn::WhereClause>,
-
 	#[darling(default)]
 	skip_format: bool,
 }
@@ -250,7 +246,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 	};
 
 	let format_impl = format.map(|format| {
-		let mut impl_generics = match attrs.where_format {
+		let impl_generics = match attrs.where_format {
 			Some(where_) => {
 				let mut generics = attrs.generics.clone();
 				generics.where_clause = Some(where_);
@@ -278,10 +274,6 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 				}
 			},
 		};
-		impl_generics
-			.make_where_clause()
-			.predicates
-			.extend(attrs.with_where_format.into_iter().flat_map(|clause| clause.predicates));
 
 		let (_, ty_generics, impl_where_clause) = impl_generics.split_for_impl();
 		let (impl_generics, ..) = {
