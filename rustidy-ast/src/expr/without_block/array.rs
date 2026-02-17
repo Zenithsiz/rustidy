@@ -59,8 +59,9 @@ impl Format<()> for ArrayExpression {
 	fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: WhitespaceConfig, (): &mut ()) -> FormatOutput {
 		match &mut self.0.value {
 			Some(ArrayElements::Punctuated(values)) => {
-				let (mut output, single_line_output) =
+				let (common_output, single_line_output) =
 					Self::format_single_line(&mut self.0.prefix, values, &mut self.0.suffix, ctx, prefix_ws);
+				let single_line_output = FormatOutput::join(common_output, single_line_output);
 
 				// Then check if we can fit into a single line.
 				// Note: If the user specified a number of columns, only
@@ -71,13 +72,15 @@ impl Format<()> for ArrayExpression {
 				let is_single_line = !has_newlines &&
 					match cols {
 						Some(cols) => cols >= values.values_len(),
-						None => values.len(ctx, true) <= ctx.config().max_array_expr_len,
+						None => single_line_output.len_without_prefix_ws() <= ctx.config().max_array_expr_len,
 					};
 
 				// If we don't fit in a single line, format it multi-line
 				match is_single_line {
-					true => output.append(single_line_output),
+					true => single_line_output,
 					false => {
+						let mut output = common_output;
+
 						ctx.with_indent(|ctx| {
 							// Format the first value in each column as indentation
 							let mut values_iter = values.values_mut();
@@ -108,10 +111,10 @@ impl Format<()> for ArrayExpression {
 							.suffix
 							.format(ctx, Whitespace::CUR_INDENT, &mut ())
 							.append_to(&mut output);
+
+						output
 					},
 				}
-
-				output
 			},
 
 			Some(ArrayElements::Repeat(repeat)) => {

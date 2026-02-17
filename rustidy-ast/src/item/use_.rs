@@ -225,7 +225,7 @@ impl UseTreeGroup {
 	) -> FormatOutput {
 		let compact_output = Self::format_tree_compact(tree, ctx, prefix_ws);
 
-		match tree.len(ctx, true) > ctx.config().max_use_tree_len {
+		match compact_output.len_without_prefix_ws() > ctx.config().max_use_tree_len {
 			true => {
 				if let Some(punct) = &mut tree.value &&
 					punct.trailing.is_none()

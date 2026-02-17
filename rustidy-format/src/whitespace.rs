@@ -137,6 +137,7 @@ impl Format<()> for Whitespace {
 
 			ws.0.format_output().append_to(&mut output);
 		}
+		output.prefix_ws_len = Some(output.len);
 
 		output
 	}

@@ -8,6 +8,10 @@ pub impl AstStr {
 	/// Gets the formatting output of this string
 	fn format_output(&self) -> FormatOutput {
 		let s = self.0.get();
-		FormatOutput { is_empty: s.is_empty() }
+		FormatOutput {
+			prefix_ws_len: None,
+			len:           s.len(),
+			is_empty:      s.is_empty(),
+		}
 	}
 }

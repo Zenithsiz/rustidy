@@ -112,27 +112,57 @@ pub trait Formattable {
 }
 
 /// Formatting output
-#[derive(Debug)]
+#[derive(Clone, Copy, Debug)]
 #[must_use = "Should not ignore format output"]
 pub struct FormatOutput {
+	/// Prefix whitespace length, if any
+	pub prefix_ws_len: Option<usize>,
+
+	/// Total length of this type
+	pub len: usize,
+
 	/// Whether the type was empty
 	pub is_empty: bool,
 }
 
 impl FormatOutput {
+	/// Returns the length of this type, excluding the prefix whitespace, if any
+	#[must_use]
+	pub fn len_without_prefix_ws(&self) -> usize {
+		self.len - self.prefix_ws_len.unwrap_or(0)
+	}
+
+	/// Joins two format outputs.
+	///
+	/// You must ensure `lhs` was formatted *before* `rhs`,
+	/// to ensure the semantics of the type.
+	///
+	/// It's fine if `lhs` and `rhs` have any "holes", so long
+	/// as you ensure the above point.
+	pub const fn join(lhs: Self, rhs: Self) -> Self {
+		Self {
+			prefix_ws_len: match lhs.prefix_ws_len {
+				Some(prefix_ws_len) => Some(prefix_ws_len),
+				None => match lhs.len == 0 {
+					true => rhs.prefix_ws_len,
+					false => None,
+				},
+			},
+			len:           lhs.len + rhs.len,
+			is_empty:      lhs.is_empty && rhs.is_empty,
+		}
+	}
+
 	/// Appends a format output to this one.
 	///
-	/// The order in which you append fields does not matter,
-	/// but you must not append the same field twice, nor can
-	/// you un-append a field.
-	#[expect(clippy::needless_pass_by_value, reason = "Semantics")]
+	/// See [`join`](Self::join) for details.
 	pub const fn append(&mut self, other: Self) {
-		self.is_empty &= other.is_empty;
+		*self = Self::join(*self, other);
 	}
 
 	/// Appends this format output to `output`.
 	///
-	/// See [`append`](Self::append) for details.
+	/// See [`join`](Self::join) for details.
 	pub const fn append_to(self, output: &mut Self) {
 		output.append(self);
 	}
@@ -140,7 +170,11 @@ impl FormatOutput {
 
 impl Default for FormatOutput {
 	fn default() -> Self {
-		Self { is_empty: true }
+		Self {
+			prefix_ws_len: None,
+			len:           0,
+			is_empty:      true,
+		}
 	}
 }
 
