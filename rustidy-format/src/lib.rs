@@ -7,8 +7,7 @@
 	coverage_attribute,
 	macro_metavar_expr_concat,
 	trait_alias,
-	iter_advance_by,
-	const_block_items
+	iter_advance_by
 )]
 
 // Modules
@@ -538,4 +537,4 @@ pub struct WhitespaceConfig {
 	format: Option<WhitespaceFormatKind>,
 }
 
-const { assert!(size_of::<WhitespaceConfig>() <= 8) }
+const _: () = const { assert!(size_of::<WhitespaceConfig>() <= 8) };
