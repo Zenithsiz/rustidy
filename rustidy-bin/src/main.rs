@@ -31,6 +31,7 @@ use {
 		item::{ItemInner, Module, VisItemInner},
 	},
 	rustidy_ast_util::Identifier,
+	rustidy_format::FormatOutput,
 	rustidy_print::{Print, PrintFmt},
 	rustidy_util::Config,
 	std::{
@@ -148,7 +149,7 @@ fn format_file(
 	}
 
 	// Format
-	rustidy::format(&input, config, &mut crate_);
+	let _: FormatOutput = rustidy::format(&input, config, &mut crate_);
 
 	// Then output it to file
 	let mut print_fmt = PrintFmt::new(&input);

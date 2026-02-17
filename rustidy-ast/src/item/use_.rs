@@ -10,7 +10,7 @@ use {
 		delimited,
 		punct::{self, PunctuatedRest},
 	},
-	rustidy_format::{Format, Formattable, WhitespaceConfig, WhitespaceFormat},
+	rustidy_format::{Format, FormatOutput, Formattable, WhitespaceConfig, WhitespaceFormat},
 	rustidy_parse::Parse,
 	rustidy_print::Print,
 	rustidy_util::Whitespace,
@@ -196,10 +196,11 @@ impl UseTreeGroup {
 		tree: &mut Braced<Option<PunctuatedTrailing<Box<UseTree>, token::Comma>>>,
 		ctx: &mut rustidy_format::Context,
 		prefix_ws: WhitespaceConfig,
-	) {
+	) -> FormatOutput {
 		if let Some(punct) = &mut tree.value {
 			punct.trailing = None;
 		}
+
 		tree.format(
 			ctx,
 			prefix_ws,
@@ -213,7 +214,7 @@ impl UseTreeGroup {
 				},
 				(),
 			),
-		);
+		)
 	}
 
 	fn format_tree(
@@ -221,30 +222,33 @@ impl UseTreeGroup {
 		ctx: &mut rustidy_format::Context,
 		prefix_ws: WhitespaceConfig,
 		(): &mut (),
-	) {
-		Self::format_tree_compact(tree, ctx, prefix_ws);
+	) -> FormatOutput {
+		let compact_output = Self::format_tree_compact(tree, ctx, prefix_ws);
 
-		if tree.len(ctx, true) > ctx.config().max_use_tree_len {
-			if let Some(punct) = &mut tree.value &&
-				punct.trailing.is_none()
-			{
-				punct.trailing = Some(token::Comma::new());
-			}
+		match tree.len(ctx, true) > ctx.config().max_use_tree_len {
+			true => {
+				if let Some(punct) = &mut tree.value &&
+					punct.trailing.is_none()
+				{
+					punct.trailing = Some(token::Comma::new());
+				}
 
-			tree.format(
-				ctx,
-				prefix_ws,
-				&mut delimited::fmt_indent_if_non_blank_with(
-					(),
-					punct::FmtArgs {
-						value_prefix_ws: Whitespace::CUR_INDENT,
-						punct_prefix_ws: Whitespace::REMOVE,
-						value_args:      (),
-						punct_args:      (),
-					},
-					(),
-				),
-			);
+				tree.format(
+					ctx,
+					prefix_ws,
+					&mut delimited::fmt_indent_if_non_blank_with(
+						(),
+						punct::FmtArgs {
+							value_prefix_ws: Whitespace::CUR_INDENT,
+							punct_prefix_ws: Whitespace::REMOVE,
+							value_args:      (),
+							punct_args:      (),
+						},
+						(),
+					),
+				)
+			},
+			false => compact_output,
 		}
 	}
 }

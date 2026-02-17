@@ -138,6 +138,7 @@ struct FieldAttrs {
 	#[darling(default)]
 	whitespace: bool,
 
+	// TODO: Remove this?
 	#[darling(default)]
 	str: bool,
 }
@@ -185,6 +186,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 		parse_quote! { self },
 		None,
 		None,
+		false,
 		&None,
 		format,
 		&attrs.before_with,
@@ -241,8 +243,8 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 		#[automatically_derived]
 		impl #impl_generics rustidy_format::Format<#args_ty> for #item_ident #ty_generics #impl_where_clause {
 			#[coverage(on)]
-			fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: rustidy_format::WhitespaceConfig, args: &mut #args_ty) {
-				#format;
+			fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: rustidy_format::WhitespaceConfig, args: &mut #args_ty) -> rustidy_format::FormatOutput {
+				#format
 			}
 		}
 	};
@@ -266,6 +268,7 @@ fn derive_enum(variants: &[VariantAttrs]) -> syn::Expr {
 				parse_quote! { value },
 				prefix_ws,
 				None,
+				false,
 				&variant.with,
 				format,
 				&variant.before_with,
@@ -292,8 +295,11 @@ fn derive_struct(fields: &darling::ast::Fields<FieldAttrs>) -> syn::Expr {
 		.collect::<Vec<_>>();
 
 	parse_quote! {{
+		let mut output = rustidy_format::FormatOutput::default();
 		let mut has_prefix_ws = true;
 		#( #format_fields; )*
+
+		output
 	}}
 }
 
@@ -313,10 +319,7 @@ fn derive_struct_field(field_idx: usize, field: &FieldAttrs) -> syn::Expr {
 		},
 	};
 
-	let format = match field.str {
-		true => parse_quote! { () },
-		false => parse_quote! { rustidy_format::Format::format(&mut self.#field_ident, ctx, prefix_ws, args) },
-	};
+	let format = parse_quote! { rustidy_format::Format::format(&mut self.#field_ident, ctx, prefix_ws, args) };
 
 	let after_format = match field.whitespace {
 		true => parse_quote! { has_prefix_ws = false },
@@ -332,6 +335,7 @@ fn derive_struct_field(field_idx: usize, field: &FieldAttrs) -> syn::Expr {
 		parse_quote! { &mut self.#field_ident },
 		prefix_ws,
 		Some(after_format),
+		true,
 		&field.with,
 		format,
 		&field.before_with,
@@ -357,6 +361,7 @@ fn derive_format(
 	value: syn::Expr,
 	prefix_ws: Option<syn::Expr>,
 	after_format: Option<syn::Expr>,
+	append_to_output: bool,
 	with: &Option<syn::Expr>,
 	default: syn::Expr,
 	before_with: &[WithExprIf],
@@ -368,9 +373,13 @@ fn derive_format(
 	// TODO: Document the order in which we parse all attributes, since
 	//       it's not in declaration order (although maybe it should?).
 
-	let format: syn::Expr = match &with {
+	let format = match &with {
 		Some(with) => parse_quote! { (#with)(#value, ctx, prefix_ws, args) },
 		None => default,
+	};
+	let format = match append_to_output {
+		true => parse_quote! { output.append(#format) },
+		false => format,
 	};
 	let format = match args {
 		Args::Skip => format,
@@ -378,14 +387,14 @@ fn derive_format(
 			let args = args.unwrap_or_else(|| parse_quote! { () });
 			parse_quote! {{
 				let mut args = &mut #args;
-				#format;
+				#format
 			}}
 		},
 	};
 	let format = match prefix_ws {
 		Some(prefix_ws) => parse_quote! {{
 			let prefix_ws = #prefix_ws;
-			#format;
+			#format
 		}},
 		None => format,
 	};
@@ -426,8 +435,10 @@ fn derive_format(
 		.map(|before_with| before_with.map(|expr| parse_quote! { (#expr)(#value, ctx) }).eval(None));
 	parse_quote! {{
 		#( #before_with; )*
-		#format;
+		let output = #format;
 
 		#after_format;
+
+		output
 	}}
 }

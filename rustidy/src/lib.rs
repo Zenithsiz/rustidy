@@ -30,16 +30,16 @@
 use {
 	app_error::{AppError, app_error},
 	rustidy_ast::Crate,
-	rustidy_format::{Format, WhitespaceFormat},
+	rustidy_format::{Format, FormatOutput, WhitespaceFormat},
 	rustidy_parse::{ParseError, Parser},
 	rustidy_util::{Config, Whitespace},
 	std::path::Path,
 };
 
 /// Formats the crate `crate_`.
-pub fn format(input: &str, config: &Config, crate_: &mut Crate) {
+pub fn format(input: &str, config: &Config, crate_: &mut Crate) -> FormatOutput {
 	let mut ctx = rustidy_format::Context::new(input, config);
-	crate_.format(&mut ctx, Whitespace::PRESERVE, &mut ());
+	crate_.format(&mut ctx, Whitespace::PRESERVE, &mut ())
 }
 
 /// Parses the input `input`.

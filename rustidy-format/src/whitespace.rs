@@ -2,7 +2,7 @@
 
 // Imports
 use {
-	crate::{Format, FormatTag, Formattable, WhitespaceConfig},
+	crate::{Format, FormatOutput, FormatTag, Formattable, WhitespaceConfig},
 	core::ops::ControlFlow,
 	itertools::Itertools,
 	rustidy_util::{
@@ -122,12 +122,12 @@ impl Formattable for Whitespace {
 }
 
 impl Format<()> for Whitespace {
-	fn format(&mut self, ctx: &mut crate::Context, prefix_ws: WhitespaceConfig, _args: &mut ()) {
-		let Some(format) = prefix_ws.format else {
-			return;
-		};
+	fn format(&mut self, ctx: &mut crate::Context, prefix_ws: WhitespaceConfig, _args: &mut ()) -> FormatOutput {
+		if let Some(format) = prefix_ws.format {
+			self::format(self, ctx, format);
+		}
 
-		self::format(self, ctx, format);
+		FormatOutput::default()
 	}
 }
 

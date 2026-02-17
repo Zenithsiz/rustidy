@@ -7,7 +7,7 @@ use {
 		attr::{InnerDocComment, OuterDocComment},
 		util::Braced,
 	},
-	rustidy_format::{Format, FormatTag, Formattable, WhitespaceConfig, WhitespaceFormat},
+	rustidy_format::{Format, FormatOutput, FormatTag, Formattable, WhitespaceConfig, WhitespaceFormat},
 	rustidy_parse::{ParsableRecursive, Parse, Parser},
 	rustidy_print::Print,
 	rustidy_util::Whitespace,
@@ -38,20 +38,28 @@ impl<T> WithOuterAttributes<T> {
 }
 
 impl<T: Format<()>> Format<()> for WithOuterAttributes<T> {
-	fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: WhitespaceConfig, (): &mut ()) {
-		self.format(ctx, prefix_ws, &mut FmtArgs { inner_args: () });
+	fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: WhitespaceConfig, (): &mut ()) -> FormatOutput {
+		self.format(ctx, prefix_ws, &mut FmtArgs { inner_args: () })
 	}
 }
 
 impl<A, T: Format<A>> Format<FmtArgs<A>> for WithOuterAttributes<T> {
-	fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: WhitespaceConfig, args: &mut FmtArgs<A>) {
+	fn format(
+		&mut self,
+		ctx: &mut rustidy_format::Context,
+		prefix_ws: WhitespaceConfig,
+		args: &mut FmtArgs<A>,
+	) -> FormatOutput {
+		let mut output = FormatOutput::default();
+
 		let mut is_after_newline = false;
 		let mut has_prefix_ws = true;
 		for attr in &mut self.attrs {
 			ctx.with_tag_if(is_after_newline, FormatTag::AfterNewline, |ctx| match has_prefix_ws {
 				true => attr.format(ctx, prefix_ws, &mut ()),
 				false => attr.format(ctx, Whitespace::CUR_INDENT, &mut ()),
-			});
+			})
+			.append_to(&mut output);
 
 			is_after_newline = matches!(attr, OuterAttrOrDocComment::DocComment(OuterDocComment::Line(_)));
 			has_prefix_ws = false;
@@ -73,7 +81,10 @@ impl<A, T: Format<A>> Format<FmtArgs<A>> for WithOuterAttributes<T> {
 				// TODO: The user should be able to choose this
 				false => self.inner.format(ctx, Whitespace::CUR_INDENT, &mut args.inner_args),
 			}
+			.append_to(&mut output);
 		});
+
+		output
 	}
 }
 
@@ -128,14 +139,21 @@ where
 pub struct BracedWithInnerAttributes<T>(Braced<WithInnerAttributes<T>>);
 
 impl<T: Format<()>> Format<()> for BracedWithInnerAttributes<T> {
-	fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: WhitespaceConfig, (): &mut ()) {
-		self.format(ctx, prefix_ws, &mut FmtArgs { inner_args: () });
+	fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: WhitespaceConfig, (): &mut ()) -> FormatOutput {
+		self.format(ctx, prefix_ws, &mut FmtArgs { inner_args: () })
 	}
 }
 
 impl<A, T: Format<A>> Format<FmtArgs<A>> for BracedWithInnerAttributes<T> {
-	fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: WhitespaceConfig, args: &mut FmtArgs<A>) {
-		self.0.prefix.format(ctx, prefix_ws, &mut ());
+	fn format(
+		&mut self,
+		ctx: &mut rustidy_format::Context,
+		prefix_ws: WhitespaceConfig,
+		args: &mut FmtArgs<A>,
+	) -> FormatOutput {
+		let mut output = FormatOutput::default();
+
+		self.0.prefix.format(ctx, prefix_ws, &mut ()).append_to(&mut output);
 
 		let mut ctx = ctx.sub_context();
 		for attr in &self.0.value.attrs {
@@ -150,7 +168,7 @@ impl<A, T: Format<A>> Format<FmtArgs<A>> for BracedWithInnerAttributes<T> {
 			let mut is_after_newline = false;
 			for attr in &mut self.0.value.attrs {
 				ctx.with_tag_if(is_after_newline, FormatTag::AfterNewline, |ctx| {
-					attr.format(ctx, Whitespace::CUR_INDENT, &mut ());
+					attr.format(ctx, Whitespace::CUR_INDENT, &mut ()).append_to(&mut output);
 				});
 
 				is_after_newline = matches!(attr, InnerAttrOrDocComment::DocComment(InnerDocComment::Line(_)));
@@ -160,13 +178,16 @@ impl<A, T: Format<A>> Format<FmtArgs<A>> for BracedWithInnerAttributes<T> {
 				self.0
 					.value
 					.inner
-					.format(ctx, Whitespace::CUR_INDENT, &mut args.inner_args);
+					.format(ctx, Whitespace::CUR_INDENT, &mut args.inner_args)
+					.append_to(&mut output);
 				let is_value_blank = self.0.value.is_blank(ctx, true);
 
 				let prefix_ws = Whitespace::indent(-1, is_value_blank);
-				self.0.suffix.format(ctx, prefix_ws, &mut ());
+				self.0.suffix.format(ctx, prefix_ws, &mut ()).append_to(&mut output);
 			});
 		});
+
+		output
 	}
 }
 

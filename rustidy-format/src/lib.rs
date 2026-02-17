@@ -108,10 +108,31 @@ pub trait Formattable {
 	}
 }
 
+/// Formatting output
+#[derive(Default, Debug)]
+#[must_use = "Should not ignore format output"]
+pub struct FormatOutput {}
+
+impl FormatOutput {
+	/// Appends a format output to this one.
+	///
+	/// The order in which you append fields does not matter,
+	/// but you must not append the same field twice, nor can
+	/// you un-append a field.
+	pub const fn append(&mut self, _other: Self) {}
+
+	/// Appends this format output to `output`.
+	///
+	/// See [`append`](Self::append) for details.
+	pub const fn append_to(self, output: &mut Self) {
+		output.append(self);
+	}
+}
+
 /// Type formatting
 pub trait Format<Args>: Formattable {
 	/// Formats this type, using `prefix_ws` to format it's prefix whitespace, if any.
-	fn format(&mut self, ctx: &mut Context, prefix_ws: WhitespaceConfig, args: &mut Args);
+	fn format(&mut self, ctx: &mut Context, prefix_ws: WhitespaceConfig, args: &mut Args) -> FormatOutput;
 }
 
 impl<T: Formattable> Formattable for &'_ mut T {
@@ -134,8 +155,8 @@ impl<T: Formattable> Formattable for &'_ mut T {
 }
 
 impl<T: Format<Args>, Args> Format<Args> for &'_ mut T {
-	fn format(&mut self, ctx: &mut Context, prefix_ws: WhitespaceConfig, args: &mut Args) {
-		(**self).format(ctx, prefix_ws, args);
+	fn format(&mut self, ctx: &mut Context, prefix_ws: WhitespaceConfig, args: &mut Args) -> FormatOutput {
+		(**self).format(ctx, prefix_ws, args)
 	}
 }
 
@@ -159,8 +180,8 @@ impl<T: Formattable> Formattable for Box<T> {
 }
 
 impl<T: Format<Args>, Args> Format<Args> for Box<T> {
-	fn format(&mut self, ctx: &mut Context, prefix_ws: WhitespaceConfig, args: &mut Args) {
-		(**self).format(ctx, prefix_ws, args);
+	fn format(&mut self, ctx: &mut Context, prefix_ws: WhitespaceConfig, args: &mut Args) -> FormatOutput {
+		(**self).format(ctx, prefix_ws, args)
 	}
 }
 
@@ -187,9 +208,10 @@ impl<T: Formattable> Formattable for Option<T> {
 }
 
 impl<T: Format<Args>, Args> Format<Args> for Option<T> {
-	fn format(&mut self, ctx: &mut Context, prefix_ws: WhitespaceConfig, args: &mut Args) {
-		if let Some(value) = self {
-			value.format(ctx, prefix_ws, args);
+	fn format(&mut self, ctx: &mut Context, prefix_ws: WhitespaceConfig, args: &mut Args) -> FormatOutput {
+		match self {
+			Some(value) => value.format(ctx, prefix_ws, args),
+			_ => FormatOutput::default(),
 		}
 	}
 }
@@ -214,7 +236,7 @@ impl Formattable for ! {
 }
 
 impl Format<()> for ! {
-	fn format(&mut self, _ctx: &mut Context, _prefix_ws: WhitespaceConfig, (): &mut ()) {
+	fn format(&mut self, _ctx: &mut Context, _prefix_ws: WhitespaceConfig, (): &mut ()) -> FormatOutput {
 		*self
 	}
 }
@@ -239,7 +261,9 @@ impl<T> Formattable for PhantomData<T> {
 }
 
 impl<T> Format<()> for PhantomData<T> {
-	fn format(&mut self, _ctx: &mut Context, _prefix_ws: WhitespaceConfig, (): &mut ()) {}
+	fn format(&mut self, _ctx: &mut Context, _prefix_ws: WhitespaceConfig, (): &mut ()) -> FormatOutput {
+		FormatOutput::default()
+	}
 }
 
 impl Formattable for () {
@@ -262,7 +286,9 @@ impl Formattable for () {
 }
 
 impl Format<()> for () {
-	fn format(&mut self, _ctx: &mut Context, _prefix_ws: WhitespaceConfig, (): &mut ()) {}
+	fn format(&mut self, _ctx: &mut Context, _prefix_ws: WhitespaceConfig, (): &mut ()) -> FormatOutput {
+		FormatOutput::default()
+	}
 }
 
 macro tuple_impl ($N:literal, $($T:ident),* $(,)?) {
@@ -298,7 +324,7 @@ macro tuple_impl ($N:literal, $($T:ident),* $(,)?) {
 	#[automatically_derived]
 	#[expect(non_snake_case)]
 	impl< $($T: Format<()>,)*> Format<()> for ( $($T,)* ) {
-		fn format(&mut self, ctx: &mut Context, prefix_ws: WhitespaceConfig, args: &mut ()) {
+		fn format(&mut self, ctx: &mut Context, prefix_ws: WhitespaceConfig, args: &mut ()) -> FormatOutput {
 			let ( $($T,)* ) = self;
 			${concat( Tuple, $N )} { $( $T, )* }.format(ctx, prefix_ws, args)
 		}
@@ -329,7 +355,9 @@ impl Formattable for AstStr {
 }
 
 impl Format<()> for AstStr {
-	fn format(&mut self, _ctx: &mut Context, _prefix_ws: WhitespaceConfig, (): &mut ()) {}
+	fn format(&mut self, _ctx: &mut Context, _prefix_ws: WhitespaceConfig, (): &mut ()) -> FormatOutput {
+		FormatOutput::default()
+	}
 }
 
 impl<T: ArenaData<Data: Formattable>> Formattable for ArenaIdx<T> {
@@ -352,8 +380,8 @@ impl<T: ArenaData<Data: Formattable>> Formattable for ArenaIdx<T> {
 }
 
 impl<T: ArenaData<Data: Format<Args>>, Args> Format<Args> for ArenaIdx<T> {
-	fn format(&mut self, ctx: &mut Context, prefix_ws: WhitespaceConfig, args: &mut Args) {
-		self.get_mut().format(ctx, prefix_ws, args);
+	fn format(&mut self, ctx: &mut Context, prefix_ws: WhitespaceConfig, args: &mut Args) -> FormatOutput {
+		self.get_mut().format(ctx, prefix_ws, args)
 	}
 }
 

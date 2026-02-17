@@ -45,7 +45,7 @@ pub mod vis;
 use {
 	self::{attr::InnerAttrOrDocComment, item::Items, shebang::Shebang},
 	core::fmt::Debug,
-	rustidy_format::{Format, Formattable, WhitespaceConfig, WhitespaceFormat},
+	rustidy_format::{Format, FormatOutput, Formattable, WhitespaceConfig, WhitespaceFormat},
 	rustidy_parse::Parse,
 	rustidy_print::Print,
 	rustidy_util::{AstStr, Whitespace, ast_str::AstStrRepr},
@@ -59,7 +59,12 @@ use {
 pub struct Crate(pub CrateInner);
 
 impl Format<()> for Crate {
-	fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: WhitespaceConfig, _args: &mut ()) {
+	fn format(
+		&mut self,
+		ctx: &mut rustidy_format::Context,
+		prefix_ws: WhitespaceConfig,
+		_args: &mut (),
+	) -> FormatOutput {
 		let mut inner_ctx = ctx.sub_context();
 		for attr in &self.0.inner_attrs {
 			if let Some(attr) = attr.try_as_attr_ref() &&
@@ -70,7 +75,7 @@ impl Format<()> for Crate {
 		}
 
 		// TODO: This also needs to set `FormatTag::AfterNewline` for `items`.
-		self.0.format(&mut inner_ctx, prefix_ws, &mut ());
+		self.0.format(&mut inner_ctx, prefix_ws, &mut ())
 	}
 }
 
@@ -91,6 +96,7 @@ pub struct CrateInner {
 	#[format(whitespace)]
 	pub suffix_ws:             Whitespace,
 	#[format(prefix_ws = Whitespace::PRESERVE)]
+	// TODO: This should be a `before_with`
 	#[format(with = Self::format_trailing_line_comment)]
 	pub trailing_line_comment: Option<TrailingLineComment>,
 }
@@ -101,8 +107,10 @@ impl CrateInner {
 		ctx: &mut rustidy_format::Context,
 		prefix_ws: WhitespaceConfig,
 		(): &mut (),
-	) {
-		let Some(trailing) = trailing else { return };
+	) -> FormatOutput {
+		let Some(trailing) = trailing else {
+			return FormatOutput::default();
+		};
 
 		let mut s = ctx.str(&trailing.0).into_owned();
 
@@ -112,7 +120,7 @@ impl CrateInner {
 			trailing.0.replace(ctx.input(), AstStrRepr::Dynamic(s));
 		}
 
-		trailing.format(ctx, prefix_ws, &mut ());
+		trailing.format(ctx, prefix_ws, &mut ())
 	}
 }
 

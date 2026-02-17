@@ -2,7 +2,7 @@
 
 // Imports
 use {
-	crate::{Context, Format, Formattable, WhitespaceConfig},
+	crate::{Context, Format, FormatOutput, Formattable, WhitespaceConfig},
 	core::ops::ControlFlow,
 	rustidy_util::AstStr,
 };
@@ -44,21 +44,25 @@ impl<T, A> Format<Args<A>> for Vec<T>
 where
 	T: Format<A>,
 {
-	fn format(&mut self, ctx: &mut Context, prefix_ws: WhitespaceConfig, args: &mut Args<A>) {
+	fn format(&mut self, ctx: &mut Context, prefix_ws: WhitespaceConfig, args: &mut Args<A>) -> FormatOutput {
 		// Note: Due to the way we're parsed, the first element will never be non-empty,
 		//       but it's possible for the caller to create this value during formatting
 		//       and have that not be true, so we always check.
+		let mut output = FormatOutput::default();
 		let mut has_prefix_ws = true;
 		for value in self {
 			match has_prefix_ws {
 				true => value.format(ctx, prefix_ws, &mut args.args),
 				false => value.format(ctx, args.rest_prefix_ws, &mut args.args),
 			}
+			.append_to(&mut output);
 
 			if has_prefix_ws && !value.is_empty(ctx, false) {
 				has_prefix_ws = false;
 			}
 		}
+
+		output
 	}
 }
 

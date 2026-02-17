@@ -5,7 +5,7 @@ use {
 	super::Type,
 	crate::{token, util::Parenthesized},
 	rustidy_ast_util::delimited,
-	rustidy_format::{Format, Formattable, WhitespaceConfig, WhitespaceFormat},
+	rustidy_format::{Format, FormatOutput, Formattable, WhitespaceConfig, WhitespaceFormat},
 	rustidy_parse::Parse,
 	rustidy_print::Print,
 	rustidy_util::Whitespace,
@@ -27,18 +27,28 @@ pub struct TupleTypeInner {
 }
 
 impl Format<()> for TupleTypeInner {
-	fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: WhitespaceConfig, _args: &mut ()) {
+	fn format(
+		&mut self,
+		ctx: &mut rustidy_format::Context,
+		prefix_ws: WhitespaceConfig,
+		_args: &mut (),
+	) -> FormatOutput {
 		let [(first_ty, first_comma), tys @ ..] = &mut *self.tys else {
-			self.end.format(ctx, prefix_ws, &mut ());
-			return;
+			return self.end.format(ctx, prefix_ws, &mut ());
 		};
 
-		first_ty.format(ctx, prefix_ws, &mut ());
-		first_comma.format(ctx, Whitespace::REMOVE, &mut ());
+		let mut output = FormatOutput::default();
+
+		first_ty.format(ctx, prefix_ws, &mut ()).append_to(&mut output);
+		first_comma
+			.format(ctx, Whitespace::REMOVE, &mut ())
+			.append_to(&mut output);
 		for (ty, comma) in tys {
-			ty.format(ctx, Whitespace::SINGLE, &mut ());
-			comma.format(ctx, Whitespace::REMOVE, &mut ());
+			ty.format(ctx, Whitespace::SINGLE, &mut ()).append_to(&mut output);
+			comma.format(ctx, Whitespace::REMOVE, &mut ()).append_to(&mut output);
 		}
-		self.end.format(ctx, Whitespace::SINGLE, &mut ());
+		self.end.format(ctx, Whitespace::SINGLE, &mut ()).append_to(&mut output);
+
+		output
 	}
 }
