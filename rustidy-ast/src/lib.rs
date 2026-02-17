@@ -78,32 +78,31 @@ impl Format<()> for Crate {
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
-#[format(and_with = Self::format_first_inner_attr_or_item)]
 pub struct CrateInner {
 	pub shebang:               Option<Shebang>,
-	#[format(prefix_ws = Whitespace::CUR_INDENT)]
+	#[format(prefix_ws = Whitespace::REMOVE)]
 	#[format(args = rustidy_format::vec::args_prefix_ws(Whitespace::CUR_INDENT))]
 	pub inner_attrs:           Vec<InnerAttrOrDocComment>,
-	#[format(prefix_ws = Whitespace::CUR_INDENT)]
+	#[format(prefix_ws = match self.inner_attrs.is_empty() {
+		true => Whitespace::REMOVE,
+		false => Whitespace::CUR_INDENT,
+	})]
 	pub items:                 Items,
 	#[format(prefix_ws = Whitespace::indent(0, self.shebang.is_none() && self.inner_attrs.is_empty() && self.items.0.is_empty()))]
 	#[format(whitespace)]
 	pub suffix_ws:             Whitespace,
 	#[format(prefix_ws = Whitespace::PRESERVE)]
-	#[format(and_with = Self::format_trailing_line_comment)]
+	#[format(with = Self::format_trailing_line_comment)]
 	pub trailing_line_comment: Option<TrailingLineComment>,
 }
 
 impl CrateInner {
-	fn format_first_inner_attr_or_item(&mut self, ctx: &mut rustidy_format::Context) {
-		if let Some(attr) = self.inner_attrs.first_mut() {
-			attr.format(ctx, Whitespace::REMOVE, &mut ());
-		} else if let Some(item) = self.items.0.first_mut() {
-			item.format(ctx, Whitespace::REMOVE, &mut ());
-		}
-	}
-
-	fn format_trailing_line_comment(trailing: &mut Option<TrailingLineComment>, ctx: &mut rustidy_format::Context) {
+	fn format_trailing_line_comment(
+		trailing: &mut Option<TrailingLineComment>,
+		ctx: &mut rustidy_format::Context,
+		prefix_ws: WhitespaceConfig,
+		(): &mut (),
+	) {
 		let Some(trailing) = trailing else { return };
 
 		let mut s = ctx.str(&trailing.0).into_owned();
@@ -113,6 +112,8 @@ impl CrateInner {
 			s.push('\n');
 			trailing.0.replace(ctx.input(), AstStrRepr::Dynamic(s));
 		}
+
+		trailing.format(ctx, prefix_ws, &mut ());
 	}
 }
 
