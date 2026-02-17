@@ -49,7 +49,7 @@ use {
 	rustidy_format::{Format, Formattable, WhitespaceFormat},
 	rustidy_parse::Parse,
 	rustidy_print::Print,
-	rustidy_util::{ArenaIdx, Whitespace, arena::decl_arena},
+	rustidy_util::{ArenaIdx, Whitespace, decl_arena},
 };
 
 #[derive(PartialEq, Eq, Debug)]

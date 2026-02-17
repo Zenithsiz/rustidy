@@ -14,7 +14,7 @@ pub mod whitespace;
 
 // Exports
 pub use self::{
-	arena::{Arena, ArenaData, ArenaIdx, ArenaRef},
+	arena::{Arena, ArenaData, ArenaIdx, ArenaRef, decl_arena},
 	ast_pos::AstPos,
 	ast_range::AstRange,
 	ast_str::AstStr,
