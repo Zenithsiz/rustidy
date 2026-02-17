@@ -1,7 +1,7 @@
 //! Whitespace
 
 // Imports
-use crate::{Arena, ArenaData, ArenaIdx, AstStr};
+use crate::{ArenaData, ArenaIdx, AstStr};
 
 /// Whitespace
 #[derive(PartialEq, Eq, Debug)]
@@ -30,16 +30,12 @@ impl Whitespace {
 }
 
 #[derive(PartialEq, Eq, Debug)]
+#[derive(ArenaData)]
 #[derive(serde::Serialize, serde::Deserialize)]
 pub struct WhitespaceInner {
 	pub first: PureWhitespace,
 	pub rest:  Vec<(Comment, PureWhitespace)>,
 }
-
-impl ArenaData for WhitespaceInner {
-	const ARENA: &'static Arena<Self> = &ARENA;
-}
-static ARENA: Arena<WhitespaceInner> = Arena::new();
 
 /// Comment
 #[derive(PartialEq, Eq, Debug)]

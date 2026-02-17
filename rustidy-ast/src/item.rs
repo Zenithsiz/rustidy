@@ -49,7 +49,7 @@ use {
 	rustidy_format::{Format, Formattable, WhitespaceFormat},
 	rustidy_parse::Parse,
 	rustidy_print::Print,
-	rustidy_util::{Arena, ArenaData, ArenaIdx, Whitespace},
+	rustidy_util::{ArenaIdx, Whitespace, arena::decl_arena},
 };
 
 #[derive(PartialEq, Eq, Debug)]
@@ -146,10 +146,7 @@ pub enum ItemInner {
 	Macro(MacroItem),
 }
 
-impl ArenaData for WithOuterAttributes<ItemInner> {
-	const ARENA: &'static Arena<Self> = &ITEM_ARENA;
-}
-static ITEM_ARENA: Arena<WithOuterAttributes<ItemInner>> = Arena::new();
+decl_arena! { WithOuterAttributes<ItemInner> }
 
 /// `VisItem`
 #[derive(PartialEq, Eq, Debug)]

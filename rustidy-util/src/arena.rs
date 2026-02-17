@@ -315,7 +315,28 @@ impl<'de, T: ArenaData + serde::Deserialize<'de>> serde::Deserialize<'de> for Ar
 		Ok(Self::new(value))
 	}
 }
+
 /// Arena data
 pub trait ArenaData: Sized + 'static {
 	const ARENA: &'static Arena<Self>;
+}
+
+/// Implements `ArenaData` for `$Ty`
+pub macro decl_arena($Ty:ty) {
+	impl ArenaData for $Ty {
+		const ARENA: &'static Arena<Self> = &ARENA;
+	}
+	static ARENA: Arena<$Ty> = Arena::new();
+}
+
+/// Derive macro for `ArenaData`
+// TODO: Can we accept just a `$I:item` and get the type from there?
+pub macro ArenaData {
+	derive() ($( #[$meta:meta] )* $vis:vis struct $Ty:ident $($rest:tt)*) => {
+		decl_arena! { $Ty }
+	},
+
+	derive() ($( #[$meta:meta] )* $vis:vis enum $Ty:ident $($rest:tt)*) => {
+		decl_arena! { $Ty }
+	}
 }

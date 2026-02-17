@@ -2,7 +2,7 @@
 
 // Imports
 use {
-	crate::{Arena, ArenaData, ArenaIdx, ArenaRef, AstRange},
+	crate::{ArenaData, ArenaIdx, ArenaRef, AstRange},
 	std::{borrow::Cow, sync::Arc},
 };
 
@@ -96,6 +96,7 @@ impl AstStr {
 }
 
 #[derive(PartialEq, Eq, Debug)]
+#[derive(ArenaData)]
 #[derive(derive_more::From)]
 #[derive(serde::Serialize)]
 #[serde(untagged)]
@@ -291,11 +292,6 @@ impl AstStrRepr {
 		}
 	}
 }
-
-impl ArenaData for AstStrRepr {
-	const ARENA: &'static Arena<Self> = &ARENA;
-}
-static ARENA: Arena<AstStrRepr> = Arena::new();
 
 impl<'de> serde::Deserialize<'de> for AstStrRepr {
 	fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>

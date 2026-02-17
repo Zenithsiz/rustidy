@@ -33,7 +33,7 @@ use {
 	rustidy_format::{Format, Formattable, WhitespaceFormat},
 	rustidy_parse::Parse,
 	rustidy_print::Print,
-	rustidy_util::{Arena, ArenaData, ArenaIdx, Whitespace},
+	rustidy_util::{ArenaData, ArenaIdx, Whitespace},
 };
 
 /// `Type`
@@ -43,6 +43,7 @@ use {
 pub struct Type(pub ArenaIdx<TypeInner>);
 
 #[derive(PartialEq, Eq, Debug)]
+#[derive(ArenaData)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 #[parse(name = "a type")]
@@ -52,11 +53,6 @@ pub enum TypeInner {
 	#[parse(peek = MacroInvocation)]
 	NoBounds(TypeNoBounds),
 }
-
-impl ArenaData for TypeInner {
-	const ARENA: &'static Arena<Self> = &TYPE_ARENA;
-}
-static TYPE_ARENA: Arena<TypeInner> = Arena::new();
 
 /// `TypeNoBounds`
 #[derive(PartialEq, Eq, Debug)]

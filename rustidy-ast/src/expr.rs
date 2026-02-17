@@ -33,7 +33,7 @@ use {
 	rustidy_format::{Format, Formattable},
 	rustidy_parse::{FromRecursiveRoot, Parse, ParseRecursive, Parser, RecursiveWrapper},
 	rustidy_print::Print,
-	rustidy_util::{Arena, ArenaData, ArenaIdx},
+	rustidy_util::{ArenaData, ArenaIdx},
 };
 
 /// `Expression`
@@ -50,6 +50,7 @@ impl FromRecursiveRoot<ExpressionInner> for Expression {
 }
 
 #[derive(PartialEq, Eq, Debug)]
+#[derive(ArenaData)]
 #[derive(derive_more::From, derive_more::TryInto)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, ParseRecursive, Formattable, Format, Print)]
@@ -60,8 +61,3 @@ pub enum ExpressionInner {
 	WithoutBlock(ExpressionWithoutBlock),
 	WithBlock(ExpressionWithBlock),
 }
-
-impl ArenaData for ExpressionInner {
-	const ARENA: &'static Arena<Self> = &EXPRESSION_ARENA;
-}
-static EXPRESSION_ARENA: Arena<ExpressionInner> = Arena::new();

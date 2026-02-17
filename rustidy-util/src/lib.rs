@@ -1,7 +1,7 @@
 //! Utilities
 
 // Features
-#![feature(iter_advance_by, decl_macro, macro_metavar_expr_concat, if_let_guard)]
+#![feature(iter_advance_by, decl_macro, macro_metavar_expr_concat, if_let_guard, macro_derive)]
 
 // Modules
 pub mod arena;
