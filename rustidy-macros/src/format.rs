@@ -27,12 +27,11 @@ struct Indent {
 }
 
 #[derive(Debug, darling::FromMeta)]
-#[darling(from_expr = |expr| Ok(Self { tag: expr.clone(), cond: None, skip_if_has_tag: false }))]
+#[darling(from_expr = |expr| Ok(Self { tag: expr.clone(), cond: None }))]
 struct WithTag {
-	tag:             syn::Expr,
+	tag:  syn::Expr,
 	#[darling(rename = "if")]
-	cond:            Option<syn::Expr>,
-	skip_if_has_tag: bool,
+	cond: Option<syn::Expr>,
 }
 
 #[derive(Clone, Debug, darling::FromMeta)]
@@ -390,17 +389,8 @@ fn derive_format(
 		true => parse_quote! { ctx.without_tags(|ctx| #format) },
 		false => format,
 	};
-	for WithTag {
-		tag,
-		cond,
-		skip_if_has_tag,
-	} in with_tag
-	{
+	for WithTag { tag, cond } in with_tag {
 		let cond = cond.clone().unwrap_or_else(|| parse_quote! { true });
-		let cond: syn::Expr = match skip_if_has_tag {
-			true => parse_quote! { ctx.has_tag(#tag) || (#cond) },
-			false => parse_quote! { #cond },
-		};
 		format = parse_quote! {
 			match #cond {
 				true => ctx.with_tag(#tag, |ctx| #format),

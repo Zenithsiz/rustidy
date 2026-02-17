@@ -64,16 +64,6 @@ pub trait Formattable {
 		f: &mut impl FnMut(&mut AstStr, &mut Context) -> ControlFlow<O>,
 	) -> ControlFlow<O>;
 
-	/// Returns the length of this type
-	fn len(&mut self, ctx: &mut Context, exclude_prefix_ws: bool) -> usize {
-		let mut len = 0;
-		self.with_strings::<!>(ctx, exclude_prefix_ws, &mut |s, _ctx| {
-			len += AstStr::len(s);
-			ControlFlow::Continue(())
-		});
-		len
-	}
-
 	/// Returns if this type is empty
 	fn is_empty(&mut self, ctx: &mut Context, exclude_prefix_ws: bool) -> bool {
 		fn is_empty(s: &mut AstStr, _ctx: &mut Context<'_, '_>) -> ControlFlow<()> {
@@ -118,6 +108,7 @@ pub struct FormatOutput {
 
 impl FormatOutput {
 	/// Returns the length of this type, excluding the prefix whitespace, if any
+	// TODO: Rename this to just `len` and `Self::len` to `total_len`?.
 	#[must_use]
 	pub fn len_without_prefix_ws(&self) -> usize {
 		self.len - self.prefix_ws_len.unwrap_or(0)

@@ -20,11 +20,7 @@ use {
 #[parse_recursive(root = ExpressionInner)]
 #[parse_recursive(into_root = ExpressionWithoutBlockInner)]
 #[parse_recursive(kind = "left")]
-#[format(with_tag(
-	tag = FormatTag::InsideChain,
-	if = self.len(ctx, true) >= ctx.config().max_chain_len,
-	skip_if_has_tag = true
-))]
+#[format(args = FieldExpressionFmt)]
 pub struct FieldExpression {
 	pub expr:  Expression,
 	#[format(prefix_ws = match ctx.has_tag(FormatTag::InsideChain) {
@@ -34,4 +30,28 @@ pub struct FieldExpression {
 	pub dot:   token::Dot,
 	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub ident: Identifier,
+}
+
+struct FieldExpressionFmt;
+
+impl Format<()> for FieldExpression {
+	fn format(
+		&mut self,
+		ctx: &mut rustidy_format::Context,
+		prefix_ws: rustidy_format::WhitespaceConfig,
+		(): &mut (),
+	) -> rustidy_format::FormatOutput {
+		let output = self.format(ctx, prefix_ws, &mut FieldExpressionFmt);
+
+		match ctx.has_tag(FormatTag::InsideChain) {
+			true => output,
+			false => match output.len_without_prefix_ws() >= ctx.config().max_chain_len {
+				// TODO: Ideally we wouldn't re-format everything here.
+				true => ctx.with_tag(FormatTag::InsideChain, |ctx| {
+					self.format(ctx, prefix_ws, &mut FieldExpressionFmt)
+				}),
+				false => output,
+			},
+		}
+	}
 }
