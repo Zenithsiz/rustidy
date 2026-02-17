@@ -3,7 +3,7 @@
 // Imports
 use {
 	either::Either,
-	rustidy_format::{Format, WhitespaceConfig},
+	rustidy_format::{Format, Formattable, WhitespaceConfig},
 	rustidy_parse::Parse,
 	rustidy_print::Print,
 };
@@ -11,7 +11,7 @@ use {
 /// Punctuated type `T`, separated by `P`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 #[format(args(ty = "FmtArgs<TA, PA>", generic = "TA", generic = "PA"))]
 #[format(where_format = "where T: Format<TA>, P: Format<PA>")]
 pub struct Punctuated<T, P> {
@@ -142,7 +142,7 @@ impl<T, P> Punctuated<T, P> {
 /// Punctuated type `T`, separated by `P` with an optional trailing `P`.
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 #[format(args(ty = "FmtArgs<TA, PA>", generic = "TA", generic = "PA"))]
 #[format(where_format = "where T: Format<TA>, P: Format<PA>")]
 pub struct PunctuatedTrailing<T, P> {
@@ -257,7 +257,7 @@ impl<'a, T, P> Iterator for SplitLastMut<'a, T, P> {
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 #[format(args(ty = "&'_ mut FmtArgs<TA, PA>", generic = "TA", generic = "PA"))]
 #[format(where_format = "where T: Format<TA>, P: Format<PA>")]
 pub struct PunctuatedRest<T, P> {

@@ -10,7 +10,7 @@ use {
 		token,
 		ty::Type,
 	},
-	rustidy_format::{Format, WhitespaceFormat},
+	rustidy_format::{Format, Formattable, WhitespaceFormat},
 	rustidy_parse::Parse,
 	rustidy_print::Print,
 	rustidy_util::Whitespace,
@@ -19,7 +19,7 @@ use {
 /// `Statement`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 #[parse(name = "a statement")]
 pub enum Statement {
 	Empty(token::Semi),
@@ -31,12 +31,12 @@ pub enum Statement {
 /// `LetStatement`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct LetStatement(pub WithOuterAttributes<LetStatementInner>);
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 #[parse(name = "a let statement")]
 pub struct LetStatementInner {
 	pub super_: Option<token::Super>,
@@ -55,7 +55,7 @@ pub struct LetStatementInner {
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct LetStatementTy {
 	pub colon: token::Colon,
 	#[parse(fatal)]
@@ -65,7 +65,7 @@ pub struct LetStatementTy {
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub enum LetStatementEq {
 	Else(LetStatementEqElse),
 	Normal(LetStatementEqNormal),
@@ -73,7 +73,7 @@ pub enum LetStatementEq {
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct LetStatementEqNormal {
 	pub eq:   token::Eq,
 	#[parse(fatal)]
@@ -83,7 +83,7 @@ pub struct LetStatementEqNormal {
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct LetStatementEqElse {
 	pub eq:        token::Eq,
 	#[format(prefix_ws = Whitespace::SINGLE)]
@@ -99,7 +99,7 @@ pub struct LetStatementEqElse {
 /// `ExpressionStatement`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub enum ExpressionStatement {
 	WithoutBlock(ExpressionStatementWithoutBlock),
 	WithBlock(ExpressionStatementWithBlock),
@@ -107,7 +107,7 @@ pub enum ExpressionStatement {
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct ExpressionStatementWithoutBlock {
 	pub expr: ExpressionWithoutBlock,
 	#[format(prefix_ws = Whitespace::REMOVE)]
@@ -116,7 +116,7 @@ pub struct ExpressionStatementWithoutBlock {
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct ExpressionStatementWithBlock {
 	pub expr: ExpressionWithBlock,
 	#[format(prefix_ws = Whitespace::REMOVE)]

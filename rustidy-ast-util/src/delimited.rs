@@ -2,7 +2,7 @@
 
 // Imports
 use {
-	rustidy_format::{Format, WhitespaceConfig, WhitespaceFormat},
+	rustidy_format::{Format, Formattable, WhitespaceConfig, WhitespaceFormat},
 	rustidy_parse::Parse,
 	rustidy_print::Print,
 	rustidy_util::Whitespace,
@@ -11,7 +11,7 @@ use {
 /// A value `T` delimited by prefix `L` and suffix `R`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 #[format(args(ty = "FmtArgs<AL, AT, AR>", generic = "AL", generic = "AT", generic = "AR",))]
 #[format(where_format = "where L: Format<AL>, T: Format<AT>, R: Format<AR>")]
 pub struct Delimited<T, L, R> {

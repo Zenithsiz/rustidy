@@ -15,7 +15,7 @@ use {
 	super::Expression,
 	crate::{attr::WithOuterAttributes, lifetime::LifetimeOrLabel, pat::Pattern, token},
 	rustidy_ast_util::{Longest, Punctuated, punct},
-	rustidy_format::{Format, WhitespaceFormat},
+	rustidy_format::{Format, Formattable, WhitespaceFormat},
 	rustidy_parse::{Parse, ParserTag},
 	rustidy_print::Print,
 	rustidy_util::Whitespace,
@@ -24,12 +24,12 @@ use {
 /// `ExpressionWithBlock`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct ExpressionWithBlock(pub WithOuterAttributes<ExpressionWithBlockInner>);
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub enum ExpressionWithBlockInner {
 	Block(BlockExpression),
 	ConstBlock(ConstBlockExpression),
@@ -43,7 +43,7 @@ pub enum ExpressionWithBlockInner {
 /// `ConstBlockExpression`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct ConstBlockExpression {
 	pub const_: token::Const,
 	#[format(prefix_ws = Whitespace::SINGLE)]
@@ -53,7 +53,7 @@ pub struct ConstBlockExpression {
 /// `UnsafeBlockExpression`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct UnsafeBlockExpression {
 	pub unsafe_: token::Unsafe,
 	#[format(prefix_ws = Whitespace::SINGLE)]
@@ -63,7 +63,7 @@ pub struct UnsafeBlockExpression {
 // Note: Nightly-only
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct TryBlockExpression {
 	pub try_: token::Try,
 	#[parse(fatal)]
@@ -74,7 +74,7 @@ pub struct TryBlockExpression {
 /// `IfExpression`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 #[parse(name = "an if expression")]
 pub struct IfExpression {
 	pub if_:        token::If,
@@ -89,7 +89,7 @@ pub struct IfExpression {
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct IfExpressionElse {
 	pub else_: token::Else,
 	#[parse(fatal)]
@@ -99,7 +99,7 @@ pub struct IfExpressionElse {
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub enum IfExpressionElseInner {
 	Block(BlockExpression),
 	If(Box<IfExpression>),
@@ -108,12 +108,12 @@ pub enum IfExpressionElseInner {
 /// `Conditions`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct Conditions(Longest<LetChain, ConditionsExpr>);
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 struct ConditionsExpr(
 	#[parse(with_tag = ParserTag::SkipStructExpression)]
 	#[parse(with_tag = ParserTag::SkipOptionalTrailingBlockExpression)]
@@ -123,7 +123,7 @@ struct ConditionsExpr(
 /// `LetChain`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct LetChain(
 	#[format(args = punct::fmt(Whitespace::SINGLE, Whitespace::SINGLE))]
 	pub  Punctuated<LetChainCondition, token::AndAnd>,
@@ -132,7 +132,7 @@ pub struct LetChain(
 /// `LetChainCondition`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub enum LetChainCondition {
 	Let(WithOuterAttributes<LetChainConditionLet>),
 	#[parse(with_tag = ParserTag::SkipStructExpression)]
@@ -148,7 +148,7 @@ pub enum LetChainCondition {
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct LetChainConditionLet {
 	pub let_:      token::Let,
 	#[parse(fatal)]
@@ -171,7 +171,7 @@ pub struct LetChainConditionLet {
 /// `LoopExpression`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct LoopExpression {
 	pub label: Option<LoopLabel>,
 	#[format(prefix_ws(expr = Whitespace::SINGLE, if = self.label.is_some()))]
@@ -181,7 +181,7 @@ pub struct LoopExpression {
 /// `LoopLabel`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct LoopLabel {
 	pub lifetime: LifetimeOrLabel,
 	#[format(prefix_ws = Whitespace::REMOVE)]
@@ -190,7 +190,7 @@ pub struct LoopLabel {
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub enum LoopExpressionInner {
 	Infinite(InfiniteLoopExpression),
 	Predicate(PredicateLoopExpression),
@@ -201,7 +201,7 @@ pub enum LoopExpressionInner {
 /// `IteratorLoopExpression`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct IteratorLoopExpression {
 	pub for_: token::For,
 	#[format(prefix_ws = Whitespace::SINGLE)]
@@ -219,7 +219,7 @@ pub struct IteratorLoopExpression {
 /// `PredicateLoopExpression`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct PredicateLoopExpression {
 	pub for_: token::While,
 	#[format(prefix_ws = Whitespace::SINGLE)]
@@ -231,7 +231,7 @@ pub struct PredicateLoopExpression {
 /// `InfiniteLoopExpression`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct InfiniteLoopExpression {
 	pub loop_: token::Loop,
 	#[format(prefix_ws = Whitespace::SINGLE)]
@@ -241,5 +241,5 @@ pub struct InfiniteLoopExpression {
 /// `LabelBlockExpression`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct LabelBlockExpression(BlockExpression);

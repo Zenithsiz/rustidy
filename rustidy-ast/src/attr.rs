@@ -18,7 +18,7 @@ use {
 	app_error::{AppError, Context, bail},
 	core::fmt::Debug,
 	rustidy_ast_util::{RemainingBlockComment, RemainingLine, delimited},
-	rustidy_format::{Format, WhitespaceFormat},
+	rustidy_format::{Format, Formattable, WhitespaceFormat},
 	rustidy_parse::{Parse, ParserTag},
 	rustidy_print::Print,
 	rustidy_util::Whitespace,
@@ -27,7 +27,7 @@ use {
 #[derive(PartialEq, Eq, Debug)]
 #[derive(strum::EnumTryAs)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub enum InnerAttrOrDocComment {
 	Attr(InnerAttribute),
 	DocComment(InnerDocComment),
@@ -36,7 +36,7 @@ pub enum InnerAttrOrDocComment {
 /// `InnerAttribute`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 #[parse(name = "an inner attribute")]
 pub struct InnerAttribute {
 	pub pound: token::Pound,
@@ -51,7 +51,7 @@ pub struct InnerAttribute {
 /// Inner Doc comment
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub enum InnerDocComment {
 	Line(InnerLineDoc),
 	Block(InnerBlockDoc),
@@ -60,7 +60,7 @@ pub enum InnerDocComment {
 /// `INNER_LINE_DOC`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct InnerLineDoc {
 	pub prefix:  token::InnerLineDoc,
 	pub comment: RemainingLine,
@@ -69,7 +69,7 @@ pub struct InnerLineDoc {
 /// `INNER_BLOCK_DOC`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct InnerBlockDoc {
 	pub prefix:  token::InnerBlockDoc,
 	pub comment: RemainingBlockComment,
@@ -79,7 +79,7 @@ pub struct InnerBlockDoc {
 #[derive(PartialEq, Eq, Debug)]
 #[derive(strum::EnumTryAs)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub enum OuterAttrOrDocComment {
 	Attr(OuterAttribute),
 	DocComment(OuterDocComment),
@@ -88,7 +88,7 @@ pub enum OuterAttrOrDocComment {
 /// `OuterAttribute`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct OuterAttribute {
 	pub pound: token::Pound,
 	#[format(prefix_ws = Whitespace::REMOVE)]
@@ -100,7 +100,7 @@ pub struct OuterAttribute {
 #[derive(PartialEq, Eq, Debug)]
 #[derive(strum::EnumTryAs)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub enum OuterDocComment {
 	Line(OuterLineDoc),
 	Block(OuterBlockDoc),
@@ -109,7 +109,7 @@ pub enum OuterDocComment {
 /// `OUTER_LINE_DOC`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct OuterLineDoc {
 	pub prefix:  token::OuterLineDoc,
 	pub comment: RemainingLine,
@@ -118,7 +118,7 @@ pub struct OuterLineDoc {
 /// `OUTER_BLOCK_DOC`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct OuterBlockDoc {
 	pub prefix:  token::OuterBlockDoc,
 	// TODO: This should technically need whitespace before if we find `/**/**/*/`,
@@ -129,7 +129,7 @@ pub struct OuterBlockDoc {
 /// `Attr`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct Attr {
 	// TODO: Unsafe attribute
 	pub path:  SimplePath,
@@ -140,7 +140,7 @@ pub struct Attr {
 /// `AttrInput`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub enum AttrInput {
 	#[format(prefix_ws = Whitespace::REMOVE)]
 	DelimTokenTree(DelimTokenTree),
@@ -150,7 +150,7 @@ pub enum AttrInput {
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct AttrInputEqExpr {
 	pub eq:   token::Eq,
 	#[format(prefix_ws = Whitespace::SINGLE)]
@@ -160,7 +160,7 @@ pub struct AttrInputEqExpr {
 /// `DelimTokenTree`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub enum DelimTokenTree {
 	#[format(args = delimited::fmt_preserve())]
 	Parens(Parenthesized<DelimTokenTreeInner>),
@@ -172,7 +172,7 @@ pub enum DelimTokenTree {
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct DelimTokenTreeInner(
 	#[parse(fatal)]
 	#[format(args = rustidy_format::vec::args_prefix_ws(Whitespace::PRESERVE))]
@@ -182,7 +182,7 @@ pub struct DelimTokenTreeInner(
 /// `TokenTree`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub enum TokenTree {
 	Tree(DelimTokenTree),
 	Token(TokenNonDelimited),
@@ -191,7 +191,7 @@ pub enum TokenTree {
 /// `Token` except delimiters
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct TokenNonDelimited(#[parse(with_tag = ParserTag::SkipDelimiters)] pub token::Token);
 
 /// Updates the configuration based on an attribute

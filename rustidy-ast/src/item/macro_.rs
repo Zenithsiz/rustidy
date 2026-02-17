@@ -9,7 +9,7 @@ use {
 		util::{Braced, Bracketed, Parenthesized},
 	},
 	rustidy_ast_util::delimited,
-	rustidy_format::{Format, WhitespaceFormat},
+	rustidy_format::{Format, Formattable, WhitespaceFormat},
 	rustidy_parse::Parse,
 	rustidy_print::Print,
 	rustidy_util::Whitespace,
@@ -18,7 +18,7 @@ use {
 /// `MacroInvocationSemi`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub enum MacroInvocationSemi {
 	Parens(MacroInvocationSemiParens),
 	Brackets(MacroInvocationSemiBrackets),
@@ -27,7 +27,7 @@ pub enum MacroInvocationSemi {
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct MacroInvocationSemiParens {
 	pub path:   SimplePath,
 	#[format(prefix_ws = Whitespace::REMOVE)]
@@ -41,7 +41,7 @@ pub struct MacroInvocationSemiParens {
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct MacroInvocationSemiBrackets {
 	pub path:   SimplePath,
 	#[format(prefix_ws = Whitespace::REMOVE)]
@@ -55,7 +55,7 @@ pub struct MacroInvocationSemiBrackets {
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct MacroInvocationSemiBraces {
 	pub path:   SimplePath,
 	#[format(prefix_ws = Whitespace::REMOVE)]
@@ -67,7 +67,7 @@ pub struct MacroInvocationSemiBraces {
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct MacroInvocationSemiTokens(
 	#[format(args = rustidy_format::vec::args_prefix_ws(Whitespace::PRESERVE))] Vec<TokenTree>,
 );

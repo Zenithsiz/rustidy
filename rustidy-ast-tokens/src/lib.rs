@@ -11,7 +11,7 @@
 
 // Imports
 use {
-	rustidy_format::Format,
+	rustidy_format::{Format, Formattable},
 	rustidy_parse::{Parse, Parser, ParserTag},
 	rustidy_print::Print,
 	rustidy_util::{AstStr, Whitespace},
@@ -32,7 +32,7 @@ pub macro decl_tokens(
 	$(
 		#[derive(PartialEq, Eq, Debug)]
 		#[derive(serde::Serialize, serde::Deserialize)]
-		#[derive(Parse, Format, Print)]
+		#[derive(Parse, Formattable, Format, Print)]
 		#[parse(error(name = NotFound, fmt("Expected `{}`", $Token)))]
 		#[parse(error(name = FollowsXid, fmt = "Token ends with `XID_CONTINUE` and follows `XID_START` or `_`"))]
 		$(

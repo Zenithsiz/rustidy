@@ -5,7 +5,7 @@ use {
 	super::token,
 	core::fmt::Debug,
 	rustidy_ast_util::{Identifier, Punctuated, punct},
-	rustidy_format::{Format, WhitespaceFormat},
+	rustidy_format::{Format, Formattable, WhitespaceFormat},
 	rustidy_parse::Parse,
 	rustidy_print::Print,
 	rustidy_util::Whitespace,
@@ -14,7 +14,7 @@ use {
 /// `SimplePath`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 #[parse(name = "a simple path")]
 pub struct SimplePath {
 	pub prefix:   Option<token::PathSep>,
@@ -58,7 +58,7 @@ impl SimplePath {
 #[derive(PartialEq, Eq, Debug)]
 #[derive(strum::EnumTryAs)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub enum SimplePathSegment {
 	Super(token::Super),
 	SelfLower(token::SelfLower),

@@ -13,7 +13,7 @@ use {
 	},
 	rustidy_ast_literal::{LiteralExpression, RawStringLiteral, StringLiteral},
 	rustidy_ast_util::{Delimited, Follows, Identifier, PunctuatedTrailing, delimited, punct},
-	rustidy_format::{Format, WhitespaceFormat},
+	rustidy_format::{Format, Formattable, WhitespaceFormat},
 	rustidy_parse::{Parse, ParsePeeked},
 	rustidy_print::Print,
 	rustidy_util::Whitespace,
@@ -22,7 +22,7 @@ use {
 /// `Function`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 #[parse(name = "a function")]
 pub struct Function {
 	pub qualifiers: FunctionQualifiers,
@@ -53,7 +53,7 @@ pub struct Function {
 #[derive(PartialEq, Eq, Debug)]
 #[derive(strum::EnumIs)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub enum FunctionBody {
 	Expr(BlockExpression),
 	Semi(token::Semi),
@@ -62,7 +62,7 @@ pub enum FunctionBody {
 /// `FunctionQualifiers`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 #[parse(name = "function qualifiers")]
 pub struct FunctionQualifiers {
 	pub const_:  Option<token::Const>,
@@ -84,7 +84,7 @@ impl FunctionQualifiers {
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct ExternAbi {
 	pub extern_: token::Extern,
 	#[format(prefix_ws = Whitespace::SINGLE)]
@@ -94,7 +94,7 @@ pub struct ExternAbi {
 /// `Abi`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub enum Abi {
 	String(StringLiteral),
 	RawString(RawStringLiteral),
@@ -103,7 +103,7 @@ pub enum Abi {
 /// `ItemSafety`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub enum ItemSafety {
 	Safe(token::Safe),
 	Unsafe(token::Unsafe),
@@ -112,7 +112,7 @@ pub enum ItemSafety {
 /// `FunctionParameters`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 #[parse(name = "function parameters")]
 pub enum FunctionParameters {
 	Full(FunctionParametersFull),
@@ -122,7 +122,7 @@ pub enum FunctionParameters {
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct FunctionParametersOnlySelf {
 	pub self_:          SelfParam,
 	#[format(prefix_ws = Whitespace::REMOVE)]
@@ -140,7 +140,7 @@ impl ParsePeeked<(SelfParam, Option<token::Comma>, Follows<token::ParenClose>)> 
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct FunctionParametersFull {
 	pub self_: Option<FunctionParametersFullSelf>,
 	#[format(prefix_ws(expr = Whitespace::SINGLE, if = self.self_.is_some()))]
@@ -150,7 +150,7 @@ pub struct FunctionParametersFull {
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct FunctionParametersFullSelf {
 	pub self_: SelfParam,
 	#[format(prefix_ws = Whitespace::REMOVE)]
@@ -160,12 +160,12 @@ pub struct FunctionParametersFullSelf {
 /// `FunctionParam`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct FunctionParam(pub WithOuterAttributes<FunctionParamInner>);
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub enum FunctionParamInner {
 	Pattern(FunctionParamPattern),
 	CVariadic(token::DotDotDot),
@@ -175,7 +175,7 @@ pub enum FunctionParamInner {
 /// `FunctionParamPattern`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct FunctionParamPattern {
 	pub pat:   PatternNoTopAlt,
 	#[format(prefix_ws = Whitespace::REMOVE)]
@@ -188,12 +188,12 @@ pub struct FunctionParamPattern {
 /// `SelfParam`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct SelfParam(pub WithOuterAttributes<ShorthandOrTypedSelf>);
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub enum ShorthandOrTypedSelf {
 	Typed(TypedSelf),
 	Shorthand(ShorthandSelf),
@@ -202,7 +202,7 @@ pub enum ShorthandOrTypedSelf {
 /// `ShorthandSelf`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct ShorthandSelf {
 	pub ref_:  Option<ShorthandSelfRef>,
 	#[format(prefix_ws = match self.ref_.as_ref().is_some_and(|ref_| ref_.lifetime.is_some()) {
@@ -219,7 +219,7 @@ pub struct ShorthandSelf {
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct ShorthandSelfRef {
 	pub ref_:     token::And,
 	#[parse(fatal)]
@@ -230,7 +230,7 @@ pub struct ShorthandSelfRef {
 /// `TypedSelf`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct TypedSelf {
 	pub mut_:  Option<token::Mut>,
 	#[format(prefix_ws(expr = Whitespace::SINGLE, if = self.mut_.is_some()))]
@@ -244,7 +244,7 @@ pub struct TypedSelf {
 /// `FunctionReturnType`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 #[parse(name = "function return type")]
 pub struct FunctionReturnType {
 	pub arrow: token::RArrow,
@@ -256,7 +256,7 @@ pub struct FunctionReturnType {
 /// `GenericParams`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 #[parse(name = "generic parameters")]
 pub struct GenericParams(
 	#[format(args = delimited::fmt_remove())] pub Delimited<Option<GenericParamsInner>, token::Lt, token::Gt>,
@@ -264,7 +264,7 @@ pub struct GenericParams(
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 #[parse(name = "generic parameters")]
 pub struct GenericParamsInner(
 	#[format(args = punct::fmt(Whitespace::SINGLE, Whitespace::REMOVE))]
@@ -274,12 +274,12 @@ pub struct GenericParamsInner(
 /// `GenericParam`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct GenericParam(pub WithOuterAttributes<GenericParamInner>);
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub enum GenericParamInner {
 	Lifetime(LifetimeParam),
 	Type(TypeParam),
@@ -289,7 +289,7 @@ pub enum GenericParamInner {
 /// `LifetimeParam`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 #[parse(name = "a lifetime parameter")]
 pub struct LifetimeParam {
 	pub lifetime: Lifetime,
@@ -299,7 +299,7 @@ pub struct LifetimeParam {
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct LifetimeParamBounds {
 	pub colon:  token::Colon,
 	#[format(prefix_ws = Whitespace::SINGLE)]
@@ -309,7 +309,7 @@ pub struct LifetimeParamBounds {
 /// `LifetimeBounds`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct LifetimeBounds(
 	#[format(args = punct::fmt(Whitespace::SINGLE, Whitespace::SINGLE))] PunctuatedTrailing<Lifetime, token::Plus>,
 );
@@ -317,7 +317,7 @@ pub struct LifetimeBounds(
 /// `TypeParam`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 #[parse(name = "a type parameter")]
 pub struct TypeParam {
 	pub ident:  Identifier,
@@ -329,7 +329,7 @@ pub struct TypeParam {
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct TypeParamColonBounds {
 	pub colon:  token::Colon,
 	#[format(prefix_ws = Whitespace::SINGLE)]
@@ -338,7 +338,7 @@ pub struct TypeParamColonBounds {
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct TypeParamEqType {
 	pub eq: token::Eq,
 	#[format(prefix_ws = Whitespace::SINGLE)]
@@ -348,7 +348,7 @@ pub struct TypeParamEqType {
 /// `TypeParamBounds`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct TypeParamBounds(
 	#[format(args = punct::fmt(Whitespace::SINGLE, Whitespace::SINGLE))]
 	pub  PunctuatedTrailing<TypeParamBound, token::Plus>,
@@ -357,7 +357,7 @@ pub struct TypeParamBounds(
 /// `TypeParamBound`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub enum TypeParamBound {
 	Lifetime(Lifetime),
 	Trait(TraitBound),
@@ -367,7 +367,7 @@ pub enum TypeParamBound {
 /// `TraitBound`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub enum TraitBound {
 	#[format(args = delimited::fmt_preserve())]
 	Parenthesized(Parenthesized<TraitBoundInner>),
@@ -376,7 +376,7 @@ pub enum TraitBound {
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct TraitBoundInner {
 	pub prefix: Option<TraitBoundInnerPrefix>,
 	#[format(prefix_ws(if = let Some(prefix) = &self.prefix, expr = match prefix {
@@ -388,7 +388,7 @@ pub struct TraitBoundInner {
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub enum TraitBoundInnerPrefix {
 	Question(token::Question),
 	ForLifetimes(Box<ForLifetimes>),
@@ -397,7 +397,7 @@ pub enum TraitBoundInnerPrefix {
 /// `WhereClause`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct WhereClause {
 	pub where_: token::Where,
 	// TODO: The reference says that this can't have a trailing comma,
@@ -411,7 +411,7 @@ pub struct WhereClause {
 /// `WhereClauseItem`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub enum WhereClauseItem {
 	Lifetime(LifetimeWhereClauseItem),
 	Type(TypeBoundWhereClauseItem),
@@ -420,7 +420,7 @@ pub enum WhereClauseItem {
 /// `LifetimeWhereClauseItem`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct LifetimeWhereClauseItem {
 	pub lifetime: Lifetime,
 	#[format(prefix_ws = Whitespace::REMOVE)]
@@ -433,7 +433,7 @@ pub struct LifetimeWhereClauseItem {
 /// `TypeBoundWhereClauseItem`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct TypeBoundWhereClauseItem {
 	pub for_lifetimes: Option<ForLifetimes>,
 	#[format(prefix_ws(expr = Whitespace::SINGLE, if = self.for_lifetimes.is_some()))]
@@ -448,7 +448,7 @@ pub struct TypeBoundWhereClauseItem {
 /// `ForLifetimes`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct ForLifetimes {
 	pub for_:   token::For,
 	#[format(prefix_ws = Whitespace::REMOVE)]
@@ -458,7 +458,7 @@ pub struct ForLifetimes {
 /// `ConstParam`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct ConstParam {
 	pub const_: token::Const,
 	#[format(prefix_ws = Whitespace::SINGLE)]
@@ -473,7 +473,7 @@ pub struct ConstParam {
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct ConstParamEq {
 	eq:   token::Eq,
 	#[format(prefix_ws = Whitespace::SINGLE)]
@@ -482,7 +482,7 @@ pub struct ConstParamEq {
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub enum ConstParamEqRest {
 	Eq(Box<BlockExpression>),
 	Ident(Identifier),
@@ -491,7 +491,7 @@ pub enum ConstParamEqRest {
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct ConstParamEqRestLiteral {
 	neg:  Option<token::Minus>,
 	#[format(prefix_ws = Whitespace::REMOVE)]
@@ -501,7 +501,7 @@ pub struct ConstParamEqRestLiteral {
 /// `UseBound`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct UseBound {
 	pub use_: token::Use,
 	#[parse(fatal)]
@@ -511,14 +511,14 @@ pub struct UseBound {
 /// `UseBoundGenericArgs`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct UseBoundGenericArgs(
 	#[format(args = delimited::fmt_preserve())] pub Delimited<UseBoundGenericArgsInner, token::Lt, token::Gt>,
 );
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct UseBoundGenericArgsInner(
 	#[format(args = punct::fmt(Whitespace::PRESERVE, Whitespace::PRESERVE))]
 	pub  PunctuatedTrailing<UseBoundGenericArg, token::Comma>,
@@ -527,7 +527,7 @@ pub struct UseBoundGenericArgsInner(
 /// `UseBoundGenericArg`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub enum UseBoundGenericArg {
 	Lifetime(Lifetime),
 	Identifier(Identifier),

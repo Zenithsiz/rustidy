@@ -5,7 +5,7 @@ use {
 	super::Type,
 	crate::{token, util::Parenthesized},
 	rustidy_ast_util::delimited,
-	rustidy_format::{Format, WhitespaceConfig, WhitespaceFormat},
+	rustidy_format::{Format, Formattable, WhitespaceConfig, WhitespaceFormat},
 	rustidy_parse::Parse,
 	rustidy_print::Print,
 	rustidy_util::Whitespace,
@@ -14,14 +14,13 @@ use {
 /// `TupleType`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 #[parse(name = "a tuple type")]
 pub struct TupleType(#[format(args = delimited::fmt_remove())] Parenthesized<Option<TupleTypeInner>>);
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
-#[format(skip_format)]
+#[derive(Parse, Formattable, Print)]
 pub struct TupleTypeInner {
 	pub tys: Vec<(Type, token::Comma)>,
 	pub end: Option<Box<Type>>,

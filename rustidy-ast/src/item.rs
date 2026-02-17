@@ -54,7 +54,7 @@ use {
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 #[format(before_with = Self::merge_use)]
 pub struct Items(#[format(args = rustidy_format::vec::args_prefix_ws(Whitespace::CUR_INDENT))] pub Vec<Item>);
 
@@ -91,7 +91,7 @@ impl Items {
 /// `Item`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 #[expect(clippy::use_self, reason = "`Parse` derive macro doesn't support `Self`")]
 pub struct Item(pub ArenaIdx<Item>);
 
@@ -159,7 +159,7 @@ static ITEM_ARENA: Arena<Item> = Arena::new();
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 #[parse(name = "an item")]
 pub enum ItemInner {
 	Vis(VisItem),
@@ -169,7 +169,7 @@ pub enum ItemInner {
 /// `VisItem`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct VisItem {
 	pub vis:   Option<Visibility>,
 	#[format(prefix_ws(expr = Whitespace::SINGLE, if = self.vis.is_some()))]
@@ -178,7 +178,7 @@ pub struct VisItem {
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub enum VisItemInner {
 	Module(Module),
 	ExternCrate(ExternCrate),
@@ -199,7 +199,7 @@ pub enum VisItemInner {
 /// `MacroItem`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub enum MacroItem {
 	Invocation(MacroInvocationSemi),
 	Definition(MacroRulesDefinition),
@@ -209,7 +209,7 @@ pub enum MacroItem {
 // Note: Nightly-only
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct DeclMacro {
 	pub macro_: token::Macro,
 	#[parse(fatal)]
@@ -220,7 +220,7 @@ pub struct DeclMacro {
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub enum DeclMacroBody {
 	#[format(prefix_ws = Whitespace::SINGLE)]
 	Branches(DeclMacroBodyBranches),
@@ -230,7 +230,7 @@ pub enum DeclMacroBody {
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct DeclMacroBodyInline {
 	#[format(indent)]
 	#[format(args = delimited::fmt_indent_if_non_blank())]
@@ -243,7 +243,7 @@ pub struct DeclMacroBodyInline {
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct DeclMacroBodyBranches(
 	#[format(indent)]
 	#[format(args = delimited::fmt_indent_if_non_blank())]
@@ -252,7 +252,7 @@ pub struct DeclMacroBodyBranches(
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct DeclMacroBodyBranchesInner(
 	#[format(args = punct::fmt(Whitespace::CUR_INDENT, Whitespace::REMOVE))]
 	pub  PunctuatedTrailing<DeclMacroBranch, token::Comma>,
@@ -260,7 +260,7 @@ pub struct DeclMacroBodyBranchesInner(
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct DeclMacroBranch {
 	pub extra: Option<DeclMacroBranchExtra>,
 	#[format(prefix_ws(expr = Whitespace::SINGLE, if = self.extra.is_some()))]
@@ -273,7 +273,7 @@ pub struct DeclMacroBranch {
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub enum DeclMacroBranchExtra {
 	Attr(DeclMacroBranchAttr),
 	Derive(DeclMacroBranchDerive),
@@ -281,7 +281,7 @@ pub enum DeclMacroBranchExtra {
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct DeclMacroBranchAttr {
 	pub attr: token::Attr,
 	#[format(prefix_ws = Whitespace::REMOVE)]
@@ -291,7 +291,7 @@ pub struct DeclMacroBranchAttr {
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct DeclMacroBranchDerive {
 	pub derive: token::Derive,
 	#[format(prefix_ws = Whitespace::REMOVE)]

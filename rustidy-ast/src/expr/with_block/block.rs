@@ -9,7 +9,7 @@ use {
 		token,
 	},
 	rustidy_ast_util::NotFollows,
-	rustidy_format::{Format, WhitespaceFormat},
+	rustidy_format::{Format, Formattable, WhitespaceFormat},
 	rustidy_parse::{Parse, ParseError, Parser, ParserError, ParserTag},
 	rustidy_print::Print,
 	rustidy_util::{Arena, ArenaData, ArenaIdx, Whitespace},
@@ -18,7 +18,7 @@ use {
 /// `BlockExpression`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 #[parse(name = "a block expression")]
 #[parse(skip_if_tag = ParserTag::SkipBlockExpression)]
 #[expect(clippy::use_self, reason = "`Parse` derive macro doesn't support `Self`")]
@@ -35,7 +35,7 @@ static TYPE_ARENA: Arena<BlockExpression> = Arena::new();
 /// `Statements`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Format, Print)]
+#[derive(Formattable, Format, Print)]
 pub struct Statements {
 	#[format(args = rustidy_format::vec::args_prefix_ws(Whitespace::CUR_INDENT))]
 	pub stmts:         Vec<Statement>,

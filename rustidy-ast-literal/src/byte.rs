@@ -4,7 +4,7 @@
 use {
 	super::escape::ByteEscapeError,
 	crate::ByteEscape,
-	rustidy_format::Format,
+	rustidy_format::{Format, Formattable},
 	rustidy_parse::Parse,
 	rustidy_print::Print,
 	rustidy_util::{AstStr, Whitespace},
@@ -13,7 +13,7 @@ use {
 /// `BYTE_LITERAL`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 #[parse(name = "a byte literal")]
 #[parse(error(name = StartQuote, fmt = "Expected `b'`"))]
 #[parse(error(name = ByteEscape(ByteEscapeError), transparent))]

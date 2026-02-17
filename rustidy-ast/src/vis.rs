@@ -4,7 +4,7 @@
 use {
 	super::{path::SimplePath, token, util::Parenthesized},
 	rustidy_ast_util::delimited,
-	rustidy_format::{Format, WhitespaceFormat},
+	rustidy_format::{Format, Formattable, WhitespaceFormat},
 	rustidy_parse::Parse,
 	rustidy_print::Print,
 	rustidy_util::Whitespace,
@@ -13,7 +13,7 @@ use {
 /// `Visibility`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct Visibility {
 	pub pub_: token::Pub,
 	#[format(prefix_ws = Whitespace::REMOVE)]
@@ -23,7 +23,7 @@ pub struct Visibility {
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub enum VisibilityPath {
 	Crate(token::Crate),
 	Self_(token::SelfLower),
@@ -33,7 +33,7 @@ pub enum VisibilityPath {
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct VisibilityPathIn {
 	pub in_:  token::In,
 	#[parse(fatal)]

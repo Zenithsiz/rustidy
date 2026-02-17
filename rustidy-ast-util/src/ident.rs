@@ -8,7 +8,7 @@ pub use self::ident_or_keyword::{IdentifierOrKeyword, RawIdentifier};
 
 // Imports
 use {
-	rustidy_format::Format,
+	rustidy_format::{Format, Formattable},
 	rustidy_parse::{Parse, Parser},
 	rustidy_print::Print,
 };
@@ -16,7 +16,7 @@ use {
 /// `IDENTIFIER`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 #[parse(name = "an identifier")]
 pub enum Identifier {
 	Raw(RawIdentifier),
@@ -49,7 +49,7 @@ impl Identifier {
 /// `NON_KEYWORD_IDENTIFIER`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 #[parse(error(name = StrictOrReserved, fmt = "Identifier was a strict or reserved keyword"))]
 #[parse(and_try_with = Self::check_strict_reserved)]
 pub struct NonKeywordIdentifier(pub IdentifierOrKeyword);

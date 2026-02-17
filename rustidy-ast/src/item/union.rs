@@ -8,7 +8,7 @@ use {
 	},
 	crate::{token, util::Braced},
 	rustidy_ast_util::{Identifier, delimited},
-	rustidy_format::{Format, WhitespaceFormat},
+	rustidy_format::{Format, Formattable, WhitespaceFormat},
 	rustidy_parse::Parse,
 	rustidy_print::Print,
 	rustidy_util::Whitespace,
@@ -17,7 +17,7 @@ use {
 /// `Union`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct Union {
 	pub union:    token::Union,
 	#[parse(fatal)]

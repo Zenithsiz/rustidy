@@ -19,7 +19,7 @@ pub mod whitespace;
 // Exports
 pub use {
 	self::whitespace::WhitespaceFormat,
-	rustidy_macros::Format,
+	rustidy_macros::{Format, Formattable},
 	tag::FormatTag,
 	whitespace::WhitespaceFormatKind,
 };
@@ -44,7 +44,9 @@ pub trait Formattable {
 	/// Joins a string as a prefix onto the prefix whitespace of this type.
 	fn prefix_ws_join_prefix(&mut self, ctx: &mut Context, ws: Whitespace) -> Result<(), Whitespace> {
 		let mut join_ws = Some(ws);
-		self.with_prefix_ws(ctx, &mut |ws, _| ws.join_prefix(join_ws.take().expect("`with_prefix_ws` called multiple times")));
+		self.with_prefix_ws(ctx, &mut |ws, _| {
+			ws.join_prefix(join_ws.take().expect("`with_prefix_ws` called multiple times"));
+		});
 
 		match join_ws {
 			Some(ws) => Err(ws),
@@ -265,7 +267,7 @@ impl Format<()> for () {
 }
 
 macro tuple_impl ($N:literal, $($T:ident),* $(,)?) {
-	#[derive(Debug, Format)]
+	#[derive(Debug, Formattable, Format)]
 	#[expect(non_snake_case)]
 	struct ${concat( Tuple, $N )}< $( $T, )* > {
 		$( $T: $T, )*

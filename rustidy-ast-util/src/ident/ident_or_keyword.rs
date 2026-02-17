@@ -2,7 +2,7 @@
 
 // Imports
 use {
-	rustidy_format::Format,
+	rustidy_format::{Format, Formattable},
 	rustidy_parse::Parse,
 	rustidy_print::Print,
 	rustidy_util::{AstStr, Whitespace},
@@ -11,7 +11,7 @@ use {
 /// `IDENTIFIER_OR_KEYWORD`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 #[parse(error(name = XidStartOrUnderscore, fmt = "Expected `XID_START` or `_`"))]
 #[parse(error(name = SingleUnderscore, fmt = "Found `_`"))]
 pub struct IdentifierOrKeyword(
@@ -43,7 +43,7 @@ impl IdentifierOrKeyword {
 /// `RAW_IDENTIFIER`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 #[parse(error(name = Raw, fmt = "Expected `r#`"))]
 #[parse(error(name = IdentOrKeyword(IdentifierOrKeywordError), transparent))]
 #[parse(error(name = ForbiddenKeyword, fmt = "Raw identifier cannot be `crate`, `self`, `super` or `Self`"))]

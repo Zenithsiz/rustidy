@@ -11,7 +11,7 @@ use {
 		token,
 		ty::{Type, TypePath},
 	},
-	rustidy_format::{Format, WhitespaceFormat},
+	rustidy_format::{Format, Formattable, WhitespaceFormat},
 	rustidy_parse::Parse,
 	rustidy_print::Print,
 	rustidy_util::Whitespace,
@@ -20,7 +20,7 @@ use {
 /// `Implementation`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 #[parse(name = "an implementation")]
 pub enum Implementation {
 	Inherent(InherentImpl),
@@ -30,7 +30,7 @@ pub enum Implementation {
 /// `InherentImpl`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct InherentImpl {
 	pub impl_:    token::Impl,
 	#[format(prefix_ws = Whitespace::REMOVE)]
@@ -46,7 +46,7 @@ pub struct InherentImpl {
 /// `TraitImpl`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct TraitImpl {
 	pub unsafe_:  Option<token::Unsafe>,
 	#[format(prefix_ws(expr = Whitespace::SINGLE, if = self.unsafe_.is_some()))]
@@ -75,7 +75,7 @@ pub struct TraitImpl {
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct ImplBody(
 	#[format(args = rustidy_format::vec::args_prefix_ws(Whitespace::CUR_INDENT))] pub Vec<AssociatedItem>,
 );

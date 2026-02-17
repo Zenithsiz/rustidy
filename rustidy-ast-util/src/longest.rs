@@ -4,7 +4,7 @@
 
 // Imports
 use {
-	rustidy_format::Format,
+	rustidy_format::{Format, Formattable},
 	rustidy_parse::{Parse, ParseError, Parser, ParserError},
 	rustidy_print::Print,
 };
@@ -12,7 +12,7 @@ use {
 /// Parses the longest of two types
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Format, Print)]
+#[derive(Formattable, Format, Print)]
 pub enum Longest<L, R> {
 	Left(L),
 	Right(R),

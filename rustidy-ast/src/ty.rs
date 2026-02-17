@@ -30,7 +30,7 @@ use {
 		util::Parenthesized,
 	},
 	rustidy_ast_util::delimited,
-	rustidy_format::{Format, WhitespaceFormat},
+	rustidy_format::{Format, Formattable, WhitespaceFormat},
 	rustidy_parse::Parse,
 	rustidy_print::Print,
 	rustidy_util::{Arena, ArenaData, ArenaIdx, Whitespace},
@@ -39,7 +39,7 @@ use {
 /// `Type`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 #[expect(clippy::use_self, reason = "`Parse` derive macro doesn't support `Self`")]
 pub struct Type(pub ArenaIdx<Type>);
 
@@ -53,7 +53,7 @@ static TYPE_ARENA: Arena<Type> = Arena::new();
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 #[parse(name = "a type")]
 pub enum TypeInner {
 	ImplTrait(ImplTraitType),
@@ -66,7 +66,7 @@ pub enum TypeInner {
 #[derive(PartialEq, Eq, Debug)]
 #[derive(derive_more::From)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub enum TypeNoBounds {
 	MacroInvocation(MacroInvocation),
 	Path(TypePath),
@@ -88,19 +88,19 @@ pub enum TypeNoBounds {
 /// `ParenthesizedPath`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct ParenthesizedPath(#[format(args = delimited::fmt_single_if_non_blank())] Parenthesized<Box<Type>>);
 
 /// `NeverType`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct NeverType(token::Not);
 
 /// `ReferenceType`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 #[parse(name = "a reference type")]
 pub struct ReferenceType {
 	pub ref_:     token::AndTy,
@@ -121,13 +121,13 @@ pub struct ReferenceType {
 /// `InferredType`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct InferredType(token::Underscore);
 
 /// `ImplTraitTypeOneBound`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct ImplTraitTypeOneBound {
 	pub impl_: token::Impl,
 	#[format(prefix_ws = Whitespace::SINGLE)]
@@ -137,7 +137,7 @@ pub struct ImplTraitTypeOneBound {
 /// `TraitObjectTypeOneBound`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct TraitObjectTypeOneBound {
 	pub dyn_:  Option<token::Dyn>,
 	#[format(prefix_ws(expr = Whitespace::SINGLE, if = self.dyn_.is_some()))]
@@ -147,7 +147,7 @@ pub struct TraitObjectTypeOneBound {
 /// `ImplTraitType`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct ImplTraitType {
 	pub impl_: token::Impl,
 	#[format(prefix_ws = Whitespace::SINGLE)]
@@ -157,7 +157,7 @@ pub struct ImplTraitType {
 /// `TraitObjectType`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct TraitObjectType {
 	pub dyn_:  Option<token::Dyn>,
 	#[format(prefix_ws(expr = Whitespace::SINGLE, if = self.dyn_.is_some()))]

@@ -11,7 +11,7 @@ use {
 		ty::{Type, TypeNoBounds},
 	},
 	rustidy_ast_util::{Delimited, PunctuatedTrailing, delimited, punct},
-	rustidy_format::{Format, WhitespaceFormat},
+	rustidy_format::{Format, Formattable, WhitespaceFormat},
 	rustidy_parse::{Parse, ParseRecursive},
 	rustidy_print::Print,
 	rustidy_util::Whitespace,
@@ -19,7 +19,7 @@ use {
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(ParseRecursive, Format, Print)]
+#[derive(ParseRecursive, Formattable, Format, Print)]
 #[parse_recursive(root = ExpressionInner)]
 #[parse_recursive(into_root = ExpressionWithoutBlockInner)]
 #[parse_recursive(kind = "right")]
@@ -39,7 +39,7 @@ pub struct ClosureExpression {
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub enum ClosureParams {
 	NoParams(token::OrOr),
 	#[format(args = delimited::fmt_remove())]
@@ -48,7 +48,7 @@ pub enum ClosureParams {
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct ClosureRet {
 	pub arrow: token::RArrow,
 	#[parse(fatal)]
@@ -59,7 +59,7 @@ pub struct ClosureRet {
 /// `ClosureParameters`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct ClosureParameters(
 	#[format(args = punct::fmt(Whitespace::SINGLE, Whitespace::REMOVE))]
 	pub  PunctuatedTrailing<ClosureParameter, token::Comma>,
@@ -68,12 +68,12 @@ pub struct ClosureParameters(
 /// `ClosureParameter`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct ClosureParameter(pub WithOuterAttributes<ClosureParameterInner>);
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct ClosureParameterInner {
 	pub pat: PatternNoTopAlt,
 	#[format(prefix_ws = Whitespace::REMOVE)]
@@ -82,7 +82,7 @@ pub struct ClosureParameterInner {
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct ClosureParameterInnerTy {
 	pub colon: token::Colon,
 	#[format(prefix_ws = Whitespace::SINGLE)]

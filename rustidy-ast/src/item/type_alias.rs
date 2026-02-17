@@ -5,7 +5,7 @@ use {
 	super::function::{GenericParams, TypeParamBounds, WhereClause},
 	crate::{token, ty::Type},
 	rustidy_ast_util::Identifier,
-	rustidy_format::{Format, WhitespaceFormat},
+	rustidy_format::{Format, Formattable, WhitespaceFormat},
 	rustidy_parse::Parse,
 	rustidy_print::Print,
 	rustidy_util::Whitespace,
@@ -14,7 +14,7 @@ use {
 /// `TypeAlias`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct TypeAlias {
 	pub type_:    token::Type,
 	#[parse(fatal)]
@@ -34,7 +34,7 @@ pub struct TypeAlias {
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct TypeAliasBounds {
 	pub colon:  token::Colon,
 	#[format(prefix_ws = Whitespace::SINGLE)]
@@ -43,7 +43,7 @@ pub struct TypeAliasBounds {
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct TypeAliasEq {
 	pub eq:     token::Eq,
 	#[parse(fatal)]

@@ -3,7 +3,7 @@
 // Imports
 use {
 	crate::{attr::DelimTokenTree, path::SimplePath, token},
-	rustidy_format::{Format, WhitespaceFormat},
+	rustidy_format::{Format, Formattable, WhitespaceFormat},
 	rustidy_parse::Parse,
 	rustidy_print::Print,
 	rustidy_util::Whitespace,
@@ -12,7 +12,7 @@ use {
 /// `MacroInvocation`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 #[parse(name = "a macro invocation")]
 pub struct MacroInvocation {
 	pub path: SimplePath,

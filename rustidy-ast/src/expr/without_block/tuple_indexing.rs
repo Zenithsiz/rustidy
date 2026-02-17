@@ -6,7 +6,7 @@ use {
 		expr::{Expression, ExpressionInner},
 		token,
 	},
-	rustidy_format::{Format, WhitespaceFormat},
+	rustidy_format::{Format, Formattable, WhitespaceFormat},
 	rustidy_parse::ParseRecursive,
 	rustidy_print::Print,
 	rustidy_util::Whitespace,
@@ -15,7 +15,7 @@ use {
 /// `TupleIndexingExpression`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(ParseRecursive, Format, Print)]
+#[derive(ParseRecursive, Formattable, Format, Print)]
 #[parse_recursive(root = ExpressionInner)]
 #[parse_recursive(into_root = ExpressionWithoutBlockInner)]
 #[parse_recursive(kind = "left")]

@@ -10,7 +10,7 @@ use {
 		util::Parenthesized,
 	},
 	rustidy_ast_util::{Identifier, Punctuated, PunctuatedTrailing, delimited, punct},
-	rustidy_format::{Format, WhitespaceFormat},
+	rustidy_format::{Format, Formattable, WhitespaceFormat},
 	rustidy_parse::Parse,
 	rustidy_print::Print,
 	rustidy_util::Whitespace,
@@ -19,7 +19,7 @@ use {
 /// `BareFunctionType`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct BareFunctionType {
 	pub for_lifetimes: Option<ForLifetimes>,
 	#[format(prefix_ws(expr = Whitespace::SINGLE, if = self.for_lifetimes.is_some()))]
@@ -37,7 +37,7 @@ pub struct BareFunctionType {
 /// `FunctionTypeQualifiers`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct FunctionTypeQualifiers {
 	pub unsafe_: Option<token::Unsafe>,
 	#[format(prefix_ws(expr = Whitespace::SINGLE, if = self.unsafe_.is_some()))]
@@ -47,7 +47,7 @@ pub struct FunctionTypeQualifiers {
 /// `FunctionParametersMaybeNamedVariadic`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub enum FunctionParametersMaybeNamedVariadic {
 	Variadic(MaybeNamedFunctionParametersVariadic),
 	Normal(MaybeNamedFunctionParameters),
@@ -56,7 +56,7 @@ pub enum FunctionParametersMaybeNamedVariadic {
 /// `MaybeNamedFunctionParameters`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct MaybeNamedFunctionParameters(
 	#[format(args = punct::fmt(Whitespace::SINGLE, Whitespace::REMOVE))]
 	PunctuatedTrailing<MaybeNamedParam, token::Comma>,
@@ -65,12 +65,12 @@ pub struct MaybeNamedFunctionParameters(
 /// `MaybeNamedParam`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct MaybeNamedParam(pub WithOuterAttributes<MaybeNamedParamInner>);
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct MaybeNamedParamInner {
 	pub name: Option<MaybeNamedParamInnerName>,
 	#[format(prefix_ws(expr = Whitespace::SINGLE, if = self.name.is_some()))]
@@ -79,7 +79,7 @@ pub struct MaybeNamedParamInner {
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct MaybeNamedParamInnerName {
 	pub inner: MaybeNamedParamInnerNameInner,
 	#[format(prefix_ws = Whitespace::REMOVE)]
@@ -88,7 +88,7 @@ pub struct MaybeNamedParamInnerName {
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub enum MaybeNamedParamInnerNameInner {
 	Ident(Identifier),
 	Underscore(token::Underscore),
@@ -97,7 +97,7 @@ pub enum MaybeNamedParamInnerNameInner {
 /// `MaybeNamedFunctionParametersVariadic`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct MaybeNamedFunctionParametersVariadic {
 	// TODO: `fn(...)` is accepted by the rust compiler, but
 	//       the reference demands at least 1 argument, should
@@ -113,7 +113,7 @@ pub struct MaybeNamedFunctionParametersVariadic {
 /// `BareFunctionReturnType`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct BareFunctionReturnType {
 	pub arrow: token::RArrow,
 	#[format(prefix_ws = Whitespace::SINGLE)]

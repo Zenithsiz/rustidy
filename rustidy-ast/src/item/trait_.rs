@@ -15,7 +15,7 @@ use {
 		token,
 	},
 	rustidy_ast_util::Identifier,
-	rustidy_format::{Format, WhitespaceFormat},
+	rustidy_format::{Format, Formattable, WhitespaceFormat},
 	rustidy_parse::Parse,
 	rustidy_print::Print,
 	rustidy_util::Whitespace,
@@ -24,7 +24,7 @@ use {
 /// `Trait`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 #[parse(name = "a trait")]
 pub struct Trait {
 	pub unsafe_:  Option<token::Unsafe>,
@@ -48,7 +48,7 @@ pub struct Trait {
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub enum TraitBody {
 	// Note: Nightly-only
 	Eq(TraitBodyEq),
@@ -57,7 +57,7 @@ pub enum TraitBody {
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct TraitBodyEq {
 	pub eq:     token::Eq,
 	#[format(prefix_ws = Whitespace::SINGLE)]
@@ -68,14 +68,14 @@ pub struct TraitBodyEq {
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct TraitBodyFull(
 	#[format(args = rustidy_format::vec::args_prefix_ws(Whitespace::CUR_INDENT))] pub Vec<AssociatedItem>,
 );
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct TraitColonBounds {
 	pub colon:  token::Colon,
 	#[format(prefix_ws = Whitespace::SINGLE)]
@@ -85,12 +85,12 @@ pub struct TraitColonBounds {
 /// `AssociatedItem`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct AssociatedItem(pub WithOuterAttributes<AssociatedItemInner>);
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub enum AssociatedItemInner {
 	Macro(MacroInvocationSemi),
 	Vis(AssociatedItemVis),
@@ -98,7 +98,7 @@ pub enum AssociatedItemInner {
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct AssociatedItemVis {
 	pub vis:   Option<Visibility>,
 	#[format(prefix_ws(expr = Whitespace::SINGLE, if = self.vis.is_some()))]
@@ -107,7 +107,7 @@ pub struct AssociatedItemVis {
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub enum AssociatedItemVisInner {
 	TypeAlias(TypeAlias),
 	Constant(ConstantItem),

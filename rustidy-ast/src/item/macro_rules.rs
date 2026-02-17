@@ -17,7 +17,7 @@ use {
 		delimited,
 		punct,
 	},
-	rustidy_format::{Format, WhitespaceFormat},
+	rustidy_format::{Format, Formattable, WhitespaceFormat},
 	rustidy_parse::{Parse, ParserTag},
 	rustidy_print::Print,
 	rustidy_util::Whitespace,
@@ -26,7 +26,7 @@ use {
 /// `MacroRulesDefinition`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct MacroRulesDefinition {
 	pub macro_rules: token::MacroRules,
 	#[parse(fatal)]
@@ -42,7 +42,7 @@ pub struct MacroRulesDefinition {
 /// `MacroRulesDef`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub enum MacroRulesDef {
 	Parens(MacroRulesDefParens),
 	Brackets(MacroRulesDefBrackets),
@@ -51,7 +51,7 @@ pub enum MacroRulesDef {
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct MacroRulesDefParens {
 	#[format(args = delimited::fmt_preserve())]
 	pub rules: Parenthesized<MacroRules>,
@@ -60,7 +60,7 @@ pub struct MacroRulesDefParens {
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct MacroRulesDefBrackets {
 	#[format(args = delimited::fmt_preserve())]
 	pub rules: Bracketed<MacroRules>,
@@ -69,7 +69,7 @@ pub struct MacroRulesDefBrackets {
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct MacroRulesDefBraces {
 	#[format(args = delimited::fmt_preserve())]
 	pub rules: Braced<MacroRules>,
@@ -78,7 +78,7 @@ pub struct MacroRulesDefBraces {
 /// `MacroRules`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct MacroRules(
 	#[format(args = punct::fmt(Whitespace::PRESERVE, Whitespace::PRESERVE))] PunctuatedTrailing<MacroRule, token::Semi>,
 );
@@ -86,7 +86,7 @@ pub struct MacroRules(
 /// `MacroRule`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct MacroRule {
 	pub matcher:     MacroMatcher,
 	#[parse(fatal)]
@@ -97,7 +97,7 @@ pub struct MacroRule {
 /// `MacroMatcher`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub enum MacroMatcher {
 	#[format(args = delimited::fmt_preserve())]
 	Parens(Parenthesized<MacroMatcherMatches>),
@@ -109,7 +109,7 @@ pub enum MacroMatcher {
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct MacroMatcherMatches(
 	#[format(args = rustidy_format::vec::args_prefix_ws(Whitespace::PRESERVE))] Vec<MacroMatch>,
 );
@@ -117,7 +117,7 @@ pub struct MacroMatcherMatches(
 /// `MacroMatch`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub enum MacroMatch {
 	#[parse(with_tag = ParserTag::SkipTokenDollar)]
 	#[parse(with_tag = ParserTag::SkipDelimiters)]
@@ -136,7 +136,7 @@ pub enum MacroMatch {
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct MacroMatchDollarIdent {
 	pub dollar: token::Dollar,
 	pub ident:  MacroMatchDollarIdentInner,
@@ -147,7 +147,7 @@ pub struct MacroMatchDollarIdent {
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub enum MacroMatchDollarIdentInner {
 	Raw(RawIdentifier),
 	#[parse(with_tag = ParserTag::SkipTokenCrate)]
@@ -158,7 +158,7 @@ pub enum MacroMatchDollarIdentInner {
 /// `MacroFragSpec`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub enum MacroFragSpec {
 	Block(token::Block),
 	Expr(token::Expr),
@@ -179,7 +179,7 @@ pub enum MacroFragSpec {
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct MacroMatchDollarRep {
 	pub dollar:  token::Dollar,
 	#[format(args = delimited::fmt_preserve())]
@@ -191,7 +191,7 @@ pub struct MacroMatchDollarRep {
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct MacroMatchDollarRepMatches(
 	#[format(args = at_least::fmt_prefix_ws(Whitespace::PRESERVE))] pub AtLeast1<Box<MacroMatch>>,
 );
@@ -199,7 +199,7 @@ pub struct MacroMatchDollarRepMatches(
 /// `MacroRepSep`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct MacroRepSep(
 	#[parse(with_tag = ParserTag::SkipDelimiters)]
 	#[parse(with_tag = ParserTag::SkipTokenStar)]
@@ -211,7 +211,7 @@ pub struct MacroRepSep(
 /// `MacroRepOp`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub enum MacroRepOp {
 	Star(token::Star),
 	Plus(token::Plus),
@@ -221,5 +221,5 @@ pub enum MacroRepOp {
 /// `MacroTranscriber`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct MacroTranscriber(DelimTokenTree);

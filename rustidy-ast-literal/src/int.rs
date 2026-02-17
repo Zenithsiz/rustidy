@@ -4,7 +4,7 @@
 use {
 	super::SuffixNoE,
 	app_error::{AppError, Context},
-	rustidy_format::Format,
+	rustidy_format::{Format, Formattable},
 	rustidy_parse::Parse,
 	rustidy_print::Print,
 	rustidy_util::{AstStr, Whitespace},
@@ -14,7 +14,7 @@ use {
 /// `INTEGER_LITERAL`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 #[parse(name = "an integer literal")]
 pub struct IntegerLiteral {
 	#[format(whitespace)]
@@ -45,7 +45,7 @@ impl IntegerLiteral {
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub enum IntegerLiteralInner {
 	Decimal(DecLiteral),
 	Binary(BinLiteral),
@@ -56,7 +56,7 @@ pub enum IntegerLiteralInner {
 /// `DEC_LITERAL`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 #[parse(error(name = StartDigit, fmt = "Expected 0-9"))]
 pub struct DecLiteral(
 	#[parse(try_update_with = Self::parse)]
@@ -78,7 +78,7 @@ impl DecLiteral {
 /// `BIN_LITERAL`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 #[parse(error(name = Start0B, fmt = "Expected `0b`"))]
 #[parse(error(name = Digit, fmt = "Expected 0 or 1"))]
 pub struct BinLiteral(
@@ -103,7 +103,7 @@ impl BinLiteral {
 /// `OCT_LITERAL`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 #[parse(error(name = Start0O, fmt = "Expected `0o`"))]
 #[parse(error(name = Digit, fmt = "Expected 0-7"))]
 pub struct OctLiteral(
@@ -128,7 +128,7 @@ impl OctLiteral {
 /// `HEX_LITERAL`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 #[parse(error(name = Start0X, fmt = "Expected `0x`"))]
 #[parse(error(name = Digit, fmt = "Expected 0-9 or a-f"))]
 pub struct HexLiteral(

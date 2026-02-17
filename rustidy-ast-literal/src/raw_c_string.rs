@@ -3,7 +3,7 @@
 // Imports
 use {
 	super::Suffix,
-	rustidy_format::Format,
+	rustidy_format::{Format, Formattable},
 	rustidy_parse::Parse,
 	rustidy_print::Print,
 	rustidy_util::{AstStr, Whitespace},
@@ -12,7 +12,7 @@ use {
 /// `RAW_C_STRING_LITERAL`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 #[parse(name = "a raw C string literal")]
 #[parse(error(name = StartR, fmt = "Expected `cr`"))]
 #[parse(error(name = StartQuote, fmt = "Expected `cr\"`"))]

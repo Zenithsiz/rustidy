@@ -4,7 +4,7 @@
 use {
 	super::Suffix,
 	crate::{AsciiEscape, QuoteEscape, StringContinue, UnicodeEscape},
-	rustidy_format::Format,
+	rustidy_format::{Format, Formattable},
 	rustidy_parse::Parse,
 	rustidy_print::Print,
 	rustidy_util::{AstStr, Whitespace},
@@ -14,7 +14,7 @@ use {
 /// `STRING_LITERAL`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 #[parse(name = "a string literal")]
 #[parse(error(name = StartQuote, fmt = "Expected `\"`"))]
 #[parse(error(name = ExpectedEndQuote, fmt = "Expected `\"` after `\"`", fatal))]

@@ -45,7 +45,7 @@ pub mod vis;
 use {
 	self::{attr::InnerAttrOrDocComment, item::Items, shebang::Shebang},
 	core::fmt::Debug,
-	rustidy_format::{Format, WhitespaceConfig, WhitespaceFormat},
+	rustidy_format::{Format, Formattable, WhitespaceConfig, WhitespaceFormat},
 	rustidy_parse::Parse,
 	rustidy_print::Print,
 	rustidy_util::{AstStr, Whitespace, ast_str::AstStrRepr},
@@ -54,9 +54,8 @@ use {
 /// `Crate`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Print)]
 #[parse(name = "a crate")]
-#[format(skip_format)]
 pub struct Crate(pub CrateInner);
 
 impl Format<()> for Crate {
@@ -77,7 +76,7 @@ impl Format<()> for Crate {
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct CrateInner {
 	pub shebang:               Option<Shebang>,
 	#[format(prefix_ws = Whitespace::REMOVE)]
@@ -120,7 +119,7 @@ impl CrateInner {
 /// Trailing line comment
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 #[parse(error(name = NoComment, fmt = "Expected `//` (except `///` or `//!`)"))]
 pub struct TrailingLineComment(
 	#[parse(try_update_with = Self::parse)]

@@ -5,7 +5,7 @@ use {
 	super::function::ItemSafety,
 	crate::{expr::Expression, token, ty::Type},
 	rustidy_ast_util::Identifier,
-	rustidy_format::{Format, WhitespaceFormat},
+	rustidy_format::{Format, Formattable, WhitespaceFormat},
 	rustidy_parse::Parse,
 	rustidy_print::Print,
 	rustidy_util::Whitespace,
@@ -14,7 +14,7 @@ use {
 /// `StaticItem`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct StaticItem {
 	pub safety:  Option<ItemSafety>,
 	#[format(prefix_ws(expr = Whitespace::SINGLE, if = self.safety.is_some()))]
@@ -35,7 +35,7 @@ pub struct StaticItem {
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct StaticItemValue {
 	pub eq:    token::Eq,
 	#[format(prefix_ws = Whitespace::SINGLE)]

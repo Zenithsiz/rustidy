@@ -1,12 +1,17 @@
 //! Escapes
 
 // Imports
-use {rustidy_format::Format, rustidy_parse::Parse, rustidy_print::Print, rustidy_util::AstStr};
+use {
+	rustidy_format::{Format, Formattable},
+	rustidy_parse::Parse,
+	rustidy_print::Print,
+	rustidy_util::AstStr,
+};
 
 /// `QUOTE_ESCAPE`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 #[parse(error(name = Escape, fmt = "Expected `\\'` or `\\\"`"))]
 pub struct QuoteEscape(
 	#[parse(try_update_with = Self::parse)]
@@ -26,7 +31,7 @@ impl QuoteEscape {
 /// `ASCII_ESCAPE`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 #[parse(error(name = Escape, fmt = "Expected `\\xXX`, `\\n`, `\\r`, `\\t`, `\\\\` or `\\0`"))]
 #[parse(error(name = Octal, fmt = "Expected octal digit", fatal))]
 #[parse(error(name = Hex, fmt = "Expected hex digit", fatal))]
@@ -62,7 +67,7 @@ impl AsciiEscape {
 /// `BYTE_ESCAPE`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 #[parse(error(name = Escape, fmt = "Expected `\\xXX`, `\\n`, `\\r`, `\\t`, `\\\\`, `\\0`, `'` or `\"`"))]
 #[parse(error(name = Hex, fmt = "Expected hex digit"))]
 pub struct ByteEscape(
@@ -99,7 +104,7 @@ impl ByteEscape {
 /// `BYTE_ESCAPE` except `\0`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 #[parse(error(name = ByteEscape(ByteEscapeError), transparent))]
 #[parse(error(name = Nul, fmt = "Nul escape isn't allowed", fatal))]
 pub struct NonNulByteEscape(
@@ -122,7 +127,7 @@ impl NonNulByteEscape {
 /// `UNICODE_ESCAPE`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 #[parse(error(name = Escape, fmt = "Expected `\\u{{XXXXX}}`"))]
 #[parse(error(name = TooManyDigits, fmt = "Expected at most 6 digits", fatal))]
 pub struct UnicodeEscape(
@@ -157,7 +162,7 @@ impl UnicodeEscape {
 /// `UNICODE_ESCAPE` except `\u{0}` (and variants)
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 #[parse(error(name = UnicodeEscape(UnicodeEscapeError), transparent))]
 #[parse(error(name = Nul, fmt = "Nul escape isn't allowed", fatal))]
 pub struct NonNulUnicodeEscape(
@@ -182,7 +187,7 @@ impl NonNulUnicodeEscape {
 /// `STRING_CONTINUE`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 #[parse(error(name = Escape, fmt = "Expected `\\` and a newline"))]
 pub struct StringContinue(
 	#[parse(try_update_with = Self::parse)]

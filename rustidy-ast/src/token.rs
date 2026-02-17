@@ -16,7 +16,7 @@ use {
 		StringLiteral,
 	},
 	rustidy_ast_util::{IdentifierOrKeyword, RawIdentifier},
-	rustidy_format::Format,
+	rustidy_format::{Format, Formattable},
 	rustidy_parse::Parse,
 	rustidy_print::Print,
 };
@@ -27,7 +27,7 @@ pub use rustidy_ast_tokens::*;
 /// `Token`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub enum Token {
 	RawIdent(RawIdentifier),
 	CharLiteral(CharLiteral),
@@ -50,7 +50,7 @@ pub enum Token {
 /// `Punctuation`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub enum Punctuation {
 	Eq(Eq),
 	Lt(Lt),

@@ -17,6 +17,7 @@
 
 // Modules
 mod format;
+mod formattable;
 mod parse;
 mod parse_error;
 mod parse_recursive;
@@ -42,6 +43,11 @@ pub fn derive_parser(input: proc_macro::TokenStream) -> proc_macro::TokenStream 
 #[proc_macro_derive(ParseRecursive, attributes(parse_recursive))]
 pub fn derive_parser_recursive(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
 	self::try_derive(input, parse_recursive::derive)
+}
+
+#[proc_macro_derive(Formattable, attributes(formattable))]
+pub fn derive_formattable(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
+	self::try_derive(input, formattable::derive)
 }
 
 #[proc_macro_derive(Format, attributes(format))]

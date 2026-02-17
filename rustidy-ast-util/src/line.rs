@@ -1,12 +1,17 @@
 //! Line remainder
 
 // Imports
-use {rustidy_format::Format, rustidy_parse::Parse, rustidy_print::Print, rustidy_util::AstStr};
+use {
+	rustidy_format::{Format, Formattable},
+	rustidy_parse::Parse,
+	rustidy_print::Print,
+	rustidy_util::AstStr,
+};
 
 /// Characters remaining until the end of the line (including the newline if it exists)
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 #[parse(name = "remaining characters in line")]
 pub struct RemainingLine(
 	#[parse(update_with = Self::parse)]
@@ -28,7 +33,7 @@ impl RemainingLine {
 //       just be merged with `attr.rs`.
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 #[parse(name = "remaining characters in block comment")]
 #[parse(error(name = MissingCommentEnd, fmt = "Expected `*/` after `/*`", fatal))]
 pub struct RemainingBlockComment(

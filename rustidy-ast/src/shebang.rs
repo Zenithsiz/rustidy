@@ -1,12 +1,17 @@
 //! Shebang
 
 // Imports
-use {rustidy_format::Format, rustidy_parse::Parse, rustidy_print::Print, rustidy_util::AstStr};
+use {
+	rustidy_format::{Format, Formattable},
+	rustidy_parse::Parse,
+	rustidy_print::Print,
+	rustidy_util::AstStr,
+};
 
 /// Shebang
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 #[parse(name = "a shebang")]
 #[parse(error(name = Shebang, fmt = "Expected a `#!`"))]
 pub struct Shebang(

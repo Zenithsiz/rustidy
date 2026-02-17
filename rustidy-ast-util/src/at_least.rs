@@ -2,14 +2,14 @@
 
 // Imports
 use {
-	rustidy_format::{Format, WhitespaceConfig},
+	rustidy_format::{Format, Formattable, WhitespaceConfig},
 	rustidy_parse::Parse,
 	rustidy_print::Print,
 };
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 #[format(args = FmtArgs)]
 // TODO: Support arguments for `T`
 pub struct AtLeast1<T> {

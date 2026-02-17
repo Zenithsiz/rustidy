@@ -12,7 +12,7 @@ use {
 		vis::Visibility,
 	},
 	rustidy_ast_util::{Identifier, PunctuatedTrailing, delimited, punct},
-	rustidy_format::{Format, WhitespaceFormat},
+	rustidy_format::{Format, Formattable, WhitespaceFormat},
 	rustidy_parse::Parse,
 	rustidy_print::Print,
 	rustidy_util::Whitespace,
@@ -21,7 +21,7 @@ use {
 /// `Struct`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub enum Struct {
 	Struct(StructStruct),
 	Tuple(TupleStruct),
@@ -30,7 +30,7 @@ pub enum Struct {
 /// `StructStruct`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct StructStruct {
 	pub struct_:  token::Struct,
 	#[format(prefix_ws = Whitespace::SINGLE)]
@@ -45,7 +45,7 @@ pub struct StructStruct {
 #[derive(PartialEq, Eq, Debug)]
 #[derive(strum::EnumIs)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub enum StructStructInner {
 	#[format(prefix_ws = Whitespace::SINGLE)]
 	#[format(indent)]
@@ -58,7 +58,7 @@ pub enum StructStructInner {
 /// `StructFields`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct StructFields(
 	#[format(args = {
 		let max_ident_len = self.0.values().map(|field| field.0.inner.ident.non_ws_len()).max().expect("At least one element exists");
@@ -70,13 +70,13 @@ pub struct StructFields(
 /// `StructField`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 #[format(args(ty = "StructFieldInnerArgs"))]
 pub struct StructField(#[format(args = with::fmt(args))] pub WithOuterAttributes<StructFieldInner>);
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 #[format(args(ty = "&'_ mut StructFieldInnerArgs"))]
 pub struct StructFieldInner {
 	pub vis:   Option<Visibility>,
@@ -102,7 +102,7 @@ struct StructFieldInnerArgs {
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct StructFieldEq {
 	pub eq:   token::Eq,
 	#[format(prefix_ws = Whitespace::SINGLE)]
@@ -112,7 +112,7 @@ pub struct StructFieldEq {
 /// `TupleStruct`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct TupleStruct {
 	pub struct_:  token::Struct,
 	#[format(prefix_ws = Whitespace::SINGLE)]
@@ -132,7 +132,7 @@ pub struct TupleStruct {
 /// `TupleFields`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct TupleFields(
 	#[format(args = punct::fmt(Whitespace::SINGLE, Whitespace::REMOVE))] PunctuatedTrailing<TupleField, token::Comma>,
 );
@@ -140,13 +140,13 @@ pub struct TupleFields(
 /// `TupleField`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct TupleField(pub WithOuterAttributes<TupleFieldInner>);
 
 /// `TupleFieldInner`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct TupleFieldInner {
 	pub vis: Option<Visibility>,
 	#[format(prefix_ws(expr = Whitespace::SINGLE, if = self.vis.is_some()))]

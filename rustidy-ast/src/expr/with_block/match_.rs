@@ -10,7 +10,7 @@ use {
 		token,
 	},
 	core::ops::ControlFlow,
-	rustidy_format::{Format, WhitespaceFormat},
+	rustidy_format::{Format, Formattable, WhitespaceFormat},
 	rustidy_parse::{FromRecursiveRoot, Parse, ParseError, Parser, ParserError, ParserTag},
 	rustidy_print::Print,
 	rustidy_util::Whitespace,
@@ -19,7 +19,7 @@ use {
 /// `MatchExpression`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 #[parse(name = "a match expression")]
 pub struct MatchExpression {
 	pub match_:    token::Match,
@@ -33,13 +33,13 @@ pub struct MatchExpression {
 /// `Scrutinee`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct Scrutinee(#[parse(with_tag = ParserTag::SkipStructExpression)] Expression);
 
 /// `MatchArms`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Format, Print)]
+#[derive(Formattable, Format, Print)]
 pub struct MatchArms {
 	#[format(args = rustidy_format::vec::args_prefix_ws(Whitespace::CUR_INDENT))]
 	pub arms: Vec<MatchArmWithExpr>,
@@ -154,7 +154,7 @@ pub enum MatchArmsError {
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct MatchArmWithExpr {
 	pub arm:            MatchArm,
 	#[format(prefix_ws = Whitespace::SINGLE)]
@@ -168,12 +168,12 @@ pub struct MatchArmWithExpr {
 /// `MatchArm`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct MatchArm(pub WithOuterAttributes<MatchArmInner>);
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 #[parse(name = "a match arm")]
 pub struct MatchArmInner {
 	pub pat:   Pattern,
@@ -184,7 +184,7 @@ pub struct MatchArmInner {
 /// `MatchArmGuard`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct MatchArmGuard {
 	pub if_:  token::If,
 	// TODO: The reference says this is just an expression, but

@@ -51,11 +51,15 @@ pub use self::{
 };
 
 // Imports
-use {rustidy_format::Format, rustidy_parse::Parse, rustidy_print::Print};
+use {
+	rustidy_format::{Format, Formattable},
+	rustidy_parse::Parse,
+	rustidy_print::Print,
+};
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub enum LiteralExpression {
 	Float(FloatLiteral),
 

@@ -49,7 +49,7 @@ use {
 	super::{Expression, ExpressionInner},
 	crate::{attr::WithOuterAttributes, token},
 	rustidy_ast_literal::{IntegerLiteral, LiteralExpression},
-	rustidy_format::{Format, WhitespaceFormat},
+	rustidy_format::{Format, Formattable, WhitespaceFormat},
 	rustidy_parse::{Parse, ParseRecursive, ParserTag, RecursiveWrapper},
 	rustidy_print::Print,
 	rustidy_util::Whitespace,
@@ -59,7 +59,7 @@ use {
 #[derive(PartialEq, Eq, Debug)]
 #[derive(derive_more::From)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, ParseRecursive, Format, Print)]
+#[derive(Parse, ParseRecursive, Formattable, Format, Print)]
 #[parse(from = RecursiveWrapper::<ExpressionWithoutBlock, ExpressionInner>)]
 #[parse(skip_if_tag = ParserTag::SkipExpressionWithoutBlock)]
 #[parse_recursive(root = ExpressionInner)]
@@ -87,7 +87,7 @@ impl TryFrom<ExpressionWithoutBlock> for ExpressionWithoutBlockInner {
 #[derive(PartialEq, Eq, Debug)]
 #[derive(derive_more::From, derive_more::TryInto)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(ParseRecursive, Format, Print)]
+#[derive(ParseRecursive, Formattable, Format, Print)]
 #[parse_recursive(root = ExpressionInner)]
 #[parse_recursive(into_root = ExpressionWithoutBlock)]
 pub enum ExpressionWithoutBlockInner {
@@ -131,7 +131,7 @@ pub enum ExpressionWithoutBlockInner {
 // Note: Nightly-only
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct DoYeetExpression {
 	pub do_:   token::Do,
 	#[format(prefix_ws = Whitespace::SINGLE)]
@@ -144,5 +144,5 @@ pub struct DoYeetExpression {
 /// `TUPLE_INDEX`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct TupleIndex(pub IntegerLiteral);

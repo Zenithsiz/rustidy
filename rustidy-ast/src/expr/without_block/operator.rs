@@ -8,7 +8,7 @@ use {
 		token,
 		ty::TypeNoBounds,
 	},
-	rustidy_format::{Format, WhitespaceFormat},
+	rustidy_format::{Format, Formattable, WhitespaceFormat},
 	rustidy_parse::{ParseRecursive, ParserTag},
 	rustidy_print::Print,
 	rustidy_util::Whitespace,
@@ -18,7 +18,7 @@ use {
 #[derive(PartialEq, Eq, Debug)]
 #[derive(derive_more::From, derive_more::TryInto)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(ParseRecursive, Format, Print)]
+#[derive(ParseRecursive, Formattable, Format, Print)]
 #[parse_recursive(root = ExpressionInner)]
 #[parse_recursive(into_root = ExpressionWithoutBlockInner)]
 pub enum OperatorExpression {
@@ -48,7 +48,7 @@ pub enum OperatorExpression {
 /// `ErrorPropagationExpression`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(ParseRecursive, Format, Print)]
+#[derive(ParseRecursive, Formattable, Format, Print)]
 #[parse_recursive(root = ExpressionInner)]
 #[parse_recursive(into_root = OperatorExpression)]
 #[parse_recursive(kind = "left")]
@@ -61,7 +61,7 @@ pub struct TryPropagationExpression {
 /// `BorrowExpression`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(ParseRecursive, Format, Print)]
+#[derive(ParseRecursive, Formattable, Format, Print)]
 #[parse_recursive(root = ExpressionInner)]
 #[parse_recursive(into_root = OperatorExpression)]
 #[parse_recursive(kind = "right")]
@@ -78,7 +78,7 @@ pub struct BorrowExpression {
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub enum BorrowExpressionKindRef {
 	And(token::And),
 	AndAnd(token::AndAnd),
@@ -86,7 +86,7 @@ pub enum BorrowExpressionKindRef {
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub enum BorrowExpressionKindRest {
 	Mut(token::Mut),
 	RawConst((token::Raw, token::Const)),
@@ -96,7 +96,7 @@ pub enum BorrowExpressionKindRest {
 /// `DereferenceExpression`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(ParseRecursive, Format, Print)]
+#[derive(ParseRecursive, Formattable, Format, Print)]
 #[parse_recursive(root = ExpressionInner)]
 #[parse_recursive(into_root = OperatorExpression)]
 #[parse_recursive(kind = "right")]
@@ -109,7 +109,7 @@ pub struct DereferenceExpression {
 /// `NegationExpression`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(ParseRecursive, Format, Print)]
+#[derive(ParseRecursive, Formattable, Format, Print)]
 #[parse_recursive(root = ExpressionInner)]
 #[parse_recursive(into_root = OperatorExpression)]
 #[parse_recursive(kind = "right")]
@@ -121,7 +121,7 @@ pub struct NegationExpression {
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub enum NegationExpressionToken {
 	Minus(token::Minus),
 	Not(token::Not),
@@ -130,7 +130,7 @@ pub enum NegationExpressionToken {
 /// `ArithmeticOrLogicalExpression`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(ParseRecursive, Format, Print)]
+#[derive(ParseRecursive, Formattable, Format, Print)]
 #[parse_recursive(root = ExpressionInner)]
 #[parse_recursive(into_root = OperatorExpression)]
 #[parse_recursive(kind = "fully")]
@@ -144,7 +144,7 @@ pub struct ArithmeticOrLogicalExpression {
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub enum ArithmeticOrLogicalExpressionOp {
 	Plus(token::Plus),
 	Minus(token::Minus),
@@ -161,7 +161,7 @@ pub enum ArithmeticOrLogicalExpressionOp {
 /// `ComparisonExpression`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(ParseRecursive, Format, Print)]
+#[derive(ParseRecursive, Formattable, Format, Print)]
 #[parse_recursive(root = ExpressionInner)]
 #[parse_recursive(into_root = OperatorExpression)]
 #[parse_recursive(kind = "fully")]
@@ -175,7 +175,7 @@ pub struct ComparisonExpression {
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub enum ComparisonExpressionOp {
 	EqEq(token::EqEq),
 	Ne(token::Ne),
@@ -188,7 +188,7 @@ pub enum ComparisonExpressionOp {
 /// `LazyBooleanExpression`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(ParseRecursive, Format, Print)]
+#[derive(ParseRecursive, Formattable, Format, Print)]
 #[parse_recursive(root = ExpressionInner)]
 #[parse_recursive(into_root = OperatorExpression)]
 #[parse_recursive(kind = "fully")]
@@ -203,7 +203,7 @@ pub struct LazyBooleanExpression {
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub enum LazyBooleanExpressionOp {
 	Or(token::OrOr),
 	And(token::AndAnd),
@@ -212,7 +212,7 @@ pub enum LazyBooleanExpressionOp {
 /// `TypeCastExpression`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(ParseRecursive, Format, Print)]
+#[derive(ParseRecursive, Formattable, Format, Print)]
 #[parse_recursive(root = ExpressionInner)]
 #[parse_recursive(into_root = OperatorExpression)]
 #[parse_recursive(kind = "left")]
@@ -227,7 +227,7 @@ pub struct TypeCastExpression {
 /// `AssignmentExpression`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(ParseRecursive, Format, Print)]
+#[derive(ParseRecursive, Formattable, Format, Print)]
 #[parse_recursive(root = ExpressionInner)]
 #[parse_recursive(into_root = OperatorExpression)]
 #[parse_recursive(kind = "fully")]
@@ -243,7 +243,7 @@ pub struct AssignmentExpression {
 /// `CompoundAssignmentExpression`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(ParseRecursive, Format, Print)]
+#[derive(ParseRecursive, Formattable, Format, Print)]
 #[parse_recursive(root = ExpressionInner)]
 #[parse_recursive(into_root = OperatorExpression)]
 #[parse_recursive(kind = "fully")]
@@ -258,7 +258,7 @@ pub struct CompoundAssignmentExpression {
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub enum CompoundAssignmentExpressionOp {
 	Plus(token::PlusEq),
 	Minus(token::MinusEq),

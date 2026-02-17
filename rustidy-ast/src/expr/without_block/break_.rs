@@ -3,7 +3,7 @@
 // Imports
 use {
 	crate::{expr::Expression, lifetime::LifetimeOrLabel, token},
-	rustidy_format::{Format, WhitespaceFormat},
+	rustidy_format::{Format, Formattable, WhitespaceFormat},
 	rustidy_parse::{Parse, ParserTag},
 	rustidy_print::Print,
 	rustidy_util::Whitespace,
@@ -12,7 +12,7 @@ use {
 /// `BreakExpression`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct BreakExpression {
 	pub continue_: token::Break,
 	#[format(prefix_ws = Whitespace::SINGLE)]

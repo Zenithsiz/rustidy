@@ -4,7 +4,7 @@
 use {
 	super::token,
 	rustidy_ast_util::{IdentifierOrKeyword, NonKeywordIdentifier},
-	rustidy_format::Format,
+	rustidy_format::{Format, Formattable},
 	rustidy_parse::{Parse, Parser, ParserTag},
 	rustidy_print::Print,
 };
@@ -12,13 +12,13 @@ use {
 /// `Lifetime`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct Lifetime(LifetimeToken);
 
 /// `LIFETIME_TOKEN`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub enum LifetimeToken {
 	IdentOrKeyword(QuoteNotQuote<IdentifierOrKeyword>),
 	Underscore(QuoteNotQuote<token::Underscore>),
@@ -28,7 +28,7 @@ pub enum LifetimeToken {
 /// `LIFETIME_OR_LABEL`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub enum LifetimeOrLabel {
 	IdentOrKeyword(QuoteNotQuote<NonKeywordIdentifier>),
 	Underscore(QuoteNotQuote<token::Underscore>),
@@ -37,7 +37,7 @@ pub enum LifetimeOrLabel {
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 #[parse(name = "a lifetime token")]
 #[parse(error(name = SuffixQuote, fmt = "Unexpected `'`"))]
 #[parse(and_try_with = Self::check_suffix_quote)]

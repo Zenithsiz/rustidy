@@ -5,7 +5,7 @@ use {
 	super::{TupleIndex, path::PathInExpression},
 	crate::{attr::WithOuterAttributes, expr::Expression, token, util::Braced},
 	rustidy_ast_util::{Identifier, Punctuated, delimited, punct},
-	rustidy_format::{Format, WhitespaceFormat},
+	rustidy_format::{Format, Formattable, WhitespaceFormat},
 	rustidy_parse::{Parse, ParserTag},
 	rustidy_print::Print,
 	rustidy_util::Whitespace,
@@ -14,7 +14,7 @@ use {
 /// `StructExpression`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 #[parse(name = "a struct expression")]
 #[parse(skip_if_tag = ParserTag::SkipStructExpression)]
 pub struct StructExpression {
@@ -27,7 +27,7 @@ pub struct StructExpression {
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub enum StructExpressionInner {
 	Fields(StructExprFields),
 	Base(StructBase),
@@ -36,7 +36,7 @@ pub enum StructExpressionInner {
 /// `StructExprFields`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct StructExprFields {
 	#[format(args = punct::fmt(Whitespace::CUR_INDENT, Whitespace::REMOVE))]
 	pub fields: Punctuated<StructExprField, token::Comma>,
@@ -46,7 +46,7 @@ pub struct StructExprFields {
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub enum StructExprFieldsEnd {
 	Base(StructExprFieldsEndBase),
 	TrailingComma(token::Comma),
@@ -54,7 +54,7 @@ pub enum StructExprFieldsEnd {
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct StructExprFieldsEndBase {
 	pub comma: token::Comma,
 	#[format(prefix_ws = Whitespace::SINGLE)]
@@ -64,12 +64,12 @@ pub struct StructExprFieldsEndBase {
 /// `StructExprField`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct StructExprField(pub WithOuterAttributes<StructExprFieldInner>);
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub enum StructExprFieldInner {
 	WithExpr(StructExprFieldInnerWithExpr),
 	Ident(Identifier),
@@ -77,7 +77,7 @@ pub enum StructExprFieldInner {
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct StructExprFieldInnerWithExpr {
 	pub start: StructExprFieldInnerWithExprStart,
 	#[format(prefix_ws = Whitespace::REMOVE)]
@@ -88,7 +88,7 @@ pub struct StructExprFieldInnerWithExpr {
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub enum StructExprFieldInnerWithExprStart {
 	Ident(Identifier),
 	Tuple(TupleIndex),
@@ -97,7 +97,7 @@ pub enum StructExprFieldInnerWithExprStart {
 /// `StructBase`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct StructBase {
 	pub dot_dot: token::DotDot,
 	#[format(prefix_ws = Whitespace::REMOVE)]

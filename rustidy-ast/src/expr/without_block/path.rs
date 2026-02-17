@@ -22,7 +22,7 @@ use {
 		delimited,
 		punct,
 	},
-	rustidy_format::{Format, WhitespaceFormat},
+	rustidy_format::{Format, Formattable, WhitespaceFormat},
 	rustidy_parse::Parse,
 	rustidy_print::Print,
 	rustidy_util::Whitespace,
@@ -31,7 +31,7 @@ use {
 /// `PathExpression`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub enum PathExpression {
 	Normal(PathInExpression),
 	Qualified(QualifiedPathInExpression),
@@ -40,7 +40,7 @@ pub enum PathExpression {
 /// `PathInExpression`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct PathInExpression {
 	pub prefix:   Option<token::PathSep>,
 	#[format(prefix_ws(expr = Whitespace::REMOVE, if = self.prefix.is_some()))]
@@ -51,7 +51,7 @@ pub struct PathInExpression {
 /// `PathExprSegment`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct PathExprSegment {
 	pub ident:   PathIdentSegment,
 	#[format(prefix_ws = Whitespace::REMOVE)]
@@ -60,7 +60,7 @@ pub struct PathExprSegment {
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct PathExprSegmentGenericArgs {
 	pub sep:     token::PathSep,
 	#[format(prefix_ws = Whitespace::REMOVE)]
@@ -70,7 +70,7 @@ pub struct PathExprSegmentGenericArgs {
 /// `PathIdentSegment`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub enum PathIdentSegment {
 	Super(token::Super),
 	SelfLower(token::SelfLower),
@@ -83,7 +83,7 @@ pub enum PathIdentSegment {
 /// `GenericArgs`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 #[parse(name = "generic arguments")]
 pub struct GenericArgs(
 	#[format(args = delimited::fmt_remove())] pub Delimited<Option<GenericArgsInner>, token::Lt, token::Gt>,
@@ -91,7 +91,7 @@ pub struct GenericArgs(
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct GenericArgsInner(
 	#[format(args = punct::fmt(Whitespace::SINGLE, Whitespace::REMOVE))]
 	pub  PunctuatedTrailing<GenericArg, token::Comma>,
@@ -100,7 +100,7 @@ pub struct GenericArgsInner(
 /// `GenericArg`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub enum GenericArg {
 	Lifetime(Lifetime),
 
@@ -114,7 +114,7 @@ pub enum GenericArg {
 /// `GenericArgsConst`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub enum GenericArgsConst {
 	Block(Box<BlockExpression>),
 	Literal(LiteralExpression),
@@ -125,7 +125,7 @@ pub enum GenericArgsConst {
 /// `GenericArgsBinding`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct GenericArgsBinding {
 	pub ident:    Identifier,
 	#[format(prefix_ws = Whitespace::REMOVE)]
@@ -140,7 +140,7 @@ pub struct GenericArgsBinding {
 /// `GenericArgsBounds`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct GenericArgsBounds {
 	pub ident:    Identifier,
 	#[format(prefix_ws = Whitespace::REMOVE)]
@@ -155,7 +155,7 @@ pub struct GenericArgsBounds {
 /// `TypePathFn`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct TypePathFn {
 	#[format(args = delimited::fmt_remove())]
 	pub inputs: Parenthesized<Option<TypePathFnInputs>>,
@@ -166,14 +166,14 @@ pub struct TypePathFn {
 /// `TypePathFnInputs`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct TypePathFnInputs(
 	#[format(args = punct::fmt(Whitespace::REMOVE, Whitespace::REMOVE))] PunctuatedTrailing<Box<Type>, token::Comma>,
 );
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct TypePathFnRet {
 	pub arrow: token::RArrow,
 	#[format(prefix_ws = Whitespace::SINGLE)]
@@ -183,7 +183,7 @@ pub struct TypePathFnRet {
 /// `QualifiedPathInExpression`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct QualifiedPathInExpression {
 	pub qualified: QualifiedPathType,
 	#[format(prefix_ws = Whitespace::REMOVE)]
@@ -193,7 +193,7 @@ pub struct QualifiedPathInExpression {
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct QualifiedPathInExpressionSegment {
 	sep:     token::PathSep,
 	#[format(prefix_ws = Whitespace::REMOVE)]
@@ -203,14 +203,14 @@ pub struct QualifiedPathInExpressionSegment {
 /// `QualifiedPathType`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct QualifiedPathType(
 	#[format(args = delimited::fmt_remove())] Delimited<QualifiedPathTypeInner, token::Lt, token::Gt>,
 );
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct QualifiedPathTypeInner {
 	pub ty:  Box<Type>,
 	#[format(prefix_ws = Whitespace::SINGLE)]
@@ -219,7 +219,7 @@ pub struct QualifiedPathTypeInner {
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct QualifiedPathTypeAs {
 	pub as_: token::As,
 	#[format(prefix_ws = Whitespace::SINGLE)]
@@ -228,7 +228,7 @@ pub struct QualifiedPathTypeAs {
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct QualifiedPathInTypeSegment {
 	pub sep:     token::PathSep,
 	pub segment: TypePathSegment,

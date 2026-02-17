@@ -14,7 +14,7 @@ use {
 		vis::Visibility,
 	},
 	rustidy_ast_util::{Identifier, PunctuatedTrailing, delimited, punct},
-	rustidy_format::{Format, WhitespaceFormat},
+	rustidy_format::{Format, Formattable, WhitespaceFormat},
 	rustidy_parse::Parse,
 	rustidy_print::Print,
 	rustidy_util::Whitespace,
@@ -23,7 +23,7 @@ use {
 /// `Enumeration`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct Enumeration {
 	pub enum_:    token::Enum,
 	#[parse(fatal)]
@@ -42,7 +42,7 @@ pub struct Enumeration {
 /// `EnumVariants`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct EnumVariants(
 	#[format(args = punct::fmt(Whitespace::CUR_INDENT, Whitespace::REMOVE))]
 	pub  PunctuatedTrailing<EnumVariant, token::Comma>,
@@ -51,12 +51,12 @@ pub struct EnumVariants(
 /// `EnumVariant`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct EnumVariant(pub WithOuterAttributes<EnumVariantInner>);
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct EnumVariantInner {
 	pub vis:          Option<Visibility>,
 	#[format(prefix_ws(expr = Whitespace::SINGLE, if = self.vis.is_some()))]
@@ -68,7 +68,7 @@ pub struct EnumVariantInner {
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub enum EnumVariantKind {
 	#[format(prefix_ws = Whitespace::REMOVE)]
 	Tuple(EnumVariantTuple),
@@ -79,13 +79,13 @@ pub enum EnumVariantKind {
 /// `EnumVariantTuple`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct EnumVariantTuple(#[format(args = delimited::fmt_remove())] pub Parenthesized<Option<TupleFields>>);
 
 /// `EnumVariantStruct`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct EnumVariantStruct(
 	#[format(indent)]
 	#[format(args = delimited::fmt_indent_if_non_blank())]
@@ -95,7 +95,7 @@ pub struct EnumVariantStruct(
 /// `EnumVariantDiscriminant`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct EnumVariantDiscriminant {
 	pub eq:   token::Eq,
 	#[format(prefix_ws = Whitespace::SINGLE)]

@@ -4,7 +4,7 @@
 use {
 	super::{Suffix, int::DecLiteral},
 	crate::SuffixNoE,
-	rustidy_format::Format,
+	rustidy_format::{Format, Formattable},
 	rustidy_macros::ParseError,
 	rustidy_parse::{Parse, Parser, ParserError, ParserTag},
 	rustidy_print::Print,
@@ -16,7 +16,7 @@ use {
 /// `FLOAT_LITERAL`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Format, Print)]
+#[derive(Formattable, Format, Print)]
 pub struct FloatLiteral {
 	#[format(whitespace)]
 	pub ws:       Whitespace,
@@ -102,7 +102,7 @@ pub enum FloatLiteralError {
 /// `FLOAT_EXPONENT`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 #[parse(error(name = E, fmt = "Expected `e` or `E`"))]
 #[parse(error(name = Digit, fmt = "Expected a digit"))]
 pub struct FloatExponent(

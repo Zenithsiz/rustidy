@@ -4,7 +4,7 @@
 use {
 	super::escape::{AsciiEscapeError, QuoteEscapeError, UnicodeEscapeError},
 	crate::{AsciiEscape, QuoteEscape, UnicodeEscape},
-	rustidy_format::Format,
+	rustidy_format::{Format, Formattable},
 	rustidy_parse::Parse,
 	rustidy_print::Print,
 	rustidy_util::{AstStr, Whitespace},
@@ -13,7 +13,7 @@ use {
 /// `CHAR_LITERAL`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 #[parse(name = "a character literal")]
 #[parse(error(name = StartQuote, fmt = "Expected `'`"))]
 #[parse(error(name = QuoteEscape(QuoteEscapeError), transparent))]

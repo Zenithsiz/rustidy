@@ -5,7 +5,7 @@ use {
 	super::Items,
 	crate::{attr::BracedWithInnerAttributes, token},
 	rustidy_ast_util::Identifier,
-	rustidy_format::{Format, WhitespaceFormat},
+	rustidy_format::{Format, Formattable, WhitespaceFormat},
 	rustidy_parse::Parse,
 	rustidy_print::Print,
 	rustidy_util::Whitespace,
@@ -14,7 +14,7 @@ use {
 /// `Module`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 #[parse(name = "module declaration")]
 pub struct Module {
 	pub unsafe_: Option<token::Unsafe>,
@@ -33,7 +33,7 @@ pub struct Module {
 #[derive(PartialEq, Eq, Debug)]
 #[derive(strum::EnumIs)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub enum ModuleInner {
 	None(token::Semi),
 	Def(BracedWithInnerAttributes<Items>),

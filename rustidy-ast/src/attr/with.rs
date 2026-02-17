@@ -16,8 +16,7 @@ use {
 /// A type with outer attributes
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
-#[format(skip_format)]
+#[derive(Parse, Formattable, Print)]
 pub struct WithOuterAttributes<T> {
 	pub attrs: Vec<OuterAttrOrDocComment>,
 	pub inner: T,
@@ -125,8 +124,7 @@ where
 /// A braced type with inner attributes.
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
-#[format(skip_format)]
+#[derive(Parse, Formattable, Print)]
 pub struct BracedWithInnerAttributes<T>(Braced<WithInnerAttributes<T>>);
 
 impl<T: Format<()>> Format<()> for BracedWithInnerAttributes<T> {
@@ -175,8 +173,7 @@ impl<A, T: Format<A>> Format<FmtArgs<A>> for BracedWithInnerAttributes<T> {
 /// A type with inner attributes
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
-#[format(skip_format)]
+#[derive(Parse, Formattable, Print)]
 struct WithInnerAttributes<T> {
 	pub attrs: Vec<InnerAttrOrDocComment>,
 	pub inner: T,

@@ -19,7 +19,7 @@ use {
 /// `UseDeclaration`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 #[parse(name = "use declaration")]
 pub struct UseDeclaration {
 	pub use_: token::Use,
@@ -56,7 +56,7 @@ impl UseDeclaration {
 #[derive(PartialEq, Eq, Debug)]
 #[derive(strum::EnumIs)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub enum UseTree {
 	Glob(UseTreeGlob),
 	Group(UseTreeGroup),
@@ -80,7 +80,7 @@ impl UseTree {
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct UseTreeGlob {
 	pub prefix: Option<UseTreeGlobPrefix>,
 	#[format(prefix_ws(expr = Whitespace::REMOVE, if = self.prefix.is_some()))]
@@ -89,7 +89,7 @@ pub struct UseTreeGlob {
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct UseTreeGlobPrefix {
 	pub path: Option<SimplePath>,
 	#[format(prefix_ws(expr = Whitespace::REMOVE, if = self.path.is_some()))]
@@ -98,7 +98,7 @@ pub struct UseTreeGlobPrefix {
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 #[format(before_with = Self::flatten)]
 pub struct UseTreeGroup {
 	pub prefix: Option<UseTreeGroupPrefix>,
@@ -251,7 +251,7 @@ impl UseTreeGroup {
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct UseTreeGroupPrefix {
 	pub path: Option<SimplePath>,
 	#[format(prefix_ws(expr = Whitespace::REMOVE, if = self.path.is_some()))]
@@ -260,7 +260,7 @@ pub struct UseTreeGroupPrefix {
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct UseTreeSimple {
 	pub path: SimplePath,
 	#[format(prefix_ws = Whitespace::SINGLE)]
@@ -269,7 +269,7 @@ pub struct UseTreeSimple {
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub struct UseTreeSimpleAs {
 	pub as_:   token::As,
 	#[parse(fatal)]
@@ -279,7 +279,7 @@ pub struct UseTreeSimpleAs {
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 pub enum UseTreeSimpleAsValue {
 	Ident(Identifier),
 	Underscore(token::Underscore),

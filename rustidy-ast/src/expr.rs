@@ -30,7 +30,7 @@ pub use self::{
 
 // Imports
 use {
-	rustidy_format::Format,
+	rustidy_format::{Format, Formattable},
 	rustidy_parse::{FromRecursiveRoot, Parse, ParseRecursive, Parser, RecursiveWrapper},
 	rustidy_print::Print,
 	rustidy_util::{Arena, ArenaData, ArenaIdx},
@@ -39,7 +39,7 @@ use {
 /// `Expression`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Format, Print)]
+#[derive(Parse, Formattable, Format, Print)]
 #[expect(clippy::use_self, reason = "`Parse` derive macro doesn't support `Self`")]
 pub struct Expression(pub ArenaIdx<Expression>);
 
@@ -61,7 +61,7 @@ impl FromRecursiveRoot<ExpressionInner> for Expression {
 #[derive(PartialEq, Eq, Debug)]
 #[derive(derive_more::From, derive_more::TryInto)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, ParseRecursive, Format, Print)]
+#[derive(Parse, ParseRecursive, Formattable, Format, Print)]
 #[parse(from = RecursiveWrapper::<ExpressionInner, ExpressionInner>)]
 #[parse_recursive(root = ExpressionInner)]
 pub enum ExpressionInner {
