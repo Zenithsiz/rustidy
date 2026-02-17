@@ -41,7 +41,6 @@ use {
 	app_error::AppError,
 	core::{
 		marker::PhantomData,
-		mem,
 		ops::{Residual, Try},
 	},
 	rustidy_util::{ArenaData, ArenaIdx, AstPos, AstRange, AstStr},
@@ -231,6 +230,9 @@ pub struct Parser<'input> {
 	/// Tags
 	// Note: Always sorted by ast position.
 	tags: Vec<(AstPos, ParserTag)>,
+
+	/// Tags offset
+	tags_offset: usize,
 }
 
 impl<'input> Parser<'input> {
@@ -241,6 +243,7 @@ impl<'input> Parser<'input> {
 			input,
 			cur_pos: AstPos::from_usize(0),
 			tags: vec![],
+			tags_offset: 0,
 		}
 	}
 
@@ -451,7 +454,7 @@ impl<'input> Parser<'input> {
 
 	/// Returns all current tags
 	pub fn tags(&self) -> impl Iterator<Item = ParserTag> {
-		self.tags
+		self.tags[self.tags_offset..]
 			.iter()
 			.rev()
 			.take_while(|&&(pos, _)| pos == self.cur_pos)
@@ -485,11 +488,10 @@ impl<'input> Parser<'input> {
 
 	/// Calls `f` with all tags removed.
 	pub fn without_tags<O>(&mut self, f: impl FnOnce(&mut Self) -> O) -> O {
-		// TODO: Just add an offset to the start of the new tags
-		//       to reduce an allocation?
-		let tags = mem::take(&mut self.tags);
+		let prev_offset = self.tags_offset;
+		self.tags_offset = self.tags.len();
 		let output = f(self);
-		self.tags = tags;
+		self.tags_offset = prev_offset;
 
 		output
 	}
