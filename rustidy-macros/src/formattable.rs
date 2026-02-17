@@ -126,34 +126,20 @@ fn derive_enum(variants: &[VariantAttrs]) -> Impls<syn::Expr, syn::Expr> {
 fn derive_struct(fields: &darling::ast::Fields<FieldAttrs>) -> Impls<syn::Expr, syn::Expr> {
 	let Impls {
 		with_strings,
-		with_prefix_ws: (),
+		with_prefix_ws,
 	} = fields
 		.iter()
 		.enumerate()
 		.map(|(field_idx, field)| self::derive_struct_field(field_idx, field))
-		.collect::<Impls<Vec<_>, ()>>();
+		.collect::<Impls<Vec<_>, Vec<_>>>();
 
-	let with_strings = parse_quote! {{ #( #with_strings; )* std::ops::ControlFlow::Continue(()) }};
+	let with_strings = parse_quote! {{
+		#( #with_strings; )*
+		std::ops::ControlFlow::Continue(())
+	}};
 
-	let with_prefix_ws_fields = fields.iter().enumerate().map(|(field_idx, field)| -> syn::Expr {
-		let field_ident = util::field_member_access(field_idx, field);
-
-		parse_quote! {{
-			// If we used the whitespace, return
-			if let Some(value) = rustidy_format::Formattable::with_prefix_ws(&mut self.#field_ident, ctx, f) {
-				return Some(value);
-			}
-
-			// Otherwise, if this field wasn't empty, we have no more fields
-			// to check and we can return
-			if !rustidy_format::Formattable::is_empty(&mut self.#field_ident, ctx, false) {
-				return None;
-			}
-		}}
-	});
 	let with_prefix_ws = parse_quote! {{
-		#( #with_prefix_ws_fields; )*
-
+		#( #with_prefix_ws; )*
 		None
 	}};
 
@@ -163,7 +149,7 @@ fn derive_struct(fields: &darling::ast::Fields<FieldAttrs>) -> Impls<syn::Expr, 
 	}
 }
 
-fn derive_struct_field(field_idx: usize, field: &FieldAttrs) -> Impls<syn::Expr, ()> {
+fn derive_struct_field(field_idx: usize, field: &FieldAttrs) -> Impls<syn::Expr, syn::Expr> {
 	let field_ident = util::field_member_access(field_idx, field);
 
 	let with_strings = parse_quote! {{
@@ -176,9 +162,22 @@ fn derive_struct_field(field_idx: usize, field: &FieldAttrs) -> Impls<syn::Expr,
 		}
 	}};
 
+	let with_prefix_ws = parse_quote! {{
+		// If we used the whitespace, return
+		if let Some(value) = rustidy_format::Formattable::with_prefix_ws(&mut self.#field_ident, ctx, f) {
+			return Some(value);
+		}
+
+		// Otherwise, if this field wasn't empty, we have no more fields
+		// to check and we can return
+		if !rustidy_format::Formattable::is_empty(&mut self.#field_ident, ctx, false) {
+			return None;
+		}
+	}};
+
 	Impls {
 		with_strings,
-		with_prefix_ws: (),
+		with_prefix_ws,
 	}
 }
 
