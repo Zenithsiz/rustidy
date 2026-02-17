@@ -12,7 +12,7 @@ use {
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
-#[format(args(ty = "FmtArgs"))]
+#[format(args = FmtArgs)]
 #[format(where_format = "where T: Format<()>, P: Format<()>")]
 // TODO: Support arguments for `T` and `P`
 pub struct Punctuated<T, P> {
@@ -143,7 +143,7 @@ impl<T, P> Punctuated<T, P> {
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
-#[format(args(ty = "FmtArgs"))]
+#[format(args = FmtArgs)]
 #[format(where_format = "where T: Format<()>, P: Format<()>")]
 pub struct PunctuatedTrailing<T, P> {
 	#[format(args = *args)]
@@ -257,7 +257,7 @@ impl<'a, T, P> Iterator for SplitLastMut<'a, T, P> {
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
-#[format(args(ty = "WhitespaceConfig"))]
+#[format(args = WhitespaceConfig)]
 pub struct PunctuatedRest<T, P> {
 	pub punct: P,
 	#[format(prefix_ws = *args)]

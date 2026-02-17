@@ -10,7 +10,7 @@ use {
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
-#[format(args(ty = "FmtArgs"))]
+#[format(args = FmtArgs)]
 // TODO: Support arguments for `T`
 pub struct AtLeast1<T> {
 	pub first: T,
