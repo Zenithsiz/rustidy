@@ -12,13 +12,13 @@ use {
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
-#[format(args = FmtArgs)]
-#[format(where_format = "where T: Format<()>, P: Format<()>")]
-// TODO: Support arguments for `T` and `P`
+#[format(args(ty = "FmtArgs<TA, PA>", generic = "TA", generic = "PA"))]
+#[format(where_format = "where T: Format<TA>, P: Format<PA>")]
 pub struct Punctuated<T, P> {
+	#[format(args = args.value_args)]
 	pub first: T,
-	#[format(prefix_ws = args.punct)]
-	#[format(args = rustidy_format::vec::args(args.punct, args.value))]
+	#[format(prefix_ws = args.punct_prefix_ws)]
+	#[format(args = rustidy_format::vec::args(args.punct_prefix_ws, args))]
 	pub rest:  Vec<PunctuatedRest<T, P>>,
 }
 
@@ -143,12 +143,13 @@ impl<T, P> Punctuated<T, P> {
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
-#[format(args = FmtArgs)]
-#[format(where_format = "where T: Format<()>, P: Format<()>")]
+#[format(args(ty = "FmtArgs<TA, PA>", generic = "TA", generic = "PA"))]
+#[format(where_format = "where T: Format<TA>, P: Format<PA>")]
 pub struct PunctuatedTrailing<T, P> {
 	#[format(args = *args)]
 	pub punctuated: Punctuated<T, P>,
-	#[format(prefix_ws = args.punct)]
+	#[format(prefix_ws = args.punct_prefix_ws)]
+	#[format(args = args.punct_args)]
 	pub trailing:   Option<P>,
 }
 
@@ -257,20 +258,41 @@ impl<'a, T, P> Iterator for SplitLastMut<'a, T, P> {
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
-#[format(args = WhitespaceConfig)]
+#[format(args(ty = "&'_ mut FmtArgs<TA, PA>", generic = "TA", generic = "PA"))]
+#[format(where_format = "where T: Format<TA>, P: Format<PA>")]
 pub struct PunctuatedRest<T, P> {
+	#[format(args = args.punct_args)]
 	pub punct: P,
-	#[format(prefix_ws = *args)]
+	#[format(prefix_ws = args.value_prefix_ws)]
+	#[format(args = args.value_args)]
 	pub value: T,
 }
 
 /// Formatting arguments
-pub struct FmtArgs {
-	pub value: WhitespaceConfig,
-	pub punct: WhitespaceConfig,
+pub struct FmtArgs<TA, PA> {
+	pub value_prefix_ws: WhitespaceConfig,
+	pub punct_prefix_ws: WhitespaceConfig,
+
+	pub value_args: TA,
+	pub punct_args: PA,
 }
 
 #[must_use]
-pub const fn fmt(value: WhitespaceConfig, punct: WhitespaceConfig) -> FmtArgs {
-	FmtArgs { value, punct }
+pub const fn fmt_with<TA, PA>(
+	value: WhitespaceConfig,
+	punct: WhitespaceConfig,
+	value_args: TA,
+	punct_args: PA,
+) -> FmtArgs<TA, PA> {
+	FmtArgs {
+		value_prefix_ws: value,
+		punct_prefix_ws: punct,
+		value_args,
+		punct_args,
+	}
+}
+
+#[must_use]
+pub const fn fmt(value: WhitespaceConfig, punct: WhitespaceConfig) -> FmtArgs<(), ()> {
+	self::fmt_with(value, punct, (), ())
 }

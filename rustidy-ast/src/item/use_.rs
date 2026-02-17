@@ -225,8 +225,10 @@ impl UseTreeGroup {
 			&mut delimited::fmt_remove_with(
 				(),
 				punct::FmtArgs {
-					value: Whitespace::SINGLE,
-					punct: Whitespace::REMOVE,
+					value_prefix_ws: Whitespace::SINGLE,
+					punct_prefix_ws: Whitespace::REMOVE,
+					value_args:      (),
+					punct_args:      (),
 				},
 				(),
 			),
@@ -254,8 +256,10 @@ impl UseTreeGroup {
 				&mut delimited::fmt_indent_if_non_blank_with(
 					(),
 					punct::FmtArgs {
-						value: Whitespace::CUR_INDENT,
-						punct: Whitespace::REMOVE,
+						value_prefix_ws: Whitespace::CUR_INDENT,
+						punct_prefix_ws: Whitespace::REMOVE,
+						value_args:      (),
+						punct_args:      (),
 					},
 					(),
 				),
