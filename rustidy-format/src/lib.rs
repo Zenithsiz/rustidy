@@ -36,17 +36,22 @@ use {
 
 /// Formattable types
 pub trait Formattable {
-	/// Accesses the prefix whitespace of this type
+	/// Accesses the prefix whitespace of this type.
+	///
+	/// # Return
+	/// - `Ok()` if the prefix whitespace was found.
+	/// - `Err(Break(()))` if no prefix whitespace existed and the type wasn't empty
+	/// - `Err(Continue(()))` if no prefix whitespace existed but the type was empty.
 	fn with_prefix_ws<O>(
 		&mut self,
 		ctx: &mut Context,
 		f: &mut impl FnMut(&mut Whitespace, &mut Context) -> O,
-	) -> Option<O>;
+	) -> Result<O, ControlFlow<()>>;
 
 	/// Joins a string as a prefix onto the prefix whitespace of this type.
 	fn prefix_ws_join_prefix(&mut self, ctx: &mut Context, ws: Whitespace) -> Result<(), Whitespace> {
 		let mut join_ws = Some(ws);
-		self.with_prefix_ws(ctx, &mut |ws, _| {
+		let _ = self.with_prefix_ws(ctx, &mut |ws, _| {
 			ws.join_prefix(join_ws.take().expect("`with_prefix_ws` called multiple times"));
 		});
 
@@ -173,7 +178,7 @@ impl<T: Formattable> Formattable for &'_ mut T {
 		&mut self,
 		ctx: &mut Context,
 		f: &mut impl FnMut(&mut Whitespace, &mut Context) -> O,
-	) -> Option<O> {
+	) -> Result<O, ControlFlow<()>> {
 		(**self).with_prefix_ws(ctx, f)
 	}
 
@@ -198,7 +203,7 @@ impl<T: Formattable> Formattable for Box<T> {
 		&mut self,
 		ctx: &mut Context,
 		f: &mut impl FnMut(&mut Whitespace, &mut Context) -> O,
-	) -> Option<O> {
+	) -> Result<O, ControlFlow<()>> {
 		(**self).with_prefix_ws(ctx, f)
 	}
 
@@ -223,8 +228,11 @@ impl<T: Formattable> Formattable for Option<T> {
 		&mut self,
 		ctx: &mut Context,
 		f: &mut impl FnMut(&mut Whitespace, &mut Context) -> O,
-	) -> Option<O> {
-		self.as_mut()?.with_prefix_ws(ctx, f)
+	) -> Result<O, ControlFlow<()>> {
+		match self {
+			Self::Some(value) => value.with_prefix_ws(ctx, f),
+			Self::None => Err(ControlFlow::Continue(())),
+		}
 	}
 
 	fn with_strings<O>(
@@ -254,7 +262,7 @@ impl Formattable for ! {
 		&mut self,
 		_ctx: &mut Context,
 		_f: &mut impl FnMut(&mut Whitespace, &mut Context) -> O,
-	) -> Option<O> {
+	) -> Result<O, ControlFlow<()>> {
 		*self
 	}
 
@@ -279,8 +287,8 @@ impl<T> Formattable for PhantomData<T> {
 		&mut self,
 		_ctx: &mut Context,
 		_f: &mut impl FnMut(&mut Whitespace, &mut Context) -> O,
-	) -> Option<O> {
-		None
+	) -> Result<O, ControlFlow<()>> {
+		Err(ControlFlow::Continue(()))
 	}
 
 	fn with_strings<O>(
@@ -304,8 +312,8 @@ impl Formattable for () {
 		&mut self,
 		_ctx: &mut Context,
 		_f: &mut impl FnMut(&mut Whitespace, &mut Context) -> O,
-	) -> Option<O> {
-		None
+	) -> Result<O, ControlFlow<()>> {
+		Err(ControlFlow::Continue(()))
 	}
 
 	fn with_strings<O>(
@@ -338,7 +346,7 @@ macro tuple_impl ($N:literal, $($T:ident),* $(,)?) {
 			&mut self,
 			ctx: &mut Context,
 			f: &mut impl FnMut(&mut Whitespace, &mut Context) -> O,
-		) -> Option<O> {
+		) -> Result<O, ControlFlow<()>> {
 			let ( $($T,)* ) = self;
 			${concat( Tuple, $N )} { $( $T, )* }.with_prefix_ws(ctx, f)
 		}
@@ -373,8 +381,11 @@ impl Formattable for AstStr {
 		&mut self,
 		_ctx: &mut Context,
 		_f: &mut impl FnMut(&mut Whitespace, &mut Context) -> O,
-	) -> Option<O> {
-		None
+	) -> Result<O, ControlFlow<()>> {
+		match Self::is_empty(self) {
+			true => Err(ControlFlow::Continue(())),
+			false => Err(ControlFlow::Break(())),
+		}
 	}
 
 	fn with_strings<O>(
@@ -398,7 +409,7 @@ impl<T: ArenaData<Data: Formattable>> Formattable for ArenaIdx<T> {
 		&mut self,
 		ctx: &mut Context,
 		f: &mut impl FnMut(&mut Whitespace, &mut Context) -> O,
-	) -> Option<O> {
+	) -> Result<O, ControlFlow<()>> {
 		self.get_mut().with_prefix_ws(ctx, f)
 	}
 

@@ -73,7 +73,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 				&mut self,
 				ctx: &mut rustidy_format::Context,
 				f: &mut impl FnMut(&mut rustidy_util::Whitespace, &mut rustidy_format::Context) -> WITH_PREFIX_WS_O,
-			) -> Option<WITH_PREFIX_WS_O> {
+			) -> Result<WITH_PREFIX_WS_O, std::ops::ControlFlow<()>> {
 				#with_prefix_ws
 			}
 
@@ -140,7 +140,7 @@ fn derive_struct(fields: &darling::ast::Fields<FieldAttrs>) -> Impls<syn::Expr, 
 
 	let with_prefix_ws = parse_quote! {{
 		#( #with_prefix_ws; )*
-		None
+		Err(std::ops::ControlFlow::Continue(()))
 	}};
 
 	Impls {
@@ -162,18 +162,13 @@ fn derive_struct_field(field_idx: usize, field: &FieldAttrs) -> Impls<syn::Expr,
 		}
 	}};
 
-	let with_prefix_ws = parse_quote! {{
-		// If we used the whitespace, return
-		if let Some(value) = rustidy_format::Formattable::with_prefix_ws(&mut self.#field_ident, ctx, f) {
-			return Some(value);
+	let with_prefix_ws = parse_quote! {
+		match rustidy_format::Formattable::with_prefix_ws(&mut self.#field_ident, ctx, f) {
+			Ok(value) => return Ok(value),
+			Err(std::ops::ControlFlow::Continue(())) => (),
+			Err(std::ops::ControlFlow::Break(())) => return Err(std::ops::ControlFlow::Break(())),
 		}
-
-		// Otherwise, if this field wasn't empty, we have no more fields
-		// to check and we can return
-		if !rustidy_format::Formattable::is_empty(&mut self.#field_ident, ctx, false) {
-			return None;
-		}
-	}};
+	};
 
 	Impls {
 		with_strings,

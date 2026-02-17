@@ -12,18 +12,16 @@ impl<T: Formattable> Formattable for Vec<T> {
 		&mut self,
 		ctx: &mut Context,
 		f: &mut impl FnMut(&mut rustidy_util::Whitespace, &mut Context) -> O,
-	) -> Option<O> {
+	) -> Result<O, ControlFlow<()>> {
 		for value in self {
-			if let Some(output) = value.with_prefix_ws(ctx, f) {
-				return Some(output);
-			}
-
-			if !value.is_empty(ctx, false) {
-				return None;
+			match value.with_prefix_ws(ctx, f) {
+				Ok(output) => return Ok(output),
+				Err(ControlFlow::Continue(())) => (),
+				Err(ControlFlow::Break(())) => return Err(ControlFlow::Break(())),
 			}
 		}
 
-		None
+		Err(ControlFlow::Continue(()))
 	}
 
 	fn with_strings<O>(

@@ -93,8 +93,8 @@ impl Formattable for Whitespace {
 		&mut self,
 		ctx: &mut crate::Context,
 		f: &mut impl FnMut(&mut Self, &mut crate::Context) -> O,
-	) -> Option<O> {
-		Some(f(self, ctx))
+	) -> Result<O, ControlFlow<()>> {
+		Ok(f(self, ctx))
 	}
 
 	fn with_strings<O>(
