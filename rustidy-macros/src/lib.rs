@@ -10,7 +10,8 @@
 	yeet_expr,
 	try_find,
 	try_blocks,
-	super_let
+	super_let,
+	exact_size_is_empty
 )]
 // Lints
 #![expect(clippy::needless_continue, reason = "Macro-generated code")]

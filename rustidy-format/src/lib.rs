@@ -11,16 +11,19 @@
 )]
 
 // Modules
+pub mod str;
 mod tag;
 pub mod vec;
 pub mod whitespace;
 
 // Exports
 pub use {
-	self::whitespace::WhitespaceFormat,
+	self::{
+		str::AstStrFormat,
+		whitespace::{WhitespaceFormat, WhitespaceFormatKind},
+	},
 	rustidy_macros::{Format, Formattable},
 	tag::FormatTag,
-	whitespace::WhitespaceFormatKind,
 };
 
 // Imports
@@ -109,9 +112,12 @@ pub trait Formattable {
 }
 
 /// Formatting output
-#[derive(Default, Debug)]
+#[derive(Debug)]
 #[must_use = "Should not ignore format output"]
-pub struct FormatOutput {}
+pub struct FormatOutput {
+	/// Whether the type was empty
+	pub is_empty: bool,
+}
 
 impl FormatOutput {
 	/// Appends a format output to this one.
@@ -119,13 +125,22 @@ impl FormatOutput {
 	/// The order in which you append fields does not matter,
 	/// but you must not append the same field twice, nor can
 	/// you un-append a field.
-	pub const fn append(&mut self, _other: Self) {}
+	#[expect(clippy::needless_pass_by_value, reason = "Semantics")]
+	pub const fn append(&mut self, other: Self) {
+		self.is_empty &= other.is_empty;
+	}
 
 	/// Appends this format output to `output`.
 	///
 	/// See [`append`](Self::append) for details.
 	pub const fn append_to(self, output: &mut Self) {
 		output.append(self);
+	}
+}
+
+impl Default for FormatOutput {
+	fn default() -> Self {
+		Self { is_empty: true }
 	}
 }
 
@@ -356,7 +371,7 @@ impl Formattable for AstStr {
 
 impl Format<()> for AstStr {
 	fn format(&mut self, _ctx: &mut Context, _prefix_ws: WhitespaceConfig, (): &mut ()) -> FormatOutput {
-		FormatOutput::default()
+		self.format_output()
 	}
 }
 

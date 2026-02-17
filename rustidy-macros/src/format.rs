@@ -135,6 +135,7 @@ struct FieldAttrs {
 
 	args: Option<syn::Expr>,
 
+	// TODO: Remove since we no longer need it.
 	#[darling(default)]
 	whitespace: bool,
 }
@@ -182,7 +183,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 		parse_quote! { self },
 		None,
 		None,
-		false,
+		true,
 		&None,
 		format,
 		&attrs.before_with,
@@ -264,7 +265,7 @@ fn derive_enum(variants: &[VariantAttrs]) -> syn::Expr {
 				parse_quote! { value },
 				prefix_ws,
 				None,
-				false,
+				true,
 				&variant.with,
 				format,
 				&variant.before_with,
@@ -318,7 +319,7 @@ fn derive_struct_field(field_idx: usize, field: &FieldAttrs) -> syn::Expr {
 		true => parse_quote! { has_prefix_ws = false },
 		false => parse_quote! {
 			// TODO: Make `format` return this so we don't have to recurse back into the type
-			if has_prefix_ws && !rustidy_format::Formattable::is_empty(&mut self.#field_ident, ctx, false) {
+			if has_prefix_ws && !output.is_empty {
 				has_prefix_ws = false;
 			}
 		},
@@ -328,7 +329,7 @@ fn derive_struct_field(field_idx: usize, field: &FieldAttrs) -> syn::Expr {
 		parse_quote! { &mut self.#field_ident },
 		prefix_ws,
 		Some(after_format),
-		true,
+		false,
 		&field.with,
 		format,
 		&field.before_with,
@@ -354,7 +355,7 @@ fn derive_format(
 	value: syn::Expr,
 	prefix_ws: Option<syn::Expr>,
 	after_format: Option<syn::Expr>,
-	append_to_output: bool,
+	return_output: bool,
 	with: &Option<syn::Expr>,
 	default: syn::Expr,
 	before_with: &[WithExprIf],
@@ -370,9 +371,9 @@ fn derive_format(
 		Some(with) => parse_quote! { (#with)(#value, ctx, prefix_ws, args) },
 		None => default,
 	};
-	let format = match append_to_output {
-		true => parse_quote! { output.append(#format) },
-		false => format,
+	let format = match return_output {
+		true => format,
+		false => parse_quote! { output.append(#format) },
 	};
 	let format = match args {
 		Args::Skip => format,
@@ -426,12 +427,23 @@ fn derive_format(
 	let before_with = before_with
 		.iter()
 		.map(|before_with| before_with.map(|expr| parse_quote! { (#expr)(#value, ctx) }).eval(None));
-	parse_quote! {{
-		#( #before_with; )*
-		let output = #format;
+	let format = match before_with.is_empty() {
+		true => format,
+		false => parse_quote! {{
+			#( #before_with )*;
+			#format
+		}},
+	};
 
-		#after_format;
-
-		output
-	}}
+	match return_output {
+		true => parse_quote! {{
+			let output = #format;
+			#after_format;
+			output
+		}},
+		false => parse_quote! {{
+			#format;
+			#after_format;
+		}},
+	}
 }

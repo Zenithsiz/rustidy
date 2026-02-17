@@ -2,7 +2,7 @@
 
 // Imports
 use {
-	crate::{Format, FormatOutput, FormatTag, Formattable, WhitespaceConfig},
+	crate::{AstStrFormat, Format, FormatOutput, FormatTag, Formattable, WhitespaceConfig},
 	core::ops::ControlFlow,
 	itertools::Itertools,
 	rustidy_util::{
@@ -127,7 +127,18 @@ impl Format<()> for Whitespace {
 			self::format(self, ctx, format);
 		}
 
-		FormatOutput::default()
+		let inner = self.0.get();
+		let mut output = inner.first.0.format_output();
+		for (comment, ws) in &inner.rest {
+			match comment {
+				Comment::Line(comment) => comment.0.format_output().append_to(&mut output),
+				Comment::Block(comment) => comment.0.format_output().append_to(&mut output),
+			}
+
+			ws.0.format_output().append_to(&mut output);
+		}
+
+		output
 	}
 }
 
