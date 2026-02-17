@@ -128,14 +128,14 @@ impl Format<()> for Whitespace {
 		}
 
 		let inner = self.0.get();
-		let mut output = inner.first.0.format_output();
+		let mut output = inner.first.0.format_output(ctx);
 		for (comment, ws) in &inner.rest {
 			match comment {
-				Comment::Line(comment) => comment.0.format_output().append_to(&mut output),
-				Comment::Block(comment) => comment.0.format_output().append_to(&mut output),
+				Comment::Line(comment) => comment.0.format_output(ctx).append_to(&mut output),
+				Comment::Block(comment) => comment.0.format_output(ctx).append_to(&mut output),
 			}
 
-			ws.0.format_output().append_to(&mut output);
+			ws.0.format_output(ctx).append_to(&mut output);
 		}
 		output.prefix_ws_len = Some(output.len);
 

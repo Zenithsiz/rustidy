@@ -97,18 +97,6 @@ pub trait Formattable {
 
 		self.with_strings(ctx, exclude_prefix_ws, &mut is_blank).is_continue()
 	}
-
-	/// Returns if this type has newlines
-	fn has_newlines(&mut self, ctx: &mut Context, exclude_prefix_ws: bool) -> bool {
-		fn has_newlines(s: &mut AstStr, ctx: &mut Context<'_, '_>) -> ControlFlow<()> {
-			match AstStr::has_newlines(s, ctx.input) {
-				true => ControlFlow::Break(()),
-				false => ControlFlow::Continue(()),
-			}
-		}
-
-		self.with_strings(ctx, exclude_prefix_ws, &mut has_newlines).is_break()
-	}
 }
 
 /// Formatting output
@@ -123,6 +111,9 @@ pub struct FormatOutput {
 
 	/// Whether the type was empty
 	pub is_empty: bool,
+
+	/// Whether the type has newlines
+	pub has_newlines: bool,
 }
 
 impl FormatOutput {
@@ -150,6 +141,7 @@ impl FormatOutput {
 			},
 			len:           lhs.len + rhs.len,
 			is_empty:      lhs.is_empty && rhs.is_empty,
+			has_newlines:  lhs.has_newlines || rhs.has_newlines,
 		}
 	}
 
@@ -174,6 +166,7 @@ impl Default for FormatOutput {
 			prefix_ws_len: None,
 			len:           0,
 			is_empty:      true,
+			has_newlines:  false,
 		}
 	}
 }
@@ -404,8 +397,8 @@ impl Formattable for AstStr {
 }
 
 impl Format<()> for AstStr {
-	fn format(&mut self, _ctx: &mut Context, _prefix_ws: WhitespaceConfig, (): &mut ()) -> FormatOutput {
-		self.format_output()
+	fn format(&mut self, ctx: &mut Context, _prefix_ws: WhitespaceConfig, (): &mut ()) -> FormatOutput {
+		self.format_output(ctx)
 	}
 }
 
