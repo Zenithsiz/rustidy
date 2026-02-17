@@ -4,7 +4,7 @@
 use {
 	super::function::{GenericParams, WhereClause},
 	crate::{
-		attr::WithOuterAttributes,
+		attr::{WithOuterAttributes, with},
 		expr::Expression,
 		token,
 		ty::Type,
@@ -59,48 +59,45 @@ pub enum StructStructInner {
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
-#[format(and_with = Self::align_fields)]
 pub struct StructFields(
-	#[format(args = punct::fmt(Whitespace::CUR_INDENT, Whitespace::REMOVE))]
+	#[format(args = {
+		let max_ident_len = self.0.values().map(|field| field.0.inner.ident.non_ws_len()).max().expect("At least one element exists");
+		punct::fmt_with(Whitespace::CUR_INDENT, Whitespace::REMOVE, StructFieldInnerArgs { max_ident_len }, ())
+	})]
 	PunctuatedTrailing<StructField, token::Comma>,
 );
-
-impl StructFields {
-	/// Aligns all fields
-	pub fn align_fields(&mut self, ctx: &mut rustidy_format::Context) {
-		let Some(max_ident_len) = self.0.values().map(|field| field.0.inner.ident.non_ws_len()).max() else {
-			return;
-		};
-
-		for field in self.0.values_mut() {
-			let ident_len = field.0.inner.ident.non_ws_len();
-			let ty_prefix_ws_len = 1 + max_ident_len - ident_len;
-			let prefix_ws = Whitespace::spaces(ty_prefix_ws_len);
-			field.0.inner.ty.format(ctx, prefix_ws, &mut ());
-		}
-	}
-}
 
 /// `StructField`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
-pub struct StructField(pub WithOuterAttributes<StructFieldInner>);
+#[format(args(ty = "StructFieldInnerArgs"))]
+pub struct StructField(#[format(args = with::fmt(args))] pub WithOuterAttributes<StructFieldInner>);
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
+#[format(args(ty = "&'_ mut StructFieldInnerArgs"))]
 pub struct StructFieldInner {
 	pub vis:   Option<Visibility>,
 	#[format(prefix_ws(expr = Whitespace::SINGLE, if = self.vis.is_some()))]
 	pub ident: Identifier,
 	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub colon: token::Colon,
-	#[format(prefix_ws = Whitespace::SINGLE)]
+	#[format(prefix_ws = {
+		let ident_len = self.ident.non_ws_len();
+		let ty_prefix_ws_len = 1 + args.max_ident_len - ident_len;
+		Whitespace::spaces(ty_prefix_ws_len)
+	})]
 	pub ty:    Type,
 	// Note: Nightly-only
 	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub eq:    Option<StructFieldEq>,
+}
+
+#[derive(Debug)]
+struct StructFieldInnerArgs {
+	max_ident_len: usize,
 }
 
 #[derive(PartialEq, Eq, Debug)]
