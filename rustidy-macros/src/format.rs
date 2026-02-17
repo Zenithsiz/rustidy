@@ -37,13 +37,13 @@ struct WithTag {
 
 #[derive(Clone, Debug, darling::FromMeta)]
 #[darling(from_expr = |expr| Ok(Self { expr: expr.clone(), cond: None }))]
-struct AndWith {
+struct WithExprIf {
 	expr: syn::Expr,
 	#[darling(rename = "if")]
 	cond: Option<syn::Expr>,
 }
 
-impl AndWith {
+impl WithExprIf {
 	/// Maps the expressions in this and-with
 	pub fn map(&self, mut f: impl FnMut(&syn::Expr) -> syn::Expr) -> Self {
 		Self {
@@ -94,10 +94,10 @@ struct VariantAttrs {
 	with: Option<syn::Expr>,
 
 	#[darling(default)]
-	prefix_ws: Option<AndWith>,
+	prefix_ws: Option<WithExprIf>,
 
 	#[darling(multiple)]
-	before_with: Vec<AndWith>,
+	before_with: Vec<WithExprIf>,
 
 	#[darling(multiple)]
 	with_tag: Vec<WithTag>,
@@ -122,10 +122,10 @@ struct FieldAttrs {
 	with: Option<syn::Expr>,
 
 	#[darling(default)]
-	prefix_ws: Option<AndWith>,
+	prefix_ws: Option<WithExprIf>,
 
 	#[darling(multiple)]
-	before_with: Vec<AndWith>,
+	before_with: Vec<WithExprIf>,
 
 	#[darling(multiple)]
 	with_tag: Vec<WithTag>,
@@ -156,7 +156,7 @@ struct Attrs {
 	indent: Option<Indent>,
 
 	#[darling(multiple)]
-	before_with: Vec<AndWith>,
+	before_with: Vec<WithExprIf>,
 
 	#[darling(multiple)]
 	with_tag: Vec<WithTag>,
@@ -477,7 +477,7 @@ fn derive_format(
 	after_format: Option<syn::Expr>,
 	with: &Option<syn::Expr>,
 	default: syn::Expr,
-	before_with: &[AndWith],
+	before_with: &[WithExprIf],
 	with_tag: &[WithTag],
 	without_tags: bool,
 	args: Args,
@@ -541,7 +541,7 @@ fn derive_format(
 
 	let before_with = before_with
 		.iter()
-		.map(|and_with| and_with.map(|expr| parse_quote! { (#expr)(#value, ctx) }).eval(None));
+		.map(|before_with| before_with.map(|expr| parse_quote! { (#expr)(#value, ctx) }).eval(None));
 	parse_quote! {{
 		#( #before_with; )*
 		#format;
