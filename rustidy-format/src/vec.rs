@@ -51,13 +51,13 @@ where
 		let mut output = FormatOutput::default();
 		let mut has_prefix_ws = true;
 		for value in self {
-			match has_prefix_ws {
+			let value_output = match has_prefix_ws {
 				true => value.format(ctx, prefix_ws, &mut args.args),
 				false => value.format(ctx, args.rest_prefix_ws, &mut args.args),
-			}
-			.append_to(&mut output);
+			};
+			value_output.append_to(&mut output);
 
-			if has_prefix_ws && !value.is_empty(ctx, false) {
+			if has_prefix_ws && !value_output.is_empty {
 				has_prefix_ws = false;
 			}
 		}
