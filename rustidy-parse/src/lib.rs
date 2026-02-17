@@ -108,10 +108,14 @@ impl<T> Parse for Box<T>
 where
 	T: Parse,
 {
-	type Error = ParserError<T>;
+	type Error = T::Error;
+
+	fn name() -> Option<impl fmt::Display> {
+		T::name()
+	}
 
 	fn parse_from(parser: &mut Parser) -> Result<Self, Self::Error> {
-		parser.parse::<T>().map(Self::new)
+		T::parse_from(parser).map(Self::new)
 	}
 }
 
@@ -119,10 +123,14 @@ impl<T> Parse for Option<T>
 where
 	T: Parse,
 {
-	type Error = ParserError<T>;
+	type Error = T::Error;
+
+	fn name() -> Option<impl fmt::Display> {
+		T::name()
+	}
 
 	fn parse_from(parser: &mut Parser) -> Result<Self, Self::Error> {
-		parser.try_parse::<T>().map(Result::ok)
+		parser.try_parse_with(T::parse_from).map(Result::ok)
 	}
 }
 
@@ -130,13 +138,17 @@ impl<T> Parse for Vec<T>
 where
 	T: Parse,
 {
-	type Error = ParserError<T>;
+	type Error = T::Error;
+
+	fn name() -> Option<impl fmt::Display> {
+		T::name()
+	}
 
 	fn parse_from(parser: &mut Parser) -> Result<Self, Self::Error> {
 		let mut values = vec![];
 		loop {
 			let start_pos = parser.cur_pos;
-			match parser.try_parse::<T>()? {
+			match parser.try_parse_with(T::parse_from)? {
 				Ok(value) if parser.cur_pos != start_pos => values.push(value),
 				_ => break,
 			}
@@ -209,10 +221,14 @@ tuple_impl! { 3, T0, T1, T2 }
 tuple_impl! { 4, T0, T1, T2, T3 }
 
 impl<T: ArenaData + Parse> Parse for ArenaIdx<T> {
-	type Error = ParserError<T>;
+	type Error = T::Error;
+
+	fn name() -> Option<impl fmt::Display> {
+		T::name()
+	}
 
 	fn parse_from(parser: &mut Parser) -> Result<Self, Self::Error> {
-		let value = parser.parse::<T>()?;
+		let value = T::parse_from(parser)?;
 		let idx = Self::new(value);
 		Ok(idx)
 	}
@@ -409,12 +425,15 @@ impl<'input> Parser<'input> {
 			.map_err(|source| ParserError::new(source, AstRange::new(start_pos, self.cur_pos)))
 	}
 
-	/// Tries to parses `T` from this parser.
+	/// Tries to parses `T` from this parser using `parser` for parsing.
 	///
 	/// On error, nothing is modified.
-	pub fn try_parse<T: Parse>(&mut self) -> Result<Result<T, ParserError<T>>, ParserError<T>> {
+	pub fn try_parse_with<T, E: ParseError>(
+		&mut self,
+		parser: impl FnOnce(&mut Self) -> Result<T, E>,
+	) -> Result<Result<T, E>, E> {
 		let prev_pos = self.cur_pos;
-		match self.parse::<T>() {
+		match parser(self) {
 			Ok(value) => Ok(Ok(value)),
 			Err(err) if err.is_fatal() => Err(err),
 			Err(err) => {
@@ -424,13 +443,22 @@ impl<'input> Parser<'input> {
 		}
 	}
 
-	/// Peeks a `T` from this parser.
+	/// Tries to parses `T` from this parser.
+	///
+	/// On error, nothing is modified.
+	pub fn try_parse<T: Parse>(&mut self) -> Result<Result<T, ParserError<T>>, ParserError<T>> {
+		self.try_parse_with(Self::parse::<T>)
+	}
+
+	/// Peeks a `T` from this parser using `parser` for parsing.
 	///
 	/// Parser is only advanced is a fatal error occurs
-	#[expect(clippy::type_complexity, reason = "TODO")]
-	pub fn peek<T: Parse>(&mut self) -> Result<Result<(T, PeekState), ParserError<T>>, ParserError<T>> {
+	pub fn peek_with<T, E: ParseError>(
+		&mut self,
+		parse: impl FnOnce(&mut Self) -> Result<T, E>,
+	) -> Result<Result<(T, PeekState), E>, E> {
 		let start_pos = self.cur_pos;
-		let output = match self.parse::<T>() {
+		let output = match parse(self) {
 			Ok(value) => Ok(value),
 			Err(err) if err.is_fatal() => return Err(err),
 			Err(err) => Err(err),
@@ -441,6 +469,14 @@ impl<'input> Parser<'input> {
 
 		let output = output.map(|value| (value, peek_state));
 		Ok(output)
+	}
+
+	/// Peeks a `T` from this parser.
+	///
+	/// Parser is only advanced is a fatal error occurs
+	#[expect(clippy::type_complexity, reason = "TODO")]
+	pub fn peek<T: Parse>(&mut self) -> Result<Result<(T, PeekState), ParserError<T>>, ParserError<T>> {
+		self.peek_with(Self::parse::<T>)
 	}
 
 	/// Accepts a peeked state.
