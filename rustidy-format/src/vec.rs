@@ -27,14 +27,19 @@ impl<T: Formattable> Formattable for Vec<T> {
 	fn with_strings<O>(
 		&mut self,
 		ctx: &mut Context,
-		exclude_prefix_ws: bool,
+		mut exclude_prefix_ws: bool,
 		f: &mut impl FnMut(&mut AstStr, &mut Context) -> ControlFlow<O>,
-	) -> ControlFlow<O> {
+	) -> ControlFlow<O, bool> {
+		let mut is_empty = true;
 		for value in self {
-			value.with_strings(ctx, exclude_prefix_ws, f)?;
+			is_empty &= value.with_strings(ctx, exclude_prefix_ws, f)?;
+
+			if !is_empty {
+				exclude_prefix_ws = false;
+			}
 		}
 
-		ControlFlow::Continue(())
+		ControlFlow::Continue(is_empty)
 	}
 }
 

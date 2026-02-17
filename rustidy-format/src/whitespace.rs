@@ -102,22 +102,22 @@ impl Formattable for Whitespace {
 		ctx: &mut crate::Context,
 		exclude_prefix_ws: bool,
 		f: &mut impl FnMut(&mut AstStr, &mut crate::Context) -> ControlFlow<O>,
-	) -> ControlFlow<O> {
-		if exclude_prefix_ws {
-			return ControlFlow::Continue(());
-		}
-
+	) -> ControlFlow<O, bool> {
 		let mut inner = self.0.get_mut();
-		f(&mut inner.first.0, ctx)?;
-		for (comment, pure) in &mut inner.rest {
-			match comment {
-				Comment::Line(comment) => f(&mut comment.0, ctx)?,
-				Comment::Block(comment) => f(&mut comment.0, ctx)?,
+		let is_empty = inner.first.0.is_empty() && inner.rest.is_empty();
+
+		if !exclude_prefix_ws {
+			f(&mut inner.first.0, ctx)?;
+			for (comment, pure) in &mut inner.rest {
+				match comment {
+					Comment::Line(comment) => f(&mut comment.0, ctx)?,
+					Comment::Block(comment) => f(&mut comment.0, ctx)?,
+				}
+				f(&mut pure.0, ctx)?;
 			}
-			f(&mut pure.0, ctx)?;
 		}
 
-		ControlFlow::Continue(())
+		ControlFlow::Continue(is_empty)
 	}
 }
 

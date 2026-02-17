@@ -61,25 +61,18 @@ pub trait Formattable {
 		}
 	}
 
-	/// Iterates over all strings in this type
+	/// Iterates over all strings in this type.
+	///
+	/// # Returns
+	/// - `Break()` if `f` returned `Break()`
+	/// - `Continue(true)` if this type was empty.
+	/// - `Continue(false)` if this type was non-empty.
 	fn with_strings<O>(
 		&mut self,
 		ctx: &mut Context,
 		exclude_prefix_ws: bool,
 		f: &mut impl FnMut(&mut AstStr, &mut Context) -> ControlFlow<O>,
-	) -> ControlFlow<O>;
-
-	/// Returns if this type is empty
-	fn is_empty(&mut self, ctx: &mut Context, exclude_prefix_ws: bool) -> bool {
-		fn is_empty(s: &mut AstStr, _ctx: &mut Context<'_, '_>) -> ControlFlow<()> {
-			match AstStr::is_empty(s) {
-				true => ControlFlow::Continue(()),
-				false => ControlFlow::Break(()),
-			}
-		}
-
-		self.with_strings(ctx, exclude_prefix_ws, &mut is_empty).is_continue()
-	}
+	) -> ControlFlow<O, bool>;
 
 	/// Returns if this type is blank
 	fn is_blank(&mut self, ctx: &mut Context, exclude_prefix_ws: bool) -> bool {
@@ -187,7 +180,7 @@ impl<T: Formattable> Formattable for &'_ mut T {
 		ctx: &mut Context,
 		exclude_prefix_ws: bool,
 		f: &mut impl FnMut(&mut AstStr, &mut Context) -> ControlFlow<O>,
-	) -> ControlFlow<O> {
+	) -> ControlFlow<O, bool> {
 		(**self).with_strings(ctx, exclude_prefix_ws, f)
 	}
 }
@@ -212,7 +205,7 @@ impl<T: Formattable> Formattable for Box<T> {
 		ctx: &mut Context,
 		exclude_prefix_ws: bool,
 		f: &mut impl FnMut(&mut AstStr, &mut Context) -> ControlFlow<O>,
-	) -> ControlFlow<O> {
+	) -> ControlFlow<O, bool> {
 		(**self).with_strings(ctx, exclude_prefix_ws, f)
 	}
 }
@@ -240,10 +233,10 @@ impl<T: Formattable> Formattable for Option<T> {
 		ctx: &mut Context,
 		exclude_prefix_ws: bool,
 		f: &mut impl FnMut(&mut AstStr, &mut Context) -> ControlFlow<O>,
-	) -> ControlFlow<O> {
+	) -> ControlFlow<O, bool> {
 		match self {
 			Some(value) => value.with_strings(ctx, exclude_prefix_ws, f),
-			None => ControlFlow::Continue(()),
+			None => ControlFlow::Continue(true),
 		}
 	}
 }
@@ -271,7 +264,7 @@ impl Formattable for ! {
 		_ctx: &mut Context,
 		_exclude_prefix_ws: bool,
 		_f: &mut impl FnMut(&mut AstStr, &mut Context) -> ControlFlow<O>,
-	) -> ControlFlow<O> {
+	) -> ControlFlow<O, bool> {
 		*self
 	}
 }
@@ -296,8 +289,8 @@ impl<T> Formattable for PhantomData<T> {
 		_ctx: &mut Context,
 		_exclude_prefix_ws: bool,
 		_f: &mut impl FnMut(&mut AstStr, &mut Context) -> ControlFlow<O>,
-	) -> ControlFlow<O> {
-		ControlFlow::Continue(())
+	) -> ControlFlow<O, bool> {
+		ControlFlow::Continue(true)
 	}
 }
 
@@ -321,8 +314,8 @@ impl Formattable for () {
 		_ctx: &mut Context,
 		_exclude_prefix_ws: bool,
 		_f: &mut impl FnMut(&mut AstStr, &mut Context) -> ControlFlow<O>,
-	) -> ControlFlow<O> {
-		ControlFlow::Continue(())
+	) -> ControlFlow<O, bool> {
+		ControlFlow::Continue(true)
 	}
 }
 
@@ -356,7 +349,7 @@ macro tuple_impl ($N:literal, $($T:ident),* $(,)?) {
 			ctx: &mut Context,
 			exclude_prefix_ws: bool,
 			f: &mut impl FnMut(&mut AstStr, &mut Context) -> ControlFlow<O>,
-		) -> ControlFlow<O> {
+		) -> ControlFlow<O, bool> {
 			let ( $($T,)* ) = self;
 			${concat( Tuple, $N )} { $( $T, )* }.with_strings(ctx, exclude_prefix_ws, f)
 		}
@@ -382,7 +375,7 @@ impl Formattable for AstStr {
 		_ctx: &mut Context,
 		_f: &mut impl FnMut(&mut Whitespace, &mut Context) -> O,
 	) -> Result<O, ControlFlow<()>> {
-		match Self::is_empty(self) {
+		match self.is_empty() {
 			true => Err(ControlFlow::Continue(())),
 			false => Err(ControlFlow::Break(())),
 		}
@@ -393,8 +386,10 @@ impl Formattable for AstStr {
 		ctx: &mut Context,
 		_exclude_prefix_ws: bool,
 		f: &mut impl FnMut(&mut Self, &mut Context) -> ControlFlow<O>,
-	) -> ControlFlow<O> {
-		f(self, ctx)
+	) -> ControlFlow<O, bool> {
+		f(self, ctx)?;
+
+		ControlFlow::Continue(self.is_empty())
 	}
 }
 
@@ -418,7 +413,7 @@ impl<T: ArenaData<Data: Formattable>> Formattable for ArenaIdx<T> {
 		ctx: &mut Context,
 		exclude_prefix_ws: bool,
 		f: &mut impl FnMut(&mut AstStr, &mut Context) -> ControlFlow<O>,
-	) -> ControlFlow<O> {
+	) -> ControlFlow<O, bool> {
 		self.get_mut().with_strings(ctx, exclude_prefix_ws, f)
 	}
 }

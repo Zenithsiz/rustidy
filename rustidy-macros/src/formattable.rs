@@ -82,7 +82,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 				ctx: &mut rustidy_format::Context,
 				mut exclude_prefix_ws: bool,
 				f: &mut impl FnMut(&mut rustidy_util::AstStr, &mut rustidy_format::Context) -> std::ops::ControlFlow<WITH_STRINGS_O>,
-			) -> std::ops::ControlFlow<WITH_STRINGS_O> {
+			) -> std::ops::ControlFlow<WITH_STRINGS_O, bool> {
 				#with_strings
 			}
 		}
@@ -134,8 +134,9 @@ fn derive_struct(fields: &darling::ast::Fields<FieldAttrs>) -> Impls<syn::Expr, 
 		.collect::<Impls<Vec<_>, Vec<_>>>();
 
 	let with_strings = parse_quote! {{
+		let mut is_empty = true;
 		#( #with_strings; )*
-		std::ops::ControlFlow::Continue(())
+		std::ops::ControlFlow::Continue(is_empty)
 	}};
 
 	let with_prefix_ws = parse_quote! {{
@@ -153,11 +154,11 @@ fn derive_struct_field(field_idx: usize, field: &FieldAttrs) -> Impls<syn::Expr,
 	let field_ident = util::field_member_access(field_idx, field);
 
 	let with_strings = parse_quote! {{
-		rustidy_format::Formattable::with_strings(&mut self.#field_ident, ctx, exclude_prefix_ws, f)?;
+		is_empty &= rustidy_format::Formattable::with_strings(&mut self.#field_ident, ctx, exclude_prefix_ws, f)?;
 
 		// If this field wasn't empty, then we no longer exclude the prefix ws, since
 		// we already excluded it here.
-		if exclude_prefix_ws && !rustidy_format::Formattable::is_empty(&mut self.#field_ident, ctx, false) {
+		if !is_empty {
 			exclude_prefix_ws = false;
 		}
 	}};
