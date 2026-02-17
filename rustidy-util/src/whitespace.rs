@@ -6,7 +6,7 @@ use crate::{Arena, ArenaData, ArenaIdx, AstStr};
 /// Whitespace
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-pub struct Whitespace(pub ArenaIdx<Self>);
+pub struct Whitespace(pub ArenaIdx<WhitespaceInner>);
 
 impl Whitespace {
 	/// Creates an empty whitespace
@@ -29,20 +29,17 @@ impl Whitespace {
 	}
 }
 
-impl ArenaData for Whitespace {
-	type Data = WhitespaceInner;
-
-	const ARENA: &'static Arena<Self> = &ARENA;
-}
-
-static ARENA: Arena<Whitespace> = Arena::new();
-
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 pub struct WhitespaceInner {
 	pub first: PureWhitespace,
 	pub rest:  Vec<(Comment, PureWhitespace)>,
 }
+
+impl ArenaData for WhitespaceInner {
+	const ARENA: &'static Arena<Self> = &ARENA;
+}
+static ARENA: Arena<WhitespaceInner> = Arena::new();
 
 /// Comment
 #[derive(PartialEq, Eq, Debug)]

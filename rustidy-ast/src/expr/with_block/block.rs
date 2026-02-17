@@ -21,16 +21,7 @@ use {
 #[derive(Parse, Formattable, Format, Print)]
 #[parse(name = "a block expression")]
 #[parse(skip_if_tag = ParserTag::SkipBlockExpression)]
-#[expect(clippy::use_self, reason = "`Parse` derive macro doesn't support `Self`")]
-pub struct BlockExpression(pub ArenaIdx<BlockExpression>);
-
-impl ArenaData for BlockExpression {
-	type Data = BracedWithInnerAttributes<Statements>;
-
-	const ARENA: &'static Arena<Self> = &TYPE_ARENA;
-}
-
-static TYPE_ARENA: Arena<BlockExpression> = Arena::new();
+pub struct BlockExpression(pub ArenaIdx<BracedWithInnerAttributes<Statements>>);
 
 /// `Statements`
 #[derive(PartialEq, Eq, Debug)]
@@ -42,6 +33,11 @@ pub struct Statements {
 	#[format(prefix_ws(expr = Whitespace::CUR_INDENT, if = !self.stmts.is_empty()))]
 	pub trailing_expr: Option<ExpressionWithoutBlock>,
 }
+
+impl ArenaData for BracedWithInnerAttributes<Statements> {
+	const ARENA: &'static Arena<Self> = &STMTS_ARENA;
+}
+static STMTS_ARENA: Arena<BracedWithInnerAttributes<Statements>> = Arena::new();
 
 impl Parse for Statements {
 	type Error = StatementsError;

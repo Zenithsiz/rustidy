@@ -92,8 +92,7 @@ impl Items {
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
-#[expect(clippy::use_self, reason = "`Parse` derive macro doesn't support `Self`")]
-pub struct Item(pub ArenaIdx<Item>);
+pub struct Item(pub ArenaIdx<WithOuterAttributes<ItemInner>>);
 
 impl Item {
 	#[expect(clippy::result_large_err, reason = "TODO")]
@@ -138,14 +137,6 @@ impl Item {
 	}
 }
 
-impl ArenaData for Item {
-	type Data = WithOuterAttributes<ItemInner>;
-
-	const ARENA: &'static Arena<Self> = &ITEM_ARENA;
-}
-
-static ITEM_ARENA: Arena<Item> = Arena::new();
-
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
@@ -154,6 +145,11 @@ pub enum ItemInner {
 	Vis(VisItem),
 	Macro(MacroItem),
 }
+
+impl ArenaData for WithOuterAttributes<ItemInner> {
+	const ARENA: &'static Arena<Self> = &ITEM_ARENA;
+}
+static ITEM_ARENA: Arena<WithOuterAttributes<ItemInner>> = Arena::new();
 
 /// `VisItem`
 #[derive(PartialEq, Eq, Debug)]

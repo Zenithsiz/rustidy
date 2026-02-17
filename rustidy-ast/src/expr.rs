@@ -40,16 +40,7 @@ use {
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
-#[expect(clippy::use_self, reason = "`Parse` derive macro doesn't support `Self`")]
-pub struct Expression(pub ArenaIdx<Expression>);
-
-impl ArenaData for Expression {
-	type Data = ExpressionInner;
-
-	const ARENA: &'static Arena<Self> = &EXPRESSION_ARENA;
-}
-
-static EXPRESSION_ARENA: Arena<Expression> = Arena::new();
+pub struct Expression(pub ArenaIdx<ExpressionInner>);
 
 impl FromRecursiveRoot<ExpressionInner> for Expression {
 	fn from_recursive_root(expr: ExpressionInner, _parser: &mut Parser) -> Self {
@@ -69,3 +60,8 @@ pub enum ExpressionInner {
 	WithoutBlock(ExpressionWithoutBlock),
 	WithBlock(ExpressionWithBlock),
 }
+
+impl ArenaData for ExpressionInner {
+	const ARENA: &'static Arena<Self> = &EXPRESSION_ARENA;
+}
+static EXPRESSION_ARENA: Arena<ExpressionInner> = Arena::new();

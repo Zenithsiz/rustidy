@@ -208,11 +208,11 @@ tuple_impl! { 2, T0, T1 }
 tuple_impl! { 3, T0, T1, T2 }
 tuple_impl! { 4, T0, T1, T2, T3 }
 
-impl<T: ArenaData<Data: Parse>> Parse for ArenaIdx<T> {
-	type Error = ParserError<T::Data>;
+impl<T: ArenaData + Parse> Parse for ArenaIdx<T> {
+	type Error = ParserError<T>;
 
 	fn parse_from(parser: &mut Parser) -> Result<Self, Self::Error> {
-		let value = parser.parse::<T::Data>()?;
+		let value = parser.parse::<T>()?;
 		let idx = Self::new(value);
 		Ok(idx)
 	}

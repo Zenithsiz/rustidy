@@ -40,16 +40,7 @@ use {
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
-#[expect(clippy::use_self, reason = "`Parse` derive macro doesn't support `Self`")]
-pub struct Type(pub ArenaIdx<Type>);
-
-impl ArenaData for Type {
-	type Data = TypeInner;
-
-	const ARENA: &'static Arena<Self> = &TYPE_ARENA;
-}
-
-static TYPE_ARENA: Arena<Type> = Arena::new();
+pub struct Type(pub ArenaIdx<TypeInner>);
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
@@ -61,6 +52,11 @@ pub enum TypeInner {
 	#[parse(peek = MacroInvocation)]
 	NoBounds(TypeNoBounds),
 }
+
+impl ArenaData for TypeInner {
+	const ARENA: &'static Arena<Self> = &TYPE_ARENA;
+}
+static TYPE_ARENA: Arena<TypeInner> = Arena::new();
 
 /// `TypeNoBounds`
 #[derive(PartialEq, Eq, Debug)]

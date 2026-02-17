@@ -11,7 +11,7 @@ use {
 #[derive(PartialEq, Eq, Hash, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[must_use = "Ast output must not be discarded"]
-pub struct AstStr(pub ArenaIdx<Self>);
+pub struct AstStr(pub ArenaIdx<AstStrRepr>);
 
 impl AstStr {
 	/// Creates a new ast string
@@ -37,7 +37,7 @@ impl AstStr {
 
 	/// Returns the inner representation of this string
 	#[must_use]
-	pub fn repr(&self) -> ArenaRef<'_, Self> {
+	pub fn repr(&self) -> ArenaRef<'_, AstStrRepr> {
 		self.0.get()
 	}
 
@@ -94,14 +94,6 @@ impl AstStr {
 		}
 	}
 }
-
-impl ArenaData for AstStr {
-	type Data = AstStrRepr;
-
-	const ARENA: &'static Arena<Self> = &ARENA;
-}
-
-static ARENA: Arena<AstStr> = Arena::new();
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(derive_more::From)]
@@ -299,6 +291,11 @@ impl AstStrRepr {
 		}
 	}
 }
+
+impl ArenaData for AstStrRepr {
+	const ARENA: &'static Arena<Self> = &ARENA;
+}
+static ARENA: Arena<AstStrRepr> = Arena::new();
 
 impl<'de> serde::Deserialize<'de> for AstStrRepr {
 	fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>

@@ -397,7 +397,7 @@ impl Format<()> for AstStr {
 	}
 }
 
-impl<T: ArenaData<Data: Formattable>> Formattable for ArenaIdx<T> {
+impl<T: ArenaData + Formattable> Formattable for ArenaIdx<T> {
 	fn with_prefix_ws<O>(
 		&mut self,
 		ctx: &mut Context,
@@ -416,7 +416,7 @@ impl<T: ArenaData<Data: Formattable>> Formattable for ArenaIdx<T> {
 	}
 }
 
-impl<T: ArenaData<Data: Format<Args>>, Args> Format<Args> for ArenaIdx<T> {
+impl<T: ArenaData + Format<Args>, Args> Format<Args> for ArenaIdx<T> {
 	fn format(&mut self, ctx: &mut Context, prefix_ws: WhitespaceConfig, args: &mut Args) -> FormatOutput {
 		self.get_mut().format(ctx, prefix_ws, args)
 	}

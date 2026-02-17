@@ -24,13 +24,16 @@ impl Parse for Whitespace {
 			return Ok(Self(idx));
 		}
 
-		parser.parse::<ArenaIdx<Self>>().map(Self).map_err(WhitespaceError)
+		parser
+			.parse::<ArenaIdx<WhitespaceInner>>()
+			.map(Self)
+			.map_err(WhitespaceError)
 	}
 }
 
 #[derive(Debug, derive_more::From, ParseError)]
 #[parse_error(transparent)]
-pub struct WhitespaceError(ParserError<ArenaIdx<Whitespace>>);
+pub struct WhitespaceError(ParserError<ArenaIdx<WhitespaceInner>>);
 
 
 impl Parse for WhitespaceInner {
