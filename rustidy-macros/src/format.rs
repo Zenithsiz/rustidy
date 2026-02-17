@@ -109,9 +109,6 @@ struct VariantAttrs {
 	before_with: Vec<AndWith>,
 
 	#[darling(multiple)]
-	and_with: Vec<AndWith>,
-
-	#[darling(multiple)]
 	with_tag: Vec<WithTag>,
 
 	#[darling(default)]
@@ -138,9 +135,6 @@ struct FieldAttrs {
 
 	#[darling(multiple)]
 	before_with: Vec<AndWith>,
-
-	#[darling(multiple)]
-	and_with: Vec<AndWith>,
 
 	#[darling(multiple)]
 	with_tag: Vec<WithTag>,
@@ -172,9 +166,6 @@ struct Attrs {
 
 	#[darling(multiple)]
 	before_with: Vec<AndWith>,
-
-	#[darling(multiple)]
-	and_with: Vec<AndWith>,
 
 	#[darling(multiple)]
 	with_tag: Vec<WithTag>,
@@ -218,7 +209,6 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 			&None,
 			format,
 			&attrs.before_with,
-			&attrs.and_with,
 			&attrs.with_tag,
 			attrs.without_tags,
 			Args::Skip,
@@ -341,7 +331,6 @@ fn derive_enum(variants: &[VariantAttrs]) -> Impls<syn::Expr, syn::Expr, syn::Ex
 				&variant.with,
 				format,
 				&variant.before_with,
-				&variant.and_with,
 				&variant.with_tag,
 				variant.without_tags,
 				Args::Set(variant.args.clone()),
@@ -476,7 +465,6 @@ fn derive_struct_field(field_idx: usize, field: &FieldAttrs) -> Impls<syn::Expr,
 		&field.with,
 		format,
 		&field.before_with,
-		&field.and_with,
 		&field.with_tag,
 		field.without_tags,
 		Args::Set(field.args.clone()),
@@ -508,7 +496,6 @@ fn derive_format(
 	with: &Option<syn::Expr>,
 	default: syn::Expr,
 	before_with: &[AndWith],
-	and_with: &[AndWith],
 	with_tag: &[WithTag],
 	without_tags: bool,
 	args: Args,
@@ -538,15 +525,6 @@ fn derive_format(
 		}},
 		None => format,
 	};
-
-	let and_with = and_with
-		.iter()
-		.map(|and_with| and_with.map(|expr| parse_quote! { (#expr)(#value, ctx) }).eval());
-	let format: syn::Expr = parse_quote! {{
-		#format;
-		#( #and_with; )*
-	}};
-
 
 	let mut format = match without_tags {
 		true => parse_quote! { ctx.without_tags(|ctx| #format) },
