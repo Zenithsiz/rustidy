@@ -86,8 +86,7 @@ pub enum PathIdentSegment {
 #[derive(Parse, Format, Print)]
 #[parse(name = "generic arguments")]
 pub struct GenericArgs(
-	#[format(args = delimited::fmt_remove())]
-	pub  Delimited<Option<GenericArgsInner>, token::Lt, token::Gt>,
+	#[format(args = delimited::fmt_remove())] pub Delimited<Option<GenericArgsInner>, token::Lt, token::Gt>,
 );
 
 #[derive(PartialEq, Eq, Debug)]

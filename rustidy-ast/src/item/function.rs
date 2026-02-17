@@ -259,8 +259,7 @@ pub struct FunctionReturnType {
 #[derive(Parse, Format, Print)]
 #[parse(name = "generic parameters")]
 pub struct GenericParams(
-	#[format(args = delimited::fmt_remove())]
-	pub  Delimited<Option<GenericParamsInner>, token::Lt, token::Gt>,
+	#[format(args = delimited::fmt_remove())] pub Delimited<Option<GenericParamsInner>, token::Lt, token::Gt>,
 );
 
 #[derive(PartialEq, Eq, Debug)]
@@ -514,8 +513,7 @@ pub struct UseBound {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 pub struct UseBoundGenericArgs(
-	#[format(args = delimited::fmt_preserve())]
-	pub  Delimited<UseBoundGenericArgsInner, token::Lt, token::Gt>,
+	#[format(args = delimited::fmt_preserve())] pub Delimited<UseBoundGenericArgsInner, token::Lt, token::Gt>,
 );
 
 #[derive(PartialEq, Eq, Debug)]

@@ -80,9 +80,7 @@ pub enum EnumVariantKind {
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
-pub struct EnumVariantTuple(
-	#[format(args = delimited::fmt_remove())] pub Parenthesized<Option<TupleFields>>,
-);
+pub struct EnumVariantTuple(#[format(args = delimited::fmt_remove())] pub Parenthesized<Option<TupleFields>>);
 
 /// `EnumVariantStruct`
 #[derive(PartialEq, Eq, Debug)]
