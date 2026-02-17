@@ -21,14 +21,14 @@ pub struct TupleType(#[format(args = delimited::fmt_remove())] Parenthesized<Opt
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
-#[format(with = Self::format_tys)]
+#[format(skip_format)]
 pub struct TupleTypeInner {
 	pub tys: Vec<(Type, token::Comma)>,
 	pub end: Option<Box<Type>>,
 }
 
-impl TupleTypeInner {
-	fn format_tys(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: WhitespaceConfig, _args: &mut ()) {
+impl Format<()> for TupleTypeInner {
+	fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: WhitespaceConfig, _args: &mut ()) {
 		let [(first_ty, first_comma), tys @ ..] = &mut *self.tys else {
 			self.end.format(ctx, prefix_ws, &mut ());
 			return;

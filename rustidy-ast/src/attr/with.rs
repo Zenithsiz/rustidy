@@ -17,8 +17,7 @@ use {
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
-#[format(with = Self::format)]
-#[format(where_format = "where T: Format<()>")]
+#[format(skip_format)]
 pub struct WithOuterAttributes<T> {
 	pub attrs: Vec<OuterAttrOrDocComment>,
 	pub inner: T,
@@ -39,11 +38,8 @@ impl<T> WithOuterAttributes<T> {
 	}
 }
 
-impl<T> WithOuterAttributes<T> {
-	fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: WhitespaceConfig, args: &mut ())
-	where
-		T: Format<()>,
-	{
+impl<T: Format<()>> Format<()> for WithOuterAttributes<T> {
+	fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: WhitespaceConfig, args: &mut ()) {
 		let mut is_after_newline = false;
 		let mut has_prefix_ws = true;
 		for attr in &mut self.attrs {
@@ -124,16 +120,11 @@ where
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
-// TODO: Remove once rustc realizes that `Braced<WithInnerAttributes<T>>: Format => T: Format`
-#[format(with_where_format = "where T: Format<()>")]
-#[format(with = Self::format)]
+#[format(skip_format)]
 pub struct BracedWithInnerAttributes<T>(Braced<WithInnerAttributes<T>>);
 
-impl<T> BracedWithInnerAttributes<T> {
-	fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: WhitespaceConfig, args: &mut ())
-	where
-		T: Format<()>,
-	{
+impl<T: Format<()>> Format<()> for BracedWithInnerAttributes<T> {
+	fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: WhitespaceConfig, _args: &mut ()) {
 		self.0.prefix.format(ctx, prefix_ws, &mut ());
 
 		let mut ctx = ctx.sub_context();
@@ -156,7 +147,7 @@ impl<T> BracedWithInnerAttributes<T> {
 			}
 
 			ctx.with_tag_if(is_after_newline, FormatTag::AfterNewline, |ctx| {
-				self.0.value.inner.format(ctx, Whitespace::CUR_INDENT, args);
+				self.0.value.inner.format(ctx, Whitespace::CUR_INDENT, &mut ());
 				let is_value_blank = self.0.value.is_blank(ctx, true);
 
 				let prefix_ws = Whitespace::indent(-1, is_value_blank);
@@ -170,8 +161,7 @@ impl<T> BracedWithInnerAttributes<T> {
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
-#[format(with = |_, _, _, (): &mut ()| panic!("This type shouldn't be formatted manually"))]
-#[format(where_format = "where T: Format<()>")]
+#[format(skip_format)]
 struct WithInnerAttributes<T> {
 	pub attrs: Vec<InnerAttrOrDocComment>,
 	pub inner: T,

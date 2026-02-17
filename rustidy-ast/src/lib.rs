@@ -56,10 +56,10 @@ use {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 #[parse(name = "a crate")]
-#[format(with = Self::format)]
+#[format(skip_format)]
 pub struct Crate(pub CrateInner);
 
-impl Crate {
+impl Format<()> for Crate {
 	fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: WhitespaceConfig, _args: &mut ()) {
 		let mut inner_ctx = ctx.sub_context();
 		for attr in &self.0.inner_attrs {

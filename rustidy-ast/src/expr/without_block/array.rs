@@ -15,7 +15,7 @@ use {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
 #[parse(name = "an array expression")]
-#[format(with = Self::format)]
+#[format(skip_format)]
 pub struct ArrayExpression(Bracketed<Option<ArrayElements>>);
 
 impl ArrayExpression {
@@ -33,7 +33,9 @@ impl ArrayExpression {
 
 		values.trailing.format(ctx, Whitespace::REMOVE, &mut ());
 	}
+}
 
+impl Format<()> for ArrayExpression {
 	fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: WhitespaceConfig, (): &mut ()) {
 		match &mut self.0.value {
 			Some(ArrayElements::Punctuated(values)) => {
@@ -101,7 +103,7 @@ impl ArrayExpression {
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Format, Print)]
-#[format(with = |_, _, _, (): &mut ()| panic!("This type shouldn't be formatted manually"))]
+#[format(skip_format)]
 pub enum ArrayElements {
 	Repeat(ArrayElementsRepeat),
 	Punctuated(PunctuatedTrailing<Expression, token::Comma>),

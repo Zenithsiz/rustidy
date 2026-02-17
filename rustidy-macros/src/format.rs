@@ -170,8 +170,6 @@ struct Attrs {
 	#[darling(default)]
 	indent: Option<Indent>,
 
-	with: Option<syn::Expr>,
-
 	#[darling(multiple)]
 	before_with: Vec<AndWith>,
 
@@ -192,6 +190,9 @@ struct Attrs {
 	// TODO: Don't require the `where` token here.
 	#[darling(multiple)]
 	with_where_format: Vec<syn::WhereClause>,
+
+	#[darling(default)]
+	skip_format: bool,
 }
 
 pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream, AppError> {
@@ -208,19 +209,22 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 
 	let Impls { with_strings, format } = impls;
 
-	let format = self::derive_format(
-		parse_quote! { self },
-		None,
-		None,
-		&attrs.with,
-		format,
-		&attrs.before_with,
-		&attrs.and_with,
-		&attrs.with_tag,
-		attrs.without_tags,
-		Args::Skip,
-		&attrs.indent,
-	);
+	let format = match attrs.skip_format {
+		true => None,
+		false => Some(self::derive_format(
+			parse_quote! { self },
+			None,
+			None,
+			&None,
+			format,
+			&attrs.before_with,
+			&attrs.and_with,
+			&attrs.with_tag,
+			attrs.without_tags,
+			Args::Skip,
+			&attrs.indent,
+		)),
+	};
 
 	let formattable_impl = {
 		let impl_generics = util::with_bounds(&attrs, |ty| parse_quote! { #ty: rustidy_format::Formattable });
@@ -245,36 +249,33 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 		None => parse_quote! { () },
 	};
 
-	let format_impl = {
+	let format_impl = format.map(|format| {
 		let mut impl_generics = match attrs.where_format {
 			Some(where_) => {
 				let mut generics = attrs.generics.clone();
 				generics.where_clause = Some(where_);
 				generics
 			},
-			None => match attrs.with.is_some() {
-				true => attrs.generics.clone(),
-				false => {
-					let generics = attrs.generics.clone();
-					match &attrs.data {
-						darling::ast::Data::Enum(variants) =>
-							util::with_enum_bounds(generics, variants, |variant, field| {
-								let ty = &field.ty;
-								match variant.args.is_some() {
-									true => parse_quote! { #ty: },
-									false => parse_quote! { #ty: rustidy_format::Format<#args_ty> },
-								}
-							}),
-						darling::ast::Data::Struct(fields) =>
-							util::with_struct_bounds(generics, &fields.fields, |field| {
-								let ty = &field.ty;
-								match field.args.is_some() {
-									true => parse_quote! { #ty: },
-									false => parse_quote! { #ty: rustidy_format::Format<#args_ty> },
-								}
-							}),
-					}
-				},
+			None => {
+				let generics = attrs.generics.clone();
+				match &attrs.data {
+					darling::ast::Data::Enum(variants) =>
+						util::with_enum_bounds(generics, variants, |variant, field| {
+							let ty = &field.ty;
+							match variant.args.is_some() {
+								true => parse_quote! { #ty: },
+								false => parse_quote! { #ty: rustidy_format::Format<#args_ty> },
+							}
+						}),
+					darling::ast::Data::Struct(fields) =>
+						util::with_struct_bounds(generics, &fields.fields, |field| {
+							let ty = &field.ty;
+							match field.args.is_some() {
+								true => parse_quote! { #ty: },
+								false => parse_quote! { #ty: rustidy_format::Format<#args_ty> },
+							}
+						}),
+				}
 			},
 		};
 		impl_generics
@@ -302,7 +303,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 				}
 			}
 		}
-	};
+	});
 
 	let output = quote! {
 		#formattable_impl
