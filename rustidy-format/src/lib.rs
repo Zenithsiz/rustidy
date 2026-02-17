@@ -28,12 +28,30 @@ pub use {
 use {
 	crate as rustidy_format,
 	core::{marker::PhantomData, mem, ops::ControlFlow},
-	rustidy_util::{ArenaData, ArenaIdx, AstStr, Config, Oob},
+	rustidy_util::{ArenaData, ArenaIdx, AstStr, Config, Oob, Whitespace},
 	std::borrow::Cow,
 };
 
 /// Formattable types
 pub trait Formattable {
+	/// Accesses the prefix whitespace of this type
+	fn with_prefix_ws<O>(
+		&mut self,
+		ctx: &mut Context,
+		f: &mut impl FnMut(&mut Whitespace, &mut Context) -> O,
+	) -> Option<O>;
+
+	/// Joins a string as a prefix onto the prefix whitespace of this type.
+	fn prefix_ws_join_prefix(&mut self, ctx: &mut Context, ws: Whitespace) -> Result<(), Whitespace> {
+		let mut join_ws = Some(ws);
+		self.with_prefix_ws(ctx, &mut |ws, _| ws.join_prefix(join_ws.take().expect("`with_prefix_ws` called multiple times")));
+
+		match join_ws {
+			Some(ws) => Err(ws),
+			None => Ok(()),
+		}
+	}
+
 	/// Iterates over all strings in this type
 	fn with_strings<O>(
 		&mut self,
@@ -96,6 +114,14 @@ pub trait Format<Args>: Formattable {
 }
 
 impl<T: Formattable> Formattable for &'_ mut T {
+	fn with_prefix_ws<O>(
+		&mut self,
+		ctx: &mut Context,
+		f: &mut impl FnMut(&mut Whitespace, &mut Context) -> O,
+	) -> Option<O> {
+		(**self).with_prefix_ws(ctx, f)
+	}
+
 	fn with_strings<O>(
 		&mut self,
 		ctx: &mut Context,
@@ -113,6 +139,14 @@ impl<T: Format<Args>, Args> Format<Args> for &'_ mut T {
 }
 
 impl<T: Formattable> Formattable for Box<T> {
+	fn with_prefix_ws<O>(
+		&mut self,
+		ctx: &mut Context,
+		f: &mut impl FnMut(&mut Whitespace, &mut Context) -> O,
+	) -> Option<O> {
+		(**self).with_prefix_ws(ctx, f)
+	}
+
 	fn with_strings<O>(
 		&mut self,
 		ctx: &mut Context,
@@ -130,6 +164,14 @@ impl<T: Format<Args>, Args> Format<Args> for Box<T> {
 }
 
 impl<T: Formattable> Formattable for Option<T> {
+	fn with_prefix_ws<O>(
+		&mut self,
+		ctx: &mut Context,
+		f: &mut impl FnMut(&mut Whitespace, &mut Context) -> O,
+	) -> Option<O> {
+		self.as_mut()?.with_prefix_ws(ctx, f)
+	}
+
 	fn with_strings<O>(
 		&mut self,
 		ctx: &mut Context,
@@ -152,6 +194,14 @@ impl<T: Format<Args>, Args> Format<Args> for Option<T> {
 }
 
 impl Formattable for ! {
+	fn with_prefix_ws<O>(
+		&mut self,
+		_ctx: &mut Context,
+		_f: &mut impl FnMut(&mut Whitespace, &mut Context) -> O,
+	) -> Option<O> {
+		*self
+	}
+
 	fn with_strings<O>(
 		&mut self,
 		_ctx: &mut Context,
@@ -169,6 +219,14 @@ impl Format<()> for ! {
 }
 
 impl<T> Formattable for PhantomData<T> {
+	fn with_prefix_ws<O>(
+		&mut self,
+		_ctx: &mut Context,
+		_f: &mut impl FnMut(&mut Whitespace, &mut Context) -> O,
+	) -> Option<O> {
+		None
+	}
+
 	fn with_strings<O>(
 		&mut self,
 		_ctx: &mut Context,
@@ -184,6 +242,14 @@ impl<T> Format<()> for PhantomData<T> {
 }
 
 impl Formattable for () {
+	fn with_prefix_ws<O>(
+		&mut self,
+		_ctx: &mut Context,
+		_f: &mut impl FnMut(&mut Whitespace, &mut Context) -> O,
+	) -> Option<O> {
+		None
+	}
+
 	fn with_strings<O>(
 		&mut self,
 		_ctx: &mut Context,
@@ -208,6 +274,15 @@ macro tuple_impl ($N:literal, $($T:ident),* $(,)?) {
 	#[automatically_derived]
 	#[expect(non_snake_case)]
 	impl< $($T: Formattable,)* > Formattable for ( $($T,)* ) {
+		fn with_prefix_ws<O>(
+			&mut self,
+			ctx: &mut Context,
+			f: &mut impl FnMut(&mut Whitespace, &mut Context) -> O,
+		) -> Option<O> {
+			let ( $($T,)* ) = self;
+			${concat( Tuple, $N )} { $( $T, )* }.with_prefix_ws(ctx, f)
+		}
+
 		fn with_strings<O>(
 			&mut self,
 			ctx: &mut Context,
@@ -234,6 +309,14 @@ tuple_impl! { 2, T0, T1 }
 tuple_impl! { 3, T0, T1, T2 }
 
 impl Formattable for AstStr {
+	fn with_prefix_ws<O>(
+		&mut self,
+		_ctx: &mut Context,
+		_f: &mut impl FnMut(&mut Whitespace, &mut Context) -> O,
+	) -> Option<O> {
+		None
+	}
+
 	fn with_strings<O>(
 		&mut self,
 		ctx: &mut Context,
@@ -249,6 +332,14 @@ impl Format<()> for AstStr {
 }
 
 impl<T: ArenaData<Data: Formattable>> Formattable for ArenaIdx<T> {
+	fn with_prefix_ws<O>(
+		&mut self,
+		ctx: &mut Context,
+		f: &mut impl FnMut(&mut Whitespace, &mut Context) -> O,
+	) -> Option<O> {
+		self.get_mut().with_prefix_ws(ctx, f)
+	}
+
 	fn with_strings<O>(
 		&mut self,
 		ctx: &mut Context,

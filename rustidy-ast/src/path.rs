@@ -24,14 +24,6 @@ pub struct SimplePath {
 }
 
 impl SimplePath {
-	// TODO: Remove once `UseDecl` no longer needs this
-	pub const fn prefix_ws(&mut self) -> &mut Whitespace {
-		match &mut self.prefix {
-			Some(prefix) => &mut prefix.ws,
-			None => self.segments.first.prefix_ws(),
-		}
-	}
-
 	/// Returns if this path is the same as `path`.
 	#[must_use]
 	pub fn is_str(&self, input: &str, path: &str) -> bool {
@@ -76,20 +68,6 @@ pub enum SimplePathSegment {
 }
 
 impl SimplePathSegment {
-	// TODO: Remove once `UseDecl` no longer needs this
-	pub const fn prefix_ws(&mut self) -> &mut Whitespace {
-		match self {
-			Self::Super(super_) => &mut super_.ws,
-			Self::SelfLower(self_lower) => &mut self_lower.ws,
-			Self::Crate(crate_) => &mut crate_.ws,
-			Self::DollarCrate(dollar_crate) => &mut dollar_crate.ws,
-			Self::Ident(ident) => match ident {
-				Identifier::Raw(ident) => &mut ident.0,
-				Identifier::NonKw(ident) => &mut ident.0.0,
-			},
-		}
-	}
-
 	/// Returns if this segment is the same as `segment`.
 	#[must_use]
 	pub fn is_str(&self, input: &str, segment: &str) -> bool {

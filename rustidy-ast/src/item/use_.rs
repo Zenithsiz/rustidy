@@ -118,7 +118,7 @@ impl UseTreeGroup {
 		}
 	}
 
-	pub fn flatten(&mut self, _ctx: &mut rustidy_format::Context) {
+	pub fn flatten(&mut self, ctx: &mut rustidy_format::Context) {
 		replace_with::replace_with_or_abort(&mut self.tree.value, |trees| {
 			let mut trees = trees?;
 			let mut trees_first = Some(PunctuatedRest {
@@ -178,28 +178,9 @@ impl UseTreeGroup {
 				     punct: first_comma,
 				     value: mut first,
 				 }| {
-					// TODO: Do this during formatting so we have access to the prefix whitespace more easily.
-					let first_prefix_ws = match &mut *first {
-						UseTree::Glob(use_tree) => match &mut use_tree.prefix {
-							Some(prefix) => match &mut prefix.path {
-								Some(path) => path.prefix_ws(),
-								None => &mut prefix.sep.ws,
-							},
-							None => &mut use_tree.glob.ws,
-						},
-						UseTree::Group(use_tree) => match &mut use_tree.prefix {
-							Some(prefix) => match &mut prefix.path {
-								Some(path) => match &mut path.prefix {
-									Some(prefix) => &mut prefix.ws,
-									None => path.segments.first.prefix_ws(),
-								},
-								None => &mut prefix.sep.ws,
-							},
-							None => &mut use_tree.tree.prefix.ws,
-						},
-						UseTree::Simple(use_tree) => &mut use_tree.path.prefix_ws(),
-					};
-					first_prefix_ws.join_prefix(first_comma.ws);
+					first
+						.prefix_ws_join_prefix(ctx, first_comma.ws)
+						.expect("Use tree should have prefix whitespace");
 
 					new_trees.reverse();
 					PunctuatedTrailing {

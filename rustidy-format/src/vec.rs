@@ -8,6 +8,24 @@ use {
 };
 
 impl<T: Formattable> Formattable for Vec<T> {
+	fn with_prefix_ws<O>(
+		&mut self,
+		ctx: &mut Context,
+		f: &mut impl FnMut(&mut rustidy_util::Whitespace, &mut Context) -> O,
+	) -> Option<O> {
+		for value in self {
+			if let Some(output) = value.with_prefix_ws(ctx, f) {
+				return Some(output);
+			}
+
+			if !value.is_empty(ctx, false) {
+				return None;
+			}
+		}
+
+		None
+	}
+
 	fn with_strings<O>(
 		&mut self,
 		ctx: &mut Context,

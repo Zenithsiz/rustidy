@@ -89,6 +89,14 @@ pub impl Whitespace {
 }
 
 impl Formattable for Whitespace {
+	fn with_prefix_ws<O>(
+		&mut self,
+		ctx: &mut crate::Context,
+		f: &mut impl FnMut(&mut Self, &mut crate::Context) -> O,
+	) -> Option<O> {
+		Some(f(self, ctx))
+	}
+
 	fn with_strings<O>(
 		&mut self,
 		ctx: &mut crate::Context,

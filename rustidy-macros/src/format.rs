@@ -203,7 +203,11 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 		darling::ast::Data::Struct(fields) => self::derive_struct(fields),
 	};
 
-	let Impls { with_strings, format } = impls;
+	let Impls {
+		with_strings,
+		format,
+		with_prefix_ws,
+	} = impls;
 
 	let format = match attrs.skip_format {
 		true => None,
@@ -228,12 +232,20 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 		quote! {
 			#[automatically_derived]
 			impl #impl_generics rustidy_format::Formattable for #item_ident #ty_generics #impl_where_clause {
-				fn with_strings<WITH_STRINGS_WS_O>(
+				fn with_prefix_ws<WITH_PREFIX_WS_O>(
+					&mut self,
+					ctx: &mut rustidy_format::Context,
+					f: &mut impl FnMut(&mut rustidy_util::Whitespace, &mut rustidy_format::Context) -> WITH_PREFIX_WS_O,
+				) -> Option<WITH_PREFIX_WS_O> {
+					#with_prefix_ws
+				}
+
+				fn with_strings<WITH_STRINGS_O>(
 					&mut self,
 					ctx: &mut rustidy_format::Context,
 					mut exclude_prefix_ws: bool,
-					f: &mut impl FnMut(&mut rustidy_util::AstStr, &mut rustidy_format::Context) -> std::ops::ControlFlow<WITH_STRINGS_WS_O>,
-				) -> std::ops::ControlFlow<WITH_STRINGS_WS_O> {
+					f: &mut impl FnMut(&mut rustidy_util::AstStr, &mut rustidy_format::Context) -> std::ops::ControlFlow<WITH_STRINGS_O>,
+				) -> std::ops::ControlFlow<WITH_STRINGS_O> {
 					#with_strings
 				}
 			}
@@ -305,7 +317,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 	Ok(output.into())
 }
 
-fn derive_enum(variants: &[VariantAttrs]) -> Impls<syn::Expr, syn::Expr> {
+fn derive_enum(variants: &[VariantAttrs]) -> Impls<syn::Expr, syn::Expr, syn::Expr> {
 	let variant_impls = variants
 		.iter()
 		.map(|variant| {
@@ -339,27 +351,44 @@ fn derive_enum(variants: &[VariantAttrs]) -> Impls<syn::Expr, syn::Expr> {
 				Self::#variant_ident(ref mut value) => #format,
 			};
 
+			let with_prefix_ws =
+				parse_quote! { Self::#variant_ident(ref mut value) => value.with_prefix_ws(ctx, f), };
+
 			Impls {
 				with_strings,
 				format,
+				with_prefix_ws,
 			}
 		})
-		.collect::<Impls<Vec<syn::Arm>, Vec<syn::Arm>>>();
+		.collect::<Impls<Vec<syn::Arm>, Vec<syn::Arm>, Vec<syn::Arm>>>();
 
 
-	let Impls { with_strings, format } = variant_impls;
+	let Impls {
+		with_strings,
+		format,
+		with_prefix_ws,
+	} = variant_impls;
 	let with_strings = parse_quote! { match *self { #( #with_strings )* } };
 	let format = parse_quote! { match *self { #( #format )* } };
+	let with_prefix_ws = parse_quote! { match *self { #( #with_prefix_ws )* } };
 
-	Impls { with_strings, format }
+	Impls {
+		with_strings,
+		format,
+		with_prefix_ws,
+	}
 }
 
-fn derive_struct(fields: &darling::ast::Fields<FieldAttrs>) -> Impls<syn::Expr, syn::Expr> {
-	let Impls { with_strings, format } = fields
+fn derive_struct(fields: &darling::ast::Fields<FieldAttrs>) -> Impls<syn::Expr, syn::Expr, syn::Expr> {
+	let Impls {
+		with_strings,
+		format,
+		with_prefix_ws: (),
+	} = fields
 		.iter()
 		.enumerate()
 		.map(|(field_idx, field)| self::derive_struct_field(field_idx, field))
-		.collect::<Impls<Vec<_>, Vec<_>>>();
+		.collect::<Impls<Vec<_>, Vec<_>, ()>>();
 
 	let with_strings = parse_quote! {{ #( #with_strings; )* std::ops::ControlFlow::Continue(()) }};
 	let format = parse_quote! {{
@@ -367,10 +396,36 @@ fn derive_struct(fields: &darling::ast::Fields<FieldAttrs>) -> Impls<syn::Expr, 
 		#( #format; )*
 	}};
 
-	Impls { with_strings, format }
+	let with_prefix_ws_fields = fields.iter().enumerate().map(|(field_idx, field)| -> syn::Expr {
+		let field_ident = util::field_member_access(field_idx, field);
+
+		parse_quote! {{
+			// If we used the whitespace, return
+			if let Some(value) = rustidy_format::Formattable::with_prefix_ws(&mut self.#field_ident, ctx, f) {
+				return Some(value);
+			}
+
+			// Otherwise, if this field wasn't empty, we have no more fields
+			// to check and we can return
+			if !rustidy_format::Formattable::is_empty(&mut self.#field_ident, ctx, false) {
+				return None;
+			}
+		}}
+	});
+	let with_prefix_ws = parse_quote! {{
+		#( #with_prefix_ws_fields; )*
+
+		None
+	}};
+
+	Impls {
+		with_strings,
+		format,
+		with_prefix_ws,
+	}
 }
 
-fn derive_struct_field(field_idx: usize, field: &FieldAttrs) -> Impls<syn::Expr, syn::Expr> {
+fn derive_struct_field(field_idx: usize, field: &FieldAttrs) -> Impls<syn::Expr, syn::Expr, ()> {
 	let field_ident = util::field_member_access(field_idx, field);
 
 	let with_strings = parse_quote! {{
@@ -428,7 +483,11 @@ fn derive_struct_field(field_idx: usize, field: &FieldAttrs) -> Impls<syn::Expr,
 		&field.indent,
 	);
 
-	Impls { with_strings, format }
+	Impls {
+		with_strings,
+		format,
+		with_prefix_ws: (),
+	}
 }
 
 enum Args {
@@ -532,21 +591,24 @@ fn derive_format(
 }
 
 #[derive(Default, Debug)]
-struct Impls<WithStrings, Format> {
-	with_strings: WithStrings,
-	format:       Format,
+struct Impls<WithStrings, Format, PrefixWs> {
+	with_strings:   WithStrings,
+	format:         Format,
+	with_prefix_ws: PrefixWs,
 }
 
-impl<T0, T1, A0, A1> FromIterator<Impls<A0, A1>> for Impls<T0, T1>
+impl<T0, T1, T2, A0, A1, A2> FromIterator<Impls<A0, A1, A2>> for Impls<T0, T1, T2>
 where
 	T0: Default + Extend<A0>,
 	T1: Default + Extend<A1>,
+	T2: Default + Extend<A2>,
 {
-	fn from_iter<I: IntoIterator<Item = Impls<A0, A1>>>(iter: I) -> Self {
+	fn from_iter<I: IntoIterator<Item = Impls<A0, A1, A2>>>(iter: I) -> Self {
 		let mut output = Self::default();
 		for impls in iter {
 			output.with_strings.extend_one(impls.with_strings);
 			output.format.extend_one(impls.format);
+			output.with_prefix_ws.extend_one(impls.with_prefix_ws);
 		}
 
 		output
