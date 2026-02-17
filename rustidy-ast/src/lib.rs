@@ -93,7 +93,6 @@ pub struct CrateInner {
 	})]
 	pub items:                 Items,
 	#[format(prefix_ws = Whitespace::indent(0, self.shebang.is_none() && self.inner_attrs.is_empty() && self.items.0.is_empty()))]
-	#[format(whitespace)]
 	pub suffix_ws:             Whitespace,
 	#[format(prefix_ws = Whitespace::PRESERVE)]
 	// TODO: This should be a `before_with`
@@ -129,10 +128,7 @@ impl CrateInner {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 #[parse(error(name = NoComment, fmt = "Expected `//` (except `///` or `//!`)"))]
-pub struct TrailingLineComment(
-	#[parse(try_update_with = Self::parse)]
-	pub AstStr,
-);
+pub struct TrailingLineComment(#[parse(try_update_with = Self::parse)] pub AstStr);
 
 impl TrailingLineComment {
 	fn parse(s: &mut &str) -> Result<(), TrailingLineCommentError> {

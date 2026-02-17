@@ -18,7 +18,6 @@ use {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Formattable, Format, Print)]
 pub struct FloatLiteral {
-	#[format(whitespace)]
 	pub ws:       Whitespace,
 	pub int:      DecLiteral,
 	pub dot:      Option<rustidy_ast_tokens::Dot>,
@@ -105,10 +104,7 @@ pub enum FloatLiteralError {
 #[derive(Parse, Formattable, Format, Print)]
 #[parse(error(name = E, fmt = "Expected `e` or `E`"))]
 #[parse(error(name = Digit, fmt = "Expected a digit"))]
-pub struct FloatExponent(
-	#[parse(try_update_with = Self::parse)]
-	pub AstStr,
-);
+pub struct FloatExponent(#[parse(try_update_with = Self::parse)] pub AstStr);
 
 impl FloatExponent {
 	fn parse(s: &mut &str) -> Result<(), FloatExponentError> {

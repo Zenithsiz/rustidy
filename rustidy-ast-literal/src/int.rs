@@ -17,7 +17,6 @@ use {
 #[derive(Parse, Formattable, Format, Print)]
 #[parse(name = "an integer literal")]
 pub struct IntegerLiteral {
-	#[format(whitespace)]
 	pub ws:     Whitespace,
 	pub inner:  IntegerLiteralInner,
 	pub suffix: Option<SuffixNoE>,

@@ -14,11 +14,7 @@ use {
 #[derive(Parse, Formattable, Format, Print)]
 #[parse(error(name = XidStartOrUnderscore, fmt = "Expected `XID_START` or `_`"))]
 #[parse(error(name = SingleUnderscore, fmt = "Found `_`"))]
-pub struct IdentifierOrKeyword(
-	#[format(whitespace)] pub Whitespace,
-	#[parse(try_update_with = Self::parse)]
-	pub AstStr,
-);
+pub struct IdentifierOrKeyword(pub Whitespace, #[parse(try_update_with = Self::parse)] pub AstStr);
 
 impl IdentifierOrKeyword {
 	fn parse(s: &mut &str) -> Result<(), IdentifierOrKeywordError> {
@@ -46,11 +42,7 @@ impl IdentifierOrKeyword {
 #[parse(error(name = Raw, fmt = "Expected `r#`"))]
 #[parse(error(name = IdentOrKeyword(IdentifierOrKeywordError), transparent))]
 #[parse(error(name = ForbiddenKeyword, fmt = "Raw identifier cannot be `crate`, `self`, `super` or `Self`"))]
-pub struct RawIdentifier(
-	#[format(whitespace)] pub Whitespace,
-	#[parse(try_update_with = Self::parse)]
-	pub AstStr,
-);
+pub struct RawIdentifier(pub Whitespace, #[parse(try_update_with = Self::parse)] pub AstStr);
 
 impl RawIdentifier {
 	fn parse(s: &mut &str) -> Result<(), RawIdentifierError> {

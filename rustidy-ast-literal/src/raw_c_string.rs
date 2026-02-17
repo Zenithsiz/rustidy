@@ -19,7 +19,6 @@ use {
 #[parse(error(name = Nul, fmt = "Found a nul character"))]
 #[parse(error(name = ExpectedEndQuote, fmt = "Expected `\"` after `cr\"`", fatal))]
 pub struct RawCStringLiteral {
-	#[format(whitespace)]
 	pub ws:     Whitespace,
 	#[parse(try_update_with = Self::parse)]
 	pub s:      AstStr,

@@ -134,10 +134,6 @@ struct FieldAttrs {
 	without_tags: bool,
 
 	args: Option<syn::Expr>,
-
-	// TODO: Remove since we no longer need it.
-	#[darling(default)]
-	whitespace: bool,
 }
 
 #[derive(Debug, darling::FromDeriveInput, derive_more::AsRef)]
@@ -315,14 +311,11 @@ fn derive_struct_field(field_idx: usize, field: &FieldAttrs) -> syn::Expr {
 
 	let format = parse_quote! { rustidy_format::Format::format(&mut self.#field_ident, ctx, prefix_ws, args) };
 
-	let after_format = match field.whitespace {
-		true => parse_quote! { has_prefix_ws = false },
-		false => parse_quote! {
-			// TODO: Make `format` return this so we don't have to recurse back into the type
-			if has_prefix_ws && !output.is_empty {
-				has_prefix_ws = false;
-			}
-		},
+	let after_format = parse_quote! {
+		// TODO: Make `format` return this so we don't have to recurse back into the type
+		if has_prefix_ws && !output.is_empty {
+			has_prefix_ws = false;
+		}
 	};
 
 	self::derive_format(
@@ -435,15 +428,18 @@ fn derive_format(
 		}},
 	};
 
-	match return_output {
-		true => parse_quote! {{
-			let output = #format;
-			#after_format;
-			output
-		}},
-		false => parse_quote! {{
-			#format;
-			#after_format;
-		}},
+	match after_format {
+		Some(after_format) => match return_output {
+			true => parse_quote! {{
+				let output = #format;
+				#after_format;
+				output
+			}},
+			false => parse_quote! {{
+				#format;
+				#after_format;
+			}},
+		},
+		None => format,
 	}
 }
