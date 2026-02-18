@@ -69,6 +69,8 @@ impl ParseError for () {
 pub struct ParserError<T: Parse> {
 	// Note: This is behind an indirection to avoid overflowing the stack when
 	//       we parse large enums.
+	// TODO: Make this an `ArenaIdx` once either `#[fundamental]` can be applied
+	//       to enums, or generic statics become available.
 	source: Box<T::Error>,
 	range:  AstRange,
 }
