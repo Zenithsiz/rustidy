@@ -146,6 +146,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 	let skip_if_tag_err_variant = attrs.skip_if_tag.as_ref().map(|tag| {
 		quote! {
 			#[parse_error(fmt("Tag `{:?}` was present", #tag))]
+			#[debug("Tag({:?})", #tag)]
 			#skip_if_tag_err_variant_ident,
 		}
 	});
