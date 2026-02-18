@@ -17,8 +17,9 @@ use {
 	},
 	rustidy_ast_util::{IdentifierOrKeyword, RawIdentifier},
 	rustidy_format::{Format, Formattable},
-	rustidy_parse::{Parse, ParseError},
+	rustidy_parse::{Parse, ParseError, ParserError, ParserTag},
 	rustidy_print::Print,
+	rustidy_util::{StrPopFirst, Whitespace},
 };
 
 // Exports
@@ -56,7 +57,7 @@ pub enum Punctuation {
 	Lt(Lt),
 	Le(Le),
 	EqEq(EqEq),
-	PunctEquals(Ne),
+	Ne(Ne),
 	Ge(Ge),
 	Gt(Gt),
 	AndAnd(AndAnd),
@@ -107,174 +108,242 @@ pub enum Punctuation {
 	BracesClose(BracesClose),
 }
 
+// TODO: Autogenerate this impl?
 impl rustidy_parse::Parse for Punctuation {
 	type Error = PunctuationError;
 
 	fn parse_from(parser: &mut rustidy_parse::Parser) -> Result<Self, Self::Error> {
-		if let Ok(value) = parser.try_parse().map_err(|_| PunctuationError)? {
-			return Ok(Self::Eq(value));
-		}
-		if let Ok(value) = parser.try_parse().map_err(|_| PunctuationError)? {
-			return Ok(Self::Lt(value));
-		}
-		if let Ok(value) = parser.try_parse().map_err(|_| PunctuationError)? {
-			return Ok(Self::Le(value));
-		}
-		if let Ok(value) = parser.try_parse().map_err(|_| PunctuationError)? {
-			return Ok(Self::EqEq(value));
-		}
-		if let Ok(value) = parser.try_parse().map_err(|_| PunctuationError)? {
-			return Ok(Self::PunctEquals(value));
-		}
-		if let Ok(value) = parser.try_parse().map_err(|_| PunctuationError)? {
-			return Ok(Self::Ge(value));
-		}
-		if let Ok(value) = parser.try_parse().map_err(|_| PunctuationError)? {
-			return Ok(Self::Gt(value));
-		}
-		if let Ok(value) = parser.try_parse().map_err(|_| PunctuationError)? {
-			return Ok(Self::AndAnd(value));
-		}
-		if let Ok(value) = parser.try_parse().map_err(|_| PunctuationError)? {
-			return Ok(Self::OrOr(value));
-		}
-		if let Ok(value) = parser.try_parse().map_err(|_| PunctuationError)? {
-			return Ok(Self::Not(value));
-		}
-		if let Ok(value) = parser.try_parse().map_err(|_| PunctuationError)? {
-			return Ok(Self::Tilde(value));
-		}
-		if let Ok(value) = parser.try_parse().map_err(|_| PunctuationError)? {
-			return Ok(Self::Plus(value));
-		}
-		if let Ok(value) = parser.try_parse().map_err(|_| PunctuationError)? {
-			return Ok(Self::Minus(value));
-		}
-		if let Ok(value) = parser.try_parse().map_err(|_| PunctuationError)? {
-			return Ok(Self::Star(value));
-		}
-		if let Ok(value) = parser.try_parse().map_err(|_| PunctuationError)? {
-			return Ok(Self::Slash(value));
-		}
-		if let Ok(value) = parser.try_parse().map_err(|_| PunctuationError)? {
-			return Ok(Self::Percent(value));
-		}
-		if let Ok(value) = parser.try_parse().map_err(|_| PunctuationError)? {
-			return Ok(Self::Caret(value));
-		}
-		if let Ok(value) = parser.try_parse().map_err(|_| PunctuationError)? {
-			return Ok(Self::And(value));
-		}
-		if let Ok(value) = parser.try_parse().map_err(|_| PunctuationError)? {
-			return Ok(Self::Or(value));
-		}
-		if let Ok(value) = parser.try_parse().map_err(|_| PunctuationError)? {
-			return Ok(Self::Shl(value));
-		}
-		if let Ok(value) = parser.try_parse().map_err(|_| PunctuationError)? {
-			return Ok(Self::Shr(value));
-		}
-		if let Ok(value) = parser.try_parse().map_err(|_| PunctuationError)? {
-			return Ok(Self::PlusEq(value));
-		}
-		if let Ok(value) = parser.try_parse().map_err(|_| PunctuationError)? {
-			return Ok(Self::MinusEq(value));
-		}
-		if let Ok(value) = parser.try_parse().map_err(|_| PunctuationError)? {
-			return Ok(Self::StarEq(value));
-		}
-		if let Ok(value) = parser.try_parse().map_err(|_| PunctuationError)? {
-			return Ok(Self::SlashEq(value));
-		}
-		if let Ok(value) = parser.try_parse().map_err(|_| PunctuationError)? {
-			return Ok(Self::PercentEq(value));
-		}
-		if let Ok(value) = parser.try_parse().map_err(|_| PunctuationError)? {
-			return Ok(Self::CaretEq(value));
-		}
-		if let Ok(value) = parser.try_parse().map_err(|_| PunctuationError)? {
-			return Ok(Self::AndEq(value));
-		}
-		if let Ok(value) = parser.try_parse().map_err(|_| PunctuationError)? {
-			return Ok(Self::OrEq(value));
-		}
-		if let Ok(value) = parser.try_parse().map_err(|_| PunctuationError)? {
-			return Ok(Self::ShlEq(value));
-		}
-		if let Ok(value) = parser.try_parse().map_err(|_| PunctuationError)? {
-			return Ok(Self::ShrEq(value));
-		}
-		if let Ok(value) = parser.try_parse().map_err(|_| PunctuationError)? {
-			return Ok(Self::At(value));
-		}
-		if let Ok(value) = parser.try_parse().map_err(|_| PunctuationError)? {
-			return Ok(Self::Dot(value));
-		}
-		if let Ok(value) = parser.try_parse().map_err(|_| PunctuationError)? {
-			return Ok(Self::DotDot(value));
-		}
-		if let Ok(value) = parser.try_parse().map_err(|_| PunctuationError)? {
-			return Ok(Self::DotDotDot(value));
-		}
-		if let Ok(value) = parser.try_parse().map_err(|_| PunctuationError)? {
-			return Ok(Self::DotDotEq(value));
-		}
-		if let Ok(value) = parser.try_parse().map_err(|_| PunctuationError)? {
-			return Ok(Self::Comma(value));
-		}
-		if let Ok(value) = parser.try_parse().map_err(|_| PunctuationError)? {
-			return Ok(Self::Semi(value));
-		}
-		if let Ok(value) = parser.try_parse().map_err(|_| PunctuationError)? {
-			return Ok(Self::Colon(value));
-		}
-		if let Ok(value) = parser.try_parse().map_err(|_| PunctuationError)? {
-			return Ok(Self::PathSep(value));
-		}
-		if let Ok(value) = parser.try_parse().map_err(|_| PunctuationError)? {
-			return Ok(Self::RArrow(value));
-		}
-		if let Ok(value) = parser.try_parse().map_err(|_| PunctuationError)? {
-			return Ok(Self::LArrow(value));
-		}
-		if let Ok(value) = parser.try_parse().map_err(|_| PunctuationError)? {
-			return Ok(Self::FatArrow(value));
-		}
-		if let Ok(value) = parser.try_parse().map_err(|_| PunctuationError)? {
-			return Ok(Self::Pound(value));
-		}
-		if let Ok(value) = parser.try_parse().map_err(|_| PunctuationError)? {
-			return Ok(Self::Dollar(value));
-		}
-		if let Ok(value) = parser.try_parse().map_err(|_| PunctuationError)? {
-			return Ok(Self::Question(value));
-		}
-		if let Ok(value) = parser.try_parse().map_err(|_| PunctuationError)? {
-			return Ok(Self::Underscore(value));
-		}
-		if let Ok(value) = parser.try_parse().map_err(|_| PunctuationError)? {
-			return Ok(Self::ParenOpen(value));
-		}
-		if let Ok(value) = parser.try_parse().map_err(|_| PunctuationError)? {
-			return Ok(Self::ParenClose(value));
-		}
-		if let Ok(value) = parser.try_parse().map_err(|_| PunctuationError)? {
-			return Ok(Self::BracketOpen(value));
-		}
-		if let Ok(value) = parser.try_parse().map_err(|_| PunctuationError)? {
-			return Ok(Self::BracketClose(value));
-		}
-		if let Ok(value) = parser.try_parse().map_err(|_| PunctuationError)? {
-			return Ok(Self::BracesOpen(value));
-		}
-		if let Ok(value) = parser.try_parse().map_err(|_| PunctuationError)? {
-			return Ok(Self::BracesClose(value));
+		// TODO: Autogenerate this from `Punctuation`.
+		#[derive(Clone, Copy, Debug)]
+		enum Punct {
+			Eq,
+			Lt,
+			Le,
+			EqEq,
+			Ne,
+			Ge,
+			Gt,
+			AndAnd,
+			OrOr,
+			Not,
+			Tilde,
+			Plus,
+			Minus,
+			Star,
+			Slash,
+			Percent,
+			Caret,
+			And,
+			Or,
+			Shl,
+			Shr,
+			PlusEq,
+			MinusEq,
+			StarEq,
+			SlashEq,
+			PercentEq,
+			CaretEq,
+			AndEq,
+			OrEq,
+			ShlEq,
+			ShrEq,
+			At,
+			Dot,
+			DotDot,
+			DotDotDot,
+			DotDotEq,
+			Comma,
+			Semi,
+			Colon,
+			PathSep,
+			RArrow,
+			LArrow,
+			FatArrow,
+			Pound,
+			Dollar,
+			Question,
+			Underscore,
+			ParenOpen,
+			ParenClose,
+			BracketOpen,
+			BracketClose,
+			BracesOpen,
+			BracesClose,
 		}
 
-		Err(PunctuationError)
+		let skip_plus = parser.has_tag(ParserTag::SkipTokenPlus);
+		let skip_star = parser.has_tag(ParserTag::SkipTokenStar);
+		let skip_dollar = parser.has_tag(ParserTag::SkipTokenDollar);
+		let skip_question = parser.has_tag(ParserTag::SkipTokenQuestion);
+		let skip_delimiters = parser.has_tag(ParserTag::SkipDelimiters);
+
+		let ws = parser.parse()?;
+		let res = parser.try_update_with(|s| {
+			let original_s = *s;
+			macro punct($len:literal, $punct:ident) {{
+				*s = &original_s[$len..];
+				Some(Punct::$punct)
+			}}
+			match s.pop_first()? {
+				'=' => match s.pop_first() {
+					Some('=') => punct!(2, EqEq),
+					Some('>') => punct!(2, FatArrow),
+					_ => punct!(1, Eq),
+				},
+				'<' => match s.pop_first() {
+					Some('=') => punct!(2, Le),
+					Some('-') => punct!(2, LArrow),
+					Some('<') => match s.pop_first() {
+						Some('=') => punct!(3, ShlEq),
+						_ => punct!(2, Shl),
+					},
+					_ => punct!(1, Lt),
+				},
+				'>' => match s.pop_first() {
+					Some('=') => punct!(2, Ge),
+					Some('>') => match s.pop_first() {
+						Some('=') => punct!(3, ShrEq),
+						_ => punct!(2, Shr),
+					},
+					_ => punct!(1, Gt),
+				},
+				'!' => match s.pop_first() {
+					Some('=') => punct!(2, Ne),
+					_ => punct!(1, Not),
+				},
+				'&' => match s.pop_first() {
+					Some('&') => punct!(2, AndAnd),
+					Some('=') => punct!(2, AndEq),
+					_ => punct!(1, And),
+				},
+				'|' => match s.pop_first() {
+					Some('|') => punct!(2, OrOr),
+					Some('=') => punct!(2, OrEq),
+					_ => punct!(1, Or),
+				},
+				'+' => match s.pop_first() {
+					Some('=') => punct!(2, PlusEq),
+					_ if !skip_plus => punct!(1, Plus),
+					_ => None,
+				},
+				'-' => match s.pop_first() {
+					Some('=') => punct!(2, MinusEq),
+					Some('>') => punct!(2, RArrow),
+					_ => punct!(1, Minus),
+				},
+				'*' => match s.pop_first() {
+					Some('=') => punct!(2, StarEq),
+					_ if !skip_star => punct!(1, Star),
+					_ => None,
+				},
+				'/' => match s.pop_first() {
+					Some('=') => punct!(2, SlashEq),
+					_ => punct!(1, Slash),
+				},
+				'^' => match s.pop_first() {
+					Some('=') => punct!(2, CaretEq),
+					_ => punct!(1, Caret),
+				},
+				'%' => match s.pop_first() {
+					Some('=') => punct!(2, PercentEq),
+					_ => punct!(1, Percent),
+				},
+				'.' => match s.pop_first() {
+					Some('.') => match s.pop_first() {
+						Some('.') => punct!(3, DotDotDot),
+						Some('=') => punct!(3, DotDotEq),
+						_ => punct!(2, DotDot),
+					},
+					_ => punct!(1, Dot),
+				},
+				':' => match s.pop_first() {
+					Some(':') => punct!(2, PathSep),
+					_ => punct!(1, Colon),
+				},
+				'~' => punct!(1, Tilde),
+				'@' => punct!(1, At),
+				',' => punct!(1, Comma),
+				';' => punct!(1, Semi),
+				'#' => punct!(1, Pound),
+				'$' if !skip_dollar => punct!(1, Dollar),
+				'?' if !skip_question => punct!(1, Question),
+				'_' => punct!(1, Underscore),
+				'(' if !skip_delimiters => punct!(1, ParenOpen),
+				')' if !skip_delimiters => punct!(1, ParenClose),
+				'[' if !skip_delimiters => punct!(1, BracketOpen),
+				']' if !skip_delimiters => punct!(1, BracketClose),
+				'{' if !skip_delimiters => punct!(1, BracesOpen),
+				'}' if !skip_delimiters => punct!(1, BracesClose),
+				_ => None,
+			}
+		});
+		let (s, punct) = res.ok_or(PunctuationError::NotFound)?;
+
+		let punct = match punct {
+			Punct::Eq => Self::Eq(Eq(ws, s)),
+			Punct::Lt => Self::Lt(Lt(ws, s)),
+			Punct::Le => Self::Le(Le(ws, s)),
+			Punct::EqEq => Self::EqEq(EqEq(ws, s)),
+			Punct::Ne => Self::Ne(Ne(ws, s)),
+			Punct::Ge => Self::Ge(Ge(ws, s)),
+			Punct::Gt => Self::Gt(Gt(ws, s)),
+			Punct::AndAnd => Self::AndAnd(AndAnd(ws, s)),
+			Punct::OrOr => Self::OrOr(OrOr(ws, s)),
+			Punct::Not => Self::Not(Not(ws, s)),
+			Punct::Tilde => Self::Tilde(Tilde(ws, s)),
+			Punct::Plus => Self::Plus(Plus(ws, s)),
+			Punct::Minus => Self::Minus(Minus(ws, s)),
+			Punct::Star => Self::Star(Star(ws, s)),
+			Punct::Slash => Self::Slash(Slash(ws, s)),
+			Punct::Percent => Self::Percent(Percent(ws, s)),
+			Punct::Caret => Self::Caret(Caret(ws, s)),
+			Punct::And => Self::And(And(ws, s)),
+			Punct::Or => Self::Or(Or(ws, s)),
+			Punct::Shl => Self::Shl(Shl(ws, s)),
+			Punct::Shr => Self::Shr(Shr(ws, s)),
+			Punct::PlusEq => Self::PlusEq(PlusEq(ws, s)),
+			Punct::MinusEq => Self::MinusEq(MinusEq(ws, s)),
+			Punct::StarEq => Self::StarEq(StarEq(ws, s)),
+			Punct::SlashEq => Self::SlashEq(SlashEq(ws, s)),
+			Punct::PercentEq => Self::PercentEq(PercentEq(ws, s)),
+			Punct::CaretEq => Self::CaretEq(CaretEq(ws, s)),
+			Punct::AndEq => Self::AndEq(AndEq(ws, s)),
+			Punct::OrEq => Self::OrEq(OrEq(ws, s)),
+			Punct::ShlEq => Self::ShlEq(ShlEq(ws, s)),
+			Punct::ShrEq => Self::ShrEq(ShrEq(ws, s)),
+			Punct::At => Self::At(At(ws, s)),
+			Punct::Dot => Self::Dot(Dot(ws, s)),
+			Punct::DotDot => Self::DotDot(DotDot(ws, s)),
+			Punct::DotDotDot => Self::DotDotDot(DotDotDot(ws, s)),
+			Punct::DotDotEq => Self::DotDotEq(DotDotEq(ws, s)),
+			Punct::Comma => Self::Comma(Comma(ws, s)),
+			Punct::Semi => Self::Semi(Semi(ws, s)),
+			Punct::Colon => Self::Colon(Colon(ws, s)),
+			Punct::PathSep => Self::PathSep(PathSep(ws, s)),
+			Punct::RArrow => Self::RArrow(RArrow(ws, s)),
+			Punct::LArrow => Self::LArrow(LArrow(ws, s)),
+			Punct::FatArrow => Self::FatArrow(FatArrow(ws, s)),
+			Punct::Pound => Self::Pound(Pound(ws, s)),
+			Punct::Dollar => Self::Dollar(Dollar(ws, s)),
+			Punct::Question => Self::Question(Question(ws, s)),
+			Punct::Underscore => Self::Underscore(Underscore(ws, s)),
+			Punct::ParenOpen => Self::ParenOpen(ParenOpen(ws, s)),
+			Punct::ParenClose => Self::ParenClose(ParenClose(ws, s)),
+			Punct::BracketOpen => Self::BracketOpen(BracketOpen(ws, s)),
+			Punct::BracketClose => Self::BracketClose(BracketClose(ws, s)),
+			Punct::BracesOpen => Self::BracesOpen(BracesOpen(ws, s)),
+			Punct::BracesClose => Self::BracesClose(BracesClose(ws, s)),
+		};
+
+		Ok(punct)
 	}
 }
 
-#[derive(derive_more::Debug, ParseError)]
-#[parse_error(fmt = "Expected punctuation")]
-pub struct PunctuationError;
+#[derive(derive_more::Debug, derive_more::From, ParseError)]
+pub enum PunctuationError {
+	#[parse_error(transparent)]
+	Whitespace(ParserError<Whitespace>),
+
+	#[parse_error(fmt = "Expected punctuation")]
+	NotFound,
+}

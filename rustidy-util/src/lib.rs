@@ -37,3 +37,14 @@ pub use self::{
 pub fn is_str_blank(s: &str) -> bool {
 	s.chars().all(|ch| ch.is_ascii_whitespace())
 }
+
+#[extend::ext(name = StrPopFirst)]
+pub impl &str {
+	fn pop_first(&mut self) -> Option<char> {
+		let mut chars = self.chars();
+		let ch = chars.next()?;
+		*self = chars.as_str();
+
+		Some(ch)
+	}
+}
