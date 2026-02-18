@@ -12,6 +12,11 @@
 	unwrap_infallible,
 	substr_range
 )]
+// Lints
+#![cfg_attr(
+	not(feature = "flamegraph-traces"),
+	expect(unused_crate_dependencies, reason = "It's only used with that feature flag")
+)]
 
 // Modules
 mod error;
@@ -46,7 +51,12 @@ use {
 	rustidy_util::{ArenaData, ArenaIdx, AstPos, AstRange, AstStr},
 	std::{borrow::Cow, fmt},
 };
-
+#[cfg(feature = "flamegraph-traces")]
+use {
+	app_error::Context,
+	flate2::write::GzEncoder,
+	std::{env, fs, io::BufWriter, io::Write},
+};
 
 /// Parsable types
 pub trait Parse: Sized {
@@ -249,17 +259,57 @@ pub struct Parser<'input> {
 
 	/// Tags offset
 	tags_offset: usize,
+
+	#[cfg(feature = "flamegraph-traces")]
+	stack: Vec<&'static str>,
+
+	#[cfg(feature = "flamegraph-traces")]
+	trace_max_depth: usize,
+
+	#[cfg(feature = "flamegraph-traces")]
+	trace_file: BufWriter<GzEncoder<fs::File>>,
 }
 
 impl<'input> Parser<'input> {
 	/// Creates a new parser
 	#[must_use]
-	pub const fn new(input: &'input str) -> Self {
+	#[cfg_attr(
+		not(feature = "flamegraph-traces"),
+		expect(clippy::missing_const_for_fn, reason = "It can't be const with some features")
+	)]
+	pub fn new(input: &'input str) -> Self {
 		Self {
 			input,
 			cur_pos: AstPos::from_usize(0),
 			tags: vec![],
 			tags_offset: 0,
+			#[cfg(feature = "flamegraph-traces")]
+			stack: {
+				let mut stack = Vec::with_capacity(128);
+				stack.push("parse");
+				stack
+			},
+			#[cfg(feature = "flamegraph-traces")]
+			trace_max_depth: {
+				let var = "RUSTIDY_FLAMEGRAPH_TRACE_MAX_DEPTH";
+				let default = 50;
+
+				match self::get_flamegraph_trace_max_depth(var, default) {
+					Ok(max_depth) => max_depth,
+					Err(err) => {
+						tracing::warn!("Unable to parse {var:?}: {err:?}");
+						default
+					},
+				}
+			},
+			#[cfg(feature = "flamegraph-traces")]
+			trace_file: {
+				let var = "RUSTIDY_FLAMEGRAPH_TRACE_FILE";
+				let default = "output.gz";
+
+				self::open_flamegraph_trace_file(var, default)
+					.unwrap_or_else(|err| panic!("Unable to create {var:?}: {err:?}"))
+			},
 		}
 	}
 
@@ -346,10 +396,7 @@ impl<'input> Parser<'input> {
 	where
 		F: FnOnce(&mut &'input str) -> O,
 	{
-		self.try_update_with(|remaining| {
-			Ok::<_, !>(f(remaining))
-		})
-		.into_ok()
+		self.try_update_with(|remaining| Ok::<_, !>(f(remaining))).into_ok()
 	}
 
 	/// Updates this parser from a string.
@@ -401,8 +448,36 @@ impl<'input> Parser<'input> {
 
 	/// Parses `T` from this parser
 	pub fn parse<T: Parse>(&mut self) -> Result<T, ParserError<T>> {
+		#[cfg(feature = "flamegraph-traces")]
+		let emit_traces = self.stack.len() < self.trace_max_depth;
+
+		#[cfg(feature = "flamegraph-traces")]
+		if emit_traces {
+			self.stack.push(std::any::type_name::<T>());
+		}
+
+		#[cfg(feature = "flamegraph-traces")]
+		let start = self::flamegraph_trace_get_timestamp();
+
 		let start_pos = self.cur_pos;
-		T::parse_from(self).map_err(|source| ParserError::new(source, AstRange::new(start_pos, self.cur_pos)))
+		let res =
+			T::parse_from(self).map_err(|source| ParserError::new(source, AstRange::new(start_pos, self.cur_pos)));
+
+		#[cfg(feature = "flamegraph-traces")]
+		let end = self::flamegraph_trace_get_timestamp();
+
+		// TODO: Do this in another thread?
+		#[cfg(feature = "flamegraph-traces")]
+		if emit_traces {
+			self.stack.pop();
+			for &ty in &self.stack {
+				write!(self.trace_file, "{ty};").expect("Unable to write to trace file");
+			}
+			writeln!(self.trace_file, "{} {}", std::any::type_name::<T>(), end - start)
+				.expect("Unable to write to trace file");
+		}
+
+		res
 	}
 
 	/// Parses `T` from this parser with a peeked value
@@ -595,4 +670,32 @@ where
 		Err(err) if err.is_fatal() => Err(err),
 		Err(err) => Ok(Err(err)),
 	}
+}
+
+#[cfg(feature = "flamegraph-traces")]
+fn get_flamegraph_trace_max_depth(var: &str, default: usize) -> Result<usize, AppError> {
+	let Ok(max_depth) = env::var(var) else {
+		return Ok(default);
+	};
+
+	max_depth.parse::<usize>().context("Unable to parse value")
+}
+
+#[cfg(feature = "flamegraph-traces")]
+fn open_flamegraph_trace_file(var: &str, default: &str) -> Result<BufWriter<GzEncoder<fs::File>>, AppError> {
+	let res = env::var(var);
+	let path = match &res {
+		Ok(path) => path,
+		Err(_) => default,
+	};
+
+	let file = fs::File::create(path).context("Unable to create file")?;
+	let file = GzEncoder::new(file, flate2::Compression::fast());
+	Ok(BufWriter::new(file))
+}
+
+#[cfg(feature = "flamegraph-traces")]
+fn flamegraph_trace_get_timestamp() -> u64 {
+	// Safety: `rdtsc` is always safe to call
+	unsafe { std::arch::x86_64::_rdtsc() }
 }
