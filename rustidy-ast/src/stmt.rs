@@ -11,7 +11,7 @@ use {
 		ty::Type,
 	},
 	rustidy_format::{Format, Formattable, WhitespaceFormat},
-	rustidy_parse::Parse,
+	rustidy_parse::{Parse, ParseError, Parser, ParserError},
 	rustidy_print::Print,
 	rustidy_util::Whitespace,
 };
@@ -65,10 +65,48 @@ pub struct LetStatementTy {
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Formattable, Format, Print)]
+#[derive(Formattable, Format, Print)]
 pub enum LetStatementEq {
 	Else(LetStatementEqElse),
 	Normal(LetStatementEqNormal),
+}
+
+impl Parse for LetStatementEq {
+	type Error = LetStatementEqError;
+
+	#[coverage(on)]
+	fn parse_from(parser: &mut Parser) -> Result<Self, Self::Error> {
+		let eq = parser.parse()?;
+		let expr = parser.parse()?;
+
+		match parser.try_parse::<token::Else>()? {
+			Ok(else_) => {
+				let else_expr = parser.parse()?;
+				Ok(Self::Else(LetStatementEqElse {
+					eq,
+					expr,
+					else_,
+					else_expr,
+				}))
+			},
+			Err(_) => Ok(Self::Normal(LetStatementEqNormal { eq, expr })),
+		}
+	}
+}
+#[derive(derive_more::Debug, derive_more::From, ParseError)]
+pub enum LetStatementEqError {
+	#[parse_error(transparent)]
+	Eq(ParserError<token::Eq>),
+
+	#[parse_error(transparent)]
+	Expr(ParserError<Expression>),
+
+	#[parse_error(transparent)]
+	Else(ParserError<token::Else>),
+
+	#[parse_error(transparent)]
+	#[parse_error(fatal)]
+	ElseExpr(ParserError<BlockExpression>),
 }
 
 #[derive(PartialEq, Eq, Debug)]
