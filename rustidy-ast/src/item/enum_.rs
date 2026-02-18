@@ -61,6 +61,10 @@ pub struct EnumVariantInner {
 	pub vis:          Option<Visibility>,
 	#[format(prefix_ws(expr = Whitespace::SINGLE, if = self.vis.is_some()))]
 	pub ident:        Identifier,
+	#[format(prefix_ws(if = let Some(kind) = &self.kind, expr = match kind {
+		EnumVariantKind::Tuple(_) => Whitespace::REMOVE,
+		EnumVariantKind::Struct(_) => Whitespace::SINGLE,
+	}))]
 	pub kind:         Option<EnumVariantKind>,
 	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub discriminant: Option<EnumVariantDiscriminant>,
@@ -70,9 +74,7 @@ pub struct EnumVariantInner {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub enum EnumVariantKind {
-	#[format(prefix_ws = Whitespace::REMOVE)]
 	Tuple(EnumVariantTuple),
-	#[format(prefix_ws = Whitespace::SINGLE)]
 	Struct(EnumVariantStruct),
 }
 

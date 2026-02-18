@@ -307,9 +307,7 @@ fn derive_struct_field(field_idx: usize, field: &FieldAttrs) -> syn::Expr {
 			true => None,
 			false => Some(parse_quote! { match has_prefix_ws {
 				true => prefix_ws,
-				// TODO: Ideally here we'd panic once we ensure
-				//       the caller can always provide a prefix whitespace.
-				false => <rustidy_util::Whitespace as rustidy_format::WhitespaceFormat>::PRESERVE,
+				false => panic!("Missing prefix whitespace for {}::{}", std::any::type_name::<Self>(), stringify!(#field_ident)),
 			}}),
 		},
 	};

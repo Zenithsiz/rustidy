@@ -90,7 +90,9 @@ pub struct MacroRules(
 pub struct MacroRule {
 	pub matcher:     MacroMatcher,
 	#[parse(fatal)]
+	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub arrow:       token::FatArrow,
+	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub transcriber: MacroTranscriber,
 }
 

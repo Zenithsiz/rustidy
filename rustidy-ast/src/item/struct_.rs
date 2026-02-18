@@ -39,6 +39,10 @@ pub struct StructStruct {
 	pub generics: Option<GenericParams>,
 	#[format(prefix_ws = Whitespace::CUR_INDENT)]
 	pub where_:   Option<WhereClause>,
+	#[format(prefix_ws = match self.inner {
+		StructStructInner::Fields(_) => Whitespace::SINGLE,
+		StructStructInner::Semi(_) => Whitespace::REMOVE,
+	})]
 	pub inner:    StructStructInner,
 }
 
@@ -47,11 +51,9 @@ pub struct StructStruct {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub enum StructStructInner {
-	#[format(prefix_ws = Whitespace::SINGLE)]
 	#[format(indent)]
 	#[format(args = delimited::fmt_indent_if_non_blank())]
 	Fields(Braced<Option<StructFields>>),
-	#[format(prefix_ws = Whitespace::REMOVE)]
 	Semi(token::Semi),
 }
 

@@ -63,6 +63,9 @@ pub enum InnerDocComment {
 #[derive(Parse, Formattable, Format, Print)]
 pub struct InnerLineDoc {
 	pub prefix:  token::InnerLineDoc,
+	// TODO: There is no prefix whitespace here, so we'd ideally
+	//       not need to pass anything through.
+	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub comment: RemainingLine,
 }
 
@@ -112,6 +115,9 @@ pub enum OuterDocComment {
 #[derive(Parse, Formattable, Format, Print)]
 pub struct OuterLineDoc {
 	pub prefix:  token::OuterLineDoc,
+	// TODO: There is no prefix whitespace here, so we'd ideally
+	//       not need to pass anything through.
+	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub comment: RemainingLine,
 }
 

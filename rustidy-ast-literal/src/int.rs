@@ -4,7 +4,7 @@
 use {
 	super::SuffixNoE,
 	app_error::{AppError, Context},
-	rustidy_format::{Format, Formattable},
+	rustidy_format::{Format, Formattable, WhitespaceFormat},
 	rustidy_parse::Parse,
 	rustidy_print::Print,
 	rustidy_util::{AstStr, Whitespace},
@@ -18,7 +18,11 @@ use {
 #[parse(name = "an integer literal")]
 pub struct IntegerLiteral {
 	pub ws:     Whitespace,
+	// TODO: There is no prefix whitespace here, so we'd ideally
+	//       not need to pass anything through.
+	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub inner:  IntegerLiteralInner,
+	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub suffix: Option<SuffixNoE>,
 }
 
