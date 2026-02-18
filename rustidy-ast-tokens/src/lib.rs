@@ -78,6 +78,13 @@ pub macro decl_tokens(
 			}
 		}
 
+		#[expect(non_snake_case, reason = "This is a tuple constructor")]
+		pub const fn $TokenName($ws: Whitespace, $token: AstStr) -> $TokenName {
+			$TokenName {
+				$ws, $token
+			}
+		}
+
 		impl Default for $TokenName {
 			fn default() -> Self {
 				Self::$new()
