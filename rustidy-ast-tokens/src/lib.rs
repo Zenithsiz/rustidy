@@ -6,13 +6,14 @@
 	coverage_attribute,
 	yeet_expr,
 	anonymous_lifetime_in_impl_trait,
-	decl_macro
+	decl_macro,
+	macro_metavar_expr
 )]
 
 // Imports
 use {
 	rustidy_format::{Format, Formattable},
-	rustidy_parse::{Parse, Parser, ParserTag},
+	rustidy_parse::{Parse, ParserTag},
 	rustidy_print::Print,
 	rustidy_util::{AstStr, Whitespace},
 };
@@ -24,6 +25,7 @@ pub macro decl_tokens(
 
 	$(
 		$TokenName:ident = $Token:literal
+		$( , ends_with_xid_continue $ends_with_xid_continue:tt )?
 		$( , skip_if_tag $skip_if_tag:expr )?
 		$( , must_not_follow $( $must_not_follow:literal ),* $(,)? )?
 		;
@@ -34,11 +36,9 @@ pub macro decl_tokens(
 		#[derive(serde::Serialize, serde::Deserialize)]
 		#[derive(Parse, Formattable, Format, Print)]
 		#[parse(error(name = NotFound, fmt("Expected `{}`", $Token)))]
-		#[parse(error(name = FollowsXid, fmt = "Token ends with `XID_CONTINUE` and follows `XID_START` or `_`"))]
 		$(
 			#[parse(skip_if_tag = $skip_if_tag)]
 		)?
-		#[parse(and_try_with = Self::check)]
 		pub struct $TokenName {
 			pub $ws: Whitespace,
 
@@ -57,26 +57,18 @@ pub macro decl_tokens(
 
 			fn parse(s: &mut &str) -> Result<(), <Self as Parse>::Error> {
 				*s = s.strip_prefix($Token).ok_or(<Self as Parse>::Error::NotFound)?;
-				Ok(())
-			}
 
-			fn check(&mut self, parser: &mut Parser) -> Result<(), <Self as Parse>::Error> {
 				// Note: This checks prevents matching `match` on `matches`
-				{
-					let token = parser.str(&self.$token);
-					let remaining = parser.remaining();
-
-					if token.ends_with(unicode_ident::is_xid_continue) &&
-						remaining.starts_with(|ch: char| unicode_ident::is_xid_continue(ch))
+				$( ${ignore($ends_with_xid_continue)}
+					if s.starts_with(|ch: char| unicode_ident::is_xid_continue(ch))
 					{
-						return Err(<Self as Parse>::Error::FollowsXid);
+						return Err(<Self as Parse>::Error::NotFound);
 					}
-				}
+				)?
 
 				$(
 					$(
-						// TODO: Different error message?
-						if parser.strip_prefix($must_not_follow).is_some() {
+						if s.starts_with($must_not_follow) {
 							return Err(<Self as Parse>::Error::NotFound);
 						}
 					)*
@@ -104,74 +96,74 @@ decl_tokens! {
 	InnerBlockDoc = "/*!";
 	OuterBlockDoc = "/**";
 
-	Super = "super";
-	SelfLower = "self";
-	SelfUpper = "Self";
-	Crate = "crate", skip_if_tag ParserTag::SkipTokenCrate;
-	DollarCrate = "$crate";
+	Super = "super", ends_with_xid_continue ();
+	SelfLower = "self", ends_with_xid_continue ();
+	SelfUpper = "Self", ends_with_xid_continue ();
+	Crate = "crate", ends_with_xid_continue (), skip_if_tag ParserTag::SkipTokenCrate;
+	DollarCrate = "$crate", ends_with_xid_continue ();
 
-	As = "as";
-	Async = "async";
-	Attr = "attr";
-	Auto = "auto";
-	Await = "await";
-	Break = "break";
-	Const = "const";
-	Continue = "continue";
-	Derive = "derive";
-	Do = "do";
-	Dyn = "dyn";
-	Else = "else";
-	Enum = "enum";
-	Extern = "extern";
-	False = "false";
-	Fn = "fn";
-	For = "for";
-	If = "if";
-	Impl = "impl";
-	In = "in";
-	Let = "let";
-	Loop = "loop";
-	Macro = "macro";
-	MacroRules = "macro_rules";
-	Match = "match";
-	Mod = "mod";
-	Move = "move";
-	Mut = "mut";
-	Pub = "pub";
-	Raw = "raw";
-	Ref = "ref";
-	Return = "return";
-	Safe = "safe";
-	Static = "static";
-	Struct = "struct";
-	Trait = "trait";
-	True = "true";
-	Try = "try";
-	Type = "type";
-	Union = "union";
-	Unsafe = "unsafe";
-	Use = "use";
-	Where = "where";
-	While = "while";
-	Yeet = "yeet";
+	As = "as", ends_with_xid_continue ();
+	Async = "async", ends_with_xid_continue ();
+	Attr = "attr", ends_with_xid_continue ();
+	Auto = "auto", ends_with_xid_continue ();
+	Await = "await", ends_with_xid_continue ();
+	Break = "break", ends_with_xid_continue ();
+	Const = "const", ends_with_xid_continue ();
+	Continue = "continue", ends_with_xid_continue ();
+	Derive = "derive", ends_with_xid_continue ();
+	Do = "do", ends_with_xid_continue ();
+	Dyn = "dyn", ends_with_xid_continue ();
+	Else = "else", ends_with_xid_continue ();
+	Enum = "enum", ends_with_xid_continue ();
+	Extern = "extern", ends_with_xid_continue ();
+	False = "false", ends_with_xid_continue ();
+	Fn = "fn", ends_with_xid_continue ();
+	For = "for", ends_with_xid_continue ();
+	If = "if", ends_with_xid_continue ();
+	Impl = "impl", ends_with_xid_continue ();
+	In = "in", ends_with_xid_continue ();
+	Let = "let", ends_with_xid_continue ();
+	Loop = "loop", ends_with_xid_continue ();
+	Macro = "macro", ends_with_xid_continue ();
+	MacroRules = "macro_rules", ends_with_xid_continue ();
+	Match = "match", ends_with_xid_continue ();
+	Mod = "mod", ends_with_xid_continue ();
+	Move = "move", ends_with_xid_continue ();
+	Mut = "mut", ends_with_xid_continue ();
+	Pub = "pub", ends_with_xid_continue ();
+	Raw = "raw", ends_with_xid_continue ();
+	Ref = "ref", ends_with_xid_continue ();
+	Return = "return", ends_with_xid_continue ();
+	Safe = "safe", ends_with_xid_continue ();
+	Static = "static", ends_with_xid_continue ();
+	Struct = "struct", ends_with_xid_continue ();
+	Trait = "trait", ends_with_xid_continue ();
+	True = "true", ends_with_xid_continue ();
+	Try = "try", ends_with_xid_continue ();
+	Type = "type", ends_with_xid_continue ();
+	Union = "union", ends_with_xid_continue ();
+	Unsafe = "unsafe", ends_with_xid_continue ();
+	Use = "use", ends_with_xid_continue ();
+	Where = "where", ends_with_xid_continue ();
+	While = "while", ends_with_xid_continue ();
+	Yeet = "yeet", ends_with_xid_continue ();
 
 	// Macro frag spec
-	Block = "block";
-	Expr = "expr";
-	Expr2021 = "expr_2021";
-	Ident = "ident";
-	Item = "item";
-	Lifetime = "lifetime";
-	Literal = "literal";
-	Meta = "meta";
-	Pat = "pat";
-	PatParam = "pat_param";
-	Path = "path";
-	Stmt = "stmt";
-	Tt = "tt";
-	Ty = "ty";
-	Vis = "vis";
+	Block = "block", ends_with_xid_continue ();
+	Expr = "expr", ends_with_xid_continue ();
+	Expr2021 = "expr_2021", ends_with_xid_continue ();
+	Ident = "ident", ends_with_xid_continue ();
+	Item = "item", ends_with_xid_continue ();
+	Lifetime = "lifetime", ends_with_xid_continue ();
+	Literal = "literal", ends_with_xid_continue ();
+	Meta = "meta", ends_with_xid_continue ();
+	Pat = "pat", ends_with_xid_continue ();
+	PatParam = "pat_param", ends_with_xid_continue ();
+	Path = "path", ends_with_xid_continue ();
+	Stmt = "stmt", ends_with_xid_continue ();
+	Tt = "tt", ends_with_xid_continue ();
+	Ty = "ty", ends_with_xid_continue ();
+	Vis = "vis", ends_with_xid_continue ();
 
 	// Punctuation
 	Eq = '=', must_not_follow '=', '>';
