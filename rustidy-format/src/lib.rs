@@ -403,7 +403,7 @@ impl<T: ArenaData + Formattable> Formattable for ArenaIdx<T> {
 		ctx: &mut Context,
 		f: &mut impl FnMut(&mut Whitespace, &mut Context) -> O,
 	) -> Result<O, ControlFlow<()>> {
-		self.get_mut().with_prefix_ws(ctx, f)
+		(**self).with_prefix_ws(ctx, f)
 	}
 
 	fn with_strings<O>(
@@ -412,13 +412,13 @@ impl<T: ArenaData + Formattable> Formattable for ArenaIdx<T> {
 		exclude_prefix_ws: bool,
 		f: &mut impl FnMut(&mut AstStr, &mut Context) -> ControlFlow<O>,
 	) -> ControlFlow<O, bool> {
-		self.get_mut().with_strings(ctx, exclude_prefix_ws, f)
+		(**self).with_strings(ctx, exclude_prefix_ws, f)
 	}
 }
 
 impl<T: ArenaData + Format<Args>, Args> Format<Args> for ArenaIdx<T> {
 	fn format(&mut self, ctx: &mut Context, prefix_ws: WhitespaceConfig, args: &mut Args) -> FormatOutput {
-		self.get_mut().format(ctx, prefix_ws, args)
+		(**self).format(ctx, prefix_ws, args)
 	}
 }
 

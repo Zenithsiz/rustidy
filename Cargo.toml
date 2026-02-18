@@ -75,7 +75,8 @@ rust.unused_crate_dependencies = "warn"
 clippy.nursery  = { level = "warn", priority = -1 }
 clippy.pedantic = { level = "warn", priority = -1 }
 
-clippy.unnecessary_self_imports = "warn"
+clippy.undocumented_unsafe_blocks = "warn"
+clippy.unnecessary_self_imports   = "warn"
 
 # Style
 clippy.match_bool         = "allow"

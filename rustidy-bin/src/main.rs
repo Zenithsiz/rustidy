@@ -131,8 +131,7 @@ fn format_file(
 		for item in &crate_.0.items.0 {
 			// If it's not a module definition, skip it
 			// TODO: Support modules inside of other modules (and other items).
-			let item = item.0.get();
-			let ItemInner::Vis(vis_item) = &item.inner else {
+			let ItemInner::Vis(vis_item) = &item.0.inner else {
 				continue;
 			};
 			let VisItemInner::Module(mod_) = &vis_item.inner else {
@@ -143,7 +142,7 @@ fn format_file(
 			}
 
 			// Then get it's path
-			let mod_path = self::mod_path(file_path, &input, &item.attrs, mod_)?;
+			let mod_path = self::mod_path(file_path, &input, &item.0.attrs, mod_)?;
 			files.push(mod_path);
 		}
 	}
@@ -229,8 +228,7 @@ fn find_path_attr<'input>(
 			Some(AttrInput::EqExpr(eq_expr)) => &eq_expr.expr,
 			_ => bail!("Malformed `#[path = ...]` attribute"),
 		};
-		let expr = expr.0.get();
-		let literal = match &*expr {
+		let literal = match &*expr.0 {
 			ExpressionInner::WithoutBlock(expr)
 				if let ExpressionWithoutBlockInner::Literal(literal) = &expr.0.inner =>
 				literal,

@@ -12,7 +12,7 @@ use {
 	rustidy_format::{Format, Formattable, WhitespaceFormat},
 	rustidy_parse::{Parse, ParseError, Parser, ParserError, ParserTag},
 	rustidy_print::Print,
-	rustidy_util::{Arena, ArenaData, ArenaIdx, Whitespace},
+	rustidy_util::{ArenaIdx, Whitespace, decl_arena},
 };
 
 /// `BlockExpression`
@@ -34,10 +34,7 @@ pub struct Statements {
 	pub trailing_expr: Option<ExpressionWithoutBlock>,
 }
 
-impl ArenaData for BracedWithInnerAttributes<Statements> {
-	const ARENA: &'static Arena<Self> = &STMTS_ARENA;
-}
-static STMTS_ARENA: Arena<BracedWithInnerAttributes<Statements>> = Arena::new();
+decl_arena! { BracedWithInnerAttributes<Statements> }
 
 impl Parse for Statements {
 	type Error = StatementsError;

@@ -2,7 +2,7 @@
 
 // Imports
 use {
-	crate::{ArenaData, ArenaIdx, ArenaRef, AstRange},
+	crate::{ArenaData, ArenaIdx, AstRange},
 	std::{borrow::Cow, sync::Arc},
 };
 
@@ -21,12 +21,11 @@ impl AstStr {
 
 	/// Replaces this ast string
 	pub fn replace(&mut self, input: &str, new_repr: impl Into<AstStrRepr>) {
-		let mut cur_repr = self.0.get_mut();
 		let new_repr = new_repr.into();
 
 		// TODO: Should we only check if it's cheap to do so?
-		if !cur_repr.is_str_eq_to(&new_repr, input) {
-			*cur_repr = new_repr;
+		if !self.0.is_str_eq_to(&new_repr, input) {
+			*self.0 = new_repr;
 		}
 	}
 
@@ -37,8 +36,8 @@ impl AstStr {
 
 	/// Returns the inner representation of this string
 	#[must_use]
-	pub fn repr(&self) -> ArenaRef<'_, AstStrRepr> {
-		self.0.get()
+	pub fn repr(&self) -> &AstStrRepr {
+		&self.0
 	}
 
 	/// Returns the length of this string

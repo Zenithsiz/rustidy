@@ -1,17 +1,38 @@
 //! Arenas
 
+// TODO: Ensure that being able to drop arenas is sound.
+
 // Imports
 use {
-	core::{fmt, hash::Hash, marker::PhantomData, mem, ops},
-	std::{hash::Hasher, sync::Mutex},
+	core::{
+		cell::UnsafeCell,
+		fmt,
+		hash::Hash,
+		marker::PhantomData,
+		mem::{self, MaybeUninit},
+		ops,
+		ptr,
+	},
+	std::hash::Hasher,
 };
+
+pub const CAPACITY: usize = 4096;
+
+type Slot<T> = UnsafeCell<MaybeUninit<T>>;
+type Row<T> = [Slot<T>; CAPACITY];
 
 /// Arena for `T`'s Data
 #[derive(Debug)]
 pub struct Arena<T> {
-	// TODO: Track the borrows/dropped separately to not wrap each
-	//       data within an `ArenaSlot`?
-	data: Mutex<Vec<ArenaSlot<T>>>,
+	/// Tracks all the initialized fields.
+	///
+	/// It's length also corresponds to the current
+	/// length of the arena.
+	// TODO: Make this a bitvec?
+	init: Vec<bool>,
+
+	/// Rows for each value.
+	rows: Vec<Box<Row<T>>>,
 }
 
 impl<T> Arena<T> {
@@ -19,130 +40,49 @@ impl<T> Arena<T> {
 	#[must_use]
 	pub const fn new() -> Self {
 		Self {
-			data: Mutex::new(vec![]),
+			init: vec![],
+			rows: vec![],
 		}
 	}
 
-	/// Returns the number of values in this arena
-	#[must_use]
-	pub fn len(&self) -> usize {
-		self.data.lock().expect("Poisoned").len()
+	/// Removes any trailing dead values
+	fn clean_trailing(&mut self) {
+		let dead_elements = self
+			.init
+			.iter()
+			.rev()
+			.position(|is_init| *is_init)
+			.unwrap_or(self.init.len());
+		self.init.truncate(self.init.len() - dead_elements);
 	}
 
-	/// Returns if the arena is empty
-	#[must_use]
-	pub fn is_empty(&self) -> bool {
-		self.data.lock().expect("Poisoned").is_empty()
+	/// Gets a slot by index
+	fn slot(&self, idx: usize) -> *mut MaybeUninit<T> {
+		debug_assert!(self.init[idx]);
+
+		let row = &self.rows[idx / CAPACITY];
+		row[idx % CAPACITY].get()
+	}
+
+	/// Takes a slot by index, uninitialized it.
+	///
+	/// # SAFETY
+	/// You must ensure that no references to the slot exist.
+	unsafe fn take_slot(&mut self, idx: usize) -> T {
+		let slot = self.slot(idx);
+		self.init[idx] = false;
+
+		// SAFETY: No other references to `slot` exist
+		unsafe { ptr::read(slot).assume_init() }
 	}
 }
 
-impl<T: ArenaData> Default for Arena<T> {
+impl<T> !Send for Arena<T> {}
+impl<T> !Sync for Arena<T> {}
+
+impl<T> Default for Arena<T> {
 	fn default() -> Self {
 		Self::new()
-	}
-}
-
-#[derive(Debug)]
-#[derive(strum::EnumIs)]
-enum ArenaSlot<T> {
-	Alive(T),
-	Borrowed,
-	Empty,
-}
-
-impl<T> ArenaSlot<T> {
-	/// Borrows the value in this arena slot.
-	fn borrow(&mut self) -> Option<T> {
-		match mem::replace(self, Self::Borrowed) {
-			Self::Alive(value) => Some(value),
-			Self::Borrowed => None,
-			Self::Empty => {
-				*self = Self::Empty;
-				None
-			},
-		}
-	}
-
-	/// Takes the value in this arena slot.
-	fn take(&mut self) -> Option<T> {
-		match mem::replace(self, Self::Borrowed) {
-			Self::Alive(value) => Some(value),
-			Self::Borrowed => {
-				*self = Self::Borrowed;
-				None
-			},
-			Self::Empty => None,
-		}
-	}
-}
-
-/// Arena reference
-pub struct ArenaRef<'a, T: ArenaData> {
-	value:   Option<T>,
-	idx:     usize,
-	phantom: PhantomData<&'a T>,
-}
-
-impl<T: ArenaData> ops::Deref for ArenaRef<'_, T> {
-	type Target = T;
-
-	fn deref(&self) -> &Self::Target {
-		self.value.as_ref().expect("Value should exist")
-	}
-}
-
-impl<T: ArenaData + fmt::Debug> fmt::Debug for ArenaRef<'_, T> {
-	#[inline]
-	fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-		(**self).fmt(f)
-	}
-}
-
-impl<T: ArenaData> Drop for ArenaRef<'_, T> {
-	fn drop(&mut self) {
-		let mut data = T::ARENA.data.lock().expect("Poisoned");
-		let value = data.get_mut(self.idx).expect("Arena was truncated during borrow");
-		assert!(value.is_borrowed(), "Borrowed value wasn't borrowed");
-		*value = ArenaSlot::Alive(self.value.take().expect("Value should exist"));
-		drop(data);
-	}
-}
-
-/// Arena mutable reference
-pub struct ArenaRefMut<'a, T: ArenaData> {
-	value:   Option<T>,
-	idx:     usize,
-	phantom: PhantomData<&'a mut T>,
-}
-
-impl<T: ArenaData> ops::Deref for ArenaRefMut<'_, T> {
-	type Target = T;
-
-	fn deref(&self) -> &Self::Target {
-		self.value.as_ref().expect("Value should exist")
-	}
-}
-
-impl<T: ArenaData> ops::DerefMut for ArenaRefMut<'_, T> {
-	fn deref_mut(&mut self) -> &mut Self::Target {
-		self.value.as_mut().expect("Value should exist")
-	}
-}
-
-impl<T: ArenaData + fmt::Debug> fmt::Debug for ArenaRefMut<'_, T> {
-	#[inline]
-	fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-		(**self).fmt(f)
-	}
-}
-
-impl<T: ArenaData> Drop for ArenaRefMut<'_, T> {
-	fn drop(&mut self) {
-		let mut data = T::ARENA.data.lock().expect("Poisoned");
-		let value = data.get_mut(self.idx).expect("Arena was truncated during borrow");
-		assert!(value.is_borrowed(), "Borrowed value wasn't borrowed");
-		*value = ArenaSlot::Alive(self.value.take().expect("Value should exist"));
-		drop(data);
 	}
 }
 
@@ -155,72 +95,54 @@ pub struct ArenaIdx<T: ArenaData> {
 impl<T: ArenaData> ArenaIdx<T> {
 	/// Creates a new value in the arena
 	pub fn new(value: T) -> Self {
-		let mut data = T::ARENA.data.lock().expect("Poisoned");
+		T::with_arena(|arena| {
+			// SAFETY: We create no other references to `arena` in this block
+			let arena = unsafe { arena.as_mut_unchecked() };
 
-		// Pop all dead slots at the end
-		while data.pop_if(|slot| slot.is_empty()).is_some() {}
+			// Before inserting, remove any trailing dead values
+			arena.clean_trailing();
 
-		// Then push the new value
-		let idx = data.len();
-		data.push(ArenaSlot::Alive(value));
-		drop(data);
+			// Then find our slot.
+			let idx = arena.init.len();
+			let row = match arena.rows.get(idx / CAPACITY) {
+				Some(row) => row,
+				// Note: If the row we're looking for doesn't exist, then
+				//       we must be at the end of the last row, so create
+				//       a new one.
+				None => {
+					// SAFETY: We're initializing an array of uninitialized values
+					let row = unsafe { Box::<[Slot<T>; CAPACITY]>::new_uninit().assume_init() };
+					arena.rows.push_mut(row)
+				},
+			};
+			let slot = &row[idx % CAPACITY];
 
-		Self {
-			inner:   idx.try_into().expect("Too many indices"),
-			phantom: PhantomData,
-		}
-	}
+			// Finally push the new value and set it as initialized.
+			// SAFETY: No other mutable references to `slot` exist, since
+			//         the slot was empty.
+			unsafe { slot.as_mut_unchecked().write(value) };
+			arena.init.push(true);
 
-	/// Borrows this value
-	pub fn get(&self) -> ArenaRef<'_, T> {
-		let idx = self.inner as usize;
-		let value = T::ARENA
-			.data
-			.lock()
-			.expect("Poisoned")
-			.get_mut(idx)
-			.expect("Invalid arena index")
-			.borrow()
-			.expect("Attempted to borrow arena value twice");
-
-		ArenaRef {
-			value: Some(value),
-			idx,
-			phantom: PhantomData,
-		}
-	}
-
-	/// Borrows this value mutably
-	pub fn get_mut(&mut self) -> ArenaRefMut<'_, T> {
-		let idx = self.inner as usize;
-		let value = T::ARENA
-			.data
-			.lock()
-			.expect("Poisoned")
-			.get_mut(idx)
-			.expect("Invalid arena index")
-			.borrow()
-			.expect("Attempted to borrow arena value twice");
-
-		ArenaRefMut {
-			value: Some(value),
-			idx,
-			phantom: PhantomData,
-		}
+			Self {
+				inner:   idx.try_into().expect("Too many indices"),
+				phantom: PhantomData,
+			}
+		})
 	}
 
 	/// Moves out of this value
+	#[must_use = "If you don't need the value, just drop `self`"]
 	pub fn take(self) -> T {
-		let inner_idx = self.inner as usize;
+		let idx = self.inner as usize;
 		mem::forget(self);
-		T::ARENA
-			.data
-			.lock()
-			.expect("Poisoned")
-			.get_mut(inner_idx)
-			.expect("Invalid arena index")
-			.take()
-			.expect("Attempted to borrow arena value twice")
+
+		T::with_arena(|arena| {
+			// SAFETY: We create no other references to `arena` in this block
+			let arena = unsafe { arena.as_mut_unchecked() };
+
+			// SAFETY: No other mutable references to the slot exist, since we take `self`
+			unsafe { arena.take_slot(idx) }
+		})
 	}
 
 	/// Moves out of this value if `f` returns `Ok`.
@@ -228,32 +150,11 @@ impl<T: ArenaData> ArenaIdx<T> {
 	where
 		F: FnOnce(T) -> Result<R, T>,
 	{
-		let inner_idx = self.inner as usize;
-		let value = T::ARENA
-			.data
-			.lock()
-			.expect("Poisoned")
-			.get_mut(inner_idx)
-			.expect("Invalid arena index")
-			.borrow()
-			.expect("Attempted to borrow arena value twice");
-
-		let (output, slot) = match f(value) {
-			Ok(output) => {
-				mem::forget(self);
-				(Ok(output), ArenaSlot::Empty)
-			},
-			Err(value) => (Err(self), ArenaSlot::Alive(value)),
-		};
-
-		*T::ARENA
-			.data
-			.lock()
-			.expect("Poisoned")
-			.get_mut(inner_idx)
-			.expect("Invalid arena index") = slot;
-
-		output
+		// TODO: Optimize this?
+		match f(self.take()) {
+			Ok(value) => Ok(value),
+			Err(value) => Err(Self::new(value)),
+		}
 	}
 
 	/// Returns a unique id for this arena index
@@ -263,15 +164,55 @@ impl<T: ArenaData> ArenaIdx<T> {
 	}
 }
 
+impl<T: ArenaData> !Send for ArenaIdx<T> {}
+impl<T: ArenaData> !Sync for ArenaIdx<T> {}
+
+impl<T: ArenaData> ops::Deref for ArenaIdx<T> {
+	type Target = T;
+
+	fn deref(&self) -> &Self::Target {
+		let idx = self.inner as usize;
+
+		T::with_arena(|arena| {
+			// SAFETY: We create no other references to `arena` in this block
+			let arena = unsafe { arena.as_ref_unchecked() };
+
+			let slot = arena.slot(idx);
+
+			// SAFETY: No mutable reference to the value exists since we take `&self`
+			unsafe { MaybeUninit::assume_init_ref(&*slot) }
+		})
+	}
+}
+
+impl<T: ArenaData> ops::DerefMut for ArenaIdx<T> {
+	fn deref_mut(&mut self) -> &mut Self::Target {
+		let idx = self.inner as usize;
+
+		T::with_arena(|arena| {
+			// SAFETY: We create no other references to `arena` in this block
+			let arena = unsafe { arena.as_ref_unchecked() };
+
+			let slot = arena.slot(idx);
+
+			// SAFETY: No other references to the value exist since we take `&mut self`
+			unsafe { MaybeUninit::assume_init_mut(&mut *slot) }
+		})
+	}
+}
+
 impl<T: ArenaData> Drop for ArenaIdx<T> {
 	fn drop(&mut self) {
-		let inner_idx = self.inner as usize;
+		let idx = self.inner as usize;
 
-		let mut data = T::ARENA.data.lock().expect("Poisoned");
-		let value = mem::replace(&mut data[inner_idx], ArenaSlot::Empty);
-		drop(data);
+		T::with_arena(|arena| {
+			// SAFETY: We create no other references to `arena` in this block
+			let arena = unsafe { arena.as_mut_unchecked() };
 
-		assert!(value.is_alive(), "Attempted to drop a non-alive pack");
+			// SAFETY: No other mutable references to the slot exist, since we take `&mut self`
+			// TODO: Should we manually implement this to avoid moving the value onto the stack?
+			let _ = unsafe { arena.take_slot(idx) };
+		});
 	}
 }
 
@@ -302,7 +243,7 @@ impl<T: ArenaData + serde::Serialize> serde::Serialize for ArenaIdx<T> {
 	where
 		S: serde::Serializer,
 	{
-		self.get().serialize(serializer)
+		(**self).serialize(serializer)
 	}
 }
 
@@ -318,15 +259,19 @@ impl<'de, T: ArenaData + serde::Deserialize<'de>> serde::Deserialize<'de> for Ar
 
 /// Arena data
 pub trait ArenaData: Sized + 'static {
-	const ARENA: &'static Arena<Self>;
+	fn with_arena<O>(f: impl FnOnce(&UnsafeCell<Arena<Self>>) -> O) -> O;
 }
 
 /// Implements `ArenaData` for `$Ty`
 pub macro decl_arena($Ty:ty) {
 	impl ArenaData for $Ty {
-		const ARENA: &'static Arena<Self> = &ARENA;
+		fn with_arena<O>(f: impl FnOnce(&UnsafeCell<Arena<Self>>) -> O) -> O {
+			f(&ARENA)
+		}
 	}
-	static ARENA: Arena<$Ty> = Arena::new();
+
+	#[thread_local]
+	static ARENA: UnsafeCell<Arena<$Ty>> = UnsafeCell::new(Arena::new());
 }
 
 /// Derive macro for `ArenaData`

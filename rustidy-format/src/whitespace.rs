@@ -62,12 +62,12 @@ pub impl Whitespace {
 
 	/// Returns if this whitespace only contains pure whitespace
 	fn is_pure(&mut self, _ctx: &mut crate::Context) -> bool {
-		self.0.get().rest.is_empty()
+		self.0.rest.is_empty()
 	}
 
 	/// Joins `other` to this whitespace as a suffix
 	fn join_suffix(&mut self, other: Self) {
-		let mut lhs = self.0.get_mut();
+		let lhs = &mut *self.0;
 		let mut rhs = other.0.take();
 
 		let lhs_last = match lhs.rest.last_mut() {
@@ -103,12 +103,11 @@ impl Formattable for Whitespace {
 		exclude_prefix_ws: bool,
 		f: &mut impl FnMut(&mut AstStr, &mut crate::Context) -> ControlFlow<O>,
 	) -> ControlFlow<O, bool> {
-		let mut inner = self.0.get_mut();
-		let is_empty = inner.first.0.is_empty() && inner.rest.is_empty();
+		let is_empty = self.0.first.0.is_empty() && self.0.rest.is_empty();
 
 		if !exclude_prefix_ws {
-			f(&mut inner.first.0, ctx)?;
-			for (comment, pure) in &mut inner.rest {
+			f(&mut self.0.first.0, ctx)?;
+			for (comment, pure) in &mut self.0.rest {
 				match comment {
 					Comment::Line(comment) => f(&mut comment.0, ctx)?,
 					Comment::Block(comment) => f(&mut comment.0, ctx)?,
@@ -127,9 +126,8 @@ impl Format<()> for Whitespace {
 			self::format(self, ctx, format);
 		}
 
-		let inner = self.0.get();
-		let mut output = inner.first.0.format_output(ctx);
-		for (comment, ws) in &inner.rest {
+		let mut output = self.0.first.0.format_output(ctx);
+		for (comment, ws) in &self.0.rest {
 			match comment {
 				Comment::Line(comment) => comment.0.format_output(ctx).append_to(&mut output),
 				Comment::Block(comment) => comment.0.format_output(ctx).append_to(&mut output),
@@ -231,16 +229,14 @@ impl WhitespaceFormatKind {
 
 #[doc(hidden)]
 pub fn format(ws: &mut Whitespace, ctx: &mut crate::Context, kind: WhitespaceFormatKind) {
-	let mut inner = ws.0.get_mut();
-
 	// Note: If we're whitespace after a line doc comment, then we have a newline
 	//       prior to us that we need to take into account.
 	let after_newline = ctx.take_tag(FormatTag::AfterNewline);
 
-	let prefix_str = kind.prefix_str(ctx, &inner.first.0, inner.rest.is_empty(), after_newline);
-	inner.first.0.replace(ctx.input, prefix_str);
+	let prefix_str = kind.prefix_str(ctx, &ws.0.first.0, ws.0.rest.is_empty(), after_newline);
+	ws.0.first.0.replace(ctx.input, prefix_str);
 
-	for (pos, (comment, ws)) in inner.rest.iter_mut().with_position() {
+	for (pos, (comment, ws)) in ws.0.rest.iter_mut().with_position() {
 		let is_last = matches!(pos, itertools::Position::Last | itertools::Position::Only);
 		let ws_str = match comment.is_line() {
 			true => kind.after_newline_str(ctx, &ws.0, is_last),

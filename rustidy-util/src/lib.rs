@@ -1,7 +1,16 @@
 //! Utilities
 
 // Features
-#![feature(iter_advance_by, decl_macro, macro_metavar_expr_concat, if_let_guard, macro_derive)]
+#![feature(
+	iter_advance_by,
+	decl_macro,
+	macro_metavar_expr_concat,
+	if_let_guard,
+	macro_derive,
+	thread_local,
+	negative_impls,
+	unsafe_cell_access
+)]
 
 // Modules
 pub mod arena;
@@ -14,7 +23,7 @@ pub mod whitespace;
 
 // Exports
 pub use self::{
-	arena::{Arena, ArenaData, ArenaIdx, ArenaRef, decl_arena},
+	arena::{Arena, ArenaData, ArenaIdx, decl_arena},
 	ast_pos::AstPos,
 	ast_range::AstRange,
 	ast_str::AstStr,

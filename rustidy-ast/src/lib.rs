@@ -24,7 +24,8 @@
 	is_ascii_octdigit,
 	trim_prefix_suffix,
 	if_let_guard,
-	str_as_str
+	str_as_str,
+	thread_local
 )]
 
 // Modules

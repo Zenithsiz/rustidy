@@ -88,7 +88,7 @@ impl Print for AstStr {
 
 impl<T: ArenaData + Print> Print for ArenaIdx<T> {
 	fn print(&self, f: &mut PrintFmt) {
-		self.get().print(f);
+		(**self).print(f);
 	}
 }
 
