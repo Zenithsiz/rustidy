@@ -14,7 +14,7 @@ impl Parse for Whitespace {
 
 	fn parse_from(parser: &mut Parser) -> Result<Self, Self::Error> {
 		if parser.has_tag(ParserTag::SkipWhitespace) {
-			let s = parser.update_with(|_| ());
+			let (s, ()) = parser.update_with(|_| ());
 			let inner = WhitespaceInner {
 				first: PureWhitespace(s),
 				rest:  vec![],
@@ -127,7 +127,7 @@ impl Parse for BlockComment {
 					_ => Err(BlockCommentError::NoComment),
 				}
 			})
-			.map(Self)
+			.map(|(s, ())| Self(s))
 	}
 }
 
@@ -157,7 +157,7 @@ impl Parse for LineComment {
 					false => Err(LineCommentError::NoComment),
 				}
 			})
-			.map(Self)
+			.map(|(s, ())| Self(s))
 	}
 }
 
@@ -174,7 +174,7 @@ impl Parse for PureWhitespace {
 	type Error = !;
 
 	fn parse_from(parser: &mut Parser) -> Result<Self, Self::Error> {
-		let s = parser.update_with(|s| *s = s.trim_start());
+		let (s, ()) = parser.update_with(|s| *s = s.trim_start());
 		Ok(Self(s))
 	}
 }

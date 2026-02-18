@@ -44,7 +44,7 @@ use {
 		ops::{Residual, Try},
 	},
 	rustidy_util::{ArenaData, ArenaIdx, AstPos, AstRange, AstStr},
-	std::{borrow::Cow, fmt, str::pattern::Pattern},
+	std::{borrow::Cow, fmt},
 };
 
 
@@ -342,13 +342,12 @@ impl<'input> Parser<'input> {
 	/// Updates this parser from a string.
 	///
 	/// See [`Self::try_update_with`] for more details.
-	pub fn update_with<F>(&mut self, f: F) -> AstStr
+	pub fn update_with<F, O>(&mut self, f: F) -> (AstStr, O)
 	where
-		F: FnOnce(&mut &'input str),
+		F: FnOnce(&mut &'input str) -> O,
 	{
 		self.try_update_with(|remaining| {
-			f(remaining);
-			Ok::<_, !>(())
+			Ok::<_, !>(f(remaining))
 		})
 		.into_ok()
 	}
@@ -366,10 +365,10 @@ impl<'input> Parser<'input> {
 	/// # Failure
 	/// If `f` returns unsuccessfully, an error will be returned
 	/// with the latest change to the string as it's position.
-	pub fn try_update_with<F, T>(&mut self, f: F) -> <T::Residual as Residual<AstStr>>::TryType
+	pub fn try_update_with<F, T>(&mut self, f: F) -> <T::Residual as Residual<(AstStr, T::Output)>>::TryType
 	where
 		F: FnOnce(&mut &'input str) -> T,
-		T: Try<Output = (), Residual: Residual<AstStr>>,
+		T: Try<Residual: Residual<(AstStr, T::Output)>>,
 	{
 		let mut remaining = self.remaining();
 		let res = f(&mut remaining);
@@ -384,7 +383,7 @@ impl<'input> Parser<'input> {
 		self.cur_pos.0 += range.start;
 
 		// After updating the remaining, quit if an error occurred
-		let () = res?;
+		let value = res?;
 
 		// Else get the output string
 		let output_range = self
@@ -397,19 +396,7 @@ impl<'input> Parser<'input> {
 			end:   AstPos(output_range.end),
 		};
 
-		<_>::from_output(AstStr::new(output_range))
-	}
-
-	/// Strips a prefix `s` from the parser
-	#[expect(clippy::needless_pass_by_value, reason = "It's more ergonomic")]
-	pub fn strip_prefix<S>(&mut self, s: S) -> Option<AstStr>
-	where
-		S: Pattern + Clone + Into<String>,
-	{
-		self.try_update_with(|remaining| {
-			*remaining = remaining.strip_prefix(s.clone())?;
-			Some(())
-		})
+		<_>::from_output((AstStr::new(output_range), value))
 	}
 
 	/// Parses `T` from this parser

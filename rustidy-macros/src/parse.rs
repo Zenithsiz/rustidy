@@ -440,10 +440,10 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 									field.update_with.is_none(),
 									"Cannot specify both `update_with` and `try_update_with`."
 								);
-								quote! { parser.try_update_with(#expr) }
+								quote! { parser.try_update_with(#expr).map(|(s, ())| s) }
 							},
 							None => match &field.update_with {
-								Some(expr) => quote! { parser.update_with(#expr) },
+								Some(expr) => quote! { parser.update_with(#expr).0 },
 								None => quote! { parser.parse() },
 							},
 						};
