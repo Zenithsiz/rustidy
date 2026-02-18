@@ -116,6 +116,9 @@ struct FieldAttrs {
 	ty:    syn::Type,
 
 	#[darling(default)]
+	str: bool,
+
+	#[darling(default)]
 	indent: Option<Indent>,
 
 	with: Option<syn::Expr>,
@@ -300,15 +303,22 @@ fn derive_struct_field(field_idx: usize, field: &FieldAttrs) -> syn::Expr {
 
 	let prefix_ws = match &field.prefix_ws {
 		Some(prefix_ws) => Some(prefix_ws.eval(Some(parse_quote! { prefix_ws }))),
-		None => Some(parse_quote! { match has_prefix_ws {
-			true => prefix_ws,
-			// TODO: Ideally here we'd panic once we ensure
-			//       the caller can always provide a prefix whitespace.
-			false => <rustidy_util::Whitespace as rustidy_format::WhitespaceFormat>::PRESERVE,
-		}}),
+		None => match field.str {
+			true => None,
+			false => Some(parse_quote! { match has_prefix_ws {
+				true => prefix_ws,
+				// TODO: Ideally here we'd panic once we ensure
+				//       the caller can always provide a prefix whitespace.
+				false => <rustidy_util::Whitespace as rustidy_format::WhitespaceFormat>::PRESERVE,
+			}}),
+		},
 	};
 
-	let format = parse_quote! { rustidy_format::Format::format(&mut self.#field_ident, ctx, prefix_ws, args) };
+	let format = match field.str {
+		true =>
+			parse_quote! { <rustidy_util::AstStr as rustidy_format::AstStrFormat>::format_output(&mut self.#field_ident, ctx) },
+		false => parse_quote! { rustidy_format::Format::format(&mut self.#field_ident, ctx, prefix_ws, args) },
+	};
 
 	let after_format = parse_quote! {
 		// TODO: Make `format` return this so we don't have to recurse back into the type

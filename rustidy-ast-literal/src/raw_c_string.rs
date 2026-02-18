@@ -21,6 +21,7 @@ use {
 pub struct RawCStringLiteral {
 	pub ws:     Whitespace,
 	#[parse(try_update_with = Self::parse)]
+	#[format(str)]
 	pub s:      AstStr,
 	pub suffix: Option<Suffix>,
 }

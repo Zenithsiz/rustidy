@@ -14,7 +14,11 @@ use {
 #[derive(Parse, Formattable, Format, Print)]
 #[parse(name = "a shebang")]
 #[parse(error(name = Shebang, fmt = "Expected a `#!`"))]
-pub struct Shebang(#[parse(try_update_with = Self::parse)] pub AstStr);
+pub struct Shebang(
+	#[parse(try_update_with = Self::parse)]
+	#[format(str)]
+	pub AstStr,
+);
 
 impl Shebang {
 	fn parse(s: &mut &str) -> Result<(), ShebangError> {

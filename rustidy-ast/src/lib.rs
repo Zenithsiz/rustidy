@@ -129,7 +129,11 @@ impl CrateInner {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 #[parse(error(name = NoComment, fmt = "Expected `//` (except `///` or `//!`)"))]
-pub struct TrailingLineComment(#[parse(try_update_with = Self::parse)] pub AstStr);
+pub struct TrailingLineComment(
+	#[parse(try_update_with = Self::parse)]
+	#[format(str)]
+	pub AstStr,
+);
 
 impl TrailingLineComment {
 	fn parse(s: &mut &str) -> Result<(), TrailingLineCommentError> {
