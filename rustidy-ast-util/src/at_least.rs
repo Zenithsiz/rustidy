@@ -14,6 +14,7 @@ use {
 // TODO: Support arguments for `T`
 pub struct AtLeast1<T> {
 	pub first: T,
+	#[format(prefix_ws = args.rest_prefix_ws)]
 	#[format(args = rustidy_format::vec::args_prefix_ws(args.rest_prefix_ws))]
 	pub rest:  Vec<T>,
 }

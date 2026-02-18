@@ -4,9 +4,10 @@
 use {
 	super::token,
 	rustidy_ast_util::{IdentifierOrKeyword, NonKeywordIdentifier},
-	rustidy_format::{Format, Formattable},
+	rustidy_format::{Format, Formattable, WhitespaceFormat},
 	rustidy_parse::{Parse, Parser, ParserTag},
 	rustidy_print::Print,
+	rustidy_util::Whitespace,
 };
 
 /// `Lifetime`
@@ -44,6 +45,7 @@ pub enum LifetimeOrLabel {
 pub struct QuoteNotQuote<T> {
 	pub quote: token::Quote,
 	#[parse(with_tag = ParserTag::SkipWhitespace)]
+	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub value: T,
 }
 

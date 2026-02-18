@@ -7,7 +7,7 @@ use {
 		escape::{ByteEscapeError, StringContinueError},
 	},
 	crate::{ByteEscape, StringContinue},
-	rustidy_format::{Format, Formattable},
+	rustidy_format::{Format, Formattable, WhitespaceFormat},
 	rustidy_parse::Parse,
 	rustidy_print::Print,
 	rustidy_util::{AstStr, Whitespace},
@@ -28,6 +28,7 @@ pub struct ByteStringLiteral {
 	#[parse(try_update_with = Self::parse)]
 	#[format(str)]
 	pub s:      AstStr,
+	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub suffix: Option<Suffix>,
 }
 

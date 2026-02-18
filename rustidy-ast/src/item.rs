@@ -197,6 +197,10 @@ pub struct DeclMacro {
 	#[parse(fatal)]
 	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub ident:  Identifier,
+	#[format(prefix_ws = match self.body {
+		DeclMacroBody::Branches(_) => Whitespace::SINGLE,
+		DeclMacroBody::Inline(_) => Whitespace::REMOVE,
+	})]
 	pub body:   DeclMacroBody,
 }
 
@@ -204,9 +208,7 @@ pub struct DeclMacro {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub enum DeclMacroBody {
-	#[format(prefix_ws = Whitespace::SINGLE)]
 	Branches(DeclMacroBodyBranches),
-	#[format(prefix_ws = Whitespace::REMOVE)]
 	Inline(DeclMacroBodyInline),
 }
 
