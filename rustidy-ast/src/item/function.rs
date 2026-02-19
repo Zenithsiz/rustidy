@@ -66,11 +66,11 @@ pub enum FunctionBody {
 #[parse(name = "function qualifiers")]
 pub struct FunctionQualifiers {
 	pub const_:  Option<token::Const>,
-	#[format(prefix_ws = Whitespace::SINGLE)]
+	#[format(prefix_ws(if = self.const_.is_some(), expr = Whitespace::SINGLE))]
 	pub async_:  Option<token::Async>,
-	#[format(prefix_ws = Whitespace::SINGLE)]
+	#[format(prefix_ws(if = self.const_.is_some() || self.async_.is_some(), expr = Whitespace::SINGLE))]
 	pub safety:  Option<ItemSafety>,
-	#[format(prefix_ws = Whitespace::SINGLE)]
+	#[format(prefix_ws(if = self.const_.is_some() || self.async_.is_some() || self.safety.is_some(), expr = Whitespace::SINGLE))]
 	pub extern_: Option<ExternAbi>,
 }
 
@@ -205,15 +205,15 @@ pub enum ShorthandOrTypedSelf {
 #[derive(Parse, Formattable, Format, Print)]
 pub struct ShorthandSelf {
 	pub ref_:  Option<ShorthandSelfRef>,
-	#[format(prefix_ws = match self.ref_.as_ref().is_some_and(|ref_| ref_.lifetime.is_some()) {
+	#[format(prefix_ws(if = let Some(ref_) = &self.ref_, expr = match ref_.lifetime.is_some() {
 		true => Whitespace::SINGLE,
 		false => Whitespace::REMOVE,
-	})]
+	}))]
 	pub mut_:  Option<token::Mut>,
-	#[format(prefix_ws = match self.ref_.as_ref().is_some_and(|ref_| ref_.lifetime.is_some()) || self.mut_.is_some() {
-		true => Whitespace::SINGLE,
-		false => Whitespace::REMOVE,
-	})]
+	#[format(prefix_ws(if = self.ref_.is_some() || self.mut_.is_some(), expr = match &self.ref_ {
+		Some(ref_) if ref_.lifetime.is_none() => Whitespace::SINGLE,
+		_ => Whitespace::REMOVE,
+	}))]
 	pub self_: token::SelfLower,
 }
 

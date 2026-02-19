@@ -128,7 +128,7 @@ fn format_file(
 	if let Some(file_path) = file_path &&
 		let Some(files) = files
 	{
-		for item in &crate_.0.items.0 {
+		for item in &crate_.items.0 {
 			// If it's not a module definition, skip it
 			// TODO: Support modules inside of other modules (and other items).
 			let ItemInner::Vis(vis_item) = &item.0.inner else {

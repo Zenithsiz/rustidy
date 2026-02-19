@@ -303,7 +303,16 @@ fn derive_struct_field(field_idx: usize, field: &FieldAttrs) -> syn::Expr {
 
 	let prefix_ws = match &field.prefix_ws {
 		// TODO: We should panic here if we overwrite the existing prefix whitespace.
-		Some(prefix_ws) => Some(prefix_ws.eval(Some(parse_quote! { prefix_ws }))),
+		Some(prefix_ws) => Some(
+			prefix_ws
+				.map(|prefix_ws| {
+					parse_quote! { match has_prefix_ws {
+						true => panic!("Overwriting prefix whitespace of {}::{}", std::any::type_name::<Self>(), stringify!(#field_ident)),
+						false => #prefix_ws,
+					}}
+				})
+				.eval(Some(parse_quote! { prefix_ws })),
+		),
 		None => match field.str {
 			true => None,
 			false => Some(parse_quote! { match has_prefix_ws {

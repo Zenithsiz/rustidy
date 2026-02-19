@@ -57,69 +57,78 @@ use {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Print)]
 #[parse(name = "a crate")]
-pub struct Crate(pub CrateInner);
+pub struct Crate {
+	pub shebang:               Option<Shebang>,
+	pub inner_attrs:           Vec<InnerAttrOrDocComment>,
+	pub items:                 Items,
+	pub suffix_ws:             Whitespace,
+	pub trailing_line_comment: Option<TrailingLineComment>,
+}
 
 impl Format<()> for Crate {
-	fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: WhitespaceConfig, _args: ()) -> FormatOutput {
-		let mut inner_ctx = ctx.sub_context();
-		for attr in &self.0.inner_attrs {
+	fn format(&mut self, ctx: &mut rustidy_format::Context, _prefix_ws: WhitespaceConfig, _args: ()) -> FormatOutput {
+		let mut ctx = ctx.sub_context();
+		for attr in &self.inner_attrs {
 			if let Some(attr) = attr.try_as_attr_ref() &&
-				let Err(err) = attr::update_config(&attr.attr.value, &mut inner_ctx)
+				let Err(err) = attr::update_config(&attr.attr.value, &mut ctx)
 			{
 				tracing::warn!("Malformed `#![rustidy::config(...)]` attribute: {err:?}");
 			}
 		}
 
-		// TODO: This also needs to set `FormatTag::AfterNewline` for `items`.
-		self.0.format(&mut inner_ctx, prefix_ws, ())
-	}
-}
+		let mut output = FormatOutput::default();
 
-#[derive(PartialEq, Eq, Debug)]
-#[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Formattable, Format, Print)]
-pub struct CrateInner {
-	pub shebang:               Option<Shebang>,
-	#[format(prefix_ws = Whitespace::REMOVE)]
-	#[format(args = rustidy_format::vec::args_prefix_ws(Whitespace::CUR_INDENT))]
-	pub inner_attrs:           Vec<InnerAttrOrDocComment>,
-	#[format(prefix_ws = match self.inner_attrs.is_empty() {
-		true => Whitespace::REMOVE,
-		false => Whitespace::CUR_INDENT,
-	})]
-	pub items:                 Items,
-	#[format(prefix_ws = Whitespace::indent(0, self.shebang.is_none() && self.inner_attrs.is_empty() && self.items.0.is_empty()))]
-	pub suffix_ws:             Whitespace,
-	#[format(prefix_ws = Whitespace::PRESERVE)]
-	// TODO: This should be a `before_with`
-	#[format(with = Self::format_trailing_line_comment)]
-	pub trailing_line_comment: Option<TrailingLineComment>,
-}
+		self.shebang
+			.format(&mut ctx, Whitespace::PRESERVE, ())
+			.append_to(&mut output);
 
-impl CrateInner {
-	fn format_trailing_line_comment(
-		trailing: &mut Option<TrailingLineComment>,
-		ctx: &mut rustidy_format::Context,
-		prefix_ws: WhitespaceConfig,
-		_args: (),
-	) -> FormatOutput {
-		let Some(trailing) = trailing else {
-			return FormatOutput::default();
-		};
+		self.inner_attrs
+			.format(
+				&mut ctx,
+				Whitespace::REMOVE,
+				rustidy_format::vec::args_prefix_ws(Whitespace::CUR_INDENT),
+			)
+			.append_to(&mut output);
 
-		let mut s = ctx.str(&trailing.0).into_owned();
+		// TODO: We need to set `FormatTag::AfterNewline` for `items`.
+		self.items
+			.format(
+				&mut ctx,
+				match self.inner_attrs.is_empty() {
+					true => Whitespace::REMOVE,
+					false => Whitespace::CUR_INDENT,
+				},
+				(),
+			)
+			.append_to(&mut output);
+
+		self.suffix_ws
+			.format(
+				&mut ctx,
+				Whitespace::indent(0, self.inner_attrs.is_empty() && self.items.0.is_empty()),
+				(),
+			)
+			.append_to(&mut output);
 
 		// Add the newline at the end of the trailing comment if it didn't have one already
-		if !s.ends_with('\n') {
-			s.push('\n');
-			trailing.0.replace(ctx.input(), AstStrRepr::Dynamic(s));
+		if let Some(trailing) = &mut self.trailing_line_comment {
+			let mut s = ctx.str(&trailing.0).into_owned();
+			if !s.ends_with('\n') {
+				s.push('\n');
+				trailing.0.replace(ctx.input(), AstStrRepr::Dynamic(s));
+			}
 		}
 
-		trailing.format(ctx, prefix_ws, ())
+		self.trailing_line_comment
+			.format(&mut ctx, Whitespace::PRESERVE, ())
+			.append_to(&mut output);
+
+		output
 	}
 }
 
 /// Trailing line comment
+// TODO: Remove this?
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
