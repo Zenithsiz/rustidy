@@ -4,7 +4,7 @@
 use {
 	super::{
 		function::{GenericParams, WhereClause},
-		struct_::{StructFields, TupleFields},
+		struct_::{StructFields, TupleFields, TupleStruct},
 	},
 	crate::{
 		attr::WithOuterAttributes,
@@ -80,7 +80,7 @@ pub enum EnumVariantKind {
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
-pub struct EnumVariantTuple(#[format(args = delimited::fmt_remove())]
+pub struct EnumVariantTuple(#[format(with = TupleStruct::format_fields)]
 pub Parenthesized<Option<TupleFields>>);
 
 /// `EnumVariantStruct`

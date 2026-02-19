@@ -73,11 +73,12 @@ macro decl_config(
 decl_config! {
 	Config;
 
-	indent            : Arc<str>      = "\t".into(),
-	min_empty_lines   : usize         = 0,
-	max_empty_lines   : usize         = 2,
-	max_use_tree_len  : usize         = 75,
-	array_expr_cols   : Option<usize> = None,
-	max_array_expr_len: usize         = 80,
-	max_chain_len     : usize         = 50,
+	indent                     : Arc<str>      = "\t".into(),
+	min_empty_lines            : usize         = 0,
+	max_empty_lines            : usize         = 2,
+	max_use_tree_len           : usize         = 75,
+	array_expr_cols            : Option<usize> = None,
+	max_array_expr_len         : usize         = 80,
+	max_chain_len              : usize         = 50,
+	max_inline_tuple_struct_len: usize         = 80,
 }

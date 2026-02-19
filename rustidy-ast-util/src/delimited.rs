@@ -149,6 +149,11 @@ pub const fn fmt_indent_if_non_blank_with<LArgs, TArgs, RArgs>(prefix_args: LArg
 }
 
 #[must_use]
+pub const fn fmt_indent_if_non_blank_with_value<TArgs>(value_args: TArgs) -> FmtArgs<WhitespaceConfig, WhitespaceConfig, (), TArgs, ()> {
+	self::fmt_indent_if_non_blank_with((), value_args, ())
+}
+
+#[must_use]
 pub const fn fmt_indent_if_non_blank() -> FmtArgs<WhitespaceConfig, WhitespaceConfig, (), (), ()> {
 	self::fmt_indent_if_non_blank_with((), (), ())
 }
@@ -166,6 +171,11 @@ pub const fn fmt_remove_with<LArgs, TArgs, RArgs>(prefix_args: LArgs, value_args
 		value_args,
 		suffix_args,
 	}
+}
+
+#[must_use]
+pub const fn fmt_remove_with_value<TArgs>(value_args: TArgs) -> FmtArgs<WhitespaceConfig, WhitespaceConfig, (), TArgs, ()> {
+	self::fmt_remove_with((), value_args, ())
 }
 
 #[must_use]

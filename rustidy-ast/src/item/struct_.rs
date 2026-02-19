@@ -12,7 +12,7 @@ use {
 		vis::Visibility,
 	},
 	rustidy_ast_util::{Identifier, PunctuatedTrailing, delimited, punct},
-	rustidy_format::{Format, Formattable, WhitespaceFormat},
+	rustidy_format::{Format, FormatOutput, Formattable, WhitespaceConfig, WhitespaceFormat},
 	rustidy_parse::Parse,
 	rustidy_print::Print,
 	rustidy_util::Whitespace,
@@ -121,7 +121,7 @@ pub struct TupleStruct {
 	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub generics: Option<GenericParams>,
 	#[format(prefix_ws = Whitespace::REMOVE)]
-	#[format(args = delimited::fmt_remove())]
+	#[format(with = Self::format_fields)]
 	pub fields:   Parenthesized<Option<TupleFields>>,
 	#[parse(fatal)]
 	#[format(prefix_ws = Whitespace::CUR_INDENT)]
@@ -130,12 +130,45 @@ pub struct TupleStruct {
 	pub semi:     token::Semi,
 }
 
+impl TupleStruct {
+	pub fn format_fields(fields: &mut Parenthesized<Option<TupleFields>>, ctx: &mut rustidy_format::Context, prefix_ws: WhitespaceConfig, _args: ()) -> FormatOutput {
+		if let Some(fields) = &mut fields.value {
+			fields.0.trailing = None;
+		}
+		let output = fields
+			.format(ctx, prefix_ws, delimited::fmt_remove_with_value(TupleFieldsFmt {
+				field_prefix_ws: Whitespace::SINGLE
+			}));
+
+		match output.len_without_prefix_ws() <= ctx.config().max_inline_tuple_struct_len {
+			true => output,
+			false => {
+				if let Some(fields) = &mut fields.value && fields.0.trailing.is_none() {
+					fields.0.trailing = Some(token::Comma::new());
+				}
+
+				ctx
+					.with_indent(|ctx| fields
+						.format(ctx, prefix_ws, delimited::fmt_indent_if_non_blank_with_value(TupleFieldsFmt {
+							field_prefix_ws: Whitespace::CUR_INDENT
+						})))
+			},
+		}
+	}
+}
+
 /// `TupleFields`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
-pub struct TupleFields(#[format(args = punct::fmt(Whitespace::SINGLE, Whitespace::REMOVE))]
-PunctuatedTrailing<TupleField, token::Comma>,);
+#[format(args(ty = "TupleFieldsFmt"))]
+pub struct TupleFields(#[format(args = punct::fmt(args.field_prefix_ws, Whitespace::REMOVE))]
+pub PunctuatedTrailing<TupleField, token::Comma>);
+
+#[derive(Clone, Copy, Debug)]
+struct TupleFieldsFmt {
+	field_prefix_ws: WhitespaceConfig,
+}
 
 /// `TupleField`
 #[derive(PartialEq, Eq, Debug)]
