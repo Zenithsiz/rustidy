@@ -15,6 +15,7 @@ use {
 struct ArgsTy {
 	ty: syn::Type,
 
+	// TODO: Move these generics to their own attribute
 	#[darling(multiple)]
 	#[darling(rename = "generic")]
 	generics: Vec<syn::TypeParam>,
@@ -191,6 +192,8 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 		&attrs.indent,
 	);
 
+	let prefix_ws_ty: syn::Type = parse_quote! { rustidy_format::WhitespaceConfig };
+
 	let args_ty = match &attrs.args {
 		Some(args) => args.ty.clone(),
 		None => parse_quote! { () },
@@ -209,14 +212,14 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 					let ty = &field.ty;
 					match variant.args.is_some() {
 						true => parse_quote! { #ty: rustidy_format::Formattable },
-						false => parse_quote! { #ty: rustidy_format::Format<()> },
+						false => parse_quote! { #ty: rustidy_format::Format<#prefix_ws_ty, ()> },
 					}
 				}),
 				darling::ast::Data::Struct(fields) => util::with_struct_bounds(generics, &fields.fields, |field| {
 					let ty = &field.ty;
 					match field.args.is_some() {
 						true => parse_quote! { #ty: rustidy_format::Formattable },
-						false => parse_quote! { #ty: rustidy_format::Format<()> },
+						false => parse_quote! { #ty: rustidy_format::Format<#prefix_ws_ty, ()> },
 					}
 				}),
 			}
@@ -236,9 +239,9 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 
 	let output = quote! {
 		#[automatically_derived]
-		impl #impl_generics rustidy_format::Format<#args_ty> for #item_ident #ty_generics #impl_where_clause {
+		impl #impl_generics rustidy_format::Format<#prefix_ws_ty, #args_ty> for #item_ident #ty_generics #impl_where_clause {
 			#[coverage(on)]
-			fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: rustidy_format::WhitespaceConfig, args: #args_ty) -> rustidy_format::FormatOutput {
+			fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: #prefix_ws_ty, args: #args_ty) -> rustidy_format::FormatOutput {
 				#format
 			}
 		}

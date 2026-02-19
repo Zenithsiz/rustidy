@@ -25,7 +25,8 @@
 	trim_prefix_suffix,
 	if_let_guard,
 	str_as_str,
-	thread_local
+	thread_local,
+	type_changing_struct_update
 )]
 
 // Modules
@@ -46,7 +47,7 @@ pub mod vis;
 use {
 	self::{attr::InnerAttrOrDocComment, item::Items, shebang::Shebang},
 	core::fmt::Debug,
-	rustidy_format::{Format, FormatOutput, Formattable, WhitespaceConfig, WhitespaceFormat},
+	rustidy_format::{Format, FormatOutput, Formattable, WhitespaceFormat},
 	rustidy_parse::Parse,
 	rustidy_print::Print,
 	rustidy_util::{AstStr, Whitespace, ast_str::AstStrRepr},
@@ -65,8 +66,8 @@ pub struct Crate {
 	pub trailing_line_comment: Option<TrailingLineComment>,
 }
 
-impl Format<()> for Crate {
-	fn format(&mut self, ctx: &mut rustidy_format::Context, _prefix_ws: WhitespaceConfig, _args: ()) -> FormatOutput {
+impl Format<(), ()> for Crate {
+	fn format(&mut self, ctx: &mut rustidy_format::Context, _prefix_ws: (), _args: ()) -> FormatOutput {
 		let mut ctx = ctx.sub_context();
 		for attr in &self.inner_attrs {
 			if let Some(attr) = attr.try_as_attr_ref() &&

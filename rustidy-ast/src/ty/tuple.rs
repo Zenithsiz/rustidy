@@ -26,13 +26,8 @@ pub struct TupleTypeInner {
 	pub end: Option<Box<Type>>,
 }
 
-impl Format<()> for TupleTypeInner {
-	fn format(
-		&mut self,
-		ctx: &mut rustidy_format::Context,
-		prefix_ws: WhitespaceConfig,
-		_args: (),
-	) -> FormatOutput {
+impl Format<WhitespaceConfig, ()> for TupleTypeInner {
+	fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: WhitespaceConfig, _args: ()) -> FormatOutput {
 		let [(first_ty, first_comma), tys @ ..] = &mut *self.tys else {
 			return self.end.format(ctx, prefix_ws, ());
 		};
@@ -40,9 +35,7 @@ impl Format<()> for TupleTypeInner {
 		let mut output = FormatOutput::default();
 
 		first_ty.format(ctx, prefix_ws, ()).append_to(&mut output);
-		first_comma
-			.format(ctx, Whitespace::REMOVE, ())
-			.append_to(&mut output);
+		first_comma.format(ctx, Whitespace::REMOVE, ()).append_to(&mut output);
 		for (ty, comma) in tys {
 			ty.format(ctx, Whitespace::SINGLE, ()).append_to(&mut output);
 			comma.format(ctx, Whitespace::REMOVE, ()).append_to(&mut output);

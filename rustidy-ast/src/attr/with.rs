@@ -37,13 +37,13 @@ impl<T> WithOuterAttributes<T> {
 	}
 }
 
-impl<T: Format<()>> Format<()> for WithOuterAttributes<T> {
+impl<T: Format<WhitespaceConfig, ()>> Format<WhitespaceConfig, ()> for WithOuterAttributes<T> {
 	fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: WhitespaceConfig, _args: ()) -> FormatOutput {
 		self.format(ctx, prefix_ws, FmtArgs { inner_args: () })
 	}
 }
 
-impl<A, T: Format<A>> Format<FmtArgs<A>> for WithOuterAttributes<T> {
+impl<A, T: Format<WhitespaceConfig, A>> Format<WhitespaceConfig, FmtArgs<A>> for WithOuterAttributes<T> {
 	fn format(
 		&mut self,
 		ctx: &mut rustidy_format::Context,
@@ -138,13 +138,13 @@ where
 #[derive(Parse, Formattable, Print)]
 pub struct BracedWithInnerAttributes<T>(Braced<WithInnerAttributes<T>>);
 
-impl<T: Format<()>> Format<()> for BracedWithInnerAttributes<T> {
+impl<T: Format<WhitespaceConfig, ()>> Format<WhitespaceConfig, ()> for BracedWithInnerAttributes<T> {
 	fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: WhitespaceConfig, _args: ()) -> FormatOutput {
 		self.format(ctx, prefix_ws, FmtArgs { inner_args: () })
 	}
 }
 
-impl<A, T: Format<A>> Format<FmtArgs<A>> for BracedWithInnerAttributes<T> {
+impl<A, T: Format<WhitespaceConfig, A>> Format<WhitespaceConfig, FmtArgs<A>> for BracedWithInnerAttributes<T> {
 	fn format(
 		&mut self,
 		ctx: &mut rustidy_format::Context,

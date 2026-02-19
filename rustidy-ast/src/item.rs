@@ -279,6 +279,10 @@ pub struct DeclMacroBranchAttr {
 pub struct DeclMacroBranchDerive {
 	pub derive: token::Derive,
 	#[format(prefix_ws = Whitespace::REMOVE)]
-	#[format(args = delimited::fmt_remove())]
+	#[format(args = delimited::FmtArgs {
+		value_non_blank: (),
+		value_blank: (),
+		..delimited::fmt_remove()
+	})]
 	pub args:   Parenthesized<()>,
 }

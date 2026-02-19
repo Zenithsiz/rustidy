@@ -7,7 +7,7 @@ use {
 		token,
 	},
 	rustidy_ast_util::Identifier,
-	rustidy_format::{Format, FormatTag, Formattable, WhitespaceFormat},
+	rustidy_format::{Format, FormatOutput, FormatTag, Formattable, WhitespaceConfig, WhitespaceFormat},
 	rustidy_parse::ParseRecursive,
 	rustidy_print::Print,
 	rustidy_util::Whitespace,
@@ -34,13 +34,8 @@ pub struct FieldExpression {
 
 struct FieldExpressionFmt;
 
-impl Format<()> for FieldExpression {
-	fn format(
-		&mut self,
-		ctx: &mut rustidy_format::Context,
-		prefix_ws: rustidy_format::WhitespaceConfig,
-		_args: (),
-	) -> rustidy_format::FormatOutput {
+impl Format<WhitespaceConfig, ()> for FieldExpression {
+	fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: WhitespaceConfig, _args: ()) -> FormatOutput {
 		let output = self.format(ctx, prefix_ws, FieldExpressionFmt);
 
 		match ctx.has_tag(FormatTag::InsideChain) {

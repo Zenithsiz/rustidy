@@ -53,7 +53,7 @@ impl ArrayExpression {
 	}
 }
 
-impl Format<()> for ArrayExpression {
+impl Format<WhitespaceConfig, ()> for ArrayExpression {
 	fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: WhitespaceConfig, _args: ()) -> FormatOutput {
 		match &mut self.0.value {
 			Some(ArrayElements::Punctuated(values)) => {

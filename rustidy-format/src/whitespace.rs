@@ -120,7 +120,7 @@ impl Formattable for Whitespace {
 	}
 }
 
-impl Format<()> for Whitespace {
+impl Format<WhitespaceConfig, ()> for Whitespace {
 	fn format(&mut self, ctx: &mut crate::Context, prefix_ws: WhitespaceConfig, _args: ()) -> FormatOutput {
 		if let Some(format) = prefix_ws.format {
 			self::format(self, ctx, format);

@@ -2,7 +2,7 @@
 
 // Imports
 use {
-	crate::{Context, Format, FormatOutput, Formattable, WhitespaceConfig},
+	crate::{Context, Format, FormatOutput, Formattable},
 	core::ops::ControlFlow,
 	rustidy_util::AstStr,
 };
@@ -43,26 +43,27 @@ impl<T: Formattable> Formattable for Vec<T> {
 	}
 }
 
-impl<T, A> Format<Args<A>> for Vec<T>
+impl<T, PrefixWs, A> Format<PrefixWs, Args<PrefixWs, A>> for Vec<T>
 where
-	T: Format<A>,
+	T: Format<PrefixWs, A>,
+	PrefixWs: Clone,
 	A: Clone,
 {
-	fn format(&mut self, ctx: &mut Context, prefix_ws: WhitespaceConfig, args: Args<A>) -> FormatOutput {
+	fn format(&mut self, ctx: &mut Context, prefix_ws: PrefixWs, args: Args<PrefixWs, A>) -> FormatOutput {
 		// Note: Due to the way we're parsed, the first element will never be non-empty,
 		//       but it's possible for the caller to create this value during formatting
 		//       and have that not be true, so we always check.
 		let mut output = FormatOutput::default();
-		let mut has_prefix_ws = true;
+		let mut prefix_ws = Some(prefix_ws);
 		for value in self {
-			let value_output = match has_prefix_ws {
-				true => value.format(ctx, prefix_ws, args.args.clone()),
-				false => value.format(ctx, args.rest_prefix_ws, args.args.clone()),
+			let value_output = match &prefix_ws {
+				Some(prefix_ws) => value.format(ctx, prefix_ws.clone(), args.args.clone()),
+				None => value.format(ctx, args.rest_prefix_ws.clone(), args.args.clone()),
 			};
 			value_output.append_to(&mut output);
 
-			if has_prefix_ws && value_output.has_prefix_ws() {
-				has_prefix_ws = false;
+			if prefix_ws.is_some() && value_output.has_prefix_ws() {
+				prefix_ws = None;
 			}
 		}
 
@@ -71,22 +72,22 @@ where
 }
 
 /// Arguments for formatting a [`Vec<T>`]
-pub struct Args<A> {
+pub struct Args<PrefixWs, A> {
 	/// Whitespace formatter for the rest of the vector
-	rest_prefix_ws: WhitespaceConfig,
+	rest_prefix_ws: PrefixWs,
 
 	/// Arguments for the rest of the vector
 	args: A,
 }
 
 /// Creates vector arguments
-pub const fn args<A>(rest_prefix_ws: WhitespaceConfig, args: A) -> Args<A> {
+pub const fn args<PrefixWs, A>(rest_prefix_ws: PrefixWs, args: A) -> Args<PrefixWs, A> {
 	Args { rest_prefix_ws, args }
 }
 
 /// Creates vector arguments from just the prefix whitespace
 #[must_use]
-pub const fn args_prefix_ws(rest_prefix_ws: WhitespaceConfig) -> Args<()> {
+pub const fn args_prefix_ws<PrefixWs>(rest_prefix_ws: PrefixWs) -> Args<PrefixWs, ()> {
 	Args {
 		rest_prefix_ws,
 		args: (),

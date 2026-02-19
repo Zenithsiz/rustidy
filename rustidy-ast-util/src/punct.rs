@@ -13,7 +13,7 @@ use {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 #[format(args(ty = "FmtArgs<TA, PA>", generic = "TA: Clone", generic = "PA: Clone"))]
-#[format(where_format = "where T: Format<TA>, P: Format<PA>")]
+#[format(where_format = "where T: Format<WhitespaceConfig, TA>, P: Format<WhitespaceConfig, PA>")]
 pub struct Punctuated<T, P> {
 	#[format(args = args.value_args.clone())]
 	pub first: T,
@@ -144,7 +144,7 @@ impl<T, P> Punctuated<T, P> {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 #[format(args(ty = "FmtArgs<TA, PA>", generic = "TA: Clone", generic = "PA: Clone"))]
-#[format(where_format = "where T: Format<TA>, P: Format<PA>")]
+#[format(where_format = "where T: Format<WhitespaceConfig, TA>, P: Format<WhitespaceConfig, PA>")]
 pub struct PunctuatedTrailing<T, P> {
 	#[format(args = args.clone())]
 	pub punctuated: Punctuated<T, P>,
@@ -259,7 +259,7 @@ impl<'a, T, P> Iterator for SplitLastMut<'a, T, P> {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 #[format(args(ty = "FmtArgs<TA, PA>", generic = "TA", generic = "PA"))]
-#[format(where_format = "where T: Format<TA>, P: Format<PA>")]
+#[format(where_format = "where T: Format<WhitespaceConfig, TA>, P: Format<WhitespaceConfig, PA>")]
 pub struct PunctuatedRest<T, P> {
 	#[format(args = args.punct_args)]
 	pub punct: P,

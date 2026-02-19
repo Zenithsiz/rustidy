@@ -8,7 +8,7 @@ use {
 		util::Parenthesized,
 	},
 	rustidy_ast_util::{PunctuatedTrailing, delimited, punct},
-	rustidy_format::{Format, FormatTag, Formattable, WhitespaceFormat},
+	rustidy_format::{Format, FormatOutput, FormatTag, Formattable, WhitespaceConfig, WhitespaceFormat},
 	rustidy_parse::{Parse, ParseRecursive},
 	rustidy_print::Print,
 	rustidy_util::Whitespace,
@@ -55,13 +55,8 @@ pub struct MethodCallExpression {
 
 struct MethodCallExpressionFmt;
 
-impl Format<()> for MethodCallExpression {
-	fn format(
-		&mut self,
-		ctx: &mut rustidy_format::Context,
-		prefix_ws: rustidy_format::WhitespaceConfig,
-		_args: (),
-	) -> rustidy_format::FormatOutput {
+impl Format<WhitespaceConfig, ()> for MethodCallExpression {
+	fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: WhitespaceConfig, _args: ()) -> FormatOutput {
 		let output = self.format(ctx, prefix_ws, MethodCallExpressionFmt);
 
 		match ctx.has_tag(FormatTag::InsideChain) {
