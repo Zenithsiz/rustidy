@@ -8,3 +8,8 @@ struct A(
 	u32,
 	Loooooooooooooooooooonooooooooooooooooooooooooooooooooooooooooooooooooooooog,
 );
+
+struct A(
+	u32,
+	Loooooooooooooooooooonooooooooooooooooooooooooooooooooooooooooooooooooooooog,
+);
