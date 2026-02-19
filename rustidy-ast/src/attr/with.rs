@@ -18,7 +18,7 @@ use {
 };
 
 /// A type with outer attributes
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Print)]
 pub struct WithOuterAttributes<T> {
@@ -144,7 +144,7 @@ where
 }
 
 /// A braced type with inner attributes.
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Print)]
 pub struct BracedWithInnerAttributes<T>(Braced<WithInnerAttributes<T>>);
@@ -210,7 +210,7 @@ impl<A, T: Format<WhitespaceConfig, A>> Format<WhitespaceConfig, FmtArgs<A>> for
 }
 
 /// A type with inner attributes
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Print)]
 struct WithInnerAttributes<T> {

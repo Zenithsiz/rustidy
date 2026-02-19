@@ -57,7 +57,7 @@ use {
 	rustidy_util::{ArenaIdx, Whitespace, decl_arena},
 };
 
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 #[format(before_with = Self::merge_use)]
@@ -98,7 +98,7 @@ impl Items {
 }
 
 /// `Item`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct Item(pub ArenaIdx<WithOuterAttributes<ItemInner>>);
@@ -142,7 +142,7 @@ impl Item {
 	}
 }
 
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 #[parse(name = "an item")]
@@ -154,7 +154,7 @@ pub enum ItemInner {
 decl_arena! { WithOuterAttributes<ItemInner> }
 
 /// `VisItem`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct VisItem {
@@ -163,7 +163,7 @@ pub struct VisItem {
 	pub inner: VisItemInner,
 }
 
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub enum VisItemInner {
@@ -184,7 +184,7 @@ pub enum VisItemInner {
 }
 
 /// `MacroItem`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub enum MacroItem {
@@ -194,7 +194,7 @@ pub enum MacroItem {
 
 
 // Note: Nightly-only
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct DeclMacro {
@@ -209,7 +209,7 @@ pub struct DeclMacro {
 	pub body:   DeclMacroBody,
 }
 
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub enum DeclMacroBody {
@@ -217,7 +217,7 @@ pub enum DeclMacroBody {
 	Inline(DeclMacroBodyInline),
 }
 
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct DeclMacroBodyInline {
@@ -230,7 +230,7 @@ pub struct DeclMacroBodyInline {
 	pub body: Braced<DelimTokenTreeInner>,
 }
 
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct DeclMacroBodyBranches(
@@ -239,7 +239,7 @@ pub struct DeclMacroBodyBranches(
 	pub Braced<DeclMacroBodyBranchesInner>,
 );
 
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct DeclMacroBodyBranchesInner(
@@ -247,7 +247,7 @@ pub struct DeclMacroBodyBranchesInner(
 	pub PunctuatedTrailing<DeclMacroBranch, token::Comma>,
 );
 
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct DeclMacroBranch {
@@ -260,7 +260,7 @@ pub struct DeclMacroBranch {
 	pub body:  DelimTokenTree,
 }
 
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub enum DeclMacroBranchExtra {
@@ -268,7 +268,7 @@ pub enum DeclMacroBranchExtra {
 	Derive(DeclMacroBranchDerive),
 }
 
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct DeclMacroBranchAttr {
@@ -278,7 +278,7 @@ pub struct DeclMacroBranchAttr {
 	pub args: Parenthesized<DelimTokenTreeInner>,
 }
 
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct DeclMacroBranchDerive {

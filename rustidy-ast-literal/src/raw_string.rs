@@ -10,7 +10,7 @@ use {
 };
 
 /// `RAW_STRING_LITERAL`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 #[parse(name = "a raw string literal")]

@@ -11,7 +11,7 @@ use {
 };
 
 /// `RawPointerType`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct RawPointerType {
@@ -22,7 +22,7 @@ pub struct RawPointerType {
 	pub ty:   Box<TypeNoBounds>,
 }
 
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub enum RawPointerTypeKind {

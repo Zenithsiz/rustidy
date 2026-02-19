@@ -14,7 +14,7 @@ use {
 };
 
 /// `IDENTIFIER`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 #[parse(name = "an identifier")]
@@ -47,7 +47,7 @@ impl Identifier {
 }
 
 /// `NON_KEYWORD_IDENTIFIER`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 #[parse(error(name = StrictOrReserved, fmt = "Identifier was a strict or reserved keyword"))]

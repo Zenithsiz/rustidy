@@ -9,7 +9,7 @@ use {
 };
 
 /// Characters remaining until the end of the line (including the newline if it exists)
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 #[parse(name = "remaining characters in line")]
@@ -30,7 +30,7 @@ impl RemainingLine {
 /// Characters remaining until the end of block comment
 // TODO: This should not be in this file, or maybe this file should
 //       just be merged with `attr.rs`.
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 #[parse(name = "remaining characters in block comment")]

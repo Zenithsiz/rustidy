@@ -4,7 +4,7 @@
 use crate::{ArenaData, ArenaIdx, AstStr};
 
 /// Whitespace
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 pub struct Whitespace(pub ArenaIdx<WhitespaceInner>);
 
@@ -28,7 +28,7 @@ impl Whitespace {
 	}
 }
 
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(ArenaData)]
 #[derive(serde::Serialize, serde::Deserialize)]
 pub struct WhitespaceInner {
@@ -37,7 +37,7 @@ pub struct WhitespaceInner {
 }
 
 /// Comment
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(strum::EnumIs)]
 #[derive(serde::Serialize, serde::Deserialize)]
 pub enum Comment {
@@ -46,16 +46,16 @@ pub enum Comment {
 }
 
 /// Block Comment
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 pub struct BlockComment(pub AstStr);
 
 /// Line comment
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 pub struct LineComment(pub AstStr);
 
 /// Pure whitespace
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 pub struct PureWhitespace(pub AstStr);

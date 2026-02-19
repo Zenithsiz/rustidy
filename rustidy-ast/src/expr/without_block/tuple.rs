@@ -11,14 +11,14 @@ use {
 };
 
 /// `TupleExpression`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct TupleExpression(#[format(args = delimited::fmt_remove())]
 Parenthesized<Option<TupleElements>>);
 
 /// `TupleElements`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct TupleElements {
@@ -28,7 +28,7 @@ pub struct TupleElements {
 	pub last:  Option<Expression>,
 }
 
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct TupleElementsInner {

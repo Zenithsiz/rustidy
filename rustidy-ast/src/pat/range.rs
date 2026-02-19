@@ -11,7 +11,7 @@ use {
 };
 
 /// `RangePattern`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub enum RangePattern {
@@ -23,7 +23,7 @@ pub enum RangePattern {
 	Obsolete(ObsoleteRangePattern),
 }
 
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct RangeExclusivePattern {
@@ -34,7 +34,7 @@ pub struct RangeExclusivePattern {
 	rhs:     RangePatternBound,
 }
 
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct RangeInclusivePattern {
@@ -45,7 +45,7 @@ pub struct RangeInclusivePattern {
 	rhs:        RangePatternBound,
 }
 
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct RangeFromPattern {
@@ -54,7 +54,7 @@ pub struct RangeFromPattern {
 	dot_dot: token::DotDot,
 }
 
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct RangeToExclusivePattern {
@@ -63,7 +63,7 @@ pub struct RangeToExclusivePattern {
 	rhs:     RangePatternBound,
 }
 
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct RangeToInclusivePattern {
@@ -72,7 +72,7 @@ pub struct RangeToInclusivePattern {
 	rhs:        RangePatternBound,
 }
 
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct ObsoleteRangePattern {
@@ -83,7 +83,7 @@ pub struct ObsoleteRangePattern {
 	rhs:         RangePatternBound,
 }
 
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub enum RangePatternBound {

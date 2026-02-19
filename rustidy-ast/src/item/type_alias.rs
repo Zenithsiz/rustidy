@@ -12,7 +12,7 @@ use {
 };
 
 /// `TypeAlias`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct TypeAlias {
@@ -32,7 +32,7 @@ pub struct TypeAlias {
 	pub semi:     token::Semi,
 }
 
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct TypeAliasBounds {
@@ -41,7 +41,7 @@ pub struct TypeAliasBounds {
 	pub bounds: TypeParamBounds,
 }
 
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct TypeAliasEq {

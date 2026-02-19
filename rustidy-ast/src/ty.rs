@@ -37,12 +37,12 @@ use {
 };
 
 /// `Type`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct Type(pub ArenaIdx<TypeInner>);
 
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(ArenaData)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
@@ -55,7 +55,7 @@ pub enum TypeInner {
 }
 
 /// `TypeNoBounds`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(derive_more::From)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
@@ -78,7 +78,7 @@ pub enum TypeNoBounds {
 }
 
 /// `ParenthesizedPath`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct ParenthesizedPath(
@@ -87,13 +87,13 @@ pub struct ParenthesizedPath(
 );
 
 /// `NeverType`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct NeverType(token::Not);
 
 /// `ReferenceType`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 #[parse(name = "a reference type")]
@@ -114,13 +114,13 @@ pub struct ReferenceType {
 }
 
 /// `InferredType`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct InferredType(token::Underscore);
 
 /// `ImplTraitTypeOneBound`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct ImplTraitTypeOneBound {
@@ -130,7 +130,7 @@ pub struct ImplTraitTypeOneBound {
 }
 
 /// `TraitObjectTypeOneBound`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct TraitObjectTypeOneBound {
@@ -140,7 +140,7 @@ pub struct TraitObjectTypeOneBound {
 }
 
 /// `ImplTraitType`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct ImplTraitType {
@@ -150,7 +150,7 @@ pub struct ImplTraitType {
 }
 
 /// `TraitObjectType`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct TraitObjectType {

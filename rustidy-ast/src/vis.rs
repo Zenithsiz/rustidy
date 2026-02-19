@@ -11,7 +11,7 @@ use {
 };
 
 /// `Visibility`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct Visibility {
@@ -21,7 +21,7 @@ pub struct Visibility {
 	pub path: Option<Parenthesized<VisibilityPath>>,
 }
 
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub enum VisibilityPath {
@@ -31,7 +31,7 @@ pub enum VisibilityPath {
 	In(VisibilityPathIn),
 }
 
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct VisibilityPathIn {

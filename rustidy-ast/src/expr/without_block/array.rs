@@ -11,7 +11,7 @@ use {
 };
 
 /// `ArrayExpression`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Print)]
 #[parse(name = "an array expression")]
@@ -142,7 +142,7 @@ impl Format<WhitespaceConfig, ()> for ArrayExpression {
 }
 
 /// `ArrayElements`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Print)]
 pub enum ArrayElements {
@@ -150,7 +150,7 @@ pub enum ArrayElements {
 	Punctuated(PunctuatedTrailing<Expression, token::Comma>),
 }
 
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct ArrayElementsRepeat {

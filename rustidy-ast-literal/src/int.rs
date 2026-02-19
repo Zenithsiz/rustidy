@@ -12,7 +12,7 @@ use {
 };
 
 /// `INTEGER_LITERAL`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 #[parse(name = "an integer literal")]
@@ -44,7 +44,7 @@ impl IntegerLiteral {
 	}
 }
 
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 #[format(no_prefix_ws)]
@@ -56,7 +56,7 @@ pub enum IntegerLiteralInner {
 }
 
 /// `DEC_LITERAL`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 #[parse(error(name = StartDigit, fmt = "Expected 0-9"))]
@@ -78,7 +78,7 @@ impl DecLiteral {
 }
 
 /// `BIN_LITERAL`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 #[parse(error(name = Start0B, fmt = "Expected `0b`"))]
@@ -104,7 +104,7 @@ impl BinLiteral {
 }
 
 /// `OCT_LITERAL`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 #[parse(error(name = Start0O, fmt = "Expected `0o`"))]
@@ -131,7 +131,7 @@ impl OctLiteral {
 }
 
 /// `HEX_LITERAL`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 #[parse(error(name = Start0X, fmt = "Expected `0x`"))]

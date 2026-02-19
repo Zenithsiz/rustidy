@@ -19,7 +19,7 @@ use {
 };
 
 /// `Trait`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 #[parse(name = "a trait")]
@@ -43,7 +43,7 @@ pub struct Trait {
 	pub body:     TraitBody,
 }
 
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub enum TraitBody {
@@ -52,7 +52,7 @@ pub enum TraitBody {
 	Full(BracedWithInnerAttributes<TraitBodyFull>),
 }
 
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct TraitBodyEq {
@@ -63,7 +63,7 @@ pub struct TraitBodyEq {
 	pub semi:   token::Semi,
 }
 
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct TraitBodyFull(
@@ -71,7 +71,7 @@ pub struct TraitBodyFull(
 	pub Vec<AssociatedItem>,
 );
 
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct TraitColonBounds {
@@ -81,12 +81,12 @@ pub struct TraitColonBounds {
 }
 
 /// `AssociatedItem`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct AssociatedItem(pub WithOuterAttributes<AssociatedItemInner>);
 
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub enum AssociatedItemInner {
@@ -94,7 +94,7 @@ pub enum AssociatedItemInner {
 	Vis(AssociatedItemVis),
 }
 
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct AssociatedItemVis {
@@ -103,7 +103,7 @@ pub struct AssociatedItemVis {
 	pub inner: AssociatedItemVisInner,
 }
 
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub enum AssociatedItemVisInner {

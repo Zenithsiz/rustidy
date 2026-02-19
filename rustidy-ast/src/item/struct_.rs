@@ -19,7 +19,7 @@ use {
 };
 
 /// `Struct`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub enum Struct {
@@ -28,7 +28,7 @@ pub enum Struct {
 }
 
 /// `StructStruct`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct StructStruct {
@@ -46,7 +46,7 @@ pub struct StructStruct {
 	pub inner:    StructStructInner,
 }
 
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(strum::EnumIs)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
@@ -58,7 +58,7 @@ pub enum StructStructInner {
 }
 
 /// `StructFields`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct StructFields(
@@ -70,14 +70,14 @@ pub struct StructFields(
 );
 
 /// `StructField`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 #[format(args(ty = "StructFieldInnerArgs"))]
 pub struct StructField(#[format(args = with::fmt(args))]
 pub WithOuterAttributes<StructFieldInner>);
 
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 #[format(args(ty = "StructFieldInnerArgs"))]
@@ -103,7 +103,7 @@ struct StructFieldInnerArgs {
 	max_ident_len: usize,
 }
 
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct StructFieldEq {
@@ -113,7 +113,7 @@ pub struct StructFieldEq {
 }
 
 /// `TupleStruct`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct TupleStruct {
@@ -160,7 +160,7 @@ impl TupleStruct {
 }
 
 /// `TupleFields`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 #[format(args(ty = "TupleFieldsFmt"))]
@@ -175,13 +175,13 @@ struct TupleFieldsFmt {
 }
 
 /// `TupleField`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct TupleField(pub WithOuterAttributes<TupleFieldInner>);
 
 /// `TupleFieldInner`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct TupleFieldInner {

@@ -36,7 +36,7 @@ use {
 };
 
 /// `Pattern`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 #[parse(name = "a pattern")]
@@ -48,7 +48,7 @@ pub struct Pattern {
 }
 
 /// `PatternNoTopAlt`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub enum PatternNoTopAlt {
@@ -57,7 +57,7 @@ pub enum PatternNoTopAlt {
 }
 
 /// `PatternWithoutRange`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub enum PatternWithoutRange {
@@ -82,33 +82,33 @@ pub enum PatternWithoutRange {
 }
 
 /// `WildcardPattern`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct WildcardPattern(token::Underscore);
 
 /// `RestPattern`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct RestPattern(token::DotDot);
 
 /// `GroupedPattern`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct GroupedPattern(#[format(args = delimited::fmt_remove())]
 Parenthesized<Box<Pattern>>);
 
 /// `SlicePattern`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct SlicePattern(#[format(args = delimited::fmt_remove())]
 Bracketed<Option<SlicePatternItems>>);
 
 /// `SlicePatternItems`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct SlicePatternItems(
@@ -117,13 +117,13 @@ pub struct SlicePatternItems(
 );
 
 /// `PathPattern`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct PathPattern(PathExpression);
 
 /// `ReferencePattern`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct ReferencePattern {
@@ -137,7 +137,7 @@ pub struct ReferencePattern {
 	pub pat:  Box<PatternWithoutRange>,
 }
 
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub enum ReferencePatternRef {
@@ -146,7 +146,7 @@ pub enum ReferencePatternRef {
 }
 
 /// `StructPattern`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct StructPattern {
@@ -158,7 +158,7 @@ pub struct StructPattern {
 }
 
 /// `StructPatternElements`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub enum StructPatternElements {
@@ -166,7 +166,7 @@ pub enum StructPatternElements {
 	EtCetera(StructPatternEtCetera),
 }
 
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct StructPatternElementsFields {
@@ -175,7 +175,7 @@ pub struct StructPatternElementsFields {
 	pub et_cetera: Option<StructPatternElementsFieldsEtCetera>,
 }
 
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct StructPatternElementsFieldsEtCetera {
@@ -185,7 +185,7 @@ pub struct StructPatternElementsFieldsEtCetera {
 }
 
 /// `StructPatternFields`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct StructPatternFields(
@@ -194,12 +194,12 @@ pub struct StructPatternFields(
 );
 
 /// `StructPatternField`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct StructPatternField(pub WithOuterAttributes<StructPatternFieldInner>);
 
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub enum StructPatternFieldInner {
@@ -208,7 +208,7 @@ pub enum StructPatternFieldInner {
 	Ident(StructPatternFieldIdent),
 }
 
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct StructPatternFieldTuplePat {
@@ -219,7 +219,7 @@ pub struct StructPatternFieldTuplePat {
 	pub pat: Box<Pattern>,
 }
 
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct StructPatternFieldIdentPat {
@@ -230,7 +230,7 @@ pub struct StructPatternFieldIdentPat {
 	pub pat:   Box<Pattern>,
 }
 
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct StructPatternFieldIdent {
@@ -242,13 +242,13 @@ pub struct StructPatternFieldIdent {
 }
 
 /// `StructPatternEtCetera`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct StructPatternEtCetera(token::DotDot);
 
 /// `TupleStructPattern`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct TupleStructPattern {
@@ -259,7 +259,7 @@ pub struct TupleStructPattern {
 }
 
 /// `TupleStructItems`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct TupleStructItems(
@@ -268,7 +268,7 @@ pub struct TupleStructItems(
 );
 
 /// `TuplePattern`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct TuplePattern(
@@ -277,7 +277,7 @@ pub struct TuplePattern(
 );
 
 /// `TuplePatternItems`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub enum TuplePatternItems {
@@ -286,7 +286,7 @@ pub enum TuplePatternItems {
 	Rest(RestPattern),
 }
 
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct TupleItemsPat {
@@ -295,7 +295,7 @@ pub struct TupleItemsPat {
 	pub comma: token::Comma,
 }
 
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct TupleItemsPats {
@@ -307,7 +307,7 @@ pub struct TupleItemsPats {
 	pub trailing_comma: Option<token::Comma>,
 }
 
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct TupleItemsPatsPat {
@@ -317,7 +317,7 @@ pub struct TupleItemsPatsPat {
 }
 
 /// `LiteralPattern`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct LiteralPattern {
@@ -335,7 +335,7 @@ impl ParsePeeked<ByteLiteral> for LiteralPattern {
 }
 
 /// `IdentifierPattern`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 #[parse(error(name = Pat(ParserError::<PatternNoTopAlt>), transparent))]
@@ -366,7 +366,7 @@ impl ParsePeeked<(Option<token::Ref>, Option<token::Mut>, Identifier, token::At)
 	}
 }
 
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct IdentifierPatternRest {

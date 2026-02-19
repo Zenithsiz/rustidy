@@ -9,7 +9,7 @@ use {
 };
 
 /// Punctuated type `T`, separated by `P`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 #[format(args(ty = "FmtArgs<TA, PA>", generic = "TA: Clone", generic = "PA: Clone"))]
@@ -162,7 +162,7 @@ impl<T, P> Punctuated<T, P> {
 }
 
 /// Punctuated type `T`, separated by `P` with an optional trailing `P`.
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 #[format(args(ty = "FmtArgs<TA, PA>", generic = "TA: Clone", generic = "PA: Clone"))]
@@ -280,7 +280,7 @@ impl<'a, T, P> Iterator for SplitLastMut<'a, T, P> {
 	}
 }
 
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 #[format(args(ty = "FmtArgs<TA, PA>", generic = "TA", generic = "PA"))]

@@ -37,7 +37,7 @@ use {
 };
 
 /// `Expression`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct Expression(pub ArenaIdx<ExpressionInner>);
@@ -49,7 +49,7 @@ impl FromRecursiveRoot<ExpressionInner> for Expression {
 	}
 }
 
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(ArenaData)]
 #[derive(derive_more::From, derive_more::TryInto)]
 #[derive(serde::Serialize, serde::Deserialize)]

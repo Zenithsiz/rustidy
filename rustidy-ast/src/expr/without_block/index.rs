@@ -12,7 +12,7 @@ use {
 };
 
 /// `IndexExpression`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(ParseRecursive, Formattable, Format, Print)]
 #[parse_recursive(root = ExpressionInner)]

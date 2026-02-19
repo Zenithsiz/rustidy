@@ -11,7 +11,7 @@ use {
 };
 
 /// `Implementation`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 #[parse(name = "an implementation")]
@@ -21,7 +21,7 @@ pub enum Implementation {
 }
 
 /// `InherentImpl`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct InherentImpl {
@@ -37,7 +37,7 @@ pub struct InherentImpl {
 }
 
 /// `TraitImpl`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct TraitImpl {
@@ -66,7 +66,7 @@ pub struct TraitImpl {
 	pub body:     BracedWithInnerAttributes<ImplBody>,
 }
 
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct ImplBody(

@@ -56,7 +56,7 @@ use {
 };
 
 /// `ExpressionWithoutBlock`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(derive_more::From)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, ParseRecursive, Formattable, Format, Print)]
@@ -84,7 +84,7 @@ impl TryFrom<ExpressionWithoutBlock> for ExpressionWithoutBlockInner {
 	}
 }
 
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(derive_more::From, derive_more::TryInto)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(ParseRecursive, Formattable, Format, Print)]
@@ -129,7 +129,7 @@ pub enum ExpressionWithoutBlockInner {
 }
 
 // Note: Nightly-only
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct DoYeetExpression {
@@ -142,7 +142,7 @@ pub struct DoYeetExpression {
 }
 
 /// `TUPLE_INDEX`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct TupleIndex(pub IntegerLiteral);

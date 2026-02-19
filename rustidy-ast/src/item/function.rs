@@ -20,7 +20,7 @@ use {
 };
 
 /// `Function`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 #[parse(name = "a function")]
@@ -50,7 +50,7 @@ pub struct Function {
 	pub body:       FunctionBody,
 }
 
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(strum::EnumIs)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
@@ -60,7 +60,7 @@ pub enum FunctionBody {
 }
 
 /// `FunctionQualifiers`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 #[parse(name = "function qualifiers")]
@@ -82,7 +82,7 @@ impl FunctionQualifiers {
 	}
 }
 
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct ExternAbi {
@@ -92,7 +92,7 @@ pub struct ExternAbi {
 }
 
 /// `Abi`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub enum Abi {
@@ -101,7 +101,7 @@ pub enum Abi {
 }
 
 /// `ItemSafety`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub enum ItemSafety {
@@ -110,7 +110,7 @@ pub enum ItemSafety {
 }
 
 /// `FunctionParameters`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 #[parse(name = "function parameters")]
@@ -120,7 +120,7 @@ pub enum FunctionParameters {
 	OnlySelf(FunctionParametersOnlySelf),
 }
 
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct FunctionParametersOnlySelf {
@@ -138,7 +138,7 @@ impl ParsePeeked<(SelfParam, Option<token::Comma>, Follows<token::ParenClose>)> 
 	}
 }
 
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct FunctionParametersFull {
@@ -148,7 +148,7 @@ pub struct FunctionParametersFull {
 	pub rest:  PunctuatedTrailing<FunctionParam, token::Comma>,
 }
 
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct FunctionParametersFullSelf {
@@ -158,12 +158,12 @@ pub struct FunctionParametersFullSelf {
 }
 
 /// `FunctionParam`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct FunctionParam(pub WithOuterAttributes<FunctionParamInner>);
 
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub enum FunctionParamInner {
@@ -173,7 +173,7 @@ pub enum FunctionParamInner {
 }
 
 /// `FunctionParamPattern`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct FunctionParamPattern {
@@ -186,12 +186,12 @@ pub struct FunctionParamPattern {
 }
 
 /// `SelfParam`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct SelfParam(pub WithOuterAttributes<ShorthandOrTypedSelf>);
 
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub enum ShorthandOrTypedSelf {
@@ -200,7 +200,7 @@ pub enum ShorthandOrTypedSelf {
 }
 
 /// `ShorthandSelf`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct ShorthandSelf {
@@ -217,7 +217,7 @@ pub struct ShorthandSelf {
 	pub self_: token::SelfLower,
 }
 
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct ShorthandSelfRef {
@@ -228,7 +228,7 @@ pub struct ShorthandSelfRef {
 }
 
 /// `TypedSelf`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct TypedSelf {
@@ -242,7 +242,7 @@ pub struct TypedSelf {
 }
 
 /// `FunctionReturnType`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 #[parse(name = "function return type")]
@@ -254,7 +254,7 @@ pub struct FunctionReturnType {
 }
 
 /// `GenericParams`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 #[parse(name = "generic parameters")]
@@ -263,7 +263,7 @@ pub struct GenericParams(
 	pub Delimited<Option<GenericParamsInner>, token::Lt, token::Gt>,
 );
 
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 #[parse(name = "generic parameters")]
@@ -273,12 +273,12 @@ pub struct GenericParamsInner(
 );
 
 /// `GenericParam`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct GenericParam(pub WithOuterAttributes<GenericParamInner>);
 
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub enum GenericParamInner {
@@ -288,7 +288,7 @@ pub enum GenericParamInner {
 }
 
 /// `LifetimeParam`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 #[parse(name = "a lifetime parameter")]
@@ -298,7 +298,7 @@ pub struct LifetimeParam {
 	pub bounds:   Option<LifetimeParamBounds>,
 }
 
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct LifetimeParamBounds {
@@ -308,7 +308,7 @@ pub struct LifetimeParamBounds {
 }
 
 /// `LifetimeBounds`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct LifetimeBounds(
@@ -317,7 +317,7 @@ pub struct LifetimeBounds(
 );
 
 /// `TypeParam`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 #[parse(name = "a type parameter")]
@@ -329,7 +329,7 @@ pub struct TypeParam {
 	pub eq_ty:  Option<TypeParamEqType>,
 }
 
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct TypeParamColonBounds {
@@ -338,7 +338,7 @@ pub struct TypeParamColonBounds {
 	pub bounds: Option<TypeParamBounds>,
 }
 
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct TypeParamEqType {
@@ -348,7 +348,7 @@ pub struct TypeParamEqType {
 }
 
 /// `TypeParamBounds`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct TypeParamBounds(
@@ -357,7 +357,7 @@ pub struct TypeParamBounds(
 );
 
 /// `TypeParamBound`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub enum TypeParamBound {
@@ -367,7 +367,7 @@ pub enum TypeParamBound {
 }
 
 /// `TraitBound`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub enum TraitBound {
@@ -376,7 +376,7 @@ pub enum TraitBound {
 	Normal(TraitBoundInner),
 }
 
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct TraitBoundInner {
@@ -388,7 +388,7 @@ pub struct TraitBoundInner {
 	pub path:   TypePath,
 }
 
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub enum TraitBoundInnerPrefix {
@@ -397,7 +397,7 @@ pub enum TraitBoundInnerPrefix {
 }
 
 /// `WhereClause`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct WhereClause {
@@ -411,7 +411,7 @@ pub struct WhereClause {
 }
 
 /// `WhereClauseItem`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub enum WhereClauseItem {
@@ -420,7 +420,7 @@ pub enum WhereClauseItem {
 }
 
 /// `LifetimeWhereClauseItem`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct LifetimeWhereClauseItem {
@@ -433,7 +433,7 @@ pub struct LifetimeWhereClauseItem {
 }
 
 /// `TypeBoundWhereClauseItem`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct TypeBoundWhereClauseItem {
@@ -448,7 +448,7 @@ pub struct TypeBoundWhereClauseItem {
 }
 
 /// `ForLifetimes`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct ForLifetimes {
@@ -458,7 +458,7 @@ pub struct ForLifetimes {
 }
 
 /// `ConstParam`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct ConstParam {
@@ -473,7 +473,7 @@ pub struct ConstParam {
 	pub eq:     Option<ConstParamEq>,
 }
 
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct ConstParamEq {
@@ -482,7 +482,7 @@ pub struct ConstParamEq {
 	rest: ConstParamEqRest,
 }
 
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub enum ConstParamEqRest {
@@ -491,7 +491,7 @@ pub enum ConstParamEqRest {
 	Literal(ConstParamEqRestLiteral),
 }
 
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct ConstParamEqRestLiteral {
@@ -501,7 +501,7 @@ pub struct ConstParamEqRestLiteral {
 }
 
 /// `UseBound`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct UseBound {
@@ -511,7 +511,7 @@ pub struct UseBound {
 }
 
 /// `UseBoundGenericArgs`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct UseBoundGenericArgs(
@@ -519,7 +519,7 @@ pub struct UseBoundGenericArgs(
 	pub Delimited<UseBoundGenericArgsInner, token::Lt, token::Gt>,
 );
 
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct UseBoundGenericArgsInner(
@@ -528,7 +528,7 @@ pub struct UseBoundGenericArgsInner(
 );
 
 /// `UseBoundGenericArg`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub enum UseBoundGenericArg {

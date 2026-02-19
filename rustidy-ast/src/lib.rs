@@ -54,7 +54,7 @@ use {
 };
 
 /// `Crate`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Print)]
 #[parse(name = "a crate")]
@@ -122,7 +122,7 @@ impl Format<(), ()> for Crate {
 
 /// Trailing line comment
 // TODO: Remove this?
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 #[parse(error(name = NoComment, fmt = "Expected `//` (except `///` or `//!`)"))]

@@ -17,7 +17,7 @@ use {
 	rustidy_util::Whitespace,
 };
 
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(ParseRecursive, Formattable, Format, Print)]
 #[parse_recursive(root = ExpressionInner)]
@@ -37,7 +37,7 @@ pub struct ClosureExpression {
 	pub expr:   Expression,
 }
 
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub enum ClosureParams {
@@ -46,7 +46,7 @@ pub enum ClosureParams {
 	WithParams(Delimited<Option<ClosureParameters>, token::Or, token::Or>),
 }
 
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct ClosureRet {
@@ -57,7 +57,7 @@ pub struct ClosureRet {
 }
 
 /// `ClosureParameters`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct ClosureParameters(
@@ -66,12 +66,12 @@ pub struct ClosureParameters(
 );
 
 /// `ClosureParameter`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct ClosureParameter(pub WithOuterAttributes<ClosureParameterInner>);
 
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct ClosureParameterInner {
@@ -80,7 +80,7 @@ pub struct ClosureParameterInner {
 	pub ty:  Option<ClosureParameterInnerTy>,
 }
 
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct ClosureParameterInnerTy {

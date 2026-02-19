@@ -21,7 +21,7 @@ use {
 };
 
 /// `BlockExpression`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 #[parse(name = "a block expression")]
@@ -29,7 +29,7 @@ use {
 pub struct BlockExpression(pub ArenaIdx<BracedWithInnerAttributes<Statements>>);
 
 /// `Statements`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Formattable, Format, Print)]
 pub struct Statements {

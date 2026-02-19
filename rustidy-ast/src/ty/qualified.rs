@@ -12,7 +12,7 @@ use {
 };
 
 /// `QualifiedPathInType`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct QualifiedPathInType {
@@ -22,7 +22,7 @@ pub struct QualifiedPathInType {
 	pub segments:  AtLeast1<QualifiedPathInTypeSegment>,
 }
 
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct QualifiedPathInTypeSegment {

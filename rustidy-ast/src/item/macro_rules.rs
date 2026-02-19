@@ -24,7 +24,7 @@ use {
 };
 
 /// `MacroRulesDefinition`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct MacroRulesDefinition {
@@ -40,7 +40,7 @@ pub struct MacroRulesDefinition {
 }
 
 /// `MacroRulesDef`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub enum MacroRulesDef {
@@ -49,7 +49,7 @@ pub enum MacroRulesDef {
 	Braces(MacroRulesDefBraces),
 }
 
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct MacroRulesDefParens {
@@ -58,7 +58,7 @@ pub struct MacroRulesDefParens {
 	pub semi:  token::Semi,
 }
 
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct MacroRulesDefBrackets {
@@ -67,7 +67,7 @@ pub struct MacroRulesDefBrackets {
 	pub semi:  token::Semi,
 }
 
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct MacroRulesDefBraces {
@@ -76,7 +76,7 @@ pub struct MacroRulesDefBraces {
 }
 
 /// `MacroRules`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct MacroRules(
@@ -85,7 +85,7 @@ pub struct MacroRules(
 );
 
 /// `MacroRule`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct MacroRule {
@@ -98,7 +98,7 @@ pub struct MacroRule {
 }
 
 /// `MacroMatcher`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub enum MacroMatcher {
@@ -110,7 +110,7 @@ pub enum MacroMatcher {
 	Braces(Braced<MacroMatcherMatches>),
 }
 
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct MacroMatcherMatches(
@@ -119,7 +119,7 @@ pub struct MacroMatcherMatches(
 );
 
 /// `MacroMatch`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub enum MacroMatch {
@@ -138,7 +138,7 @@ pub enum MacroMatch {
 	Dollar(token::Dollar),
 }
 
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct MacroMatchDollarIdent {
@@ -149,7 +149,7 @@ pub struct MacroMatchDollarIdent {
 	pub spec:   MacroFragSpec,
 }
 
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub enum MacroMatchDollarIdentInner {
@@ -160,7 +160,7 @@ pub enum MacroMatchDollarIdentInner {
 }
 
 /// `MacroFragSpec`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub enum MacroFragSpec {
@@ -181,7 +181,7 @@ pub enum MacroFragSpec {
 	Vis(token::Vis),
 }
 
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct MacroMatchDollarRep {
@@ -193,7 +193,7 @@ pub struct MacroMatchDollarRep {
 	pub rep_op:  MacroRepOp,
 }
 
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct MacroMatchDollarRepMatches(
@@ -202,7 +202,7 @@ pub struct MacroMatchDollarRepMatches(
 );
 
 /// `MacroRepSep`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct MacroRepSep(
@@ -214,7 +214,7 @@ pub struct MacroRepSep(
 );
 
 /// `MacroRepOp`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub enum MacroRepOp {
@@ -224,7 +224,7 @@ pub enum MacroRepOp {
 }
 
 /// `MacroTranscriber`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct MacroTranscriber(DelimTokenTree);

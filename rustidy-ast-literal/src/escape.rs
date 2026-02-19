@@ -9,7 +9,7 @@ use {
 };
 
 /// `QUOTE_ESCAPE`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 #[parse(error(name = Escape, fmt = "Expected `\\'` or `\\\"`"))]
@@ -28,7 +28,7 @@ impl QuoteEscape {
 }
 
 /// `ASCII_ESCAPE`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 #[parse(error(name = Escape, fmt = "Expected `\\xXX`, `\\n`, `\\r`, `\\t`, `\\\\` or `\\0`"))]
@@ -63,7 +63,7 @@ impl AsciiEscape {
 }
 
 /// `BYTE_ESCAPE`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 #[parse(error(name = Escape, fmt = "Expected `\\xXX`, `\\n`, `\\r`, `\\t`, `\\\\`, `\\0`, `'` or `\"`"))]
@@ -99,7 +99,7 @@ impl ByteEscape {
 }
 
 /// `BYTE_ESCAPE` except `\0`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 #[parse(error(name = ByteEscape(ByteEscapeError), transparent))]
@@ -121,7 +121,7 @@ impl NonNulByteEscape {
 }
 
 /// `UNICODE_ESCAPE`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 #[parse(error(name = Escape, fmt = "Expected `\\u{{XXXXX}}`"))]
@@ -158,7 +158,7 @@ impl UnicodeEscape {
 }
 
 /// `UNICODE_ESCAPE` except `\u{0}` (and variants)
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 #[parse(error(name = UnicodeEscape(UnicodeEscapeError), transparent))]
@@ -183,7 +183,7 @@ impl NonNulUnicodeEscape {
 }
 
 /// `STRING_CONTINUE`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 #[parse(error(name = Escape, fmt = "Expected `\\` and a newline"))]

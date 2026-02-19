@@ -9,7 +9,7 @@ use {
 };
 
 /// A value `T` delimited by prefix `L` and suffix `R`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Print)]
 pub struct Delimited<T, L, R> {

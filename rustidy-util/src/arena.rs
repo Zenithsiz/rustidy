@@ -182,6 +182,12 @@ impl<T: ArenaData> ArenaIdx<T> {
 impl<T: ArenaData> !Send for ArenaIdx<T> {}
 impl<T: ArenaData> !Sync for ArenaIdx<T> {}
 
+// TODO: Implement clone via reference counting with copy-on-mutable access?
+impl<T: ArenaData + Clone> Clone for ArenaIdx<T> {
+	fn clone(&self) -> Self {
+		Self::new((**self).clone())
+	}
+}
 impl<T: ArenaData> ops::Deref for ArenaIdx<T> {
 	type Target = T;
 

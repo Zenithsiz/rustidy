@@ -12,7 +12,7 @@ use {
 };
 
 /// `TupleType`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 #[parse(name = "a tuple type")]
@@ -21,7 +21,7 @@ pub struct TupleType(
 	Parenthesized<Option<TupleTypeInner>>,
 );
 
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Print)]
 pub struct TupleTypeInner {

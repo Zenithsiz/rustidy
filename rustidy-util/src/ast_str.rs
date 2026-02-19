@@ -5,7 +5,7 @@ use {crate::{ArenaData, ArenaIdx, AstRange}, std::{borrow::Cow, sync::Arc}};
 
 /// Ast string
 // TODO: Add an "empty" position for newly created ast nodes?
-#[derive(PartialEq, Eq, Hash, Debug)]
+#[derive(PartialEq, Eq, Clone, Hash, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[must_use = "Ast output must not be discarded"]
 pub struct AstStr(pub ArenaIdx<AstStrRepr>);
@@ -99,7 +99,7 @@ impl AstStr {
 	}
 }
 
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(ArenaData)]
 #[derive(derive_more::From)]
 #[derive(serde::Serialize)]

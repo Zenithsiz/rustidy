@@ -10,7 +10,7 @@ use {
 };
 
 /// `SUFFIX`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 #[format(no_prefix_ws)]
@@ -21,7 +21,7 @@ pub struct Suffix(
 );
 
 /// `SUFFIX_NO_E`
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 #[parse(error(name = StartedWithE, fmt = "Started with an `e` or `E`"))]

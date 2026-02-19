@@ -10,7 +10,7 @@ use {
 };
 
 /// Parses the longest of two types
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Formattable, Format, Print)]
 pub enum Longest<L, R> {
