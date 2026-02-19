@@ -315,7 +315,6 @@ fn derive_struct_field(field_idx: usize, field: &FieldAttrs) -> syn::Expr {
 	let field_ident = util::field_member_access(field_idx, field);
 
 	let prefix_ws = match &field.prefix_ws {
-		// TODO: We should panic here if we overwrite the existing prefix whitespace.
 		Some(prefix_ws) => Some(
 			prefix_ws
 				.map(|prefix_ws| {
