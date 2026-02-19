@@ -60,7 +60,7 @@ where
 			};
 			value_output.append_to(&mut output);
 
-			if has_prefix_ws && !value_output.is_empty {
+			if has_prefix_ws && value_output.has_prefix_ws() {
 				has_prefix_ws = false;
 			}
 		}

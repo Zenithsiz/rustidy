@@ -320,8 +320,7 @@ fn derive_struct_field(field_idx: usize, field: &FieldAttrs) -> syn::Expr {
 	};
 
 	let after_format = parse_quote! {
-		// TODO: Make `format` return this so we don't have to recurse back into the type
-		if has_prefix_ws && !output.is_empty {
+		if has_prefix_ws && output.has_prefix_ws() {
 			has_prefix_ws = false;
 		}
 	};

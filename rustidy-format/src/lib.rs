@@ -101,6 +101,12 @@ pub struct FormatOutput {
 }
 
 impl FormatOutput {
+	/// Returns if this format output has any prefix whitespace
+	#[must_use]
+	pub const fn has_prefix_ws(&self) -> bool {
+		self.prefix_ws_len.is_some()
+	}
+
 	/// Returns the length of this type, excluding the prefix whitespace, if any
 	// TODO: Rename this to just `len` and `Self::len` to `total_len`?.
 	#[must_use]
