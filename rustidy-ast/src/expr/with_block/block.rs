@@ -5,7 +5,12 @@ use {
 	crate::{
 		attr::BracedWithInnerAttributes,
 		expr::ExpressionWithoutBlock,
-		stmt::{ExpressionStatement, ExpressionStatementWithBlock, ExpressionStatementWithoutBlock, Statement},
+		stmt::{
+			ExpressionStatement,
+			ExpressionStatementWithBlock,
+			ExpressionStatementWithoutBlock,
+			Statement,
+		},
 		token,
 	},
 	rustidy_ast_util::NotFollows,
@@ -47,29 +52,32 @@ impl Parse for Statements {
 			//       parses as an empty block, followed by the expression `*a`, but
 			//       this is not the case for field/method access and the question mark
 			//       operator.
-			if let Ok((expr, ..)) = parser.try_parse::<(
-				ExpressionStatementWithBlock,
-				NotFollows<token::Dot>,
-				NotFollows<token::Question>,
-			)>()? {
-				stmts.push(Statement::Expression(ExpressionStatement::WithBlock(expr)));
+			if let Ok((expr, ..)) = parser
+				.try_parse::<(ExpressionStatementWithBlock, NotFollows<token::Dot>, NotFollows<token::Question>,)>()? {
+				stmts
+					.push(Statement::Expression(ExpressionStatement::WithBlock(expr)));
 				continue;
 			}
 
-			match parser.peek::<(ExpressionWithoutBlock, Option<token::Semi>)>()? {
+			match parser
+				.peek::<(ExpressionWithoutBlock, Option<token::Semi>)>()? {
 				Ok(((expr, semi), peek_expr_state)) => match semi {
 					Some(semi) => {
 						parser.set_peeked(peek_expr_state);
-						stmts.push(Statement::Expression(ExpressionStatement::WithoutBlock(
-							ExpressionStatementWithoutBlock { expr, semi },
-						)));
+						stmts
+							.push(Statement::Expression(ExpressionStatement::WithoutBlock(ExpressionStatementWithoutBlock {
+								expr,
+								semi
+							},)));
 					},
-					None => match parser.with_tag(ParserTag::SkipExpressionWithoutBlock, Parser::peek::<Statement>)? {
+					None => match parser
+						.with_tag(ParserTag::SkipExpressionWithoutBlock, Parser::peek::<Statement>)? {
 						// Note: On macros, we want to ensure we parse a statement macro instead of expression macro,
 						//       since braced statement macros don't need a semi-colon, while expression ones do.
 						//       Since both have the same length, we prefer statements to expressions if they have
 						//       the same length here.
-						Ok((stmt, peek_stmt_state)) if peek_stmt_state.ahead_of_or_equal(&peek_expr_state) => {
+						Ok((stmt, peek_stmt_state)) if peek_stmt_state
+							.ahead_of_or_equal(&peek_expr_state) => {
 							parser.set_peeked(peek_stmt_state);
 							stmts.push(stmt);
 						},
@@ -79,28 +87,25 @@ impl Parse for Statements {
 						},
 					},
 				},
-				Err(_) =>
-					match parser.with_tag(ParserTag::SkipExpressionWithoutBlock, Parser::try_parse::<Statement>)? {
-						Ok(stmt) => stmts.push(stmt),
-						Err(_) => break None,
-					},
+				Err(_) => match parser
+					.with_tag(ParserTag::SkipExpressionWithoutBlock, Parser::try_parse::<Statement>)? {
+					Ok(stmt) => stmts.push(stmt),
+					Err(_) => break None,
+				},
 			}
 		};
 
-		Ok(Self { stmts, trailing_expr })
+		Ok(Self {
+			stmts,
+			trailing_expr
+		})
 	}
 }
 
 #[derive(derive_more::Debug, derive_more::From, ParseError)]
 pub enum StatementsError {
 	#[parse_error(transparent)]
-	ExpressionStatementWithBlock(
-		ParserError<(
-			ExpressionStatementWithBlock,
-			NotFollows<token::Dot>,
-			NotFollows<token::Question>,
-		)>,
-	),
+	ExpressionStatementWithBlock(ParserError<(ExpressionStatementWithBlock, NotFollows<token::Dot>, NotFollows<token::Question>,)>,),
 
 	#[parse_error(transparent)]
 	ExpressionWithoutBlock(ParserError<(ExpressionWithoutBlock, Option<token::Semi>)>),

@@ -5,10 +5,7 @@ pub mod block;
 pub mod match_;
 
 // Exports
-pub use self::{
-	block::BlockExpression,
-	match_::{MatchExpression, Scrutinee},
-};
+pub use self::{block::BlockExpression, match_::{MatchExpression, Scrutinee}};
 
 // Imports
 use {
@@ -114,20 +111,16 @@ pub struct Conditions(Longest<LetChain, ConditionsExpr>);
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
-struct ConditionsExpr(
-	#[parse(with_tag = ParserTag::SkipStructExpression)]
-	#[parse(with_tag = ParserTag::SkipOptionalTrailingBlockExpression)]
-	Expression,
-);
+struct ConditionsExpr(#[parse(with_tag = ParserTag::SkipStructExpression)]
+#[parse(with_tag = ParserTag::SkipOptionalTrailingBlockExpression)]
+Expression,);
 
 /// `LetChain`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
-pub struct LetChain(
-	#[format(args = punct::fmt(Whitespace::SINGLE, Whitespace::SINGLE))]
-	pub  Punctuated<LetChainCondition, token::AndAnd>,
-);
+pub struct LetChain(#[format(args = punct::fmt(Whitespace::SINGLE, Whitespace::SINGLE))]
+pub Punctuated<LetChainCondition, token::AndAnd>,);
 
 /// `LetChainCondition`
 #[derive(PartialEq, Eq, Debug)]

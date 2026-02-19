@@ -27,13 +27,18 @@ impl<T, P> Punctuated<T, P> {
 	pub const fn single(value: T) -> Self {
 		Self {
 			first: value,
-			rest:  vec![],
+			rest: vec![],
 		}
 	}
 
 	/// Pushes a punctuation and value onto this punctuated
 	pub fn push(&mut self, punct: P, value: T) {
-		self.rest.push(PunctuatedRest { punct, value });
+		self
+			.rest
+			.push(PunctuatedRest {
+				punct,
+				value
+			});
 	}
 
 	/// Pushes a value onto this punctuated, with a default punctuated
@@ -45,25 +50,24 @@ impl<T, P> Punctuated<T, P> {
 	}
 
 	/// Splits this punctuated at the first value
-	pub fn split_first_mut(
-		&mut self,
-	) -> (
-		&mut T,
-		impl DoubleEndedIterator<Item = (&mut P, &mut T)> + ExactSizeIterator,
-	) {
-		(
-			&mut self.first,
-			self.rest
-				.iter_mut()
-				.map(|PunctuatedRest { punct, value }| (punct, value)),
-		)
+	pub fn split_first_mut(&mut self,) -> (&mut T, impl DoubleEndedIterator<Item = (&mut P, &mut T)> + ExactSizeIterator,) {
+		(&mut self.first, self
+			.rest
+			.iter_mut()
+			.map(|PunctuatedRest {
+				punct,
+				value
+			}| (punct, value)),)
 	}
 
 	/// Splits this punctuated at the last value
 	pub fn split_last_mut(&mut self) -> (SplitLastMut<'_, T, P>, &mut T) {
 		let mut rest = self.rest.iter_mut();
 		match rest.next_back() {
-			Some(PunctuatedRest { punct, value }) => {
+			Some(PunctuatedRest {
+				punct,
+				value
+			}) => {
 				let iter = SplitLastMut {
 					next_value: Some(&mut self.first),
 					last_punct: Some(punct),
@@ -125,17 +129,35 @@ impl<T, P> Punctuated<T, P> {
 
 	/// Returns an iterator over all punctuation
 	pub fn puncts(&self) -> impl Iterator<Item = &P> {
-		self.rest.iter().map(|PunctuatedRest { punct, .. }| punct)
+		self
+			.rest
+			.iter()
+			.map(|PunctuatedRest {
+				punct,
+				..
+			}| punct)
 	}
 
 	/// Returns a mutable iterator over all punctuation
 	pub fn puncts_mut(&mut self) -> impl Iterator<Item = &mut P> {
-		self.rest.iter_mut().map(|PunctuatedRest { punct, .. }| punct)
+		self
+			.rest
+			.iter_mut()
+			.map(|PunctuatedRest {
+				punct,
+				..
+			}| punct)
 	}
 
 	/// Returns a mutable iterator over all punctuation
 	pub fn punct_mut(&mut self) -> impl Iterator<Item = &mut P> {
-		self.rest.iter_mut().map(|PunctuatedRest { punct, .. }| punct)
+		self
+			.rest
+			.iter_mut()
+			.map(|PunctuatedRest {
+				punct,
+				..
+			}| punct)
 	}
 }
 
@@ -158,7 +180,7 @@ impl<T, P> PunctuatedTrailing<T, P> {
 	pub const fn single(value: T) -> Self {
 		Self {
 			punctuated: Punctuated::single(value),
-			trailing:   None,
+			trailing: None,
 		}
 	}
 
@@ -226,7 +248,7 @@ pub struct SplitLastMut<'a, T, P> {
 	last_punct: Option<&'a mut P>,
 
 	/// Rest of the slice
-	rest: std::slice::IterMut<'a, PunctuatedRest<T, P>>,
+	rest:       std::slice::IterMut<'a, PunctuatedRest<T, P>>,
 }
 
 impl<'a, T, P> Iterator for SplitLastMut<'a, T, P> {
@@ -240,7 +262,10 @@ impl<'a, T, P> Iterator for SplitLastMut<'a, T, P> {
 		let punct = match self.rest.next() {
 			// If there's still something in the slice, save the value
 			// for the next iteration
-			Some(PunctuatedRest { punct, value }) => {
+			Some(PunctuatedRest {
+				punct,
+				value
+			}) => {
 				self.next_value = Some(value);
 				punct
 			},
@@ -274,17 +299,12 @@ pub struct FmtArgs<TA, PA> {
 	pub value_prefix_ws: WhitespaceConfig,
 	pub punct_prefix_ws: WhitespaceConfig,
 
-	pub value_args: TA,
-	pub punct_args: PA,
+	pub value_args:      TA,
+	pub punct_args:      PA,
 }
 
 #[must_use]
-pub const fn fmt_with<TA, PA>(
-	value: WhitespaceConfig,
-	punct: WhitespaceConfig,
-	value_args: TA,
-	punct_args: PA,
-) -> FmtArgs<TA, PA> {
+pub const fn fmt_with<TA, PA>(value: WhitespaceConfig, punct: WhitespaceConfig, value_args: TA, punct_args: PA,) -> FmtArgs<TA, PA> {
 	FmtArgs {
 		value_prefix_ws: value,
 		punct_prefix_ws: punct,

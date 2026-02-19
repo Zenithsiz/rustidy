@@ -56,8 +56,7 @@ impl<T: Parse> QuoteNotQuote<T> {
 		if parser
 			.with_tag(ParserTag::SkipWhitespace, Parser::try_parse::<token::Quote>)
 			.map_err(QuoteNotQuoteError::Quote)?
-			.is_ok()
-		{
+			.is_ok() {
 			return Err(QuoteNotQuoteError::SuffixQuote);
 		}
 

@@ -27,5 +27,7 @@ pub struct FmtArgs {
 
 #[must_use]
 pub const fn fmt_prefix_ws(rest_prefix_ws: WhitespaceConfig) -> FmtArgs {
-	FmtArgs { rest_prefix_ws }
+	FmtArgs {
+		rest_prefix_ws
+	}
 }

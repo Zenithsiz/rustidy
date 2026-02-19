@@ -49,7 +49,8 @@ impl StringLiteral {
 		let mut cur_idx = 0;
 		while let Some(idx) = s[cur_idx..].find('\\') {
 			let s = Cow::to_mut(&mut s);
-			let replace_with = |s: &mut String, replacement| s.replace_range(idx..idx + 2, replacement);
+			let replace_with = |s: &mut String, replacement| s
+				.replace_range(idx..idx + 2, replacement);
 			match s[idx + 1..].chars().next() {
 				Some('n') => replace_with(s, "\n"),
 				Some('r') => replace_with(s, "\r"),
@@ -77,26 +78,29 @@ impl StringLiteral {
 	}
 
 	fn parse(s: &mut &str) -> Result<(), StringLiteralError> {
-		*s = s.strip_prefix('"').ok_or(StringLiteralError::StartQuote)?;
+		*s = s
+			.strip_prefix('"')
+			.ok_or(StringLiteralError::StartQuote)?;
 
 		loop {
-			match s.strip_prefix(|ch| !matches!(ch, '"' | '\\' | '\r')) {
+			match s
+				.strip_prefix(|ch| !matches!(ch, '"' | '\\' | '\r')) {
 				Some(rest) => *s = rest,
 				// TODO: We should report fatal errors from here
-				None =>
-					if QuoteEscape::parse(s)
-						.ok()
-						.or_else(|| AsciiEscape::parse(s).ok())
-						.or_else(|| UnicodeEscape::parse(s).ok())
-						.or_else(|| StringContinue::parse(s).ok())
-						.is_none()
-					{
-						break;
-					},
+				None => if QuoteEscape::parse(s)
+					.ok()
+					.or_else(|| AsciiEscape::parse(s).ok())
+					.or_else(|| UnicodeEscape::parse(s).ok())
+					.or_else(|| StringContinue::parse(s).ok())
+					.is_none() {
+					break;
+				},
 			}
 		}
 
-		*s = s.strip_prefix('"').ok_or(StringLiteralError::ExpectedEndQuote)?;
+		*s = s
+			.strip_prefix('"')
+			.ok_or(StringLiteralError::ExpectedEndQuote)?;
 
 		Ok(())
 	}

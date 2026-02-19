@@ -130,11 +130,11 @@ pub struct FunctionParametersOnlySelf {
 }
 
 impl ParsePeeked<(SelfParam, Option<token::Comma>, Follows<token::ParenClose>)> for FunctionParametersOnlySelf {
-	fn parse_from_with_peeked(
-		_parser: &mut rustidy_parse::Parser,
-		(self_, trailing_comma, _): (SelfParam, Option<token::Comma>, Follows<token::ParenClose>),
-	) -> Result<Self, Self::Error> {
-		Ok(Self { self_, trailing_comma })
+	fn parse_from_with_peeked(_parser: &mut rustidy_parse::Parser, (self_, trailing_comma, _): (SelfParam, Option<token::Comma>, Follows<token::ParenClose>),) -> Result<Self, Self::Error> {
+		Ok(Self {
+			self_,
+			trailing_comma
+		})
 	}
 }
 
@@ -258,18 +258,15 @@ pub struct FunctionReturnType {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 #[parse(name = "generic parameters")]
-pub struct GenericParams(
-	#[format(args = delimited::fmt_remove())] pub Delimited<Option<GenericParamsInner>, token::Lt, token::Gt>,
-);
+pub struct GenericParams(#[format(args = delimited::fmt_remove())]
+pub Delimited<Option<GenericParamsInner>, token::Lt, token::Gt>,);
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 #[parse(name = "generic parameters")]
-pub struct GenericParamsInner(
-	#[format(args = punct::fmt(Whitespace::SINGLE, Whitespace::REMOVE))]
-	pub  PunctuatedTrailing<GenericParam, token::Comma>,
-);
+pub struct GenericParamsInner(#[format(args = punct::fmt(Whitespace::SINGLE, Whitespace::REMOVE))]
+pub PunctuatedTrailing<GenericParam, token::Comma>,);
 
 /// `GenericParam`
 #[derive(PartialEq, Eq, Debug)]
@@ -310,9 +307,8 @@ pub struct LifetimeParamBounds {
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
-pub struct LifetimeBounds(
-	#[format(args = punct::fmt(Whitespace::SINGLE, Whitespace::SINGLE))] PunctuatedTrailing<Lifetime, token::Plus>,
-);
+pub struct LifetimeBounds(#[format(args = punct::fmt(Whitespace::SINGLE, Whitespace::SINGLE))]
+PunctuatedTrailing<Lifetime, token::Plus>,);
 
 /// `TypeParam`
 #[derive(PartialEq, Eq, Debug)]
@@ -349,10 +345,8 @@ pub struct TypeParamEqType {
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
-pub struct TypeParamBounds(
-	#[format(args = punct::fmt(Whitespace::SINGLE, Whitespace::SINGLE))]
-	pub  PunctuatedTrailing<TypeParamBound, token::Plus>,
-);
+pub struct TypeParamBounds(#[format(args = punct::fmt(Whitespace::SINGLE, Whitespace::SINGLE))]
+pub PunctuatedTrailing<TypeParamBound, token::Plus>,);
 
 /// `TypeParamBound`
 #[derive(PartialEq, Eq, Debug)]
@@ -512,17 +506,14 @@ pub struct UseBound {
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
-pub struct UseBoundGenericArgs(
-	#[format(args = delimited::fmt_preserve())] pub Delimited<UseBoundGenericArgsInner, token::Lt, token::Gt>,
-);
+pub struct UseBoundGenericArgs(#[format(args = delimited::fmt_preserve())]
+pub Delimited<UseBoundGenericArgsInner, token::Lt, token::Gt>,);
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
-pub struct UseBoundGenericArgsInner(
-	#[format(args = punct::fmt(Whitespace::PRESERVE, Whitespace::PRESERVE))]
-	pub  PunctuatedTrailing<UseBoundGenericArg, token::Comma>,
-);
+pub struct UseBoundGenericArgsInner(#[format(args = punct::fmt(Whitespace::PRESERVE, Whitespace::PRESERVE))]
+pub PunctuatedTrailing<UseBoundGenericArg, token::Comma>,);
 
 /// `UseBoundGenericArg`
 #[derive(PartialEq, Eq, Debug)]

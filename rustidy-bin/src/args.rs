@@ -12,7 +12,7 @@ pub struct Args {
 	///
 	/// You can use `RUST_FILE_LOG` to set filtering options
 	#[clap(long = "log-file")]
-	pub log_file: Option<PathBuf>,
+	pub log_file:    Option<PathBuf>,
 
 	/// Configuration file.
 	///
@@ -21,5 +21,5 @@ pub struct Args {
 	pub config_file: Option<PathBuf>,
 
 	/// Files to format
-	pub files: Vec<PathBuf>,
+	pub files:       Vec<PathBuf>,
 }

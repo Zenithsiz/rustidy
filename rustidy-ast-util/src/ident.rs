@@ -56,7 +56,8 @@ pub struct NonKeywordIdentifier(pub IdentifierOrKeyword);
 
 impl NonKeywordIdentifier {
 	pub fn check_strict_reserved(&mut self, parser: &mut Parser) -> Result<(), NonKeywordIdentifierError> {
-		if STRICT_OR_RESERVED_KEYWORDS.contains(&&*parser.str(&self.0.1)) {
+		if STRICT_OR_RESERVED_KEYWORDS
+			.contains(&&*parser.str(&self.0.1)) {
 			return Err(NonKeywordIdentifierError::StrictOrReserved);
 		}
 
@@ -103,12 +104,10 @@ pub const STRICT_OR_RESERVED_KEYWORDS: [&str; 52] = [
 	"use",
 	"where",
 	"while",
-
 	// Strict (2015)
 	"async",
 	"await",
 	"dyn",
-
 	// Reserved (2015)
 	"abstract",
 	"become",
@@ -122,10 +121,8 @@ pub const STRICT_OR_RESERVED_KEYWORDS: [&str; 52] = [
 	"unsized",
 	"virtual",
 	"yield",
-
 	// Reserved (2018)
 	"try",
-
 	// Reserved (2024)
 	"try",
 ];

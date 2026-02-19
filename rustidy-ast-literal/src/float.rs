@@ -43,25 +43,27 @@ impl Parse for FloatLiteral {
 		let ws = parser.parse::<Whitespace>()?;
 		let int = parser.parse::<DecLiteral>()?;
 
-		let (dot, frac) =
-			match parser.with_tag(ParserTag::SkipWhitespace, Parser::try_parse::<rustidy_ast_tokens::Dot>)? {
-				Ok(dot) => match parser.try_parse::<DecLiteral>()? {
-					Ok(frac) => (Some(dot), Some(frac)),
-					Err(_) => match parser
-						.remaining()
-						.starts_with(|ch| matches!(ch, '.' | '_') || unicode_ident::is_xid_start(ch))
-					{
-						true => return Err(Self::Error::FractionalPartMissing),
-						false => (Some(dot), None),
-					},
+		let (dot, frac) = match parser
+			.with_tag(ParserTag::SkipWhitespace, Parser::try_parse::<rustidy_ast_tokens::Dot>)? {
+			Ok(dot) => match parser.try_parse::<DecLiteral>()? {
+				Ok(frac) => (Some(dot), Some(frac)),
+				Err(_) => match parser
+					.remaining()
+					.starts_with(|ch| matches!(ch, '.' | '_') || unicode_ident::is_xid_start(ch)) {
+					true => return Err(Self::Error::FractionalPartMissing),
+					false => (Some(dot), None),
 				},
-				Err(_) => (None, None),
-			};
+			},
+			Err(_) => (None, None),
+		};
 
 		let (exponent, suffix) = match (dot.is_some(), frac.is_some()) {
 			(true, true) => match parser.try_parse::<FloatExponent>()? {
 				Ok(exponent) => (Some(exponent), parser.try_parse::<Suffix>()?.ok()),
-				Err(_) => (None, parser.try_parse::<SuffixNoE>()?.ok().map(|suffix| suffix.0)),
+				Err(_) => (None, parser
+					.try_parse::<SuffixNoE>()?
+					.ok()
+					.map(|suffix| suffix.0)),
 			},
 			(true, false) => (None, None),
 			(false, true) => unreachable!(),
@@ -109,21 +111,22 @@ pub enum FloatLiteralError {
 #[parse(error(name = E, fmt = "Expected `e` or `E`"))]
 #[parse(error(name = Digit, fmt = "Expected a digit"))]
 #[format(no_prefix_ws)]
-pub struct FloatExponent(
-	#[parse(try_update_with = Self::parse)]
-	#[format(str)]
-	pub AstStr,
-);
+pub struct FloatExponent(#[parse(try_update_with = Self::parse)]
+#[format(str)]
+pub AstStr,);
 
 impl FloatExponent {
 	fn parse(s: &mut &str) -> Result<(), FloatExponentError> {
-		*s = s.strip_prefix(['e', 'E']).ok_or(FloatExponentError::E)?;
+		*s = s
+			.strip_prefix(['e', 'E'])
+			.ok_or(FloatExponentError::E)?;
 		*s = s.trim_prefix(['+', '-']);
 		*s = s.trim_start_matches('_');
 		*s = s
 			.strip_prefix(|ch: char| ch.is_ascii_digit())
 			.ok_or(FloatExponentError::Digit)?;
-		*s = s.trim_start_matches(|ch: char| ch.is_ascii_digit() || ch == '_');
+		*s = s
+			.trim_start_matches(|ch: char| ch.is_ascii_digit() || ch == '_');
 
 		Ok(())
 	}

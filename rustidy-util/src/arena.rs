@@ -53,7 +53,9 @@ impl<T> Arena<T> {
 			.rev()
 			.position(|is_init| *is_init)
 			.unwrap_or(self.init.len());
-		self.init.truncate(self.init.len() - dead_elements);
+		self
+			.init
+			.truncate(self.init.len() - dead_elements);
 	}
 
 	/// Gets a slot by index
@@ -73,7 +75,9 @@ impl<T> Arena<T> {
 		self.init[idx] = false;
 
 		// SAFETY: No other references to `slot` exist
-		unsafe { ptr::read(slot).assume_init() }
+		unsafe {
+			ptr::read(slot).assume_init()
+		}
 	}
 }
 
@@ -97,7 +101,9 @@ impl<T: ArenaData> ArenaIdx<T> {
 	pub fn new(value: T) -> Self {
 		T::with_arena(|arena| {
 			// SAFETY: We create no other references to `arena` in this block
-			let arena = unsafe { arena.as_mut_unchecked() };
+			let arena = unsafe {
+				arena.as_mut_unchecked()
+			};
 
 			// Before inserting, remove any trailing dead values
 			arena.clean_trailing();
@@ -111,7 +117,10 @@ impl<T: ArenaData> ArenaIdx<T> {
 				//       a new one.
 				None => {
 					// SAFETY: We're initializing an array of uninitialized values
-					let row = unsafe { Box::<[Slot<T>; CAPACITY]>::new_uninit().assume_init() };
+					let row = unsafe {
+						Box::<[Slot<T>; CAPACITY]>::new_uninit()
+							.assume_init()
+					};
 					arena.rows.push_mut(row)
 				},
 			};
@@ -120,11 +129,13 @@ impl<T: ArenaData> ArenaIdx<T> {
 			// Finally push the new value and set it as initialized.
 			// SAFETY: No other mutable references to `slot` exist, since
 			//         the slot was empty.
-			unsafe { slot.as_mut_unchecked().write(value) };
+			unsafe {
+				slot.as_mut_unchecked().write(value)
+			};
 			arena.init.push(true);
 
 			Self {
-				inner:   idx.try_into().expect("Too many indices"),
+				inner: idx.try_into().expect("Too many indices"),
 				phantom: PhantomData,
 			}
 		})
@@ -138,10 +149,14 @@ impl<T: ArenaData> ArenaIdx<T> {
 
 		T::with_arena(|arena| {
 			// SAFETY: We create no other references to `arena` in this block
-			let arena = unsafe { arena.as_mut_unchecked() };
+			let arena = unsafe {
+				arena.as_mut_unchecked()
+			};
 
 			// SAFETY: No other mutable references to the slot exist, since we take `self`
-			unsafe { arena.take_slot(idx) }
+			unsafe {
+				arena.take_slot(idx)
+			}
 		})
 	}
 
@@ -175,12 +190,16 @@ impl<T: ArenaData> ops::Deref for ArenaIdx<T> {
 
 		T::with_arena(|arena| {
 			// SAFETY: We create no other references to `arena` in this block
-			let arena = unsafe { arena.as_ref_unchecked() };
+			let arena = unsafe {
+				arena.as_ref_unchecked()
+			};
 
 			let slot = arena.slot(idx);
 
 			// SAFETY: No mutable reference to the value exists since we take `&self`
-			unsafe { MaybeUninit::assume_init_ref(&*slot) }
+			unsafe {
+				MaybeUninit::assume_init_ref(&*slot)
+			}
 		})
 	}
 }
@@ -191,12 +210,16 @@ impl<T: ArenaData> ops::DerefMut for ArenaIdx<T> {
 
 		T::with_arena(|arena| {
 			// SAFETY: We create no other references to `arena` in this block
-			let arena = unsafe { arena.as_ref_unchecked() };
+			let arena = unsafe {
+				arena.as_ref_unchecked()
+			};
 
 			let slot = arena.slot(idx);
 
 			// SAFETY: No other references to the value exist since we take `&mut self`
-			unsafe { MaybeUninit::assume_init_mut(&mut *slot) }
+			unsafe {
+				MaybeUninit::assume_init_mut(&mut *slot)
+			}
 		})
 	}
 }
@@ -207,11 +230,15 @@ impl<T: ArenaData> Drop for ArenaIdx<T> {
 
 		T::with_arena(|arena| {
 			// SAFETY: We create no other references to `arena` in this block
-			let arena = unsafe { arena.as_mut_unchecked() };
+			let arena = unsafe {
+				arena.as_mut_unchecked()
+			};
 
 			// SAFETY: No other mutable references to the slot exist, since we take `&mut self`
 			// TODO: Should we manually implement this to avoid moving the value onto the stack?
-			let _ = unsafe { arena.take_slot(idx) };
+			let _ = unsafe {
+				arena.take_slot(idx)
+			};
 		});
 	}
 }
@@ -233,7 +260,10 @@ impl<T: ArenaData> Hash for ArenaIdx<T> {
 
 impl<T: ArenaData> fmt::Debug for ArenaIdx<T> {
 	fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-		f.debug_tuple("ArenaIdx").field(&self.inner).finish()
+		f
+			.debug_tuple("ArenaIdx")
+			.field(&self.inner)
+			.finish()
 	}
 }
 
@@ -263,7 +293,9 @@ pub trait ArenaData: Sized + 'static {
 }
 
 /// Implements `ArenaData` for `$Ty`
-pub macro decl_arena($Ty:ty) {
+pub macro decl_arena(
+	$Ty:ty
+) {
 	impl ArenaData for $Ty {
 		fn with_arena<O>(f: impl FnOnce(&UnsafeCell<Arena<Self>>) -> O) -> O {
 			f(&ARENA)

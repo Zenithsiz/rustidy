@@ -68,6 +68,5 @@ pub struct MacroInvocationSemiBraces {
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
-pub struct MacroInvocationSemiTokens(
-	#[format(args = rustidy_format::vec::args_prefix_ws(Whitespace::PRESERVE))] Vec<TokenTree>,
-);
+pub struct MacroInvocationSemiTokens(#[format(args = rustidy_format::vec::args_prefix_ws(Whitespace::PRESERVE))]
+Vec<TokenTree>,);

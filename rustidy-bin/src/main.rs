@@ -69,12 +69,14 @@ fn run() -> Result<(), AppError> {
 	let config_path = match args.config_file {
 		Some(config_path) => Some(config_path),
 		None => {
-			let cur_dir = std::env::current_dir().context("Unable to get current directory")?;
+			let cur_dir = std::env::current_dir()
+				.context("Unable to get current directory")?;
 			let mut cur_dir = cur_dir.as_path();
 			loop {
 				// TODO: Should we also allow `rustidy.toml`?
 				let config_path = cur_dir.join(".rustidy.toml");
-				if fs::exists(&config_path).context("Unable to check if directory exists")? {
+				if fs::exists(&config_path)
+					.context("Unable to check if directory exists")? {
 					break Some(config_path);
 				}
 
@@ -87,8 +89,10 @@ fn run() -> Result<(), AppError> {
 	};
 	let config = match config_path {
 		Some(config_path) => {
-			let config = fs::read_to_string(config_path).context("Unable to read configuration")?;
-			toml::from_str(&config).context("Unable to parse configuration")?
+			let config = fs::read_to_string(config_path)
+				.context("Unable to read configuration")?;
+			toml::from_str(&config)
+				.context("Unable to parse configuration")?
 		},
 		None => Config::default(),
 	};
@@ -112,22 +116,18 @@ fn run() -> Result<(), AppError> {
 	Ok(())
 }
 
-fn format_file(
-	config: &rustidy_util::Config,
-	files: Option<&mut Vec<PathBuf>>,
-	file_path: Option<&Path>,
-) -> Result<(), AppError> {
+fn format_file(config: &rustidy_util::Config, files: Option<&mut Vec<PathBuf>>, file_path: Option<&Path>,) -> Result<(), AppError> {
 	// Parse
 	let input = match file_path {
-		Some(file_path) => fs::read_to_string(file_path).context("Unable to read file")?,
-		None => io::read_to_string(io::stdin()).context("Unable to read stdin")?,
+		Some(file_path) => fs::read_to_string(file_path)
+			.context("Unable to read file")?,
+		None => io::read_to_string(io::stdin())
+			.context("Unable to read stdin")?,
 	};
 	let mut crate_ = rustidy::parse(&input, file_path.unwrap_or_else(|| Path::new("<stdin>")))?;
 
 	// Queue modules for formatting.
-	if let Some(file_path) = file_path &&
-		let Some(files) = files
-	{
+	if let Some(file_path) = file_path && let Some(files) = files {
 		for item in &crate_.items.0 {
 			// If it's not a module definition, skip it
 			// TODO: Support modules inside of other modules (and other items).
@@ -154,7 +154,9 @@ fn format_file(
 	let mut print_fmt = PrintFmt::new(&input);
 	crate_.print(&mut print_fmt);
 	match file_path {
-		Some(file_path) => fs::write(file_path, print_fmt.output()).context("Unable to write file")?,
+		Some(file_path) => fs::write(file_path, print_fmt
+			.output())
+			.context("Unable to write file")?,
 		None => io::stdout()
 			.write_all(print_fmt.output().as_bytes())
 			.context("Unable to write to stdout")?,
@@ -165,12 +167,7 @@ fn format_file(
 }
 
 /// Returns a module's path
-fn mod_path(
-	file_path: &Path,
-	input: &str,
-	attrs: impl IntoIterator<Item = &OuterAttrOrDocComment>,
-	mod_: &Module,
-) -> Result<PathBuf, AppError> {
+fn mod_path(file_path: &Path, input: &str, attrs: impl IntoIterator<Item = &OuterAttrOrDocComment>, mod_: &Module,) -> Result<PathBuf, AppError> {
 	let path = match self::find_path_attr(input, attrs)? {
 		// If it had a `#[path = ...]` attribute, use that
 		Some(name) => file_path.with_file_name("").join(&*name),
@@ -180,7 +177,9 @@ fn mod_path(
 			let name = match &mod_.ident {
 				Identifier::Raw(ident) => {
 					super let ident = ident.1.str(input);
-					let ident = ident.strip_prefix("r#").expect("Raw identified didn't start with `r#`");
+					let ident = ident
+						.strip_prefix("r#")
+						.expect("Raw identified didn't start with `r#`");
 					Cow::Borrowed(ident)
 				},
 				Identifier::NonKw(ident) => ident.0.1.str(input),
@@ -192,7 +191,9 @@ fn mod_path(
 				.expect("File had no parent")
 				.join(&*name)
 				.join("mod.rs");
-			match mod_rs_path.try_exists().context("Unable to check if file exists")? {
+			match mod_rs_path
+				.try_exists()
+				.context("Unable to check if file exists")? {
 				true => mod_rs_path,
 				// If it fails, try the new module system
 				false => {
@@ -215,12 +216,11 @@ fn mod_path(
 
 /// Finds a `#[path = ...]` attribute
 // TODO: Support `cfg_attr(..., path = ...)` and others?
-fn find_path_attr<'input>(
-	input: &'input str,
-	attrs: impl IntoIterator<Item = &OuterAttrOrDocComment>,
-) -> Result<Option<Cow<'input, str>>, AppError> {
+fn find_path_attr<'input>(input: &'input str, attrs: impl IntoIterator<Item = &OuterAttrOrDocComment>,) -> Result<Option<Cow<'input, str>>, AppError> {
 	for attr in attrs {
-		let Some(attr) = attr.try_as_attr_ref() else { continue };
+		let Some(attr) = attr.try_as_attr_ref() else {
+			continue
+		};
 		if !(attr.open.value.path.is_str(input, "path")) {
 			continue;
 		}
@@ -229,9 +229,7 @@ fn find_path_attr<'input>(
 			_ => bail!("Malformed `#[path = ...]` attribute"),
 		};
 		let literal = match &*expr.0 {
-			ExpressionInner::WithoutBlock(expr)
-				if let ExpressionWithoutBlockInner::Literal(literal) = &expr.0.inner =>
-				literal,
+			ExpressionInner::WithoutBlock(expr) if let ExpressionWithoutBlockInner::Literal(literal) = &expr.0.inner => literal,
 			_ => bail!("Expected a literal expression in `#[path = ...]` attribute"),
 		};
 		let name = match literal {
@@ -239,8 +237,7 @@ fn find_path_attr<'input>(
 			//       so we also don't.
 			rustidy_ast_literal::LiteralExpression::String(s) => s.contents(input),
 			// TODO: Allow raw strings here
-			rustidy_ast_literal::LiteralExpression::RawString(_) =>
-				todo!("Raw strings in `#[path = ...]` attributes aren't currently supported"),
+			rustidy_ast_literal::LiteralExpression::RawString(_) => todo!("Raw strings in `#[path = ...]` attributes aren't currently supported"),
 			_ => bail!("Expected a string literal in `#[path = ...]` attribute"),
 		};
 

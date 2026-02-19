@@ -48,9 +48,11 @@ struct Attrs {
 }
 
 pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream, AppError> {
-	let input = syn::parse::<syn::DeriveInput>(input).context("Unable to parse input")?;
+	let input = syn::parse::<syn::DeriveInput>(input)
+		.context("Unable to parse input")?;
 
-	let attrs = Attrs::from_derive_input(&input).context("Unable to parse attributes")?;
+	let attrs = Attrs::from_derive_input(&input)
+		.context("Unable to parse attributes")?;
 	let item_ident = &attrs.ident;
 
 	// Parse body, parsable impl and error enum (with it's impls)
@@ -96,11 +98,9 @@ fn derive_enum(variants: &[VariantAttrs]) -> Impls<syn::Expr, syn::Expr> {
 		.iter()
 		.map(|variant| {
 			let variant_ident = &variant.ident;
-			let with_strings =
-				parse_quote! { Self::#variant_ident(ref mut value) => rustidy_format::Formattable::with_strings(value, ctx, exclude_prefix_ws, f), };
+			let with_strings = parse_quote! { Self::#variant_ident(ref mut value) => rustidy_format::Formattable::with_strings(value, ctx, exclude_prefix_ws, f), };
 
-			let with_prefix_ws =
-				parse_quote! { Self::#variant_ident(ref mut value) => value.with_prefix_ws(ctx, f), };
+			let with_prefix_ws = parse_quote! { Self::#variant_ident(ref mut value) => value.with_prefix_ws(ctx, f), };
 
 			Impls {
 				with_strings,
@@ -186,13 +186,16 @@ struct Impls<WithStrings, PrefixWs> {
 impl<T0, T1, A0, A1> FromIterator<Impls<A0, A1>> for Impls<T0, T1>
 where
 	T0: Default + Extend<A0>,
-	T1: Default + Extend<A1>,
-{
+	T1: Default + Extend<A1>, {
 	fn from_iter<I: IntoIterator<Item = Impls<A0, A1>>>(iter: I) -> Self {
 		let mut output = Self::default();
 		for impls in iter {
-			output.with_strings.extend_one(impls.with_strings);
-			output.with_prefix_ws.extend_one(impls.with_prefix_ws);
+			output
+				.with_strings
+				.extend_one(impls.with_strings);
+			output
+				.with_prefix_ws
+				.extend_one(impls.with_prefix_ws);
 		}
 
 		output

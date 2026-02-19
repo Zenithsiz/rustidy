@@ -20,7 +20,15 @@ use {
 	},
 	core::fmt::Debug,
 	rustidy_ast_literal::{ByteLiteral, LiteralExpression},
-	rustidy_ast_util::{AtLeast1, Identifier, Punctuated, PunctuatedTrailing, at_least, delimited, punct},
+	rustidy_ast_util::{
+		AtLeast1,
+		Identifier,
+		Punctuated,
+		PunctuatedTrailing,
+		at_least,
+		delimited,
+		punct,
+	},
 	rustidy_format::{Format, Formattable, WhitespaceFormat},
 	rustidy_parse::{Parse, ParsePeeked, ParserError},
 	rustidy_print::Print,
@@ -89,21 +97,22 @@ pub struct RestPattern(token::DotDot);
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
-pub struct GroupedPattern(#[format(args = delimited::fmt_remove())] Parenthesized<Box<Pattern>>);
+pub struct GroupedPattern(#[format(args = delimited::fmt_remove())]
+Parenthesized<Box<Pattern>>);
 
 /// `SlicePattern`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
-pub struct SlicePattern(#[format(args = delimited::fmt_remove())] Bracketed<Option<SlicePatternItems>>);
+pub struct SlicePattern(#[format(args = delimited::fmt_remove())]
+Bracketed<Option<SlicePatternItems>>);
 
 /// `SlicePatternItems`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
-pub struct SlicePatternItems(
-	#[format(args = punct::fmt(Whitespace::SINGLE, Whitespace::REMOVE))] PunctuatedTrailing<Box<Pattern>, token::Comma>,
-);
+pub struct SlicePatternItems(#[format(args = punct::fmt(Whitespace::SINGLE, Whitespace::REMOVE))]
+PunctuatedTrailing<Box<Pattern>, token::Comma>,);
 
 /// `PathPattern`
 #[derive(PartialEq, Eq, Debug)]
@@ -177,10 +186,8 @@ pub struct StructPatternElementsFieldsEtCetera {
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
-pub struct StructPatternFields(
-	#[format(args = punct::fmt(Whitespace::CUR_INDENT, Whitespace::REMOVE))]
-	Punctuated<StructPatternField, token::Comma>,
-);
+pub struct StructPatternFields(#[format(args = punct::fmt(Whitespace::CUR_INDENT, Whitespace::REMOVE))]
+Punctuated<StructPatternField, token::Comma>,);
 
 /// `StructPatternField`
 #[derive(PartialEq, Eq, Debug)]
@@ -251,16 +258,15 @@ pub struct TupleStructPattern {
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
-pub struct TupleStructItems(
-	#[format(args = punct::fmt(Whitespace::SINGLE, Whitespace::REMOVE))]
-	pub  PunctuatedTrailing<Box<Pattern>, token::Comma>,
-);
+pub struct TupleStructItems(#[format(args = punct::fmt(Whitespace::SINGLE, Whitespace::REMOVE))]
+pub PunctuatedTrailing<Box<Pattern>, token::Comma>,);
 
 /// `TuplePattern`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
-pub struct TuplePattern(#[format(args = delimited::fmt_remove())] Parenthesized<Option<TuplePatternItems>>);
+pub struct TuplePattern(#[format(args = delimited::fmt_remove())]
+Parenthesized<Option<TuplePatternItems>>);
 
 /// `TuplePatternItems`
 #[derive(PartialEq, Eq, Debug)]
@@ -314,7 +320,7 @@ pub struct LiteralPattern {
 impl ParsePeeked<ByteLiteral> for LiteralPattern {
 	fn parse_from_with_peeked(_parser: &mut rustidy_parse::Parser, parsed: ByteLiteral) -> Result<Self, Self::Error> {
 		Ok(Self {
-			minus:   None,
+			minus: None,
 			literal: LiteralExpression::Byte(parsed),
 		})
 	}
@@ -336,16 +342,18 @@ pub struct IdentifierPattern {
 }
 
 impl ParsePeeked<(Option<token::Ref>, Option<token::Mut>, Identifier, token::At)> for IdentifierPattern {
-	fn parse_from_with_peeked(
-		parser: &mut rustidy_parse::Parser,
-		(ref_, mut_, ident, at): (Option<token::Ref>, Option<token::Mut>, Identifier, token::At),
-	) -> Result<Self, Self::Error> {
-		let pat = parser.parse::<PatternNoTopAlt>().map_err(Self::Error::Pat)?;
+	fn parse_from_with_peeked(parser: &mut rustidy_parse::Parser, (ref_, mut_, ident, at): (Option<token::Ref>, Option<token::Mut>, Identifier, token::At),) -> Result<Self, Self::Error> {
+		let pat = parser
+			.parse::<PatternNoTopAlt>()
+			.map_err(Self::Error::Pat)?;
 		Ok(Self {
 			ref_,
 			mut_,
 			ident,
-			rest: Some(IdentifierPatternRest { at, pat: Box::new(pat) }),
+			rest: Some(IdentifierPatternRest {
+				at,
+				pat: Box::new(pat)
+			}),
 		})
 	}
 }

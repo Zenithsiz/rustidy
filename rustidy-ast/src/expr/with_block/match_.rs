@@ -34,7 +34,8 @@ pub struct MatchExpression {
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
-pub struct Scrutinee(#[parse(with_tag = ParserTag::SkipStructExpression)] Expression);
+pub struct Scrutinee(#[parse(with_tag = ParserTag::SkipStructExpression)]
+Expression);
 
 /// `MatchArms`
 #[derive(PartialEq, Eq, Debug)]
@@ -54,21 +55,22 @@ impl Parse for MatchArms {
 			// TODO: For some reason, clippy (and only clippy) errors out when we
 			//       merge this into `let Ok(arm) = ... else { break }`.
 			let arm_res = parser.try_parse::<MatchArm>()?;
-			let Ok(arm) = arm_res else { break };
+			let Ok(arm) = arm_res else {
+				break
+			};
 			let arrow = parser.parse::<token::FatArrow>()?;
 
 
 			// Note: Because of `match () { () => {} () => {} }` and `match () { () => {}?, () => {} }`
 			//       requiring look-ahead after the block expressions, we need to parse both with and
 			//       without block.
-			let with_block_res = parser.peek::<(ExpressionWithBlock, Option<token::Comma>)>()?;
-			let without_block_res = parser.peek::<(ExpressionWithoutBlock, Option<token::Comma>)>()?;
+			let with_block_res = parser
+				.peek::<(ExpressionWithBlock, Option<token::Comma>)>()?;
+			let without_block_res = parser
+				.peek::<(ExpressionWithoutBlock, Option<token::Comma>)>()?;
 			let (expr, trailing_comma, control_flow) = match (with_block_res, without_block_res) {
 				// If both parse, we only accept with block if the without block had no comma.
-				(
-					Ok(((expr_with_block, with_block_trailing_comma), with_block_peek_state)),
-					Ok(((expr_without_block, without_block_trailing_comma), without_block_peek_state)),
-				) => match without_block_trailing_comma {
+				(Ok(((expr_with_block, with_block_trailing_comma), with_block_peek_state)), Ok(((expr_without_block, without_block_trailing_comma), without_block_peek_state)),) => match without_block_trailing_comma {
 					Some(trailing_comma) => {
 						parser.set_peeked(without_block_peek_state);
 
@@ -100,26 +102,28 @@ impl Parse for MatchArms {
 
 					(expr, trailing_comma, control_flow)
 				},
-				(Err(with_block), Err(without_block)) =>
-					return Err(Self::Error::Expression {
-						with_block,
-						without_block,
-					}),
+				(Err(with_block), Err(without_block)) => return Err(Self::Error::Expression {
+					with_block,
+					without_block,
+				}),
 			};
 
-			arms.push(MatchArmWithExpr {
-				arm,
-				arrow,
-				expr,
-				trailing_comma,
-			});
+			arms
+				.push(MatchArmWithExpr {
+					arm,
+					arrow,
+					expr,
+					trailing_comma,
+				});
 
 			if control_flow.is_break() {
 				break;
 			}
 		}
 
-		Ok(Self { arms })
+		Ok(Self {
+			arms
+		})
 	}
 }
 

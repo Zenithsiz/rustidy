@@ -89,7 +89,10 @@ impl Parse for LetStatementEq {
 					else_expr,
 				}))
 			},
-			Err(_) => Ok(Self::Normal(LetStatementEqNormal { eq, expr })),
+			Err(_) => Ok(Self::Normal(LetStatementEqNormal {
+				eq,
+				expr
+			})),
 		}
 	}
 }
@@ -126,7 +129,7 @@ pub struct LetStatementEqElse {
 	pub eq:        token::Eq,
 	#[format(prefix_ws = Whitespace::SINGLE)]
 	// TODO: Except `LazyBooleanExpression` and ending with `}`.
-	pub expr: Expression,
+	pub expr:      Expression,
 	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub else_:     token::Else,
 	#[parse(fatal)]

@@ -2,10 +2,7 @@
 
 // Imports
 use {
-	super::{
-		Suffix,
-		escape::{ByteEscapeError, StringContinueError},
-	},
+	super::{Suffix, escape::{ByteEscapeError, StringContinueError}},
 	crate::{ByteEscape, StringContinue},
 	rustidy_format::{Format, Formattable},
 	rustidy_parse::Parse,
@@ -34,13 +31,18 @@ pub struct ByteStringLiteral {
 
 impl ByteStringLiteral {
 	fn parse(s: &mut &str) -> Result<(), ByteStringLiteralError> {
-		*s = s.strip_prefix("b\"").ok_or(ByteStringLiteralError::StartQuote)?;
+		*s = s
+			.strip_prefix("b\"")
+			.ok_or(ByteStringLiteralError::StartQuote)?;
 
 		loop {
-			match s.strip_prefix(|ch: char| ch.is_ascii() && !matches!(ch, '"' | '\\' | '\r')) {
+			match s
+				.strip_prefix(|ch: char| ch.is_ascii() && !matches!(ch, '"' | '\\' | '\r')) {
 				Some(rest) => *s = rest,
 				None => {
-					macro try_parse($Escape:ident) {
+					macro try_parse(
+						$Escape:ident
+					) {
 						rustidy_parse::try_parse_from_str(s, $Escape::parse)
 							.map_err(ByteStringLiteralError::$Escape)?
 							.is_ok()
@@ -56,7 +58,9 @@ impl ByteStringLiteral {
 			}
 		}
 
-		*s = s.strip_prefix('"').ok_or(ByteStringLiteralError::ExpectedEndQuote)?;
+		*s = s
+			.strip_prefix('"')
+			.ok_or(ByteStringLiteralError::ExpectedEndQuote)?;
 
 		Ok(())
 	}

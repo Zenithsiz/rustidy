@@ -86,7 +86,8 @@ impl<T: Parse> ParserError<T> {
 
 impl<T: Parse<Error: fmt::Debug>> fmt::Debug for ParserError<T> {
 	fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-		f.debug_struct("ParserError")
+		f
+			.debug_struct("ParserError")
 			.field("source", &self.source)
 			.field("span", &self.range)
 			.finish()
@@ -94,7 +95,7 @@ impl<T: Parse<Error: fmt::Debug>> fmt::Debug for ParserError<T> {
 }
 
 impl<T: Parse<Error: StdError + 'static>> StdError for ParserError<T> {
-	fn source(&self) -> Option<&(dyn StdError + 'static)> {
+	fn source(&self) -> Option<&( dyn StdError + 'static )> {
 		match self::name_of::<T>().is_some() {
 			true => Some(&self.source),
 			false => self.source.source(),
@@ -130,7 +131,8 @@ impl<T: Parse> ParseError for ParserError<T> {
 	fn to_app_error(&self, parser: &Parser) -> AppError {
 		let err = self.source.to_app_error(parser).flatten();
 		match self::name_of::<T>() {
-			Some(name) => err.with_context(|| format!("Expected {name} at {}", parser.loc(self.range.start))),
+			Some(name) => err
+				.with_context(|| format!("Expected {name} at {}", parser.loc(self.range.start))),
 			None => err,
 		}
 	}
@@ -141,7 +143,8 @@ fn name_of<T: Parse>() -> Option<String> {
 	let name = T::name().map(|s| s.to_string());
 
 	#[cfg(feature = "parse-debug-name")]
-	let name = Some(name.unwrap_or_else(|| std::any::type_name::<T>().to_owned()));
+	let name = Some(name
+		.unwrap_or_else(|| std::any::type_name::<T>().to_owned()));
 
 	name
 }

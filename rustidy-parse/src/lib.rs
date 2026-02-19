@@ -12,6 +12,7 @@
 	unwrap_infallible,
 	substr_range
 )]
+
 // Lints
 #![cfg_attr(
 	not(feature = "flamegraph-traces"),
@@ -44,10 +45,7 @@ pub use {
 // Imports
 use {
 	app_error::AppError,
-	core::{
-		marker::PhantomData,
-		ops::{Residual, Try},
-	},
+	core::{marker::PhantomData, ops::{Residual, Try}},
 	rustidy_util::{ArenaData, ArenaIdx, AstPos, AstRange, AstStr},
 	std::{borrow::Cow, fmt},
 };
@@ -116,8 +114,7 @@ impl<T> Parse for PhantomData<T> {
 
 impl<T> Parse for Box<T>
 where
-	T: Parse,
-{
+	T: Parse, {
 	type Error = T::Error;
 
 	fn name() -> Option<impl fmt::Display> {
@@ -131,8 +128,7 @@ where
 
 impl<T> Parse for Option<T>
 where
-	T: Parse,
-{
+	T: Parse, {
 	type Error = T::Error;
 
 	fn name() -> Option<impl fmt::Display> {
@@ -140,14 +136,15 @@ where
 	}
 
 	fn parse_from(parser: &mut Parser) -> Result<Self, Self::Error> {
-		parser.try_parse_with(T::parse_from).map(Result::ok)
+		parser
+			.try_parse_with(T::parse_from)
+			.map(Result::ok)
 	}
 }
 
 impl<T> Parse for Vec<T>
 where
-	T: Parse,
-{
+	T: Parse, {
 	type Error = T::Error;
 
 	fn name() -> Option<impl fmt::Display> {
@@ -176,7 +173,9 @@ impl Parse for () {
 	}
 }
 
-macro tuple_impl($N:literal, $($T:ident),* $(,)?) {
+macro tuple_impl(
+	$N:literal, $($T:ident),* $(,)?
+) {
 	#[automatically_derived]
 	impl< $($T: Parse,)* > Parse for ( $($T,)* ) {
 		type Error = ${concat( Tuple, $N, Error )}< $($T,)* >;
@@ -248,26 +247,26 @@ impl<T: ArenaData + Parse> Parse for ArenaIdx<T> {
 #[derive(Debug)]
 pub struct Parser<'input> {
 	/// Input
-	input: &'input str,
+	input:           &'input str,
 
 	/// Current position
-	cur_pos: AstPos,
+	cur_pos:         AstPos,
 
 	/// Tags
 	// Note: Always sorted by ast position.
-	tags: Vec<(AstPos, ParserTag)>,
+	tags:            Vec<(AstPos, ParserTag)>,
 
 	/// Tags offset
-	tags_offset: usize,
+	tags_offset:     usize,
 
 	#[cfg(feature = "flamegraph-traces")]
-	stack: Vec<&'static str>,
+	stack:           Vec<&'static str>,
 
 	#[cfg(feature = "flamegraph-traces")]
 	trace_max_depth: usize,
 
 	#[cfg(feature = "flamegraph-traces")]
-	trace_file: BufWriter<GzEncoder<fs::File>>,
+	trace_file:      BufWriter<GzEncoder<fs::File>>,
 }
 
 impl<'input> Parser<'input> {
@@ -337,24 +336,35 @@ impl<'input> Parser<'input> {
 
 	/// Reverses all whitespace (except the last) in the current position
 	pub fn reverse_whitespace(&mut self) {
-		self.cur_pos.0 = self.input[..self.cur_pos.0]
+		self.cur_pos.0 = self
+			.input[..self
+			.cur_pos.0]
 			.rfind(|ch: char| !ch.is_whitespace())
 			.map_or(0, |idx| idx + 1);
 	}
 
 	/// Reverses to the start of the current line
 	pub fn reverse_line(&mut self) {
-		self.cur_pos.0 = self.input[..self.cur_pos.0].rfind('\n').map_or(0, |idx| idx + 1);
+		self.cur_pos.0 = self
+			.input[..self
+			.cur_pos.0]
+			.rfind('\n')
+			.map_or(0, |idx| idx + 1);
 	}
 
 	/// Returns the current line of the parser, not including the end
 	#[must_use]
 	pub fn cur_line(&self) -> &'input str {
-		let start = self.input[..self.cur_pos.0].rfind('\n').map_or(0, |idx| idx + 1);
-		let end = self.cur_pos.0 +
-			self.input[self.cur_pos.0..]
-				.find('\n')
-				.unwrap_or(self.input.len() - self.cur_pos.0);
+		let start = self
+			.input[..self
+			.cur_pos.0]
+			.rfind('\n')
+			.map_or(0, |idx| idx + 1);
+		let end = self.cur_pos.0 + self
+			.input[self
+			.cur_pos.0..]
+			.find('\n')
+			.unwrap_or(self.input.len() - self.cur_pos.0);
 
 		&self.input[start..end]
 	}
@@ -362,13 +372,20 @@ impl<'input> Parser<'input> {
 	/// Gets the position (0-indexed) of the parser at a position
 	#[must_use]
 	pub fn loc(&self, pos: AstPos) -> ParserLoc {
-		let line = self.input[..pos.0].chars().filter(|&ch| ch == '\n').count();
+		let line = self
+			.input[..pos.0]
+			.chars()
+			.filter(|&ch| ch == '\n')
+			.count();
 		let column = match self.input[..pos.0].rfind('\n') {
 			Some(newline_pos) => pos.0 - newline_pos - 1,
 			None => pos.0,
 		};
 
-		ParserLoc { line, column }
+		ParserLoc {
+			line,
+			column
+		}
 	}
 
 	/// Gets the current position (0-indexed) of the parser
@@ -396,7 +413,9 @@ impl<'input> Parser<'input> {
 	where
 		F: FnOnce(&mut &'input str) -> O,
 	{
-		self.try_update_with(|remaining| Ok::<_, !>(f(remaining))).into_ok()
+		self
+			.try_update_with(|remaining| Ok::<_, !>(f(remaining)))
+			.into_ok()
 	}
 
 	/// Updates this parser from a string.
@@ -440,7 +459,7 @@ impl<'input> Parser<'input> {
 
 		let output_range = AstRange {
 			start: AstPos(output_range.start),
-			end:   AstPos(output_range.end),
+			end: AstPos(output_range.end),
 		};
 
 		<_>::from_output((AstStr::new(output_range), value))
@@ -460,8 +479,8 @@ impl<'input> Parser<'input> {
 		let start = self::flamegraph_trace_get_timestamp();
 
 		let start_pos = self.cur_pos;
-		let res =
-			T::parse_from(self).map_err(|source| ParserError::new(source, AstRange::new(start_pos, self.cur_pos)));
+		let res = T::parse_from(self)
+			.map_err(|source| ParserError::new(source, AstRange::new(start_pos, self.cur_pos)));
 
 		#[cfg(feature = "flamegraph-traces")]
 		let end = self::flamegraph_trace_get_timestamp();
@@ -471,7 +490,8 @@ impl<'input> Parser<'input> {
 		if emit_traces {
 			self.stack.pop();
 			for &ty in &self.stack {
-				write!(self.trace_file, "{ty};").expect("Unable to write to trace file");
+				write!(self.trace_file, "{ty};")
+					.expect("Unable to write to trace file");
 			}
 			writeln!(self.trace_file, "{} {}", std::any::type_name::<T>(), end - start)
 				.expect("Unable to write to trace file");
@@ -490,10 +510,7 @@ impl<'input> Parser<'input> {
 	/// Tries to parses `T` from this parser using `parser` for parsing.
 	///
 	/// On error, nothing is modified.
-	pub fn try_parse_with<T, E: ParseError>(
-		&mut self,
-		parser: impl FnOnce(&mut Self) -> Result<T, E>,
-	) -> Result<Result<T, E>, E> {
+	pub fn try_parse_with<T, E: ParseError>(&mut self, parser: impl FnOnce(&mut Self) -> Result<T, E>,) -> Result<Result<T, E>, E> {
 		let prev_pos = self.cur_pos;
 		match parser(self) {
 			Ok(value) => Ok(Ok(value)),
@@ -515,10 +532,7 @@ impl<'input> Parser<'input> {
 	/// Peeks a `T` from this parser using `parser` for parsing.
 	///
 	/// Parser is only advanced is a fatal error occurs
-	pub fn peek_with<T, E: ParseError>(
-		&mut self,
-		parse: impl FnOnce(&mut Self) -> Result<T, E>,
-	) -> Result<Result<(T, PeekState), E>, E> {
+	pub fn peek_with<T, E: ParseError>(&mut self, parse: impl FnOnce(&mut Self) -> Result<T, E>,) -> Result<Result<(T, PeekState), E>, E> {
 		let start_pos = self.cur_pos;
 		let output = match parse(self) {
 			Ok(value) => Ok(value),
@@ -526,7 +540,9 @@ impl<'input> Parser<'input> {
 			Err(err) => Err(err),
 		};
 
-		let peek_state = PeekState { cur_pos: self.cur_pos };
+		let peek_state = PeekState {
+			cur_pos: self.cur_pos
+		};
 		self.cur_pos = start_pos;
 
 		let output = output.map(|value| (value, peek_state));
@@ -552,7 +568,9 @@ impl<'input> Parser<'input> {
 
 	/// Returns all current tags
 	pub fn tags(&self) -> impl Iterator<Item = ParserTag> {
-		self.tags[self.tags_offset..]
+		self
+			.tags[self
+			.tags_offset..]
 			.iter()
 			.rev()
 			.take_while(|&&(pos, _)| pos == self.cur_pos)
@@ -634,8 +652,7 @@ pub trait ParsePeeked<T>: Parse {
 
 impl<T, U> ParsePeeked<U> for T
 where
-	T: Parse + From<U>,
-{
+	T: Parse + From<U>, {
 	fn parse_from_with_peeked(_parser: &mut Parser, parsed: U) -> Result<Self, Self::Error> {
 		Ok(parsed.into())
 	}
@@ -654,7 +671,9 @@ where
 {
 	let start = *s;
 	parse(s)?;
-	let range = start.substr_range(s).expect("Output was not a substring of the input");
+	let range = start
+		.substr_range(s)
+		.expect("Output was not a substring of the input");
 	let parsed = &start[..range.start];
 	Ok(parsed)
 }
@@ -678,7 +697,9 @@ fn get_flamegraph_trace_max_depth(var: &str, default: usize) -> Result<usize, Ap
 		return Ok(default);
 	};
 
-	max_depth.parse::<usize>().context("Unable to parse value")
+	max_depth
+		.parse::<usize>()
+		.context("Unable to parse value")
 }
 
 #[cfg(feature = "flamegraph-traces")]
@@ -689,7 +710,8 @@ fn open_flamegraph_trace_file(var: &str, default: &str) -> Result<BufWriter<GzEn
 		Err(_) => default,
 	};
 
-	let file = fs::File::create(path).context("Unable to create file")?;
+	let file = fs::File::create(path)
+		.context("Unable to create file")?;
 	let file = GzEncoder::new(file, flate2::Compression::fast());
 	Ok(BufWriter::new(file))
 }
@@ -697,5 +719,7 @@ fn open_flamegraph_trace_file(var: &str, default: &str) -> Result<BufWriter<GzEn
 #[cfg(feature = "flamegraph-traces")]
 fn flamegraph_trace_get_timestamp() -> u64 {
 	// Safety: `rdtsc` is always safe to call
-	unsafe { std::arch::x86_64::_rdtsc() }
+	unsafe {
+		std::arch::x86_64::_rdtsc()
+	}
 }

@@ -43,10 +43,9 @@ impl SimplePath {
 			match (lhs_segments.next(), rhs_segments.next()) {
 				(None, None) => break,
 				(None, Some(_)) | (Some(_), None) => return false,
-				(Some(lhs), Some(rhs)) =>
-					if !lhs.is_str(input, rhs) {
-						return false;
-					},
+				(Some(lhs), Some(rhs)) => if !lhs.is_str(input, rhs) {
+					return false;
+				},
 			}
 		}
 

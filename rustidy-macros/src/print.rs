@@ -43,9 +43,11 @@ struct Attrs {
 }
 
 pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream, AppError> {
-	let input = syn::parse::<syn::DeriveInput>(input).context("Unable to parse input")?;
+	let input = syn::parse::<syn::DeriveInput>(input)
+		.context("Unable to parse input")?;
 
-	let attrs = Attrs::from_derive_input(&input).context("Unable to parse attributes")?;
+	let attrs = Attrs::from_derive_input(&input)
+		.context("Unable to parse attributes")?;
 	let item_ident = &attrs.ident;
 
 	// Parse body, parsable impl and error enum (with it's impls)

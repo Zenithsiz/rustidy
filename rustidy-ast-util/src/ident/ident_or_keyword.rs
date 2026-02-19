@@ -14,12 +14,9 @@ use {
 #[derive(Parse, Formattable, Format, Print)]
 #[parse(error(name = XidStartOrUnderscore, fmt = "Expected `XID_START` or `_`"))]
 #[parse(error(name = SingleUnderscore, fmt = "Found `_`"))]
-pub struct IdentifierOrKeyword(
-	pub Whitespace,
-	#[parse(try_update_with = Self::parse)]
-	#[format(str)]
-	pub AstStr,
-);
+pub struct IdentifierOrKeyword(pub Whitespace, #[parse(try_update_with = Self::parse)]
+#[format(str)]
+pub AstStr,);
 
 impl IdentifierOrKeyword {
 	fn parse(s: &mut &str) -> Result<(), IdentifierOrKeywordError> {
@@ -34,7 +31,8 @@ impl IdentifierOrKeyword {
 				}
 			},
 		}
-		*s = s.trim_start_matches(unicode_ident::is_xid_continue);
+		*s = s
+			.trim_start_matches(unicode_ident::is_xid_continue);
 
 		Ok(())
 	}
@@ -47,19 +45,19 @@ impl IdentifierOrKeyword {
 #[parse(error(name = Raw, fmt = "Expected `r#`"))]
 #[parse(error(name = IdentOrKeyword(IdentifierOrKeywordError), transparent))]
 #[parse(error(name = ForbiddenKeyword, fmt = "Raw identifier cannot be `crate`, `self`, `super` or `Self`"))]
-pub struct RawIdentifier(
-	pub Whitespace,
-	#[parse(try_update_with = Self::parse)]
-	#[format(str)]
-	pub AstStr,
-);
+pub struct RawIdentifier(pub Whitespace, #[parse(try_update_with = Self::parse)]
+#[format(str)]
+pub AstStr,);
 
 impl RawIdentifier {
 	fn parse(s: &mut &str) -> Result<(), RawIdentifierError> {
-		*s = s.strip_prefix("r#").ok_or(RawIdentifierError::Raw)?;
-		let ident =
-			rustidy_parse::parse_from_str(s, IdentifierOrKeyword::parse).map_err(RawIdentifierError::IdentOrKeyword)?;
-		if ["crate", "self", "super", "Self"].contains(&ident) {
+		*s = s
+			.strip_prefix("r#")
+			.ok_or(RawIdentifierError::Raw)?;
+		let ident = rustidy_parse::parse_from_str(s, IdentifierOrKeyword::parse)
+			.map_err(RawIdentifierError::IdentOrKeyword)?;
+		if ["crate", "self", "super", "Self"]
+			.contains(&ident) {
 			return Err(RawIdentifierError::ForbiddenKeyword);
 		}
 

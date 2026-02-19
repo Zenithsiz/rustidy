@@ -55,7 +55,8 @@ pub fn parse(input: &str, file: &Path) -> Result<rustidy_ast::Crate, AppError> {
 			}
 			parser.reverse_whitespace();
 
-			err.to_app_error(&parser)
+			err
+				.to_app_error(&parser)
 				.with_context(|| self::parser_error_ctx(file, &parser))
 		})
 		.and_then(|ast| match parser.is_finished() {
@@ -68,11 +69,14 @@ pub fn parse(input: &str, file: &Path) -> Result<rustidy_ast::Crate, AppError> {
 /// Creates context for a parser error.
 fn parser_error_ctx(file: &Path, parser: &Parser) -> String {
 	let line = parser.cur_line();
-	let line_indent = line.find(|ch: char| !ch.is_ascii_whitespace()).unwrap_or(line.len());
+	let line_indent = line
+		.find(|ch: char| !ch.is_ascii_whitespace())
+		.unwrap_or(line.len());
 
 	let loc = parser.cur_loc();
 
-	let indent = line[..loc.column][line_indent..]
+	let indent = line[..loc
+		.column][line_indent..]
 		.chars()
 		.map(|ch| match ch.is_whitespace() {
 			true => ch,

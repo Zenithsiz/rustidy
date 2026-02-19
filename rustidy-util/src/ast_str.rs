@@ -1,10 +1,7 @@
 //! Ast string
 
 // Imports
-use {
-	crate::{ArenaData, ArenaIdx, AstRange},
-	std::{borrow::Cow, sync::Arc},
-};
+use {crate::{ArenaData, ArenaIdx, AstRange}, std::{borrow::Cow, sync::Arc}};
 
 /// Ast string
 // TODO: Add an "empty" position for newly created ast nodes?
@@ -31,7 +28,10 @@ impl AstStr {
 
 	/// Joins two strings
 	pub fn join(self, other: Self) -> Self {
-		Self(ArenaIdx::new(AstStrRepr::Join { lhs: self, rhs: other }))
+		Self(ArenaIdx::new(AstStrRepr::Join {
+			lhs: self,
+			rhs: other
+		}))
 	}
 
 	/// Returns the inner representation of this string
@@ -144,13 +144,18 @@ impl AstStrRepr {
 			Self::AstRange(range) => range.len(),
 			Self::String(s) => s.len(),
 			Self::Char(ch) => ch.len_utf8(),
-			Self::Spaces { len } => usize::from(len),
+			Self::Spaces {
+				len
+			} => usize::from(len),
 			Self::Indentation {
 				ref indent,
 				newlines,
 				depth,
 			} => newlines + depth * indent.len(),
-			Self::Join { ref lhs, ref rhs } => lhs.len() + rhs.len(),
+			Self::Join {
+				ref lhs,
+				ref rhs
+			} => lhs.len() + rhs.len(),
 			Self::Dynamic(ref s) => s.len(),
 		}
 	}
@@ -186,8 +191,15 @@ impl AstStrRepr {
 			Self::AstRange(range) => crate::is_str_blank(range.str(input)),
 			Self::String(s) => crate::is_str_blank(s),
 			Self::Char(ch) => ch.is_ascii_whitespace(),
-			Self::Spaces { .. } | Self::Indentation { .. } => true,
-			Self::Join { ref lhs, ref rhs } => lhs.is_blank(input) && rhs.is_blank(input),
+			Self::Spaces {
+				..
+			} | Self::Indentation {
+				..
+			} => true,
+			Self::Join {
+				ref lhs,
+				ref rhs
+			} => lhs.is_blank(input) && rhs.is_blank(input),
 			Self::Dynamic(ref s) => crate::is_str_blank(s),
 		}
 	}
@@ -199,9 +211,17 @@ impl AstStrRepr {
 			Self::AstRange(range) => range.str(input).contains('\n'),
 			Self::String(s) => s.contains('\n'),
 			Self::Char(ch) => ch == '\n',
-			Self::Spaces { .. } => false,
-			Self::Indentation { newlines, .. } => newlines != 0,
-			Self::Join { ref lhs, ref rhs } => lhs.has_newlines(input) && rhs.has_newlines(input),
+			Self::Spaces {
+				..
+			} => false,
+			Self::Indentation {
+				newlines,
+				..
+			} => newlines != 0,
+			Self::Join {
+				ref lhs,
+				ref rhs
+			} => lhs.has_newlines(input) && rhs.has_newlines(input),
 			Self::Dynamic(ref s) => s.contains('\n'),
 		}
 	}
@@ -225,10 +245,11 @@ impl AstStrRepr {
 			Self::AstRange(range) => output.push_str(range.str(input)),
 			Self::String(s) => output.push_str(s),
 			Self::Char(ch) => output.push(ch),
-			Self::Spaces { len } =>
-				for _ in 0..len {
-					output.push(' ');
-				},
+			Self::Spaces {
+				len
+			} => for _ in 0..len {
+				output.push(' ');
+			},
 			Self::Indentation {
 				ref indent,
 				newlines,
@@ -241,7 +262,10 @@ impl AstStrRepr {
 					output.push_str(indent);
 				}
 			},
-			Self::Join { ref lhs, ref rhs } => {
+			Self::Join {
+				ref lhs,
+				ref rhs
+			} => {
 				lhs.write(input, output);
 				rhs.write(input, output);
 			},
@@ -257,8 +281,12 @@ impl AstStrRepr {
 			Self::String(s) => Some(s),
 
 			// Special case these to avoid a `String` allocation
-			Self::Spaces { len: 0 } => "".into(),
-			Self::Spaces { len: 1 } => " ".into(),
+			Self::Spaces {
+				len: 0
+			} => "".into(),
+			Self::Spaces {
+				len: 1
+			} => " ".into(),
 
 			_ => None,
 		}
@@ -300,6 +328,7 @@ impl<'de> serde::Deserialize<'de> for AstStrRepr {
 		// TODO: Should we try to deserialize a replacement?
 		//       This impl is only used for testing the parsing output,
 		//       which only contains ranges, so it might be unnecessary.
-		AstRange::deserialize(deserializer).map(Self::AstRange)
+		AstRange::deserialize(deserializer)
+			.map(Self::AstRange)
 	}
 }

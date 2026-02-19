@@ -14,7 +14,7 @@ impl Whitespace {
 	pub fn empty() -> Self {
 		let inner = WhitespaceInner {
 			first: PureWhitespace(AstStr::new("")),
-			rest:  vec![],
+			rest: vec![],
 		};
 		let idx = ArenaIdx::new(inner);
 

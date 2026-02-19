@@ -3,10 +3,7 @@
 // Imports
 use {
 	super::ExpressionWithoutBlockInner,
-	crate::{
-		expr::{Expression, ExpressionInner},
-		token,
-	},
+	crate::{expr::{Expression, ExpressionInner}, token},
 	rustidy_format::{Format, Formattable, WhitespaceFormat},
 	rustidy_parse::ParseRecursive,
 	rustidy_print::Print,

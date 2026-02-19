@@ -72,7 +72,7 @@ impl UseTree {
 
 			_ => UseTreeGroup {
 				prefix: None,
-				tree:   Braced::from_value(Some(PunctuatedTrailing::single(Box::new(self)))),
+				tree: Braced::from_value(Some(PunctuatedTrailing::single(Box::new(self)))),
 			},
 		}
 	}
@@ -137,11 +137,13 @@ impl UseTreeGroup {
 			}) = sub_trees
 				.pop()
 				.or_else(|| trees.punctuated.rest.pop())
-				.or_else(|| trees_first.take())
-			{
+				.or_else(|| trees_first.take()) {
 				// Joins a prefix whitespace to the latest whitespace we have
 				let mut latest_ws_join_prefix = |ws: Whitespace| match new_trees.last_mut() {
-					Some(PunctuatedRest { punct: last_comma, .. }) => last_comma.ws.join_prefix(ws),
+					Some(PunctuatedRest {
+						punct: last_comma,
+						..
+					}) => last_comma.ws.join_prefix(ws),
 					None => match &mut trailing_comma {
 						Some(trailing_comma) => trailing_comma.ws.join_prefix(ws),
 						None => self.tree.suffix.ws.join_prefix(ws),
@@ -155,10 +157,11 @@ impl UseTreeGroup {
 						match group.tree.value {
 							Some(trees) => {
 								comma.ws.join_prefix(group.tree.prefix.ws);
-								sub_trees.push(PunctuatedRest {
-									punct: comma,
-									value: trees.punctuated.first,
-								});
+								sub_trees
+									.push(PunctuatedRest {
+										punct: comma,
+										value: trees.punctuated.first,
+									});
 								for rest in trees.punctuated.rest {
 									sub_trees.push(rest);
 								}
@@ -166,87 +169,66 @@ impl UseTreeGroup {
 							None => latest_ws_join_prefix(group.tree.prefix.ws),
 						}
 					},
-					_ => new_trees.push(PunctuatedRest {
-						punct: comma,
-						value: tree,
-					}),
+					_ => new_trees
+						.push(PunctuatedRest {
+							punct: comma,
+							value: tree,
+						}),
 				}
 			}
 
-			new_trees.pop().map(
-				|PunctuatedRest {
-				     punct: first_comma,
-				     value: mut first,
-				 }| {
+			new_trees
+				.pop()
+				.map(|PunctuatedRest {
+					punct: first_comma,
+					value: mut first,
+				}| {
 					first
 						.prefix_ws_join_prefix(ctx, first_comma.ws)
 						.expect("Use tree should have prefix whitespace");
 
 					new_trees.reverse();
 					PunctuatedTrailing {
-						punctuated: Punctuated { first, rest: new_trees },
-						trailing:   trailing_comma,
+						punctuated: Punctuated {
+							first,
+							rest: new_trees
+						},
+						trailing: trailing_comma,
 					}
-				},
-			)
+				},)
 		});
 	}
 
-	fn format_tree_compact(
-		tree: &mut Braced<Option<PunctuatedTrailing<Box<UseTree>, token::Comma>>>,
-		ctx: &mut rustidy_format::Context,
-		prefix_ws: WhitespaceConfig,
-	) -> FormatOutput {
+	fn format_tree_compact(tree: &mut Braced<Option<PunctuatedTrailing<Box<UseTree>, token::Comma>>>, ctx: &mut rustidy_format::Context, prefix_ws: WhitespaceConfig,) -> FormatOutput {
 		if let Some(punct) = &mut tree.value {
 			punct.trailing = None;
 		}
 
-		tree.format(
-			ctx,
-			prefix_ws,
-			delimited::fmt_remove_with(
-				(),
-				punct::FmtArgs {
-					value_prefix_ws: Whitespace::SINGLE,
-					punct_prefix_ws: Whitespace::REMOVE,
-					value_args:      (),
-					punct_args:      (),
-				},
-				(),
-			),
-		)
+		tree
+			.format(ctx, prefix_ws, delimited::fmt_remove_with((), punct::FmtArgs {
+				value_prefix_ws: Whitespace::SINGLE,
+				punct_prefix_ws: Whitespace::REMOVE,
+				value_args: (),
+				punct_args: (),
+			}, (),),)
 	}
 
-	fn format_tree(
-		tree: &mut Braced<Option<PunctuatedTrailing<Box<UseTree>, token::Comma>>>,
-		ctx: &mut rustidy_format::Context,
-		prefix_ws: WhitespaceConfig,
-		_args: (),
-	) -> FormatOutput {
+	fn format_tree(tree: &mut Braced<Option<PunctuatedTrailing<Box<UseTree>, token::Comma>>>, ctx: &mut rustidy_format::Context, prefix_ws: WhitespaceConfig, _args: (),) -> FormatOutput {
 		let compact_output = Self::format_tree_compact(tree, ctx, prefix_ws);
 
 		match compact_output.len_without_prefix_ws() > ctx.config().max_use_tree_len {
 			true => {
-				if let Some(punct) = &mut tree.value &&
-					punct.trailing.is_none()
-				{
+				if let Some(punct) = &mut tree.value && punct.trailing.is_none() {
 					punct.trailing = Some(token::Comma::new());
 				}
 
-				tree.format(
-					ctx,
-					prefix_ws,
-					delimited::fmt_indent_if_non_blank_with(
-						(),
-						punct::FmtArgs {
-							value_prefix_ws: Whitespace::CUR_INDENT,
-							punct_prefix_ws: Whitespace::REMOVE,
-							value_args:      (),
-							punct_args:      (),
-						},
-						(),
-					),
-				)
+				tree
+					.format(ctx, prefix_ws, delimited::fmt_indent_if_non_blank_with((), punct::FmtArgs {
+						value_prefix_ws: Whitespace::CUR_INDENT,
+						punct_prefix_ws: Whitespace::REMOVE,
+						value_args: (),
+						punct_args: (),
+					}, (),),)
 			},
 			false => compact_output,
 		}

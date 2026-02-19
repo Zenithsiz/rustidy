@@ -175,11 +175,9 @@ pub enum DelimTokenTree {
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
-pub struct DelimTokenTreeInner(
-	#[parse(fatal)]
-	#[format(args = rustidy_format::vec::args_prefix_ws(Whitespace::PRESERVE))]
-	pub Vec<TokenTree>,
-);
+pub struct DelimTokenTreeInner(#[parse(fatal)]
+#[format(args = rustidy_format::vec::args_prefix_ws(Whitespace::PRESERVE))]
+pub Vec<TokenTree>,);
 
 /// `TokenTree`
 #[derive(PartialEq, Eq, Debug)]
@@ -194,7 +192,8 @@ pub enum TokenTree {
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
-pub struct TokenNonDelimited(#[parse(with_tag = ParserTag::SkipDelimiters)] pub token::Token);
+pub struct TokenNonDelimited(#[parse(with_tag = ParserTag::SkipDelimiters)]
+pub token::Token);
 
 /// Updates the configuration based on an attribute
 // TODO: We need to return the position for better error messages.
@@ -245,22 +244,34 @@ pub fn update_config(attr: &Attr, ctx: &mut rustidy_format::Context) -> Result<(
 				let Some(TokenTree::Token(TokenNonDelimited(Token::IntegerLiteral(literal)))) = rest.next() else {
 					bail!("Expected integer literal");
 				};
-				let value = literal.value(ctx.input()).context("Unable to parse integer")?;
-				ctx.config_mut().array_expr_cols = Some(value.try_into().expect("`u64` didn't fit into `usize`"));
+				let value = literal
+					.value(ctx.input())
+					.context("Unable to parse integer")?;
+				ctx.config_mut().array_expr_cols = Some(value
+					.try_into()
+					.expect("`u64` didn't fit into `usize`"));
 			},
 			ConfigField::MaxArrayExprLen => {
 				let Some(TokenTree::Token(TokenNonDelimited(Token::IntegerLiteral(literal)))) = rest.next() else {
 					bail!("Expected integer literal");
 				};
-				let value = literal.value(ctx.input()).context("Unable to parse integer")?;
-				ctx.config_mut().max_array_expr_len = value.try_into().expect("`u64` didn't fit into `usize`");
+				let value = literal
+					.value(ctx.input())
+					.context("Unable to parse integer")?;
+				ctx.config_mut().max_array_expr_len = value
+					.try_into()
+					.expect("`u64` didn't fit into `usize`");
 			},
 			ConfigField::MaxChainLen => {
 				let Some(TokenTree::Token(TokenNonDelimited(Token::IntegerLiteral(literal)))) = rest.next() else {
 					bail!("Expected integer literal");
 				};
-				let value = literal.value(ctx.input()).context("Unable to parse integer")?;
-				ctx.config_mut().max_chain_len = value.try_into().expect("`u64` didn't fit into `usize`");
+				let value = literal
+					.value(ctx.input())
+					.context("Unable to parse integer")?;
+				ctx.config_mut().max_chain_len = value
+					.try_into()
+					.expect("`u64` didn't fit into `usize`");
 			},
 		}
 

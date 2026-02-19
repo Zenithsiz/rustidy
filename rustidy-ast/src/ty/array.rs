@@ -15,7 +15,8 @@ use {
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
-pub struct ArrayType(#[format(args = delimited::fmt_remove())] Bracketed<ArrayTypeInner>);
+pub struct ArrayType(#[format(args = delimited::fmt_remove())]
+Bracketed<ArrayTypeInner>);
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]

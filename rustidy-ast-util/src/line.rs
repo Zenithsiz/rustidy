@@ -14,11 +14,9 @@ use {
 #[derive(Parse, Formattable, Format, Print)]
 #[parse(name = "remaining characters in line")]
 #[format(no_prefix_ws)]
-pub struct RemainingLine(
-	#[parse(update_with = Self::parse)]
-	#[format(str)]
-	pub AstStr,
-);
+pub struct RemainingLine(#[parse(update_with = Self::parse)]
+#[format(str)]
+pub AstStr,);
 
 impl RemainingLine {
 	fn parse(s: &mut &str) {
@@ -37,18 +35,18 @@ impl RemainingLine {
 #[derive(Parse, Formattable, Format, Print)]
 #[parse(name = "remaining characters in block comment")]
 #[parse(error(name = MissingCommentEnd, fmt = "Expected `*/` after `/*`", fatal))]
-pub struct RemainingBlockComment(
-	#[parse(try_update_with = Self::parse)]
-	#[format(str)]
-	pub AstStr,
-);
+pub struct RemainingBlockComment(#[parse(try_update_with = Self::parse)]
+#[format(str)]
+pub AstStr,);
 
 impl RemainingBlockComment {
 	// TODO: Deduplicate this with `whitespace::BlockComment::parse`
 	fn parse(s: &mut &str) -> Result<(), RemainingBlockCommentError> {
 		let mut depth = 1;
 		while depth != 0 {
-			let close_idx = s.find("*/").ok_or(RemainingBlockCommentError::MissingCommentEnd)?;
+			let close_idx = s
+				.find("*/")
+				.ok_or(RemainingBlockCommentError::MissingCommentEnd)?;
 
 			match s[..close_idx].find("/*") {
 				Some(open_idx) => {

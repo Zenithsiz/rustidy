@@ -27,20 +27,23 @@ struct VariantFieldAttrs {
 
 impl quote::ToTokens for VariantFieldAttrs {
 	fn to_tokens(&self, tokens: &mut proc_macro2::TokenStream) {
-		let Self { ident, ty } = self;
+		let Self {
+			ident,
+			ty
+		} = self;
 		match ident {
 			Some(ident) => quote! { #ident: #ty },
 			None => quote! { #ty },
 		}
-		.to_tokens(tokens);
+			.to_tokens(tokens);
 	}
 }
 
 #[derive(Clone, Debug, darling::FromVariant, derive_more::AsRef)]
 #[darling(attributes(parse_recursive))]
 struct VariantAttrs {
-	ident:  syn::Ident,
-	fields: darling::ast::Fields<VariantFieldAttrs>,
+	ident:     syn::Ident,
+	fields:    darling::ast::Fields<VariantFieldAttrs>,
 
 	#[darling(default)]
 	recursive: bool,
@@ -68,21 +71,24 @@ struct FieldAttrs {
 
 impl quote::ToTokens for FieldAttrs {
 	fn to_tokens(&self, tokens: &mut proc_macro2::TokenStream) {
-		let Self { ident, ty } = self;
+		let Self {
+			ident,
+			ty
+		} = self;
 		match ident {
 			Some(ident) => quote! { #ident: #ty },
 			None => quote! { #ty },
 		}
-		.to_tokens(tokens);
+			.to_tokens(tokens);
 	}
 }
 
 #[derive(Clone, Debug, darling::FromDeriveInput, derive_more::AsRef)]
 #[darling(attributes(parse_recursive))]
 struct Attrs {
-	ident:    syn::Ident,
-	generics: syn::Generics,
-	data:     darling::ast::Data<VariantAttrs, FieldAttrs>,
+	ident:       syn::Ident,
+	generics:    syn::Generics,
+	data:        darling::ast::Data<VariantAttrs, FieldAttrs>,
 
 	#[darling(default)]
 	transparent: bool,
@@ -92,13 +98,15 @@ struct Attrs {
 	// TODO: We should allow multiple here
 	skip_if_tag: Option<syn::Expr>,
 
-	kind: Option<Kind>,
+	kind:        Option<Kind>,
 }
 
 pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream, AppError> {
-	let input = syn::parse::<syn::DeriveInput>(input).context("Unable to parse input")?;
+	let input = syn::parse::<syn::DeriveInput>(input)
+		.context("Unable to parse input")?;
 
-	let attrs = Attrs::from_derive_input(&input).context("Unable to parse attributes")?;
+	let attrs = Attrs::from_derive_input(&input)
+		.context("Unable to parse attributes")?;
 	let item_ident = &attrs.ident;
 
 	let ident_base = syn::Ident::new(&format!("{item_ident}Base"), item_ident.span());
@@ -109,8 +117,11 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 	let root_ty = &attrs.root;
 
 	// TODO: Generics
-	let root_conversion_impls = attrs.into_root.as_ref().map(|into_root_ty| {
-		quote! {
+	let root_conversion_impls = attrs
+		.into_root
+		.as_ref()
+		.map(|into_root_ty| {
+			quote! {
 			#[automatically_derived]
 			impl rustidy_parse::IntoRecursiveRoot<#root_ty> for #item_ident {
 				fn into_recursive_root(self, parser: &mut rustidy_parse::Parser) -> #root_ty {
@@ -132,14 +143,15 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 				}
 			}
 		}
-	});
+		});
 
 	if attrs.transparent {
 		return self::emit_transparent(&attrs, root_conversion_impls.as_ref());
 	}
 
 	let skip_if_tag = attrs.skip_if_tag.as_ref();
-	let skip_if_tag_attr = skip_if_tag.map(|tag| quote! { #[parse(skip_if_tag = #tag)] });
+	let skip_if_tag_attr = skip_if_tag
+		.map(|tag| quote! { #[parse(skip_if_tag = #tag)] });
 
 	let impls = match &attrs.data {
 		darling::ast::Data::Enum(variants) => {
@@ -288,15 +300,15 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 			for variant in variants {
 				if recursive_variants
 					.iter()
-					.any(|existing_variant| existing_variant.ident == variant.ident)
-				{
+					.any(|existing_variant| existing_variant.ident == variant.ident) {
 					continue;
 				}
 
 				base_variants.push(variant.clone());
 
 				let variant_ident = &variant.ident;
-				base_match_arms.push(quote! {
+				base_match_arms
+					.push(quote! {
 					#ident_base::#variant_ident(base) => Self::#variant_ident(base),
 				});
 			}
@@ -337,22 +349,31 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 			}
 		},
 		darling::ast::Data::Struct(fields) => {
-			let kind = attrs.kind.context(
-				"Expected `#[parse_recursive(kind = <kind>)]` with `kind` equal to `left`, `right` or `fully`",
-			)?;
+			let kind = attrs
+				.kind
+				.context("Expected `#[parse_recursive(kind = <kind>)]` with `kind` equal to `left`, `right` or `fully`",)?;
 
 			let (suffix_impl, suffix_ty) = match kind {
 				Kind::Left => {
-					let field = fields.iter().next().context("Expected at least 1 field")?;
+					let field = fields
+						.iter()
+						.next()
+						.context("Expected at least 1 field")?;
 					let suffix_fields = fields.iter().skip(1).collect::<Vec<_>>();
 
 					let join = match &fields.style {
 						darling::ast::Style::Struct => {
-							let field_ident = field.ident.as_ref().context("Should have an ident")?;
+							let field_ident = field
+								.ident
+								.as_ref()
+								.context("Should have an ident")?;
 							let field_ty = &field.ty;
 							let suffix_fields_ident = suffix_fields
 								.iter()
-								.map(|field| field.ident.as_ref().context("Should have an ident"))
+								.map(|field| field
+									.ident
+									.as_ref()
+									.context("Should have an ident"))
 								.collect::<Result<Vec<_>, _>>()?;
 
 							quote! {
@@ -384,30 +405,39 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 
 					(impl_, Some(ty))
 				},
-				_ => (
-					quote! {
+				_ => (quote! {
 						type Suffix = !;
 
 						fn join_suffix(lhs: #root_ty, suffix: Self::Suffix, parser: &mut rustidy_parse::Parser) -> Self {
 							suffix
 						}
-					},
-					None,
-				),
+					}, None,),
 			};
 
 			let (prefix_impl, prefix_ty) = match kind {
 				Kind::Right => {
-					let field = fields.iter().last().context("Expected at least 1 field")?;
-					let prefix_fields = fields.iter().take(fields.len() - 1).collect::<Vec<_>>();
+					let field = fields
+						.iter()
+						.last()
+						.context("Expected at least 1 field")?;
+					let prefix_fields = fields
+						.iter()
+						.take(fields.len() - 1)
+						.collect::<Vec<_>>();
 
 					let join = match &fields.style {
 						darling::ast::Style::Struct => {
-							let field_ident = field.ident.as_ref().context("Should have an ident")?;
+							let field_ident = field
+								.ident
+								.as_ref()
+								.context("Should have an ident")?;
 							let field_ty = &field.ty;
 							let prefix_fields_ident = prefix_fields
 								.iter()
-								.map(|field| field.ident.as_ref().context("Should have an ident"))
+								.map(|field| field
+									.ident
+									.as_ref()
+									.context("Should have an ident"))
 								.collect::<Result<Vec<_>, _>>()?;
 
 							quote! {
@@ -439,35 +469,51 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 
 					(impl_, Some(ty))
 				},
-				_ => (
-					quote! {
+				_ => (quote! {
 						type Prefix = !;
 
 						fn join_prefix(prefix: Self::Prefix, _: #root_ty, parser: &mut rustidy_parse::Parser) -> Self {
 							prefix
 						}
-					},
-					None,
-				),
+					}, None,),
 			};
 
 			let (infix_impl, infix_ty) = match kind {
 				Kind::Fully => {
 					ensure!(fields.len() >= 2, "Expected at least 2 fields");
-					let lhs_field = fields.iter().next().context("Expected at least 2 field")?;
-					let rhs_field = fields.iter().last().context("Expected at least 2 field")?;
+					let lhs_field = fields
+						.iter()
+						.next()
+						.context("Expected at least 2 field")?;
+					let rhs_field = fields
+						.iter()
+						.last()
+						.context("Expected at least 2 field")?;
 
-					let infix_fields = fields.iter().skip(1).take(fields.len() - 2).collect::<Vec<_>>();
+					let infix_fields = fields
+						.iter()
+						.skip(1)
+						.take(fields.len() - 2)
+						.collect::<Vec<_>>();
 
 					let join = match &fields.style {
 						darling::ast::Style::Struct => {
-							let lhs_field_ident = lhs_field.ident.as_ref().context("Should have an ident")?;
-							let rhs_field_ident = rhs_field.ident.as_ref().context("Should have an ident")?;
+							let lhs_field_ident = lhs_field
+								.ident
+								.as_ref()
+								.context("Should have an ident")?;
+							let rhs_field_ident = rhs_field
+								.ident
+								.as_ref()
+								.context("Should have an ident")?;
 							let lhs_field_ty = &lhs_field.ty;
 							let rhs_field_ty = &rhs_field.ty;
 							let infix_fields_ident = infix_fields
 								.iter()
-								.map(|field| field.ident.as_ref().context("Should have an ident"))
+								.map(|field| field
+									.ident
+									.as_ref()
+									.context("Should have an ident"))
 								.collect::<Result<Vec<_>, _>>()?;
 
 							quote! {
@@ -500,16 +546,13 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 
 					(impl_, Some(ty))
 				},
-				_ => (
-					quote! {
+				_ => (quote! {
 						type Infix = !;
 
 						fn join_infix(_: #root_ty, infix: Self::Infix, _: #root_ty, parser: &mut rustidy_parse::Parser) -> Self {
 							infix
 						}
-					},
-					None,
-				),
+					}, None,),
 			};
 
 			quote! {
@@ -543,10 +586,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 }
 
 /// Emits a transparent derive
-fn emit_transparent(
-	attrs: &Attrs,
-	root_conversion_impls: Option<&proc_macro2::TokenStream>,
-) -> Result<proc_macro::TokenStream, AppError> {
+fn emit_transparent(attrs: &Attrs, root_conversion_impls: Option<&proc_macro2::TokenStream>,) -> Result<proc_macro::TokenStream, AppError> {
 	let darling::ast::Data::Struct(fields) = &attrs.data else {
 		app_error::bail!("`#[parse_recursive(transparent)]` is only supported on structs");
 	};

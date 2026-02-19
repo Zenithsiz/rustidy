@@ -10,10 +10,7 @@ mod whitespace;
 pub use rustidy_macros::Print;
 
 // Imports
-use {
-	core::marker::PhantomData,
-	rustidy_util::{ArenaData, ArenaIdx, AstStr},
-};
+use {core::marker::PhantomData, rustidy_util::{ArenaData, ArenaIdx, AstStr}};
 
 /// Printable types
 pub trait Print: Sized {
@@ -63,7 +60,9 @@ impl Print for () {
 	fn print(&self, _f: &mut PrintFmt) {}
 }
 
-macro tuple_impl($N:literal, $($T:ident),* $(,)?) {
+macro tuple_impl(
+	$N:literal, $($T:ident),* $(,)?
+) {
 	#[automatically_derived]
 	impl< $($T: Print,)* > Print for ( $($T,)* ) {
 		#[expect(non_snake_case)]

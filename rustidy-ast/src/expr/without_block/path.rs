@@ -85,17 +85,14 @@ pub enum PathIdentSegment {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 #[parse(name = "generic arguments")]
-pub struct GenericArgs(
-	#[format(args = delimited::fmt_remove())] pub Delimited<Option<GenericArgsInner>, token::Lt, token::Gt>,
-);
+pub struct GenericArgs(#[format(args = delimited::fmt_remove())]
+pub Delimited<Option<GenericArgsInner>, token::Lt, token::Gt>,);
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
-pub struct GenericArgsInner(
-	#[format(args = punct::fmt(Whitespace::SINGLE, Whitespace::REMOVE))]
-	pub  PunctuatedTrailing<GenericArg, token::Comma>,
-);
+pub struct GenericArgsInner(#[format(args = punct::fmt(Whitespace::SINGLE, Whitespace::REMOVE))]
+pub PunctuatedTrailing<GenericArg, token::Comma>,);
 
 /// `GenericArg`
 #[derive(PartialEq, Eq, Debug)]
@@ -167,9 +164,8 @@ pub struct TypePathFn {
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
-pub struct TypePathFnInputs(
-	#[format(args = punct::fmt(Whitespace::REMOVE, Whitespace::REMOVE))] PunctuatedTrailing<Box<Type>, token::Comma>,
-);
+pub struct TypePathFnInputs(#[format(args = punct::fmt(Whitespace::REMOVE, Whitespace::REMOVE))]
+PunctuatedTrailing<Box<Type>, token::Comma>,);
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
@@ -204,9 +200,8 @@ pub struct QualifiedPathInExpressionSegment {
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
-pub struct QualifiedPathType(
-	#[format(args = delimited::fmt_remove())] Delimited<QualifiedPathTypeInner, token::Lt, token::Gt>,
-);
+pub struct QualifiedPathType(#[format(args = delimited::fmt_remove())]
+Delimited<QualifiedPathTypeInner, token::Lt, token::Gt>,);
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]

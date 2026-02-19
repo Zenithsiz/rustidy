@@ -28,12 +28,18 @@ pub struct RawStringLiteral {
 
 impl RawStringLiteral {
 	fn parse(s: &mut &str) -> Result<(), RawStringLiteralError> {
-		*s = s.strip_prefix('r').ok_or(RawStringLiteralError::StartR)?;
+		*s = s
+			.strip_prefix('r')
+			.ok_or(RawStringLiteralError::StartR)?;
 
-		let prefix_hash_len = s.find(|ch| ch != '#').ok_or(RawStringLiteralError::StartQuote)?;
+		let prefix_hash_len = s
+			.find(|ch| ch != '#')
+			.ok_or(RawStringLiteralError::StartQuote)?;
 		*s = &s[prefix_hash_len..];
 
-		*s = s.strip_prefix('"').ok_or(RawStringLiteralError::StartQuote)?;
+		*s = s
+			.strip_prefix('"')
+			.ok_or(RawStringLiteralError::StartQuote)?;
 
 		let mut end_match = String::with_capacity(1 + prefix_hash_len);
 		end_match.push('"');
@@ -41,7 +47,9 @@ impl RawStringLiteral {
 			end_match.push('#');
 		}
 
-		let end = s.find(&end_match).ok_or(RawStringLiteralError::ExpectedEndQuote)?;
+		let end = s
+			.find(&end_match)
+			.ok_or(RawStringLiteralError::ExpectedEndQuote)?;
 		*s = &s[end + end_match.len()..];
 
 		Ok(())

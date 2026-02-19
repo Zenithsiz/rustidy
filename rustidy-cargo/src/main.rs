@@ -78,9 +78,9 @@ fn format(packages: HashSet<String>, manifest_path: Option<&Path>, extra_args: &
 		.args(extra_args)
 		.status()
 		.map_err(|e| match e.kind() {
-			io::ErrorKind::NotFound =>
-				app_error!("Unable to find `rustidy` binary {rustidy:?}, ensure it's in your `$PATH`"),
-			_ => AppError::new(&e).context("Unable to spawn rustidy"),
+			io::ErrorKind::NotFound => app_error!("Unable to find `rustidy` binary {rustidy:?}, ensure it's in your `$PATH`"),
+			_ => AppError::new(&e)
+				.context("Unable to spawn rustidy"),
 		})?
 		.exit_ok()
 		.context("rustidy returned an error")?;
@@ -98,7 +98,9 @@ fn get_targets(mut packages: HashSet<String>, manifest_path: Option<&Path>) -> R
 		if let Some(manifest_path) = manifest_path {
 			cmd.manifest_path(manifest_path);
 		}
-		cmd.exec().context("Unable to get cargo metadata")
+		cmd
+			.exec()
+			.context("Unable to get cargo metadata")
 	}?;
 
 	for package in metadata.packages {

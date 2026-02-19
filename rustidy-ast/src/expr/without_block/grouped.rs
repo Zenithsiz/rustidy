@@ -13,4 +13,5 @@ use {
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
-pub struct GroupedExpression(#[format(args = delimited::fmt_remove())] Parenthesized<Expression>);
+pub struct GroupedExpression(#[format(args = delimited::fmt_remove())]
+Parenthesized<Expression>);

@@ -1,10 +1,7 @@
 //! Owned or Borrowed
 
 // Imports
-use core::{
-	borrow::{Borrow, BorrowMut},
-	ops::{Deref, DerefMut},
-};
+use core::{borrow::{Borrow, BorrowMut}, ops::{Deref, DerefMut}};
 
 /// Owned or Borrowed
 pub enum Oob<'a, T: ?Sized + ToOwned> {

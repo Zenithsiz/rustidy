@@ -28,7 +28,10 @@ pub enum LongestError<L: Parse, R: Parse> {
 
 	#[parse_error(fmt = "No matches")]
 	#[parse_error(multiple)]
-	Both { lhs: ParserError<L>, rhs: ParserError<R> },
+	Both {
+		lhs: ParserError<L>,
+		rhs: ParserError<R>
+	},
 }
 
 impl<L: Parse, R: Parse> Parse for Longest<L, R> {
@@ -46,7 +49,10 @@ impl<L: Parse, R: Parse> Parse for Longest<L, R> {
 			},
 			(Ok((lhs, pos)), Err(_)) => (Self::Left(lhs), pos),
 			(Err(_), Ok((rhs, pos))) => (Self::Right(rhs), pos),
-			(Err(lhs), Err(rhs)) => return Err(Self::Error::Both { lhs, rhs }),
+			(Err(lhs), Err(rhs)) => return Err(Self::Error::Both {
+				lhs,
+				rhs
+			}),
 		};
 
 		parser.set_peeked(state);

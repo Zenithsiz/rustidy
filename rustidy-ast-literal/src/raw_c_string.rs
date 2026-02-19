@@ -29,12 +29,18 @@ pub struct RawCStringLiteral {
 
 impl RawCStringLiteral {
 	fn parse(s: &mut &str) -> Result<(), RawCStringLiteralError> {
-		*s = s.strip_prefix("cr").ok_or(RawCStringLiteralError::StartR)?;
+		*s = s
+			.strip_prefix("cr")
+			.ok_or(RawCStringLiteralError::StartR)?;
 
-		let prefix_hash_len = s.find(|ch| ch != '#').ok_or(RawCStringLiteralError::StartQuote)?;
+		let prefix_hash_len = s
+			.find(|ch| ch != '#')
+			.ok_or(RawCStringLiteralError::StartQuote)?;
 		*s = &s[prefix_hash_len..];
 
-		*s = s.strip_prefix('"').ok_or(RawCStringLiteralError::StartQuote)?;
+		*s = s
+			.strip_prefix('"')
+			.ok_or(RawCStringLiteralError::StartQuote)?;
 
 		let mut end_match = String::with_capacity(1 + prefix_hash_len);
 		end_match.push('"');
@@ -42,7 +48,9 @@ impl RawCStringLiteral {
 			end_match.push('#');
 		}
 
-		let end = s.find(&end_match).ok_or(RawCStringLiteralError::ExpectedEndQuote)?;
+		let end = s
+			.find(&end_match)
+			.ok_or(RawCStringLiteralError::ExpectedEndQuote)?;
 		if let Some(idx) = s[..end].find('\0') {
 			*s = &s[idx..];
 			return Err(RawCStringLiteralError::Nul);

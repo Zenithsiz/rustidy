@@ -2,12 +2,16 @@
 
 use {
 	super::ExpressionWithoutBlockInner,
-	crate::{
-		expr::{Expression, ExpressionInner},
-		token,
-	},
+	crate::{expr::{Expression, ExpressionInner}, token},
 	rustidy_ast_util::Identifier,
-	rustidy_format::{Format, FormatOutput, FormatTag, Formattable, WhitespaceConfig, WhitespaceFormat},
+	rustidy_format::{
+		Format,
+		FormatOutput,
+		FormatTag,
+		Formattable,
+		WhitespaceConfig,
+		WhitespaceFormat,
+	},
 	rustidy_parse::ParseRecursive,
 	rustidy_print::Print,
 	rustidy_util::Whitespace,
@@ -42,9 +46,10 @@ impl Format<WhitespaceConfig, ()> for FieldExpression {
 			true => output,
 			false => match output.len_without_prefix_ws() >= ctx.config().max_chain_len {
 				// TODO: Ideally we wouldn't re-format everything here.
-				true => ctx.with_tag(FormatTag::InsideChain, |ctx| {
-					self.format(ctx, prefix_ws, FieldExpressionFmt)
-				}),
+				true => ctx
+					.with_tag(FormatTag::InsideChain, |ctx| {
+						self.format(ctx, prefix_ws, FieldExpressionFmt)
+					}),
 				false => output,
 			},
 		}

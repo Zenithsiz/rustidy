@@ -61,18 +61,17 @@ pub enum IntegerLiteralInner {
 #[derive(Parse, Formattable, Format, Print)]
 #[parse(error(name = StartDigit, fmt = "Expected 0-9"))]
 #[format(no_prefix_ws)]
-pub struct DecLiteral(
-	#[parse(try_update_with = Self::parse)]
-	#[format(str)]
-	pub AstStr,
-);
+pub struct DecLiteral(#[parse(try_update_with = Self::parse)]
+#[format(str)]
+pub AstStr,);
 
 impl DecLiteral {
 	fn parse(s: &mut &str) -> Result<(), DecLiteralError> {
 		*s = s
 			.strip_prefix(|ch: char| ch.is_ascii_digit())
 			.ok_or(DecLiteralError::StartDigit)?;
-		*s = s.trim_start_matches(|ch: char| ch.is_ascii_digit() || ch == '_');
+		*s = s
+			.trim_start_matches(|ch: char| ch.is_ascii_digit() || ch == '_');
 
 		Ok(())
 	}
@@ -85,15 +84,15 @@ impl DecLiteral {
 #[parse(error(name = Start0B, fmt = "Expected `0b`"))]
 #[parse(error(name = Digit, fmt = "Expected 0 or 1"))]
 #[format(no_prefix_ws)]
-pub struct BinLiteral(
-	#[parse(try_update_with = Self::parse)]
-	#[format(str)]
-	pub AstStr,
-);
+pub struct BinLiteral(#[parse(try_update_with = Self::parse)]
+#[format(str)]
+pub AstStr,);
 
 impl BinLiteral {
 	fn parse(s: &mut &str) -> Result<(), BinLiteralError> {
-		*s = s.strip_prefix("0b").ok_or(BinLiteralError::Start0B)?;
+		*s = s
+			.strip_prefix("0b")
+			.ok_or(BinLiteralError::Start0B)?;
 		*s = s.trim_start_matches('_');
 		*s = s
 			.strip_prefix(|ch| matches!(ch, '0' | '1'))
@@ -111,20 +110,21 @@ impl BinLiteral {
 #[parse(error(name = Start0O, fmt = "Expected `0o`"))]
 #[parse(error(name = Digit, fmt = "Expected 0-7"))]
 #[format(no_prefix_ws)]
-pub struct OctLiteral(
-	#[parse(try_update_with = Self::parse)]
-	#[format(str)]
-	pub AstStr,
-);
+pub struct OctLiteral(#[parse(try_update_with = Self::parse)]
+#[format(str)]
+pub AstStr,);
 
 impl OctLiteral {
 	fn parse(s: &mut &str) -> Result<(), OctLiteralError> {
-		*s = s.strip_prefix("0o").ok_or(OctLiteralError::Start0O)?;
+		*s = s
+			.strip_prefix("0o")
+			.ok_or(OctLiteralError::Start0O)?;
 		*s = s.trim_start_matches('_');
 		*s = s
 			.strip_prefix(|ch: char| ch.is_ascii_octdigit())
 			.ok_or(OctLiteralError::Digit)?;
-		*s = s.trim_start_matches(|ch: char| ch.is_ascii_octdigit() || matches!(ch, '_'));
+		*s = s
+			.trim_start_matches(|ch: char| ch.is_ascii_octdigit() || matches!(ch, '_'));
 
 		Ok(())
 	}
@@ -137,20 +137,21 @@ impl OctLiteral {
 #[parse(error(name = Start0X, fmt = "Expected `0x`"))]
 #[parse(error(name = Digit, fmt = "Expected 0-9 or a-f"))]
 #[format(no_prefix_ws)]
-pub struct HexLiteral(
-	#[parse(try_update_with = Self::parse)]
-	#[format(str)]
-	pub AstStr,
-);
+pub struct HexLiteral(#[parse(try_update_with = Self::parse)]
+#[format(str)]
+pub AstStr,);
 
 impl HexLiteral {
 	fn parse(s: &mut &str) -> Result<(), HexLiteralError> {
-		*s = s.strip_prefix("0x").ok_or(HexLiteralError::Start0X)?;
+		*s = s
+			.strip_prefix("0x")
+			.ok_or(HexLiteralError::Start0X)?;
 		*s = s.trim_start_matches('_');
 		*s = s
 			.strip_prefix(|ch: char| ch.is_ascii_hexdigit())
 			.ok_or(HexLiteralError::Digit)?;
-		*s = s.trim_start_matches(|ch: char| ch.is_ascii_hexdigit() || matches!(ch, '_'));
+		*s = s
+			.trim_start_matches(|ch: char| ch.is_ascii_hexdigit() || matches!(ch, '_'));
 
 		Ok(())
 	}

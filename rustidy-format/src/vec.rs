@@ -8,11 +8,7 @@ use {
 };
 
 impl<T: Formattable> Formattable for Vec<T> {
-	fn with_prefix_ws<O>(
-		&mut self,
-		ctx: &mut Context,
-		f: &mut impl FnMut(&mut rustidy_util::Whitespace, &mut Context) -> O,
-	) -> Result<O, ControlFlow<()>> {
+	fn with_prefix_ws<O>(&mut self, ctx: &mut Context, f: &mut impl FnMut(&mut rustidy_util::Whitespace,&mut Context) -> O,) -> Result<O, ControlFlow<()>> {
 		for value in self {
 			match value.with_prefix_ws(ctx, f) {
 				Ok(output) => return Ok(output),
@@ -24,12 +20,7 @@ impl<T: Formattable> Formattable for Vec<T> {
 		Err(ControlFlow::Continue(()))
 	}
 
-	fn with_strings<O>(
-		&mut self,
-		ctx: &mut Context,
-		mut exclude_prefix_ws: bool,
-		f: &mut impl FnMut(&mut AstStr, &mut Context) -> ControlFlow<O>,
-	) -> ControlFlow<O, bool> {
+	fn with_strings<O>(&mut self, ctx: &mut Context, mut exclude_prefix_ws: bool, f: &mut impl FnMut(&mut AstStr,&mut Context) -> ControlFlow<O>,) -> ControlFlow<O, bool> {
 		let mut is_empty = true;
 		for value in self {
 			is_empty &= value.with_strings(ctx, exclude_prefix_ws, f)?;
@@ -47,8 +38,7 @@ impl<T, PrefixWs, A> Format<PrefixWs, Args<PrefixWs, A>> for Vec<T>
 where
 	T: Format<PrefixWs, A>,
 	PrefixWs: Clone,
-	A: Clone,
-{
+	A: Clone, {
 	fn format(&mut self, ctx: &mut Context, prefix_ws: PrefixWs, args: Args<PrefixWs, A>) -> FormatOutput {
 		// Note: Due to the way we're parsed, the first element will never be non-empty,
 		//       but it's possible for the caller to create this value during formatting
@@ -57,8 +47,10 @@ where
 		let mut prefix_ws = Some(prefix_ws);
 		for value in self {
 			let value_output = match &prefix_ws {
-				Some(prefix_ws) => value.format(ctx, prefix_ws.clone(), args.args.clone()),
-				None => value.format(ctx, args.rest_prefix_ws.clone(), args.args.clone()),
+				Some(prefix_ws) => value
+					.format(ctx, prefix_ws.clone(), args.args.clone()),
+				None => value
+					.format(ctx, args.rest_prefix_ws.clone(), args.args.clone()),
 			};
 			value_output.append_to(&mut output);
 
@@ -77,12 +69,15 @@ pub struct Args<PrefixWs, A> {
 	rest_prefix_ws: PrefixWs,
 
 	/// Arguments for the rest of the vector
-	args: A,
+	args:           A,
 }
 
 /// Creates vector arguments
 pub const fn args<PrefixWs, A>(rest_prefix_ws: PrefixWs, args: A) -> Args<PrefixWs, A> {
-	Args { rest_prefix_ws, args }
+	Args {
+		rest_prefix_ws,
+		args
+	}
 }
 
 /// Creates vector arguments from just the prefix whitespace

@@ -44,8 +44,7 @@ pub trait FromRecursiveRoot<R> {
 
 impl<R, T> FromRecursiveRoot<R> for T
 where
-	T: From<R>,
-{
+	T: From<R>, {
 	fn from_recursive_root(root: R, _parser: &mut Parser) -> T {
 		T::from(root)
 	}
@@ -111,8 +110,7 @@ impl<T, R> ParsableFrom<RecursiveWrapper<T, R>> for T {
 impl<T, R> crate::Parse for RecursiveWrapper<T, R>
 where
 	T: TryFromRecursiveRoot<R>,
-	R: ParsableRecursive<R>,
-{
+	R: ParsableRecursive<R>, {
 	type Error = RecursiveWrapperError<R>;
 
 	// TODO: Account for precedence
@@ -136,7 +134,8 @@ where
 			base = R::join_infix(base, infix, convert_inner(parser, rhs), parser);
 		}
 
-		let base = T::try_from_recursive_root(base, parser).ok_or(Self::Error::FromRoot)?;
+		let base = T::try_from_recursive_root(base, parser)
+			.ok_or(Self::Error::FromRoot)?;
 
 		Ok(Self(base, PhantomData))
 	}
@@ -206,11 +205,9 @@ fn parse<R: ParsableRecursive<R>>(parser: &mut Parser) -> Result<RecursiveWrappe
 	//       on each parse.
 	// TODO: This is not a very good solution.
 	#[expect(clippy::type_complexity, reason = "TODO")]
-	fn peek<T: Parse>(
-		parser: &mut Parser,
-		tags: &[ParserTag],
-	) -> Result<Result<(T, PeekState), ParserError<T>>, ParserError<T>> {
-		parser.with_tags(tags.iter().copied(), Parser::peek::<T>)
+	fn peek<T: Parse>(parser: &mut Parser, tags: &[ParserTag],) -> Result<Result<(T, PeekState), ParserError<T>>, ParserError<T>> {
+		parser
+			.with_tags(tags.iter().copied(), Parser::peek::<T>)
 	}
 	let tags = parser.tags().collect::<Vec<_>>();
 
@@ -218,16 +215,17 @@ fn parse<R: ParsableRecursive<R>>(parser: &mut Parser) -> Result<RecursiveWrappe
 
 	let mut cur_prefixes = vec![];
 	let last_inner = loop {
-		let prefix = peek::<R::Prefix>(parser, &tags).map_err(RecursiveWrapperError::Prefix)?;
-		let base = peek::<R::Base>(parser, &tags).map_err(RecursiveWrapperError::Base)?;
+		let prefix = peek::<R::Prefix>(parser, &tags)
+			.map_err(RecursiveWrapperError::Prefix)?;
+		let base = peek::<R::Base>(parser, &tags)
+			.map_err(RecursiveWrapperError::Base)?;
 
 		let parsed = match (prefix, base) {
 			(Ok((prefix, prefix_state)), Ok((base, base_state))) => {
 				parser.set_peeked(base_state);
 				match peek::<R::Base>(parser, &tags)
 					.map_err(RecursiveWrapperError::Base)?
-					.is_ok()
-				{
+					.is_ok() {
 					true => Either::Left((prefix, prefix_state)),
 					// TODO: We should undo the peek here
 					false => Either::Right((base, None)),
@@ -235,7 +233,10 @@ fn parse<R: ParsableRecursive<R>>(parser: &mut Parser) -> Result<RecursiveWrappe
 			},
 			(Ok((prefix, prefix_state)), Err(_)) => Either::Left((prefix, prefix_state)),
 			(Err(_), Ok((base, base_state))) => Either::Right((base, Some(base_state))),
-			(Err(prefix), Err(base)) => return Err(RecursiveWrapperError::PrefixOrBase { prefix, base }),
+			(Err(prefix), Err(base)) => return Err(RecursiveWrapperError::PrefixOrBase {
+				prefix,
+				base
+			}),
 		};
 
 		match parsed {
@@ -250,8 +251,10 @@ fn parse<R: ParsableRecursive<R>>(parser: &mut Parser) -> Result<RecursiveWrappe
 
 				let mut cur_suffixes = vec![];
 				let infix = loop {
-					let suffix = peek::<R::Suffix>(parser, &tags).map_err(RecursiveWrapperError::Suffix)?;
-					let infix = peek::<R::Infix>(parser, &tags).map_err(RecursiveWrapperError::Infix)?;
+					let suffix = peek::<R::Suffix>(parser, &tags)
+						.map_err(RecursiveWrapperError::Suffix)?;
+					let infix = peek::<R::Infix>(parser, &tags)
+						.map_err(RecursiveWrapperError::Infix)?;
 
 					let parsed = match (suffix, infix) {
 						(Ok((suffix, suffix_state)), Ok((infix, infix_state))) => 'parsed: {
@@ -265,11 +268,10 @@ fn parse<R: ParsableRecursive<R>>(parser: &mut Parser) -> Result<RecursiveWrappe
 							//       should instead just make optional suffixes / base expressions aware of the
 							//       `SkipOptionalTrailingBlockExpression` tag and skip themselves or something
 							//       similar that doesn't involve us doing anything.
-							if tags.contains(&ParserTag::SkipOptionalTrailingBlockExpression) &&
-								peek::<ParseBracesOpen>(parser, &tags)
-									.map_err(RecursiveWrapperError::BracesOpen)?
-									.is_ok()
-							{
+							if tags
+								.contains(&ParserTag::SkipOptionalTrailingBlockExpression) && peek::<ParseBracesOpen>(parser, &tags)
+								.map_err(RecursiveWrapperError::BracesOpen)?
+								.is_ok() {
 								// TODO: We should undo the peek here
 								break 'parsed Either::Left((suffix, suffix_state));
 							}
@@ -278,8 +280,7 @@ fn parse<R: ParsableRecursive<R>>(parser: &mut Parser) -> Result<RecursiveWrappe
 								.map_err(RecursiveWrapperError::Prefix)?
 								.is_ok() || peek::<R::Base>(parser, &tags)
 								.map_err(RecursiveWrapperError::Base)?
-								.is_ok()
-							{
+								.is_ok() {
 								// TODO: We should undo the peek here
 								true => Either::Right((infix, None)),
 								false => Either::Left((suffix, suffix_state)),
@@ -333,7 +334,10 @@ fn parse<R: ParsableRecursive<R>>(parser: &mut Parser) -> Result<RecursiveWrappe
 		None => (last_inner, vec![]),
 	};
 
-	Ok(RecursiveWrapperInner { first, rest })
+	Ok(RecursiveWrapperInner {
+		first,
+		rest
+	})
 }
 
 /// Hack to ensure we don't parse optional trailing block expressions

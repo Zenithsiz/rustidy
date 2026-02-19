@@ -9,11 +9,7 @@ use proc_macro2::Span;
 /// Creates new generics with an added trait bound of `path` on each variant of `item`
 ///
 /// If the item is not generic, no bounds are added.
-pub fn with_enum_bounds<V, F>(
-	mut generics: syn::Generics,
-	variants: &[V],
-	create_bound: impl Fn(&V, &F) -> syn::WherePredicate,
-) -> syn::Generics
+pub fn with_enum_bounds<V, F>(mut generics: syn::Generics, variants: &[V], create_bound: impl Fn(&V,&F) -> syn::WherePredicate,) -> syn::Generics
 where
 	V: AsRef<darling::ast::Fields<F>>,
 {
@@ -26,7 +22,9 @@ where
 	let where_clause = generics.make_where_clause();
 	for variant in variants {
 		for field in variant.as_ref().iter() {
-			where_clause.predicates.push(create_bound(variant, field));
+			where_clause
+				.predicates
+				.push(create_bound(variant, field));
 		}
 	}
 
@@ -36,11 +34,7 @@ where
 /// Creates new generics with an added trait bound of `path` on each field of `item`
 ///
 /// If the item is not generic, no bounds are added.
-pub fn with_struct_bounds<F>(
-	mut generics: syn::Generics,
-	fields: &[F],
-	create_bound: impl Fn(&F) -> syn::WherePredicate,
-) -> syn::Generics {
+pub fn with_struct_bounds<F>(mut generics: syn::Generics, fields: &[F], create_bound: impl Fn(&F) -> syn::WherePredicate,) -> syn::Generics {
 	// If we have no generic parameters, just return them
 	if generics.params.is_empty() {
 		return generics;
@@ -65,12 +59,11 @@ where
 	VF: AsRef<syn::Type>,
 	F: AsRef<syn::Type>,
 {
-	let generics = <A as AsRef<syn::Generics>>::as_ref(attrs).clone();
+	let generics = <A as AsRef<syn::Generics>>::as_ref(attrs)
+		.clone();
 	match <A as AsRef<darling::ast::Data<V, F>>>::as_ref(attrs) {
-		darling::ast::Data::Enum(variants) =>
-			self::with_enum_bounds(generics, variants, |_, field| create_bound(field.as_ref())),
-		darling::ast::Data::Struct(fields) =>
-			self::with_struct_bounds(generics, &fields.fields, |field| create_bound(field.as_ref())),
+		darling::ast::Data::Enum(variants) => self::with_enum_bounds(generics, variants, |_, field| create_bound(field.as_ref())),
+		darling::ast::Data::Struct(fields) => self::with_struct_bounds(generics, &fields.fields, |field| create_bound(field.as_ref())),
 	}
 }
 
@@ -85,7 +78,7 @@ pub fn field_member_access<F: AsRef<Option<syn::Ident>>>(field_idx: usize, field
 				reason = "There shouldn't be more than 2^32 fields in a struct"
 			)]
 			index: field_idx as u32,
-			span:  Span::call_site(),
+			span: Span::call_site(),
 		}),
 	}
 }
@@ -130,18 +123,20 @@ impl darling::FromMeta for Fmt {
 					syn::Meta::Path(path) => Ok(syn::Expr::Path(syn::ExprPath {
 						attrs: vec![],
 						qself: None,
-						path:  path.clone(),
+						path: path.clone(),
 					})),
 					syn::Meta::List(_) => todo!("Expected a literal or path"),
 					syn::Meta::NameValue(_) => todo!("Expected a literal or path"),
 				},
 				darling::ast::NestedMeta::Lit(lit) => Ok(syn::Expr::Lit(syn::ExprLit {
 					attrs: vec![],
-					lit:   lit.clone(),
+					lit: lit.clone(),
 				})),
 			})
 			.collect::<Result<Vec<_>, darling::Error>>()?;
 
-		Ok(Self { parts })
+		Ok(Self {
+			parts
+		})
 	}
 }

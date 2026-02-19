@@ -31,9 +31,8 @@ pub struct ExternBlock {
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
-pub struct ExternBlockItems(
-	#[format(args = rustidy_format::vec::args_prefix_ws(Whitespace::CUR_INDENT))] Vec<ExternalItem>,
-);
+pub struct ExternBlockItems(#[format(args = rustidy_format::vec::args_prefix_ws(Whitespace::CUR_INDENT))]
+Vec<ExternalItem>,);
 
 /// `ExternalItem`
 #[derive(PartialEq, Eq, Debug)]

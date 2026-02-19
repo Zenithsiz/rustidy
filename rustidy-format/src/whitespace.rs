@@ -2,14 +2,17 @@
 
 // Imports
 use {
-	crate::{AstStrFormat, Format, FormatOutput, FormatTag, Formattable, WhitespaceConfig},
+	crate::{
+		AstStrFormat,
+		Format,
+		FormatOutput,
+		FormatTag,
+		Formattable,
+		WhitespaceConfig,
+	},
 	core::ops::ControlFlow,
 	itertools::Itertools,
-	rustidy_util::{
-		AstStr,
-		ast_str::AstStrRepr,
-		whitespace::{Comment, Whitespace},
-	},
+	rustidy_util::{AstStr, ast_str::AstStrRepr, whitespace::{Comment, Whitespace}},
 	std::sync::Arc,
 };
 
@@ -17,26 +20,28 @@ use {
 pub impl Whitespace {
 	const CUR_INDENT: WhitespaceConfig = WhitespaceConfig {
 		format: Some(WhitespaceFormatKind::Indent {
-			offset:         0,
+			offset: 0,
 			remove_if_pure: false,
 		}),
 	};
 	const NEXT_INDENT: WhitespaceConfig = WhitespaceConfig {
 		format: Some(WhitespaceFormatKind::Indent {
-			offset:         1,
+			offset: 1,
 			remove_if_pure: false,
 		}),
 	};
-	const PRESERVE: WhitespaceConfig = WhitespaceConfig { format: None };
+	const PRESERVE: WhitespaceConfig = WhitespaceConfig {
+		format: None
+	};
 	const PREV_INDENT: WhitespaceConfig = WhitespaceConfig {
 		format: Some(WhitespaceFormatKind::Indent {
-			offset:         -1,
+			offset: -1,
 			remove_if_pure: false,
 		}),
 	};
 	const PREV_INDENT_REMOVE_IF_PURE: WhitespaceConfig = WhitespaceConfig {
 		format: Some(WhitespaceFormatKind::Indent {
-			offset:         -1,
+			offset: -1,
 			remove_if_pure: true,
 		}),
 	};
@@ -44,19 +49,27 @@ pub impl Whitespace {
 		format: Some(WhitespaceFormatKind::Remove),
 	};
 	const SINGLE: WhitespaceConfig = WhitespaceConfig {
-		format: Some(WhitespaceFormatKind::Spaces { len: 1 }),
+		format: Some(WhitespaceFormatKind::Spaces {
+			len: 1
+		}),
 	};
 
 	fn spaces(len: usize) -> WhitespaceConfig {
-		let len = u16::try_from(len).expect("Cannot format more than 2^16 spaces");
+		let len = u16::try_from(len)
+			.expect("Cannot format more than 2^16 spaces");
 		WhitespaceConfig {
-			format: Some(WhitespaceFormatKind::Spaces { len }),
+			format: Some(WhitespaceFormatKind::Spaces {
+				len
+			}),
 		}
 	}
 
 	fn indent(offset: i16, remove_if_pure: bool) -> WhitespaceConfig {
 		WhitespaceConfig {
-			format: Some(WhitespaceFormatKind::Indent { offset, remove_if_pure }),
+			format: Some(WhitespaceFormatKind::Indent {
+				offset,
+				remove_if_pure
+			}),
 		}
 	}
 
@@ -94,20 +107,11 @@ pub impl Whitespace {
 }
 
 impl Formattable for Whitespace {
-	fn with_prefix_ws<O>(
-		&mut self,
-		ctx: &mut crate::Context,
-		f: &mut impl FnMut(&mut Self, &mut crate::Context) -> O,
-	) -> Result<O, ControlFlow<()>> {
+	fn with_prefix_ws<O>(&mut self, ctx: &mut crate::Context, f: &mut impl FnMut(&mut Self,&mut crate::Context) -> O,) -> Result<O, ControlFlow<()>> {
 		Ok(f(self, ctx))
 	}
 
-	fn with_strings<O>(
-		&mut self,
-		ctx: &mut crate::Context,
-		exclude_prefix_ws: bool,
-		f: &mut impl FnMut(&mut AstStr, &mut crate::Context) -> ControlFlow<O>,
-	) -> ControlFlow<O, bool> {
+	fn with_strings<O>(&mut self, ctx: &mut crate::Context, exclude_prefix_ws: bool, f: &mut impl FnMut(&mut AstStr,&mut crate::Context) -> ControlFlow<O>,) -> ControlFlow<O, bool> {
 		let is_empty = self.0.first.0.is_empty() && self.0.rest.is_empty();
 
 		if !exclude_prefix_ws {
@@ -146,8 +150,12 @@ impl Format<WhitespaceConfig, ()> for Whitespace {
 		let mut output = self.0.first.0.format_output(ctx);
 		for (comment, ws) in &self.0.rest {
 			match comment {
-				Comment::Line(comment) => comment.0.format_output(ctx).append_to(&mut output),
-				Comment::Block(comment) => comment.0.format_output(ctx).append_to(&mut output),
+				Comment::Line(comment) => comment.0
+					.format_output(ctx)
+					.append_to(&mut output),
+				Comment::Block(comment) => comment.0
+					.format_output(ctx)
+					.append_to(&mut output),
 			}
 
 			ws.0.format_output(ctx).append_to(&mut output);
@@ -171,7 +179,7 @@ pub enum WhitespaceFormatKind {
 
 	Indent {
 		/// Indentation offset
-		offset: i16,
+		offset:         i16,
 
 		/// Remove if the whitespace is pure
 		remove_if_pure: bool,
@@ -182,9 +190,9 @@ impl WhitespaceFormatKind {
 	/// Returns the indentation string, without a newline
 	fn indent_str(ctx: &crate::Context) -> AstStrRepr {
 		AstStrRepr::Indentation {
-			indent:   Arc::clone(&ctx.config().indent),
+			indent: Arc::clone(&ctx.config().indent),
 			newlines: 0,
-			depth:    ctx.indent(),
+			depth: ctx.indent(),
 		}
 	}
 
@@ -197,7 +205,11 @@ impl WhitespaceFormatKind {
 			true => (min_newlines, max_newlines),
 			false => (min_newlines + 1, max_newlines + 1),
 		};
-		let newlines = ctx.str(cur_str).chars().filter(|&ch| ch == '\n').count();
+		let newlines = ctx
+			.str(cur_str)
+			.chars()
+			.filter(|&ch| ch == '\n')
+			.count();
 		let newlines = newlines.clamp(min_newlines, max_newlines);
 
 		AstStrRepr::Indentation {
@@ -211,11 +223,18 @@ impl WhitespaceFormatKind {
 	fn prefix_str(self, ctx: &mut crate::Context, cur_str: &AstStr, is_last: bool, after_newline: bool) -> AstStrRepr {
 		match self {
 			Self::Remove => "".into(),
-			Self::Spaces { len } => AstStrRepr::Spaces { len },
-			Self::Indent { offset, remove_if_pure } => match remove_if_pure && is_last {
+			Self::Spaces {
+				len
+			} => AstStrRepr::Spaces {
+				len
+			},
+			Self::Indent {
+				offset,
+				remove_if_pure
+			} => match remove_if_pure && is_last {
 				true => "".into(),
-				false =>
-					ctx.with_indent_offset_if(offset, is_last, |ctx| Self::indent_str_nl(ctx, cur_str, after_newline)),
+				false => ctx
+					.with_indent_offset_if(offset, is_last, |ctx| Self::indent_str_nl(ctx, cur_str, after_newline)),
 			},
 		}
 	}
@@ -223,9 +242,15 @@ impl WhitespaceFormatKind {
 	/// Returns the string after a newline
 	fn after_newline_str(self, ctx: &mut crate::Context, cur_str: &AstStr, is_last: bool) -> AstStrRepr {
 		match self {
-			Self::Remove | Self::Spaces { .. } => "".into(),
-			Self::Indent { offset, .. } => match is_last {
-				true => ctx.with_indent_offset(offset, |ctx| Self::indent_str(ctx)),
+			Self::Remove | Self::Spaces {
+				..
+			} => "".into(),
+			Self::Indent {
+				offset,
+				..
+			} => match is_last {
+				true => ctx
+					.with_indent_offset(offset, |ctx| Self::indent_str(ctx)),
 				false => Self::indent_str_nl(ctx, cur_str, true),
 			},
 		}
@@ -235,9 +260,17 @@ impl WhitespaceFormatKind {
 	fn normal_str(self, ctx: &mut crate::Context, cur_str: &AstStr, is_last: bool) -> AstStrRepr {
 		match self {
 			Self::Remove => "".into(),
-			Self::Spaces { len } => AstStrRepr::Spaces { len },
-			Self::Indent { offset, .. } => match is_last {
-				true => ctx.with_indent_offset(offset, |ctx| Self::indent_str_nl(ctx, cur_str, false)),
+			Self::Spaces {
+				len
+			} => AstStrRepr::Spaces {
+				len
+			},
+			Self::Indent {
+				offset,
+				..
+			} => match is_last {
+				true => ctx
+					.with_indent_offset(offset, |ctx| Self::indent_str_nl(ctx, cur_str, false)),
 				false => Self::indent_str_nl(ctx, cur_str, false),
 			},
 		}
@@ -250,7 +283,8 @@ pub fn format(ws: &mut Whitespace, ctx: &mut crate::Context, kind: WhitespaceFor
 	//       prior to us that we need to take into account.
 	let after_newline = ctx.take_tag(FormatTag::AfterNewline);
 
-	let prefix_str = kind.prefix_str(ctx, &ws.0.first.0, ws.0.rest.is_empty(), after_newline);
+	let prefix_str = kind
+		.prefix_str(ctx, &ws.0.first.0, ws.0.rest.is_empty(), after_newline);
 	ws.0.first.0.replace(ctx.input, prefix_str);
 
 	for (pos, (comment, ws)) in ws.0.rest.iter_mut().with_position() {

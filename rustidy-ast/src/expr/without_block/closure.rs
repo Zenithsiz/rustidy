@@ -60,10 +60,8 @@ pub struct ClosureRet {
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
-pub struct ClosureParameters(
-	#[format(args = punct::fmt(Whitespace::SINGLE, Whitespace::REMOVE))]
-	pub  PunctuatedTrailing<ClosureParameter, token::Comma>,
-);
+pub struct ClosureParameters(#[format(args = punct::fmt(Whitespace::SINGLE, Whitespace::REMOVE))]
+pub PunctuatedTrailing<ClosureParameter, token::Comma>,);
 
 /// `ClosureParameter`
 #[derive(PartialEq, Eq, Debug)]

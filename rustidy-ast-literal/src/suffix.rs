@@ -14,11 +14,9 @@ use {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 #[format(no_prefix_ws)]
-pub struct Suffix(
-	#[parse(with_tag = ParserTag::SkipWhitespace)]
-	#[format(prefix_ws = Whitespace::REMOVE)]
-	IdentifierOrKeyword,
-);
+pub struct Suffix(#[parse(with_tag = ParserTag::SkipWhitespace)]
+#[format(prefix_ws = Whitespace::REMOVE)]
+IdentifierOrKeyword,);
 
 /// `SUFFIX_NO_E`
 #[derive(PartialEq, Eq, Debug)]

@@ -47,109 +47,120 @@ struct VariantFieldAttrs {
 #[darling(attributes(parse))]
 struct VariantAttrs {
 	#[as_ref]
-	ident:  syn::Ident,
+	ident:        syn::Ident,
 	#[as_ref]
-	fields: darling::ast::Fields<VariantFieldAttrs>,
+	fields:       darling::ast::Fields<VariantFieldAttrs>,
 
 	// TODO: We should rename this to `try` because we're no longer just peeking
 	#[darling(multiple)]
-	peek: Vec<PeekAttrs>,
+	peek:         Vec<PeekAttrs>,
 
 	#[darling(default)]
 	without_tags: bool,
 
 	#[darling(default)]
-	box_error: bool,
+	box_error:    bool,
 
 	#[darling(multiple)]
-	with_tag: Vec<syn::Expr>,
+	with_tag:     Vec<syn::Expr>,
 }
 
 #[derive(Debug, darling::FromField, derive_more::AsRef)]
 #[darling(attributes(parse))]
 struct FieldAttrs {
 	#[as_ref]
-	ident: Option<syn::Ident>,
+	ident:           Option<syn::Ident>,
 	#[as_ref]
-	ty:    syn::Type,
+	ty:              syn::Type,
 
 	#[darling(default)]
-	without_tags: bool,
+	without_tags:    bool,
 
 	#[darling(multiple)]
-	with_tag: Vec<syn::Expr>,
+	with_tag:        Vec<syn::Expr>,
 
 	update_with:     Option<syn::Expr>,
 	try_update_with: Option<syn::Expr>,
 
 	#[darling(default)]
-	box_error: bool,
+	box_error:       bool,
 
 	#[darling(default)]
-	fatal: bool,
+	fatal:           bool,
 
 	// TODO: We should allow multiple here
-	skip_if_tag: Option<syn::Expr>,
+	skip_if_tag:     Option<syn::Expr>,
 }
 
 #[derive(Debug, darling::FromDeriveInput, derive_more::AsRef)]
 #[darling(attributes(parse))]
 struct Attrs {
 	#[as_ref]
-	ident:    syn::Ident,
+	ident:        syn::Ident,
 	#[as_ref]
-	generics: syn::Generics,
+	generics:     syn::Generics,
 	#[as_ref]
-	data:     darling::ast::Data<VariantAttrs, FieldAttrs>,
+	data:         darling::ast::Data<VariantAttrs, FieldAttrs>,
 
 	#[darling(multiple)]
-	try_with: Vec<syn::Expr>,
+	try_with:     Vec<syn::Expr>,
 
 	#[darling(multiple)]
 	and_try_with: Vec<syn::Expr>,
 
-	name:        Option<syn::LitStr>,
-	from:        Option<syn::Path>,
+	name:         Option<syn::LitStr>,
+	from:         Option<syn::Path>,
 	#[darling(multiple)]
-	error:       Vec<ExtraErrorVariant>,
+	error:        Vec<ExtraErrorVariant>,
 	// TODO: We should allow multiple here
-	skip_if_tag: Option<syn::Expr>,
+	skip_if_tag:  Option<syn::Expr>,
 }
 
 pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream, AppError> {
-	let input = syn::parse::<syn::DeriveInput>(input).context("Unable to parse input")?;
+	let input = syn::parse::<syn::DeriveInput>(input)
+		.context("Unable to parse input")?;
 
-	let attrs = Attrs::from_derive_input(&input).context("Unable to parse attributes")?;
+	let attrs = Attrs::from_derive_input(&input)
+		.context("Unable to parse attributes")?;
 	let item_ident = &attrs.ident;
 
 
 	// Error type identifier
 	let error_ident = syn::Ident::new(&format!("{item_ident}Error"), item_ident.span());
 
-	let name_impl = attrs.name.as_ref().map(|name| {
-		quote! {
+	let name_impl = attrs
+		.name
+		.as_ref()
+		.map(|name| {
+			quote! {
 			fn name() -> Option<impl std::fmt::Display> {
 				Some(#name)
 			}
 		}
-	});
+		});
 
 	let skip_if_tag_err_variant_ident = syn::Ident::new("Tag", Span::mixed_site());
-	let skip_if_tag_expr = attrs.skip_if_tag.as_ref().map(|tag| {
-		quote! {
+	let skip_if_tag_expr = attrs
+		.skip_if_tag
+		.as_ref()
+		.map(|tag| {
+			quote! {
 			if parser.has_tag(#tag) {
 				return Err(#error_ident::#skip_if_tag_err_variant_ident);
 			}
 		}
-	});
+		});
 
-	let skip_if_tag_err_variant = attrs.skip_if_tag.as_ref().map(|tag| {
-		quote! {
+	let skip_if_tag_err_variant = attrs
+		.skip_if_tag
+		.as_ref()
+		.map(|tag| {
+			quote! {
 			#[parse_error(fmt("Tag `{:?}` was present", #tag))]
 			#[debug("Tag({:?})", #tag)]
 			#skip_if_tag_err_variant_ident,
 		}
-	});
+		});
 
 	// Parse body, parsable impl and error enum (with it's impls)
 	// TODO: Instead of getting the whole error enum here, we should just
@@ -215,40 +226,48 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 				}
 				let peeks = itertools::izip!(variants, &variant_tys)
 					.flat_map(|(variant, variant_ty)| {
-						variant.peek.iter().enumerate().map(|(idx, ty)| {
-							let err_variant =
-								syn::Ident::new(&format!("{}Peek{idx}", variant.ident), variant.ident.span());
-							Peek {
-								variant,
-								variant_ty,
-								peek_ty: ty,
-								err_variant,
-							}
-						})
+						variant
+							.peek
+							.iter()
+							.enumerate()
+							.map(|(idx, ty)| {
+								let err_variant = syn::Ident::new(&format!("{}Peek{idx}", variant.ident), variant.ident.span());
+								Peek {
+									variant,
+									variant_ty,
+									peek_ty: ty,
+									err_variant,
+								}
+							})
 					})
 					.collect::<Vec<_>>();
-				let parse_peeks = peeks.iter().map(|peek| {
-					let Peek {
-						variant,
-						variant_ty,
-						peek_ty: PeekAttrs(ty),
-						err_variant,
-					} = peek;
-					let variant_ident = &variant.ident;
+				let parse_peeks = peeks
+					.iter()
+					.map(|peek| {
+						let Peek {
+							variant,
+							variant_ty,
+							peek_ty: PeekAttrs(ty),
+							err_variant,
+						} = peek;
+						let variant_ident = &variant.ident;
 
-					quote! {
+						quote! {
 						if let Ok(value) = parser.try_parse::<#ty>().map_err(#error_ident::#err_variant)?
 						{
 							let variant = parser.parse_with_peeked::<#variant_ty, #ty>(value).map_err(#error_ident::#variant_ident)?;
 							return Ok(Self::#variant_ident(variant));
 						}
 					}
-				});
+					});
 
 				let err_idents = variants
 					.iter()
 					.map(|variant| {
-						let name = variant.ident.to_string().to_case(convert_case::Case::Snake);
+						let name = variant
+							.ident
+							.to_string()
+							.to_case(convert_case::Case::Snake);
 						let name = match name.ends_with('_') {
 							true => format!("{name}err"),
 							false => format!("{name}_err"),
@@ -322,20 +341,22 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 							#variant_ident(#ty),
 						}
 					})
-					.chain(peeks.iter().map(|peek| {
-						let Peek {
-							variant: _,
-							variant_ty: _,
-							peek_ty: PeekAttrs(ty),
-							err_variant,
-						} = peek;
-						let err_ty = quote! { rustidy_parse::ParserError<#ty> };
+					.chain(peeks
+						.iter()
+						.map(|peek| {
+							let Peek {
+								variant: _,
+								variant_ty: _,
+								peek_ty: PeekAttrs(ty),
+								err_variant,
+							} = peek;
+							let err_ty = quote! { rustidy_parse::ParserError<#ty> };
 
-						quote! {
+							quote! {
 							#[parse_error(transparent)]
 							#err_variant(#err_ty),
 						}
-					}))
+						}))
 					.collect::<Vec<_>>();
 
 				let unknown_errs_decl = itertools::izip!(variants, &err_idents, &variant_tys)
@@ -398,7 +419,9 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 							return None;
 						}
 
-						let mut name = field_ident.to_string().to_case(convert_case::Case::Pascal);
+						let mut name = field_ident
+							.to_string()
+							.to_case(convert_case::Case::Pascal);
 						if matches!(name.as_str(), "Self") {
 							name.push('_');
 						}
@@ -419,7 +442,11 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 					})
 					.collect::<HashMap<_, _>>();
 
-				let field_tys = fields.fields.iter().map(|field| &field.ty).collect::<Vec<_>>();
+				let field_tys = fields
+					.fields
+					.iter()
+					.map(|field| &field.ty)
+					.collect::<Vec<_>>();
 
 				let get_tag_exists = fields
 					.fields
@@ -468,14 +495,16 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 							expr = quote! { parser.with_tag(#tag, |parser| #expr) };
 						}
 
-						let map_err = error_name.as_ref().map(|error_name| {
-							let box_error = match field.box_error {
-								true => Some(quote! { .map_err(Box::new) }),
-								false => None,
-							};
+						let map_err = error_name
+							.as_ref()
+							.map(|error_name| {
+								let box_error = match field.box_error {
+									true => Some(quote! { .map_err(Box::new) }),
+									false => None,
+								};
 
-							quote! { #box_error .map_err(#error_ident::#error_name) }
-						});
+								quote! { #box_error .map_err(#error_ident::#error_name) }
+							});
 
 						let propagate_error = match field.update_with.is_some() {
 							true => None,
@@ -516,7 +545,9 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 
 				let error_enum_variants = itertools::izip!(&fields.fields, &error_names, &field_tys, &fatal_fields)
 					.filter_map(|(field, error_name, field_ty, is_fatal)| {
-						let Some(error_name) = error_name else { return None };
+						let Some(error_name) = error_name else {
+							return None
+						};
 
 						let fatal = match is_fatal {
 							true => quote! { #[parse_error(fatal)] },
@@ -601,20 +632,20 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 	Ok(output.into())
 }
 
-fn derive_extra_error_variant(
-	&ExtraErrorVariant {
-		ref name,
-		ref fmt,
-		transparent,
-		fatal,
-	}: &ExtraErrorVariant,
-) -> Result<syn::Variant, AppError> {
+fn derive_extra_error_variant(&ExtraErrorVariant {
+	ref name,
+	ref fmt,
+	transparent,
+	fatal,
+}: &ExtraErrorVariant,) -> Result<syn::Variant, AppError> {
 	ensure!(
 		transparent || fmt.is_some(),
 		"Must specify exactly one of `fmt` or `transparent`"
 	);
 	let attr = match fmt {
-		Some(Fmt { parts }) => quote! { #[parse_error(fmt( #( #parts ),* ))] },
+		Some(Fmt {
+			parts
+		}) => quote! { #[parse_error(fmt( #( #parts ),* ))] },
 		None => quote! { #[parse_error(transparent)] },
 	};
 

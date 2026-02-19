@@ -5,7 +5,14 @@ use {
 	crate::{self as rustidy_parse, Parse, ParseError, Parser, ParserError, ParserTag},
 	rustidy_util::{
 		ArenaIdx,
-		whitespace::{BlockComment, Comment, LineComment, PureWhitespace, Whitespace, WhitespaceInner},
+		whitespace::{
+			BlockComment,
+			Comment,
+			LineComment,
+			PureWhitespace,
+			Whitespace,
+			WhitespaceInner,
+		},
 	},
 };
 
@@ -17,7 +24,7 @@ impl Parse for Whitespace {
 			let (s, ()) = parser.update_with(|_| ());
 			let inner = WhitespaceInner {
 				first: PureWhitespace(s),
-				rest:  vec![],
+				rest: vec![],
 			};
 			let idx = ArenaIdx::new(inner);
 
@@ -47,7 +54,10 @@ impl Parse for WhitespaceInner {
 			rest.push((comment, pure));
 		}
 
-		Ok(Self { first, rest })
+		Ok(Self {
+			first,
+			rest
+		})
 	}
 }
 
@@ -74,7 +84,7 @@ impl Parse for Comment {
 
 		Err(CommentError::None {
 			block: block_err,
-			line:  line_err,
+			line: line_err,
 		})
 	}
 }
@@ -101,15 +111,16 @@ impl Parse for BlockComment {
 	fn parse_from(parser: &mut Parser) -> Result<Self, Self::Error> {
 		parser
 			.try_update_with(|s| {
-				let is_doc_comment =
-					(s.starts_with("/**") && !s.starts_with("/***") && !s.starts_with("/**/")) || s.starts_with("/*!");
+				let is_doc_comment = (s.starts_with("/**") && !s.starts_with("/***") && !s.starts_with("/**/")) || s.starts_with("/*!");
 
 				match s.strip_prefix("/*") {
 					Some(rest) if !is_doc_comment => {
 						*s = rest;
 						let mut depth = 1;
 						while depth != 0 {
-							let close_idx = s.find("*/").ok_or(BlockCommentError::MissingCommentEnd)?;
+							let close_idx = s
+								.find("*/")
+								.ok_or(BlockCommentError::MissingCommentEnd)?;
 
 							match s[..close_idx].find("/*") {
 								Some(open_idx) => {

@@ -28,16 +28,16 @@ pub struct Rustidy {
 	///
 	/// You can use `RUST_FILE_LOG` to set filtering options
 	#[clap(long = "log-file")]
-	pub log_file: Option<PathBuf>,
+	pub log_file:      Option<PathBuf>,
 
 	/// Specify package to format
 	#[arg(short = 'p', long = "package")]
-	pub packages: Vec<String>,
+	pub packages:      Vec<String>,
 
 	/// Specify path to Cargo.toml
 	#[arg(long = "manifest-path")]
 	pub manifest_path: Option<PathBuf>,
 
 	/// Arguments to pass to `rustidy`
-	pub extra_args: Vec<OsString>,
+	pub extra_args:    Vec<OsString>,
 }

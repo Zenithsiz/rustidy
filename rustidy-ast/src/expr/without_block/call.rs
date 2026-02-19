@@ -2,13 +2,16 @@
 
 use {
 	super::{ExpressionWithoutBlockInner, path::PathExprSegment},
-	crate::{
-		expr::{Expression, ExpressionInner},
-		token,
-		util::Parenthesized,
-	},
+	crate::{expr::{Expression, ExpressionInner}, token, util::Parenthesized},
 	rustidy_ast_util::{PunctuatedTrailing, delimited, punct},
-	rustidy_format::{Format, FormatOutput, FormatTag, Formattable, WhitespaceConfig, WhitespaceFormat},
+	rustidy_format::{
+		Format,
+		FormatOutput,
+		FormatTag,
+		Formattable,
+		WhitespaceConfig,
+		WhitespaceFormat,
+	},
 	rustidy_parse::{Parse, ParseRecursive},
 	rustidy_print::Print,
 	rustidy_util::Whitespace,
@@ -57,15 +60,18 @@ struct MethodCallExpressionFmt;
 
 impl Format<WhitespaceConfig, ()> for MethodCallExpression {
 	fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: WhitespaceConfig, _args: ()) -> FormatOutput {
-		let output = self.format(ctx, prefix_ws, MethodCallExpressionFmt);
+		let output = self
+			.format(ctx, prefix_ws, MethodCallExpressionFmt);
 
 		match ctx.has_tag(FormatTag::InsideChain) {
 			true => output,
 			false => match output.len_without_prefix_ws() >= ctx.config().max_chain_len {
 				// TODO: Ideally we wouldn't re-format everything here.
-				true => ctx.with_tag(FormatTag::InsideChain, |ctx| {
-					self.format(ctx, prefix_ws, MethodCallExpressionFmt)
-				}),
+				true => ctx
+					.with_tag(FormatTag::InsideChain, |ctx| {
+						self
+							.format(ctx, prefix_ws, MethodCallExpressionFmt)
+					}),
 				false => output,
 			},
 		}
@@ -76,7 +82,5 @@ impl Format<WhitespaceConfig, ()> for MethodCallExpression {
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
-pub struct CallParams(
-	#[format(args = punct::fmt(Whitespace::SINGLE, Whitespace::REMOVE))]
-	pub  PunctuatedTrailing<Expression, token::Comma>,
-);
+pub struct CallParams(#[format(args = punct::fmt(Whitespace::SINGLE, Whitespace::REMOVE))]
+pub PunctuatedTrailing<Expression, token::Comma>,);

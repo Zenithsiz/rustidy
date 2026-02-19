@@ -13,7 +13,7 @@ use {
 // TODO: Something better than this...
 #[darling(from_expr = |expr| Ok(Self { ty: parse_quote! { #expr }, generics: vec![] }))]
 struct ArgsTy {
-	ty: syn::Type,
+	ty:       syn::Type,
 
 	// TODO: Move these generics to their own attribute
 	#[darling(multiple)]
@@ -57,7 +57,10 @@ impl WithExprIf {
 	/// If this contains an `if` condition, then `else_expr` will be used
 	/// when that fails.
 	pub fn eval(&self, else_expr: Option<syn::Expr>) -> syn::Expr {
-		let Self { expr, cond } = self;
+		let Self {
+			expr,
+			cond
+		} = self;
 		match cond {
 			Some(cond) => match else_expr {
 				Some(else_expr) => parse_quote! {
@@ -84,95 +87,97 @@ struct VariantFieldAttrs {
 #[darling(attributes(format))]
 struct VariantAttrs {
 	#[as_ref]
-	ident:  syn::Ident,
+	ident:        syn::Ident,
 	#[as_ref]
-	fields: darling::ast::Fields<VariantFieldAttrs>,
+	fields:       darling::ast::Fields<VariantFieldAttrs>,
 
 	#[darling(default)]
-	indent: Option<Indent>,
+	indent:       Option<Indent>,
 
-	with: Option<syn::Expr>,
+	with:         Option<syn::Expr>,
 
 	#[darling(default)]
-	prefix_ws: Option<WithExprIf>,
+	prefix_ws:    Option<WithExprIf>,
 
 	#[darling(multiple)]
-	before_with: Vec<WithExprIf>,
+	before_with:  Vec<WithExprIf>,
 
 	#[darling(multiple)]
-	with_tag: Vec<WithTag>,
+	with_tag:     Vec<WithTag>,
 
 	#[darling(default)]
 	without_tags: bool,
 
-	args: Option<syn::Expr>,
+	args:         Option<syn::Expr>,
 }
 
 #[derive(Debug, darling::FromField, derive_more::AsRef)]
 #[darling(attributes(format))]
 struct FieldAttrs {
 	#[as_ref]
-	ident: Option<syn::Ident>,
+	ident:        Option<syn::Ident>,
 	#[as_ref]
-	ty:    syn::Type,
+	ty:           syn::Type,
 
 	#[darling(default)]
-	str: bool,
+	str:          bool,
 
 	#[darling(default)]
-	indent: Option<Indent>,
+	indent:       Option<Indent>,
 
-	with: Option<syn::Expr>,
+	with:         Option<syn::Expr>,
 
 	#[darling(default)]
-	prefix_ws: Option<WithExprIf>,
+	prefix_ws:    Option<WithExprIf>,
 
 	#[darling(multiple)]
-	before_with: Vec<WithExprIf>,
+	before_with:  Vec<WithExprIf>,
 
 	#[darling(multiple)]
-	with_tag: Vec<WithTag>,
+	with_tag:     Vec<WithTag>,
 
 	#[darling(default)]
 	without_tags: bool,
 
-	args: Option<syn::Expr>,
+	args:         Option<syn::Expr>,
 }
 
 #[derive(Debug, darling::FromDeriveInput, derive_more::AsRef)]
 #[darling(attributes(format))]
 struct Attrs {
 	#[as_ref]
-	ident:    syn::Ident,
+	ident:        syn::Ident,
 	#[as_ref]
-	generics: syn::Generics,
+	generics:     syn::Generics,
 	#[as_ref]
-	data:     darling::ast::Data<VariantAttrs, FieldAttrs>,
+	data:         darling::ast::Data<VariantAttrs, FieldAttrs>,
 
-	indent: Option<Indent>,
+	indent:       Option<Indent>,
 
 	#[darling(default)]
 	no_prefix_ws: bool,
 
 	#[darling(multiple)]
-	before_with: Vec<WithExprIf>,
+	before_with:  Vec<WithExprIf>,
 
 	#[darling(multiple)]
-	with_tag: Vec<WithTag>,
+	with_tag:     Vec<WithTag>,
 
 	#[darling(default)]
 	without_tags: bool,
 
-	args: Option<ArgsTy>,
+	args:         Option<ArgsTy>,
 
 	// TODO: Don't require the `where` token here.
 	where_format: Option<syn::WhereClause>,
 }
 
 pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream, AppError> {
-	let input = syn::parse::<syn::DeriveInput>(input).context("Unable to parse input")?;
+	let input = syn::parse::<syn::DeriveInput>(input)
+		.context("Unable to parse input")?;
 
-	let attrs = Attrs::from_derive_input(&input).context("Unable to parse attributes")?;
+	let attrs = Attrs::from_derive_input(&input)
+		.context("Unable to parse attributes")?;
 	let item_ident = &attrs.ident;
 
 	let format = match &attrs.data {
@@ -180,19 +185,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 		darling::ast::Data::Struct(fields) => self::derive_struct(&attrs, fields),
 	};
 
-	let format = self::derive_format(
-		parse_quote! { self },
-		None,
-		None,
-		true,
-		&None,
-		format,
-		&attrs.before_with,
-		&attrs.with_tag,
-		attrs.without_tags,
-		Args::Skip,
-		&attrs.indent,
-	);
+	let format = self::derive_format(parse_quote! { self }, None, None, true, &None, format, &attrs.before_with, &attrs.with_tag, attrs.without_tags, Args::Skip, &attrs.indent,);
 
 	let prefix_ws_ty: syn::Type = match attrs.no_prefix_ws {
 		true => parse_quote! { () },
@@ -236,7 +229,9 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 		super let mut impl_generics = impl_generics.clone();
 		if let Some(args) = &attrs.args {
 			for generic in &args.generics {
-				impl_generics.params.push(syn::GenericParam::Type(generic.clone()));
+				impl_generics
+					.params
+					.push(syn::GenericParam::Type(generic.clone()));
 			}
 		}
 		impl_generics.split_for_impl()
@@ -264,22 +259,11 @@ fn derive_enum(variants: &[VariantAttrs]) -> syn::Expr {
 			let prefix_ws = variant
 				.prefix_ws
 				.as_ref()
-				.map(|prefix_ws| prefix_ws.eval(Some(parse_quote! { prefix_ws })));
+				.map(|prefix_ws| prefix_ws
+					.eval(Some(parse_quote! { prefix_ws })));
 
 			let format = parse_quote! { rustidy_format::Format::format(value, ctx, prefix_ws, args) };
-			let format = self::derive_format(
-				parse_quote! { value },
-				prefix_ws,
-				None,
-				true,
-				&variant.with,
-				format,
-				&variant.before_with,
-				&variant.with_tag,
-				variant.without_tags,
-				Args::Set(variant.args.clone()),
-				&variant.indent,
-			);
+			let format = self::derive_format(parse_quote! { value }, prefix_ws, None, true, &variant.with, format, &variant.before_with, &variant.with_tag, variant.without_tags, Args::Set(variant.args.clone()), &variant.indent,);
 
 			parse_quote! {
 				Self::#variant_ident(ref mut value) => #format,
@@ -297,9 +281,10 @@ fn derive_struct(attrs: &Attrs, fields: &darling::ast::Fields<FieldAttrs>) -> sy
 		.map(|(field_idx, field)| self::derive_struct_field(field_idx, field))
 		.collect::<Vec<_>>();
 
-	let assert_prefix_ws: Option<syn::Expr> = (!attrs.no_prefix_ws).then(|| parse_quote! {
-		assert!(output.has_prefix_ws() || output.is_empty, "Non-empty type did not use prefix whitespace: {}", std::any::type_name::<Self>()) }
-	);
+	let assert_prefix_ws: Option<syn::Expr> = (!attrs
+		.no_prefix_ws)
+		.then(|| parse_quote! {
+		assert!(output.has_prefix_ws() || output.is_empty, "Non-empty type did not use prefix whitespace: {}", std::any::type_name::<Self>()) });
 
 	parse_quote! {{
 		let mut output = rustidy_format::FormatOutput::default();
@@ -315,16 +300,14 @@ fn derive_struct_field(field_idx: usize, field: &FieldAttrs) -> syn::Expr {
 	let field_ident = util::field_member_access(field_idx, field);
 
 	let prefix_ws = match &field.prefix_ws {
-		Some(prefix_ws) => Some(
-			prefix_ws
-				.map(|prefix_ws| {
-					parse_quote! { match has_prefix_ws {
+		Some(prefix_ws) => Some(prefix_ws
+			.map(|prefix_ws| {
+				parse_quote! { match has_prefix_ws {
 						true => panic!("Overwriting prefix whitespace of {}::{}", std::any::type_name::<Self>(), stringify!(#field_ident)),
 						false => #prefix_ws,
 					}}
-				})
-				.eval(Some(parse_quote! { prefix_ws })),
-		),
+			})
+			.eval(Some(parse_quote! { prefix_ws })),),
 		None => match field.str {
 			true => None,
 			false => Some(parse_quote! { match has_prefix_ws {
@@ -335,8 +318,7 @@ fn derive_struct_field(field_idx: usize, field: &FieldAttrs) -> syn::Expr {
 	};
 
 	let format = match field.str {
-		true =>
-			parse_quote! { <rustidy_util::AstStr as rustidy_format::AstStrFormat>::format_output(&mut self.#field_ident, ctx) },
+		true => parse_quote! { <rustidy_util::AstStr as rustidy_format::AstStrFormat>::format_output(&mut self.#field_ident, ctx) },
 		false => parse_quote! { rustidy_format::Format::format(&mut self.#field_ident, ctx, prefix_ws, args) },
 	};
 
@@ -346,19 +328,7 @@ fn derive_struct_field(field_idx: usize, field: &FieldAttrs) -> syn::Expr {
 		}
 	};
 
-	self::derive_format(
-		parse_quote! { &mut self.#field_ident },
-		prefix_ws,
-		Some(after_format),
-		false,
-		&field.with,
-		format,
-		&field.before_with,
-		&field.with_tag,
-		field.without_tags,
-		Args::Set(field.args.clone()),
-		&field.indent,
-	)
+	self::derive_format(parse_quote! { &mut self.#field_ident }, prefix_ws, Some(after_format), false, &field.with, format, &field.before_with, &field.with_tag, field.without_tags, Args::Set(field.args.clone()), &field.indent,)
 }
 
 enum Args {
@@ -372,22 +342,9 @@ enum Args {
 	reason = "This signature is more ergonomic"
 )]
 #[expect(clippy::too_many_arguments, reason = "TODO")]
-fn derive_format(
-	value: syn::Expr,
-	prefix_ws: Option<syn::Expr>,
-	after_format: Option<syn::Expr>,
-	return_output: bool,
-	with: &Option<syn::Expr>,
-	default: syn::Expr,
-	before_with: &[WithExprIf],
-	with_tag: &[WithTag],
-	without_tags: bool,
-	args: Args,
-	indent: &Option<Indent>,
-) -> syn::Expr {
+fn derive_format(value: syn::Expr, prefix_ws: Option<syn::Expr>, after_format: Option<syn::Expr>, return_output: bool, with: &Option<syn::Expr>, default: syn::Expr, before_with: &[WithExprIf], with_tag: &[WithTag], without_tags: bool, args: Args, indent: &Option<Indent>,) -> syn::Expr {
 	// TODO: Document the order in which we parse all attributes, since
 	//       it's not in declaration order (although maybe it should?).
-
 	let format = match &with {
 		Some(with) => parse_quote! { (#with)(#value, ctx, prefix_ws, args) },
 		None => default,
@@ -418,8 +375,13 @@ fn derive_format(
 		true => parse_quote! { ctx.without_tags(|ctx| #format) },
 		false => format,
 	};
-	for WithTag { tag, cond } in with_tag {
-		let cond = cond.clone().unwrap_or_else(|| parse_quote! { true });
+	for WithTag {
+		tag,
+		cond
+	} in with_tag {
+		let cond = cond
+			.clone()
+			.unwrap_or_else(|| parse_quote! { true });
 		format = parse_quote! {
 			match #cond {
 				true => ctx.with_tag(#tag, |ctx| #format),
@@ -429,7 +391,9 @@ fn derive_format(
 	}
 
 	let format = match indent {
-		Some(Indent { if_has_tag }) => match if_has_tag {
+		Some(Indent {
+			if_has_tag
+		}) => match if_has_tag {
 			Some(cond) => parse_quote! { ctx.with_indent_if(ctx.has_tag(#cond), |ctx| #format) },
 			None => parse_quote! { ctx.with_indent(|ctx| #format) },
 		},
@@ -438,7 +402,9 @@ fn derive_format(
 
 	let before_with = before_with
 		.iter()
-		.map(|before_with| before_with.map(|expr| parse_quote! { (#expr)(#value, ctx) }).eval(None));
+		.map(|before_with| before_with
+			.map(|expr| parse_quote! { (#expr)(#value, ctx) })
+			.eval(None));
 	let format = match before_with.is_empty() {
 		true => format,
 		false => parse_quote! {{

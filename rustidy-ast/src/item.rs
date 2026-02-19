@@ -39,7 +39,12 @@ pub use self::{
 // Imports
 use {
 	super::{
-		attr::{DelimTokenTree, DelimTokenTreeInner, OuterAttrOrDocComment, WithOuterAttributes},
+		attr::{
+			DelimTokenTree,
+			DelimTokenTreeInner,
+			OuterAttrOrDocComment,
+			WithOuterAttributes,
+		},
 		token,
 		util::{Braced, Parenthesized},
 		vis::Visibility,
@@ -56,7 +61,8 @@ use {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 #[format(before_with = Self::merge_use)]
-pub struct Items(#[format(args = rustidy_format::vec::args_prefix_ws(Whitespace::CUR_INDENT))] pub Vec<Item>);
+pub struct Items(#[format(args = rustidy_format::vec::args_prefix_ws(Whitespace::CUR_INDENT))]
+pub Vec<Item>);
 
 impl Items {
 	pub fn merge_use(&mut self, ctx: &mut rustidy_format::Context) {
@@ -66,8 +72,9 @@ impl Items {
 			item = match item.try_into_use_decl() {
 				Ok((attrs, vis, mut first_use_decl)) => {
 					let mut use_decls = vec![];
-					while let Some(use_decl) = items.next_if_map(|item| item.try_into_just_use_decl(ctx, vis.as_ref()))
-					{
+					while let Some(use_decl) = items
+						.next_if_map(|item| item
+							.try_into_just_use_decl(ctx, vis.as_ref())) {
 						use_decls.push(use_decl);
 					}
 
@@ -110,11 +117,7 @@ impl Item {
 
 	// TODO: This needs to check for comments in the prefix whitespace.
 	#[expect(clippy::result_large_err, reason = "TODO")]
-	fn try_into_just_use_decl(
-		self,
-		ctx: &mut rustidy_format::Context,
-		expected_vis: Option<&Visibility>,
-	) -> Result<UseDeclaration, Self> {
+	fn try_into_just_use_decl(self, ctx: &mut rustidy_format::Context, expected_vis: Option<&Visibility>,) -> Result<UseDeclaration, Self> {
 		self.0
 			.try_take_map(|mut item| {
 				// Note: If no prefix whitespace exists, we can merge them anyway.
@@ -228,19 +231,15 @@ pub struct DeclMacroBodyInline {
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
-pub struct DeclMacroBodyBranches(
-	#[format(indent)]
-	#[format(args = delimited::fmt_indent_if_non_blank())]
-	pub Braced<DeclMacroBodyBranchesInner>,
-);
+pub struct DeclMacroBodyBranches(#[format(indent)]
+#[format(args = delimited::fmt_indent_if_non_blank())]
+pub Braced<DeclMacroBodyBranchesInner>,);
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
-pub struct DeclMacroBodyBranchesInner(
-	#[format(args = punct::fmt(Whitespace::CUR_INDENT, Whitespace::REMOVE))]
-	pub  PunctuatedTrailing<DeclMacroBranch, token::Comma>,
-);
+pub struct DeclMacroBodyBranchesInner(#[format(args = punct::fmt(Whitespace::CUR_INDENT, Whitespace::REMOVE))]
+pub PunctuatedTrailing<DeclMacroBranch, token::Comma>,);
 
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]

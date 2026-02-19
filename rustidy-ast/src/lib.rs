@@ -70,43 +70,35 @@ impl Format<(), ()> for Crate {
 	fn format(&mut self, ctx: &mut rustidy_format::Context, _prefix_ws: (), _args: ()) -> FormatOutput {
 		let mut ctx = ctx.sub_context();
 		for attr in &self.inner_attrs {
-			if let Some(attr) = attr.try_as_attr_ref() &&
-				let Err(err) = attr::update_config(&attr.attr.value, &mut ctx)
-			{
+			if let Some(attr) = attr.try_as_attr_ref() && let Err(err) = attr::update_config(&attr.attr.value, &mut ctx) {
 				tracing::warn!("Malformed `#![rustidy::config(...)]` attribute: {err:?}");
 			}
 		}
 
 		let mut output = FormatOutput::default();
 
-		self.shebang.format(&mut ctx, (), ()).append_to(&mut output);
+		self
+			.shebang
+			.format(&mut ctx, (), ())
+			.append_to(&mut output);
 
-		self.inner_attrs
-			.format(
-				&mut ctx,
-				Whitespace::REMOVE,
-				rustidy_format::vec::args_prefix_ws(Whitespace::CUR_INDENT),
-			)
+		self
+			.inner_attrs
+			.format(&mut ctx, Whitespace::REMOVE, rustidy_format::vec::args_prefix_ws(Whitespace::CUR_INDENT),)
 			.append_to(&mut output);
 
 		// TODO: We need to set `FormatTag::AfterNewline` for `items`.
-		self.items
-			.format(
-				&mut ctx,
-				match self.inner_attrs.is_empty() {
-					true => Whitespace::REMOVE,
-					false => Whitespace::CUR_INDENT,
-				},
-				(),
-			)
+		self
+			.items
+			.format(&mut ctx, match self.inner_attrs.is_empty() {
+				true => Whitespace::REMOVE,
+				false => Whitespace::CUR_INDENT,
+			}, (),)
 			.append_to(&mut output);
 
-		self.suffix_ws
-			.format(
-				&mut ctx,
-				Whitespace::indent(0, self.inner_attrs.is_empty() && self.items.0.is_empty()),
-				(),
-			)
+		self
+			.suffix_ws
+			.format(&mut ctx, Whitespace::indent(0, self.inner_attrs.is_empty() && self.items.0.is_empty()), (),)
 			.append_to(&mut output);
 
 		// Add the newline at the end of the trailing comment if it didn't have one already
@@ -114,11 +106,13 @@ impl Format<(), ()> for Crate {
 			let mut s = ctx.str(&trailing.0).into_owned();
 			if !s.ends_with('\n') {
 				s.push('\n');
-				trailing.0.replace(ctx.input(), AstStrRepr::Dynamic(s));
+				trailing.0
+					.replace(ctx.input(), AstStrRepr::Dynamic(s));
 			}
 		}
 
-		self.trailing_line_comment
+		self
+			.trailing_line_comment
 			.format(&mut ctx, (), ())
 			.append_to(&mut output);
 
@@ -133,11 +127,9 @@ impl Format<(), ()> for Crate {
 #[derive(Parse, Formattable, Format, Print)]
 #[parse(error(name = NoComment, fmt = "Expected `//` (except `///` or `//!`)"))]
 #[format(no_prefix_ws)]
-pub struct TrailingLineComment(
-	#[parse(try_update_with = Self::parse)]
-	#[format(str)]
-	pub AstStr,
-);
+pub struct TrailingLineComment(#[parse(try_update_with = Self::parse)]
+#[format(str)]
+pub AstStr,);
 
 impl TrailingLineComment {
 	fn parse(s: &mut &str) -> Result<(), TrailingLineCommentError> {

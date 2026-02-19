@@ -2,6 +2,7 @@
 
 // Features
 #![feature(yeet_expr, anonymous_lifetime_in_impl_trait)]
+
 // Lints
 #![expect(unused_crate_dependencies, reason = "They're used in other tests")]
 
@@ -18,13 +19,7 @@ struct Config {
 	indent_depth: usize,
 }
 
-fn test_case_with(
-	source: &str,
-	expected: &str,
-	fmt_config: &rustidy_util::Config,
-	config: &Config,
-	kind: WhitespaceFormatKind,
-) -> Result<(), AppError> {
+fn test_case_with(source: &str, expected: &str, fmt_config: &rustidy_util::Config, config: &Config, kind: WhitespaceFormatKind,) -> Result<(), AppError> {
 	let mut parser = Parser::new(source);
 	let mut whitespace = parser
 		.parse::<Whitespace>()
@@ -62,7 +57,10 @@ fn test_case_with(
 		let mut print_fmt = PrintFmt::new(source);
 		whitespace.print(&mut print_fmt);
 
-		let output_fmt = print_fmt.output().replace(' ', "·").replace('\t', "⭾");
+		let output_fmt = print_fmt
+			.output()
+			.replace(' ', "·")
+			.replace('\t', "⭾");
 
 		app_error::ensure!(
 			output == print_fmt.output(),
@@ -75,51 +73,55 @@ fn test_case_with(
 }
 
 struct CaseKinds<'a> {
-	source: &'a str,
-	expected_remove: &'a str,
-	expected_set_single: &'a str,
-	expected_set_indent: &'a str,
-	expected_set_prev_indent: &'a str,
+	source:                             &'a str,
+	expected_remove:                    &'a str,
+	expected_set_single:                &'a str,
+	expected_set_indent:                &'a str,
+	expected_set_prev_indent:           &'a str,
 	expected_set_prev_indent_or_remove: &'a str,
 }
 
-fn test_cases_with(
-	cases: impl IntoIterator<Item = CaseKinds<'_>>,
-	fmt_config: &rustidy_util::Config,
-	config: &Config,
-) -> Result<(), AppError> {
+fn test_cases_with(cases: impl IntoIterator<Item = CaseKinds<'_>>, fmt_config: &rustidy_util::Config, config: &Config,) -> Result<(), AppError> {
 	cases
 		.into_iter()
 		.map(|case| {
 			[
-				(case.expected_remove, WhitespaceFormatKind::Remove),
-				(case.expected_set_single, WhitespaceFormatKind::Spaces { len: 1 }),
-				(case.expected_set_indent, WhitespaceFormatKind::Indent {
-					offset:         0,
+				(case
+					.expected_remove, WhitespaceFormatKind::Remove),
+				(case
+					.expected_set_single, WhitespaceFormatKind::Spaces {
+					len: 1
+				}),
+				(case
+					.expected_set_indent, WhitespaceFormatKind::Indent {
+					offset: 0,
 					remove_if_pure: false,
 				}),
-				(case.expected_set_prev_indent, WhitespaceFormatKind::Indent {
-					offset:         -1,
+				(case
+					.expected_set_prev_indent, WhitespaceFormatKind::Indent {
+					offset: -1,
 					remove_if_pure: false,
 				}),
-				(case.expected_set_prev_indent_or_remove, WhitespaceFormatKind::Indent {
-					offset:         -1,
+				(case
+					.expected_set_prev_indent_or_remove, WhitespaceFormatKind::Indent {
+					offset: -1,
 					remove_if_pure: true,
 				}),
 			]
-			.into_iter()
-			.map(|(expected, kind)| {
-				let mods = [("", ""), ("  ", ""), ("", "  "), ("  ", "  ")];
-				mods.into_iter()
-					.map(|(prefix, suffix)| {
-						let source = format!("{prefix}{}{suffix}", case.source);
-						test_case_with(&source, expected, fmt_config, config, kind)
-					})
-					.collect::<app_error::AllErrs<()>>()?;
+				.into_iter()
+				.map(|(expected, kind)| {
+					let mods = [("", ""), ("  ", ""), ("", "  "), ("  ", "  ")];
+					mods
+						.into_iter()
+						.map(|(prefix, suffix)| {
+							let source = format!("{prefix}{}{suffix}", case.source);
+							test_case_with(&source, expected, fmt_config, config, kind)
+						})
+						.collect::<app_error::AllErrs<()>>()?;
 
-				Ok(())
-			})
-			.collect::<app_error::AllErrs<()>>()?;
+					Ok(())
+				})
+				.collect::<app_error::AllErrs<()>>()?;
 
 			Ok(())
 		})
@@ -207,6 +209,9 @@ fn main() -> Result<(), AppError> {
 	];
 
 	let fmt_config = rustidy_util::Config::default();
-	let config = Config { indent_depth: 2 };
-	self::test_cases_with(cases, &fmt_config, &config).map_err(AppError::flatten)
+	let config = Config {
+		indent_depth: 2
+	};
+	self::test_cases_with(cases, &fmt_config, &config)
+		.map_err(AppError::flatten)
 }

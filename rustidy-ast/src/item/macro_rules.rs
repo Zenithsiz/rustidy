@@ -79,9 +79,8 @@ pub struct MacroRulesDefBraces {
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
-pub struct MacroRules(
-	#[format(args = punct::fmt(Whitespace::PRESERVE, Whitespace::PRESERVE))] PunctuatedTrailing<MacroRule, token::Semi>,
-);
+pub struct MacroRules(#[format(args = punct::fmt(Whitespace::PRESERVE, Whitespace::PRESERVE))]
+PunctuatedTrailing<MacroRule, token::Semi>,);
 
 /// `MacroRule`
 #[derive(PartialEq, Eq, Debug)]
@@ -112,9 +111,8 @@ pub enum MacroMatcher {
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
-pub struct MacroMatcherMatches(
-	#[format(args = rustidy_format::vec::args_prefix_ws(Whitespace::PRESERVE))] Vec<MacroMatch>,
-);
+pub struct MacroMatcherMatches(#[format(args = rustidy_format::vec::args_prefix_ws(Whitespace::PRESERVE))]
+Vec<MacroMatch>,);
 
 /// `MacroMatch`
 #[derive(PartialEq, Eq, Debug)]
@@ -194,21 +192,18 @@ pub struct MacroMatchDollarRep {
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
-pub struct MacroMatchDollarRepMatches(
-	#[format(args = at_least::fmt_prefix_ws(Whitespace::PRESERVE))] pub AtLeast1<Box<MacroMatch>>,
-);
+pub struct MacroMatchDollarRepMatches(#[format(args = at_least::fmt_prefix_ws(Whitespace::PRESERVE))]
+pub AtLeast1<Box<MacroMatch>>,);
 
 /// `MacroRepSep`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
-pub struct MacroRepSep(
-	#[parse(with_tag = ParserTag::SkipDelimiters)]
-	#[parse(with_tag = ParserTag::SkipTokenStar)]
-	#[parse(with_tag = ParserTag::SkipTokenPlus)]
-	#[parse(with_tag = ParserTag::SkipTokenQuestion)]
-	Token,
-);
+pub struct MacroRepSep(#[parse(with_tag = ParserTag::SkipDelimiters)]
+#[parse(with_tag = ParserTag::SkipTokenStar)]
+#[parse(with_tag = ParserTag::SkipTokenPlus)]
+#[parse(with_tag = ParserTag::SkipTokenQuestion)]
+Token,);
 
 /// `MacroRepOp`
 #[derive(PartialEq, Eq, Debug)]

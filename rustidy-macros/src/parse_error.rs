@@ -15,9 +15,9 @@ use {
 #[darling(attributes(parse_error))]
 struct VariantFieldAttrs {
 	#[as_ref]
-	ident: Option<syn::Ident>,
+	ident:  Option<syn::Ident>,
 	#[as_ref]
-	ty:    syn::Type,
+	ty:     syn::Type,
 
 	#[darling(default)]
 	source: bool,
@@ -27,20 +27,20 @@ struct VariantFieldAttrs {
 #[darling(attributes(parse_error))]
 struct VariantAttrs {
 	#[as_ref]
-	ident:  syn::Ident,
+	ident:       syn::Ident,
 	#[as_ref]
-	fields: darling::ast::Fields<VariantFieldAttrs>,
+	fields:      darling::ast::Fields<VariantFieldAttrs>,
 
 	#[darling(default)]
-	fatal: bool,
+	fatal:       bool,
 
 	#[darling(default)]
-	multiple: bool,
+	multiple:    bool,
 
 	#[darling(default)]
 	transparent: bool,
 
-	fmt: Option<Fmt>,
+	fmt:         Option<Fmt>,
 }
 
 #[derive(Debug, darling::FromField, derive_more::AsRef)]
@@ -56,25 +56,27 @@ struct FieldAttrs {
 #[darling(attributes(parse_error))]
 struct Attrs {
 	#[as_ref]
-	ident:    syn::Ident,
+	ident:       syn::Ident,
 	#[as_ref]
-	generics: syn::Generics,
+	generics:    syn::Generics,
 	#[as_ref]
-	data:     darling::ast::Data<VariantAttrs, FieldAttrs>,
+	data:        darling::ast::Data<VariantAttrs, FieldAttrs>,
 
 	#[darling(default)]
-	fatal: bool,
+	fatal:       bool,
 
 	#[darling(default)]
 	transparent: bool,
 
-	fmt: Option<Fmt>,
+	fmt:         Option<Fmt>,
 }
 
 pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream, AppError> {
-	let input = syn::parse::<syn::DeriveInput>(input).context("Unable to parse input")?;
+	let input = syn::parse::<syn::DeriveInput>(input)
+		.context("Unable to parse input")?;
 
-	let attrs = Attrs::from_derive_input(&input).context("Unable to parse attributes")?;
+	let attrs = Attrs::from_derive_input(&input)
+		.context("Unable to parse attributes")?;
 	let item_ident = &attrs.ident;
 
 	let is_item_transparent = attrs.transparent;
@@ -165,7 +167,12 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 						false => {
 							let field = match variant.transparent {
 								true => {
-									let field = variant.fields.iter().enumerate().exactly_one().context("Exactly 1 field must exist on `#[parse_error(transparent)]` variants")?;
+									let field = variant
+										.fields
+										.iter()
+										.enumerate()
+										.exactly_one()
+										.context("Exactly 1 field must exist on `#[parse_error(transparent)]` variants")?;
 									Some(field)
 								},
 								false => variant
@@ -182,18 +189,14 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 							let is_fatal = variant.fatal;
 							match field {
 								Some((field_idx, field)) => match &field.ident {
-									Some(field_ident) => (
-										quote! { Self::#variant_ident { ref #field_ident, .. } => #is_fatal || #field_ident.is_fatal(), },
-										quote! { Self::#variant_ident { ref #field_ident, .. } => #field_ident.pos(), },
-									),
+									Some(field_ident) => (quote! { Self::#variant_ident { ref #field_ident, .. } => #is_fatal || #field_ident.is_fatal(), }, quote! { Self::#variant_ident { ref #field_ident, .. } => #field_ident.pos(), },),
 									None => {
 										ensure!(
 											field_idx == 0,
 											"Non-first unnamed `#[parse_error(source)]` aren't supported yet"
 										);
 
-										let is_fatal =
-											quote! { Self::#variant_ident(ref err, ..) => #is_fatal || err.is_fatal(), };
+										let is_fatal = quote! { Self::#variant_ident(ref err, ..) => #is_fatal || err.is_fatal(), };
 										let pos = quote! { Self::#variant_ident(ref err, ..) => err.pos(), };
 
 										(is_fatal, pos)
@@ -239,9 +242,12 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 					let output = match &*field_idents {
 						[] => {
 							ensure!(!variant.transparent, "Empty variants may not be transparent");
-							let Fmt { parts } = variant.fmt.as_ref().context(
-								"Expected either `#[parse_error(transparent)]` or `#[parse_error(fmt = \"...\")]`",
-							)?;
+							let Fmt {
+								parts
+							} = variant
+								.fmt
+								.as_ref()
+								.context("Expected either `#[parse_error(transparent)]` or `#[parse_error(fmt = \"...\")]`",)?;
 
 							quote! {
 								match format_args!(#( #parts, )*).as_str() {
@@ -305,7 +311,9 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 					quote! { #field_access.to_app_error(parser) }
 				},
 				None => {
-					let Fmt { parts } = item_error_fmt
+					let Fmt {
+						parts
+					} = item_error_fmt
 						.as_ref()
 						.context("Expected either `#[parse_error(transparent)]` or `#[parse_error(fmt = \"...\")]`")?;
 

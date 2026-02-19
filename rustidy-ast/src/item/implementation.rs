@@ -2,15 +2,8 @@
 
 // Imports
 use {
-	super::{
-		function::{GenericParams, WhereClause},
-		trait_::AssociatedItem,
-	},
-	crate::{
-		attr::BracedWithInnerAttributes,
-		token,
-		ty::{Type, TypePath},
-	},
+	super::{function::{GenericParams, WhereClause}, trait_::AssociatedItem},
+	crate::{attr::BracedWithInnerAttributes, token, ty::{Type, TypePath}},
 	rustidy_format::{Format, Formattable, WhitespaceFormat},
 	rustidy_parse::Parse,
 	rustidy_print::Print,
@@ -76,6 +69,5 @@ pub struct TraitImpl {
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
-pub struct ImplBody(
-	#[format(args = rustidy_format::vec::args_prefix_ws(Whitespace::CUR_INDENT))] pub Vec<AssociatedItem>,
-);
+pub struct ImplBody(#[format(args = rustidy_format::vec::args_prefix_ws(Whitespace::CUR_INDENT))]
+pub Vec<AssociatedItem>,);

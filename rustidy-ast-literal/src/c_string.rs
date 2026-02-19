@@ -34,13 +34,18 @@ pub struct CStringLiteral {
 
 impl CStringLiteral {
 	fn parse(s: &mut &str) -> Result<(), CStringLiteralError> {
-		*s = s.strip_prefix("c\"").ok_or(CStringLiteralError::StartQuote)?;
+		*s = s
+			.strip_prefix("c\"")
+			.ok_or(CStringLiteralError::StartQuote)?;
 
 		loop {
-			match s.strip_prefix(|ch: char| !matches!(ch, '"' | '\\' | '\r' | '\0')) {
+			match s
+				.strip_prefix(|ch: char| !matches!(ch, '"' | '\\' | '\r' | '\0')) {
 				Some(rest) => *s = rest,
 				None => {
-					macro try_parse($Escape:ident) {
+					macro try_parse(
+						$Escape:ident
+					) {
 						rustidy_parse::try_parse_from_str(s, $Escape::parse)
 							.map_err(CStringLiteralError::$Escape)?
 							.is_ok()
@@ -57,7 +62,9 @@ impl CStringLiteral {
 			}
 		}
 
-		*s = s.strip_prefix('"').ok_or(CStringLiteralError::ExpectedEndQuote)?;
+		*s = s
+			.strip_prefix('"')
+			.ok_or(CStringLiteralError::ExpectedEndQuote)?;
 
 		Ok(())
 	}

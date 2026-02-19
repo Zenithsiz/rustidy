@@ -14,7 +14,8 @@ use {
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
-pub struct TupleExpression(#[format(args = delimited::fmt_remove())] Parenthesized<Option<TupleElements>>);
+pub struct TupleExpression(#[format(args = delimited::fmt_remove())]
+Parenthesized<Option<TupleElements>>);
 
 /// `TupleElements`
 #[derive(PartialEq, Eq, Debug)]

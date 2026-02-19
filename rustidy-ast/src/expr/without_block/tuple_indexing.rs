@@ -2,10 +2,7 @@
 
 use {
 	super::{ExpressionWithoutBlockInner, TupleIndex},
-	crate::{
-		expr::{Expression, ExpressionInner},
-		token,
-	},
+	crate::{expr::{Expression, ExpressionInner}, token},
 	rustidy_format::{Format, Formattable, WhitespaceFormat},
 	rustidy_parse::ParseRecursive,
 	rustidy_print::Print,

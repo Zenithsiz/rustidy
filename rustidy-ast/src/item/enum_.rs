@@ -43,10 +43,8 @@ pub struct Enumeration {
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
-pub struct EnumVariants(
-	#[format(args = punct::fmt(Whitespace::CUR_INDENT, Whitespace::REMOVE))]
-	pub  PunctuatedTrailing<EnumVariant, token::Comma>,
-);
+pub struct EnumVariants(#[format(args = punct::fmt(Whitespace::CUR_INDENT, Whitespace::REMOVE))]
+pub PunctuatedTrailing<EnumVariant, token::Comma>,);
 
 /// `EnumVariant`
 #[derive(PartialEq, Eq, Debug)]
@@ -82,17 +80,16 @@ pub enum EnumVariantKind {
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
-pub struct EnumVariantTuple(#[format(args = delimited::fmt_remove())] pub Parenthesized<Option<TupleFields>>);
+pub struct EnumVariantTuple(#[format(args = delimited::fmt_remove())]
+pub Parenthesized<Option<TupleFields>>);
 
 /// `EnumVariantStruct`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
-pub struct EnumVariantStruct(
-	#[format(indent)]
-	#[format(args = delimited::fmt_indent_if_non_blank())]
-	pub Braced<Option<StructFields>>,
-);
+pub struct EnumVariantStruct(#[format(indent)]
+#[format(args = delimited::fmt_indent_if_non_blank())]
+pub Braced<Option<StructFields>>,);
 
 /// `EnumVariantDiscriminant`
 #[derive(PartialEq, Eq, Debug)]

@@ -178,105 +178,110 @@ impl rustidy_parse::Parse for Punctuation {
 		let skip_delimiters = parser.has_tag(ParserTag::SkipDelimiters);
 
 		let ws = parser.parse()?;
-		let res = parser.try_update_with(|s| {
-			let original_s = *s;
-			macro punct($len:literal, $punct:ident) {{
+		let res = parser
+			.try_update_with(|s| {
+				let original_s = *s;
+				macro punct(
+					$len:literal, $punct:ident
+				) {
+					{
 				*s = &original_s[$len..];
 				Some(Punct::$punct)
-			}}
-			match s.pop_first()? {
-				'=' => match s.pop_first() {
-					Some('=') => punct!(2, EqEq),
-					Some('>') => punct!(2, FatArrow),
-					_ => punct!(1, Eq),
-				},
-				'<' => match s.pop_first() {
-					Some('=') => punct!(2, Le),
-					Some('-') => punct!(2, LArrow),
-					Some('<') => match s.pop_first() {
-						Some('=') => punct!(3, ShlEq),
-						_ => punct!(2, Shl),
-					},
-					_ => punct!(1, Lt),
-				},
-				'>' => match s.pop_first() {
-					Some('=') => punct!(2, Ge),
-					Some('>') => match s.pop_first() {
-						Some('=') => punct!(3, ShrEq),
-						_ => punct!(2, Shr),
-					},
-					_ => punct!(1, Gt),
-				},
-				'!' => match s.pop_first() {
-					Some('=') => punct!(2, Ne),
-					_ => punct!(1, Not),
-				},
-				'&' => match s.pop_first() {
-					Some('&') => punct!(2, AndAnd),
-					Some('=') => punct!(2, AndEq),
-					_ => punct!(1, And),
-				},
-				'|' => match s.pop_first() {
-					Some('|') => punct!(2, OrOr),
-					Some('=') => punct!(2, OrEq),
-					_ => punct!(1, Or),
-				},
-				'+' => match s.pop_first() {
-					Some('=') => punct!(2, PlusEq),
-					_ if !skip_plus => punct!(1, Plus),
-					_ => None,
-				},
-				'-' => match s.pop_first() {
-					Some('=') => punct!(2, MinusEq),
-					Some('>') => punct!(2, RArrow),
-					_ => punct!(1, Minus),
-				},
-				'*' => match s.pop_first() {
-					Some('=') => punct!(2, StarEq),
-					_ if !skip_star => punct!(1, Star),
-					_ => None,
-				},
-				'/' => match s.pop_first() {
-					Some('=') => punct!(2, SlashEq),
-					_ => punct!(1, Slash),
-				},
-				'^' => match s.pop_first() {
-					Some('=') => punct!(2, CaretEq),
-					_ => punct!(1, Caret),
-				},
-				'%' => match s.pop_first() {
-					Some('=') => punct!(2, PercentEq),
-					_ => punct!(1, Percent),
-				},
-				'.' => match s.pop_first() {
-					Some('.') => match s.pop_first() {
-						Some('.') => punct!(3, DotDotDot),
-						Some('=') => punct!(3, DotDotEq),
-						_ => punct!(2, DotDot),
-					},
-					_ => punct!(1, Dot),
-				},
-				':' => match s.pop_first() {
-					Some(':') => punct!(2, PathSep),
-					_ => punct!(1, Colon),
-				},
-				'~' => punct!(1, Tilde),
-				'@' => punct!(1, At),
-				',' => punct!(1, Comma),
-				';' => punct!(1, Semi),
-				'#' => punct!(1, Pound),
-				'$' if !skip_dollar => punct!(1, Dollar),
-				'?' if !skip_question => punct!(1, Question),
-				'_' => punct!(1, Underscore),
-				'(' if !skip_delimiters => punct!(1, ParenOpen),
-				')' if !skip_delimiters => punct!(1, ParenClose),
-				'[' if !skip_delimiters => punct!(1, BracketOpen),
-				']' if !skip_delimiters => punct!(1, BracketClose),
-				'{' if !skip_delimiters => punct!(1, BracesOpen),
-				'}' if !skip_delimiters => punct!(1, BracesClose),
-				_ => None,
 			}
-		});
+				}
+				match s.pop_first()? {
+					'=' => match s.pop_first() {
+						Some('=') => punct!(2, EqEq),
+						Some('>') => punct!(2, FatArrow),
+						_ => punct!(1, Eq),
+					},
+					'<' => match s.pop_first() {
+						Some('=') => punct!(2, Le),
+						Some('-') => punct!(2, LArrow),
+						Some('<') => match s.pop_first() {
+							Some('=') => punct!(3, ShlEq),
+							_ => punct!(2, Shl),
+						},
+						_ => punct!(1, Lt),
+					},
+					'>' => match s.pop_first() {
+						Some('=') => punct!(2, Ge),
+						Some('>') => match s.pop_first() {
+							Some('=') => punct!(3, ShrEq),
+							_ => punct!(2, Shr),
+						},
+						_ => punct!(1, Gt),
+					},
+					'!' => match s.pop_first() {
+						Some('=') => punct!(2, Ne),
+						_ => punct!(1, Not),
+					},
+					'&' => match s.pop_first() {
+						Some('&') => punct!(2, AndAnd),
+						Some('=') => punct!(2, AndEq),
+						_ => punct!(1, And),
+					},
+					'|' => match s.pop_first() {
+						Some('|') => punct!(2, OrOr),
+						Some('=') => punct!(2, OrEq),
+						_ => punct!(1, Or),
+					},
+					'+' => match s.pop_first() {
+						Some('=') => punct!(2, PlusEq),
+						_ if !skip_plus => punct!(1, Plus),
+						_ => None,
+					},
+					'-' => match s.pop_first() {
+						Some('=') => punct!(2, MinusEq),
+						Some('>') => punct!(2, RArrow),
+						_ => punct!(1, Minus),
+					},
+					'*' => match s.pop_first() {
+						Some('=') => punct!(2, StarEq),
+						_ if !skip_star => punct!(1, Star),
+						_ => None,
+					},
+					'/' => match s.pop_first() {
+						Some('=') => punct!(2, SlashEq),
+						_ => punct!(1, Slash),
+					},
+					'^' => match s.pop_first() {
+						Some('=') => punct!(2, CaretEq),
+						_ => punct!(1, Caret),
+					},
+					'%' => match s.pop_first() {
+						Some('=') => punct!(2, PercentEq),
+						_ => punct!(1, Percent),
+					},
+					'.' => match s.pop_first() {
+						Some('.') => match s.pop_first() {
+							Some('.') => punct!(3, DotDotDot),
+							Some('=') => punct!(3, DotDotEq),
+							_ => punct!(2, DotDot),
+						},
+						_ => punct!(1, Dot),
+					},
+					':' => match s.pop_first() {
+						Some(':') => punct!(2, PathSep),
+						_ => punct!(1, Colon),
+					},
+					'~' => punct!(1, Tilde),
+					'@' => punct!(1, At),
+					',' => punct!(1, Comma),
+					';' => punct!(1, Semi),
+					'#' => punct!(1, Pound),
+					'$' if !skip_dollar => punct!(1, Dollar),
+					'?' if !skip_question => punct!(1, Question),
+					'_' => punct!(1, Underscore),
+					'(' if !skip_delimiters => punct!(1, ParenOpen),
+					')' if !skip_delimiters => punct!(1, ParenClose),
+					'[' if !skip_delimiters => punct!(1, BracketOpen),
+					']' if !skip_delimiters => punct!(1, BracketClose),
+					'{' if !skip_delimiters => punct!(1, BracesOpen),
+					'}' if !skip_delimiters => punct!(1, BracesClose),
+					_ => None,
+				}
+			});
 		let (s, punct) = res.ok_or(PunctuationError::NotFound)?;
 
 		let punct = match punct {

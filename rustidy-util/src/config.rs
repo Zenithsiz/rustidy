@@ -3,7 +3,9 @@
 // Imports
 use std::sync::Arc;
 
-macro decl_config($Config:ident; $($field:ident : $T:ty = $default:expr),* $(,)?) {
+macro decl_config(
+	$Config:ident; $($field:ident : $T:ty = $default:expr),* $(,)?
+) {
 	/// Formatter configuration
 	#[derive(Clone, Debug)]
 	pub struct $Config {
