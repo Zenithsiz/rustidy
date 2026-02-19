@@ -3,7 +3,7 @@
 // Imports
 use {
 	crate::util,
-	app_error::{AppError, Context},
+	app_error::{AppError, Context, ensure},
 	darling::FromDeriveInput,
 	quote::quote,
 	syn::parse_quote,
@@ -126,6 +126,7 @@ struct FieldAttrs {
 	indent:       Option<Indent>,
 
 	with:         Option<syn::Expr>,
+	with_self:    Option<syn::Expr>,
 
 	#[darling(default)]
 	prefix_ws:    Option<WithExprIf>,
@@ -181,11 +182,11 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 	let item_ident = &attrs.ident;
 
 	let format = match &attrs.data {
-		darling::ast::Data::Enum(variants) => self::derive_enum(variants),
-		darling::ast::Data::Struct(fields) => self::derive_struct(&attrs, fields),
+		darling::ast::Data::Enum(variants) => self::derive_enum(variants)?,
+		darling::ast::Data::Struct(fields) => self::derive_struct(&attrs, fields)?,
 	};
 
-	let format = self::derive_format(parse_quote! { self }, None, None, true, &None, format, &attrs.before_with, &attrs.with_tag, attrs.without_tags, Args::Skip, &attrs.indent,);
+	let format = self::derive_format(parse_quote! { self }, None, None, true, &None, &None, format, &attrs.before_with, &attrs.with_tag, attrs.without_tags, Args::Skip, &attrs.indent,)?;
 
 	let prefix_ws_ty: syn::Type = match attrs.no_prefix_ws {
 		true => parse_quote! { () },
@@ -250,7 +251,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 	Ok(output.into())
 }
 
-fn derive_enum(variants: &[VariantAttrs]) -> syn::Expr {
+fn derive_enum(variants: &[VariantAttrs]) -> Result<syn::Expr, AppError> {
 	let format_variants = variants
 		.iter()
 		.map(|variant| {
@@ -263,23 +264,23 @@ fn derive_enum(variants: &[VariantAttrs]) -> syn::Expr {
 					.eval(Some(parse_quote! { prefix_ws })));
 
 			let format = parse_quote! { rustidy_format::Format::format(value, ctx, prefix_ws, args) };
-			let format = self::derive_format(parse_quote! { value }, prefix_ws, None, true, &variant.with, format, &variant.before_with, &variant.with_tag, variant.without_tags, Args::Set(variant.args.clone()), &variant.indent,);
+			let format = self::derive_format(parse_quote! { value }, prefix_ws, None, true, &variant.with, &None, format, &variant.before_with, &variant.with_tag, variant.without_tags, Args::Set(variant.args.clone()), &variant.indent)?;
 
-			parse_quote! {
+			Ok(parse_quote! {
 				Self::#variant_ident(ref mut value) => #format,
-			}
+			})
 		})
-		.collect::<Vec<syn::Arm>>();
+		.collect::<Result<Vec<syn::Arm>, AppError>>()?;
 
-	parse_quote! { match *self { #( #format_variants )* } }
+	Ok(parse_quote! { match *self { #( #format_variants )* } })
 }
 
-fn derive_struct(attrs: &Attrs, fields: &darling::ast::Fields<FieldAttrs>) -> syn::Expr {
+fn derive_struct(attrs: &Attrs, fields: &darling::ast::Fields<FieldAttrs>) -> Result<syn::Expr, AppError> {
 	let format_fields = fields
 		.iter()
 		.enumerate()
 		.map(|(field_idx, field)| self::derive_struct_field(attrs, field_idx, field))
-		.collect::<Vec<_>>();
+		.collect::<Result<Vec<_>, _>>()?;
 
 	let assert_prefix_ws: Option<syn::Expr> = (!attrs
 		.no_prefix_ws)
@@ -289,17 +290,17 @@ fn derive_struct(attrs: &Attrs, fields: &darling::ast::Fields<FieldAttrs>) -> sy
 			}
 		});
 
-	parse_quote! {{
+	Ok(parse_quote! {{
 		let mut output = rustidy_format::FormatOutput::default();
 		let mut has_prefix_ws = true;
 		#( #format_fields; )*
 
 		#assert_prefix_ws;
 		output
-	}}
+	}})
 }
 
-fn derive_struct_field(attrs: &Attrs, field_idx: usize, field: &FieldAttrs) -> syn::Expr {
+fn derive_struct_field(attrs: &Attrs, field_idx: usize, field: &FieldAttrs) -> Result<syn::Expr, AppError> {
 	let field_ident = util::field_member_access(field_idx, field);
 
 	let prefix_ws = match &field.prefix_ws {
@@ -350,7 +351,7 @@ fn derive_struct_field(attrs: &Attrs, field_idx: usize, field: &FieldAttrs) -> s
 		}
 	};
 
-	self::derive_format(parse_quote! { &mut self.#field_ident }, prefix_ws, Some(after_format), false, &field.with, format, &field.before_with, &field.with_tag, field.without_tags, Args::Set(field.args.clone()), &field.indent,)
+	self::derive_format(parse_quote! { &mut self.#field_ident }, prefix_ws, Some(after_format), false, &field.with, &field.with_self, format, &field.before_with, &field.with_tag, field.without_tags, Args::Set(field.args.clone()), &field.indent,)
 }
 
 enum Args {
@@ -364,13 +365,18 @@ enum Args {
 	reason = "This signature is more ergonomic"
 )]
 #[expect(clippy::too_many_arguments, reason = "TODO")]
-fn derive_format(value: syn::Expr, prefix_ws: Option<syn::Expr>, after_format: Option<syn::Expr>, return_output: bool, with: &Option<syn::Expr>, default: syn::Expr, before_with: &[WithExprIf], with_tag: &[WithTag], without_tags: bool, args: Args, indent: &Option<Indent>,) -> syn::Expr {
+fn derive_format(value: syn::Expr, prefix_ws: Option<syn::Expr>, after_format: Option<syn::Expr>, return_output: bool, with: &Option<syn::Expr>, with_self: &Option<syn::Expr>, default: syn::Expr, before_with: &[WithExprIf], with_tag: &[WithTag], without_tags: bool, args: Args, indent: &Option<Indent>,) -> Result<syn::Expr, AppError> {
 	// TODO: Document the order in which we parse all attributes, since
 	//       it's not in declaration order (although maybe it should?).
+	ensure!(with.is_none() || with_self.is_none(), "Cannot specify both `#[format(with)]` and `#[format(with_self)]`");
 	let format = match &with {
 		Some(with) => parse_quote! { (#with)(#value, ctx, prefix_ws, args) },
-		None => default,
+		None => match &with_self {
+			Some(with) => parse_quote! { (#with)(self, ctx, prefix_ws, args) },
+			None => default,
+		},
 	};
+
 	let format = match return_output {
 		true => format,
 		false => parse_quote! { output.append(#format) },
@@ -435,7 +441,7 @@ fn derive_format(value: syn::Expr, prefix_ws: Option<syn::Expr>, after_format: O
 		}},
 	};
 
-	match after_format {
+	let format = match after_format {
 		Some(after_format) => match return_output {
 			true => parse_quote! {{
 				let output = #format;
@@ -448,5 +454,7 @@ fn derive_format(value: syn::Expr, prefix_ws: Option<syn::Expr>, after_format: O
 			}},
 		},
 		None => format,
-	}
+	};
+
+	Ok(format)
 }
