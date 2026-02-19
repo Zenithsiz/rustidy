@@ -49,7 +49,9 @@ where
 		let mut output = self
 			.prefix
 			.format(ctx, prefix_ws, args.prefix_args);
-		assert!(output.has_prefix_ws(), "Delimited prefix had no prefix whitespace");
+		if !output.has_prefix_ws() {
+			tracing::warn!("Delimited prefix had no prefix whitespace");
+		}
 
 		let value_output = self
 			.value

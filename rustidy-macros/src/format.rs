@@ -278,13 +278,16 @@ fn derive_struct(attrs: &Attrs, fields: &darling::ast::Fields<FieldAttrs>) -> sy
 	let format_fields = fields
 		.iter()
 		.enumerate()
-		.map(|(field_idx, field)| self::derive_struct_field(field_idx, field))
+		.map(|(field_idx, field)| self::derive_struct_field(attrs, field_idx, field))
 		.collect::<Vec<_>>();
 
 	let assert_prefix_ws: Option<syn::Expr> = (!attrs
 		.no_prefix_ws)
 		.then(|| parse_quote! {
-		assert!(output.has_prefix_ws() || output.is_empty, "Non-empty type did not use prefix whitespace: {}", std::any::type_name::<Self>()) });
+			if !output.is_empty && !output.has_prefix_ws() {
+				tracing::warn!("Non-empty type did not use prefix whitespace: {}", std::any::type_name::<Self>())
+			}
+		});
 
 	parse_quote! {{
 		let mut output = rustidy_format::FormatOutput::default();
@@ -296,14 +299,33 @@ fn derive_struct(attrs: &Attrs, fields: &darling::ast::Fields<FieldAttrs>) -> sy
 	}}
 }
 
-fn derive_struct_field(field_idx: usize, field: &FieldAttrs) -> syn::Expr {
+fn derive_struct_field(attrs: &Attrs, field_idx: usize, field: &FieldAttrs) -> syn::Expr {
 	let field_ident = util::field_member_access(field_idx, field);
+
+	let default_prefix_ws: syn::Expr = match &field.prefix_ws {
+		Some(field) => field.expr.clone(),
+		None => match attrs.no_prefix_ws {
+			true => parse_quote! {
+				#[expect(clippy::unused_unit)]
+				()
+			},
+			false => parse_quote! { <rustidy_util::Whitespace as rustidy_format::WhitespaceFormat>::PRESERVE },
+		},
+	};
 
 	let prefix_ws = match &field.prefix_ws {
 		Some(prefix_ws) => Some(prefix_ws
 			.map(|prefix_ws| {
 				parse_quote! { match has_prefix_ws {
-						true => panic!("Overwriting prefix whitespace of {}::{}", std::any::type_name::<Self>(), stringify!(#field_ident)),
+						true => {
+							tracing::warn!(
+								"Overwriting prefix whitespace of {}::{}",
+								std::any::type_name::<Self>(),
+								stringify!(#field_ident)
+							);
+
+							#default_prefix_ws
+						},
 						false => #prefix_ws,
 					}}
 			})
@@ -312,7 +334,15 @@ fn derive_struct_field(field_idx: usize, field: &FieldAttrs) -> syn::Expr {
 			true => None,
 			false => Some(parse_quote! { match has_prefix_ws {
 				true => prefix_ws,
-				false => panic!("Missing prefix whitespace for {}::{}", std::any::type_name::<Self>(), stringify!(#field_ident)),
+				false => {
+					tracing::warn!(
+						"Missing prefix whitespace for {}::{}",
+						std::any::type_name::<Self>(),
+						stringify!(#field_ident)
+					);
+
+					#default_prefix_ws
+				},
 			}}),
 		},
 	};

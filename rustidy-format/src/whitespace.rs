@@ -136,7 +136,9 @@ impl Formattable for Whitespace {
 //       does it at the type level.
 impl Format<(), ()> for Whitespace {
 	fn format(&mut self, _ctx: &mut crate::Context, _prefix_ws: (), _args: ()) -> FormatOutput {
-		assert!(self.is_empty(), "Whitespace was not empty");
+		if !self.is_empty() {
+			tracing::warn!("Whitespace was not empty");
+		}
 		FormatOutput::default()
 	}
 }
