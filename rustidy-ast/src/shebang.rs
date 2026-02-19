@@ -14,6 +14,7 @@ use {
 #[derive(Parse, Formattable, Format, Print)]
 #[parse(name = "a shebang")]
 #[parse(error(name = Shebang, fmt = "Expected a `#!`"))]
+#[format(no_prefix_ws)]
 pub struct Shebang(
 	#[parse(try_update_with = Self::parse)]
 	#[format(str)]

@@ -19,10 +19,14 @@ use {
 #[derive(Formattable, Format, Print)]
 pub struct FloatLiteral {
 	pub ws:       Whitespace,
+	#[format(prefix_ws = ())]
 	pub int:      DecLiteral,
 	pub dot:      Option<rustidy_ast_tokens::Dot>,
+	#[format(prefix_ws = ())]
 	pub frac:     Option<DecLiteral>,
+	#[format(prefix_ws = ())]
 	pub exponent: Option<FloatExponent>,
+	#[format(prefix_ws = ())]
 	pub suffix:   Option<Suffix>,
 }
 
@@ -104,6 +108,7 @@ pub enum FloatLiteralError {
 #[derive(Parse, Formattable, Format, Print)]
 #[parse(error(name = E, fmt = "Expected `e` or `E`"))]
 #[parse(error(name = Digit, fmt = "Expected a digit"))]
+#[format(no_prefix_ws)]
 pub struct FloatExponent(
 	#[parse(try_update_with = Self::parse)]
 	#[format(str)]

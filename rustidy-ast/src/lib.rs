@@ -79,9 +79,7 @@ impl Format<(), ()> for Crate {
 
 		let mut output = FormatOutput::default();
 
-		self.shebang
-			.format(&mut ctx, Whitespace::PRESERVE, ())
-			.append_to(&mut output);
+		self.shebang.format(&mut ctx, (), ()).append_to(&mut output);
 
 		self.inner_attrs
 			.format(
@@ -121,7 +119,7 @@ impl Format<(), ()> for Crate {
 		}
 
 		self.trailing_line_comment
-			.format(&mut ctx, Whitespace::PRESERVE, ())
+			.format(&mut ctx, (), ())
 			.append_to(&mut output);
 
 		output
@@ -134,6 +132,7 @@ impl Format<(), ()> for Crate {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 #[parse(error(name = NoComment, fmt = "Expected `//` (except `///` or `//!`)"))]
+#[format(no_prefix_ws)]
 pub struct TrailingLineComment(
 	#[parse(try_update_with = Self::parse)]
 	#[format(str)]

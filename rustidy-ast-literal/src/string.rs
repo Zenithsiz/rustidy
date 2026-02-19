@@ -4,7 +4,7 @@
 use {
 	super::Suffix,
 	crate::{AsciiEscape, QuoteEscape, StringContinue, UnicodeEscape},
-	rustidy_format::{Format, Formattable, WhitespaceFormat},
+	rustidy_format::{Format, Formattable},
 	rustidy_parse::Parse,
 	rustidy_print::Print,
 	rustidy_util::{AstStr, Whitespace},
@@ -24,7 +24,7 @@ pub struct StringLiteral {
 	#[parse(try_update_with = Self::parse)]
 	#[format(str)]
 	pub s:      AstStr,
-	#[format(prefix_ws = Whitespace::REMOVE)]
+	#[format(prefix_ws = ())]
 	pub suffix: Option<Suffix>,
 }
 

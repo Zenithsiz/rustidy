@@ -23,6 +23,7 @@ pub struct RawByteStringLiteral {
 	#[parse(try_update_with = Self::parse)]
 	#[format(str)]
 	pub s:      AstStr,
+	#[format(prefix_ws = ())]
 	pub suffix: Option<Suffix>,
 }
 

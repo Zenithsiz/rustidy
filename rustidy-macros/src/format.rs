@@ -149,8 +149,10 @@ struct Attrs {
 	#[as_ref]
 	data:     darling::ast::Data<VariantAttrs, FieldAttrs>,
 
-	#[darling(default)]
 	indent: Option<Indent>,
+
+	#[darling(default)]
+	no_prefix_ws: bool,
 
 	#[darling(multiple)]
 	before_with: Vec<WithExprIf>,
@@ -175,7 +177,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 
 	let format = match &attrs.data {
 		darling::ast::Data::Enum(variants) => self::derive_enum(variants),
-		darling::ast::Data::Struct(fields) => self::derive_struct(fields),
+		darling::ast::Data::Struct(fields) => self::derive_struct(&attrs, fields),
 	};
 
 	let format = self::derive_format(
@@ -192,7 +194,10 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 		&attrs.indent,
 	);
 
-	let prefix_ws_ty: syn::Type = parse_quote! { rustidy_format::WhitespaceConfig };
+	let prefix_ws_ty: syn::Type = match attrs.no_prefix_ws {
+		true => parse_quote! { () },
+		false => parse_quote! { rustidy_format::WhitespaceConfig },
+	};
 
 	let args_ty = match &attrs.args {
 		Some(args) => args.ty.clone(),
@@ -285,18 +290,23 @@ fn derive_enum(variants: &[VariantAttrs]) -> syn::Expr {
 	parse_quote! { match *self { #( #format_variants )* } }
 }
 
-fn derive_struct(fields: &darling::ast::Fields<FieldAttrs>) -> syn::Expr {
+fn derive_struct(attrs: &Attrs, fields: &darling::ast::Fields<FieldAttrs>) -> syn::Expr {
 	let format_fields = fields
 		.iter()
 		.enumerate()
 		.map(|(field_idx, field)| self::derive_struct_field(field_idx, field))
 		.collect::<Vec<_>>();
 
+	let assert_prefix_ws: Option<syn::Expr> = (!attrs.no_prefix_ws).then(|| parse_quote! {
+		assert!(output.has_prefix_ws() || output.is_empty, "Non-empty type did not use prefix whitespace: {}", std::any::type_name::<Self>()) }
+	);
+
 	parse_quote! {{
 		let mut output = rustidy_format::FormatOutput::default();
 		let mut has_prefix_ws = true;
 		#( #format_fields; )*
 
+		#assert_prefix_ws;
 		output
 	}}
 }

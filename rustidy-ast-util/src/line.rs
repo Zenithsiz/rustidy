@@ -13,6 +13,7 @@ use {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 #[parse(name = "remaining characters in line")]
+#[format(no_prefix_ws)]
 pub struct RemainingLine(
 	#[parse(update_with = Self::parse)]
 	#[format(str)]

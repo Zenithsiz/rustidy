@@ -60,8 +60,13 @@ pub impl Whitespace {
 		}
 	}
 
+	/// Returns if this whitespace is empty
+	fn is_empty(&mut self) -> bool {
+		self.0.first.0.is_empty() && self.0.rest.is_empty()
+	}
+
 	/// Returns if this whitespace only contains pure whitespace
-	fn is_pure(&mut self, _ctx: &mut crate::Context) -> bool {
+	fn is_pure(&mut self) -> bool {
 		self.0.rest.is_empty()
 	}
 
@@ -117,6 +122,18 @@ impl Formattable for Whitespace {
 		}
 
 		ControlFlow::Continue(is_empty)
+	}
+}
+
+// Note: This impl is useful for types that have whitespace within them,
+//       but require that whitespace to be empty.
+// TODO: Remove this impl and just make it so any place
+//       that skips whitespace during parsing instead
+//       does it at the type level.
+impl Format<(), ()> for Whitespace {
+	fn format(&mut self, _ctx: &mut crate::Context, _prefix_ws: (), _args: ()) -> FormatOutput {
+		assert!(self.is_empty(), "Whitespace was not empty");
+		FormatOutput::default()
 	}
 }
 

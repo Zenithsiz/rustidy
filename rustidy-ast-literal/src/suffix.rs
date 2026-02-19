@@ -3,16 +3,22 @@
 // Imports
 use {
 	rustidy_ast_util::IdentifierOrKeyword,
-	rustidy_format::{Format, Formattable},
+	rustidy_format::{Format, Formattable, WhitespaceFormat},
 	rustidy_parse::{Parse, Parser, ParserTag},
 	rustidy_print::Print,
+	rustidy_util::Whitespace,
 };
 
 /// `SUFFIX`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
-pub struct Suffix(#[parse(with_tag = ParserTag::SkipWhitespace)] IdentifierOrKeyword);
+#[format(no_prefix_ws)]
+pub struct Suffix(
+	#[parse(with_tag = ParserTag::SkipWhitespace)]
+	#[format(prefix_ws = Whitespace::REMOVE)]
+	IdentifierOrKeyword,
+);
 
 /// `SUFFIX_NO_E`
 #[derive(PartialEq, Eq, Debug)]
@@ -20,6 +26,7 @@ pub struct Suffix(#[parse(with_tag = ParserTag::SkipWhitespace)] IdentifierOrKey
 #[derive(Parse, Formattable, Format, Print)]
 #[parse(error(name = StartedWithE, fmt = "Started with an `e` or `E`"))]
 #[parse(and_try_with = Self::check_no_e)]
+#[format(no_prefix_ws)]
 pub struct SuffixNoE(pub Suffix);
 
 impl SuffixNoE {

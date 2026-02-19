@@ -50,7 +50,7 @@ pub trait Formattable {
 
 	/// Returns if the prefix whitespace is pure.
 	fn prefix_ws_is_pure(&mut self, ctx: &mut Context) -> Option<bool> {
-		self.with_prefix_ws(ctx, &mut |ws, ctx| ws.is_pure(ctx)).ok()
+		self.with_prefix_ws(ctx, &mut |ws, _ctx| ws.is_pure()).ok()
 	}
 
 	/// Joins a string as a prefix onto the prefix whitespace of this type.

@@ -4,7 +4,7 @@
 use {
 	super::SuffixNoE,
 	app_error::{AppError, Context},
-	rustidy_format::{Format, Formattable, WhitespaceFormat},
+	rustidy_format::{Format, Formattable},
 	rustidy_parse::Parse,
 	rustidy_print::Print,
 	rustidy_util::{AstStr, Whitespace},
@@ -18,11 +18,9 @@ use {
 #[parse(name = "an integer literal")]
 pub struct IntegerLiteral {
 	pub ws:     Whitespace,
-	// TODO: There is no prefix whitespace here, so we'd ideally
-	//       not need to pass anything through.
-	#[format(prefix_ws = Whitespace::REMOVE)]
+	#[format(prefix_ws = ())]
 	pub inner:  IntegerLiteralInner,
-	#[format(prefix_ws = Whitespace::REMOVE)]
+	#[format(prefix_ws = ())]
 	pub suffix: Option<SuffixNoE>,
 }
 
@@ -49,6 +47,7 @@ impl IntegerLiteral {
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
+#[format(no_prefix_ws)]
 pub enum IntegerLiteralInner {
 	Decimal(DecLiteral),
 	Binary(BinLiteral),
@@ -61,6 +60,7 @@ pub enum IntegerLiteralInner {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 #[parse(error(name = StartDigit, fmt = "Expected 0-9"))]
+#[format(no_prefix_ws)]
 pub struct DecLiteral(
 	#[parse(try_update_with = Self::parse)]
 	#[format(str)]
@@ -84,6 +84,7 @@ impl DecLiteral {
 #[derive(Parse, Formattable, Format, Print)]
 #[parse(error(name = Start0B, fmt = "Expected `0b`"))]
 #[parse(error(name = Digit, fmt = "Expected 0 or 1"))]
+#[format(no_prefix_ws)]
 pub struct BinLiteral(
 	#[parse(try_update_with = Self::parse)]
 	#[format(str)]
@@ -109,6 +110,7 @@ impl BinLiteral {
 #[derive(Parse, Formattable, Format, Print)]
 #[parse(error(name = Start0O, fmt = "Expected `0o`"))]
 #[parse(error(name = Digit, fmt = "Expected 0-7"))]
+#[format(no_prefix_ws)]
 pub struct OctLiteral(
 	#[parse(try_update_with = Self::parse)]
 	#[format(str)]
@@ -134,6 +136,7 @@ impl OctLiteral {
 #[derive(Parse, Formattable, Format, Print)]
 #[parse(error(name = Start0X, fmt = "Expected `0x`"))]
 #[parse(error(name = Digit, fmt = "Expected 0-9 or a-f"))]
+#[format(no_prefix_ws)]
 pub struct HexLiteral(
 	#[parse(try_update_with = Self::parse)]
 	#[format(str)]
