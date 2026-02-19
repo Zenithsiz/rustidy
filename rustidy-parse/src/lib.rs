@@ -396,7 +396,10 @@ impl<'input> Parser<'input> {
 
 	/// Returns the string of an range
 	#[must_use]
-	pub fn str(&mut self, s: &AstStr) -> Cow<'input, str> {
+	pub fn str<'s>(&mut self, s: &'s AstStr) -> Cow<'s, str>
+	where
+		'input: 's
+	{
 		s.str(self.input)
 	}
 

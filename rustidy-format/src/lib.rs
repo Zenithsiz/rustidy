@@ -375,7 +375,10 @@ impl<'a, 'input> Context<'a, 'input> {
 
 	/// Returns the string of a string
 	#[must_use]
-	pub fn str(&mut self, s: &AstStr) -> Cow<'input, str> {
+	pub fn str<'s>(&mut self, s: &'s AstStr) -> Cow<'s, str>
+	where
+		'input: 's
+	{
 		s.str(self.input)
 	}
 

@@ -81,15 +81,20 @@ impl AstStr {
 		self.repr().str_input(input)
 	}
 
+	/// Returns the string of this string, if it's cheap to get
+	#[must_use]
+	pub fn str_cheap<'a>(&'a self, input: &'a str) -> Option<&'a str> {
+		self.repr().str_input(input)
+	}
+
 	/// Returns the string of this string
 	// TODO: This can be somewhat expensive, should we replace it with
 	//       functions performing whatever checks the callers need instead?
 	#[must_use]
-	pub fn str<'input>(&self, input: &'input str) -> Cow<'input, str> {
-		let repr = self.repr();
-		match repr.str_input(input) {
+	pub fn str<'a>(&'a self, input: &'a str) -> Cow<'a, str> {
+		match self.0.str_cheap(input) {
 			Some(s) => s.into(),
-			None => repr.str(input).into_owned().into(),
+			None => self.repr().str(input).into_owned().into(),
 		}
 	}
 }

@@ -33,7 +33,7 @@ impl StringLiteral {
 	///
 	/// Doesn't include the quotes or suffix, and resolves any escapes
 	#[must_use]
-	pub fn contents<'input>(&self, input: &'input str) -> Cow<'input, str> {
+	pub fn contents<'s>(&'s self, input: &'s str) -> Cow<'s, str> {
 		let mut s = self.s.str(input);
 
 		// Remove the quotes
