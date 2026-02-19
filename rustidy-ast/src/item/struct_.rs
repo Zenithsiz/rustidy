@@ -79,7 +79,7 @@ pub struct StructField(#[format(args = with::fmt(args))] pub WithOuterAttributes
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
-#[format(args(ty = "&'_ mut StructFieldInnerArgs"))]
+#[format(args(ty = "StructFieldInnerArgs"))]
 pub struct StructFieldInner {
 	pub vis:   Option<Visibility>,
 	#[format(prefix_ws(expr = Whitespace::SINGLE, if = self.vis.is_some()))]
@@ -97,7 +97,7 @@ pub struct StructFieldInner {
 	pub eq:    Option<StructFieldEq>,
 }
 
-#[derive(Debug)]
+#[derive(Clone, Copy, Debug)]
 struct StructFieldInnerArgs {
 	max_ident_len: usize,
 }

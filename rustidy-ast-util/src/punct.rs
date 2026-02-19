@@ -12,10 +12,10 @@ use {
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
-#[format(args(ty = "FmtArgs<TA, PA>", generic = "TA", generic = "PA"))]
+#[format(args(ty = "FmtArgs<TA, PA>", generic = "TA: Clone", generic = "PA: Clone"))]
 #[format(where_format = "where T: Format<TA>, P: Format<PA>")]
 pub struct Punctuated<T, P> {
-	#[format(args = args.value_args)]
+	#[format(args = args.value_args.clone())]
 	pub first: T,
 	#[format(prefix_ws = args.punct_prefix_ws)]
 	#[format(args = rustidy_format::vec::args(args.punct_prefix_ws, args))]
@@ -143,10 +143,10 @@ impl<T, P> Punctuated<T, P> {
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
-#[format(args(ty = "FmtArgs<TA, PA>", generic = "TA", generic = "PA"))]
+#[format(args(ty = "FmtArgs<TA, PA>", generic = "TA: Clone", generic = "PA: Clone"))]
 #[format(where_format = "where T: Format<TA>, P: Format<PA>")]
 pub struct PunctuatedTrailing<T, P> {
-	#[format(args = *args)]
+	#[format(args = args.clone())]
 	pub punctuated: Punctuated<T, P>,
 	#[format(prefix_ws = args.punct_prefix_ws)]
 	#[format(args = args.punct_args)]
@@ -258,7 +258,7 @@ impl<'a, T, P> Iterator for SplitLastMut<'a, T, P> {
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
-#[format(args(ty = "&'_ mut FmtArgs<TA, PA>", generic = "TA", generic = "PA"))]
+#[format(args(ty = "FmtArgs<TA, PA>", generic = "TA", generic = "PA"))]
 #[format(where_format = "where T: Format<TA>, P: Format<PA>")]
 pub struct PunctuatedRest<T, P> {
 	#[format(args = args.punct_args)]
@@ -269,6 +269,7 @@ pub struct PunctuatedRest<T, P> {
 }
 
 /// Formatting arguments
+#[derive(Clone, Copy, Debug)]
 pub struct FmtArgs<TA, PA> {
 	pub value_prefix_ws: WhitespaceConfig,
 	pub punct_prefix_ws: WhitespaceConfig,

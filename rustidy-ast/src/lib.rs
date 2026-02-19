@@ -60,12 +60,7 @@ use {
 pub struct Crate(pub CrateInner);
 
 impl Format<()> for Crate {
-	fn format(
-		&mut self,
-		ctx: &mut rustidy_format::Context,
-		prefix_ws: WhitespaceConfig,
-		_args: &mut (),
-	) -> FormatOutput {
+	fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: WhitespaceConfig, _args: ()) -> FormatOutput {
 		let mut inner_ctx = ctx.sub_context();
 		for attr in &self.0.inner_attrs {
 			if let Some(attr) = attr.try_as_attr_ref() &&
@@ -76,7 +71,7 @@ impl Format<()> for Crate {
 		}
 
 		// TODO: This also needs to set `FormatTag::AfterNewline` for `items`.
-		self.0.format(&mut inner_ctx, prefix_ws, &mut ())
+		self.0.format(&mut inner_ctx, prefix_ws, ())
 	}
 }
 
@@ -106,7 +101,7 @@ impl CrateInner {
 		trailing: &mut Option<TrailingLineComment>,
 		ctx: &mut rustidy_format::Context,
 		prefix_ws: WhitespaceConfig,
-		(): &mut (),
+		_args: (),
 	) -> FormatOutput {
 		let Some(trailing) = trailing else {
 			return FormatOutput::default();
@@ -120,7 +115,7 @@ impl CrateInner {
 			trailing.0.replace(ctx.input(), AstStrRepr::Dynamic(s));
 		}
 
-		trailing.format(ctx, prefix_ws, &mut ())
+		trailing.format(ctx, prefix_ws, ())
 	}
 }
 

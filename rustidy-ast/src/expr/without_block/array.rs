@@ -29,26 +29,24 @@ impl ArrayExpression {
 		let mut common_output = FormatOutput::default();
 		let mut single_line_output = FormatOutput::default();
 
-		prefix.format(ctx, prefix_ws, &mut ()).append_to(&mut common_output);
+		prefix.format(ctx, prefix_ws, ()).append_to(&mut common_output);
 		values
 			.punctuated
 			.first
-			.format(ctx, Whitespace::REMOVE, &mut ())
+			.format(ctx, Whitespace::REMOVE, ())
 			.append_to(&mut common_output);
 
 		for PunctuatedRest { punct: comma, value } in &mut values.punctuated.rest {
-			comma
-				.format(ctx, Whitespace::REMOVE, &mut ())
-				.append_to(&mut common_output);
+			comma.format(ctx, Whitespace::REMOVE, ()).append_to(&mut common_output);
 			value
-				.format(ctx, Whitespace::SINGLE, &mut ())
+				.format(ctx, Whitespace::SINGLE, ())
 				.append_to(&mut single_line_output);
 		}
 
 		// TODO: Should we preserve the original comma by returning it?
 		values.trailing = None;
 		suffix
-			.format(ctx, Whitespace::REMOVE, &mut ())
+			.format(ctx, Whitespace::REMOVE, ())
 			.append_to(&mut single_line_output);
 
 		(common_output, single_line_output)
@@ -56,7 +54,7 @@ impl ArrayExpression {
 }
 
 impl Format<()> for ArrayExpression {
-	fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: WhitespaceConfig, (): &mut ()) -> FormatOutput {
+	fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: WhitespaceConfig, _args: ()) -> FormatOutput {
 		match &mut self.0.value {
 			Some(ArrayElements::Punctuated(values)) => {
 				let (common_output, single_line_output) =
@@ -86,12 +84,10 @@ impl Format<()> for ArrayExpression {
 							loop {
 								let mut row_values = (&mut values_iter).take(cols.unwrap_or(1));
 								let Some(first) = row_values.next() else { break };
-								first
-									.format(ctx, Whitespace::CUR_INDENT, &mut ())
-									.append_to(&mut output);
+								first.format(ctx, Whitespace::CUR_INDENT, ()).append_to(&mut output);
 
 								for value in row_values {
-									value.format(ctx, Whitespace::SINGLE, &mut ()).append_to(&mut output);
+									value.format(ctx, Whitespace::SINGLE, ()).append_to(&mut output);
 								}
 							}
 							drop(values_iter);
@@ -101,14 +97,14 @@ impl Format<()> for ArrayExpression {
 							}
 							values
 								.trailing
-								.format(ctx, Whitespace::REMOVE, &mut ())
+								.format(ctx, Whitespace::REMOVE, ())
 								.append_to(&mut output);
 						});
 
 						// Finally, close the indentation on the `]`
 						self.0
 							.suffix
-							.format(ctx, Whitespace::CUR_INDENT, &mut ())
+							.format(ctx, Whitespace::CUR_INDENT, ())
 							.append_to(&mut output);
 
 						output
@@ -119,12 +115,9 @@ impl Format<()> for ArrayExpression {
 			Some(ArrayElements::Repeat(repeat)) => {
 				let mut output = FormatOutput::default();
 
-				self.0.prefix.format(ctx, prefix_ws, &mut ()).append_to(&mut output);
-				repeat.format(ctx, Whitespace::REMOVE, &mut ()).append_to(&mut output);
-				self.0
-					.suffix
-					.format(ctx, Whitespace::REMOVE, &mut ())
-					.append_to(&mut output);
+				self.0.prefix.format(ctx, prefix_ws, ()).append_to(&mut output);
+				repeat.format(ctx, Whitespace::REMOVE, ()).append_to(&mut output);
+				self.0.suffix.format(ctx, Whitespace::REMOVE, ()).append_to(&mut output);
 
 				output
 			},

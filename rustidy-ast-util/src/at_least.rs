@@ -20,6 +20,7 @@ pub struct AtLeast1<T> {
 }
 
 /// Formatting arguments
+#[derive(Clone, Copy, Debug)]
 pub struct FmtArgs {
 	pub rest_prefix_ws: WhitespaceConfig,
 }

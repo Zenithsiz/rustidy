@@ -60,16 +60,16 @@ impl Format<()> for MethodCallExpression {
 		&mut self,
 		ctx: &mut rustidy_format::Context,
 		prefix_ws: rustidy_format::WhitespaceConfig,
-		(): &mut (),
+		_args: (),
 	) -> rustidy_format::FormatOutput {
-		let output = self.format(ctx, prefix_ws, &mut MethodCallExpressionFmt);
+		let output = self.format(ctx, prefix_ws, MethodCallExpressionFmt);
 
 		match ctx.has_tag(FormatTag::InsideChain) {
 			true => output,
 			false => match output.len_without_prefix_ws() >= ctx.config().max_chain_len {
 				// TODO: Ideally we wouldn't re-format everything here.
 				true => ctx.with_tag(FormatTag::InsideChain, |ctx| {
-					self.format(ctx, prefix_ws, &mut MethodCallExpressionFmt)
+					self.format(ctx, prefix_ws, MethodCallExpressionFmt)
 				}),
 				false => output,
 			},

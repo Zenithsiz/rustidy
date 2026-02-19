@@ -39,7 +39,7 @@ use {
 /// Formats the crate `crate_`.
 pub fn format(input: &str, config: &Config, crate_: &mut Crate) -> FormatOutput {
 	let mut ctx = rustidy_format::Context::new(input, config);
-	crate_.format(&mut ctx, Whitespace::PRESERVE, &mut ())
+	crate_.format(&mut ctx, Whitespace::PRESERVE, ())
 }
 
 /// Parses the input `input`.

@@ -39,6 +39,7 @@ impl<T, L, R> Delimited<T, L, R> {
 
 impl<T, L, R, AL, AT, AR> Format<FmtArgs<AL, AT, AR>> for Delimited<T, L, R>
 where
+	AT: Clone,
 	L: Format<AL>,
 	T: Format<AT>,
 	R: Format<AR>,
@@ -47,15 +48,15 @@ where
 		&mut self,
 		ctx: &mut rustidy_format::Context,
 		prefix_ws: WhitespaceConfig,
-		args: &mut FmtArgs<AL, AT, AR>,
+		args: FmtArgs<AL, AT, AR>,
 	) -> FormatOutput {
 		// TODO: Should we handle the case of the prefix being empty and needing to
 		//       pass the prefix whitespace along?
-		let mut output = self.prefix.format(ctx, prefix_ws, &mut args.prefix_args);
+		let mut output = self.prefix.format(ctx, prefix_ws, args.prefix_args);
 
-		let value_output = self.value.format(ctx, args.value_non_blank, &mut args.value_args);
+		let value_output = self.value.format(ctx, args.value_non_blank, args.value_args.clone());
 		let value_output = match value_output.is_blank {
-			true => self.value.format(ctx, args.value_blank, &mut args.value_args),
+			true => self.value.format(ctx, args.value_blank, args.value_args),
 			false => value_output,
 		};
 		value_output.append_to(&mut output);
@@ -65,7 +66,7 @@ where
 			false => args.suffix_non_blank,
 		};
 		self.suffix
-			.format(ctx, suffix_prefix_ws, &mut args.suffix_args)
+			.format(ctx, suffix_prefix_ws, args.suffix_args)
 			.append_to(&mut output);
 
 		output
@@ -74,6 +75,7 @@ where
 
 /// Formatting arguments
 // TODO: Switch order of generics to `T, L, R` like `Delimited`.
+#[derive(Clone, Copy, Debug)]
 pub struct FmtArgs<AL, AT, AR> {
 	pub value_non_blank:  WhitespaceConfig,
 	pub suffix_non_blank: WhitespaceConfig,

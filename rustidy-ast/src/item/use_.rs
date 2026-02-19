@@ -204,7 +204,7 @@ impl UseTreeGroup {
 		tree.format(
 			ctx,
 			prefix_ws,
-			&mut delimited::fmt_remove_with(
+			delimited::fmt_remove_with(
 				(),
 				punct::FmtArgs {
 					value_prefix_ws: Whitespace::SINGLE,
@@ -221,7 +221,7 @@ impl UseTreeGroup {
 		tree: &mut Braced<Option<PunctuatedTrailing<Box<UseTree>, token::Comma>>>,
 		ctx: &mut rustidy_format::Context,
 		prefix_ws: WhitespaceConfig,
-		(): &mut (),
+		_args: (),
 	) -> FormatOutput {
 		let compact_output = Self::format_tree_compact(tree, ctx, prefix_ws);
 
@@ -236,7 +236,7 @@ impl UseTreeGroup {
 				tree.format(
 					ctx,
 					prefix_ws,
-					&mut delimited::fmt_indent_if_non_blank_with(
+					delimited::fmt_indent_if_non_blank_with(
 						(),
 						punct::FmtArgs {
 							value_prefix_ws: Whitespace::CUR_INDENT,

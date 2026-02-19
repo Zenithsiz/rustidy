@@ -39,16 +39,16 @@ impl Format<()> for FieldExpression {
 		&mut self,
 		ctx: &mut rustidy_format::Context,
 		prefix_ws: rustidy_format::WhitespaceConfig,
-		(): &mut (),
+		_args: (),
 	) -> rustidy_format::FormatOutput {
-		let output = self.format(ctx, prefix_ws, &mut FieldExpressionFmt);
+		let output = self.format(ctx, prefix_ws, FieldExpressionFmt);
 
 		match ctx.has_tag(FormatTag::InsideChain) {
 			true => output,
 			false => match output.len_without_prefix_ws() >= ctx.config().max_chain_len {
 				// TODO: Ideally we wouldn't re-format everything here.
 				true => ctx.with_tag(FormatTag::InsideChain, |ctx| {
-					self.format(ctx, prefix_ws, &mut FieldExpressionFmt)
+					self.format(ctx, prefix_ws, FieldExpressionFmt)
 				}),
 				false => output,
 			},

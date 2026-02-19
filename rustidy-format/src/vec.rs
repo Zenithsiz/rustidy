@@ -46,8 +46,9 @@ impl<T: Formattable> Formattable for Vec<T> {
 impl<T, A> Format<Args<A>> for Vec<T>
 where
 	T: Format<A>,
+	A: Clone,
 {
-	fn format(&mut self, ctx: &mut Context, prefix_ws: WhitespaceConfig, args: &mut Args<A>) -> FormatOutput {
+	fn format(&mut self, ctx: &mut Context, prefix_ws: WhitespaceConfig, args: Args<A>) -> FormatOutput {
 		// Note: Due to the way we're parsed, the first element will never be non-empty,
 		//       but it's possible for the caller to create this value during formatting
 		//       and have that not be true, so we always check.
@@ -55,8 +56,8 @@ where
 		let mut has_prefix_ws = true;
 		for value in self {
 			let value_output = match has_prefix_ws {
-				true => value.format(ctx, prefix_ws, &mut args.args),
-				false => value.format(ctx, args.rest_prefix_ws, &mut args.args),
+				true => value.format(ctx, prefix_ws, args.args.clone()),
+				false => value.format(ctx, args.rest_prefix_ws, args.args.clone()),
 			};
 			value_output.append_to(&mut output);
 

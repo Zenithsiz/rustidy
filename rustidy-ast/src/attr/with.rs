@@ -38,8 +38,8 @@ impl<T> WithOuterAttributes<T> {
 }
 
 impl<T: Format<()>> Format<()> for WithOuterAttributes<T> {
-	fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: WhitespaceConfig, (): &mut ()) -> FormatOutput {
-		self.format(ctx, prefix_ws, &mut FmtArgs { inner_args: () })
+	fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: WhitespaceConfig, _args: ()) -> FormatOutput {
+		self.format(ctx, prefix_ws, FmtArgs { inner_args: () })
 	}
 }
 
@@ -48,7 +48,7 @@ impl<A, T: Format<A>> Format<FmtArgs<A>> for WithOuterAttributes<T> {
 		&mut self,
 		ctx: &mut rustidy_format::Context,
 		prefix_ws: WhitespaceConfig,
-		args: &mut FmtArgs<A>,
+		args: FmtArgs<A>,
 	) -> FormatOutput {
 		let mut output = FormatOutput::default();
 
@@ -56,8 +56,8 @@ impl<A, T: Format<A>> Format<FmtArgs<A>> for WithOuterAttributes<T> {
 		let mut has_prefix_ws = true;
 		for attr in &mut self.attrs {
 			ctx.with_tag_if(is_after_newline, FormatTag::AfterNewline, |ctx| match has_prefix_ws {
-				true => attr.format(ctx, prefix_ws, &mut ()),
-				false => attr.format(ctx, Whitespace::CUR_INDENT, &mut ()),
+				true => attr.format(ctx, prefix_ws, ()),
+				false => attr.format(ctx, Whitespace::CUR_INDENT, ()),
 			})
 			.append_to(&mut output);
 
@@ -77,9 +77,9 @@ impl<A, T: Format<A>> Format<FmtArgs<A>> for WithOuterAttributes<T> {
 
 		value_ctx.with_tag_if(is_after_newline, FormatTag::AfterNewline, |ctx| {
 			match has_prefix_ws {
-				true => self.inner.format(ctx, prefix_ws, &mut args.inner_args),
+				true => self.inner.format(ctx, prefix_ws, args.inner_args),
 				// TODO: The user should be able to choose this
-				false => self.inner.format(ctx, Whitespace::CUR_INDENT, &mut args.inner_args),
+				false => self.inner.format(ctx, Whitespace::CUR_INDENT, args.inner_args),
 			}
 			.append_to(&mut output);
 		});
@@ -139,8 +139,8 @@ where
 pub struct BracedWithInnerAttributes<T>(Braced<WithInnerAttributes<T>>);
 
 impl<T: Format<()>> Format<()> for BracedWithInnerAttributes<T> {
-	fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: WhitespaceConfig, (): &mut ()) -> FormatOutput {
-		self.format(ctx, prefix_ws, &mut FmtArgs { inner_args: () })
+	fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: WhitespaceConfig, _args: ()) -> FormatOutput {
+		self.format(ctx, prefix_ws, FmtArgs { inner_args: () })
 	}
 }
 
@@ -149,11 +149,11 @@ impl<A, T: Format<A>> Format<FmtArgs<A>> for BracedWithInnerAttributes<T> {
 		&mut self,
 		ctx: &mut rustidy_format::Context,
 		prefix_ws: WhitespaceConfig,
-		args: &mut FmtArgs<A>,
+		args: FmtArgs<A>,
 	) -> FormatOutput {
 		let mut output = FormatOutput::default();
 
-		self.0.prefix.format(ctx, prefix_ws, &mut ()).append_to(&mut output);
+		self.0.prefix.format(ctx, prefix_ws, ()).append_to(&mut output);
 
 		let mut ctx = ctx.sub_context();
 		for attr in &self.0.value.attrs {
@@ -168,23 +168,19 @@ impl<A, T: Format<A>> Format<FmtArgs<A>> for BracedWithInnerAttributes<T> {
 			let mut is_after_newline = false;
 			for attr in &mut self.0.value.attrs {
 				ctx.with_tag_if(is_after_newline, FormatTag::AfterNewline, |ctx| {
-					attr.format(ctx, Whitespace::CUR_INDENT, &mut ()).append_to(&mut output);
+					attr.format(ctx, Whitespace::CUR_INDENT, ()).append_to(&mut output);
 				});
 
 				is_after_newline = matches!(attr, InnerAttrOrDocComment::DocComment(InnerDocComment::Line(_)));
 			}
 
 			ctx.with_tag_if(is_after_newline, FormatTag::AfterNewline, |ctx| {
-				let value_output = self
-					.0
-					.value
-					.inner
-					.format(ctx, Whitespace::CUR_INDENT, &mut args.inner_args);
+				let value_output = self.0.value.inner.format(ctx, Whitespace::CUR_INDENT, args.inner_args);
 				value_output.append_to(&mut output);
 
 				let remove_if_pure = self.0.value.attrs.is_empty() && value_output.is_empty;
 				let prefix_ws = Whitespace::indent(-1, remove_if_pure);
-				self.0.suffix.format(ctx, prefix_ws, &mut ()).append_to(&mut output);
+				self.0.suffix.format(ctx, prefix_ws, ()).append_to(&mut output);
 			});
 		});
 
@@ -202,6 +198,7 @@ struct WithInnerAttributes<T> {
 }
 
 /// Formatting arguments
+#[derive(Clone, Copy, Debug)]
 pub struct FmtArgs<A> {
 	pub inner_args: A,
 }

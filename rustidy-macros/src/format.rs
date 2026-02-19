@@ -238,7 +238,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 		#[automatically_derived]
 		impl #impl_generics rustidy_format::Format<#args_ty> for #item_ident #ty_generics #impl_where_clause {
 			#[coverage(on)]
-			fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: rustidy_format::WhitespaceConfig, args: &mut #args_ty) -> rustidy_format::FormatOutput {
+			fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: rustidy_format::WhitespaceConfig, args: #args_ty) -> rustidy_format::FormatOutput {
 				#format
 			}
 		}
@@ -380,7 +380,7 @@ fn derive_format(
 		Args::Set(args) => {
 			let args = args.unwrap_or_else(|| parse_quote! { () });
 			parse_quote! {{
-				let mut args = &mut #args;
+				let args = #args;
 				#format
 			}}
 		},
