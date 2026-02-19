@@ -21,7 +21,12 @@ fn a()//a
 fn a()->u32;
 fn a()where;
 fn a(){/*a*/{/*c*/}/*b*/}
-fn a(&mut self);
-fn a(&  mut  self  ,  );
+fn a(  self  );
+fn a(  &  self  );
+fn a(  &  'a  self  );
+fn a(  mut  self  );
+fn a(  &  mut  self  );
+fn a(  &'a  mut  self  );
+fn a(  &'a  mut  self  ,  );
 fn a(a:u32,b:u32);
 fn a(  a  :  u32  ,  b  :  u32  );

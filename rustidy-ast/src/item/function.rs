@@ -210,9 +210,9 @@ pub struct ShorthandSelf {
 		false => Whitespace::REMOVE,
 	}))]
 	pub mut_:  Option<token::Mut>,
-	#[format(prefix_ws(if = self.ref_.is_some() || self.mut_.is_some(), expr = match &self.ref_ {
-		Some(ref_) if ref_.lifetime.is_none() => Whitespace::SINGLE,
-		_ => Whitespace::REMOVE,
+	#[format(prefix_ws(if = self.ref_.is_some() || self.mut_.is_some(), expr = match self.ref_.as_ref().is_some_and(|ref_| ref_.lifetime.is_some()) || self.mut_.is_some() {
+		true => Whitespace::SINGLE,
+		false => Whitespace::REMOVE,
 	}))]
 	pub self_: token::SelfLower,
 }
