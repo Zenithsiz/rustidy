@@ -114,7 +114,7 @@ pub enum FloatLiteralError {
 #[format(no_prefix_ws)]
 pub struct FloatExponent(#[parse(try_update_with = Self::parse)]
 #[format(str)]
-pub AstStr,);
+pub AstStr);
 
 impl FloatExponent {
 	fn parse(s: &mut &str) -> Result<(), FloatExponentError> {

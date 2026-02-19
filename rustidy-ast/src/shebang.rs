@@ -17,7 +17,7 @@ use {
 #[format(no_prefix_ws)]
 pub struct Shebang(#[parse(try_update_with = Self::parse)]
 #[format(str)]
-pub AstStr,);
+pub AstStr);
 
 impl Shebang {
 	fn parse(s: &mut &str) -> Result<(), ShebangError> {

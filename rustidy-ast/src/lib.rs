@@ -129,7 +129,7 @@ impl Format<(), ()> for Crate {
 #[format(no_prefix_ws)]
 pub struct TrailingLineComment(#[parse(try_update_with = Self::parse)]
 #[format(str)]
-pub AstStr,);
+pub AstStr);
 
 impl TrailingLineComment {
 	fn parse(s: &mut &str) -> Result<(), TrailingLineCommentError> {

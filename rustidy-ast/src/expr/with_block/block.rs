@@ -105,7 +105,9 @@ impl Parse for Statements {
 #[derive(derive_more::Debug, derive_more::From, ParseError)]
 pub enum StatementsError {
 	#[parse_error(transparent)]
-	ExpressionStatementWithBlock(ParserError<(ExpressionStatementWithBlock, NotFollows<token::Dot>, NotFollows<token::Question>,)>,),
+	ExpressionStatementWithBlock(
+		ParserError<(ExpressionStatementWithBlock, NotFollows<token::Dot>, NotFollows<token::Question>,)>,
+	),
 
 	#[parse_error(transparent)]
 	ExpressionWithoutBlock(ParserError<(ExpressionWithoutBlock, Option<token::Semi>)>),

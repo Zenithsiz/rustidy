@@ -175,9 +175,11 @@ pub enum DelimTokenTree {
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
-pub struct DelimTokenTreeInner(#[parse(fatal)]
-#[format(args = rustidy_format::vec::args_prefix_ws(Whitespace::PRESERVE))]
-pub Vec<TokenTree>,);
+pub struct DelimTokenTreeInner(
+	#[parse(fatal)]
+	#[format(args = rustidy_format::vec::args_prefix_ws(Whitespace::PRESERVE))]
+	pub Vec<TokenTree>,
+);
 
 /// `TokenTree`
 #[derive(PartialEq, Eq, Debug)]

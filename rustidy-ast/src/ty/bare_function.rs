@@ -57,8 +57,10 @@ pub enum FunctionParametersMaybeNamedVariadic {
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
-pub struct MaybeNamedFunctionParameters(#[format(args = punct::fmt(Whitespace::SINGLE, Whitespace::REMOVE))]
-PunctuatedTrailing<MaybeNamedParam, token::Comma>,);
+pub struct MaybeNamedFunctionParameters(
+	#[format(args = punct::fmt(Whitespace::SINGLE, Whitespace::REMOVE))]
+	PunctuatedTrailing<MaybeNamedParam, token::Comma>,
+);
 
 /// `MaybeNamedParam`
 #[derive(PartialEq, Eq, Debug)]

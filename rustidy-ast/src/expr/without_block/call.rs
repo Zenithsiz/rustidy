@@ -82,5 +82,7 @@ impl Format<WhitespaceConfig, ()> for MethodCallExpression {
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
-pub struct CallParams(#[format(args = punct::fmt(Whitespace::SINGLE, Whitespace::REMOVE))]
-pub PunctuatedTrailing<Expression, token::Comma>,);
+pub struct CallParams(
+	#[format(args = punct::fmt(Whitespace::SINGLE, Whitespace::REMOVE))]
+	pub PunctuatedTrailing<Expression, token::Comma>,
+);

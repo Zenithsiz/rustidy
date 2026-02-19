@@ -111,8 +111,10 @@ Bracketed<Option<SlicePatternItems>>);
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
-pub struct SlicePatternItems(#[format(args = punct::fmt(Whitespace::SINGLE, Whitespace::REMOVE))]
-PunctuatedTrailing<Box<Pattern>, token::Comma>,);
+pub struct SlicePatternItems(
+	#[format(args = punct::fmt(Whitespace::SINGLE, Whitespace::REMOVE))]
+	PunctuatedTrailing<Box<Pattern>, token::Comma>,
+);
 
 /// `PathPattern`
 #[derive(PartialEq, Eq, Debug)]
@@ -186,8 +188,10 @@ pub struct StructPatternElementsFieldsEtCetera {
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
-pub struct StructPatternFields(#[format(args = punct::fmt(Whitespace::CUR_INDENT, Whitespace::REMOVE))]
-Punctuated<StructPatternField, token::Comma>,);
+pub struct StructPatternFields(
+	#[format(args = punct::fmt(Whitespace::CUR_INDENT, Whitespace::REMOVE))]
+	Punctuated<StructPatternField, token::Comma>,
+);
 
 /// `StructPatternField`
 #[derive(PartialEq, Eq, Debug)]
@@ -258,15 +262,19 @@ pub struct TupleStructPattern {
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
-pub struct TupleStructItems(#[format(args = punct::fmt(Whitespace::SINGLE, Whitespace::REMOVE))]
-pub PunctuatedTrailing<Box<Pattern>, token::Comma>,);
+pub struct TupleStructItems(
+	#[format(args = punct::fmt(Whitespace::SINGLE, Whitespace::REMOVE))]
+	pub PunctuatedTrailing<Box<Pattern>, token::Comma>,
+);
 
 /// `TuplePattern`
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
-pub struct TuplePattern(#[format(args = delimited::fmt_remove())]
-Parenthesized<Option<TuplePatternItems>>);
+pub struct TuplePattern(
+	#[format(args = delimited::fmt_remove())]
+	Parenthesized<Option<TuplePatternItems>>,
+);
 
 /// `TuplePatternItems`
 #[derive(PartialEq, Eq, Debug)]

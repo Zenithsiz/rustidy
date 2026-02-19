@@ -63,7 +63,7 @@ pub enum IntegerLiteralInner {
 #[format(no_prefix_ws)]
 pub struct DecLiteral(#[parse(try_update_with = Self::parse)]
 #[format(str)]
-pub AstStr,);
+pub AstStr);
 
 impl DecLiteral {
 	fn parse(s: &mut &str) -> Result<(), DecLiteralError> {
@@ -86,7 +86,7 @@ impl DecLiteral {
 #[format(no_prefix_ws)]
 pub struct BinLiteral(#[parse(try_update_with = Self::parse)]
 #[format(str)]
-pub AstStr,);
+pub AstStr);
 
 impl BinLiteral {
 	fn parse(s: &mut &str) -> Result<(), BinLiteralError> {
@@ -112,7 +112,7 @@ impl BinLiteral {
 #[format(no_prefix_ws)]
 pub struct OctLiteral(#[parse(try_update_with = Self::parse)]
 #[format(str)]
-pub AstStr,);
+pub AstStr);
 
 impl OctLiteral {
 	fn parse(s: &mut &str) -> Result<(), OctLiteralError> {
@@ -139,7 +139,7 @@ impl OctLiteral {
 #[format(no_prefix_ws)]
 pub struct HexLiteral(#[parse(try_update_with = Self::parse)]
 #[format(str)]
-pub AstStr,);
+pub AstStr);
 
 impl HexLiteral {
 	fn parse(s: &mut &str) -> Result<(), HexLiteralError> {

@@ -61,11 +61,13 @@ pub enum StructStructInner {
 #[derive(PartialEq, Eq, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
-pub struct StructFields(#[format(args = {
+pub struct StructFields(
+	#[format(args = {
 		let max_ident_len = self.0.values().map(|field| field.0.inner.ident.non_ws_len()).max().expect("At least one element exists");
 		punct::fmt_with(Whitespace::CUR_INDENT, Whitespace::REMOVE, StructFieldInnerArgs { max_ident_len }, ())
 	})]
-PunctuatedTrailing<StructField, token::Comma>,);
+	PunctuatedTrailing<StructField, token::Comma>,
+);
 
 /// `StructField`
 #[derive(PartialEq, Eq, Debug)]
@@ -162,8 +164,10 @@ impl TupleStruct {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 #[format(args(ty = "TupleFieldsFmt"))]
-pub struct TupleFields(#[format(args = punct::fmt(args.field_prefix_ws, Whitespace::REMOVE))]
-pub PunctuatedTrailing<TupleField, token::Comma>);
+pub struct TupleFields(
+	#[format(args = punct::fmt(args.field_prefix_ws, Whitespace::REMOVE))]
+	pub PunctuatedTrailing<TupleField, token::Comma>,
+);
 
 #[derive(Clone, Copy, Debug)]
 struct TupleFieldsFmt {

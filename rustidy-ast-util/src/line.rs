@@ -16,7 +16,7 @@ use {
 #[format(no_prefix_ws)]
 pub struct RemainingLine(#[parse(update_with = Self::parse)]
 #[format(str)]
-pub AstStr,);
+pub AstStr);
 
 impl RemainingLine {
 	fn parse(s: &mut &str) {
@@ -37,7 +37,7 @@ impl RemainingLine {
 #[parse(error(name = MissingCommentEnd, fmt = "Expected `*/` after `/*`", fatal))]
 pub struct RemainingBlockComment(#[parse(try_update_with = Self::parse)]
 #[format(str)]
-pub AstStr,);
+pub AstStr);
 
 impl RemainingBlockComment {
 	// TODO: Deduplicate this with `whitespace::BlockComment::parse`
