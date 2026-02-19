@@ -302,48 +302,40 @@ fn derive_struct(attrs: &Attrs, fields: &darling::ast::Fields<FieldAttrs>) -> sy
 fn derive_struct_field(attrs: &Attrs, field_idx: usize, field: &FieldAttrs) -> syn::Expr {
 	let field_ident = util::field_member_access(field_idx, field);
 
-	let default_prefix_ws: syn::Expr = match &field.prefix_ws {
-		Some(field) => field.expr.clone(),
-		None => match attrs.no_prefix_ws {
-			true => parse_quote! {
-				#[expect(clippy::unused_unit)]
-				()
-			},
-			false => parse_quote! { <rustidy_util::Whitespace as rustidy_format::WhitespaceFormat>::PRESERVE },
-		},
-	};
-
 	let prefix_ws = match &field.prefix_ws {
 		Some(prefix_ws) => Some(prefix_ws
-			.map(|prefix_ws| {
-				parse_quote! { match has_prefix_ws {
-						true => {
-							tracing::warn!(
-								"Overwriting prefix whitespace of {}::{}",
-								std::any::type_name::<Self>(),
-								stringify!(#field_ident)
-							);
+			.map(|prefix_ws| match attrs.no_prefix_ws {
+				true => prefix_ws.clone(),
+				false => parse_quote! {{
+					if has_prefix_ws {
+						tracing::warn!(
+							"Overwriting prefix whitespace of {}::{}",
+							std::any::type_name::<Self>(),
+							stringify!(#field_ident)
+						);
+					}
 
-							#default_prefix_ws
-						},
-						false => #prefix_ws,
-					}}
+					#prefix_ws
+				}},
 			})
 			.eval(Some(parse_quote! { prefix_ws })),),
 		None => match field.str {
 			true => None,
-			false => Some(parse_quote! { match has_prefix_ws {
-				true => prefix_ws,
-				false => {
-					tracing::warn!(
-						"Missing prefix whitespace for {}::{}",
-						std::any::type_name::<Self>(),
-						stringify!(#field_ident)
-					);
+			false => match attrs.no_prefix_ws {
+				true => None,
+				false => Some(parse_quote! { match has_prefix_ws {
+					true => prefix_ws,
+					false => {
+						tracing::warn!(
+							"Missing prefix whitespace for {}::{}",
+							std::any::type_name::<Self>(),
+							stringify!(#field_ident)
+						);
 
-					#default_prefix_ws
-				},
-			}}),
+						<rustidy_util::Whitespace as rustidy_format::WhitespaceFormat>::PRESERVE
+					},
+				}})
+			},
 		},
 	};
 
