@@ -4,7 +4,7 @@
 use {
 	super::{Suffix, int::DecLiteral},
 	crate::SuffixNoE,
-	rustidy_format::{Format, Formattable},
+	rustidy_format::{Format, Formattable, WhitespaceFormat},
 	rustidy_macros::ParseError,
 	rustidy_parse::{Parse, Parser, ParserError, ParserTag},
 	rustidy_print::Print,
@@ -21,6 +21,7 @@ pub struct FloatLiteral {
 	pub ws:       Whitespace,
 	#[format(prefix_ws = ())]
 	pub int:      DecLiteral,
+	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub dot:      Option<rustidy_ast_tokens::Dot>,
 	#[format(prefix_ws = ())]
 	pub frac:     Option<DecLiteral>,
