@@ -50,6 +50,6 @@ pub struct AsClause {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub enum AsClauseName {
-	Underscore(token::Underscore),
 	Ident(Identifier),
+	Underscore(token::Underscore),
 }
