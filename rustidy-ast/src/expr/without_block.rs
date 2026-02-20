@@ -47,10 +47,10 @@ pub use self::{
 // Imports
 use {
 	super::{Expression, ExpressionInner},
-	crate::{attr::WithOuterAttributes, token},
+	crate::{attr::{OuterAttrOrDocComment, WithOuterAttributes}, token},
 	rustidy_ast_literal::{IntegerLiteral, LiteralExpression},
 	rustidy_format::{Format, Formattable, WhitespaceFormat},
-	rustidy_parse::{Parse, ParseRecursive, ParserTag, RecursiveWrapper},
+	rustidy_parse::{Parse, ParseRecursive, Parser, ParserError, ParserTag, RecursiveWrapper},
 	rustidy_print::Print,
 	rustidy_util::Whitespace,
 };
@@ -59,9 +59,7 @@ use {
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(derive_more::From)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, ParseRecursive, Formattable, Format, Print)]
-#[parse(from = RecursiveWrapper::<ExpressionWithoutBlock, ExpressionInner>)]
-#[parse(skip_if_tag = ParserTag::SkipExpressionWithoutBlock)]
+#[derive(ParseRecursive, Formattable, Format, Print)]
 #[parse_recursive(root = ExpressionInner)]
 #[parse_recursive(transparent)]
 #[parse_recursive(into_root = ExpressionInner)]
@@ -82,6 +80,37 @@ impl TryFrom<ExpressionWithoutBlock> for ExpressionWithoutBlockInner {
 			false => Err(()),
 		}
 	}
+}
+
+impl Parse for ExpressionWithoutBlock {
+	type Error = ExpressionWithoutBlockError;
+
+	#[coverage(on)]
+	fn parse_from(parser: &mut Parser) -> Result<Self, Self::Error> {
+		if parser
+			.has_tag(ParserTag::SkipExpressionWithoutBlock) {
+			return Err(ExpressionWithoutBlockError::Tag);
+		}
+
+		let attrs = parser.parse::<Vec<OuterAttrOrDocComment>>()?;
+		let RecursiveWrapper(mut expr, _) = parser
+			.parse::<RecursiveWrapper<Self, ExpressionInner>>()?;
+		expr.0.attrs.extend(attrs);
+
+		Ok(expr)
+	}
+}
+#[derive(derive_more::Debug, derive_more::From, rustidy_parse::ParseError)]
+pub enum ExpressionWithoutBlockError {
+	#[parse_error(transparent)]
+	Attributes(ParserError<Vec<OuterAttrOrDocComment>>),
+
+	#[parse_error(transparent)]
+	From(ParserError<RecursiveWrapper<ExpressionWithoutBlock, ExpressionInner>>),
+
+	#[parse_error(fmt("Tag `{:?}` was present", ParserTag::SkipExpressionWithoutBlock))]
+	#[debug("Tag({:?})", ParserTag::SkipExpressionWithoutBlock)]
+	Tag,
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]

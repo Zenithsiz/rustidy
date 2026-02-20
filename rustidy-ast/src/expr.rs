@@ -30,8 +30,16 @@ pub use self::{
 
 // Imports
 use {
+	crate::attr::OuterAttrOrDocComment,
 	rustidy_format::{Format, Formattable},
-	rustidy_parse::{FromRecursiveRoot, Parse, ParseRecursive, Parser, RecursiveWrapper},
+	rustidy_parse::{
+		FromRecursiveRoot,
+		Parse,
+		ParseRecursive,
+		Parser,
+		ParserError,
+		RecursiveWrapper,
+	},
 	rustidy_print::Print,
 	rustidy_util::{ArenaData, ArenaIdx},
 };
@@ -53,11 +61,37 @@ impl FromRecursiveRoot<ExpressionInner> for Expression {
 #[derive(ArenaData)]
 #[derive(derive_more::From, derive_more::TryInto)]
 #[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, ParseRecursive, Formattable, Format, Print)]
-#[parse(from = RecursiveWrapper::<ExpressionInner, ExpressionInner>)]
+#[derive(ParseRecursive, Formattable, Format, Print)]
 #[parse_recursive(root = ExpressionInner)]
 pub enum ExpressionInner {
 	#[parse_recursive(recursive)]
 	WithoutBlock(ExpressionWithoutBlock),
 	WithBlock(ExpressionWithBlock),
+}
+
+// TODO: Once we implement precedence and bubble all the attributes
+//       to the top automatically, derive this impl
+impl Parse for ExpressionInner {
+	type Error = ExpressionInnerError;
+
+	fn parse_from(parser: &mut Parser) -> Result<Self, Self::Error> {
+		let attrs = parser.parse::<Vec<OuterAttrOrDocComment>>()?;
+		let RecursiveWrapper(mut expr, _) = parser.parse::<RecursiveWrapper<Self, Self>>()?;
+
+		match &mut expr {
+			Self::WithoutBlock(expr) => expr.0.attrs.extend(attrs),
+			Self::WithBlock(expr) => expr.0.attrs.extend(attrs),
+		}
+
+		Ok(expr)
+	}
+}
+
+#[derive(derive_more::Debug, derive_more::From, rustidy_parse::ParseError)]
+pub enum ExpressionInnerError {
+	#[parse_error(transparent)]
+	Attributes(ParserError<Vec<OuterAttrOrDocComment>>),
+
+	#[parse_error(transparent)]
+	Inner(ParserError<RecursiveWrapper<ExpressionInner, ExpressionInner>>),
 }
