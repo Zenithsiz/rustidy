@@ -85,6 +85,12 @@ impl AstStr {
 		self.repr().is_blank(input)
 	}
 
+	/// Returns the number of newlines in this string
+	#[must_use]
+	pub fn count_newlines(&self, input: &str) -> usize {
+		self.repr().count_newlines(input)
+	}
+
 	/// Returns if this string has newlines
 	#[must_use]
 	pub fn has_newlines(&self, input: &str) -> bool {
@@ -270,26 +276,35 @@ impl AstStrRepr {
 		}
 	}
 
-	/// Returns if this representation has newlines
+	/// Returns the number of newlines in this string
 	#[must_use]
-	pub fn has_newlines(&self, input: &str) -> bool {
+	pub fn count_newlines(&self, input: &str) -> usize {
 		match *self {
-			Self::AstRange(range) => range.str(input).contains('\n'),
-			Self::String(s) => s.contains('\n'),
-			Self::Char(ch) => ch == '\n',
+			Self::AstRange(range) => crate::str_count_newlines(range.str(input)),
+			Self::String(s) => crate::str_count_newlines(s),
+			Self::Char(ch) => match ch == '\n' {
+				true => 1,
+				false => 0,
+			},
 			Self::Spaces {
 				..
-			} => false,
+			} => 0,
 			Self::Indentation {
 				newlines,
 				..
-			} => newlines != 0,
+			} => newlines,
 			Self::Join {
 				ref lhs,
 				ref rhs
-			} => lhs.has_newlines(input) && rhs.has_newlines(input),
-			Self::Dynamic(ref s) => s.contains('\n'),
+			} => lhs.count_newlines(input) + rhs.count_newlines(input),
+			Self::Dynamic(ref s) => crate::str_count_newlines(s),
 		}
+	}
+
+	/// Returns if this representation has newlines
+	#[must_use]
+	pub fn has_newlines(&self, input: &str) -> bool {
+		self.count_newlines(input) == 0
 	}
 
 	/// Returns if this representation is equal to `other`

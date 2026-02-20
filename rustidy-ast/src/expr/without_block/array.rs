@@ -66,7 +66,7 @@ impl Format<WhitespaceConfig, ()> for ArrayExpression {
 				//       put everything into a single line if they fit.
 				// TODO: Should we even special case that?
 				let cols = ctx.config().array_expr_cols;
-				let is_single_line = !single_line_output.has_newlines && match cols {
+				let is_single_line = !single_line_output.has_newlines() && match cols {
 					Some(cols) => cols >= values.values_len(),
 					None => single_line_output.len_without_prefix_ws() <= ctx.config().max_array_expr_len,
 				};

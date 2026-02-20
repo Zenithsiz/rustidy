@@ -38,6 +38,12 @@ pub fn is_str_blank(s: &str) -> bool {
 	s.chars().all(|ch| ch.is_ascii_whitespace())
 }
 
+/// Counts the number of newlines in a string
+#[must_use]
+pub fn str_count_newlines(s: &str) -> usize {
+	s.chars().filter(|&ch| ch == '\n').count()
+}
+
 #[extend::ext(name = StrPopFirst)]
 pub impl &str {
 	fn pop_first(&mut self) -> Option<char> {
