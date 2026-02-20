@@ -16,10 +16,7 @@ pub struct AstStr(ArenaIdx<Inner>);
 impl AstStr {
 	/// Creates a new ast string without any associated input range
 	pub fn new(repr: impl Into<AstStrRepr>) -> Self {
-		Self(ArenaIdx::new(Inner {
-			repr: repr.into(),
-			input_range: None,
-		}))
+		Self(ArenaIdx::new(Inner { repr: repr.into(), input_range: None, }))
 	}
 
 	/// Creates a new ast string from an input range
@@ -39,18 +36,12 @@ impl AstStr {
 	pub fn join(self, other: Self) -> Self {
 		let input_range = match (self.0.input_range, other.0.input_range) {
 			// TODO: Keep the range more than just when contiguous?
-			(Some(lhs), Some(rhs)) if lhs.end == rhs.start => Some(AstRange {
-				start: lhs.start,
-				end: rhs.end
-			}),
+			(Some(lhs), Some(rhs)) if lhs.end == rhs.start => Some(AstRange { start: lhs.start, end: rhs.end }),
 			_ => None,
 		};
 
 		Self(ArenaIdx::new(Inner {
-			repr: AstStrRepr::Join {
-				lhs: self,
-				rhs: other
-			},
+			repr: AstStrRepr::Join { lhs: self, rhs: other },
 			input_range
 		}))
 	}

@@ -29,27 +29,19 @@ pub struct WithOuterAttributes<T> {
 impl<T> WithOuterAttributes<T> {
 	/// Creates a new value without any attributes
 	pub const fn without_attributes(inner: T) -> Self {
-		Self {
-			attrs: vec![],
-			inner
-		}
+		Self { attrs: vec![], inner }
 	}
 
 	/// Maps the inner type
 	pub fn map<U>(self, f: impl FnOnce(T) -> U) -> WithOuterAttributes<U> {
-		WithOuterAttributes {
-			attrs: self.attrs,
-			inner: f(self.inner),
-		}
+		WithOuterAttributes { attrs: self.attrs, inner: f(self.inner), }
 	}
 }
 
 impl<T: Format<WhitespaceConfig, ()>> Format<WhitespaceConfig, ()> for WithOuterAttributes<T> {
 	fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: WhitespaceConfig, _args: ()) -> FormatOutput {
 		self
-			.format(ctx, prefix_ws, FmtArgs {
-				inner_args: ()
-			})
+			.format(ctx, prefix_ws, FmtArgs { inner_args: () })
 	}
 }
 
@@ -99,10 +91,7 @@ impl<A, T: Format<WhitespaceConfig, A>> Format<WhitespaceConfig, FmtArgs<A>> for
 
 impl<T> From<T> for WithOuterAttributes<T> {
 	fn from(inner: T) -> Self {
-		Self {
-			attrs: vec![],
-			inner
-		}
+		Self { attrs: vec![], inner }
 	}
 }
 
@@ -152,9 +141,7 @@ pub struct BracedWithInnerAttributes<T>(Braced<WithInnerAttributes<T>>);
 impl<T: Format<WhitespaceConfig, ()>> Format<WhitespaceConfig, ()> for BracedWithInnerAttributes<T> {
 	fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: WhitespaceConfig, _args: ()) -> FormatOutput {
 		self
-			.format(ctx, prefix_ws, FmtArgs {
-				inner_args: ()
-			})
+			.format(ctx, prefix_ws, FmtArgs { inner_args: () })
 	}
 }
 
@@ -226,7 +213,5 @@ pub struct FmtArgs<A> {
 
 #[must_use]
 pub const fn fmt<A>(inner_args: A) -> FmtArgs<A> {
-	FmtArgs {
-		inner_args
-	}
+	FmtArgs { inner_args }
 }

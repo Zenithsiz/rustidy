@@ -75,14 +75,7 @@ impl Parse for FloatLiteral {
 			},
 		};
 
-		Ok(Self {
-			ws,
-			int,
-			dot,
-			frac,
-			exponent,
-			suffix,
-		})
+		Ok(Self { ws, int, dot, frac, exponent, suffix, })
 	}
 }
 

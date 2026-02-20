@@ -110,9 +110,7 @@ pub struct Fmt {
 
 impl darling::FromMeta for Fmt {
 	fn from_expr(expr: &syn::Expr) -> darling::Result<Self> {
-		Ok(Self {
-			parts: vec![expr.clone()],
-		})
+		Ok(Self { parts: vec![expr.clone()], })
 	}
 
 	fn from_list(items: &[darling::ast::NestedMeta]) -> darling::Result<Self> {
@@ -128,15 +126,10 @@ impl darling::FromMeta for Fmt {
 					syn::Meta::List(_) => todo!("Expected a literal or path"),
 					syn::Meta::NameValue(_) => todo!("Expected a literal or path"),
 				},
-				darling::ast::NestedMeta::Lit(lit) => Ok(syn::Expr::Lit(syn::ExprLit {
-					attrs: vec![],
-					lit: lit.clone(),
-				})),
+				darling::ast::NestedMeta::Lit(lit) => Ok(syn::Expr::Lit(syn::ExprLit { attrs: vec![], lit: lit.clone(), })),
 			})
 			.collect::<Result<Vec<_>, darling::Error>>()?;
 
-		Ok(Self {
-			parts
-		})
+		Ok(Self { parts })
 	}
 }

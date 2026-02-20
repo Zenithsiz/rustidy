@@ -77,10 +77,7 @@ pub struct ParserError<T: Parse> {
 
 impl<T: Parse> ParserError<T> {
 	pub(super) fn new(source: T::Error, range: AstRange) -> Self {
-		Self {
-			source: Box::new(source),
-			range,
-		}
+		Self { source: Box::new(source), range, }
 	}
 }
 

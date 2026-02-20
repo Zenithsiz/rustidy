@@ -102,10 +102,7 @@ fn derive_enum(variants: &[VariantAttrs]) -> Impls<syn::Expr, syn::Expr> {
 
 			let with_prefix_ws = parse_quote! { Self::#variant_ident(ref mut value) => value.with_prefix_ws(ctx, f), };
 
-			Impls {
-				with_strings,
-				with_prefix_ws,
-			}
+			Impls { with_strings, with_prefix_ws, }
 		})
 		.collect::<Impls<Vec<syn::Arm>, Vec<syn::Arm>>>();
 
@@ -117,10 +114,7 @@ fn derive_enum(variants: &[VariantAttrs]) -> Impls<syn::Expr, syn::Expr> {
 	let with_strings = parse_quote! { match *self { #( #with_strings )* } };
 	let with_prefix_ws = parse_quote! { match *self { #( #with_prefix_ws )* } };
 
-	Impls {
-		with_strings,
-		with_prefix_ws,
-	}
+	Impls { with_strings, with_prefix_ws, }
 }
 
 fn derive_struct(fields: &darling::ast::Fields<FieldAttrs>) -> Impls<syn::Expr, syn::Expr> {
@@ -144,10 +138,7 @@ fn derive_struct(fields: &darling::ast::Fields<FieldAttrs>) -> Impls<syn::Expr, 
 		Err(std::ops::ControlFlow::Continue(()))
 	}};
 
-	Impls {
-		with_strings,
-		with_prefix_ws,
-	}
+	Impls { with_strings, with_prefix_ws, }
 }
 
 fn derive_struct_field(field_idx: usize, field: &FieldAttrs) -> Impls<syn::Expr, syn::Expr> {
@@ -171,10 +162,7 @@ fn derive_struct_field(field_idx: usize, field: &FieldAttrs) -> Impls<syn::Expr,
 		}
 	};
 
-	Impls {
-		with_strings,
-		with_prefix_ws,
-	}
+	Impls { with_strings, with_prefix_ws, }
 }
 
 #[derive(Default, Debug)]

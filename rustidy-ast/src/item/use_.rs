@@ -158,10 +158,7 @@ impl UseTreeGroup {
 							Some(trees) => {
 								comma.ws.join_prefix(group.tree.prefix.ws);
 								sub_trees
-									.push(PunctuatedRest {
-										punct: comma,
-										value: trees.punctuated.first,
-									});
+									.push(PunctuatedRest { punct: comma, value: trees.punctuated.first, });
 								for rest in trees.punctuated.rest {
 									sub_trees.push(rest);
 								}
@@ -170,10 +167,7 @@ impl UseTreeGroup {
 						}
 					},
 					_ => new_trees
-						.push(PunctuatedRest {
-							punct: comma,
-							value: tree,
-						}),
+						.push(PunctuatedRest { punct: comma, value: tree, }),
 				}
 			}
 
@@ -189,10 +183,7 @@ impl UseTreeGroup {
 
 					new_trees.reverse();
 					PunctuatedTrailing {
-						punctuated: Punctuated {
-							first,
-							rest: new_trees
-						},
+						punctuated: Punctuated { first, rest: new_trees },
 						trailing: trailing_comma,
 					}
 				},)

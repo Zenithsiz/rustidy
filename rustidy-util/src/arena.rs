@@ -39,10 +39,7 @@ impl<T> Arena<T> {
 	/// Creates a new, empty, arena
 	#[must_use]
 	pub const fn new() -> Self {
-		Self {
-			init: vec![],
-			rows: vec![],
-		}
+		Self { init: vec![], rows: vec![], }
 	}
 
 	/// Removes any trailing dead values

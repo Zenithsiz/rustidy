@@ -232,12 +232,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 							.enumerate()
 							.map(|(idx, ty)| {
 								let err_variant = syn::Ident::new(&format!("{}Peek{idx}", variant.ident), variant.ident.span());
-								Peek {
-									variant,
-									variant_ty,
-									peek_ty: ty,
-									err_variant,
-								}
+								Peek { variant, variant_ty, peek_ty: ty, err_variant, }
 							})
 					})
 					.collect::<Vec<_>>();

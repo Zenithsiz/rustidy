@@ -65,10 +65,7 @@ impl Parse for Statements {
 					Some(semi) => {
 						parser.set_peeked(peek_expr_state);
 						stmts
-							.push(Statement::Expression(ExpressionStatement::WithoutBlock(ExpressionStatementWithoutBlock {
-								expr,
-								semi
-							},)));
+							.push(Statement::Expression(ExpressionStatement::WithoutBlock(ExpressionStatementWithoutBlock { expr, semi },)));
 					},
 					None => match parser
 						.with_tag(ParserTag::SkipExpressionWithoutBlock, Parser::peek::<Statement>)? {
@@ -95,10 +92,7 @@ impl Parse for Statements {
 			}
 		};
 
-		Ok(Self {
-			stmts,
-			trailing_expr
-		})
+		Ok(Self { stmts, trailing_expr })
 	}
 }
 

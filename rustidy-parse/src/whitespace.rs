@@ -22,10 +22,7 @@ impl Parse for Whitespace {
 	fn parse_from(parser: &mut Parser) -> Result<Self, Self::Error> {
 		if parser.has_tag(ParserTag::SkipWhitespace) {
 			let (s, ()) = parser.update_with(|_| ());
-			let inner = WhitespaceInner {
-				first: PureWhitespace(s),
-				rest: vec![],
-			};
+			let inner = WhitespaceInner { first: PureWhitespace(s), rest: vec![], };
 			let idx = ArenaIdx::new(inner);
 
 			return Ok(Self(idx));
@@ -54,10 +51,7 @@ impl Parse for WhitespaceInner {
 			rest.push((comment, pure));
 		}
 
-		Ok(Self {
-			first,
-			rest
-		})
+		Ok(Self { first, rest })
 	}
 }
 
@@ -82,10 +76,7 @@ impl Parse for Comment {
 			Err(err) => err,
 		};
 
-		Err(CommentError::None {
-			block: block_err,
-			line: line_err,
-		})
+		Err(CommentError::None { block: block_err, line: line_err, })
 	}
 }
 

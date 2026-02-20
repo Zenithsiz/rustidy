@@ -15,10 +15,7 @@ impl AstRange {
 	/// Creates an ast range from a start and end position
 	#[must_use]
 	pub const fn new(start: AstPos, end: AstPos) -> Self {
-		Self {
-			start,
-			end
-		}
+		Self { start, end }
 	}
 
 	/// Returns the length of this range

@@ -359,10 +359,7 @@ impl ParsePeeked<(Option<token::Ref>, Option<token::Mut>, Identifier, token::At)
 			ref_,
 			mut_,
 			ident,
-			rest: Some(IdentifierPatternRest {
-				at,
-				pat: Box::new(pat)
-			}),
+			rest: Some(IdentifierPatternRest { at, pat: Box::new(pat) }),
 		})
 	}
 }

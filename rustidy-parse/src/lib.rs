@@ -382,10 +382,7 @@ impl<'input> Parser<'input> {
 			None => pos.0,
 		};
 
-		ParserLoc {
-			line,
-			column
-		}
+		ParserLoc { line, column }
 	}
 
 	/// Gets the current position (0-indexed) of the parser
@@ -543,9 +540,7 @@ impl<'input> Parser<'input> {
 			Err(err) => Err(err),
 		};
 
-		let peek_state = PeekState {
-			cur_pos: self.cur_pos
-		};
+		let peek_state = PeekState { cur_pos: self.cur_pos };
 		self.cur_pos = start_pos;
 
 		let output = output.map(|value| (value, peek_state));

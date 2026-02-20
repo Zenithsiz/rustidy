@@ -202,11 +202,7 @@ pub struct FmtArgsSingleOrIndentIfNonBlank<TArgs> {
 /// `max_len`, otherwise formats with [`fmt_indent_if_non_blank`].
 #[must_use]
 pub const fn fmt_single_or_indent_if_non_blank<TArgs>(max_len: usize, value_args_single: TArgs, value_args_indent: TArgs) -> FmtArgsSingleOrIndentIfNonBlank<TArgs> {
-	FmtArgsSingleOrIndentIfNonBlank {
-		max_len,
-		value_args_single,
-		value_args_indent
-	}
+	FmtArgsSingleOrIndentIfNonBlank { max_len, value_args_single, value_args_indent }
 }
 
 impl<T, L, R, TArgs> Format<WhitespaceConfig, FmtArgsSingleOrIndentIfNonBlank<TArgs>> for Delimited<T, L, R>

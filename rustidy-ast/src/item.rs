@@ -83,10 +83,7 @@ impl Items {
 					first_use_decl.merge(use_decls);
 					Item(ArenaIdx::new(WithOuterAttributes {
 						attrs,
-						inner: ItemInner::Vis(VisItem {
-							vis,
-							inner: VisItemInner::Use(first_use_decl),
-						}),
+						inner: ItemInner::Vis(VisItem { vis, inner: VisItemInner::Use(first_use_decl), }),
 					}))
 				},
 				Err(item) => item,

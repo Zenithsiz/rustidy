@@ -131,10 +131,7 @@ pub struct FunctionParametersOnlySelf {
 
 impl ParsePeeked<(SelfParam, Option<token::Comma>, Follows<token::ParenClose>)> for FunctionParametersOnlySelf {
 	fn parse_from_with_peeked(_parser: &mut rustidy_parse::Parser, (self_, trailing_comma, _): (SelfParam, Option<token::Comma>, Follows<token::ParenClose>),) -> Result<Self, Self::Error> {
-		Ok(Self {
-			self_,
-			trailing_comma
-		})
+		Ok(Self { self_, trailing_comma })
 	}
 }
 

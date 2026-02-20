@@ -233,10 +233,7 @@ fn parse<R: ParsableRecursive<R>>(parser: &mut Parser) -> Result<RecursiveWrappe
 			},
 			(Ok((prefix, prefix_state)), Err(_)) => Either::Left((prefix, prefix_state)),
 			(Err(_), Ok((base, base_state))) => Either::Right((base, Some(base_state))),
-			(Err(prefix), Err(base)) => return Err(RecursiveWrapperError::PrefixOrBase {
-				prefix,
-				base
-			}),
+			(Err(prefix), Err(base)) => return Err(RecursiveWrapperError::PrefixOrBase { prefix, base }),
 		};
 
 		match parsed {
@@ -334,10 +331,7 @@ fn parse<R: ParsableRecursive<R>>(parser: &mut Parser) -> Result<RecursiveWrappe
 		None => (last_inner, vec![]),
 	};
 
-	Ok(RecursiveWrapperInner {
-		first,
-		rest
-	})
+	Ok(RecursiveWrapperInner { first, rest })
 }
 
 /// Hack to ensure we don't parse optional trailing block expressions

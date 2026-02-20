@@ -19,60 +19,37 @@ use {
 #[extend::ext(name = WhitespaceFormat)]
 pub impl Whitespace {
 	const INDENT: WhitespaceConfig = WhitespaceConfig {
-		format: Some(WhitespaceFormatKind::Indent {
-			use_prev: false,
-			remove_if_pure: false,
-		}),
+		format: Some(WhitespaceFormatKind::Indent { use_prev: false, remove_if_pure: false, }),
 	};
-	const PRESERVE: WhitespaceConfig = WhitespaceConfig {
-		format: None
-	};
+	const PRESERVE: WhitespaceConfig = WhitespaceConfig { format: None };
 	const INDENT_CLOSE: WhitespaceConfig = WhitespaceConfig {
-		format: Some(WhitespaceFormatKind::Indent {
-			use_prev: true,
-			remove_if_pure: false,
-		}),
+		format: Some(WhitespaceFormatKind::Indent { use_prev: true, remove_if_pure: false, }),
 	};
 	const INDENT_CLOSE_REMOVE_IF_PURE: WhitespaceConfig = WhitespaceConfig {
-		format: Some(WhitespaceFormatKind::Indent {
-			use_prev: true,
-			remove_if_pure: true,
-		}),
+		format: Some(WhitespaceFormatKind::Indent { use_prev: true, remove_if_pure: true, }),
 	};
-	const REMOVE: WhitespaceConfig = WhitespaceConfig {
-		format: Some(WhitespaceFormatKind::Remove),
-	};
+	const REMOVE: WhitespaceConfig = WhitespaceConfig { format: Some(WhitespaceFormatKind::Remove), };
 	const SINGLE: WhitespaceConfig = WhitespaceConfig {
-		format: Some(WhitespaceFormatKind::Spaces {
-			len: 1
-		}),
+		format: Some(WhitespaceFormatKind::Spaces { len: 1 }),
 	};
 
 	fn spaces(len: usize) -> WhitespaceConfig {
 		let len = u16::try_from(len)
 			.expect("Cannot format more than 2^16 spaces");
 		WhitespaceConfig {
-			format: Some(WhitespaceFormatKind::Spaces {
-				len
-			}),
+			format: Some(WhitespaceFormatKind::Spaces { len }),
 		}
 	}
 
 	fn indent(remove_if_pure: bool) -> WhitespaceConfig {
 		WhitespaceConfig {
-			format: Some(WhitespaceFormatKind::Indent {
-				use_prev: false,
-				remove_if_pure
-			}),
+			format: Some(WhitespaceFormatKind::Indent { use_prev: false, remove_if_pure }),
 		}
 	}
 
 	fn prev_indent(remove_if_pure: bool) -> WhitespaceConfig {
 		WhitespaceConfig {
-			format: Some(WhitespaceFormatKind::Indent {
-				use_prev: true,
-				remove_if_pure
-			}),
+			format: Some(WhitespaceFormatKind::Indent { use_prev: true, remove_if_pure }),
 		}
 	}
 
@@ -231,9 +208,7 @@ impl WhitespaceFormatKind {
 			Self::Remove => "".into(),
 			Self::Spaces {
 				len
-			} => AstStrRepr::Spaces {
-				len
-			},
+			} => AstStrRepr::Spaces { len },
 			Self::Indent {
 				use_prev,
 				remove_if_pure
@@ -268,9 +243,7 @@ impl WhitespaceFormatKind {
 			Self::Remove => "".into(),
 			Self::Spaces {
 				len
-			} => AstStrRepr::Spaces {
-				len
-			},
+			} => AstStrRepr::Spaces { len },
 			Self::Indent {
 				use_prev,
 				..

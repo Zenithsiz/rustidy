@@ -46,10 +46,7 @@ struct WithExprIf {
 impl WithExprIf {
 	/// Maps the expressions in this and-with
 	pub fn map(&self, mut f: impl FnMut(&syn::Expr) -> syn::Expr) -> Self {
-		Self {
-			expr: f(&self.expr),
-			cond: self.cond.clone(),
-		}
+		Self { expr: f(&self.expr), cond: self.cond.clone(), }
 	}
 
 	/// Evaluates this and-with.

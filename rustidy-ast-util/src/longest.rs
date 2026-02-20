@@ -49,10 +49,7 @@ impl<L: Parse, R: Parse> Parse for Longest<L, R> {
 			},
 			(Ok((lhs, pos)), Err(_)) => (Self::Left(lhs), pos),
 			(Err(_), Ok((rhs, pos))) => (Self::Right(rhs), pos),
-			(Err(lhs), Err(rhs)) => return Err(Self::Error::Both {
-				lhs,
-				rhs
-			}),
+			(Err(lhs), Err(rhs)) => return Err(Self::Error::Both { lhs, rhs }),
 		};
 
 		parser.set_peeked(state);

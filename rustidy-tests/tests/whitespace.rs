@@ -89,24 +89,13 @@ fn test_cases_with(cases: impl IntoIterator<Item = CaseKinds<'_>>, fmt_config: &
 				(case
 					.expected_remove, WhitespaceFormatKind::Remove),
 				(case
-					.expected_set_single, WhitespaceFormatKind::Spaces {
-					len: 1
-				}),
+					.expected_set_single, WhitespaceFormatKind::Spaces { len: 1 }),
 				(case
-					.expected_set_indent, WhitespaceFormatKind::Indent {
-					use_prev: false,
-					remove_if_pure: false,
-				}),
+					.expected_set_indent, WhitespaceFormatKind::Indent { use_prev: false, remove_if_pure: false, }),
 				(case
-					.expected_set_prev_indent, WhitespaceFormatKind::Indent {
-					use_prev: true,
-					remove_if_pure: false,
-				}),
+					.expected_set_prev_indent, WhitespaceFormatKind::Indent { use_prev: true, remove_if_pure: false, }),
 				(case
-					.expected_set_prev_indent_or_remove, WhitespaceFormatKind::Indent {
-					use_prev: true,
-					remove_if_pure: true,
-				}),
+					.expected_set_prev_indent_or_remove, WhitespaceFormatKind::Indent { use_prev: true, remove_if_pure: true, }),
 			]
 				.into_iter()
 				.map(|(expected, kind)| {
@@ -209,9 +198,7 @@ fn main() -> Result<(), AppError> {
 	];
 
 	let fmt_config = rustidy_util::Config::default();
-	let config = Config {
-		indent_depth: 2
-	};
+	let config = Config { indent_depth: 2 };
 	self::test_cases_with(cases, &fmt_config, &config)
 		.map_err(AppError::flatten)
 }

@@ -102,28 +102,18 @@ impl Parse for MatchArms {
 
 					(expr, trailing_comma, control_flow)
 				},
-				(Err(with_block), Err(without_block)) => return Err(Self::Error::Expression {
-					with_block,
-					without_block,
-				}),
+				(Err(with_block), Err(without_block)) => return Err(Self::Error::Expression { with_block, without_block, }),
 			};
 
 			arms
-				.push(MatchArmWithExpr {
-					arm,
-					arrow,
-					expr,
-					trailing_comma,
-				});
+				.push(MatchArmWithExpr { arm, arrow, expr, trailing_comma, });
 
 			if control_flow.is_break() {
 				break;
 			}
 		}
 
-		Ok(Self {
-			arms
-		})
+		Ok(Self { arms })
 	}
 }
 

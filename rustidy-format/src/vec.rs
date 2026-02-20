@@ -74,17 +74,11 @@ pub struct Args<PrefixWs, A> {
 
 /// Creates vector arguments
 pub const fn args<PrefixWs, A>(rest_prefix_ws: PrefixWs, args: A) -> Args<PrefixWs, A> {
-	Args {
-		rest_prefix_ws,
-		args
-	}
+	Args { rest_prefix_ws, args }
 }
 
 /// Creates vector arguments from just the prefix whitespace
 #[must_use]
 pub const fn args_prefix_ws<PrefixWs>(rest_prefix_ws: PrefixWs) -> Args<PrefixWs, ()> {
-	Args {
-		rest_prefix_ws,
-		args: (),
-	}
+	Args { rest_prefix_ws, args: (), }
 }

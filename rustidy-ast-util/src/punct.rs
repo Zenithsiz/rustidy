@@ -25,20 +25,12 @@ pub struct Punctuated<T, P> {
 impl<T, P> Punctuated<T, P> {
 	/// Creates a punctuated from a single value
 	pub const fn single(value: T) -> Self {
-		Self {
-			first: value,
-			rest: vec![],
-		}
+		Self { first: value, rest: vec![], }
 	}
 
 	/// Pushes a punctuation and value onto this punctuated
 	pub fn push(&mut self, punct: P, value: T) {
-		self
-			.rest
-			.push(PunctuatedRest {
-				punct,
-				value
-			});
+		self.rest.push(PunctuatedRest { punct, value });
 	}
 
 	/// Pushes a value onto this punctuated, with a default punctuated
@@ -76,11 +68,7 @@ impl<T, P> Punctuated<T, P> {
 				(iter, value)
 			},
 			None => {
-				let iter = SplitLastMut {
-					next_value: None,
-					last_punct: None,
-					rest,
-				};
+				let iter = SplitLastMut { next_value: None, last_punct: None, rest, };
 				(iter, &mut self.first)
 			},
 		}

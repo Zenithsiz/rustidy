@@ -101,10 +101,7 @@ impl<'input> PrintFmt<'input> {
 	/// Creates a new formatter
 	#[must_use]
 	pub const fn new(input: &'input str) -> Self {
-		Self {
-			input,
-			output: String::new(),
-		}
+		Self { input, output: String::new(), }
 	}
 
 	/// Returns the output
