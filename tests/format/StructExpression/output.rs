@@ -1,5 +1,5 @@
 fn a() {
-	let _ = A { };
+	let _ = A {};
 
 	let _ = A { a };
 	let _ = A { a, b };

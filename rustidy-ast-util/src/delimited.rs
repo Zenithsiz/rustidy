@@ -122,7 +122,7 @@ pub const fn fmt_single_if_non_blank_with<LArgs, TArgs, RArgs>(prefix_args: LArg
 		suffix_non_blank: Whitespace::SINGLE,
 
 		value_blank: Whitespace::REMOVE,
-		suffix_blank: Whitespace::SINGLE,
+		suffix_blank: Whitespace::REMOVE,
 
 		prefix_args,
 		value_args,
