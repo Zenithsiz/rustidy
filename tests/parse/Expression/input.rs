@@ -263,6 +263,7 @@ fn match_() {
 
 fn with_attr() {
 	let _ = #[a] a;
+	let _ = #[a] a::b();
 }
 
 fn complex() {

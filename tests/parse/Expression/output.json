@@ -34054,6 +34054,256 @@
 															}
 														}
 													}
+												},
+												{
+													"Let": {
+														"attrs": [],
+														"inner": {
+															"super_": null,
+															"let_": {
+																"ws": {
+																	"first": {
+																		"start": 3954,
+																		"end": 3956
+																	},
+																	"rest": []
+																},
+																"token": {
+																	"start": 3956,
+																	"end": 3959
+																}
+															},
+															"pat": {
+																"WithoutRange": {
+																	"Wildcard": {
+																		"ws": {
+																			"first": {
+																				"start": 3959,
+																				"end": 3960
+																			},
+																			"rest": []
+																		},
+																		"token": {
+																			"start": 3960,
+																			"end": 3961
+																		}
+																	}
+																}
+															},
+															"ty": null,
+															"eq": {
+																"Normal": {
+																	"eq": {
+																		"ws": {
+																			"first": {
+																				"start": 3961,
+																				"end": 3962
+																			},
+																			"rest": []
+																		},
+																		"token": {
+																			"start": 3962,
+																			"end": 3963
+																		}
+																	},
+																	"expr": {
+																		"WithoutBlock": {
+																			"attrs": [],
+																			"inner": {
+																				"Call": {
+																					"expr": {
+																						"WithoutBlock": {
+																							"attrs": [
+																								{
+																									"Attr": {
+																										"pound": {
+																											"ws": {
+																												"first": {
+																													"start": 3963,
+																													"end": 3964
+																												},
+																												"rest": []
+																											},
+																											"token": {
+																												"start": 3964,
+																												"end": 3965
+																											}
+																										},
+																										"open": {
+																											"prefix": {
+																												"ws": {
+																													"first": {
+																														"start": 3965,
+																														"end": 3965
+																													},
+																													"rest": []
+																												},
+																												"token": {
+																													"start": 3965,
+																													"end": 3966
+																												}
+																											},
+																											"value": {
+																												"path": {
+																													"prefix": null,
+																													"segments": {
+																														"first": {
+																															"Ident": {
+																																"NonKw": [
+																																	{
+																																		"first": {
+																																			"start": 3966,
+																																			"end": 3966
+																																		},
+																																		"rest": []
+																																	},
+																																	{
+																																		"start": 3966,
+																																		"end": 3967
+																																	}
+																																]
+																															}
+																														},
+																														"rest": []
+																													}
+																												},
+																												"input": null
+																											},
+																											"suffix": {
+																												"ws": {
+																													"first": {
+																														"start": 3967,
+																														"end": 3967
+																													},
+																													"rest": []
+																												},
+																												"token": {
+																													"start": 3967,
+																													"end": 3968
+																												}
+																											}
+																										}
+																									}
+																								}
+																							],
+																							"inner": {
+																								"Path": {
+																									"Normal": {
+																										"prefix": null,
+																										"segments": {
+																											"first": {
+																												"ident": {
+																													"Ident": {
+																														"NonKw": [
+																															{
+																																"first": {
+																																	"start": 3968,
+																																	"end": 3969
+																																},
+																																"rest": []
+																															},
+																															{
+																																"start": 3969,
+																																"end": 3970
+																															}
+																														]
+																													}
+																												},
+																												"generic": null
+																											},
+																											"rest": [
+																												{
+																													"punct": {
+																														"ws": {
+																															"first": {
+																																"start": 3970,
+																																"end": 3970
+																															},
+																															"rest": []
+																														},
+																														"token": {
+																															"start": 3970,
+																															"end": 3972
+																														}
+																													},
+																													"value": {
+																														"ident": {
+																															"Ident": {
+																																"NonKw": [
+																																	{
+																																		"first": {
+																																			"start": 3972,
+																																			"end": 3972
+																																		},
+																																		"rest": []
+																																	},
+																																	{
+																																		"start": 3972,
+																																		"end": 3973
+																																	}
+																																]
+																															}
+																														},
+																														"generic": null
+																													}
+																												}
+																											]
+																										}
+																									}
+																								}
+																							}
+																						}
+																					},
+																					"params": {
+																						"prefix": {
+																							"ws": {
+																								"first": {
+																									"start": 3973,
+																									"end": 3973
+																								},
+																								"rest": []
+																							},
+																							"token": {
+																								"start": 3973,
+																								"end": 3974
+																							}
+																						},
+																						"value": null,
+																						"suffix": {
+																							"ws": {
+																								"first": {
+																									"start": 3974,
+																									"end": 3974
+																								},
+																								"rest": []
+																							},
+																							"token": {
+																								"start": 3974,
+																								"end": 3975
+																							}
+																						}
+																					}
+																				}
+																			}
+																		}
+																	}
+																}
+															},
+															"semi": {
+																"ws": {
+																	"first": {
+																		"start": 3975,
+																		"end": 3975
+																	},
+																	"rest": []
+																},
+																"token": {
+																	"start": 3975,
+																	"end": 3976
+																}
+															}
+														}
+													}
 												}
 											],
 											"trailing_expr": null
@@ -34062,14 +34312,14 @@
 									"suffix": {
 										"ws": {
 											"first": {
-												"start": 3954,
-												"end": 3955
+												"start": 3976,
+												"end": 3977
 											},
 											"rest": []
 										},
 										"token": {
-											"start": 3955,
-											"end": 3956
+											"start": 3977,
+											"end": 3978
 										}
 									}
 								}
@@ -34095,28 +34345,28 @@
 							"fn_": {
 								"ws": {
 									"first": {
-										"start": 3956,
-										"end": 3958
+										"start": 3978,
+										"end": 3980
 									},
 									"rest": []
 								},
 								"token": {
-									"start": 3958,
-									"end": 3960
+									"start": 3980,
+									"end": 3982
 								}
 							},
 							"ident": {
 								"NonKw": [
 									{
 										"first": {
-											"start": 3960,
-											"end": 3961
+											"start": 3982,
+											"end": 3983
 										},
 										"rest": []
 									},
 									{
-										"start": 3961,
-										"end": 3968
+										"start": 3983,
+										"end": 3990
 									}
 								]
 							},
@@ -34125,28 +34375,28 @@
 								"prefix": {
 									"ws": {
 										"first": {
-											"start": 3968,
-											"end": 3968
+											"start": 3990,
+											"end": 3990
 										},
 										"rest": []
 									},
 									"token": {
-										"start": 3968,
-										"end": 3969
+										"start": 3990,
+										"end": 3991
 									}
 								},
 								"value": null,
 								"suffix": {
 									"ws": {
 										"first": {
-											"start": 3969,
-											"end": 3969
+											"start": 3991,
+											"end": 3991
 										},
 										"rest": []
 									},
 									"token": {
-										"start": 3969,
-										"end": 3970
+										"start": 3991,
+										"end": 3992
 									}
 								}
 							},
@@ -34157,14 +34407,14 @@
 									"prefix": {
 										"ws": {
 											"first": {
-												"start": 3970,
-												"end": 3971
+												"start": 3992,
+												"end": 3993
 											},
 											"rest": []
 										},
 										"token": {
-											"start": 3971,
-											"end": 3972
+											"start": 3993,
+											"end": 3994
 										}
 									},
 									"value": {
@@ -34211,14 +34461,14 @@
 																																											"And": {
 																																												"ws": {
 																																													"first": {
-																																														"start": 3972,
-																																														"end": 3974
+																																														"start": 3994,
+																																														"end": 3996
 																																													},
 																																													"rest": []
 																																												},
 																																												"token": {
-																																													"start": 3974,
-																																													"end": 3975
+																																													"start": 3996,
+																																													"end": 3997
 																																												}
 																																											}
 																																										},
@@ -34232,14 +34482,14 @@
 																																															"star": {
 																																																"ws": {
 																																																	"first": {
-																																																		"start": 3975,
-																																																		"end": 3975
+																																																		"start": 3997,
+																																																		"end": 3997
 																																																	},
 																																																	"rest": []
 																																																},
 																																																"token": {
-																																																	"start": 3975,
-																																																	"end": 3976
+																																																	"start": 3997,
+																																																	"end": 3998
 																																																}
 																																															},
 																																															"expr": {
@@ -34251,14 +34501,14 @@
 																																																				"star": {
 																																																					"ws": {
 																																																						"first": {
-																																																							"start": 3976,
-																																																							"end": 3976
+																																																							"start": 3998,
+																																																							"end": 3998
 																																																						},
 																																																						"rest": []
 																																																					},
 																																																					"token": {
-																																																						"start": 3976,
-																																																						"end": 3977
+																																																						"start": 3998,
+																																																						"end": 3999
 																																																					}
 																																																				},
 																																																				"expr": {
@@ -34275,14 +34525,14 @@
 																																																													"NonKw": [
 																																																														{
 																																																															"first": {
-																																																																"start": 3977,
-																																																																"end": 3977
+																																																																"start": 3999,
+																																																																"end": 3999
 																																																															},
 																																																															"rest": []
 																																																														},
 																																																														{
-																																																															"start": 3977,
-																																																															"end": 3978
+																																																															"start": 3999,
+																																																															"end": 4000
 																																																														}
 																																																													]
 																																																												}
@@ -34314,28 +34564,28 @@
 																																					"dot": {
 																																						"ws": {
 																																							"first": {
-																																								"start": 3978,
-																																								"end": 3978
+																																								"start": 4000,
+																																								"end": 4000
 																																							},
 																																							"rest": []
 																																						},
 																																						"token": {
-																																							"start": 3978,
-																																							"end": 3979
+																																							"start": 4000,
+																																							"end": 4001
 																																						}
 																																					},
 																																					"ident": {
 																																						"NonKw": [
 																																							{
 																																								"first": {
-																																									"start": 3979,
-																																									"end": 3979
+																																									"start": 4001,
+																																									"end": 4001
 																																								},
 																																								"rest": []
 																																							},
 																																							{
-																																								"start": 3979,
-																																								"end": 3980
+																																								"start": 4001,
+																																								"end": 4002
 																																							}
 																																						]
 																																					}
@@ -34346,14 +34596,14 @@
 																																	"question": {
 																																		"ws": {
 																																			"first": {
-																																				"start": 3980,
-																																				"end": 3980
+																																				"start": 4002,
+																																				"end": 4002
 																																			},
 																																			"rest": []
 																																		},
 																																		"token": {
-																																			"start": 3980,
-																																			"end": 3981
+																																			"start": 4002,
+																																			"end": 4003
 																																		}
 																																	}
 																																}
@@ -34364,28 +34614,28 @@
 																												"dot": {
 																													"ws": {
 																														"first": {
-																															"start": 3981,
-																															"end": 3981
+																															"start": 4003,
+																															"end": 4003
 																														},
 																														"rest": []
 																													},
 																													"token": {
-																														"start": 3981,
-																														"end": 3982
+																														"start": 4003,
+																														"end": 4004
 																													}
 																												},
 																												"ident": {
 																													"NonKw": [
 																														{
 																															"first": {
-																																"start": 3982,
-																																"end": 3982
+																																"start": 4004,
+																																"end": 4004
 																															},
 																															"rest": []
 																														},
 																														{
-																															"start": 3982,
-																															"end": 3983
+																															"start": 4004,
+																															"end": 4005
 																														}
 																													]
 																												}
@@ -34397,14 +34647,14 @@
 																									"Plus": {
 																										"ws": {
 																											"first": {
-																												"start": 3983,
-																												"end": 3984
+																												"start": 4005,
+																												"end": 4006
 																											},
 																											"rest": []
 																										},
 																										"token": {
-																											"start": 3984,
-																											"end": 3985
+																											"start": 4006,
+																											"end": 4007
 																										}
 																									}
 																								},
@@ -34434,14 +34684,14 @@
 																																											"And": {
 																																												"ws": {
 																																													"first": {
-																																														"start": 3985,
-																																														"end": 3986
+																																														"start": 4007,
+																																														"end": 4008
 																																													},
 																																													"rest": []
 																																												},
 																																												"token": {
-																																													"start": 3986,
-																																													"end": 3987
+																																													"start": 4008,
+																																													"end": 4009
 																																												}
 																																											}
 																																										},
@@ -34455,14 +34705,14 @@
 																																															"star": {
 																																																"ws": {
 																																																	"first": {
-																																																		"start": 3987,
-																																																		"end": 3987
+																																																		"start": 4009,
+																																																		"end": 4009
 																																																	},
 																																																	"rest": []
 																																																},
 																																																"token": {
-																																																	"start": 3987,
-																																																	"end": 3988
+																																																	"start": 4009,
+																																																	"end": 4010
 																																																}
 																																															},
 																																															"expr": {
@@ -34474,14 +34724,14 @@
 																																																				"star": {
 																																																					"ws": {
 																																																						"first": {
-																																																							"start": 3988,
-																																																							"end": 3988
+																																																							"start": 4010,
+																																																							"end": 4010
 																																																						},
 																																																						"rest": []
 																																																					},
 																																																					"token": {
-																																																						"start": 3988,
-																																																						"end": 3989
+																																																						"start": 4010,
+																																																						"end": 4011
 																																																					}
 																																																				},
 																																																				"expr": {
@@ -34498,14 +34748,14 @@
 																																																													"NonKw": [
 																																																														{
 																																																															"first": {
-																																																																"start": 3989,
-																																																																"end": 3989
+																																																																"start": 4011,
+																																																																"end": 4011
 																																																															},
 																																																															"rest": []
 																																																														},
 																																																														{
-																																																															"start": 3989,
-																																																															"end": 3990
+																																																															"start": 4011,
+																																																															"end": 4012
 																																																														}
 																																																													]
 																																																												}
@@ -34537,28 +34787,28 @@
 																																					"dot": {
 																																						"ws": {
 																																							"first": {
-																																								"start": 3990,
-																																								"end": 3990
+																																								"start": 4012,
+																																								"end": 4012
 																																							},
 																																							"rest": []
 																																						},
 																																						"token": {
-																																							"start": 3990,
-																																							"end": 3991
+																																							"start": 4012,
+																																							"end": 4013
 																																						}
 																																					},
 																																					"ident": {
 																																						"NonKw": [
 																																							{
 																																								"first": {
-																																									"start": 3991,
-																																									"end": 3991
+																																									"start": 4013,
+																																									"end": 4013
 																																								},
 																																								"rest": []
 																																							},
 																																							{
-																																								"start": 3991,
-																																								"end": 3992
+																																								"start": 4013,
+																																								"end": 4014
 																																							}
 																																						]
 																																					}
@@ -34569,14 +34819,14 @@
 																																	"question": {
 																																		"ws": {
 																																			"first": {
-																																				"start": 3992,
-																																				"end": 3992
+																																				"start": 4014,
+																																				"end": 4014
 																																			},
 																																			"rest": []
 																																		},
 																																		"token": {
-																																			"start": 3992,
-																																			"end": 3993
+																																			"start": 4014,
+																																			"end": 4015
 																																		}
 																																	}
 																																}
@@ -34587,28 +34837,28 @@
 																												"dot": {
 																													"ws": {
 																														"first": {
-																															"start": 3993,
-																															"end": 3993
+																															"start": 4015,
+																															"end": 4015
 																														},
 																														"rest": []
 																													},
 																													"token": {
-																														"start": 3993,
-																														"end": 3994
+																														"start": 4015,
+																														"end": 4016
 																													}
 																												},
 																												"ident": {
 																													"NonKw": [
 																														{
 																															"first": {
-																																"start": 3994,
-																																"end": 3994
+																																"start": 4016,
+																																"end": 4016
 																															},
 																															"rest": []
 																														},
 																														{
-																															"start": 3994,
-																															"end": 3995
+																															"start": 4016,
+																															"end": 4017
 																														}
 																													]
 																												}
@@ -34625,14 +34875,14 @@
 																				"Plus": {
 																					"ws": {
 																						"first": {
-																							"start": 3995,
-																							"end": 3996
+																							"start": 4017,
+																							"end": 4018
 																						},
 																						"rest": []
 																					},
 																					"token": {
-																						"start": 3996,
-																						"end": 3997
+																						"start": 4018,
+																						"end": 4019
 																					}
 																				}
 																			},
@@ -34662,14 +34912,14 @@
 																																						"And": {
 																																							"ws": {
 																																								"first": {
-																																									"start": 3997,
-																																									"end": 3998
+																																									"start": 4019,
+																																									"end": 4020
 																																								},
 																																								"rest": []
 																																							},
 																																							"token": {
-																																								"start": 3998,
-																																								"end": 3999
+																																								"start": 4020,
+																																								"end": 4021
 																																							}
 																																						}
 																																					},
@@ -34683,14 +34933,14 @@
 																																										"star": {
 																																											"ws": {
 																																												"first": {
-																																													"start": 3999,
-																																													"end": 3999
+																																													"start": 4021,
+																																													"end": 4021
 																																												},
 																																												"rest": []
 																																											},
 																																											"token": {
-																																												"start": 3999,
-																																												"end": 4000
+																																												"start": 4021,
+																																												"end": 4022
 																																											}
 																																										},
 																																										"expr": {
@@ -34702,14 +34952,14 @@
 																																															"star": {
 																																																"ws": {
 																																																	"first": {
-																																																		"start": 4000,
-																																																		"end": 4000
+																																																		"start": 4022,
+																																																		"end": 4022
 																																																	},
 																																																	"rest": []
 																																																},
 																																																"token": {
-																																																	"start": 4000,
-																																																	"end": 4001
+																																																	"start": 4022,
+																																																	"end": 4023
 																																																}
 																																															},
 																																															"expr": {
@@ -34726,14 +34976,14 @@
 																																																								"NonKw": [
 																																																									{
 																																																										"first": {
-																																																											"start": 4001,
-																																																											"end": 4001
+																																																											"start": 4023,
+																																																											"end": 4023
 																																																										},
 																																																										"rest": []
 																																																									},
 																																																									{
-																																																										"start": 4001,
-																																																										"end": 4002
+																																																										"start": 4023,
+																																																										"end": 4024
 																																																									}
 																																																								]
 																																																							}
@@ -34765,28 +35015,28 @@
 																																"dot": {
 																																	"ws": {
 																																		"first": {
-																																			"start": 4002,
-																																			"end": 4002
+																																			"start": 4024,
+																																			"end": 4024
 																																		},
 																																		"rest": []
 																																	},
 																																	"token": {
-																																		"start": 4002,
-																																		"end": 4003
+																																		"start": 4024,
+																																		"end": 4025
 																																	}
 																																},
 																																"ident": {
 																																	"NonKw": [
 																																		{
 																																			"first": {
-																																				"start": 4003,
-																																				"end": 4003
+																																				"start": 4025,
+																																				"end": 4025
 																																			},
 																																			"rest": []
 																																		},
 																																		{
-																																			"start": 4003,
-																																			"end": 4004
+																																			"start": 4025,
+																																			"end": 4026
 																																		}
 																																	]
 																																}
@@ -34797,14 +35047,14 @@
 																												"question": {
 																													"ws": {
 																														"first": {
-																															"start": 4004,
-																															"end": 4004
+																															"start": 4026,
+																															"end": 4026
 																														},
 																														"rest": []
 																													},
 																													"token": {
-																														"start": 4004,
-																														"end": 4005
+																														"start": 4026,
+																														"end": 4027
 																													}
 																												}
 																											}
@@ -34815,220 +35065,30 @@
 																							"dot": {
 																								"ws": {
 																									"first": {
-																										"start": 4005,
-																										"end": 4005
+																										"start": 4027,
+																										"end": 4027
 																									},
 																									"rest": []
 																								},
 																								"token": {
-																									"start": 4005,
-																									"end": 4006
+																									"start": 4027,
+																									"end": 4028
 																								}
 																							},
 																							"ident": {
 																								"NonKw": [
 																									{
 																										"first": {
-																											"start": 4006,
-																											"end": 4006
-																										},
-																										"rest": []
-																									},
-																									{
-																										"start": 4006,
-																										"end": 4007
-																									}
-																								]
-																							}
-																						}
-																					}
-																				}
-																			}
-																		}
-																	}
-																}
-															},
-															"semi": {
-																"ws": {
-																	"first": {
-																		"start": 4007,
-																		"end": 4007
-																	},
-																	"rest": []
-																},
-																"token": {
-																	"start": 4007,
-																	"end": 4008
-																}
-															}
-														}
-													}
-												},
-												{
-													"Expression": {
-														"WithoutBlock": {
-															"expr": {
-																"attrs": [],
-																"inner": {
-																	"Operator": {
-																		"Assignment": {
-																			"lhs": {
-																				"WithoutBlock": {
-																					"attrs": [],
-																					"inner": {
-																						"Operator": {
-																							"Dereference": {
-																								"star": {
-																									"ws": {
-																										"first": {
-																											"start": 4008,
-																											"end": 4010
-																										},
-																										"rest": []
-																									},
-																									"token": {
-																										"start": 4010,
-																										"end": 4011
-																									}
-																								},
-																								"expr": {
-																									"WithoutBlock": {
-																										"attrs": [],
-																										"inner": {
-																											"Path": {
-																												"Normal": {
-																													"prefix": null,
-																													"segments": {
-																														"first": {
-																															"ident": {
-																																"SelfLower": {
-																																	"ws": {
-																																		"first": {
-																																			"start": 4011,
-																																			"end": 4011
-																																		},
-																																		"rest": []
-																																	},
-																																	"token": {
-																																		"start": 4011,
-																																		"end": 4015
-																																	}
-																																}
-																															},
-																															"generic": null
-																														},
-																														"rest": []
-																													}
-																												}
-																											}
-																										}
-																									}
-																								}
-																							}
-																						}
-																					}
-																				}
-																			},
-																			"eq": {
-																				"ws": {
-																					"first": {
-																						"start": 4015,
-																						"end": 4016
-																					},
-																					"rest": []
-																				},
-																				"token": {
-																					"start": 4016,
-																					"end": 4017
-																				}
-																			},
-																			"rhs": {
-																				"WithBlock": {
-																					"attrs": [],
-																					"inner": {
-																						"Match": {
-																							"match_": {
-																								"ws": {
-																									"first": {
-																										"start": 4017,
-																										"end": 4018
-																									},
-																									"rest": []
-																								},
-																								"token": {
-																									"start": 4018,
-																									"end": 4023
-																								}
-																							},
-																							"scrutinee": {
-																								"WithoutBlock": {
-																									"attrs": [],
-																									"inner": {
-																										"Tuple": {
-																											"prefix": {
-																												"ws": {
-																													"first": {
-																														"start": 4023,
-																														"end": 4024
-																													},
-																													"rest": []
-																												},
-																												"token": {
-																													"start": 4024,
-																													"end": 4025
-																												}
-																											},
-																											"value": null,
-																											"suffix": {
-																												"ws": {
-																													"first": {
-																														"start": 4025,
-																														"end": 4025
-																													},
-																													"rest": []
-																												},
-																												"token": {
-																													"start": 4025,
-																													"end": 4026
-																												}
-																											}
-																										}
-																									}
-																								}
-																							},
-																							"arms": {
-																								"prefix": {
-																									"ws": {
-																										"first": {
-																											"start": 4026,
-																											"end": 4027
-																										},
-																										"rest": []
-																									},
-																									"token": {
-																										"start": 4027,
-																										"end": 4028
-																									}
-																								},
-																								"value": {
-																									"attrs": [],
-																									"inner": {
-																										"arms": []
-																									}
-																								},
-																								"suffix": {
-																									"ws": {
-																										"first": {
 																											"start": 4028,
 																											"end": 4028
 																										},
 																										"rest": []
 																									},
-																									"token": {
+																									{
 																										"start": 4028,
 																										"end": 4029
 																									}
-																								}
+																								]
 																							}
 																						}
 																					}
@@ -35053,6 +35113,196 @@
 															}
 														}
 													}
+												},
+												{
+													"Expression": {
+														"WithoutBlock": {
+															"expr": {
+																"attrs": [],
+																"inner": {
+																	"Operator": {
+																		"Assignment": {
+																			"lhs": {
+																				"WithoutBlock": {
+																					"attrs": [],
+																					"inner": {
+																						"Operator": {
+																							"Dereference": {
+																								"star": {
+																									"ws": {
+																										"first": {
+																											"start": 4030,
+																											"end": 4032
+																										},
+																										"rest": []
+																									},
+																									"token": {
+																										"start": 4032,
+																										"end": 4033
+																									}
+																								},
+																								"expr": {
+																									"WithoutBlock": {
+																										"attrs": [],
+																										"inner": {
+																											"Path": {
+																												"Normal": {
+																													"prefix": null,
+																													"segments": {
+																														"first": {
+																															"ident": {
+																																"SelfLower": {
+																																	"ws": {
+																																		"first": {
+																																			"start": 4033,
+																																			"end": 4033
+																																		},
+																																		"rest": []
+																																	},
+																																	"token": {
+																																		"start": 4033,
+																																		"end": 4037
+																																	}
+																																}
+																															},
+																															"generic": null
+																														},
+																														"rest": []
+																													}
+																												}
+																											}
+																										}
+																									}
+																								}
+																							}
+																						}
+																					}
+																				}
+																			},
+																			"eq": {
+																				"ws": {
+																					"first": {
+																						"start": 4037,
+																						"end": 4038
+																					},
+																					"rest": []
+																				},
+																				"token": {
+																					"start": 4038,
+																					"end": 4039
+																				}
+																			},
+																			"rhs": {
+																				"WithBlock": {
+																					"attrs": [],
+																					"inner": {
+																						"Match": {
+																							"match_": {
+																								"ws": {
+																									"first": {
+																										"start": 4039,
+																										"end": 4040
+																									},
+																									"rest": []
+																								},
+																								"token": {
+																									"start": 4040,
+																									"end": 4045
+																								}
+																							},
+																							"scrutinee": {
+																								"WithoutBlock": {
+																									"attrs": [],
+																									"inner": {
+																										"Tuple": {
+																											"prefix": {
+																												"ws": {
+																													"first": {
+																														"start": 4045,
+																														"end": 4046
+																													},
+																													"rest": []
+																												},
+																												"token": {
+																													"start": 4046,
+																													"end": 4047
+																												}
+																											},
+																											"value": null,
+																											"suffix": {
+																												"ws": {
+																													"first": {
+																														"start": 4047,
+																														"end": 4047
+																													},
+																													"rest": []
+																												},
+																												"token": {
+																													"start": 4047,
+																													"end": 4048
+																												}
+																											}
+																										}
+																									}
+																								}
+																							},
+																							"arms": {
+																								"prefix": {
+																									"ws": {
+																										"first": {
+																											"start": 4048,
+																											"end": 4049
+																										},
+																										"rest": []
+																									},
+																									"token": {
+																										"start": 4049,
+																										"end": 4050
+																									}
+																								},
+																								"value": {
+																									"attrs": [],
+																									"inner": {
+																										"arms": []
+																									}
+																								},
+																								"suffix": {
+																									"ws": {
+																										"first": {
+																											"start": 4050,
+																											"end": 4050
+																										},
+																										"rest": []
+																									},
+																									"token": {
+																										"start": 4050,
+																										"end": 4051
+																									}
+																								}
+																							}
+																						}
+																					}
+																				}
+																			}
+																		}
+																	}
+																}
+															},
+															"semi": {
+																"ws": {
+																	"first": {
+																		"start": 4051,
+																		"end": 4051
+																	},
+																	"rest": []
+																},
+																"token": {
+																	"start": 4051,
+																	"end": 4052
+																}
+															}
+														}
+													}
 												}
 											],
 											"trailing_expr": null
@@ -35061,14 +35311,14 @@
 									"suffix": {
 										"ws": {
 											"first": {
-												"start": 4030,
-												"end": 4031
+												"start": 4052,
+												"end": 4053
 											},
 											"rest": []
 										},
 										"token": {
-											"start": 4031,
-											"end": 4032
+											"start": 4053,
+											"end": 4054
 										}
 									}
 								}
@@ -35094,28 +35344,28 @@
 							"fn_": {
 								"ws": {
 									"first": {
-										"start": 4032,
-										"end": 4034
+										"start": 4054,
+										"end": 4056
 									},
 									"rest": []
 								},
 								"token": {
-									"start": 4034,
-									"end": 4036
+									"start": 4056,
+									"end": 4058
 								}
 							},
 							"ident": {
 								"NonKw": [
 									{
 										"first": {
-											"start": 4036,
-											"end": 4037
+											"start": 4058,
+											"end": 4059
 										},
 										"rest": []
 									},
 									{
-										"start": 4037,
-										"end": 4044
+										"start": 4059,
+										"end": 4066
 									}
 								]
 							},
@@ -35124,28 +35374,28 @@
 								"prefix": {
 									"ws": {
 										"first": {
-											"start": 4044,
-											"end": 4044
+											"start": 4066,
+											"end": 4066
 										},
 										"rest": []
 									},
 									"token": {
-										"start": 4044,
-										"end": 4045
+										"start": 4066,
+										"end": 4067
 									}
 								},
 								"value": null,
 								"suffix": {
 									"ws": {
 										"first": {
-											"start": 4045,
-											"end": 4045
+											"start": 4067,
+											"end": 4067
 										},
 										"rest": []
 									},
 									"token": {
-										"start": 4045,
-										"end": 4046
+										"start": 4067,
+										"end": 4068
 									}
 								}
 							},
@@ -35156,14 +35406,14 @@
 									"prefix": {
 										"ws": {
 											"first": {
-												"start": 4046,
-												"end": 4047
+												"start": 4068,
+												"end": 4069
 											},
 											"rest": []
 										},
 										"token": {
-											"start": 4047,
-											"end": 4048
+											"start": 4069,
+											"end": 4070
 										}
 									},
 									"value": {
@@ -35180,27 +35430,27 @@
 																		"do_": {
 																			"ws": {
 																				"first": {
-																					"start": 4048,
-																					"end": 4050
+																					"start": 4070,
+																					"end": 4072
 																				},
 																				"rest": []
 																			},
 																			"token": {
-																				"start": 4050,
-																				"end": 4052
+																				"start": 4072,
+																				"end": 4074
 																			}
 																		},
 																		"yeet_": {
 																			"ws": {
 																				"first": {
-																					"start": 4052,
-																					"end": 4053
+																					"start": 4074,
+																					"end": 4075
 																				},
 																				"rest": []
 																			},
 																			"token": {
-																				"start": 4053,
-																				"end": 4057
+																				"start": 4075,
+																				"end": 4079
 																			}
 																		},
 																		"expr": {
@@ -35211,15 +35461,15 @@
 																						"Integer": {
 																							"ws": {
 																								"first": {
-																									"start": 4057,
-																									"end": 4058
+																									"start": 4079,
+																									"end": 4080
 																								},
 																								"rest": []
 																							},
 																							"inner": {
 																								"Decimal": {
-																									"start": 4058,
-																									"end": 4059
+																									"start": 4080,
+																									"end": 4081
 																								}
 																							},
 																							"suffix": null
@@ -35234,14 +35484,14 @@
 															"semi": {
 																"ws": {
 																	"first": {
-																		"start": 4059,
-																		"end": 4059
+																		"start": 4081,
+																		"end": 4081
 																	},
 																	"rest": []
 																},
 																"token": {
-																	"start": 4059,
-																	"end": 4060
+																	"start": 4081,
+																	"end": 4082
 																}
 															}
 														}
@@ -35257,27 +35507,27 @@
 																		"do_": {
 																			"ws": {
 																				"first": {
-																					"start": 4060,
-																					"end": 4062
+																					"start": 4082,
+																					"end": 4084
 																				},
 																				"rest": []
 																			},
 																			"token": {
-																				"start": 4062,
-																				"end": 4064
+																				"start": 4084,
+																				"end": 4086
 																			}
 																		},
 																		"yeet_": {
 																			"ws": {
 																				"first": {
-																					"start": 4064,
-																					"end": 4065
+																					"start": 4086,
+																					"end": 4087
 																				},
 																				"rest": []
 																			},
 																			"token": {
-																				"start": 4065,
-																				"end": 4069
+																				"start": 4087,
+																				"end": 4091
 																			}
 																		},
 																		"expr": {
@@ -35288,14 +35538,14 @@
 																						"return_": {
 																							"ws": {
 																								"first": {
-																									"start": 4069,
-																									"end": 4070
+																									"start": 4091,
+																									"end": 4092
 																								},
 																								"rest": []
 																							},
 																							"token": {
-																								"start": 4070,
-																								"end": 4076
+																								"start": 4092,
+																								"end": 4098
 																							}
 																						},
 																						"expr": {
@@ -35306,15 +35556,15 @@
 																										"Integer": {
 																											"ws": {
 																												"first": {
-																													"start": 4076,
-																													"end": 4077
+																													"start": 4098,
+																													"end": 4099
 																												},
 																												"rest": []
 																											},
 																											"inner": {
 																												"Decimal": {
-																													"start": 4077,
-																													"end": 4078
+																													"start": 4099,
+																													"end": 4100
 																												}
 																											},
 																											"suffix": null
@@ -35333,14 +35583,14 @@
 															"semi": {
 																"ws": {
 																	"first": {
-																		"start": 4078,
-																		"end": 4078
+																		"start": 4100,
+																		"end": 4100
 																	},
 																	"rest": []
 																},
 																"token": {
-																	"start": 4078,
-																	"end": 4079
+																	"start": 4100,
+																	"end": 4101
 																}
 															}
 														}
@@ -35353,14 +35603,14 @@
 									"suffix": {
 										"ws": {
 											"first": {
-												"start": 4079,
-												"end": 4080
+												"start": 4101,
+												"end": 4102
 											},
 											"rest": []
 										},
 										"token": {
-											"start": 4080,
-											"end": 4081
+											"start": 4102,
+											"end": 4103
 										}
 									}
 								}
@@ -35386,28 +35636,28 @@
 							"fn_": {
 								"ws": {
 									"first": {
-										"start": 4081,
-										"end": 4085
+										"start": 4103,
+										"end": 4107
 									},
 									"rest": []
 								},
 								"token": {
-									"start": 4085,
-									"end": 4087
+									"start": 4107,
+									"end": 4109
 								}
 							},
 							"ident": {
 								"NonKw": [
 									{
 										"first": {
-											"start": 4087,
-											"end": 4088
+											"start": 4109,
+											"end": 4110
 										},
 										"rest": []
 									},
 									{
-										"start": 4088,
-										"end": 4104
+										"start": 4110,
+										"end": 4126
 									}
 								]
 							},
@@ -35416,28 +35666,28 @@
 								"prefix": {
 									"ws": {
 										"first": {
-											"start": 4104,
-											"end": 4104
+											"start": 4126,
+											"end": 4126
 										},
 										"rest": []
 									},
 									"token": {
-										"start": 4104,
-										"end": 4105
+										"start": 4126,
+										"end": 4127
 									}
 								},
 								"value": null,
 								"suffix": {
 									"ws": {
 										"first": {
-											"start": 4105,
-											"end": 4105
+											"start": 4127,
+											"end": 4127
 										},
 										"rest": []
 									},
 									"token": {
-										"start": 4105,
-										"end": 4106
+										"start": 4127,
+										"end": 4128
 									}
 								}
 							},
@@ -35448,14 +35698,14 @@
 									"prefix": {
 										"ws": {
 											"first": {
-												"start": 4106,
-												"end": 4107
+												"start": 4128,
+												"end": 4129
 											},
 											"rest": []
 										},
 										"token": {
-											"start": 4107,
-											"end": 4108
+											"start": 4129,
+											"end": 4130
 										}
 									},
 									"value": {
@@ -35472,14 +35722,14 @@
 																		"prefix": {
 																			"ws": {
 																				"first": {
-																					"start": 4108,
-																					"end": 4110
+																					"start": 4130,
+																					"end": 4132
 																				},
 																				"rest": []
 																			},
 																			"token": {
-																				"start": 4110,
-																				"end": 4111
+																				"start": 4132,
+																				"end": 4133
 																			}
 																		},
 																		"value": {
@@ -35492,14 +35742,14 @@
 																		"suffix": {
 																			"ws": {
 																				"first": {
-																					"start": 4111,
-																					"end": 4111
+																					"start": 4133,
+																					"end": 4133
 																				},
 																				"rest": []
 																			},
 																			"token": {
-																				"start": 4111,
-																				"end": 4112
+																				"start": 4133,
+																				"end": 4134
 																			}
 																		}
 																	}
@@ -35520,14 +35770,14 @@
 																			"star": {
 																				"ws": {
 																					"first": {
-																						"start": 4112,
-																						"end": 4113
+																						"start": 4134,
+																						"end": 4135
 																					},
 																					"rest": []
 																				},
 																				"token": {
-																					"start": 4113,
-																					"end": 4114
+																					"start": 4135,
+																					"end": 4136
 																				}
 																			},
 																			"expr": {
@@ -35544,14 +35794,14 @@
 																												"NonKw": [
 																													{
 																														"first": {
-																															"start": 4114,
-																															"end": 4115
+																															"start": 4136,
+																															"end": 4137
 																														},
 																														"rest": []
 																													},
 																													{
-																														"start": 4115,
-																														"end": 4116
+																														"start": 4137,
+																														"end": 4138
 																													}
 																												]
 																											}
@@ -35563,315 +35813,6 @@
 																							}
 																						}
 																					}
-																				}
-																			}
-																		}
-																	}
-																}
-															},
-															"semi": {
-																"ws": {
-																	"first": {
-																		"start": 4116,
-																		"end": 4116
-																	},
-																	"rest": []
-																},
-																"token": {
-																	"start": 4116,
-																	"end": 4117
-																}
-															}
-														}
-													}
-												},
-												{
-													"Expression": {
-														"WithoutBlock": {
-															"expr": {
-																"attrs": [],
-																"inner": {
-																	"Field": {
-																		"expr": {
-																			"WithBlock": {
-																				"attrs": [],
-																				"inner": {
-																					"Block": {
-																						"prefix": {
-																							"ws": {
-																								"first": {
-																									"start": 4117,
-																									"end": 4119
-																								},
-																								"rest": []
-																							},
-																							"token": {
-																								"start": 4119,
-																								"end": 4120
-																							}
-																						},
-																						"value": {
-																							"attrs": [],
-																							"inner": {
-																								"stmts": [],
-																								"trailing_expr": null
-																							}
-																						},
-																						"suffix": {
-																							"ws": {
-																								"first": {
-																									"start": 4120,
-																									"end": 4120
-																								},
-																								"rest": []
-																							},
-																							"token": {
-																								"start": 4120,
-																								"end": 4121
-																							}
-																						}
-																					}
-																				}
-																			}
-																		},
-																		"dot": {
-																			"ws": {
-																				"first": {
-																					"start": 4121,
-																					"end": 4121
-																				},
-																				"rest": []
-																			},
-																			"token": {
-																				"start": 4121,
-																				"end": 4122
-																			}
-																		},
-																		"ident": {
-																			"NonKw": [
-																				{
-																					"first": {
-																						"start": 4122,
-																						"end": 4122
-																					},
-																					"rest": []
-																				},
-																				{
-																					"start": 4122,
-																					"end": 4123
-																				}
-																			]
-																		}
-																	}
-																}
-															},
-															"semi": {
-																"ws": {
-																	"first": {
-																		"start": 4123,
-																		"end": 4123
-																	},
-																	"rest": []
-																},
-																"token": {
-																	"start": 4123,
-																	"end": 4124
-																}
-															}
-														}
-													}
-												},
-												{
-													"Expression": {
-														"WithoutBlock": {
-															"expr": {
-																"attrs": [],
-																"inner": {
-																	"MethodCall": {
-																		"expr": {
-																			"WithBlock": {
-																				"attrs": [],
-																				"inner": {
-																					"Block": {
-																						"prefix": {
-																							"ws": {
-																								"first": {
-																									"start": 4124,
-																									"end": 4126
-																								},
-																								"rest": []
-																							},
-																							"token": {
-																								"start": 4126,
-																								"end": 4127
-																							}
-																						},
-																						"value": {
-																							"attrs": [],
-																							"inner": {
-																								"stmts": [],
-																								"trailing_expr": null
-																							}
-																						},
-																						"suffix": {
-																							"ws": {
-																								"first": {
-																									"start": 4127,
-																									"end": 4127
-																								},
-																								"rest": []
-																							},
-																							"token": {
-																								"start": 4127,
-																								"end": 4128
-																							}
-																						}
-																					}
-																				}
-																			}
-																		},
-																		"dot": {
-																			"ws": {
-																				"first": {
-																					"start": 4128,
-																					"end": 4128
-																				},
-																				"rest": []
-																			},
-																			"token": {
-																				"start": 4128,
-																				"end": 4129
-																			}
-																		},
-																		"segment": {
-																			"ident": {
-																				"Ident": {
-																					"NonKw": [
-																						{
-																							"first": {
-																								"start": 4129,
-																								"end": 4129
-																							},
-																							"rest": []
-																						},
-																						{
-																							"start": 4129,
-																							"end": 4130
-																						}
-																					]
-																				}
-																			},
-																			"generic": null
-																		},
-																		"params": {
-																			"prefix": {
-																				"ws": {
-																					"first": {
-																						"start": 4130,
-																						"end": 4130
-																					},
-																					"rest": []
-																				},
-																				"token": {
-																					"start": 4130,
-																					"end": 4131
-																				}
-																			},
-																			"value": null,
-																			"suffix": {
-																				"ws": {
-																					"first": {
-																						"start": 4131,
-																						"end": 4131
-																					},
-																					"rest": []
-																				},
-																				"token": {
-																					"start": 4131,
-																					"end": 4132
-																				}
-																			}
-																		}
-																	}
-																}
-															},
-															"semi": {
-																"ws": {
-																	"first": {
-																		"start": 4132,
-																		"end": 4132
-																	},
-																	"rest": []
-																},
-																"token": {
-																	"start": 4132,
-																	"end": 4133
-																}
-															}
-														}
-													}
-												},
-												{
-													"Expression": {
-														"WithoutBlock": {
-															"expr": {
-																"attrs": [],
-																"inner": {
-																	"Operator": {
-																		"TryPropagation": {
-																			"expr": {
-																				"WithBlock": {
-																					"attrs": [],
-																					"inner": {
-																						"Block": {
-																							"prefix": {
-																								"ws": {
-																									"first": {
-																										"start": 4133,
-																										"end": 4135
-																									},
-																									"rest": []
-																								},
-																								"token": {
-																									"start": 4135,
-																									"end": 4136
-																								}
-																							},
-																							"value": {
-																								"attrs": [],
-																								"inner": {
-																									"stmts": [],
-																									"trailing_expr": null
-																								}
-																							},
-																							"suffix": {
-																								"ws": {
-																									"first": {
-																										"start": 4136,
-																										"end": 4136
-																									},
-																									"rest": []
-																								},
-																								"token": {
-																									"start": 4136,
-																									"end": 4137
-																								}
-																							}
-																						}
-																					}
-																				}
-																			},
-																			"question": {
-																				"ws": {
-																					"first": {
-																						"start": 4137,
-																						"end": 4137
-																					},
-																					"rest": []
-																				},
-																				"token": {
-																					"start": 4137,
-																					"end": 4138
 																				}
 																			}
 																		}
@@ -35893,6 +35834,315 @@
 															}
 														}
 													}
+												},
+												{
+													"Expression": {
+														"WithoutBlock": {
+															"expr": {
+																"attrs": [],
+																"inner": {
+																	"Field": {
+																		"expr": {
+																			"WithBlock": {
+																				"attrs": [],
+																				"inner": {
+																					"Block": {
+																						"prefix": {
+																							"ws": {
+																								"first": {
+																									"start": 4139,
+																									"end": 4141
+																								},
+																								"rest": []
+																							},
+																							"token": {
+																								"start": 4141,
+																								"end": 4142
+																							}
+																						},
+																						"value": {
+																							"attrs": [],
+																							"inner": {
+																								"stmts": [],
+																								"trailing_expr": null
+																							}
+																						},
+																						"suffix": {
+																							"ws": {
+																								"first": {
+																									"start": 4142,
+																									"end": 4142
+																								},
+																								"rest": []
+																							},
+																							"token": {
+																								"start": 4142,
+																								"end": 4143
+																							}
+																						}
+																					}
+																				}
+																			}
+																		},
+																		"dot": {
+																			"ws": {
+																				"first": {
+																					"start": 4143,
+																					"end": 4143
+																				},
+																				"rest": []
+																			},
+																			"token": {
+																				"start": 4143,
+																				"end": 4144
+																			}
+																		},
+																		"ident": {
+																			"NonKw": [
+																				{
+																					"first": {
+																						"start": 4144,
+																						"end": 4144
+																					},
+																					"rest": []
+																				},
+																				{
+																					"start": 4144,
+																					"end": 4145
+																				}
+																			]
+																		}
+																	}
+																}
+															},
+															"semi": {
+																"ws": {
+																	"first": {
+																		"start": 4145,
+																		"end": 4145
+																	},
+																	"rest": []
+																},
+																"token": {
+																	"start": 4145,
+																	"end": 4146
+																}
+															}
+														}
+													}
+												},
+												{
+													"Expression": {
+														"WithoutBlock": {
+															"expr": {
+																"attrs": [],
+																"inner": {
+																	"MethodCall": {
+																		"expr": {
+																			"WithBlock": {
+																				"attrs": [],
+																				"inner": {
+																					"Block": {
+																						"prefix": {
+																							"ws": {
+																								"first": {
+																									"start": 4146,
+																									"end": 4148
+																								},
+																								"rest": []
+																							},
+																							"token": {
+																								"start": 4148,
+																								"end": 4149
+																							}
+																						},
+																						"value": {
+																							"attrs": [],
+																							"inner": {
+																								"stmts": [],
+																								"trailing_expr": null
+																							}
+																						},
+																						"suffix": {
+																							"ws": {
+																								"first": {
+																									"start": 4149,
+																									"end": 4149
+																								},
+																								"rest": []
+																							},
+																							"token": {
+																								"start": 4149,
+																								"end": 4150
+																							}
+																						}
+																					}
+																				}
+																			}
+																		},
+																		"dot": {
+																			"ws": {
+																				"first": {
+																					"start": 4150,
+																					"end": 4150
+																				},
+																				"rest": []
+																			},
+																			"token": {
+																				"start": 4150,
+																				"end": 4151
+																			}
+																		},
+																		"segment": {
+																			"ident": {
+																				"Ident": {
+																					"NonKw": [
+																						{
+																							"first": {
+																								"start": 4151,
+																								"end": 4151
+																							},
+																							"rest": []
+																						},
+																						{
+																							"start": 4151,
+																							"end": 4152
+																						}
+																					]
+																				}
+																			},
+																			"generic": null
+																		},
+																		"params": {
+																			"prefix": {
+																				"ws": {
+																					"first": {
+																						"start": 4152,
+																						"end": 4152
+																					},
+																					"rest": []
+																				},
+																				"token": {
+																					"start": 4152,
+																					"end": 4153
+																				}
+																			},
+																			"value": null,
+																			"suffix": {
+																				"ws": {
+																					"first": {
+																						"start": 4153,
+																						"end": 4153
+																					},
+																					"rest": []
+																				},
+																				"token": {
+																					"start": 4153,
+																					"end": 4154
+																				}
+																			}
+																		}
+																	}
+																}
+															},
+															"semi": {
+																"ws": {
+																	"first": {
+																		"start": 4154,
+																		"end": 4154
+																	},
+																	"rest": []
+																},
+																"token": {
+																	"start": 4154,
+																	"end": 4155
+																}
+															}
+														}
+													}
+												},
+												{
+													"Expression": {
+														"WithoutBlock": {
+															"expr": {
+																"attrs": [],
+																"inner": {
+																	"Operator": {
+																		"TryPropagation": {
+																			"expr": {
+																				"WithBlock": {
+																					"attrs": [],
+																					"inner": {
+																						"Block": {
+																							"prefix": {
+																								"ws": {
+																									"first": {
+																										"start": 4155,
+																										"end": 4157
+																									},
+																									"rest": []
+																								},
+																								"token": {
+																									"start": 4157,
+																									"end": 4158
+																								}
+																							},
+																							"value": {
+																								"attrs": [],
+																								"inner": {
+																									"stmts": [],
+																									"trailing_expr": null
+																								}
+																							},
+																							"suffix": {
+																								"ws": {
+																									"first": {
+																										"start": 4158,
+																										"end": 4158
+																									},
+																									"rest": []
+																								},
+																								"token": {
+																									"start": 4158,
+																									"end": 4159
+																								}
+																							}
+																						}
+																					}
+																				}
+																			},
+																			"question": {
+																				"ws": {
+																					"first": {
+																						"start": 4159,
+																						"end": 4159
+																					},
+																					"rest": []
+																				},
+																				"token": {
+																					"start": 4159,
+																					"end": 4160
+																				}
+																			}
+																		}
+																	}
+																}
+															},
+															"semi": {
+																"ws": {
+																	"first": {
+																		"start": 4160,
+																		"end": 4160
+																	},
+																	"rest": []
+																},
+																"token": {
+																	"start": 4160,
+																	"end": 4161
+																}
+															}
+														}
+													}
 												}
 											],
 											"trailing_expr": null
@@ -35901,14 +36151,14 @@
 									"suffix": {
 										"ws": {
 											"first": {
-												"start": 4139,
-												"end": 4140
+												"start": 4161,
+												"end": 4162
 											},
 											"rest": []
 										},
 										"token": {
-											"start": 4140,
-											"end": 4141
+											"start": 4162,
+											"end": 4163
 										}
 									}
 								}
@@ -35921,8 +36171,8 @@
 	],
 	"suffix_ws": {
 		"first": {
-			"start": 4141,
-			"end": 4142
+			"start": 4163,
+			"end": 4164
 		},
 		"rest": []
 	},
