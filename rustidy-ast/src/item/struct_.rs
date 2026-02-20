@@ -37,7 +37,7 @@ pub struct StructStruct {
 	pub ident:    Identifier,
 	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub generics: Option<GenericParams>,
-	#[format(prefix_ws = Whitespace::CUR_INDENT)]
+	#[format(prefix_ws = Whitespace::INDENT)]
 	pub where_:   Option<WhereClause>,
 	#[format(prefix_ws = match self.inner {
 		StructStructInner::Fields(_) => Whitespace::SINGLE,
@@ -64,7 +64,7 @@ pub enum StructStructInner {
 pub struct StructFields(
 	#[format(args = {
 		let max_ident_len = self.0.values().map(|field| field.0.inner.ident.non_ws_len()).max().expect("At least one element exists");
-		punct::fmt_with(Whitespace::CUR_INDENT, Whitespace::REMOVE, StructFieldInnerArgs { max_ident_len }, ())
+		punct::fmt_with(Whitespace::INDENT, Whitespace::REMOVE, StructFieldInnerArgs { max_ident_len }, ())
 	})]
 	PunctuatedTrailing<StructField, token::Comma>,
 );
@@ -126,7 +126,7 @@ pub struct TupleStruct {
 	#[format(with = Self::format_fields)]
 	pub fields:   Parenthesized<Option<TupleFields>>,
 	#[parse(fatal)]
-	#[format(prefix_ws = Whitespace::CUR_INDENT)]
+	#[format(prefix_ws = Whitespace::INDENT)]
 	pub where_:   Option<WhereClause>,
 	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub semi:     token::Semi,
@@ -152,7 +152,7 @@ impl TupleStruct {
 				ctx
 					.with_indent(|ctx| fields
 						.format(ctx, prefix_ws, delimited::fmt_indent_if_non_blank_with_value(TupleFieldsFmt {
-							field_prefix_ws: Whitespace::CUR_INDENT
+							field_prefix_ws: Whitespace::INDENT
 						})))
 			},
 		}

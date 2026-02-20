@@ -22,7 +22,7 @@ pub struct Union {
 	pub ident:    Identifier,
 	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub generics: Option<GenericParams>,
-	#[format(prefix_ws = Whitespace::CUR_INDENT)]
+	#[format(prefix_ws = Whitespace::INDENT)]
 	pub where_:   Option<WhereClause>,
 	#[format(prefix_ws = Whitespace::SINGLE)]
 	#[format(indent)]

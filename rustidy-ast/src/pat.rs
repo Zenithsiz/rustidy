@@ -180,7 +180,7 @@ pub struct StructPatternElementsFields {
 #[derive(Parse, Formattable, Format, Print)]
 pub struct StructPatternElementsFieldsEtCetera {
 	pub comma:     token::Comma,
-	#[format(prefix_ws = Whitespace::CUR_INDENT)]
+	#[format(prefix_ws = Whitespace::INDENT)]
 	pub et_cetera: Option<StructPatternEtCetera>,
 }
 
@@ -189,7 +189,7 @@ pub struct StructPatternElementsFieldsEtCetera {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct StructPatternFields(
-	#[format(args = punct::fmt(Whitespace::CUR_INDENT, Whitespace::REMOVE))]
+	#[format(args = punct::fmt(Whitespace::INDENT, Whitespace::REMOVE))]
 	Punctuated<StructPatternField, token::Comma>,
 );
 

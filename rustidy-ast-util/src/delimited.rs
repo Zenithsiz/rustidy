@@ -136,11 +136,11 @@ pub const fn fmt_single_if_non_blank() -> FmtArgs<WhitespaceConfig, WhitespaceCo
 #[must_use]
 pub const fn fmt_indent_if_non_blank_with<LArgs, TArgs, RArgs>(prefix_args: LArgs, value_args: TArgs, suffix_args: RArgs,) -> FmtArgs<WhitespaceConfig, WhitespaceConfig, LArgs, TArgs, RArgs> {
 	FmtArgs {
-		value_non_blank: Whitespace::CUR_INDENT,
-		suffix_non_blank: Whitespace::PREV_INDENT,
+		value_non_blank: Whitespace::INDENT,
+		suffix_non_blank: Whitespace::INDENT_CLOSE,
 
 		value_blank: Whitespace::REMOVE,
-		suffix_blank: Whitespace::PREV_INDENT_REMOVE_IF_PURE,
+		suffix_blank: Whitespace::INDENT_CLOSE_REMOVE_IF_PURE,
 
 		prefix_args,
 		value_args,

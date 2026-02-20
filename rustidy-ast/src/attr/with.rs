@@ -63,7 +63,7 @@ impl<A, T: Format<WhitespaceConfig, A>> Format<WhitespaceConfig, FmtArgs<A>> for
 			ctx
 				.with_tag_if(is_after_newline, FormatTag::AfterNewline, |ctx| match has_prefix_ws {
 					true => attr.format(ctx, prefix_ws, ()),
-					false => attr.format(ctx, Whitespace::CUR_INDENT, ()),
+					false => attr.format(ctx, Whitespace::INDENT, ()),
 				})
 				.append_to(&mut output);
 
@@ -88,7 +88,7 @@ impl<A, T: Format<WhitespaceConfig, A>> Format<WhitespaceConfig, FmtArgs<A>> for
 					// TODO: The user should be able to choose this
 					false => self
 						.inner
-						.format(ctx, Whitespace::CUR_INDENT, args.inner_args),
+						.format(ctx, Whitespace::INDENT, args.inner_args),
 				}
 					.append_to(&mut output);
 			});
@@ -181,7 +181,7 @@ impl<A, T: Format<WhitespaceConfig, A>> Format<WhitespaceConfig, FmtArgs<A>> for
 					ctx
 						.with_tag_if(is_after_newline, FormatTag::AfterNewline, |ctx| {
 							attr
-								.format(ctx, Whitespace::CUR_INDENT, ())
+								.format(ctx, Whitespace::INDENT, ())
 								.append_to(&mut output);
 						});
 
@@ -193,11 +193,11 @@ impl<A, T: Format<WhitespaceConfig, A>> Format<WhitespaceConfig, FmtArgs<A>> for
 						let value_output = self.0
 							.value
 							.inner
-							.format(ctx, Whitespace::CUR_INDENT, args.inner_args);
+							.format(ctx, Whitespace::INDENT, args.inner_args);
 						value_output.append_to(&mut output);
 
 						let remove_if_pure = self.0.value.attrs.is_empty() && value_output.is_empty;
-						let prefix_ws = Whitespace::indent(-1, remove_if_pure);
+						let prefix_ws = Whitespace::prev_indent(remove_if_pure);
 						self.0
 							.suffix
 							.format(ctx, prefix_ws, ())

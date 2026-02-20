@@ -87,7 +87,7 @@ impl Format<WhitespaceConfig, ()> for ArrayExpression {
 										break
 									};
 									first
-										.format(ctx, Whitespace::CUR_INDENT, ())
+										.format(ctx, Whitespace::INDENT, ())
 										.append_to(&mut output);
 
 									for value in row_values {
@@ -110,7 +110,7 @@ impl Format<WhitespaceConfig, ()> for ArrayExpression {
 						// Finally, close the indentation on the `]`
 						self.0
 							.suffix
-							.format(ctx, Whitespace::CUR_INDENT, ())
+							.format(ctx, Whitespace::INDENT, ())
 							.append_to(&mut output);
 
 						output

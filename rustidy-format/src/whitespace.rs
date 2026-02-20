@@ -18,28 +18,22 @@ use {
 
 #[extend::ext(name = WhitespaceFormat)]
 pub impl Whitespace {
-	const CUR_INDENT: WhitespaceConfig = WhitespaceConfig {
+	const INDENT: WhitespaceConfig = WhitespaceConfig {
 		format: Some(WhitespaceFormatKind::Indent {
 			offset: 0,
-			remove_if_pure: false,
-		}),
-	};
-	const NEXT_INDENT: WhitespaceConfig = WhitespaceConfig {
-		format: Some(WhitespaceFormatKind::Indent {
-			offset: 1,
 			remove_if_pure: false,
 		}),
 	};
 	const PRESERVE: WhitespaceConfig = WhitespaceConfig {
 		format: None
 	};
-	const PREV_INDENT: WhitespaceConfig = WhitespaceConfig {
+	const INDENT_CLOSE: WhitespaceConfig = WhitespaceConfig {
 		format: Some(WhitespaceFormatKind::Indent {
 			offset: -1,
 			remove_if_pure: false,
 		}),
 	};
-	const PREV_INDENT_REMOVE_IF_PURE: WhitespaceConfig = WhitespaceConfig {
+	const INDENT_CLOSE_REMOVE_IF_PURE: WhitespaceConfig = WhitespaceConfig {
 		format: Some(WhitespaceFormatKind::Indent {
 			offset: -1,
 			remove_if_pure: true,
@@ -64,10 +58,19 @@ pub impl Whitespace {
 		}
 	}
 
-	fn indent(offset: i16, remove_if_pure: bool) -> WhitespaceConfig {
+	fn indent(remove_if_pure: bool) -> WhitespaceConfig {
 		WhitespaceConfig {
 			format: Some(WhitespaceFormatKind::Indent {
-				offset,
+				offset: 0,
+				remove_if_pure
+			}),
+		}
+	}
+
+	fn prev_indent(remove_if_pure: bool) -> WhitespaceConfig {
+		WhitespaceConfig {
+			format: Some(WhitespaceFormatKind::Indent {
+				offset: -1,
 				remove_if_pure
 			}),
 		}

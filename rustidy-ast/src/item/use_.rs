@@ -224,7 +224,7 @@ impl UseTreeGroup {
 
 				tree
 					.format(ctx, prefix_ws, delimited::fmt_indent_if_non_blank_with((), punct::FmtArgs {
-						value_prefix_ws: Whitespace::CUR_INDENT,
+						value_prefix_ws: Whitespace::INDENT,
 						punct_prefix_ws: Whitespace::REMOVE,
 						value_args: (),
 						punct_args: (),

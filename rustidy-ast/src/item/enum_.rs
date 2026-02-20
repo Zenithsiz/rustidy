@@ -31,7 +31,7 @@ pub struct Enumeration {
 	pub ident:    Identifier,
 	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub generic:  Option<GenericParams>,
-	#[format(prefix_ws = Whitespace::CUR_INDENT)]
+	#[format(prefix_ws = Whitespace::INDENT)]
 	pub where_:   Option<WhereClause>,
 	#[format(prefix_ws = Whitespace::SINGLE)]
 	#[format(indent)]
@@ -44,7 +44,7 @@ pub struct Enumeration {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct EnumVariants(
-	#[format(args = punct::fmt(Whitespace::CUR_INDENT, Whitespace::REMOVE))]
+	#[format(args = punct::fmt(Whitespace::INDENT, Whitespace::REMOVE))]
 	pub PunctuatedTrailing<EnumVariant, token::Comma>,
 );
 

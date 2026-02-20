@@ -42,7 +42,7 @@ Expression);
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Formattable, Format, Print)]
 pub struct MatchArms {
-	#[format(args = rustidy_format::vec::args_prefix_ws(Whitespace::CUR_INDENT))]
+	#[format(args = rustidy_format::vec::args_prefix_ws(Whitespace::INDENT))]
 	pub arms: Vec<MatchArmWithExpr>,
 }
 

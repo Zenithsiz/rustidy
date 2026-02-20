@@ -30,7 +30,7 @@ pub struct InherentImpl {
 	pub generics: Option<GenericParams>,
 	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub ty:       Type,
-	#[format(prefix_ws = Whitespace::CUR_INDENT)]
+	#[format(prefix_ws = Whitespace::INDENT)]
 	pub where_:   Option<WhereClause>,
 	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub body:     BracedWithInnerAttributes<ImplBody>,
@@ -60,7 +60,7 @@ pub struct TraitImpl {
 	pub for_:     token::For,
 	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub ty:       Type,
-	#[format(prefix_ws = Whitespace::CUR_INDENT)]
+	#[format(prefix_ws = Whitespace::INDENT)]
 	pub where_:   Option<WhereClause>,
 	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub body:     BracedWithInnerAttributes<ImplBody>,
@@ -70,6 +70,6 @@ pub struct TraitImpl {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct ImplBody(
-	#[format(args = rustidy_format::vec::args_prefix_ws(Whitespace::CUR_INDENT))]
+	#[format(args = rustidy_format::vec::args_prefix_ws(Whitespace::INDENT))]
 	pub Vec<AssociatedItem>,
 );

@@ -84,7 +84,7 @@ impl Format<(), ()> for Crate {
 
 		self
 			.inner_attrs
-			.format(&mut ctx, Whitespace::REMOVE, rustidy_format::vec::args_prefix_ws(Whitespace::CUR_INDENT),)
+			.format(&mut ctx, Whitespace::REMOVE, rustidy_format::vec::args_prefix_ws(Whitespace::INDENT),)
 			.append_to(&mut output);
 
 		// TODO: We need to set `FormatTag::AfterNewline` for `items`.
@@ -92,13 +92,13 @@ impl Format<(), ()> for Crate {
 			.items
 			.format(&mut ctx, match self.inner_attrs.is_empty() {
 				true => Whitespace::REMOVE,
-				false => Whitespace::CUR_INDENT,
+				false => Whitespace::INDENT,
 			}, (),)
 			.append_to(&mut output);
 
 		self
 			.suffix_ws
-			.format(&mut ctx, Whitespace::indent(0, self.inner_attrs.is_empty() && self.items.0.is_empty()), (),)
+			.format(&mut ctx, Whitespace::indent(self.inner_attrs.is_empty() && self.items.0.is_empty()), (),)
 			.append_to(&mut output);
 
 		// Add the newline at the end of the trailing comment if it didn't have one already

@@ -37,7 +37,7 @@ pub struct Trait {
 	pub generics: Option<GenericParams>,
 	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub bounds:   Option<TraitColonBounds>,
-	#[format(prefix_ws = Whitespace::CUR_INDENT)]
+	#[format(prefix_ws = Whitespace::INDENT)]
 	pub where_:   Option<WhereClause>,
 	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub body:     TraitBody,
@@ -67,7 +67,7 @@ pub struct TraitBodyEq {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct TraitBodyFull(
-	#[format(args = rustidy_format::vec::args_prefix_ws(Whitespace::CUR_INDENT))]
+	#[format(args = rustidy_format::vec::args_prefix_ws(Whitespace::INDENT))]
 	pub Vec<AssociatedItem>,
 );
 

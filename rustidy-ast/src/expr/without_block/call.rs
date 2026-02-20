@@ -41,8 +41,9 @@ pub struct CallExpression {
 #[format(args = MethodCallExpressionFmt)]
 pub struct MethodCallExpression {
 	pub expr:    Expression,
+	#[format(indent(if_has_tag = FormatTag::InsideChain))]
 	#[format(prefix_ws = match ctx.has_tag(FormatTag::InsideChain) {
-		true => Whitespace::NEXT_INDENT,
+		true => Whitespace::INDENT,
 		false => Whitespace::REMOVE,
 	})]
 	pub dot:     token::Dot,

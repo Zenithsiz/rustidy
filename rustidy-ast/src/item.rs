@@ -62,7 +62,7 @@ use {
 #[derive(Parse, Formattable, Format, Print)]
 #[format(before_with = Self::merge_use)]
 pub struct Items(
-	#[format(args = rustidy_format::vec::args_prefix_ws(Whitespace::CUR_INDENT))]
+	#[format(args = rustidy_format::vec::args_prefix_ws(Whitespace::INDENT))]
 	pub Vec<Item>,
 );
 
@@ -243,7 +243,7 @@ pub struct DeclMacroBodyBranches(
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct DeclMacroBodyBranchesInner(
-	#[format(args = punct::fmt(Whitespace::CUR_INDENT, Whitespace::REMOVE))]
+	#[format(args = punct::fmt(Whitespace::INDENT, Whitespace::REMOVE))]
 	pub PunctuatedTrailing<DeclMacroBranch, token::Comma>,
 );
 

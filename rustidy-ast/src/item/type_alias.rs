@@ -24,7 +24,7 @@ pub struct TypeAlias {
 	pub generics: Option<GenericParams>,
 	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub bounds:   Option<TypeAliasBounds>,
-	#[format(prefix_ws = Whitespace::CUR_INDENT)]
+	#[format(prefix_ws = Whitespace::INDENT)]
 	pub where_:   Option<WhereClause>,
 	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub eq:       Option<TypeAliasEq>,
@@ -49,6 +49,6 @@ pub struct TypeAliasEq {
 	#[parse(fatal)]
 	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub ty:     Type,
-	#[format(prefix_ws = Whitespace::CUR_INDENT)]
+	#[format(prefix_ws = Whitespace::INDENT)]
 	pub where_: Option<WhereClause>,
 }

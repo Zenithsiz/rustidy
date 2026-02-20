@@ -38,12 +38,12 @@ pub struct Function {
 	pub params:     Parenthesized<Option<FunctionParameters>>,
 	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub ret:        Option<FunctionReturnType>,
-	#[format(prefix_ws = Whitespace::CUR_INDENT)]
+	#[format(prefix_ws = Whitespace::INDENT)]
 	pub where_:     Option<WhereClause>,
 	#[format(prefix_ws = match self.body.is_semi() {
 		true => Whitespace::REMOVE,
 		false => match self.where_.is_some() {
-			true => Whitespace::CUR_INDENT,
+			true => Whitespace::INDENT,
 			false => Whitespace::SINGLE,
 		}
 	})]
@@ -404,9 +404,9 @@ pub struct WhereClause {
 	pub where_: token::Where,
 	// TODO: The reference says that this can't have a trailing comma,
 	//       but the compiler accepts it, so we do to.
-	#[format(prefix_ws = Whitespace::CUR_INDENT)]
+	#[format(prefix_ws = Whitespace::INDENT)]
 	#[format(indent)]
-	#[format(args = punct::fmt(Whitespace::CUR_INDENT, Whitespace::REMOVE))]
+	#[format(args = punct::fmt(Whitespace::INDENT, Whitespace::REMOVE))]
 	pub items:  Option<PunctuatedTrailing<WhereClauseItem, token::Comma>>,
 }
 

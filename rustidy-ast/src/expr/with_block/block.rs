@@ -33,9 +33,9 @@ pub struct BlockExpression(pub ArenaIdx<BracedWithInnerAttributes<Statements>>);
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Formattable, Format, Print)]
 pub struct Statements {
-	#[format(args = rustidy_format::vec::args_prefix_ws(Whitespace::CUR_INDENT))]
+	#[format(args = rustidy_format::vec::args_prefix_ws(Whitespace::INDENT))]
 	pub stmts:         Vec<Statement>,
-	#[format(prefix_ws(expr = Whitespace::CUR_INDENT, if = !self.stmts.is_empty()))]
+	#[format(prefix_ws(expr = Whitespace::INDENT, if = !self.stmts.is_empty()))]
 	pub trailing_expr: Option<ExpressionWithoutBlock>,
 }
 
