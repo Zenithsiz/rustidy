@@ -261,11 +261,12 @@ impl<T: ArenaData> Hash for ArenaIdx<T> {
 	}
 }
 
-impl<T: ArenaData> fmt::Debug for ArenaIdx<T> {
+impl<T: ArenaData + fmt::Debug> fmt::Debug for ArenaIdx<T> {
 	fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
 		f
-			.debug_tuple("ArenaIdx")
-			.field(&self.inner)
+			.debug_struct("ArenaIdx")
+			.field("idx", &self.inner)
+			.field("inner", &**self)
 			.finish()
 	}
 }
