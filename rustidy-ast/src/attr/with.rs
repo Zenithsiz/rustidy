@@ -97,10 +97,10 @@ impl<T> From<T> for WithOuterAttributes<T> {
 
 impl<T, R> ParsableRecursive<R> for WithOuterAttributes<T>
 where
-	T: ParsableRecursive<R>, {
+	T: ParsableRecursive<R> {
 	type Base = WithOuterAttributes<T::Base>;
 	type Infix = T::Infix;
-	type Prefix = WithOuterAttributes<T::Prefix>;
+	type Prefix = T::Prefix;
 	type Suffix = T::Suffix;
 
 	fn from_base(base: Self::Base, parser: &mut Parser) -> Self {
@@ -119,8 +119,8 @@ where
 
 	fn join_prefix(prefix: Self::Prefix, root: R, parser: &mut Parser) -> Self {
 		Self {
-			attrs: prefix.attrs,
-			inner: T::join_prefix(prefix.inner, root, parser),
+			attrs: vec![],
+			inner: T::join_prefix(prefix, root, parser),
 		}
 	}
 
