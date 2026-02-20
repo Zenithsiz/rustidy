@@ -152,6 +152,20 @@ impl FormatOutput {
 	}
 }
 
+impl<const N: usize> From<[Self; N]> for FormatOutput {
+	fn from(outputs: [Self; N]) -> Self {
+		outputs.into_iter().collect()
+	}
+}
+
+impl FromIterator<Self> for FormatOutput {
+	fn from_iter<T: IntoIterator<Item = Self>>(iter: T) -> Self {
+		iter
+			.into_iter()
+			.fold(Self::default(), Self::join)
+	}
+}
+
 impl Default for FormatOutput {
 	fn default() -> Self {
 		Self {
