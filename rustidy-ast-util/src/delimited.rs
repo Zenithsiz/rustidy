@@ -37,12 +37,14 @@ impl<T, L, R> Delimited<T, L, R> {
 	}
 }
 
+// TODO: Create another impl where we don't care about empty/non-empty?
 impl<T, L, R, LPrefixWs, TPrefixWs, RPrefixWs, LArgs, TArgs, RArgs> Format<LPrefixWs, FmtArgs<TPrefixWs, RPrefixWs, LArgs, TArgs, RArgs>> for Delimited<T, L, R>
 where
-	TArgs: Clone,
 	L: Format<LPrefixWs, LArgs>,
 	T: Format<TPrefixWs, TArgs>,
-	R: Format<RPrefixWs, RArgs>, {
+	R: Format<RPrefixWs, RArgs>,
+	// TODO: Not need this and get 2 copies of the arguments for empty and non-empty.
+	TArgs: Clone, {
 	fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: LPrefixWs, args: FmtArgs<TPrefixWs, RPrefixWs, LArgs, TArgs, RArgs>,) -> FormatOutput {
 		// TODO: Should we handle the case of the prefix being empty and needing to
 		//       pass the prefix whitespace along?
@@ -129,6 +131,11 @@ pub const fn fmt_single_if_non_blank_with<LArgs, TArgs, RArgs>(prefix_args: LArg
 }
 
 #[must_use]
+pub const fn fmt_single_if_non_blank_with_value<TArgs>(value_args: TArgs) -> FmtArgs<WhitespaceConfig, WhitespaceConfig, (), TArgs, ()> {
+	self::fmt_single_if_non_blank_with((), value_args, ())
+}
+
+#[must_use]
 pub const fn fmt_single_if_non_blank() -> FmtArgs<WhitespaceConfig, WhitespaceConfig, (), (), ()> {
 	self::fmt_single_if_non_blank_with((), (), ())
 }
@@ -181,4 +188,41 @@ pub const fn fmt_remove_with_value<TArgs>(value_args: TArgs) -> FmtArgs<Whitespa
 #[must_use]
 pub const fn fmt_remove() -> FmtArgs<WhitespaceConfig, WhitespaceConfig, (), (), ()> {
 	self::fmt_remove_with((), (), ())
+}
+
+/// Formatting arguments for [`fmt_single_or_indent_if_non_blank`]
+#[derive(Clone, Copy, Debug)]
+pub struct FmtArgsSingleOrIndentIfNonBlank<TArgs> {
+	max_len:           usize,
+	value_args_single: TArgs,
+	value_args_indent: TArgs,
+}
+
+/// Formats a delimited with [`fmt_single_if_non_blank`] if under or equal to
+/// `max_len`, otherwise formats with [`fmt_indent_if_non_blank`].
+#[must_use]
+pub const fn fmt_single_or_indent_if_non_blank<TArgs>(max_len: usize, value_args_single: TArgs, value_args_indent: TArgs) -> FmtArgsSingleOrIndentIfNonBlank<TArgs> {
+	FmtArgsSingleOrIndentIfNonBlank {
+		max_len,
+		value_args_single,
+		value_args_indent
+	}
+}
+
+impl<T, L, R, TArgs> Format<WhitespaceConfig, FmtArgsSingleOrIndentIfNonBlank<TArgs>> for Delimited<T, L, R>
+where
+	L: Format<WhitespaceConfig, ()>,
+	T: Format<WhitespaceConfig, TArgs>,
+	R: Format<WhitespaceConfig, ()>,
+	TArgs: Clone {
+	fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: WhitespaceConfig, args: FmtArgsSingleOrIndentIfNonBlank<TArgs>) -> FormatOutput {
+		let output = self
+			.format(ctx, prefix_ws, self::fmt_single_if_non_blank_with_value(args.value_args_single));
+
+		match output.len_without_prefix_ws() <= args.max_len {
+			true => output,
+			false => self
+				.format(ctx, prefix_ws, self::fmt_indent_if_non_blank_with_value(args.value_args_indent)),
+		}
+	}
 }

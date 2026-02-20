@@ -5,7 +5,7 @@ use {
 	super::{TupleIndex, path::PathInExpression},
 	crate::{attr::WithOuterAttributes, expr::Expression, token, util::Braced},
 	rustidy_ast_util::{Identifier, Punctuated, delimited, punct},
-	rustidy_format::{Format, Formattable, WhitespaceFormat},
+	rustidy_format::{Format, Formattable, WhitespaceConfig, WhitespaceFormat},
 	rustidy_parse::{Parse, ParserTag},
 	rustidy_print::Print,
 	rustidy_util::Whitespace,
@@ -21,14 +21,20 @@ pub struct StructExpression {
 	pub path:  PathInExpression,
 	#[format(prefix_ws = Whitespace::SINGLE)]
 	#[format(indent)]
-	#[format(args = delimited::fmt_indent_if_non_blank())]
+	#[format(args = delimited::fmt_single_or_indent_if_non_blank(
+		50,
+		StructExprFieldsFmt { field_prefix_ws: Whitespace::SINGLE },
+		StructExprFieldsFmt { field_prefix_ws: Whitespace::INDENT }
+	))]
 	pub inner: Braced<Option<StructExpressionInner>>,
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
+#[format(args(ty = "StructExprFieldsFmt"))]
 pub enum StructExpressionInner {
+	#[format(args = args)]
 	Fields(StructExprFields),
 	Base(StructBase),
 }
@@ -37,11 +43,17 @@ pub enum StructExpressionInner {
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
+#[format(args(ty = "StructExprFieldsFmt"))]
 pub struct StructExprFields {
-	#[format(args = punct::fmt(Whitespace::INDENT, Whitespace::REMOVE))]
+	#[format(args = punct::fmt(args.field_prefix_ws, Whitespace::REMOVE))]
 	pub fields: Punctuated<StructExprField, token::Comma>,
 	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub end:    Option<StructExprFieldsEnd>,
+}
+
+#[derive(Clone, Copy, Debug)]
+pub struct StructExprFieldsFmt {
+	field_prefix_ws: WhitespaceConfig,
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]

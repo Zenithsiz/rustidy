@@ -93,6 +93,7 @@ pub struct EnumVariantTuple(
 #[derive(Parse, Formattable, Format, Print)]
 pub struct EnumVariantStruct(
 	#[format(indent)]
+	// TODO: Use `delimited::fmt_single_or_indent_if_non_blank`
 	#[format(args = delimited::fmt_indent_if_non_blank())]
 	pub Braced<Option<StructFields>>,
 );
