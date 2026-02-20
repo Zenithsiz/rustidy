@@ -28,7 +28,7 @@ pub struct BareFunctionType {
 	pub fn_:           token::Fn,
 	#[parse(fatal)]
 	#[format(prefix_ws = Whitespace::REMOVE)]
-	#[format(args = delimited::fmt_remove())]
+	#[format(args = delimited::FmtRemove)]
 	pub params:        Parenthesized<Option<FunctionParametersMaybeNamedVariadic>>,
 	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub ret:           Option<BareFunctionReturnType>,

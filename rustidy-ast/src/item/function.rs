@@ -34,7 +34,7 @@ pub struct Function {
 	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub generics:   Option<GenericParams>,
 	#[format(prefix_ws = Whitespace::REMOVE)]
-	#[format(args = delimited::fmt_remove())]
+	#[format(args = delimited::FmtRemove)]
 	pub params:     Parenthesized<Option<FunctionParameters>>,
 	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub ret:        Option<FunctionReturnType>,
@@ -256,7 +256,7 @@ pub struct FunctionReturnType {
 #[derive(Parse, Formattable, Format, Print)]
 #[parse(name = "generic parameters")]
 pub struct GenericParams(
-	#[format(args = delimited::fmt_remove())]
+	#[format(args = delimited::FmtRemove)]
 	pub Delimited<Option<GenericParamsInner>, token::Lt, token::Gt>,
 );
 

@@ -97,14 +97,14 @@ pub struct RestPattern(token::DotDot);
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
-pub struct GroupedPattern(#[format(args = delimited::fmt_remove())]
+pub struct GroupedPattern(#[format(args = delimited::FmtRemove)]
 Parenthesized<Box<Pattern>>);
 
 /// `SlicePattern`
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
-pub struct SlicePattern(#[format(args = delimited::fmt_remove())]
+pub struct SlicePattern(#[format(args = delimited::FmtRemove)]
 Bracketed<Option<SlicePatternItems>>);
 
 /// `SlicePatternItems`
@@ -255,7 +255,7 @@ pub struct StructPatternEtCetera(token::DotDot);
 pub struct TupleStructPattern {
 	pub top:   PathInExpression,
 	#[format(prefix_ws = Whitespace::REMOVE)]
-	#[format(args = delimited::fmt_remove())]
+	#[format(args = delimited::FmtRemove)]
 	pub items: Parenthesized<Option<TupleStructItems>>,
 }
 
@@ -273,7 +273,7 @@ pub struct TupleStructItems(
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct TuplePattern(
-	#[format(args = delimited::fmt_remove())]
+	#[format(args = delimited::FmtRemove)]
 	Parenthesized<Option<TuplePatternItems>>,
 );
 

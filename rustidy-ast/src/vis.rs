@@ -17,7 +17,7 @@ use {
 pub struct Visibility {
 	pub pub_: token::Pub,
 	#[format(prefix_ws = Whitespace::REMOVE)]
-	#[format(args = delimited::fmt_remove())]
+	#[format(args = delimited::FmtRemove)]
 	pub path: Option<Parenthesized<VisibilityPath>>,
 }
 

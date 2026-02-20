@@ -271,7 +271,7 @@ pub enum DeclMacroBranchExtra {
 pub struct DeclMacroBranchAttr {
 	pub attr: token::Attr,
 	#[format(prefix_ws = Whitespace::REMOVE)]
-	#[format(args = delimited::fmt_remove())]
+	#[format(args = delimited::FmtRemove)]
 	pub args: Parenthesized<DelimTokenTreeInner>,
 }
 
@@ -282,9 +282,13 @@ pub struct DeclMacroBranchDerive {
 	pub derive: token::Derive,
 	#[format(prefix_ws = Whitespace::REMOVE)]
 	#[format(args = delimited::FmtArgs {
-		value_non_blank: (),
-		value_blank: (),
-		..delimited::fmt_remove()
+		value_non_blank:(),
+		value_blank:(),
+		suffix_non_blank: Whitespace::REMOVE,
+		suffix_blank: Whitespace::REMOVE,
+		prefix_args: (),
+		value_args: (),
+		suffix_args: ()
 	})]
 	pub args:   Parenthesized<()>,
 }

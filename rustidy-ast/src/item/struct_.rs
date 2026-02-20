@@ -138,7 +138,7 @@ impl TupleStruct {
 			fields.0.trailing = None;
 		}
 		let output = fields
-			.format(ctx, prefix_ws, delimited::fmt_remove_with_value(TupleFieldsFmt { field_prefix_ws: Whitespace::SINGLE }));
+			.format(ctx, prefix_ws, delimited::FmtRemoveWith(TupleFieldsFmt { field_prefix_ws: Whitespace::SINGLE }));
 
 		match output.len_without_prefix_ws() <= ctx.config().max_inline_tuple_struct_len {
 			true => output,

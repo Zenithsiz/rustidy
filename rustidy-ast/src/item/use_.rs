@@ -196,12 +196,12 @@ impl UseTreeGroup {
 		}
 
 		tree
-			.format(ctx, prefix_ws, delimited::fmt_remove_with((), punct::FmtArgs {
+			.format(ctx, prefix_ws, delimited::FmtRemoveWith(punct::FmtArgs {
 				value_prefix_ws: Whitespace::SINGLE,
 				punct_prefix_ws: Whitespace::REMOVE,
 				value_args: (),
 				punct_args: (),
-			}, (),),)
+			}),)
 	}
 
 	fn format_tree(tree: &mut Braced<Option<PunctuatedTrailing<Box<UseTree>, token::Comma>>>, ctx: &mut rustidy_format::Context, prefix_ws: WhitespaceConfig, _args: (),) -> FormatOutput {

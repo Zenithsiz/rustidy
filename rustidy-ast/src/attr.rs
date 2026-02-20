@@ -44,7 +44,7 @@ pub struct InnerAttribute {
 	pub not:   token::Not,
 	#[parse(fatal)]
 	#[format(prefix_ws = Whitespace::REMOVE)]
-	#[format(args = delimited::fmt_remove())]
+	#[format(args = delimited::FmtRemove)]
 	pub attr:  Bracketed<Attr>,
 }
 
@@ -93,7 +93,7 @@ pub enum OuterAttrOrDocComment {
 pub struct OuterAttribute {
 	pub pound: token::Pound,
 	#[format(prefix_ws = Whitespace::REMOVE)]
-	#[format(args = delimited::fmt_remove())]
+	#[format(args = delimited::FmtRemove)]
 	pub open:  Bracketed<Attr>,
 }
 

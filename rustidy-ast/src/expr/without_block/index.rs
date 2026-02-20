@@ -21,6 +21,6 @@ use {
 pub struct IndexExpression {
 	pub expr:  Expression,
 	#[format(prefix_ws = Whitespace::REMOVE)]
-	#[format(args = delimited::fmt_remove())]
+	#[format(args = delimited::FmtRemove)]
 	pub index: Bracketed<Expression>,
 }

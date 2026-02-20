@@ -165,29 +165,26 @@ pub const fn fmt_indent_if_non_blank() -> FmtArgs<WhitespaceConfig, WhitespaceCo
 	self::fmt_indent_if_non_blank_with((), (), ())
 }
 
-#[must_use]
-pub const fn fmt_remove_with<LArgs, TArgs, RArgs>(prefix_args: LArgs, value_args: TArgs, suffix_args: RArgs,) -> FmtArgs<WhitespaceConfig, WhitespaceConfig, LArgs, TArgs, RArgs> {
-	FmtArgs {
-		value_non_blank: Whitespace::REMOVE,
-		suffix_non_blank: Whitespace::REMOVE,
+pub struct FmtRemoveWith<TArgs>(pub TArgs);
 
-		value_blank: Whitespace::REMOVE,
-		suffix_blank: Whitespace::REMOVE,
-
-		prefix_args,
-		value_args,
-		suffix_args,
+impl<T: Format<WhitespaceConfig, TArgs>, L: Format<WhitespaceConfig, ()>, R: Format<WhitespaceConfig, ()>, TArgs> Format<WhitespaceConfig, FmtRemoveWith<TArgs>> for Delimited<T, L, R> {
+	fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: WhitespaceConfig, args: FmtRemoveWith<TArgs>) -> FormatOutput {
+		FormatOutput::from([
+			self.prefix.format(ctx, prefix_ws, ()),
+			self
+				.value
+				.format(ctx, Whitespace::REMOVE, args.0),
+			self.suffix.format(ctx, Whitespace::REMOVE, ()),
+		])
 	}
 }
 
-#[must_use]
-pub const fn fmt_remove_with_value<TArgs>(value_args: TArgs) -> FmtArgs<WhitespaceConfig, WhitespaceConfig, (), TArgs, ()> {
-	self::fmt_remove_with((), value_args, ())
-}
+pub struct FmtRemove;
 
-#[must_use]
-pub const fn fmt_remove() -> FmtArgs<WhitespaceConfig, WhitespaceConfig, (), (), ()> {
-	self::fmt_remove_with((), (), ())
+impl<T: Format<WhitespaceConfig, ()>, L: Format<WhitespaceConfig, ()>, R: Format<WhitespaceConfig, ()>> Format<WhitespaceConfig, FmtRemove> for Delimited<T, L, R> {
+	fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: WhitespaceConfig, _args: FmtRemove) -> FormatOutput {
+		self.format(ctx, prefix_ws, FmtRemoveWith(()))
+	}
 }
 
 /// Formatting arguments for [`fmt_single_or_indent_if_non_blank`]
