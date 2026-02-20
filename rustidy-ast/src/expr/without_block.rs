@@ -91,8 +91,6 @@ impl TryFrom<ExpressionWithoutBlock> for ExpressionWithoutBlockInner {
 #[parse_recursive(root = ExpressionInner)]
 #[parse_recursive(into_root = ExpressionWithoutBlock)]
 pub enum ExpressionWithoutBlockInner {
-	Underscore(UnderscoreExpression),
-
 	DoYeet(DoYeetExpression),
 
 	Literal(LiteralExpression),
@@ -123,6 +121,7 @@ pub enum ExpressionWithoutBlockInner {
 	Struct(StructExpression),
 	Array(ArrayExpression),
 	Path(PathExpression),
+	Underscore(UnderscoreExpression),
 	Continue(ContinueExpression),
 	Break(BreakExpression),
 	AsyncBlock(AsyncBlockExpression),

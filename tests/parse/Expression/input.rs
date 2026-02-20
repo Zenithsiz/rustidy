@@ -9,6 +9,8 @@ fn path() {
 	let _ = self;
 
 	let _ = <a as b>::c;
+
+	let _ = _0;
 }
 
 fn operator() {
