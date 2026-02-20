@@ -465,7 +465,7 @@ impl<'input> Parser<'input> {
 			end: AstPos(output_range.end),
 		};
 
-		<_>::from_output((AstStr::new(output_range), value))
+		<_>::from_output((AstStr::from_input(output_range), value))
 	}
 
 	/// Parses `T` from this parser

@@ -22,8 +22,8 @@ impl Whitespace {
 	}
 
 	/// Clears this whitespace
-	pub fn clear(&mut self, input: &str) {
-		self.0.first.0.replace(input, "");
+	pub fn clear(&mut self) {
+		self.0.first.0.replace("");
 		self.0.rest.clear();
 	}
 }

@@ -106,8 +106,7 @@ impl Format<(), ()> for Crate {
 			let mut s = ctx.str(&trailing.0).into_owned();
 			if !s.ends_with('\n') {
 				s.push('\n');
-				trailing.0
-					.replace(ctx.input(), AstStrRepr::Dynamic(s));
+				trailing.0.replace(AstStrRepr::Dynamic(s));
 			}
 		}
 

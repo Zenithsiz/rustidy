@@ -1,43 +1,70 @@
 //! Ast string
 
 // Imports
-use {crate::{ArenaData, ArenaIdx, AstRange}, std::{borrow::Cow, sync::Arc}};
+use {
+	crate::{ArenaData, ArenaIdx, AstRange},
+	std::{borrow::Cow, sync::Arc},
+	serde::ser::Error,
+};
 
 /// Ast string
 // TODO: Add an "empty" position for newly created ast nodes?
 #[derive(PartialEq, Eq, Clone, Hash, Debug)]
-#[derive(serde::Serialize, serde::Deserialize)]
 #[must_use = "Ast output must not be discarded"]
-pub struct AstStr(pub ArenaIdx<AstStrRepr>);
+pub struct AstStr(ArenaIdx<Inner>);
 
 impl AstStr {
-	/// Creates a new ast string
+	/// Creates a new ast string without any associated input range
 	pub fn new(repr: impl Into<AstStrRepr>) -> Self {
-		Self(ArenaIdx::new(repr.into()))
+		Self(ArenaIdx::new(Inner {
+			repr: repr.into(),
+			input_range: None,
+		}))
+	}
+
+	/// Creates a new ast string from an input range
+	pub fn from_input(input_range: AstRange) -> Self {
+		Self(ArenaIdx::new(Inner {
+			repr: AstStrRepr::AstRange(input_range),
+			input_range: Some(input_range),
+		}))
 	}
 
 	/// Replaces this ast string
-	pub fn replace(&mut self, input: &str, new_repr: impl Into<AstStrRepr>) {
-		let new_repr = new_repr.into();
-
-		// TODO: Should we only check if it's cheap to do so?
-		if !self.0.is_str_eq_to(&new_repr, input) {
-			*self.0 = new_repr;
-		}
+	pub fn replace(&mut self, repr: impl Into<AstStrRepr>) {
+		self.0.repr = repr.into();
 	}
 
 	/// Joins two strings
 	pub fn join(self, other: Self) -> Self {
-		Self(ArenaIdx::new(AstStrRepr::Join {
-			lhs: self,
-			rhs: other
+		let input_range = match (self.0.input_range, other.0.input_range) {
+			// TODO: Keep the range more than just when contiguous?
+			(Some(lhs), Some(rhs)) if lhs.end == rhs.start => Some(AstRange {
+				start: lhs.start,
+				end: rhs.end
+			}),
+			_ => None,
+		};
+
+		Self(ArenaIdx::new(Inner {
+			repr: AstStrRepr::Join {
+				lhs: self,
+				rhs: other
+			},
+			input_range
 		}))
 	}
 
 	/// Returns the inner representation of this string
 	#[must_use]
 	pub fn repr(&self) -> &AstStrRepr {
-		&self.0
+		&self.0.repr
+	}
+
+	/// Returns the input range of this string
+	#[must_use]
+	pub fn input_range(&self) -> Option<AstRange> {
+		self.0.input_range
 	}
 
 	/// Returns the length of this string
@@ -92,18 +119,52 @@ impl AstStr {
 	//       functions performing whatever checks the callers need instead?
 	#[must_use]
 	pub fn str<'a>(&'a self, input: &'a str) -> Cow<'a, str> {
-		match self.0.str_cheap(input) {
+		match self.0.repr.str_cheap(input) {
 			Some(s) => s.into(),
 			None => self.repr().str(input).into_owned().into(),
 		}
 	}
 }
 
+// TODO: Make serialization not lossy?
+impl serde::Serialize for AstStr {
+	fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+	where
+		S: serde::Serializer
+	{
+		match self.input_range() {
+			Some(input_range) => input_range.serialize(serializer),
+			None => Err(S::Error::custom(format!("Only strings with an input range may be serialized, found {:?}", *self.0))),
+		}
+	}
+}
+
+impl<'de> serde::Deserialize<'de> for AstStr {
+	fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+	where
+		D: serde::Deserializer<'de>,
+	{
+		let range = AstRange::deserialize(deserializer)?;
+		Ok(Self(ArenaIdx::new(Inner {
+			repr: AstStrRepr::AstRange(range),
+			input_range: Some(range)
+		})))
+	}
+}
+
+
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(ArenaData)]
 #[derive(derive_more::From)]
-#[derive(serde::Serialize)]
-#[serde(untagged)]
+struct Inner {
+	repr:        AstStrRepr,
+	input_range: Option<AstRange>,
+}
+
+/// Ast string representation
+#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(ArenaData)]
+#[derive(derive_more::From)]
 pub enum AstStrRepr {
 	/// Input range
 	#[from]
@@ -322,18 +383,5 @@ impl AstStrRepr {
 				output.into()
 			},
 		}
-	}
-}
-
-impl<'de> serde::Deserialize<'de> for AstStrRepr {
-	fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
-	where
-		D: serde::Deserializer<'de>,
-	{
-		// TODO: Should we try to deserialize a replacement?
-		//       This impl is only used for testing the parsing output,
-		//       which only contains ranges, so it might be unnecessary.
-		AstRange::deserialize(deserializer)
-			.map(Self::AstRange)
 	}
 }

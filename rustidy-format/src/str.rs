@@ -9,10 +9,10 @@ pub impl AstStr {
 	fn format_output(&self, ctx: &mut Context) -> FormatOutput {
 		FormatOutput {
 			prefix_ws_len: None,
-			len: self.0.len(),
-			is_empty: self.0.is_empty(),
-			is_blank: self.0.is_blank(ctx.input),
-			has_newlines: self.0.has_newlines(ctx.input),
+			len: self.len(),
+			is_empty: self.is_empty(),
+			is_blank: self.is_blank(ctx.input),
+			has_newlines: self.has_newlines(ctx.input),
 		}
 	}
 }

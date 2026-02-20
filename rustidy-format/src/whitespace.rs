@@ -287,7 +287,7 @@ pub fn format(ws: &mut Whitespace, ctx: &mut crate::Context, kind: WhitespaceFor
 
 	let prefix_str = kind
 		.prefix_str(ctx, &ws.0.first.0, ws.0.rest.is_empty(), after_newline);
-	ws.0.first.0.replace(ctx.input, prefix_str);
+	ws.0.first.0.replace(prefix_str);
 
 	for (pos, (comment, ws)) in ws.0.rest.iter_mut().with_position() {
 		let is_last = matches!(pos, itertools::Position::Last | itertools::Position::Only);
@@ -295,6 +295,6 @@ pub fn format(ws: &mut Whitespace, ctx: &mut crate::Context, kind: WhitespaceFor
 			true => kind.after_newline_str(ctx, &ws.0, is_last),
 			false => kind.normal_str(ctx, &ws.0, is_last),
 		};
-		ws.0.replace(ctx.input, ws_str);
+		ws.0.replace(ws_str);
 	}
 }
