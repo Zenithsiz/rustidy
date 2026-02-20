@@ -19,7 +19,7 @@ use {
 		util::{Braced, Bracketed, Parenthesized},
 	},
 	core::fmt::Debug,
-	rustidy_ast_literal::{ByteLiteral, LiteralExpression},
+	rustidy_ast_literal::{ByteLiteral, ByteStringLiteral, LiteralExpression},
 	rustidy_ast_util::{
 		AtLeast1,
 		Identifier,
@@ -66,6 +66,7 @@ pub enum PatternWithoutRange {
 	Path(PathPattern),
 
 	#[parse(peek = ByteLiteral)]
+	#[parse(peek = ByteStringLiteral)]
 	Literal(LiteralPattern),
 	// TODO: Parse this for single identifiers too?
 	#[parse(peek = (Option::<token::Ref>, Option::<token::Mut>, Identifier, token::At))]
@@ -331,6 +332,15 @@ impl ParsePeeked<ByteLiteral> for LiteralPattern {
 		Ok(Self {
 			minus: None,
 			literal: LiteralExpression::Byte(parsed),
+		})
+	}
+}
+
+impl ParsePeeked<ByteStringLiteral> for LiteralPattern {
+	fn parse_from_with_peeked(_parser: &mut rustidy_parse::Parser, parsed: ByteStringLiteral) -> Result<Self, Self::Error> {
+		Ok(Self {
+			minus: None,
+			literal: LiteralExpression::ByteString(parsed),
 		})
 	}
 }
