@@ -94,17 +94,17 @@ fn test_cases_with(cases: impl IntoIterator<Item = CaseKinds<'_>>, fmt_config: &
 				}),
 				(case
 					.expected_set_indent, WhitespaceFormatKind::Indent {
-					offset: 0,
+					use_prev: false,
 					remove_if_pure: false,
 				}),
 				(case
 					.expected_set_prev_indent, WhitespaceFormatKind::Indent {
-					offset: -1,
+					use_prev: true,
 					remove_if_pure: false,
 				}),
 				(case
 					.expected_set_prev_indent_or_remove, WhitespaceFormatKind::Indent {
-					offset: -1,
+					use_prev: true,
 					remove_if_pure: true,
 				}),
 			]

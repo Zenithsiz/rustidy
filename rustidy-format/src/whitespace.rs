@@ -20,7 +20,7 @@ use {
 pub impl Whitespace {
 	const INDENT: WhitespaceConfig = WhitespaceConfig {
 		format: Some(WhitespaceFormatKind::Indent {
-			offset: 0,
+			use_prev: false,
 			remove_if_pure: false,
 		}),
 	};
@@ -29,13 +29,13 @@ pub impl Whitespace {
 	};
 	const INDENT_CLOSE: WhitespaceConfig = WhitespaceConfig {
 		format: Some(WhitespaceFormatKind::Indent {
-			offset: -1,
+			use_prev: true,
 			remove_if_pure: false,
 		}),
 	};
 	const INDENT_CLOSE_REMOVE_IF_PURE: WhitespaceConfig = WhitespaceConfig {
 		format: Some(WhitespaceFormatKind::Indent {
-			offset: -1,
+			use_prev: true,
 			remove_if_pure: true,
 		}),
 	};
@@ -61,7 +61,7 @@ pub impl Whitespace {
 	fn indent(remove_if_pure: bool) -> WhitespaceConfig {
 		WhitespaceConfig {
 			format: Some(WhitespaceFormatKind::Indent {
-				offset: 0,
+				use_prev: false,
 				remove_if_pure
 			}),
 		}
@@ -70,7 +70,7 @@ pub impl Whitespace {
 	fn prev_indent(remove_if_pure: bool) -> WhitespaceConfig {
 		WhitespaceConfig {
 			format: Some(WhitespaceFormatKind::Indent {
-				offset: -1,
+				use_prev: true,
 				remove_if_pure
 			}),
 		}
@@ -183,8 +183,8 @@ pub enum WhitespaceFormatKind {
 	},
 
 	Indent {
-		/// Indentation offset
-		offset:         i16,
+		/// Use the previous indentation
+		use_prev:       bool,
 
 		/// Remove if the whitespace is pure
 		remove_if_pure: bool,
@@ -235,12 +235,12 @@ impl WhitespaceFormatKind {
 				len
 			},
 			Self::Indent {
-				offset,
+				use_prev,
 				remove_if_pure
 			} => match remove_if_pure && is_last {
 				true => "".into(),
 				false => ctx
-					.with_indent_offset_if(offset, is_last, |ctx| Self::indent_str_nl(ctx, cur_str, after_newline)),
+					.with_indent_offset_if(-1, use_prev && is_last, |ctx| Self::indent_str_nl(ctx, cur_str, after_newline)),
 			},
 		}
 	}
@@ -252,11 +252,11 @@ impl WhitespaceFormatKind {
 				..
 			} => "".into(),
 			Self::Indent {
-				offset,
+				use_prev,
 				..
 			} => match is_last {
 				true => ctx
-					.with_indent_offset(offset, |ctx| Self::indent_str(ctx)),
+					.with_indent_offset_if(-1, use_prev, |ctx| Self::indent_str(ctx)),
 				false => Self::indent_str_nl(ctx, cur_str, true),
 			},
 		}
@@ -272,11 +272,11 @@ impl WhitespaceFormatKind {
 				len
 			},
 			Self::Indent {
-				offset,
+				use_prev,
 				..
 			} => match is_last {
 				true => ctx
-					.with_indent_offset(offset, |ctx| Self::indent_str_nl(ctx, cur_str, false)),
+					.with_indent_offset_if(-1, use_prev, |ctx| Self::indent_str_nl(ctx, cur_str, false)),
 				false => Self::indent_str_nl(ctx, cur_str, false),
 			},
 		}
