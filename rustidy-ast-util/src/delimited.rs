@@ -169,11 +169,10 @@ pub struct FmtRemoveWith<TArgs>(pub TArgs);
 
 impl<T: Format<WhitespaceConfig, TArgs>, L: Format<WhitespaceConfig, ()>, R: Format<WhitespaceConfig, ()>, TArgs> Format<WhitespaceConfig, FmtRemoveWith<TArgs>> for Delimited<T, L, R> {
 	fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: WhitespaceConfig, args: FmtRemoveWith<TArgs>) -> FormatOutput {
+		#[rustidy::config(max_chain_len = 100)]
 		FormatOutput::from([
 			self.prefix.format(ctx, prefix_ws, ()),
-			self
-				.value
-				.format(ctx, Whitespace::REMOVE, args.0),
+			self.value.format(ctx, Whitespace::REMOVE, args.0),
 			self.suffix.format(ctx, Whitespace::REMOVE, ()),
 		])
 	}
