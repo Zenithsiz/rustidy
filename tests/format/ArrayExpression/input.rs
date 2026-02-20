@@ -1,4 +1,18 @@
 fn a() {
+	let _ = [ 1 ];
+	let _ = [
+		1
+	];
+
+	let _ = [
+		// Comment
+		1
+	];
+	let _ = [
+		1
+		// Comment
+	];
+
 	let _ = [ 1 , 2 , 3 , 4 , 5 , 6 , ];
 
 	#[rustidy::config(max_array_expr_len = 6)]

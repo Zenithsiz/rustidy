@@ -207,11 +207,12 @@ impl WhitespaceFormatKind {
 			true => (min_newlines, max_newlines),
 			false => (min_newlines + 1, max_newlines + 1),
 		};
-		let newlines = ctx
-			.str(cur_str)
-			.chars()
-			.filter(|&ch| ch == '\n')
-			.count();
+		// Note: We try to use the input's number of newlines, since we might
+		//       have been changed.
+		let newlines = match cur_str.input_range() {
+			Some(input_range) => rustidy_util::str_count_newlines(input_range.str(ctx.input)),
+			None => cur_str.count_newlines(ctx.input),
+		};
 		let newlines = newlines.clamp(min_newlines, max_newlines);
 
 		AstStrRepr::Indentation {

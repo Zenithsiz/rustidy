@@ -11,5 +11,6 @@ struct A(
 
 struct A(
 	u32,
+
 	Loooooooooooooooooooonooooooooooooooooooooooooooooooooooooooooooooooooooooog,
 );
