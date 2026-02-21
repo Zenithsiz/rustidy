@@ -28,25 +28,23 @@ struct Indent {
 }
 
 #[derive(Debug, darling::FromMeta)]
-#[darling(from_expr = |expr| Ok(Self { tag: expr.clone(), cond: None }))]
+#[darling(from_expr = |expr| Ok(Self { tag: expr.clone(), if_: None }))]
 struct WithTag {
-	tag:  syn::Expr,
-	#[darling(rename = "if")]
-	cond: Option<syn::Expr>,
+	tag: syn::Expr,
+	if_: Option<syn::Expr>,
 }
 
 #[derive(Clone, Debug, darling::FromMeta)]
-#[darling(from_expr = |expr| Ok(Self { expr: expr.clone(), cond: None }))]
+#[darling(from_expr = |expr| Ok(Self { expr: expr.clone(), if_: None }))]
 struct WithExprIf {
 	expr: syn::Expr,
-	#[darling(rename = "if")]
-	cond: Option<syn::Expr>,
+	if_:  Option<syn::Expr>,
 }
 
 impl WithExprIf {
 	/// Maps the expressions in this and-with
 	pub fn map(&self, mut f: impl FnMut(&syn::Expr) -> syn::Expr) -> Self {
-		Self { expr: f(&self.expr), cond: self.cond.clone(), }
+		Self { expr: f(&self.expr), if_: self.if_.clone(), }
 	}
 
 	/// Evaluates this and-with.
@@ -56,9 +54,9 @@ impl WithExprIf {
 	pub fn eval(&self, else_expr: Option<syn::Expr>) -> syn::Expr {
 		let Self {
 			expr,
-			cond
+			if_
 		} = self;
-		match cond {
+		match if_ {
 			Some(cond) => match else_expr {
 				Some(else_expr) => parse_quote! {
 					if #cond { #expr }
@@ -402,9 +400,9 @@ fn derive_format(value: syn::Expr, prefix_ws: Option<syn::Expr>, after_format: O
 	};
 	for WithTag {
 		tag,
-		cond
+		if_
 	} in with_tag {
-		let cond = cond
+		let cond = if_
 			.clone()
 			.unwrap_or_else(|| parse_quote! { true });
 		format = parse_quote! {

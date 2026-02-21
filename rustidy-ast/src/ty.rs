@@ -135,7 +135,7 @@ pub struct ImplTraitTypeOneBound {
 #[derive(Parse, Formattable, Format, Print)]
 pub struct TraitObjectTypeOneBound {
 	pub dyn_:  Option<token::Dyn>,
-	#[format(prefix_ws(expr = Whitespace::SINGLE, if = self.dyn_.is_some()))]
+	#[format(prefix_ws(expr = Whitespace::SINGLE, if_ = self.dyn_.is_some()))]
 	pub bound: TraitBound,
 }
 
@@ -155,6 +155,6 @@ pub struct ImplTraitType {
 #[derive(Parse, Formattable, Format, Print)]
 pub struct TraitObjectType {
 	pub dyn_:  Option<token::Dyn>,
-	#[format(prefix_ws(expr = Whitespace::SINGLE, if = self.dyn_.is_some()))]
+	#[format(prefix_ws(expr = Whitespace::SINGLE, if_ = self.dyn_.is_some()))]
 	pub bound: TypeParamBounds,
 }

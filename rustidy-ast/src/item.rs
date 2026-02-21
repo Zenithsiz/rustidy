@@ -156,7 +156,7 @@ decl_arena! { WithOuterAttributes<ItemInner> }
 #[derive(Parse, Formattable, Format, Print)]
 pub struct VisItem {
 	pub vis:   Option<Visibility>,
-	#[format(prefix_ws(expr = Whitespace::SINGLE, if = self.vis.is_some()))]
+	#[format(prefix_ws(expr = Whitespace::SINGLE, if_ = self.vis.is_some()))]
 	pub inner: VisItemInner,
 }
 
@@ -246,7 +246,7 @@ pub struct DeclMacroBodyBranchesInner(
 #[derive(Parse, Formattable, Format, Print)]
 pub struct DeclMacroBranch {
 	pub extra: Option<DeclMacroBranchExtra>,
-	#[format(prefix_ws(expr = Whitespace::SINGLE, if = self.extra.is_some()))]
+	#[format(prefix_ws(expr = Whitespace::SINGLE, if_ = self.extra.is_some()))]
 	pub args:  DelimTokenTree,
 	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub arrow: token::FatArrow,

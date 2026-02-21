@@ -171,7 +171,7 @@ pub struct LetChainConditionLet {
 #[derive(Parse, Formattable, Format, Print)]
 pub struct LoopExpression {
 	pub label: Option<LoopLabel>,
-	#[format(prefix_ws(expr = Whitespace::SINGLE, if = self.label.is_some()))]
+	#[format(prefix_ws(expr = Whitespace::SINGLE, if_ = self.label.is_some()))]
 	pub inner: LoopExpressionInner,
 }
 

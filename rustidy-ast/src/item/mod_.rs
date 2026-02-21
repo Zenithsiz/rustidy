@@ -18,7 +18,7 @@ use {
 #[parse(name = "module declaration")]
 pub struct Module {
 	pub unsafe_: Option<token::Unsafe>,
-	#[format(prefix_ws(expr = Whitespace::SINGLE, if = self.unsafe_.is_some()))]
+	#[format(prefix_ws(expr = Whitespace::SINGLE, if_ = self.unsafe_.is_some()))]
 	pub mod_:    token::Mod,
 	#[parse(fatal)]
 	#[format(prefix_ws = Whitespace::SINGLE)]

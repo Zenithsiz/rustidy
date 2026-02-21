@@ -42,7 +42,7 @@ use {
 #[parse(name = "a pattern")]
 pub struct Pattern {
 	pub top_alt: Option<token::Or>,
-	#[format(prefix_ws(expr = Whitespace::SINGLE, if = self.top_alt.is_some()))]
+	#[format(prefix_ws(expr = Whitespace::SINGLE, if_ = self.top_alt.is_some()))]
 	#[format(args = punct::fmt(Whitespace::SINGLE, Whitespace::SINGLE))]
 	pub inner:   Punctuated<PatternNoTopAlt, token::Or>,
 }
@@ -236,9 +236,9 @@ pub struct StructPatternFieldIdentPat {
 #[derive(Parse, Formattable, Format, Print)]
 pub struct StructPatternFieldIdent {
 	pub ref_:  Option<token::Ref>,
-	#[format(prefix_ws(expr = Whitespace::SINGLE, if = self.ref_.is_some()))]
+	#[format(prefix_ws(expr = Whitespace::SINGLE, if_ = self.ref_.is_some()))]
 	pub mut_:  Option<token::Mut>,
-	#[format(prefix_ws(expr = Whitespace::SINGLE, if = self.ref_.is_some() || self.mut_.is_some()))]
+	#[format(prefix_ws(expr = Whitespace::SINGLE, if_ = self.ref_.is_some() || self.mut_.is_some()))]
 	pub ident: Identifier,
 }
 
@@ -351,9 +351,9 @@ impl ParsePeeked<ByteStringLiteral> for LiteralPattern {
 #[parse(error(name = Pat(ParserError::<PatternNoTopAlt>), transparent))]
 pub struct IdentifierPattern {
 	pub ref_:  Option<token::Ref>,
-	#[format(prefix_ws(expr = Whitespace::SINGLE, if = self.ref_.is_some()))]
+	#[format(prefix_ws(expr = Whitespace::SINGLE, if_ = self.ref_.is_some()))]
 	pub mut_:  Option<token::Mut>,
-	#[format(prefix_ws(expr = Whitespace::SINGLE, if = self.ref_.is_some() || self.mut_.is_some()))]
+	#[format(prefix_ws(expr = Whitespace::SINGLE, if_ = self.ref_.is_some() || self.mut_.is_some()))]
 	pub ident: Identifier,
 	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub rest:  Option<IdentifierPatternRest>,

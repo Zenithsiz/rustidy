@@ -20,7 +20,7 @@ use {
 #[derive(Parse, Formattable, Format, Print)]
 pub struct ExternBlock {
 	pub unsafe_: Option<token::Unsafe>,
-	#[format(prefix_ws(expr = Whitespace::SINGLE, if = self.unsafe_.is_some()))]
+	#[format(prefix_ws(expr = Whitespace::SINGLE, if_ = self.unsafe_.is_some()))]
 	pub extern_: token::Extern,
 	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub abi:     Option<Abi>,
@@ -58,7 +58,7 @@ pub enum ExternalItemInner {
 #[derive(Parse, Formattable, Format, Print)]
 pub struct ExternalItemStatic {
 	pub vis:     Option<Visibility>,
-	#[format(prefix_ws(expr = Whitespace::SINGLE, if = self.vis.is_some()))]
+	#[format(prefix_ws(expr = Whitespace::SINGLE, if_ = self.vis.is_some()))]
 	pub static_: StaticItem,
 }
 
@@ -67,7 +67,7 @@ pub struct ExternalItemStatic {
 #[derive(Parse, Formattable, Format, Print)]
 pub struct ExternalItemFunction {
 	pub vis:      Option<Visibility>,
-	#[format(prefix_ws(expr = Whitespace::SINGLE, if = self.vis.is_some()))]
+	#[format(prefix_ws(expr = Whitespace::SINGLE, if_ = self.vis.is_some()))]
 	pub function: Function,
 }
 
@@ -76,6 +76,6 @@ pub struct ExternalItemFunction {
 #[derive(Parse, Formattable, Format, Print)]
 pub struct ExternalItemTypeAlias {
 	pub vis:   Option<Visibility>,
-	#[format(prefix_ws(expr = Whitespace::SINGLE, if = self.vis.is_some()))]
+	#[format(prefix_ws(expr = Whitespace::SINGLE, if_ = self.vis.is_some()))]
 	pub alias: TypeAlias,
 }

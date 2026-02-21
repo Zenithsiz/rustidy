@@ -26,9 +26,9 @@ use {
 pub struct Trait {
 	pub unsafe_:  Option<token::Unsafe>,
 	// Note: Nightly-only
-	#[format(prefix_ws(expr = Whitespace::SINGLE, if = self.unsafe_.is_some()))]
+	#[format(prefix_ws(expr = Whitespace::SINGLE, if_ = self.unsafe_.is_some()))]
 	pub auto:     Option<token::Auto>,
-	#[format(prefix_ws(expr = Whitespace::SINGLE, if = self.unsafe_.is_some() || self.auto.is_some()))]
+	#[format(prefix_ws(expr = Whitespace::SINGLE, if_ = self.unsafe_.is_some() || self.auto.is_some()))]
 	pub trait_:   token::Trait,
 	#[parse(fatal)]
 	#[format(prefix_ws = Whitespace::SINGLE)]
@@ -99,7 +99,7 @@ pub enum AssociatedItemInner {
 #[derive(Parse, Formattable, Format, Print)]
 pub struct AssociatedItemVis {
 	pub vis:   Option<Visibility>,
-	#[format(prefix_ws(expr = Whitespace::SINGLE, if = self.vis.is_some()))]
+	#[format(prefix_ws(expr = Whitespace::SINGLE, if_ = self.vis.is_some()))]
 	pub inner: AssociatedItemVisInner,
 }
 

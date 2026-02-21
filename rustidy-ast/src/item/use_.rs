@@ -84,7 +84,7 @@ impl UseTree {
 #[derive(Parse, Formattable, Format, Print)]
 pub struct UseTreeGlob {
 	pub prefix: Option<UseTreeGlobPrefix>,
-	#[format(prefix_ws(expr = Whitespace::REMOVE, if = self.prefix.is_some()))]
+	#[format(prefix_ws(expr = Whitespace::REMOVE, if_ = self.prefix.is_some()))]
 	pub glob:   token::Star,
 }
 
@@ -93,7 +93,7 @@ pub struct UseTreeGlob {
 #[derive(Parse, Formattable, Format, Print)]
 pub struct UseTreeGlobPrefix {
 	pub path: Option<SimplePath>,
-	#[format(prefix_ws(expr = Whitespace::REMOVE, if = self.path.is_some()))]
+	#[format(prefix_ws(expr = Whitespace::REMOVE, if_ = self.path.is_some()))]
 	pub sep:  token::PathSep,
 }
 
@@ -103,7 +103,7 @@ pub struct UseTreeGlobPrefix {
 #[format(before_with = Self::flatten)]
 pub struct UseTreeGroup {
 	pub prefix: Option<UseTreeGroupPrefix>,
-	#[format(prefix_ws(expr = Whitespace::REMOVE, if = self.prefix.is_some()))]
+	#[format(prefix_ws(expr = Whitespace::REMOVE, if_ = self.prefix.is_some()))]
 	#[format(with = Self::format_tree)]
 	pub tree:   Braced<Option<PunctuatedTrailing<Box<UseTree>, token::Comma>>>,
 }
@@ -231,7 +231,7 @@ impl UseTreeGroup {
 #[derive(Parse, Formattable, Format, Print)]
 pub struct UseTreeGroupPrefix {
 	pub path: Option<SimplePath>,
-	#[format(prefix_ws(expr = Whitespace::REMOVE, if = self.path.is_some()))]
+	#[format(prefix_ws(expr = Whitespace::REMOVE, if_ = self.path.is_some()))]
 	pub sep:  token::PathSep,
 }
 

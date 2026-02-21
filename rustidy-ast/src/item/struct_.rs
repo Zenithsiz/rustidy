@@ -82,7 +82,7 @@ pub WithOuterAttributes<StructFieldInner>);
 #[format(args(ty = "StructFieldInnerArgs"))]
 pub struct StructFieldInner {
 	pub vis:   Option<Visibility>,
-	#[format(prefix_ws(expr = Whitespace::SINGLE, if = self.vis.is_some()))]
+	#[format(prefix_ws(expr = Whitespace::SINGLE, if_ = self.vis.is_some()))]
 	pub ident: Identifier,
 	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub colon: token::Colon,
@@ -180,6 +180,6 @@ pub struct TupleField(pub WithOuterAttributes<TupleFieldInner>);
 #[derive(Parse, Formattable, Format, Print)]
 pub struct TupleFieldInner {
 	pub vis: Option<Visibility>,
-	#[format(prefix_ws(expr = Whitespace::SINGLE, if = self.vis.is_some()))]
+	#[format(prefix_ws(expr = Whitespace::SINGLE, if_ = self.vis.is_some()))]
 	pub ty:  Type,
 }

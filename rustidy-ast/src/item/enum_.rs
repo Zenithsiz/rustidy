@@ -58,9 +58,9 @@ pub struct EnumVariant(pub WithOuterAttributes<EnumVariantInner>);
 #[derive(Parse, Formattable, Format, Print)]
 pub struct EnumVariantInner {
 	pub vis:          Option<Visibility>,
-	#[format(prefix_ws(expr = Whitespace::SINGLE, if = self.vis.is_some()))]
+	#[format(prefix_ws(expr = Whitespace::SINGLE, if_ = self.vis.is_some()))]
 	pub ident:        Identifier,
-	#[format(prefix_ws(if = let Some(kind) = &self.kind, expr = match kind {
+	#[format(prefix_ws(if_ = let Some(kind) = &self.kind, expr = match kind {
 		EnumVariantKind::Tuple(_) => Whitespace::REMOVE,
 		EnumVariantKind::Struct(_) => Whitespace::SINGLE,
 	}))]

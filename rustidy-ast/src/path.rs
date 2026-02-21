@@ -18,7 +18,7 @@ use {
 #[parse(name = "a simple path")]
 pub struct SimplePath {
 	pub prefix:   Option<token::PathSep>,
-	#[format(prefix_ws(expr = Whitespace::REMOVE, if = self.prefix.is_some()))]
+	#[format(prefix_ws(expr = Whitespace::REMOVE, if_ = self.prefix.is_some()))]
 	#[format(args = punct::fmt(Whitespace::REMOVE, Whitespace::REMOVE))]
 	pub segments: Punctuated<SimplePathSegment, token::PathSep>,
 }

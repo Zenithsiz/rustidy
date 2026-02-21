@@ -40,7 +40,7 @@ pub struct LetStatement(pub WithOuterAttributes<LetStatementInner>);
 #[parse(name = "a let statement")]
 pub struct LetStatementInner {
 	pub super_: Option<token::Super>,
-	#[format(prefix_ws(expr = Whitespace::SINGLE, if = self.super_.is_some()))]
+	#[format(prefix_ws(expr = Whitespace::SINGLE, if_ = self.super_.is_some()))]
 	pub let_:   token::Let,
 	#[parse(fatal)]
 	#[format(prefix_ws = Whitespace::SINGLE)]

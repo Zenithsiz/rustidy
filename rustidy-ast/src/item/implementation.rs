@@ -42,7 +42,7 @@ pub struct InherentImpl {
 #[derive(Parse, Formattable, Format, Print)]
 pub struct TraitImpl {
 	pub unsafe_:  Option<token::Unsafe>,
-	#[format(prefix_ws(expr = Whitespace::SINGLE, if = self.unsafe_.is_some()))]
+	#[format(prefix_ws(expr = Whitespace::SINGLE, if_ = self.unsafe_.is_some()))]
 	pub impl_:    token::Impl,
 	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub generics: Option<GenericParams>,

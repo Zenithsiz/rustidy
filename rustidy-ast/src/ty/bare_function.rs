@@ -22,9 +22,9 @@ use {
 #[derive(Parse, Formattable, Format, Print)]
 pub struct BareFunctionType {
 	pub for_lifetimes: Option<ForLifetimes>,
-	#[format(prefix_ws(expr = Whitespace::SINGLE, if = self.for_lifetimes.is_some()))]
+	#[format(prefix_ws(expr = Whitespace::SINGLE, if_ = self.for_lifetimes.is_some()))]
 	pub qualifiers:    Option<FunctionTypeQualifiers>,
-	#[format(prefix_ws(expr = Whitespace::SINGLE, if = self.for_lifetimes.is_some() || self.qualifiers.is_some()))]
+	#[format(prefix_ws(expr = Whitespace::SINGLE, if_ = self.for_lifetimes.is_some() || self.qualifiers.is_some()))]
 	pub fn_:           token::Fn,
 	#[parse(fatal)]
 	#[format(prefix_ws = Whitespace::REMOVE)]
@@ -40,7 +40,7 @@ pub struct BareFunctionType {
 #[derive(Parse, Formattable, Format, Print)]
 pub struct FunctionTypeQualifiers {
 	pub unsafe_: Option<token::Unsafe>,
-	#[format(prefix_ws(expr = Whitespace::SINGLE, if = self.unsafe_.is_some()))]
+	#[format(prefix_ws(expr = Whitespace::SINGLE, if_ = self.unsafe_.is_some()))]
 	pub extern_: Option<ExternAbi>,
 }
 
@@ -73,7 +73,7 @@ pub struct MaybeNamedParam(pub WithOuterAttributes<MaybeNamedParamInner>);
 #[derive(Parse, Formattable, Format, Print)]
 pub struct MaybeNamedParamInner {
 	pub name: Option<MaybeNamedParamInnerName>,
-	#[format(prefix_ws(expr = Whitespace::SINGLE, if = self.name.is_some()))]
+	#[format(prefix_ws(expr = Whitespace::SINGLE, if_ = self.name.is_some()))]
 	pub ty:   Box<Type>,
 }
 

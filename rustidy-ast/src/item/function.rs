@@ -26,7 +26,7 @@ use {
 #[parse(name = "a function")]
 pub struct Function {
 	pub qualifiers: FunctionQualifiers,
-	#[format(prefix_ws(expr = Whitespace::SINGLE, if = self.qualifiers.has_any()))]
+	#[format(prefix_ws(expr = Whitespace::SINGLE, if_ = self.qualifiers.has_any()))]
 	pub fn_:        token::Fn,
 	#[parse(fatal)]
 	#[format(prefix_ws = Whitespace::SINGLE)]
@@ -66,11 +66,11 @@ pub enum FunctionBody {
 #[parse(name = "function qualifiers")]
 pub struct FunctionQualifiers {
 	pub const_:  Option<token::Const>,
-	#[format(prefix_ws(if = self.const_.is_some(), expr = Whitespace::SINGLE))]
+	#[format(prefix_ws(if_ = self.const_.is_some(), expr = Whitespace::SINGLE))]
 	pub async_:  Option<token::Async>,
-	#[format(prefix_ws(if = self.const_.is_some() || self.async_.is_some(), expr = Whitespace::SINGLE))]
+	#[format(prefix_ws(if_ = self.const_.is_some() || self.async_.is_some(), expr = Whitespace::SINGLE))]
 	pub safety:  Option<ItemSafety>,
-	#[format(prefix_ws(if = self.const_.is_some() || self.async_.is_some() || self.safety.is_some(), expr = Whitespace::SINGLE))]
+	#[format(prefix_ws(if_ = self.const_.is_some() || self.async_.is_some() || self.safety.is_some(), expr = Whitespace::SINGLE))]
 	pub extern_: Option<ExternAbi>,
 }
 
@@ -140,7 +140,7 @@ impl ParsePeeked<(SelfParam, Option<token::Comma>, Follows<token::ParenClose>)> 
 #[derive(Parse, Formattable, Format, Print)]
 pub struct FunctionParametersFull {
 	pub self_: Option<FunctionParametersFullSelf>,
-	#[format(prefix_ws(expr = Whitespace::SINGLE, if = self.self_.is_some()))]
+	#[format(prefix_ws(expr = Whitespace::SINGLE, if_ = self.self_.is_some()))]
 	#[format(args = punct::fmt(Whitespace::SINGLE, Whitespace::REMOVE))]
 	pub rest:  PunctuatedTrailing<FunctionParam, token::Comma>,
 }
@@ -202,12 +202,12 @@ pub enum ShorthandOrTypedSelf {
 #[derive(Parse, Formattable, Format, Print)]
 pub struct ShorthandSelf {
 	pub ref_:  Option<ShorthandSelfRef>,
-	#[format(prefix_ws(if = let Some(ref_) = &self.ref_, expr = match ref_.lifetime.is_some() {
+	#[format(prefix_ws(if_ = let Some(ref_) = &self.ref_, expr = match ref_.lifetime.is_some() {
 		true => Whitespace::SINGLE,
 		false => Whitespace::REMOVE,
 	}))]
 	pub mut_:  Option<token::Mut>,
-	#[format(prefix_ws(if = self.ref_.is_some() || self.mut_.is_some(), expr = match self.ref_.as_ref().is_some_and(|ref_| ref_.lifetime.is_some()) || self.mut_.is_some() {
+	#[format(prefix_ws(if_ = self.ref_.is_some() || self.mut_.is_some(), expr = match self.ref_.as_ref().is_some_and(|ref_| ref_.lifetime.is_some()) || self.mut_.is_some() {
 		true => Whitespace::SINGLE,
 		false => Whitespace::REMOVE,
 	}))]
@@ -230,7 +230,7 @@ pub struct ShorthandSelfRef {
 #[derive(Parse, Formattable, Format, Print)]
 pub struct TypedSelf {
 	pub mut_:  Option<token::Mut>,
-	#[format(prefix_ws(expr = Whitespace::SINGLE, if = self.mut_.is_some()))]
+	#[format(prefix_ws(expr = Whitespace::SINGLE, if_ = self.mut_.is_some()))]
 	pub self_: token::SelfLower,
 	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub colon: token::Colon,
@@ -378,7 +378,7 @@ pub enum TraitBound {
 #[derive(Parse, Formattable, Format, Print)]
 pub struct TraitBoundInner {
 	pub prefix: Option<TraitBoundInnerPrefix>,
-	#[format(prefix_ws(if = let Some(prefix) = &self.prefix, expr = match prefix {
+	#[format(prefix_ws(if_ = let Some(prefix) = &self.prefix, expr = match prefix {
 		TraitBoundInnerPrefix::Question(_) => Whitespace::REMOVE,
 		TraitBoundInnerPrefix::ForLifetimes(_) => Whitespace::SINGLE,
 	}))]
@@ -435,7 +435,7 @@ pub struct LifetimeWhereClauseItem {
 #[derive(Parse, Formattable, Format, Print)]
 pub struct TypeBoundWhereClauseItem {
 	pub for_lifetimes: Option<ForLifetimes>,
-	#[format(prefix_ws(expr = Whitespace::SINGLE, if = self.for_lifetimes.is_some()))]
+	#[format(prefix_ws(expr = Whitespace::SINGLE, if_ = self.for_lifetimes.is_some()))]
 	pub ty:            Type,
 	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub colon:         token::Colon,

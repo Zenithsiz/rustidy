@@ -17,7 +17,7 @@ use {
 pub struct Punctuated<T, P> {
 	#[format(args = args.value_args.clone())]
 	pub first: T,
-	#[format(prefix_ws(if = output.has_prefix_ws(), expr = args.punct_prefix_ws))]
+	#[format(prefix_ws(if_ = output.has_prefix_ws(), expr = args.punct_prefix_ws))]
 	#[format(args = rustidy_format::vec::args(args.punct_prefix_ws, args))]
 	pub rest:  Vec<PunctuatedRest<T, P>>,
 }
@@ -158,7 +158,7 @@ impl<T, P> Punctuated<T, P> {
 pub struct PunctuatedTrailing<T, P> {
 	#[format(args = args.clone())]
 	pub punctuated: Punctuated<T, P>,
-	#[format(prefix_ws(if = output.has_prefix_ws(), expr = args.punct_prefix_ws))]
+	#[format(prefix_ws(if_ = output.has_prefix_ws(), expr = args.punct_prefix_ws))]
 	#[format(args = args.punct_args)]
 	pub trailing:   Option<P>,
 }

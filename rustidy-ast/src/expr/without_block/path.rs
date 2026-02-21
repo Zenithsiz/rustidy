@@ -43,7 +43,7 @@ pub enum PathExpression {
 #[derive(Parse, Formattable, Format, Print)]
 pub struct PathInExpression {
 	pub prefix:   Option<token::PathSep>,
-	#[format(prefix_ws(expr = Whitespace::REMOVE, if = self.prefix.is_some()))]
+	#[format(prefix_ws(expr = Whitespace::REMOVE, if_ = self.prefix.is_some()))]
 	#[format(args = punct::fmt(Whitespace::REMOVE, Whitespace::REMOVE))]
 	pub segments: Punctuated<PathExprSegment, token::PathSep>,
 }

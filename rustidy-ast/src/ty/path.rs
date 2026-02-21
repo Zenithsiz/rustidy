@@ -19,7 +19,7 @@ use {
 #[derive(Parse, Formattable, Format, Print)]
 pub struct TypePath {
 	pub prefix:   Option<token::PathSep>,
-	#[format(prefix_ws(expr = Whitespace::REMOVE, if = self.prefix.is_some()))]
+	#[format(prefix_ws(expr = Whitespace::REMOVE, if_ = self.prefix.is_some()))]
 	#[format(args = punct::fmt(Whitespace::REMOVE, Whitespace::REMOVE))]
 	pub segments: Punctuated<TypePathSegment, token::PathSep>,
 }
@@ -39,7 +39,7 @@ pub struct TypePathSegment {
 #[derive(Parse, Formattable, Format, Print)]
 pub struct TypePathSegmentGenerics {
 	pub sep:   Option<token::PathSep>,
-	#[format(prefix_ws(expr = Whitespace::REMOVE, if = self.sep.is_some()))]
+	#[format(prefix_ws(expr = Whitespace::REMOVE, if_ = self.sep.is_some()))]
 	pub inner: GenericArgsOrTypePathFn,
 }
 

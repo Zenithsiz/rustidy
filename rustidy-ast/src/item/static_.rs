@@ -17,7 +17,7 @@ use {
 #[derive(Parse, Formattable, Format, Print)]
 pub struct StaticItem {
 	pub safety:  Option<ItemSafety>,
-	#[format(prefix_ws(expr = Whitespace::SINGLE, if = self.safety.is_some()))]
+	#[format(prefix_ws(expr = Whitespace::SINGLE, if_ = self.safety.is_some()))]
 	pub static_: token::Static,
 	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub mut_:    Option<token::Mut>,

@@ -25,9 +25,9 @@ use {
 #[parse_recursive(kind = "right")]
 pub struct ClosureExpression {
 	pub async_: Option<token::Async>,
-	#[format(prefix_ws(expr = Whitespace::SINGLE, if = self.async_.is_some()))]
+	#[format(prefix_ws(expr = Whitespace::SINGLE, if_ = self.async_.is_some()))]
 	pub move_:  Option<token::Move>,
-	#[format(prefix_ws(expr = Whitespace::SINGLE, if = self.async_.is_some() || self.move_.is_some()))]
+	#[format(prefix_ws(expr = Whitespace::SINGLE, if_ = self.async_.is_some() || self.move_.is_some()))]
 	pub params: ClosureParams,
 	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub ret:    Option<ClosureRet>,

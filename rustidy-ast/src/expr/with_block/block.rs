@@ -35,7 +35,7 @@ pub struct BlockExpression(pub ArenaIdx<BracedWithInnerAttributes<Statements>>);
 pub struct Statements {
 	#[format(args = rustidy_format::vec::args_prefix_ws(Whitespace::INDENT))]
 	pub stmts:         Vec<Statement>,
-	#[format(prefix_ws(expr = Whitespace::INDENT, if = !self.stmts.is_empty()))]
+	#[format(prefix_ws(expr = Whitespace::INDENT, if_ = !self.stmts.is_empty()))]
 	pub trailing_expr: Option<ExpressionWithoutBlock>,
 }
 
