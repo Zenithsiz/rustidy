@@ -73,10 +73,7 @@ pub fn field_member_access<F: AsRef<Option<syn::Ident>>>(field_idx: usize, field
 	match field.as_ref() {
 		Some(ident) => syn::Member::Named(ident.clone()),
 		None => syn::Member::Unnamed(syn::Index {
-			#[expect(
-				clippy::cast_possible_truncation,
-				reason = "There shouldn't be more than 2^32 fields in a struct"
-			)]
+			#[expect(clippy::cast_possible_truncation, reason = "There shouldn't be more than 2^32 fields in a struct")]
 			index: field_idx as u32,
 			span: Span::call_site(),
 		}),

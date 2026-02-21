@@ -199,10 +199,12 @@ pub struct DeclMacro {
 	#[parse(fatal)]
 	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub ident:  Identifier,
-	#[format(prefix_ws = match self.body {
-		DeclMacroBody::Branches(_) => Whitespace::SINGLE,
-		DeclMacroBody::Inline(_) => Whitespace::REMOVE,
-	})]
+	#[format(
+		prefix_ws = match self.body {
+			DeclMacroBody::Branches(_) => Whitespace::SINGLE,
+			DeclMacroBody::Inline(_) => Whitespace::REMOVE,
+		}
+	)]
 	pub body:   DeclMacroBody,
 }
 
@@ -278,15 +280,17 @@ pub struct DeclMacroBranchAttr {
 pub struct DeclMacroBranchDerive {
 	pub derive: token::Derive,
 	#[format(prefix_ws = Whitespace::REMOVE)]
-	#[format(args = delimited::FmtArgs {
-		indent: false,
-		value_non_blank:(),
-		value_blank:(),
-		suffix_non_blank: Whitespace::REMOVE,
-		suffix_blank: Whitespace::REMOVE,
-		prefix_args: (),
-		value_args: (),
-		suffix_args: ()
-	})]
+	#[format(
+		args = delimited::FmtArgs {
+			indent: false,
+			value_non_blank: (),
+			value_blank: (),
+			suffix_non_blank: Whitespace::REMOVE,
+			suffix_blank: Whitespace::REMOVE,
+			prefix_args: (),
+			value_args: (),
+			suffix_args: ()
+		}
+	)]
 	pub args:   Parenthesized<()>,
 }

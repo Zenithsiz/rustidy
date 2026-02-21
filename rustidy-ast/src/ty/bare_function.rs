@@ -24,7 +24,9 @@ pub struct BareFunctionType {
 	pub for_lifetimes: Option<ForLifetimes>,
 	#[format(prefix_ws(expr = Whitespace::SINGLE, if_ = self.for_lifetimes.is_some()))]
 	pub qualifiers:    Option<FunctionTypeQualifiers>,
-	#[format(prefix_ws(expr = Whitespace::SINGLE, if_ = self.for_lifetimes.is_some() || self.qualifiers.is_some()))]
+	#[format(
+		prefix_ws(expr = Whitespace::SINGLE, if_ = self.for_lifetimes.is_some() || self.qualifiers.is_some())
+	)]
 	pub fn_:           token::Fn,
 	#[parse(fatal)]
 	#[format(prefix_ws = Whitespace::REMOVE)]

@@ -47,7 +47,9 @@ impl IdentifierOrKeyword {
 #[derive(Parse, Formattable, Format, Print)]
 #[parse(error(name = Raw, fmt = "Expected `r#`"))]
 #[parse(error(name = IdentOrKeyword(IdentifierOrKeywordError), transparent))]
-#[parse(error(name = ForbiddenKeyword, fmt = "Raw identifier cannot be `crate`, `self`, `super` or `Self`"))]
+#[parse(
+	error(name = ForbiddenKeyword, fmt = "Raw identifier cannot be `crate`, `self`, `super` or `Self`")
+)]
 pub struct RawIdentifier(
 	pub Whitespace,
 	#[parse(try_update_with = Self::parse)]

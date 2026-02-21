@@ -50,10 +50,12 @@ pub struct TraitImpl {
 	pub const_:   Option<token::Const>,
 	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub not:      Option<token::Not>,
-	#[format(prefix_ws = match self.not.is_some() {
-		true => Whitespace::REMOVE,
-		false => Whitespace::SINGLE,
-	})]
+	#[format(
+		prefix_ws = match self.not.is_some() {
+			true => Whitespace::REMOVE,
+			false => Whitespace::SINGLE,
+		}
+	)]
 	pub trait_:   TypePath,
 	#[parse(fatal)]
 	#[format(prefix_ws = Whitespace::SINGLE)]

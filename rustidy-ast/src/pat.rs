@@ -131,10 +131,12 @@ pub struct ReferencePattern {
 	pub ref_: ReferencePatternRef,
 	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub mut_: Option<token::Mut>,
-	#[format(prefix_ws = match self.mut_.is_some() {
-		true => Whitespace::SINGLE,
-		false => Whitespace::REMOVE,
-	})]
+	#[format(
+		prefix_ws = match self.mut_.is_some() {
+			true => Whitespace::SINGLE,
+			false => Whitespace::REMOVE,
+		}
+	)]
 	pub pat:  Box<PatternWithoutRange>,
 }
 

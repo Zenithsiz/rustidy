@@ -637,7 +637,7 @@ impl PeekState {
 /// The display impl transforms this into a 1-indexed format of `{line}:{column}`
 #[derive(Debug)]
 #[derive(derive_more::Display)]
-#[display("{}:{}", line+1, column+1)]
+#[display("{}:{}", line + 1, column + 1)]
 pub struct ParserLoc {
 	pub line:   usize,
 	pub column: usize,

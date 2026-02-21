@@ -25,10 +25,7 @@ use {
 	self::args::Args,
 	app_error::{AppError, Context, bail},
 	clap::Parser as _,
-	rustidy_ast::{
-		attr::{OuterAttrOrDocComment},
-		item::{ItemInner, Module, VisItemInner},
-	},
+	rustidy_ast::{attr::{OuterAttrOrDocComment}, item::{ItemInner, Module, VisItemInner}},
 	rustidy_ast_util::Identifier,
 	rustidy_format::FormatOutput,
 	rustidy_print::{Print, PrintFmt},

@@ -101,15 +101,19 @@ pub struct ReferenceType {
 	pub ref_:     token::AndTy,
 	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub lifetime: Option<Lifetime>,
-	#[format(prefix_ws = match self.lifetime.is_some() {
-		true => Whitespace::SINGLE,
-		false => Whitespace::REMOVE,
-	})]
+	#[format(
+		prefix_ws = match self.lifetime.is_some() {
+			true => Whitespace::SINGLE,
+			false => Whitespace::REMOVE,
+		}
+	)]
 	pub mut_:     Option<token::Mut>,
-	#[format(prefix_ws = match self.lifetime.is_some() || self.mut_.is_some() {
-		true => Whitespace::SINGLE,
-		false => Whitespace::REMOVE,
-	})]
+	#[format(
+		prefix_ws = match self.lifetime.is_some() || self.mut_.is_some() {
+			true => Whitespace::SINGLE,
+			false => Whitespace::REMOVE,
+		}
+	)]
 	pub ty:       Box<TypeNoBounds>,
 }
 
