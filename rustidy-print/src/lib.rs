@@ -16,6 +16,13 @@ use {core::marker::PhantomData, rustidy_util::{ArenaData, ArenaIdx, AstStr}};
 pub trait Print: Sized {
 	/// Prints this type onto a writer
 	fn print(&self, f: &mut PrintFmt);
+
+	/// Prints this type onto a string
+	fn print_to_string(&self, input: &str) -> String {
+		let mut f = PrintFmt::new(input);
+		self.print(&mut f);
+		f.output
+	}
 }
 
 impl<T: Print> Print for &'_ T {
