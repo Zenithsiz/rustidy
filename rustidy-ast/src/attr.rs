@@ -220,9 +220,13 @@ pub token::Token);
 /// Updates the configuration based on an attribute
 // TODO: We need to return the position for better error messages.
 pub fn update_config(attr: &AttrOrMetaItem, ctx: &mut rustidy_format::Context) -> Result<(), AppError> {
-	let meta = attr
-		.try_as_meta_ref()
-		.context("Attribute was not a meta item")?;
+	let meta = match attr {
+		AttrOrMetaItem::Meta(meta) => meta,
+		AttrOrMetaItem::Attr(attr) => match attr.path.starts_with(ctx.input(), "rustidy") {
+			true => bail!("`#[rustidy]` attributes must be meta items"),
+			false => return Ok(()),
+		},
+	};
 
 	// If this isn't a `rustidy::config` macro, we have nothing to update
 	if !meta

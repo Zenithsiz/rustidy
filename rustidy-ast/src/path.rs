@@ -36,6 +36,13 @@ impl SimplePath {
 		todo!();
 	}
 
+	/// Returns if the first segment of this path is `segment`
+	#[must_use]
+	pub fn starts_with(&self, input: &str, segment: &str) -> bool {
+		// TODO: Should we care about the prefix here?
+		self.segments.first.is_str(input, segment)
+	}
+
 	/// Returns if this path is the same as `path`.
 	#[must_use]
 	pub fn is_str(&self, input: &str, path: &str) -> bool {
