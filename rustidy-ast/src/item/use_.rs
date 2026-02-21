@@ -33,22 +33,42 @@ pub struct UseDeclaration {
 impl UseDeclaration {
 	/// Merges several use declarations into this one
 	// TODO: Merge `a::{b::c, b::d}`.
-	pub fn merge(&mut self, others: impl IntoIterator<Item = Self, IntoIter: ExactSizeIterator>) {
-		let others = others.into_iter();
-
+	pub fn merge(&mut self, others: Vec<Self>) {
 		// Note: This is to avoid creating an unnecessary group
 		if others.is_empty() {
 			return;
 		}
 
-		replace_with::replace_with_or_abort(&mut self.tree, |tree| {
-			let mut group_tree = tree.into_group();
-			for use_decl in others {
-				// TODO: Here we're discarding the whitespace after `use` and before `;`,
-				//       we should probably instead return an error saying we couldn't merge.
-				group_tree.push(use_decl.tree);
-			}
-			UseTree::Group(group_tree)
+		// If all the others have the same prefix as this one, we can merge them into this one.
+		let all_group_same_prefix = others
+			.iter()
+			.all(|use_decl| match (&use_decl.tree, &self.tree) {
+				(UseTree::Group(lhs), UseTree::Group(rhs)) => lhs.prefix == rhs.prefix,
+				_ => false,
+			});
+
+
+		replace_with::replace_with_or_abort(&mut self.tree, |tree| match all_group_same_prefix {
+			true => {
+				let mut group_tree = tree.into_group();
+				for use_decl in others {
+					// TODO: Here we're discarding the whitespace after `use` and before `;`,
+					//       we should probably instead return an error saying we couldn't merge.
+					group_tree.push(use_decl.tree);
+				}
+				UseTree::Group(group_tree)
+			},
+			false => {
+				let mut group_tree = PunctuatedTrailing::single(Box::new(tree));
+				for use_decl in others {
+					group_tree.push_value(Box::new(use_decl.tree));
+				}
+
+				UseTree::Group(UseTreeGroup {
+					prefix: None,
+					tree: Braced::from_value(Some(group_tree)),
+				})
+			},
 		});
 	}
 }
