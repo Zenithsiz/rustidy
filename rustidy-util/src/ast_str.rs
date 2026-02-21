@@ -295,7 +295,7 @@ impl AstStrRepr {
 	/// Returns if this representation has newlines
 	#[must_use]
 	pub fn has_newlines(&self, input: &str) -> bool {
-		self.count_newlines(input) == 0
+		self.count_newlines(input) != 0
 	}
 
 	/// Returns if this representation is equal to `other`
