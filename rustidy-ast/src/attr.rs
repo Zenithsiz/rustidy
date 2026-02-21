@@ -232,9 +232,12 @@ pub fn update_from_attr(attr: &AttrOrMetaItem, ctx: &mut rustidy_format::Context
 	};
 
 	match meta.path().as_str(ctx.input()).as_str() {
-		"rustidy::config" => self::update_config(meta, ctx),
+		"rustidy::config" => self::update_config(meta, ctx)?,
+		"rustidy::skip" => ctx.config_mut().skip = true,
 		path => bail!("Unknown `#[rustidy]` attribute: {path:?}"),
 	}
+
+	Ok(())
 }
 
 /// Parses a `#[rustidy::config]` attribute

@@ -43,3 +43,15 @@ mod b {
 /*indent*//*indent*/#![rustidy::config(indent = "/*indent*/")]
 /*indent*/}
 }
+
+mod c {
+  #![rustidy::skip]
+    fn a(  ) {  }
+      fn b(  ) {  }
+}
+
+mod d {
+		#[rustidy::skip]
+	fn a(  ) {  }
+		fn b() {}
+}

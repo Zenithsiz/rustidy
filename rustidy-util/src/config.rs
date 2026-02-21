@@ -74,6 +74,7 @@ decl_config! {
 	Config;
 
 	indent                     : Arc<str>      = "\t".into(),
+	skip                       : bool          = false,
 	min_empty_lines            : usize         = 0,
 	max_empty_lines            : usize         = 2,
 	max_use_tree_len           : usize         = 75,

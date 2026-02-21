@@ -450,7 +450,10 @@ impl<'a, 'input> Context<'a, 'input> {
 	where
 		T: Format<PrefixWs, A>
 	{
-		value.format(self, prefix_ws, args)
+		match self.config().skip {
+			true => value.format_output(self),
+			false => value.format(self, prefix_ws, args),
+		}
 	}
 
 	/// Returns the input
