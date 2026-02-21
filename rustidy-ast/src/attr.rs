@@ -20,7 +20,7 @@ use {
 	core::fmt::Debug,
 	rustidy_ast_util::{Longest, RemainingBlockComment, RemainingLine, delimited},
 	rustidy_format::{Format, Formattable, WhitespaceFormat},
-	rustidy_parse::{Parse, ParserTag},
+	rustidy_parse::{ParsableFrom, Parse, ParserTag},
 	rustidy_print::Print,
 	rustidy_util::Whitespace,
 };
@@ -130,14 +130,21 @@ pub struct OuterBlockDoc {
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(strum::EnumTryAs)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
-pub struct AttrOrMetaItem(pub Longest<Attr, MetaItem>);
+#[parse(from = Longest::<Attr, MetaItem>)]
+pub enum AttrOrMetaItem {
+	Meta(MetaItem),
+	Attr(Attr),
+}
 
-impl AttrOrMetaItem {
-	#[must_use]
-	pub const fn try_as_meta(&self) -> Option<&MetaItem> {
-		self.0.try_as_right_ref()
+impl ParsableFrom<Longest<Attr, MetaItem>> for AttrOrMetaItem {
+	fn from_parsable(value: Longest<Attr, MetaItem>) -> Self {
+		match value {
+			Longest::Left(attr) => Self::Attr(attr),
+			Longest::Right(meta) => Self::Meta(meta),
+		}
 	}
 }
 
@@ -214,7 +221,7 @@ pub token::Token);
 // TODO: We need to return the position for better error messages.
 pub fn update_config(attr: &AttrOrMetaItem, ctx: &mut rustidy_format::Context) -> Result<(), AppError> {
 	let meta = attr
-		.try_as_meta()
+		.try_as_meta_ref()
 		.context("Attribute was not a meta item")?;
 
 	// If this isn't a `rustidy::config` macro, we have nothing to update
@@ -234,7 +241,7 @@ pub fn update_config(attr: &AttrOrMetaItem, ctx: &mut rustidy_format::Context) -
 
 	for config in configs.0.values() {
 		let config = try {
-			config.try_as_item()?.try_as_eq_expr_ref()?
+			config.try_as_meta_ref()?.try_as_eq_expr_ref()?
 		};
 		let Some(config) = config else {
 			bail!("Expected `rustidy::config(<config-name> = <value>)`");

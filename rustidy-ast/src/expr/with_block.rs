@@ -13,7 +13,7 @@ use {
 	crate::{attr::WithOuterAttributes, lifetime::LifetimeOrLabel, pat::Pattern, token},
 	rustidy_ast_util::{Longest, Punctuated, punct},
 	rustidy_format::{Format, Formattable, WhitespaceFormat},
-	rustidy_parse::{Parse, ParserTag},
+	rustidy_parse::{ParsableFrom, Parse, ParserTag},
 	rustidy_print::Print,
 	rustidy_util::Whitespace,
 };
@@ -106,12 +106,25 @@ pub enum IfExpressionElseInner {
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
-pub struct Conditions(Longest<LetChain, ConditionsExpr>);
+#[parse(from = Longest::<LetChain, ConditionsExpr>)]
+pub enum Conditions {
+	Let(LetChain),
+	Expr(ConditionsExpr)
+}
+
+impl ParsableFrom<Longest<LetChain, ConditionsExpr>> for Conditions {
+	fn from_parsable(value: Longest<LetChain, ConditionsExpr>) -> Self {
+		match value {
+			Longest::Left(let_chain) => Self::Let(let_chain),
+			Longest::Right(expr) => Self::Expr(expr),
+		}
+	}
+}
 
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
-struct ConditionsExpr(
+pub struct ConditionsExpr(
 	#[parse(with_tag = ParserTag::SkipStructExpression)]
 	#[parse(with_tag = ParserTag::SkipOptionalTrailingBlockExpression)]
 	Expression,

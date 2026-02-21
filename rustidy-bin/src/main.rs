@@ -217,7 +217,7 @@ fn find_path_attr<'a>(input: &'a str, attrs: impl IntoIterator<Item = &'a OuterA
 		let Some(attr) = attr.try_as_attr_ref() else {
 			continue;
 		};
-		let Some(meta) = attr.open.value.try_as_meta() else {
+		let Some(meta) = attr.open.value.try_as_meta_ref() else {
 			continue;
 		};
 		if !(meta.path().is_str(input, "path")) {

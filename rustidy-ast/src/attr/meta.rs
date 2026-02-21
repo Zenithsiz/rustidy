@@ -5,7 +5,7 @@ use {
 	crate::{expr::Expression, path::SimplePath, token, util::Parenthesized},
 	rustidy_ast_util::{Longest, PunctuatedTrailing, delimited, punct},
 	rustidy_format::{Format, Formattable, WhitespaceConfig, WhitespaceFormat},
-	rustidy_parse::Parse,
+	rustidy_parse::{ParsableFrom, Parse},
 	rustidy_print::Print,
 	rustidy_util::Whitespace,
 };
@@ -78,13 +78,20 @@ struct MetaSeqFmt {
 
 /// `MetaItemInner`
 #[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(strum::EnumTryAs)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
-pub struct MetaItemInner(Longest<Expression, Box<MetaItem>>);
+#[parse(from = Longest::<Expression, MetaItem>)]
+pub enum MetaItemInner {
+	Meta(Box<MetaItem>),
+	Expr(Expression),
+}
 
-impl MetaItemInner {
-	#[must_use]
-	pub fn try_as_item(&self) -> Option<&MetaItem> {
-		self.0.try_as_right_ref().map(|item| &**item)
+impl ParsableFrom<Longest<Expression, MetaItem>> for MetaItemInner {
+	fn from_parsable(value: Longest<Expression, MetaItem>) -> Self {
+		match value {
+			Longest::Left(expr) => Self::Expr(expr),
+			Longest::Right(meta) => Self::Meta(Box::new(meta)),
+		}
 	}
 }
