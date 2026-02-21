@@ -32,6 +32,7 @@ pub struct UseDeclaration {
 
 impl UseDeclaration {
 	/// Merges several use declarations into this one
+	// TODO: Merge `a::{b::c, b::d}`.
 	pub fn merge(&mut self, others: impl IntoIterator<Item = Self, IntoIter: ExactSizeIterator>) {
 		let others = others.into_iter();
 
