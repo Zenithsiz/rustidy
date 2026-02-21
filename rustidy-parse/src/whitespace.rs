@@ -152,8 +152,10 @@ impl Parse for LineComment {
 				let is_doc_comment = (s.starts_with("///") && !s.starts_with("////")) || s.starts_with("//!");
 				match s.starts_with("//") && !is_doc_comment {
 					true => {
-						let nl_idx = s.find('\n').ok_or(LineCommentError::Newline)?;
-						*s = &s[nl_idx + 1..];
+						*s = match s.find('\n') {
+							Some(idx) => &s[idx + 1..],
+							None => &s[s.len()..],
+						};
 						Ok(())
 					},
 					false => Err(LineCommentError::NoComment),
@@ -167,8 +169,6 @@ impl Parse for LineComment {
 pub enum LineCommentError {
 	#[parse_error(fmt = "Expected `//` (except `///` or `//!`)")]
 	NoComment,
-	#[parse_error(fmt = "Expected newline after `//`")]
-	Newline,
 }
 
 

@@ -169,15 +169,6 @@ pub enum WhitespaceFormatKind {
 }
 
 impl WhitespaceFormatKind {
-	/// Returns the indentation string, without a newline
-	fn indent_str(ctx: &crate::Context) -> AstStrRepr {
-		AstStrRepr::Indentation {
-			indent: Arc::clone(&ctx.config().indent),
-			newlines: 0,
-			depth: ctx.indent(),
-		}
-	}
-
 	/// Returns the indentation string, with a newline *before*
 	// TODO: Should we be checking for multiple newlines?
 	fn indent_str_nl(ctx: &mut crate::Context, cur_str: &AstStr, after_newline: bool) -> AstStrRepr {
@@ -231,7 +222,7 @@ impl WhitespaceFormatKind {
 				..
 			} => match is_last {
 				true => ctx
-					.with_indent_offset_if(-1, use_prev, |ctx| Self::indent_str(ctx)),
+					.with_indent_offset_if(-1, use_prev, |ctx| Self::indent_str_nl(ctx, cur_str, true)),
 				false => Self::indent_str_nl(ctx, cur_str, true),
 			},
 		}
@@ -260,6 +251,7 @@ impl WhitespaceFormatKind {
 pub fn format(ws: &mut Whitespace, ctx: &mut crate::Context, kind: WhitespaceFormatKind) {
 	// Note: If we're whitespace after a line doc comment, then we have a newline
 	//       prior to us that we need to take into account.
+	// TODO: We should do this even when we're preserving the whitespace
 	let after_newline = ctx.take_tag(FormatTag::AfterNewline);
 
 	let prefix_str = kind
@@ -273,5 +265,11 @@ pub fn format(ws: &mut Whitespace, ctx: &mut crate::Context, kind: WhitespaceFor
 			false => kind.normal_str(ctx, &ws.0, is_last),
 		};
 		ws.0.replace(ws_str);
+
+		if is_last && let Comment::Line(comment) = comment && !comment.0.has_newlines(ctx.input) {
+			let mut s = comment.0.str(ctx.input).into_owned();
+			s.push('\n');
+			comment.0.replace(AstStrRepr::Dynamic(s));
+		}
 	}
 }
