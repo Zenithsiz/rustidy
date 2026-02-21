@@ -66,7 +66,7 @@ impl<A, T: Format<WhitespaceConfig, A>> Format<WhitespaceConfig, FmtArgs<A>> for
 
 		let mut value_ctx = ctx.sub_context();
 		for attr in &mut self.attrs {
-			if let Some(attr) = attr.try_as_attr_ref() && let Err(err) = super::update_config(&attr.open.value, &mut value_ctx) {
+			if let Some(attr) = attr.try_as_attr_ref() && let Err(err) = super::update_from_attr(&attr.open.value, &mut value_ctx) {
 				tracing::warn!("Malformed `#[rustidy::config(...)]` attribute: {err:?}");
 			}
 		}
@@ -150,7 +150,7 @@ impl<T: Format<WhitespaceConfig, A>, A: Clone> Format<WhitespaceConfig, FmtArgs<
 	fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: WhitespaceConfig, args: FmtArgs<A>,) -> FormatOutput {
 		let mut ctx = ctx.sub_context();
 		for attr in &self.0.value.attrs {
-			if let Some(attr) = attr.try_as_attr_ref() && let Err(err) = super::update_config(&attr.attr.value, &mut ctx) {
+			if let Some(attr) = attr.try_as_attr_ref() && let Err(err) = super::update_from_attr(&attr.attr.value, &mut ctx) {
 				tracing::warn!("Malformed `#![rustidy::config(...)]` attribute: {err:?}");
 			}
 		}

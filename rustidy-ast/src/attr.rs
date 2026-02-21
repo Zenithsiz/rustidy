@@ -219,22 +219,26 @@ pub token::Token);
 
 /// Updates the configuration based on an attribute
 // TODO: We need to return the position for better error messages.
-pub fn update_config(attr: &AttrOrMetaItem, ctx: &mut rustidy_format::Context) -> Result<(), AppError> {
+pub fn update_from_attr(attr: &AttrOrMetaItem, ctx: &mut rustidy_format::Context) -> Result<(), AppError> {
 	let meta = match attr {
-		AttrOrMetaItem::Meta(meta) => meta,
+		AttrOrMetaItem::Meta(meta) => match meta.path().starts_with(ctx.input(), "rustidy") {
+			true => meta,
+			false => return Ok(()),
+		},
 		AttrOrMetaItem::Attr(attr) => match attr.path.starts_with(ctx.input(), "rustidy") {
 			true => bail!("`#[rustidy]` attributes must be meta items"),
 			false => return Ok(()),
 		},
 	};
 
-	// If this isn't a `rustidy::config` macro, we have nothing to update
-	if !meta
-		.path()
-		.is_str(ctx.input(), "rustidy::config") {
-		return Ok(());
+	match meta.path().as_str(ctx.input()).as_str() {
+		"rustidy::config" => self::update_config(meta, ctx),
+		path => bail!("Unknown `#[rustidy]` attribute: {path:?}"),
 	}
+}
 
+/// Parses a `#[rustidy::config]` attribute
+fn update_config(meta: &MetaItem, ctx: &mut rustidy_format::Context) -> Result<(), AppError> {
 	let MetaItem::Seq(meta) = meta else {
 		bail!("Expected `rustidy::config([...])`");
 	};
