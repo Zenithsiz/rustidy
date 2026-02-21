@@ -54,10 +54,10 @@ where
 		let mut prefix_ws = Some(prefix_ws);
 		for value in self {
 			let value_output = match &prefix_ws {
-				Some(prefix_ws) => value
-					.format(ctx, prefix_ws.clone(), args.args.clone()),
-				None => value
-					.format(ctx, args.rest_prefix_ws.clone(), args.args.clone()),
+				Some(prefix_ws) => ctx
+					.format_with(value, prefix_ws.clone(), args.args.clone()),
+				None => ctx
+					.format_with(value, args.rest_prefix_ws.clone(), args.args.clone()),
 			};
 			value_output.append_to(&mut output);
 

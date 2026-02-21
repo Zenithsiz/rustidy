@@ -23,31 +23,29 @@ impl ArrayExpression {
 		let mut common_output = FormatOutput::default();
 		let mut single_line_output = FormatOutput::default();
 
-		prefix
-			.format(ctx, prefix_ws, ())
+		ctx
+			.format(prefix, prefix_ws)
 			.append_to(&mut common_output);
-		values
-			.punctuated
-			.first
-			.format(ctx, Whitespace::REMOVE, ())
+		ctx
+			.format(&mut values.punctuated.first, Whitespace::REMOVE)
 			.append_to(&mut common_output);
 
 		for PunctuatedRest {
 			punct: comma,
 			value
 		} in &mut values.punctuated.rest {
-			comma
-				.format(ctx, Whitespace::REMOVE, ())
+			ctx
+				.format(comma, Whitespace::REMOVE)
 				.append_to(&mut common_output);
-			value
-				.format(ctx, Whitespace::SINGLE, ())
+			ctx
+				.format(value, Whitespace::SINGLE)
 				.append_to(&mut single_line_output);
 		}
 
 		// TODO: Should we preserve the original comma by returning it?
 		values.trailing = None;
-		suffix
-			.format(ctx, Whitespace::REMOVE, ())
+		ctx
+			.format(suffix, Whitespace::REMOVE)
 			.append_to(&mut single_line_output);
 
 		(common_output, single_line_output)
@@ -86,13 +84,13 @@ impl Format<WhitespaceConfig, ()> for ArrayExpression {
 									let Some(first) = row_values.next() else {
 										break
 									};
-									first
-										.format(ctx, Whitespace::INDENT, ())
+									ctx
+										.format(first, Whitespace::INDENT)
 										.append_to(&mut output);
 
 									for value in row_values {
-										value
-											.format(ctx, Whitespace::SINGLE, ())
+										ctx
+											.format(value, Whitespace::SINGLE)
 											.append_to(&mut output);
 									}
 								}
@@ -101,16 +99,15 @@ impl Format<WhitespaceConfig, ()> for ArrayExpression {
 								if values.trailing.is_none() {
 									values.trailing = Some(token::Comma::new());
 								}
-								values
-									.trailing
-									.format(ctx, Whitespace::REMOVE, ())
+								ctx
+									.format(&mut values.trailing, Whitespace::REMOVE)
 									.append_to(&mut output);
 							});
 
 						// Finally, close the indentation on the `]`
-						self.0
-							.suffix
-							.format(ctx, Whitespace::INDENT, ())
+						// TODO: This should use `Whitespace::INDENT_CLOSE`
+						ctx
+							.format(&mut self.0.suffix, Whitespace::INDENT)
 							.append_to(&mut output);
 
 						output
@@ -121,16 +118,14 @@ impl Format<WhitespaceConfig, ()> for ArrayExpression {
 			Some(ArrayElements::Repeat(repeat)) => {
 				let mut output = FormatOutput::default();
 
-				self.0
-					.prefix
-					.format(ctx, prefix_ws, ())
+				ctx
+					.format(&mut self.0.prefix, prefix_ws)
 					.append_to(&mut output);
-				repeat
-					.format(ctx, Whitespace::REMOVE, ())
+				ctx
+					.format(repeat, Whitespace::REMOVE)
 					.append_to(&mut output);
-				self.0
-					.suffix
-					.format(ctx, Whitespace::REMOVE, ())
+				ctx
+					.format(&mut self.0.suffix, Whitespace::REMOVE)
 					.append_to(&mut output);
 
 				output

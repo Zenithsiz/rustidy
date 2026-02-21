@@ -258,7 +258,7 @@ fn derive_enum(variants: &[VariantAttrs]) -> Result<syn::Expr, AppError> {
 				.map(|prefix_ws| prefix_ws
 					.eval(Some(parse_quote! { prefix_ws })));
 
-			let format = parse_quote! { rustidy_format::Format::format(value, ctx, prefix_ws, args) };
+			let format = parse_quote! { ctx.format_with(value, prefix_ws, args) };
 			let format = self::derive_format(parse_quote! { value }, prefix_ws, None, true, &variant.with, &None, format, &variant.before_with, &variant.with_tag, variant.without_tags, Args::Set(variant.args.clone()), &variant.indent)?;
 
 			Ok(parse_quote! {
@@ -337,7 +337,7 @@ fn derive_struct_field(attrs: &Attrs, field_idx: usize, field: &FieldAttrs) -> R
 
 	let format = match field.str {
 		true => parse_quote! { <rustidy_util::AstStr as rustidy_format::Formattable>::format_output(&mut self.#field_ident, ctx) },
-		false => parse_quote! { rustidy_format::Format::format(&mut self.#field_ident, ctx, prefix_ws, args) },
+		false => parse_quote! { ctx.format_with(&mut self.#field_ident, prefix_ws, args) },
 	};
 
 	let after_format = parse_quote! {

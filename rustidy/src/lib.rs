@@ -30,7 +30,7 @@
 use {
 	app_error::{AppError, app_error},
 	rustidy_ast::Crate,
-	rustidy_format::{Format, FormatOutput},
+	rustidy_format::{FormatOutput},
 	rustidy_parse::{ParseError, Parser},
 	rustidy_util::Config,
 	std::path::Path,
@@ -39,7 +39,7 @@ use {
 /// Formats the crate `crate_`.
 pub fn format(input: &str, config: &Config, crate_: &mut Crate) -> FormatOutput {
 	let mut ctx = rustidy_format::Context::new(input, config);
-	crate_.format(&mut ctx, (), ())
+	ctx.format(crate_, ())
 }
 
 /// Parses the input `input`.

@@ -48,22 +48,19 @@ where
 	fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: LPrefixWs, args: FmtArgs<TPrefixWs, RPrefixWs, LArgs, TArgs, RArgs>,) -> FormatOutput {
 		// TODO: Should we handle the case of the prefix being empty and needing to
 		//       pass the prefix whitespace along?
-		let mut output = self
-			.prefix
-			.format(ctx, prefix_ws, args.prefix_args);
+		let mut output = ctx
+			.format_with(&mut self.prefix, prefix_ws, args.prefix_args);
 		if !output.has_prefix_ws() {
 			tracing::warn!("Delimited prefix had no prefix whitespace");
 		}
 
 		ctx
 			.with_indent_if(args.indent, |ctx| {
-				let value_output = self
-					.value
-					.format(ctx, args.value_non_blank, args.value_args.clone());
+				let value_output = ctx
+					.format_with(&mut self.value, args.value_non_blank, args.value_args.clone());
 				let value_output = match value_output.is_blank {
-					true => self
-						.value
-						.format(ctx, args.value_blank, args.value_args),
+					true => ctx
+						.format_with(&mut self.value, args.value_blank, args.value_args),
 					false => value_output,
 				};
 				value_output.append_to(&mut output);
@@ -72,9 +69,8 @@ where
 					true => args.suffix_blank,
 					false => args.suffix_non_blank,
 				};
-				self
-					.suffix
-					.format(ctx, suffix_prefix_ws, args.suffix_args)
+				ctx
+					.format_with(&mut self.suffix, suffix_prefix_ws, args.suffix_args)
 					.append_to(&mut output);
 			});
 
@@ -182,9 +178,9 @@ impl<T: Format<WhitespaceConfig, TArgs>, L: Format<WhitespaceConfig, ()>, R: For
 	fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: WhitespaceConfig, args: FmtRemoveWith<TArgs>) -> FormatOutput {
 		#[rustidy::config(max_chain_len = 100)]
 		FormatOutput::from([
-			self.prefix.format(ctx, prefix_ws, ()),
-			self.value.format(ctx, Whitespace::REMOVE, args.0),
-			self.suffix.format(ctx, Whitespace::REMOVE, ()),
+			ctx.format(&mut self.prefix, prefix_ws),
+			ctx.format_with(&mut self.value, Whitespace::REMOVE, args.0),
+			ctx.format(&mut self.suffix, Whitespace::REMOVE),
 		])
 	}
 }

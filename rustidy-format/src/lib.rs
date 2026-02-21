@@ -183,6 +183,7 @@ impl Default for FormatOutput {
 /// Type formatting
 pub trait Format<PrefixWs, Args>: Formattable {
 	/// Formats this type.
+	// TODO: Rename this to be less confusing with `Context::format`?
 	fn format(&mut self, ctx: &mut Context, prefix_ws: PrefixWs, args: Args) -> FormatOutput;
 }
 
@@ -434,6 +435,22 @@ impl<'a, 'input> Context<'a, 'input> {
 			indent_depth: 0,
 			tags: Oob::Owned(vec![]),
 		}
+	}
+
+	/// Formats a value
+	pub fn format<T, PrefixWs>(&mut self, value: &mut T, prefix_ws: PrefixWs) -> FormatOutput
+	where
+		T: Format<PrefixWs, ()>
+	{
+		self.format_with(value, prefix_ws, ())
+	}
+
+	/// Formats a value with arguments
+	pub fn format_with<T, PrefixWs, A>(&mut self, value: &mut T, prefix_ws: PrefixWs, args: A) -> FormatOutput
+	where
+		T: Format<PrefixWs, A>
+	{
+		value.format(self, prefix_ws, args)
 	}
 
 	/// Returns the input

@@ -77,28 +77,23 @@ impl Format<(), ()> for Crate {
 
 		let mut output = FormatOutput::default();
 
-		self
-			.shebang
-			.format(&mut ctx, (), ())
+		ctx
+			.format(&mut self.shebang, ())
 			.append_to(&mut output);
-
-		self
-			.inner_attrs
-			.format(&mut ctx, Whitespace::REMOVE, rustidy_format::vec::args_prefix_ws(Whitespace::INDENT),)
+		ctx
+			.format_with(&mut self.inner_attrs, Whitespace::REMOVE, rustidy_format::vec::args_prefix_ws(Whitespace::INDENT))
 			.append_to(&mut output);
 
 		// TODO: We need to set `FormatTag::AfterNewline` for `items`.
-		self
-			.items
-			.format(&mut ctx, match self.inner_attrs.is_empty() {
+		ctx
+			.format(&mut self.items, match self.inner_attrs.is_empty() {
 				true => Whitespace::REMOVE,
 				false => Whitespace::INDENT,
-			}, (),)
+			})
 			.append_to(&mut output);
 
-		self
-			.suffix_ws
-			.format(&mut ctx, Whitespace::indent(output.is_empty), ())
+		ctx
+			.format(&mut self.suffix_ws, Whitespace::indent(output.is_empty))
 			.append_to(&mut output);
 
 		output

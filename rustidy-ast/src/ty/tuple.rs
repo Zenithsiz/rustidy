@@ -30,28 +30,27 @@ pub struct TupleTypeInner {
 impl Format<WhitespaceConfig, ()> for TupleTypeInner {
 	fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: WhitespaceConfig, _args: ()) -> FormatOutput {
 		let [(first_ty, first_comma), tys @ ..] = &mut *self.tys else {
-			return self.end.format(ctx, prefix_ws, ());
+			return ctx.format(&mut self.end, prefix_ws);
 		};
 
 		let mut output = FormatOutput::default();
 
-		first_ty
-			.format(ctx, prefix_ws, ())
+		ctx
+			.format(first_ty, prefix_ws)
 			.append_to(&mut output);
-		first_comma
-			.format(ctx, Whitespace::REMOVE, ())
+		ctx
+			.format(first_comma, Whitespace::REMOVE)
 			.append_to(&mut output);
 		for (ty, comma) in tys {
-			ty
-				.format(ctx, Whitespace::SINGLE, ())
+			ctx
+				.format(ty, Whitespace::SINGLE)
 				.append_to(&mut output);
-			comma
-				.format(ctx, Whitespace::REMOVE, ())
+			ctx
+				.format(comma, Whitespace::REMOVE)
 				.append_to(&mut output);
 		}
-		self
-			.end
-			.format(ctx, Whitespace::SINGLE, ())
+		ctx
+			.format(&mut self.end, Whitespace::SINGLE)
 			.append_to(&mut output);
 
 		output
