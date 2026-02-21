@@ -22,7 +22,7 @@ use {
 	rustidy_format::{Format, Formattable, WhitespaceFormat},
 	rustidy_parse::{ParsableFrom, Parse, ParserTag},
 	rustidy_print::Print,
-	rustidy_util::Whitespace,
+	rustidy_util::{Config, Whitespace},
 };
 
 #[derive(PartialEq, Eq, Clone, Debug)]
@@ -258,49 +258,53 @@ fn update_config(meta: &MetaItem, ctx: &mut rustidy_format::Context) -> Result<(
 			bail!("Expected `rustidy::config(<config-name> = <value>)`");
 		};
 
+		let input = ctx.input();
 		macro str() {
 			config
 				.expr
 				.as_string_literal()
 				.context("Expected a string literal")?
-				.contents(ctx.input())
+				.contents(input)
 		}
 		macro int() {
 			config
 				.expr
 				.as_integer_literal()
 				.context("Expected an integer literal")?
-				.value(ctx.input())
+				.value(input)
 				.context("Unable to parse integer")?
 				.try_into()
 				.expect("`u64` didn't fit into `usize`")
 		}
 
-		macro set_arc_str(
-			$field:ident
+		macro fields(
+			$( $field:ident = $value:expr ),* $(,)?
 		) {
-			ctx.config_mut().$field = str!().into()
+			let Config {
+				$( $field, )*
+
+				// Note: Skip is controlled by `rustidy::skip`.
+				skip: _,
+			} = ctx.config_mut();
+
+			match config.path.as_str(input).as_str() {
+				$(
+					stringify!($field) => *$field = $value,
+				)*
+				ident => bail!("Unknown configuration: {ident:?}"),
+			}
 		}
 
-		macro set_int(
-			$field:ident
-		) {
-			ctx.config_mut().$field = int!()
-		}
-
-		macro set_opt_int(
-			$field:ident
-		) {
-			ctx.config_mut().$field = Some(int!())
-		}
-
-		match config.path.as_str(ctx.input()).as_str() {
-			"indent" => set_arc_str!(indent),
-			// TODO: Should we allow resetting these to `None` again?
-			"array_expr_cols" => set_opt_int!(array_expr_cols),
-			"max_array_expr_len" => set_int!(max_array_expr_len),
-			"max_chain_len" => set_int!(max_chain_len),
-			ident => bail!("Unknown configuration: {ident:?}"),
+		// TODO: Should we allow resetting `Option` types?
+		fields! {
+			indent = str!().into(),
+			min_empty_lines = int!(),
+			max_empty_lines = int!(),
+			max_use_tree_len = int!(),
+			array_expr_cols = Some(int!()),
+			max_array_expr_len = int!(),
+			max_chain_len = int!(),
+			max_inline_tuple_struct_len = int!(),
 		}
 	};
 
