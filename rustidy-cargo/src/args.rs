@@ -38,6 +38,10 @@ pub struct Rustidy {
 	#[arg(long = "manifest-path")]
 	pub manifest_path: Option<PathBuf>,
 
+	/// Run rustidy with `--check`
+	#[arg(long = "check")]
+	pub check:         bool,
+
 	/// Arguments to pass to `rustidy`
 	pub extra_args:    Vec<OsString>,
 }

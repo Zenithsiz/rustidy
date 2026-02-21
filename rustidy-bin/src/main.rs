@@ -23,12 +23,12 @@ mod args;
 // Imports
 use {
 	self::args::Args,
-	app_error::{AppError, Context, bail},
+	app_error::{AppError, Context, bail, ensure},
 	clap::Parser as _,
-	rustidy_ast::{attr::{OuterAttrOrDocComment}, item::{ItemInner, Module, VisItemInner}},
+	rustidy_ast::{attr::OuterAttrOrDocComment, item::{ItemInner, Module, VisItemInner}},
 	rustidy_ast_util::Identifier,
 	rustidy_format::FormatOutput,
-	rustidy_print::{Print, PrintFmt},
+	rustidy_print::Print,
 	rustidy_util::Config,
 	std::{
 		borrow::Cow,
@@ -95,12 +95,14 @@ fn run() -> Result<(), AppError> {
 	tracing::debug!(?config, "Configuration");
 
 	match args.files.is_empty() {
-		true => self::format_file(&config, None, None)?,
+		true => self::format_file(&config, None, None, args.check)?,
 		false => {
 			let mut files = args.files;
 			while let Some(file_path) = files.pop() {
 				let start = Instant::now();
-				self::format_file(&config, Some(&mut files), Some(&file_path))?;
+				self::format_file(&config, Some(&mut files), Some(&file_path), args
+					.check)
+					.with_context(|| format!("While formatting {file_path:?}"))?;
 				let duration = start.elapsed();
 
 				tracing::info!("{file_path:?}: {duration:.2?}");
@@ -112,7 +114,7 @@ fn run() -> Result<(), AppError> {
 	Ok(())
 }
 
-fn format_file(config: &rustidy_util::Config, files: Option<&mut Vec<PathBuf>>, file_path: Option<&Path>,) -> Result<(), AppError> {
+fn format_file(config: &rustidy_util::Config, files: Option<&mut Vec<PathBuf>>, file_path: Option<&Path>, check: bool) -> Result<(), AppError> {
 	// Parse
 	let input = match file_path {
 		Some(file_path) => fs::read_to_string(file_path)
@@ -146,18 +148,19 @@ fn format_file(config: &rustidy_util::Config, files: Option<&mut Vec<PathBuf>>, 
 	// Format
 	let _: FormatOutput = rustidy::format(&input, config, &mut crate_);
 
-	// Then output it to file
-	let mut print_fmt = PrintFmt::new(&input);
-	crate_.print(&mut print_fmt);
-	match file_path {
-		Some(file_path) => fs::write(file_path, print_fmt
-			.output())
-			.context("Unable to write file")?,
-		None => io::stdout()
-			.write_all(print_fmt.output().as_bytes())
-			.context("Unable to write to stdout")?,
+	let output = crate_.print_to_string(&input);
+	match check {
+		true => ensure!(input == output, "File was not formatted"),
+		false => {
+			match file_path {
+				Some(file_path) => fs::write(file_path, output)
+					.context("Unable to write file")?,
+				None => io::stdout()
+					.write_all(output.as_bytes())
+					.context("Unable to write to stdout")?,
+			}
+		}
 	}
-
 
 	Ok(())
 }

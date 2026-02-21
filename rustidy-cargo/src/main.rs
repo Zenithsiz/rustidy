@@ -59,10 +59,10 @@ fn run() -> Result<(), AppError> {
 		None => None,
 	};
 
-	self::format(packages, manifest_path.as_deref(), &args.extra_args)
+	self::format(packages, manifest_path.as_deref(), &args.extra_args, args.check)
 }
 
-fn format(packages: HashSet<String>, manifest_path: Option<&Path>, extra_args: &[OsString]) -> Result<(), AppError> {
+fn format(packages: HashSet<String>, manifest_path: Option<&Path>, extra_args: &[OsString], check: bool) -> Result<(), AppError> {
 	// If we got no targets, error out
 	let targets = self::get_targets(packages, manifest_path)?;
 	ensure!(!targets.is_empty(), "No targets found for formatting");
@@ -73,9 +73,14 @@ fn format(packages: HashSet<String>, manifest_path: Option<&Path>, extra_args: &
 		None => OsStr::new("rustidy"),
 	};
 
-	Command::new(rustidy)
-		.args(targets)
-		.args(extra_args)
+	let mut command = Command::new(rustidy);
+	command.args(targets);
+	command.args(extra_args);
+	if check {
+		command.arg("--check");
+	}
+
+	command
 		.status()
 		.map_err(|e| match e.kind() {
 			io::ErrorKind::NotFound => app_error!("Unable to find `rustidy` binary {rustidy:?}, ensure it's in your `$PATH`"),

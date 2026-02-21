@@ -20,6 +20,10 @@ pub struct Args {
 	#[clap(long = "config-file")]
 	pub config_file: Option<PathBuf>,
 
+	/// Just check, don't overwrite
+	#[clap(long = "check")]
+	pub check:       bool,
+
 	/// Files to format
 	pub files:       Vec<PathBuf>,
 }
