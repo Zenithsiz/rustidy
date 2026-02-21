@@ -3,6 +3,20 @@
 // Imports
 use std::sync::Arc;
 
+decl_config! {
+	Config;
+
+	indent                     : Arc<str>      = "\t".into(),
+	skip                       : bool          = false,
+	min_empty_lines            : usize         = 0,
+	max_empty_lines            : usize         = 2,
+	max_use_tree_len           : usize         = 75,
+	array_expr_cols            : Option<usize> = None,
+	max_array_expr_len         : usize         = 80,
+	max_chain_len              : usize         = 50,
+	max_inline_tuple_struct_len: usize         = 80,
+}
+
 macro decl_config(
 	$Config:ident; $($field:ident : $T:ty = $default:expr),* $(,)?
 ) {
@@ -68,18 +82,4 @@ macro decl_config(
 
 		}
 	}
-}
-
-decl_config! {
-	Config;
-
-	indent                     : Arc<str>      = "\t".into(),
-	skip                       : bool          = false,
-	min_empty_lines            : usize         = 0,
-	max_empty_lines            : usize         = 2,
-	max_use_tree_len           : usize         = 75,
-	array_expr_cols            : Option<usize> = None,
-	max_array_expr_len         : usize         = 80,
-	max_chain_len              : usize         = 50,
-	max_inline_tuple_struct_len: usize         = 80,
 }
