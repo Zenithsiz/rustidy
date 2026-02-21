@@ -336,7 +336,7 @@ fn derive_struct_field(attrs: &Attrs, field_idx: usize, field: &FieldAttrs) -> R
 	};
 
 	let format = match field.str {
-		true => parse_quote! { <rustidy_util::AstStr as rustidy_format::AstStrFormat>::format_output(&mut self.#field_ident, ctx) },
+		true => parse_quote! { <rustidy_util::AstStr as rustidy_format::Formattable>::format_output(&mut self.#field_ident, ctx) },
 		false => parse_quote! { rustidy_format::Format::format(&mut self.#field_ident, ctx, prefix_ws, args) },
 	};
 

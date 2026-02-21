@@ -32,6 +32,13 @@ impl<T: Formattable> Formattable for Vec<T> {
 
 		ControlFlow::Continue(is_empty)
 	}
+
+	fn format_output(&mut self, ctx: &mut Context) -> FormatOutput {
+		self
+			.iter_mut()
+			.map(|value| value.format_output(ctx))
+			.fold(FormatOutput::default(), FormatOutput::join)
+	}
 }
 
 impl<T, PrefixWs, A> Format<PrefixWs, Args<PrefixWs, A>> for Vec<T>

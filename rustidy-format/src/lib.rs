@@ -11,14 +11,13 @@
 )]
 
 // Modules
-pub mod str;
 mod tag;
 pub mod vec;
 pub mod whitespace;
 
 // Exports
 pub use {
-	self::{str::AstStrFormat, whitespace::{WhitespaceFormat, WhitespaceFormatKind}},
+	self::{whitespace::{WhitespaceFormat, WhitespaceFormatKind}},
 	rustidy_macros::{Format, Formattable},
 	tag::FormatTag,
 };
@@ -72,6 +71,9 @@ pub trait Formattable {
 	/// - `Continue(true)` if this type was empty.
 	/// - `Continue(false)` if this type was non-empty.
 	fn with_strings<O>(&mut self, ctx: &mut Context, exclude_prefix_ws: bool, f: &mut impl FnMut(&mut AstStr,&mut Context) -> ControlFlow<O>,) -> ControlFlow<O, bool>;
+
+	/// Returns the formatting output for this type, without formatting it.
+	fn format_output(&mut self, ctx: &mut Context) -> FormatOutput;
 }
 
 /// Formatting output
@@ -192,6 +194,10 @@ impl<T: Formattable> Formattable for &'_ mut T {
 	fn with_strings<O>(&mut self, ctx: &mut Context, exclude_prefix_ws: bool, f: &mut impl FnMut(&mut AstStr,&mut Context) -> ControlFlow<O>,) -> ControlFlow<O, bool> {
 		(**self).with_strings(ctx, exclude_prefix_ws, f)
 	}
+
+	fn format_output(&mut self, ctx: &mut Context) -> FormatOutput {
+		(**self).format_output(ctx)
+	}
 }
 
 impl<T: Format<PrefixWs, Args>, PrefixWs, Args> Format<PrefixWs, Args> for &'_ mut T {
@@ -207,6 +213,10 @@ impl<T: Formattable> Formattable for Box<T> {
 
 	fn with_strings<O>(&mut self, ctx: &mut Context, exclude_prefix_ws: bool, f: &mut impl FnMut(&mut AstStr,&mut Context) -> ControlFlow<O>,) -> ControlFlow<O, bool> {
 		(**self).with_strings(ctx, exclude_prefix_ws, f)
+	}
+
+	fn format_output(&mut self, ctx: &mut Context) -> FormatOutput {
+		(**self).format_output(ctx)
 	}
 }
 
@@ -230,6 +240,13 @@ impl<T: Formattable> Formattable for Option<T> {
 			None => ControlFlow::Continue(true),
 		}
 	}
+
+	fn format_output(&mut self, ctx: &mut Context) -> FormatOutput {
+		match self {
+			Self::Some(value) => value.format_output(ctx),
+			Self::None => FormatOutput::default(),
+		}
+	}
 }
 
 impl<T: Format<PrefixWs, Args>, PrefixWs, Args> Format<PrefixWs, Args> for Option<T> {
@@ -249,6 +266,10 @@ impl Formattable for ! {
 	fn with_strings<O>(&mut self, _ctx: &mut Context, _exclude_prefix_ws: bool, _f: &mut impl FnMut(&mut AstStr,&mut Context) -> ControlFlow<O>,) -> ControlFlow<O, bool> {
 		*self
 	}
+
+	fn format_output(&mut self, _ctx: &mut Context) -> FormatOutput {
+		*self
+	}
 }
 
 impl<PrefixWs, Args> Format<PrefixWs, Args> for ! {
@@ -265,6 +286,10 @@ impl<T> Formattable for PhantomData<T> {
 	fn with_strings<O>(&mut self, _ctx: &mut Context, _exclude_prefix_ws: bool, _f: &mut impl FnMut(&mut AstStr,&mut Context) -> ControlFlow<O>,) -> ControlFlow<O, bool> {
 		ControlFlow::Continue(true)
 	}
+
+	fn format_output(&mut self, _ctx: &mut Context) -> FormatOutput {
+		FormatOutput::default()
+	}
 }
 
 impl<T> Format<(), ()> for PhantomData<T> {
@@ -280,6 +305,10 @@ impl Formattable for () {
 
 	fn with_strings<O>(&mut self, _ctx: &mut Context, _exclude_prefix_ws: bool, _f: &mut impl FnMut(&mut AstStr,&mut Context) -> ControlFlow<O>,) -> ControlFlow<O, bool> {
 		ControlFlow::Continue(true)
+	}
+
+	fn format_output(&mut self, _ctx: &mut Context) -> FormatOutput {
+		FormatOutput::default()
 	}
 }
 
@@ -319,6 +348,11 @@ macro tuple_impl(
 			let ( $($T,)* ) = self;
 			${concat( Tuple, $N )} { $( $T, )* }.with_strings(ctx, exclude_prefix_ws, f)
 		}
+
+		fn format_output(&mut self, ctx: &mut Context) -> FormatOutput {
+			let ( $($T,)* ) = self;
+			${concat( Tuple, $N )} { $( $T, )* }.format_output(ctx)
+		}
 	}
 
 	// TODO: Make this impl generic for all prefix whitespace/args?
@@ -349,6 +383,17 @@ impl Formattable for AstStr {
 
 		ControlFlow::Continue(self.is_empty())
 	}
+
+	fn format_output(&mut self, ctx: &mut Context) -> FormatOutput {
+		// TODO: Optimize these by not iterating over the string multiple times.
+		FormatOutput {
+			prefix_ws_len: None,
+			len: self.len(),
+			newlines: self.count_newlines(ctx.input),
+			is_empty: self.is_empty(),
+			is_blank: self.is_blank(ctx.input),
+		}
+	}
 }
 
 impl<T: ArenaData + Formattable> Formattable for ArenaIdx<T> {
@@ -358,6 +403,10 @@ impl<T: ArenaData + Formattable> Formattable for ArenaIdx<T> {
 
 	fn with_strings<O>(&mut self, ctx: &mut Context, exclude_prefix_ws: bool, f: &mut impl FnMut(&mut AstStr,&mut Context) -> ControlFlow<O>,) -> ControlFlow<O, bool> {
 		(**self).with_strings(ctx, exclude_prefix_ws, f)
+	}
+
+	fn format_output(&mut self, ctx: &mut Context) -> FormatOutput {
+		(**self).format_output(ctx)
 	}
 }
 

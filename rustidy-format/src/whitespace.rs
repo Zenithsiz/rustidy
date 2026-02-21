@@ -2,14 +2,7 @@
 
 // Imports
 use {
-	crate::{
-		AstStrFormat,
-		Format,
-		FormatOutput,
-		FormatTag,
-		Formattable,
-		WhitespaceConfig,
-	},
+	crate::{Format, FormatOutput, FormatTag, Formattable, WhitespaceConfig},
 	core::ops::ControlFlow,
 	itertools::Itertools,
 	rustidy_util::{AstStr, ast_str::AstStrRepr, whitespace::{Comment, Whitespace}},
@@ -107,6 +100,25 @@ impl Formattable for Whitespace {
 
 		ControlFlow::Continue(is_empty)
 	}
+
+	fn format_output(&mut self, ctx: &mut crate::Context) -> FormatOutput {
+		let mut output = self.0.first.0.format_output(ctx);
+		for (comment, ws) in &mut self.0.rest {
+			match comment {
+				Comment::Line(comment) => comment.0
+					.format_output(ctx)
+					.append_to(&mut output),
+				Comment::Block(comment) => comment.0
+					.format_output(ctx)
+					.append_to(&mut output),
+			}
+
+			ws.0.format_output(ctx).append_to(&mut output);
+		}
+		output.prefix_ws_len = Some(output.len);
+
+		output
+	}
 }
 
 // Note: This impl is useful for types that have whitespace within them,
@@ -129,22 +141,7 @@ impl Format<WhitespaceConfig, ()> for Whitespace {
 			self::format(self, ctx, format);
 		}
 
-		let mut output = self.0.first.0.format_output(ctx);
-		for (comment, ws) in &self.0.rest {
-			match comment {
-				Comment::Line(comment) => comment.0
-					.format_output(ctx)
-					.append_to(&mut output),
-				Comment::Block(comment) => comment.0
-					.format_output(ctx)
-					.append_to(&mut output),
-			}
-
-			ws.0.format_output(ctx).append_to(&mut output);
-		}
-		output.prefix_ws_len = Some(output.len);
-
-		output
+		self.format_output(ctx)
 	}
 }
 
