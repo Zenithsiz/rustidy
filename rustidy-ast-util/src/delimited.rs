@@ -55,25 +55,28 @@ where
 			tracing::warn!("Delimited prefix had no prefix whitespace");
 		}
 
-		let value_output = self
-			.value
-			.format(ctx, args.value_non_blank, args.value_args.clone());
-		let value_output = match value_output.is_blank {
-			true => self
-				.value
-				.format(ctx, args.value_blank, args.value_args),
-			false => value_output,
-		};
-		value_output.append_to(&mut output);
+		ctx
+			.with_indent_if(args.indent, |ctx| {
+				let value_output = self
+					.value
+					.format(ctx, args.value_non_blank, args.value_args.clone());
+				let value_output = match value_output.is_blank {
+					true => self
+						.value
+						.format(ctx, args.value_blank, args.value_args),
+					false => value_output,
+				};
+				value_output.append_to(&mut output);
 
-		let suffix_prefix_ws = match value_output.is_blank {
-			true => args.suffix_blank,
-			false => args.suffix_non_blank,
-		};
-		self
-			.suffix
-			.format(ctx, suffix_prefix_ws, args.suffix_args)
-			.append_to(&mut output);
+				let suffix_prefix_ws = match value_output.is_blank {
+					true => args.suffix_blank,
+					false => args.suffix_non_blank,
+				};
+				self
+					.suffix
+					.format(ctx, suffix_prefix_ws, args.suffix_args)
+					.append_to(&mut output);
+			});
 
 		output
 	}
@@ -83,6 +86,8 @@ where
 // TODO: Switch order of generics to `T, L, R` like `Delimited`.
 #[derive(Clone, Copy, Debug)]
 pub struct FmtArgs<TPrefixWs, SPrefixWs, LArgs, TArgs, RArgs> {
+	pub indent:           bool,
+
 	pub value_non_blank:  TPrefixWs,
 	pub suffix_non_blank: SPrefixWs,
 
@@ -97,6 +102,8 @@ pub struct FmtArgs<TPrefixWs, SPrefixWs, LArgs, TArgs, RArgs> {
 #[must_use]
 pub const fn fmt_preserve_with<LArgs, TArgs, RArgs>(prefix_args: LArgs, value_args: TArgs, suffix_args: RArgs,) -> FmtArgs<WhitespaceConfig, WhitespaceConfig, LArgs, TArgs, RArgs> {
 	FmtArgs {
+		indent: false,
+
 		value_non_blank: Whitespace::PRESERVE,
 		suffix_non_blank: Whitespace::PRESERVE,
 
@@ -118,6 +125,8 @@ pub const fn fmt_preserve() -> FmtArgs<WhitespaceConfig, WhitespaceConfig, (), (
 #[must_use]
 pub const fn fmt_single_if_non_blank_with<LArgs, TArgs, RArgs>(prefix_args: LArgs, value_args: TArgs, suffix_args: RArgs,) -> FmtArgs<WhitespaceConfig, WhitespaceConfig, LArgs, TArgs, RArgs> {
 	FmtArgs {
+		indent: false,
+
 		value_non_blank: Whitespace::SINGLE,
 		suffix_non_blank: Whitespace::SINGLE,
 
@@ -143,6 +152,8 @@ pub const fn fmt_single_if_non_blank() -> FmtArgs<WhitespaceConfig, WhitespaceCo
 #[must_use]
 pub const fn fmt_indent_if_non_blank_with<LArgs, TArgs, RArgs>(prefix_args: LArgs, value_args: TArgs, suffix_args: RArgs,) -> FmtArgs<WhitespaceConfig, WhitespaceConfig, LArgs, TArgs, RArgs> {
 	FmtArgs {
+		indent: true,
+
 		value_non_blank: Whitespace::INDENT,
 		suffix_non_blank: Whitespace::INDENT_CLOSE,
 

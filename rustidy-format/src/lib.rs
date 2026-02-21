@@ -489,6 +489,11 @@ impl<'a, 'input> Context<'a, 'input> {
 		self.tags().any(|cur_tag| cur_tag == tag)
 	}
 
+	/// Adds `tag` to this context
+	pub fn add_tag(&mut self, tag: impl Into<FormatTag>) {
+		self.tags.push(tag.into());
+	}
+
 	/// Returns if this context has a tag and removes it
 	#[must_use]
 	pub fn take_tag(&mut self, tag: impl Into<FormatTag>) -> bool {

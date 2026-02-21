@@ -103,7 +103,6 @@ pub struct UseTreeGlobPrefix {
 pub struct UseTreeGroup {
 	pub prefix: Option<UseTreeGroupPrefix>,
 	#[format(prefix_ws(expr = Whitespace::REMOVE, if = self.prefix.is_some()))]
-	#[format(indent)]
 	#[format(with = Self::format_tree)]
 	pub tree:   Braced<Option<PunctuatedTrailing<Box<UseTree>, token::Comma>>>,
 }

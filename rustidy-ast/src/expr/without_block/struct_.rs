@@ -20,7 +20,6 @@ use {
 pub struct StructExpression {
 	pub path:  PathInExpression,
 	#[format(prefix_ws = Whitespace::SINGLE)]
-	#[format(indent)]
 	#[format(args = delimited::fmt_single_or_indent_if_non_blank(
 		50,
 		StructExprFieldsFmt { field_prefix_ws: Whitespace::SINGLE },

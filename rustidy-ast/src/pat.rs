@@ -152,7 +152,6 @@ pub enum ReferencePatternRef {
 #[derive(Parse, Formattable, Format, Print)]
 pub struct StructPattern {
 	pub top:   PathInExpression,
-	#[format(indent)]
 	#[format(prefix_ws = Whitespace::SINGLE)]
 	// TODO: Use `delimited::fmt_single_or_indent_if_non_blank`
 	#[format(args = delimited::fmt_indent_if_non_blank())]

@@ -34,7 +34,6 @@ pub struct Enumeration {
 	#[format(prefix_ws = Whitespace::INDENT)]
 	pub where_:   Option<WhereClause>,
 	#[format(prefix_ws = Whitespace::SINGLE)]
-	#[format(indent)]
 	#[format(args = delimited::fmt_indent_if_non_blank())]
 	pub variants: Braced<Option<EnumVariants>>,
 }
@@ -92,7 +91,6 @@ pub struct EnumVariantTuple(
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct EnumVariantStruct(
-	#[format(indent)]
 	// TODO: Use `delimited::fmt_single_or_indent_if_non_blank`
 	#[format(args = delimited::fmt_indent_if_non_blank())]
 	pub Braced<Option<StructFields>>,

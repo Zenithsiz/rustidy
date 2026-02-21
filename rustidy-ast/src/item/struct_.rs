@@ -51,7 +51,6 @@ pub struct StructStruct {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub enum StructStructInner {
-	#[format(indent)]
 	#[format(args = delimited::fmt_indent_if_non_blank())]
 	Fields(Braced<Option<StructFields>>),
 	Semi(token::Semi),
@@ -147,9 +146,8 @@ impl TupleStruct {
 					fields.0.trailing = Some(token::Comma::new());
 				}
 
-				ctx
-					.with_indent(|ctx| fields
-						.format(ctx, prefix_ws, delimited::fmt_indent_if_non_blank_with_value(TupleFieldsFmt { field_prefix_ws: Whitespace::INDENT })))
+				fields
+					.format(ctx, prefix_ws, delimited::fmt_indent_if_non_blank_with_value(TupleFieldsFmt { field_prefix_ws: Whitespace::INDENT }))
 			},
 		}
 	}

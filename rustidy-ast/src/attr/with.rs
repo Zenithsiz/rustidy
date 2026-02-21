@@ -4,6 +4,7 @@
 use {
 	super::{InnerAttrOrDocComment, OuterAttrOrDocComment},
 	crate::{attr::{InnerDocComment, OuterDocComment}, util::Braced},
+	rustidy_ast_util::delimited,
 	rustidy_format::{
 		Format,
 		FormatOutput,
@@ -145,15 +146,8 @@ impl<T: Format<WhitespaceConfig, ()>> Format<WhitespaceConfig, ()> for BracedWit
 	}
 }
 
-impl<A, T: Format<WhitespaceConfig, A>> Format<WhitespaceConfig, FmtArgs<A>> for BracedWithInnerAttributes<T> {
+impl<T: Format<WhitespaceConfig, A>, A: Clone> Format<WhitespaceConfig, FmtArgs<A>> for BracedWithInnerAttributes<T> {
 	fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: WhitespaceConfig, args: FmtArgs<A>,) -> FormatOutput {
-		let mut output = FormatOutput::default();
-
-		self.0
-			.prefix
-			.format(ctx, prefix_ws, ())
-			.append_to(&mut output);
-
 		let mut ctx = ctx.sub_context();
 		for attr in &self.0.value.attrs {
 			if let Some(attr) = attr.try_as_attr_ref() && let Err(err) = super::update_config(&attr.attr.value, &mut ctx) {
@@ -161,38 +155,9 @@ impl<A, T: Format<WhitespaceConfig, A>> Format<WhitespaceConfig, FmtArgs<A>> for
 			}
 		}
 
-		ctx
-			.with_indent(|ctx| {
-				let mut is_after_newline = false;
-				for attr in &mut self.0.value.attrs {
-					ctx
-						.with_tag_if(is_after_newline, FormatTag::AfterNewline, |ctx| {
-							attr
-								.format(ctx, Whitespace::INDENT, ())
-								.append_to(&mut output);
-						});
+		self.0
+			.format(&mut ctx, prefix_ws, delimited::fmt_indent_if_non_blank_with_value(args))
 
-					is_after_newline = matches!(attr, InnerAttrOrDocComment::DocComment(InnerDocComment::Line(_)));
-				}
-
-				ctx
-					.with_tag_if(is_after_newline, FormatTag::AfterNewline, |ctx| {
-						let value_output = self.0
-							.value
-							.inner
-							.format(ctx, Whitespace::INDENT, args.inner_args);
-						value_output.append_to(&mut output);
-
-						let remove_if_pure = self.0.value.attrs.is_empty() && value_output.is_empty;
-						let prefix_ws = Whitespace::prev_indent(remove_if_pure);
-						self.0
-							.suffix
-							.format(ctx, prefix_ws, ())
-							.append_to(&mut output);
-					});
-			});
-
-		output
 	}
 }
 
@@ -203,6 +168,48 @@ impl<A, T: Format<WhitespaceConfig, A>> Format<WhitespaceConfig, FmtArgs<A>> for
 struct WithInnerAttributes<T> {
 	pub attrs: Vec<InnerAttrOrDocComment>,
 	pub inner: T,
+}
+
+impl<T: Format<WhitespaceConfig, A>, A> Format<WhitespaceConfig, FmtArgs<A>> for WithInnerAttributes<T> {
+	fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: WhitespaceConfig, args: FmtArgs<A>) -> FormatOutput {
+		let mut output = FormatOutput::default();
+
+		let mut is_after_newline = false;
+		let mut has_prefix_ws = true;
+		for attr in &mut self.attrs {
+			ctx
+				.with_tag_if(is_after_newline, FormatTag::AfterNewline, |ctx| {
+					let prefix_ws = match has_prefix_ws {
+						true => prefix_ws,
+						false => Whitespace::INDENT,
+					};
+
+					attr
+						.format(ctx, prefix_ws, ())
+						.append_to(&mut output);
+				});
+
+			is_after_newline = matches!(attr, InnerAttrOrDocComment::DocComment(InnerDocComment::Line(_)));
+			has_prefix_ws = false;
+		}
+
+		// Note: `self.inner` might be empty, so we add the tag
+		//       for the suffix in `BracedWithInnerAttributes`.
+		if is_after_newline {
+			ctx.add_tag(FormatTag::AfterNewline);
+		}
+
+		let prefix_ws = match has_prefix_ws {
+			true => prefix_ws,
+			false => Whitespace::INDENT,
+		};
+		self
+			.inner
+			.format(ctx, prefix_ws, args.inner_args)
+			.append_to(&mut output);
+
+		output
+	}
 }
 
 /// Formatting arguments

@@ -218,11 +218,9 @@ pub enum DeclMacroBody {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct DeclMacroBodyInline {
-	#[format(indent)]
 	#[format(args = delimited::fmt_indent_if_non_blank())]
 	pub args: Parenthesized<DelimTokenTreeInner>,
 	#[format(prefix_ws = Whitespace::SINGLE)]
-	#[format(indent)]
 	#[format(args = delimited::fmt_indent_if_non_blank())]
 	pub body: Braced<DelimTokenTreeInner>,
 }
@@ -231,7 +229,6 @@ pub struct DeclMacroBodyInline {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct DeclMacroBodyBranches(
-	#[format(indent)]
 	#[format(args = delimited::fmt_indent_if_non_blank())]
 	pub Braced<DeclMacroBodyBranchesInner>,
 );
@@ -282,6 +279,7 @@ pub struct DeclMacroBranchDerive {
 	pub derive: token::Derive,
 	#[format(prefix_ws = Whitespace::REMOVE)]
 	#[format(args = delimited::FmtArgs {
+		indent: false,
 		value_non_blank:(),
 		value_blank:(),
 		suffix_non_blank: Whitespace::REMOVE,
