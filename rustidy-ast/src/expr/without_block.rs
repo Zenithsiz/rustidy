@@ -115,6 +115,7 @@ pub enum ExpressionWithoutBlockError {
 
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(derive_more::From, derive_more::TryInto)]
+#[derive(strum::EnumTryAs)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(ParseRecursive, Formattable, Format, Print)]
 #[parse_recursive(root = ExpressionInner)]

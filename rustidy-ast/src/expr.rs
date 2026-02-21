@@ -31,6 +31,7 @@ pub use self::{
 // Imports
 use {
 	crate::attr::OuterAttrOrDocComment,
+	rustidy_ast_literal::{IntegerLiteral, LiteralExpression, StringLiteral},
 	rustidy_format::{Format, Formattable},
 	rustidy_parse::{
 		FromRecursiveRoot,
@@ -50,6 +51,29 @@ use {
 #[derive(Parse, Formattable, Format, Print)]
 pub struct Expression(pub ArenaIdx<ExpressionInner>);
 
+impl Expression {
+	/// Gets a literal out of this expression, if it is one.
+	#[must_use]
+	pub fn as_literal(&self) -> Option<&LiteralExpression> {
+		self.0
+			.try_as_without_block_ref()?.0
+			.inner
+			.try_as_literal_ref()
+	}
+
+	/// Gets a string literal out of this expression, if it is one.
+	#[must_use]
+	pub fn as_string_literal(&self) -> Option<&StringLiteral> {
+		self.as_literal()?.try_as_string_ref()
+	}
+
+	/// Gets an integer literal out of this expression, if it is one.
+	#[must_use]
+	pub fn as_integer_literal(&self) -> Option<&IntegerLiteral> {
+		self.as_literal()?.try_as_integer_ref()
+	}
+}
+
 impl FromRecursiveRoot<ExpressionInner> for Expression {
 	fn from_recursive_root(expr: ExpressionInner, _parser: &mut Parser) -> Self {
 		let idx = ArenaIdx::new(expr);
@@ -60,6 +84,7 @@ impl FromRecursiveRoot<ExpressionInner> for Expression {
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(ArenaData)]
 #[derive(derive_more::From, derive_more::TryInto)]
+#[derive(strum::EnumTryAs)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(ParseRecursive, Formattable, Format, Print)]
 #[parse_recursive(root = ExpressionInner)]

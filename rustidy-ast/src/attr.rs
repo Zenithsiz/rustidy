@@ -2,22 +2,23 @@
 
 // Module
 pub mod with;
+pub mod meta;
 
 // Exports
 pub use self::with::{BracedWithInnerAttributes, WithOuterAttributes};
 
 // Imports
 use {
+	self::meta::MetaItem,
 	super::{
 		expr::Expression,
 		path::SimplePath,
 		token,
 		util::{Braced, Bracketed, Parenthesized},
 	},
-	crate::token::{Punctuation, Token},
 	app_error::{AppError, Context, bail},
 	core::fmt::Debug,
-	rustidy_ast_util::{RemainingBlockComment, RemainingLine, delimited},
+	rustidy_ast_util::{Longest, RemainingBlockComment, RemainingLine, delimited},
 	rustidy_format::{Format, Formattable, WhitespaceFormat},
 	rustidy_parse::{Parse, ParserTag},
 	rustidy_print::Print,
@@ -45,7 +46,7 @@ pub struct InnerAttribute {
 	#[parse(fatal)]
 	#[format(prefix_ws = Whitespace::REMOVE)]
 	#[format(args = delimited::FmtRemove)]
-	pub attr:  Bracketed<Attr>,
+	pub attr:  Bracketed<AttrOrMetaItem>,
 }
 
 /// Inner Doc comment
@@ -94,7 +95,7 @@ pub struct OuterAttribute {
 	pub pound: token::Pound,
 	#[format(prefix_ws = Whitespace::REMOVE)]
 	#[format(args = delimited::FmtRemove)]
-	pub open:  Bracketed<Attr>,
+	pub open:  Bracketed<AttrOrMetaItem>,
 }
 
 /// Outer Doc comment
@@ -126,6 +127,18 @@ pub struct OuterBlockDoc {
 	// TODO: This should technically need whitespace before if we find `/**/**/*/`,
 	//       but the reference doesn't seem to mention this, so we allow it.
 	pub comment: RemainingBlockComment,
+}
+
+#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(serde::Serialize, serde::Deserialize)]
+#[derive(Parse, Formattable, Format, Print)]
+pub struct AttrOrMetaItem(pub Longest<Attr, MetaItem>);
+
+impl AttrOrMetaItem {
+	#[must_use]
+	pub const fn try_as_meta(&self) -> Option<&MetaItem> {
+		self.0.try_as_right_ref()
+	}
 }
 
 /// `Attr`
@@ -199,90 +212,79 @@ pub token::Token);
 
 /// Updates the configuration based on an attribute
 // TODO: We need to return the position for better error messages.
-pub fn update_config(attr: &Attr, ctx: &mut rustidy_format::Context) -> Result<(), AppError> {
+pub fn update_config(attr: &AttrOrMetaItem, ctx: &mut rustidy_format::Context) -> Result<(), AppError> {
+	let meta = attr
+		.try_as_meta()
+		.context("Attribute was not a meta item")?;
+
 	// If this isn't a `rustidy::config` macro, we have nothing to update
-	if !attr.path.is_str(ctx.input(), "rustidy::config") {
+	if !meta
+		.path()
+		.is_str(ctx.input(), "rustidy::config") {
 		return Ok(());
 	}
 
-	let Some(AttrInput::DelimTokenTree(DelimTokenTree::Parens(input))) = &attr.input else {
+	let MetaItem::Seq(meta) = meta else {
 		bail!("Expected `rustidy::config([...])`");
 	};
 
-	let mut rest = input.value.0.iter();
-	while let Some(tt) = rest.next() {
-		let TokenTree::Token(TokenNonDelimited(Token::IdentOrKeyword(ident))) = tt else {
-			bail!("Expected an identifier");
+	let Some(configs) = &meta.seq.value else {
+		return Ok(())
+	};
+
+	for config in configs.0.values() {
+		let config = try {
+			config.try_as_item()?.try_as_eq_expr_ref()?
+		};
+		let Some(config) = config else {
+			bail!("Expected `rustidy::config(<config-name> = <value>)`");
 		};
 
-		enum ConfigField {
-			Indent,
-			ArrayExprCols,
-			MaxArrayExprLen,
-			MaxChainLen,
+		macro str() {
+			config
+				.expr
+				.as_string_literal()
+				.context("Expected a string literal")?
+				.contents(ctx.input())
+		}
+		macro int() {
+			config
+				.expr
+				.as_integer_literal()
+				.context("Expected an integer literal")?
+				.value(ctx.input())
+				.context("Unable to parse integer")?
+				.try_into()
+				.expect("`u64` didn't fit into `usize`")
 		}
 
-		let field = match ident.1.str(ctx.input()).as_str() {
-			"indent" => ConfigField::Indent,
-			"array_expr_cols" => ConfigField::ArrayExprCols,
-			"max_array_expr_len" => ConfigField::MaxArrayExprLen,
-			"max_chain_len" => ConfigField::MaxChainLen,
+		macro set_arc_str(
+			$field:ident
+		) {
+			ctx.config_mut().$field = str!().into()
+		}
+
+		macro set_int(
+			$field:ident
+		) {
+			ctx.config_mut().$field = int!()
+		}
+
+		macro set_opt_int(
+			$field:ident
+		) {
+			ctx.config_mut().$field = Some(int!())
+		}
+
+		match config.path.as_str(ctx.input()).as_str() {
+			"indent" => set_arc_str!(indent),
+			// TODO: Should we allow resetting these to `None` again?
+			"array_expr_cols" => set_opt_int!(array_expr_cols),
+			"max_array_expr_len" => set_int!(max_array_expr_len),
+			"max_chain_len" => set_int!(max_chain_len),
 			ident => bail!("Unknown configuration: {ident:?}"),
-		};
-
-		let Some(TokenTree::Token(TokenNonDelimited(Token::Punctuation(Punctuation::Eq(_))))) = rest.next() else {
-			bail!("Expected `=`");
-		};
-
-		match field {
-			ConfigField::Indent => {
-				let Some(TokenTree::Token(TokenNonDelimited(Token::StringLiteral(literal)))) = rest.next() else {
-					bail!("Expected string literal");
-				};
-				ctx.config_mut().indent = literal.contents(ctx.input()).into();
-			},
-			// TODO: Should we allow resetting it to `None` again?
-			ConfigField::ArrayExprCols => {
-				let Some(TokenTree::Token(TokenNonDelimited(Token::IntegerLiteral(literal)))) = rest.next() else {
-					bail!("Expected integer literal");
-				};
-				let value = literal
-					.value(ctx.input())
-					.context("Unable to parse integer")?;
-				ctx.config_mut().array_expr_cols = Some(value
-					.try_into()
-					.expect("`u64` didn't fit into `usize`"));
-			},
-			ConfigField::MaxArrayExprLen => {
-				let Some(TokenTree::Token(TokenNonDelimited(Token::IntegerLiteral(literal)))) = rest.next() else {
-					bail!("Expected integer literal");
-				};
-				let value = literal
-					.value(ctx.input())
-					.context("Unable to parse integer")?;
-				ctx.config_mut().max_array_expr_len = value
-					.try_into()
-					.expect("`u64` didn't fit into `usize`");
-			},
-			ConfigField::MaxChainLen => {
-				let Some(TokenTree::Token(TokenNonDelimited(Token::IntegerLiteral(literal)))) = rest.next() else {
-					bail!("Expected integer literal");
-				};
-				let value = literal
-					.value(ctx.input())
-					.context("Unable to parse integer")?;
-				ctx.config_mut().max_chain_len = value
-					.try_into()
-					.expect("`u64` didn't fit into `usize`");
-			},
 		}
-
-		match rest.next() {
-			Some(TokenTree::Token(TokenNonDelimited(Token::Punctuation(Punctuation::Comma(_))))) => (),
-			Some(_) => bail!("Expected `,`"),
-			None => break,
-		}
-	}
+	};
 
 	Ok(())
 }

@@ -9,6 +9,7 @@ use {
 	rustidy_parse::Parse,
 	rustidy_print::Print,
 	rustidy_util::Whitespace,
+	std::borrow::Cow,
 };
 
 /// `SimplePath`
@@ -24,6 +25,17 @@ pub struct SimplePath {
 }
 
 impl SimplePath {
+	/// Returns this path as a string
+	#[must_use]
+	pub fn as_str<'a>(&'a self, input: &'a str) -> Cow<'a, str> {
+		// Optimize single segment paths with no prefix first
+		if self.prefix.is_none() && self.segments.rest.is_empty() {
+			return self.segments.first.as_str(input);
+		}
+
+		todo!();
+	}
+
 	/// Returns if this path is the same as `path`.
 	#[must_use]
 	pub fn is_str(&self, input: &str, path: &str) -> bool {
@@ -67,6 +79,18 @@ pub enum SimplePathSegment {
 }
 
 impl SimplePathSegment {
+	/// Returns this path as a string
+	#[must_use]
+	pub fn as_str<'a>(&'a self, input: &'a str) -> Cow<'a, str> {
+		match self {
+			Self::Super(_) => "super".into(),
+			Self::SelfLower(_) => "self".into(),
+			Self::Crate(_) => "crate".into(),
+			Self::DollarCrate(_) => "$crate".into(),
+			Self::Ident(ident) => ident.as_str(input),
+		}
+	}
+
 	/// Returns if this segment is the same as `segment`.
 	#[must_use]
 	pub fn is_str(&self, input: &str, segment: &str) -> bool {

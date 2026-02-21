@@ -26,7 +26,8 @@
 	if_let_guard,
 	str_as_str,
 	thread_local,
-	type_changing_struct_update
+	type_changing_struct_update,
+	try_blocks
 )]
 
 // Modules

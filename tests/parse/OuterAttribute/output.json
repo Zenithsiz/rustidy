@@ -34,95 +34,96 @@
 								}
 							},
 							"value": {
-								"path": {
-									"prefix": null,
-									"segments": {
-										"first": {
-											"Ident": {
-												"NonKw": [
-													{
-														"first": {
-															"start": 2,
-															"end": 2
-														},
-														"rest": []
-													},
-													{
-														"start": 2,
-														"end": 3
-													}
-												]
-											}
-										},
-										"rest": [
-											{
-												"punct": {
-													"ws": {
-														"first": {
-															"start": 3,
-															"end": 3
-														},
-														"rest": []
-													},
-													"token": {
-														"start": 3,
-														"end": 5
-													}
-												},
-												"value": {
-													"Ident": {
-														"NonKw": [
-															{
-																"first": {
-																	"start": 5,
-																	"end": 5
-																},
-																"rest": []
+								"Right": {
+									"Path": {
+										"prefix": null,
+										"segments": {
+											"first": {
+												"Ident": {
+													"NonKw": [
+														{
+															"first": {
+																"start": 2,
+																"end": 2
 															},
-															{
-																"start": 5,
-																"end": 6
-															}
-														]
-													}
+															"rest": []
+														},
+														{
+															"start": 2,
+															"end": 3
+														}
+													]
 												}
 											},
-											{
-												"punct": {
-													"ws": {
-														"first": {
-															"start": 6,
-															"end": 6
+											"rest": [
+												{
+													"punct": {
+														"ws": {
+															"first": {
+																"start": 3,
+																"end": 3
+															},
+															"rest": []
 														},
-														"rest": []
+														"token": {
+															"start": 3,
+															"end": 5
+														}
 													},
-													"token": {
-														"start": 6,
-														"end": 8
+													"value": {
+														"Ident": {
+															"NonKw": [
+																{
+																	"first": {
+																		"start": 5,
+																		"end": 5
+																	},
+																	"rest": []
+																},
+																{
+																	"start": 5,
+																	"end": 6
+																}
+															]
+														}
 													}
 												},
-												"value": {
-													"Ident": {
-														"NonKw": [
-															{
-																"first": {
-																	"start": 8,
-																	"end": 8
-																},
-																"rest": []
+												{
+													"punct": {
+														"ws": {
+															"first": {
+																"start": 6,
+																"end": 6
 															},
-															{
-																"start": 8,
-																"end": 9
-															}
-														]
+															"rest": []
+														},
+														"token": {
+															"start": 6,
+															"end": 8
+														}
+													},
+													"value": {
+														"Ident": {
+															"NonKw": [
+																{
+																	"first": {
+																		"start": 8,
+																		"end": 8
+																	},
+																	"rest": []
+																},
+																{
+																	"start": 8,
+																	"end": 9
+																}
+															]
+														}
 													}
 												}
-											}
-										]
+											]
+										}
 									}
-								},
-								"input": null
+								}
 							},
 							"suffix": {
 								"ws": {
@@ -170,73 +171,74 @@
 								}
 							},
 							"value": {
-								"path": {
-									"prefix": {
-										"ws": {
-											"first": {
-												"start": 13,
-												"end": 13
-											},
-											"rest": []
-										},
-										"token": {
-											"start": 13,
-											"end": 15
-										}
-									},
-									"segments": {
-										"first": {
-											"DollarCrate": {
-												"ws": {
-													"first": {
-														"start": 15,
-														"end": 15
-													},
-													"rest": []
+								"Right": {
+									"Path": {
+										"prefix": {
+											"ws": {
+												"first": {
+													"start": 13,
+													"end": 13
 												},
-												"token": {
-													"start": 15,
-													"end": 21
-												}
+												"rest": []
+											},
+											"token": {
+												"start": 13,
+												"end": 15
 											}
 										},
-										"rest": [
-											{
-												"punct": {
+										"segments": {
+											"first": {
+												"DollarCrate": {
 													"ws": {
 														"first": {
-															"start": 21,
-															"end": 21
+															"start": 15,
+															"end": 15
 														},
 														"rest": []
 													},
 													"token": {
-														"start": 21,
-														"end": 23
-													}
-												},
-												"value": {
-													"Ident": {
-														"NonKw": [
-															{
-																"first": {
-																	"start": 23,
-																	"end": 23
-																},
-																"rest": []
-															},
-															{
-																"start": 23,
-																"end": 24
-															}
-														]
+														"start": 15,
+														"end": 21
 													}
 												}
-											}
-										]
+											},
+											"rest": [
+												{
+													"punct": {
+														"ws": {
+															"first": {
+																"start": 21,
+																"end": 21
+															},
+															"rest": []
+														},
+														"token": {
+															"start": 21,
+															"end": 23
+														}
+													},
+													"value": {
+														"Ident": {
+															"NonKw": [
+																{
+																	"first": {
+																		"start": 23,
+																		"end": 23
+																	},
+																	"rest": []
+																},
+																{
+																	"start": 23,
+																	"end": 24
+																}
+															]
+														}
+													}
+												}
+											]
+										}
 									}
-								},
-								"input": null
+								}
 							},
 							"suffix": {
 								"ws": {

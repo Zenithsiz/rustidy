@@ -26,8 +26,7 @@ use {
 	app_error::{AppError, Context, bail},
 	clap::Parser as _,
 	rustidy_ast::{
-		attr::{AttrInput, OuterAttrOrDocComment},
-		expr::{ExpressionInner, without_block::ExpressionWithoutBlockInner},
+		attr::{OuterAttrOrDocComment},
 		item::{ItemInner, Module, VisItemInner},
 	},
 	rustidy_ast_util::Identifier,
@@ -219,29 +218,23 @@ fn mod_path<'a>(file_path: &Path, input: &'a str, attrs: impl IntoIterator<Item 
 fn find_path_attr<'a>(input: &'a str, attrs: impl IntoIterator<Item = &'a OuterAttrOrDocComment>,) -> Result<Option<Cow<'a, str>>, AppError> {
 	for attr in attrs {
 		let Some(attr) = attr.try_as_attr_ref() else {
-			continue
+			continue;
 		};
-		if !(attr.open.value.path.is_str(input, "path")) {
+		let Some(meta) = attr.open.value.try_as_meta() else {
+			continue;
+		};
+		if !(meta.path().is_str(input, "path")) {
 			continue;
 		}
-		let expr = match &attr.open.value.input {
-			Some(AttrInput::EqExpr(eq_expr)) => &eq_expr.expr,
-			_ => bail!("Malformed `#[path = ...]` attribute"),
+		let Some(meta) = meta.try_as_eq_expr_ref() else {
+			bail!("Malformed `#[path = ...]` attribute");
 		};
-		let literal = match &*expr.0 {
-			ExpressionInner::WithoutBlock(expr) if let ExpressionWithoutBlockInner::Literal(literal) = &expr.0.inner => literal,
-			_ => bail!("Expected a literal expression in `#[path = ...]` attribute"),
-		};
-		let name = match literal {
-			// Note: The rust compiler doesn't support c-strings or byte-strings here, only regular and raw strings,
-			//       so we also don't.
-			rustidy_ast_literal::LiteralExpression::String(s) => s.contents(input),
-			// TODO: Allow raw strings here
-			rustidy_ast_literal::LiteralExpression::RawString(_) => todo!("Raw strings in `#[path = ...]` attributes aren't currently supported"),
-			_ => bail!("Expected a string literal in `#[path = ...]` attribute"),
+		// TODO: Support raw strings here
+		let Some(literal) = meta.expr.as_string_literal() else {
+			bail!("Expected a literal expression in `#[path = ...]` attribute");
 		};
 
-		return Ok(Some(name));
+		return Ok(Some(literal.contents(input)));
 	}
 
 	Ok(None)

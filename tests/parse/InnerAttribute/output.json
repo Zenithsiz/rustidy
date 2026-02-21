@@ -44,95 +44,96 @@
 						}
 					},
 					"value": {
-						"path": {
-							"prefix": null,
-							"segments": {
-								"first": {
-									"Ident": {
-										"NonKw": [
-											{
-												"first": {
-													"start": 3,
-													"end": 3
-												},
-												"rest": []
-											},
-											{
-												"start": 3,
-												"end": 4
-											}
-										]
-									}
-								},
-								"rest": [
-									{
-										"punct": {
-											"ws": {
-												"first": {
-													"start": 4,
-													"end": 4
-												},
-												"rest": []
-											},
-											"token": {
-												"start": 4,
-												"end": 6
-											}
-										},
-										"value": {
-											"Ident": {
-												"NonKw": [
-													{
-														"first": {
-															"start": 6,
-															"end": 6
-														},
-														"rest": []
+						"Right": {
+							"Path": {
+								"prefix": null,
+								"segments": {
+									"first": {
+										"Ident": {
+											"NonKw": [
+												{
+													"first": {
+														"start": 3,
+														"end": 3
 													},
-													{
-														"start": 6,
-														"end": 7
-													}
-												]
-											}
+													"rest": []
+												},
+												{
+													"start": 3,
+													"end": 4
+												}
+											]
 										}
 									},
-									{
-										"punct": {
-											"ws": {
-												"first": {
-													"start": 7,
-													"end": 7
+									"rest": [
+										{
+											"punct": {
+												"ws": {
+													"first": {
+														"start": 4,
+														"end": 4
+													},
+													"rest": []
 												},
-												"rest": []
+												"token": {
+													"start": 4,
+													"end": 6
+												}
 											},
-											"token": {
-												"start": 7,
-												"end": 9
+											"value": {
+												"Ident": {
+													"NonKw": [
+														{
+															"first": {
+																"start": 6,
+																"end": 6
+															},
+															"rest": []
+														},
+														{
+															"start": 6,
+															"end": 7
+														}
+													]
+												}
 											}
 										},
-										"value": {
-											"Ident": {
-												"NonKw": [
-													{
-														"first": {
-															"start": 9,
-															"end": 9
-														},
-														"rest": []
+										{
+											"punct": {
+												"ws": {
+													"first": {
+														"start": 7,
+														"end": 7
 													},
-													{
-														"start": 9,
-														"end": 10
-													}
-												]
+													"rest": []
+												},
+												"token": {
+													"start": 7,
+													"end": 9
+												}
+											},
+											"value": {
+												"Ident": {
+													"NonKw": [
+														{
+															"first": {
+																"start": 9,
+																"end": 9
+															},
+															"rest": []
+														},
+														{
+															"start": 9,
+															"end": 10
+														}
+													]
+												}
 											}
 										}
-									}
-								]
+									]
+								}
 							}
-						},
-						"input": null
+						}
 					},
 					"suffix": {
 						"ws": {
@@ -193,73 +194,74 @@
 						}
 					},
 					"value": {
-						"path": {
-							"prefix": {
-								"ws": {
-									"first": {
-										"start": 15,
-										"end": 15
-									},
-									"rest": []
-								},
-								"token": {
-									"start": 15,
-									"end": 17
-								}
-							},
-							"segments": {
-								"first": {
-									"DollarCrate": {
-										"ws": {
-											"first": {
-												"start": 17,
-												"end": 17
-											},
-											"rest": []
+						"Right": {
+							"Path": {
+								"prefix": {
+									"ws": {
+										"first": {
+											"start": 15,
+											"end": 15
 										},
-										"token": {
-											"start": 17,
-											"end": 23
-										}
+										"rest": []
+									},
+									"token": {
+										"start": 15,
+										"end": 17
 									}
 								},
-								"rest": [
-									{
-										"punct": {
+								"segments": {
+									"first": {
+										"DollarCrate": {
 											"ws": {
 												"first": {
-													"start": 23,
-													"end": 23
+													"start": 17,
+													"end": 17
 												},
 												"rest": []
 											},
 											"token": {
-												"start": 23,
-												"end": 25
-											}
-										},
-										"value": {
-											"Ident": {
-												"NonKw": [
-													{
-														"first": {
-															"start": 25,
-															"end": 25
-														},
-														"rest": []
-													},
-													{
-														"start": 25,
-														"end": 26
-													}
-												]
+												"start": 17,
+												"end": 23
 											}
 										}
-									}
-								]
+									},
+									"rest": [
+										{
+											"punct": {
+												"ws": {
+													"first": {
+														"start": 23,
+														"end": 23
+													},
+													"rest": []
+												},
+												"token": {
+													"start": 23,
+													"end": 25
+												}
+											},
+											"value": {
+												"Ident": {
+													"NonKw": [
+														{
+															"first": {
+																"start": 25,
+																"end": 25
+															},
+															"rest": []
+														},
+														{
+															"start": 25,
+															"end": 26
+														}
+													]
+												}
+											}
+										}
+									]
+								}
 							}
-						},
-						"input": null
+						}
 					},
 					"suffix": {
 						"ws": {

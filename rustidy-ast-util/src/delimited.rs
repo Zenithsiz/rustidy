@@ -229,3 +229,36 @@ where
 		}
 	}
 }
+
+/// Formatting arguments for [`fmt_remove_or_indent_if_non_blank`]
+#[derive(Clone, Copy, Debug)]
+pub struct FmtArgsRemoveOrIndentIfNonBlank<TArgs> {
+	max_len:           usize,
+	value_args_remove: TArgs,
+	value_args_indent: TArgs,
+}
+
+/// Formats a delimited with [`fmt_remove_if_non_blank`] if under or equal to
+/// `max_len`, otherwise formats with [`fmt_indent_if_non_blank`].
+#[must_use]
+pub const fn fmt_remove_or_indent_if_non_blank<TArgs>(max_len: usize, value_args_remove: TArgs, value_args_indent: TArgs) -> FmtArgsRemoveOrIndentIfNonBlank<TArgs> {
+	FmtArgsRemoveOrIndentIfNonBlank { max_len, value_args_remove, value_args_indent }
+}
+
+impl<T, L, R, TArgs> Format<WhitespaceConfig, FmtArgsRemoveOrIndentIfNonBlank<TArgs>> for Delimited<T, L, R>
+where
+	L: Format<WhitespaceConfig, ()>,
+	T: Format<WhitespaceConfig, TArgs>,
+	R: Format<WhitespaceConfig, ()>,
+	TArgs: Clone {
+	fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: WhitespaceConfig, args: FmtArgsRemoveOrIndentIfNonBlank<TArgs>) -> FormatOutput {
+		let output = self
+			.format(ctx, prefix_ws, FmtRemoveWith(args.value_args_remove));
+
+		match output.len_without_prefix_ws() <= args.max_len {
+			true => output,
+			false => self
+				.format(ctx, prefix_ws, self::fmt_indent_if_non_blank_with_value(args.value_args_indent)),
+		}
+	}
+}

@@ -11,6 +11,7 @@ use {
 
 /// Parses the longest of two types
 #[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(strum::EnumTryAs)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Formattable, Format, Print)]
 pub enum Longest<L, R> {

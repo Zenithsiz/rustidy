@@ -14,13 +14,12 @@ path = "src/main.rs"
 [dependencies]
 
 # Workspace
-rustidy             = { workspace = true }
-rustidy-ast         = { workspace = true }
-rustidy-ast-literal = { workspace = true }
-rustidy-ast-util    = { workspace = true }
-rustidy-format      = { workspace = true }
-rustidy-print       = { workspace = true }
-rustidy-util        = { workspace = true }
+rustidy          = { workspace = true }
+rustidy-ast      = { workspace = true }
+rustidy-ast-util = { workspace = true }
+rustidy-format   = { workspace = true }
+rustidy-print    = { workspace = true }
+rustidy-util     = { workspace = true }
 
 app-error    = { workspace = true }
 clap         = { features = ["derive"], workspace = true }

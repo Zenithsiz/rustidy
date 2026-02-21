@@ -61,6 +61,9 @@ struct VariantAttrs {
 	#[darling(default)]
 	box_error:    bool,
 
+	#[darling(default)]
+	not_fatal:    bool,
+
 	#[darling(multiple)]
 	with_tag:     Vec<syn::Expr>,
 }
@@ -275,7 +278,11 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 					.iter()
 					.zip(&err_idents)
 					.map(|(variant, err_ident)| {
-						let mut expr = quote! { parser.try_parse() };
+						let mut expr = match variant.not_fatal {
+							true => quote! { parser.parse() },
+							false => quote! { parser.try_parse() },
+						};
+
 						if variant.without_tags {
 							expr = quote! { parser.without_tags(|parser| #expr) };
 						}
@@ -290,8 +297,14 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 						};
 
 						let variant_ident = &variant.ident;
+
+						let on_err = match variant.not_fatal {
+							true => None,
+							false => Some(quote! { .map_err(#error_ident::#variant_ident)? }),
+						};
+
 						quote! {
-							let #err_ident = match #expr #box_error .map_err(#error_ident::#variant_ident)? {
+							let #err_ident = match #expr #box_error #on_err {
 								// Note: This can be unreachable if `value: !`
 								#[allow(unreachable_code)]
 								Ok(value) => return Ok(Self::#variant_ident(value)),

@@ -11,6 +11,7 @@ use {
 	rustidy_format::{Format, Formattable},
 	rustidy_parse::{Parse, Parser},
 	rustidy_print::Print,
+	std::borrow::Cow,
 };
 
 /// `IDENTIFIER`
@@ -24,6 +25,16 @@ pub enum Identifier {
 }
 
 impl Identifier {
+	/// Returns this path as a string.
+	#[must_use]
+	pub fn as_str<'a>(&'a self, input: &'a str) -> Cow<'a, str> {
+		match self {
+			// TODO: How should we handle raw identifiers?
+			Self::Raw(_) => todo!("Raw identifiers aren't fully implemented"),
+			Self::NonKw(ident) => ident.0.1.str(input),
+		}
+	}
+
 	/// Returns if this identifier is the same as `ident`.
 	///
 	/// For raw identifiers, the `r#` prefix isn't included in
