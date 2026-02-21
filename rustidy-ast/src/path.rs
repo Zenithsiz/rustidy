@@ -33,7 +33,8 @@ impl SimplePath {
 			return self.segments.first.as_str(input);
 		}
 
-		todo!();
+		// TODO: Optimize this by returning a borrowed string more often
+		self.print_to_string(input).into()
 	}
 
 	/// Returns if the first segment of this path is `segment`
