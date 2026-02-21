@@ -143,9 +143,12 @@ pub enum MacroMatch {
 #[derive(Parse, Formattable, Format, Print)]
 pub struct MacroMatchDollarIdent {
 	pub dollar: token::Dollar,
+	#[format(prefix_ws = Whitespace::PRESERVE)]
 	pub ident:  MacroMatchDollarIdentInner,
 	#[parse(fatal)]
+	#[format(prefix_ws = Whitespace::PRESERVE)]
 	pub colon:  token::Colon,
+	#[format(prefix_ws = Whitespace::PRESERVE)]
 	pub spec:   MacroFragSpec,
 }
 
@@ -186,10 +189,13 @@ pub enum MacroFragSpec {
 #[derive(Parse, Formattable, Format, Print)]
 pub struct MacroMatchDollarRep {
 	pub dollar:  token::Dollar,
+	#[format(prefix_ws = Whitespace::PRESERVE)]
 	#[format(args = delimited::fmt_preserve())]
 	pub matches: Parenthesized<MacroMatchDollarRepMatches>,
 	#[parse(fatal)]
+	#[format(prefix_ws = Whitespace::PRESERVE)]
 	pub rep_sep: Option<MacroRepSep>,
+	#[format(prefix_ws = Whitespace::PRESERVE)]
 	pub rep_op:  MacroRepOp,
 }
 
