@@ -22,7 +22,7 @@ impl AstStr {
 	/// Creates a new ast string from an input range
 	pub fn from_input(input: Substr) -> Self {
 		Self(ArenaIdx::new(Inner {
-			repr: AstStrRepr::Input(Substr::clone(&input)),
+			repr: AstStrRepr::String(Substr::clone(&input)),
 			input: Some(input),
 		}))
 	}
@@ -108,16 +108,10 @@ impl AstStr {
 		self.repr().write(output);
 	}
 
-	/// Returns the string of this string, if it comes from the input (or is static)
-	#[must_use]
-	pub fn str_input(&self) -> Option<&str> {
-		self.repr().str_input()
-	}
-
 	/// Returns the string of this string, if it's cheap to get
 	#[must_use]
 	pub fn str_cheap(&self) -> Option<&str> {
-		self.repr().str_input()
+		self.repr().str_cheap()
 	}
 
 	/// Returns the string of this string
@@ -148,7 +142,7 @@ impl<'de> serde::Deserialize<'de> for AstStr {
 		D: serde::Deserializer<'de>,
 	{
 		let s = String::deserialize(deserializer)?;
-		Ok(Self::new(AstStrRepr::Dynamic(s)))
+		Ok(Self::new(AstStrRepr::String(s.into())))
 	}
 }
 
@@ -166,13 +160,14 @@ struct Inner {
 #[derive(ArenaData)]
 #[derive(derive_more::From)]
 pub enum AstStrRepr {
-	/// Input
+	/// String
 	#[from]
-	Input(Substr),
+	String(Substr),
 
 	/// Static string
+	// TODO: Merge this with `Self::String`?
 	#[from]
-	String(&'static str),
+	Static(&'static str),
 
 	/// Single character
 	#[from]
@@ -196,10 +191,6 @@ pub enum AstStrRepr {
 		lhs: AstStr,
 		rhs: AstStr,
 	},
-
-	// Dynamic string
-	// Note: Not `#[from]` to make it clear this is expensive
-	Dynamic(String),
 }
 
 impl AstStrRepr {
@@ -207,8 +198,8 @@ impl AstStrRepr {
 	#[must_use]
 	pub fn len(&self) -> usize {
 		match *self {
-			Self::Input(ref s) => s.len(),
-			Self::String(s) => s.len(),
+			Self::String(ref s) => s.len(),
+			Self::Static(s) => s.len(),
 			Self::Char(ch) => ch.len_utf8(),
 			Self::Spaces {
 				len
@@ -222,7 +213,6 @@ impl AstStrRepr {
 				ref lhs,
 				ref rhs
 			} => lhs.len() + rhs.len(),
-			Self::Dynamic(ref s) => s.len(),
 		}
 	}
 
@@ -254,8 +244,8 @@ impl AstStrRepr {
 	#[must_use]
 	pub fn is_blank(&self) -> bool {
 		match *self {
-			Self::Input(ref s) => crate::is_str_blank(s),
-			Self::String(s) => crate::is_str_blank(s),
+			Self::String(ref s) => crate::is_str_blank(s),
+			Self::Static(s) => crate::is_str_blank(s),
 			Self::Char(ch) => ch.is_ascii_whitespace(),
 			Self::Spaces {
 				..
@@ -266,7 +256,6 @@ impl AstStrRepr {
 				ref lhs,
 				ref rhs
 			} => lhs.is_blank() && rhs.is_blank(),
-			Self::Dynamic(ref s) => crate::is_str_blank(s),
 		}
 	}
 
@@ -274,8 +263,8 @@ impl AstStrRepr {
 	#[must_use]
 	pub fn count_newlines(&self) -> usize {
 		match *self {
-			Self::Input(ref s) => crate::str_count_newlines(s),
-			Self::String(s) => crate::str_count_newlines(s),
+			Self::String(ref s) => crate::str_count_newlines(s),
+			Self::Static(s) => crate::str_count_newlines(s),
 			Self::Char(ch) => match ch == '\n' {
 				true => 1,
 				false => 0,
@@ -291,7 +280,6 @@ impl AstStrRepr {
 				ref lhs,
 				ref rhs
 			} => lhs.count_newlines() + rhs.count_newlines(),
-			Self::Dynamic(ref s) => crate::str_count_newlines(s),
 		}
 	}
 
@@ -305,9 +293,8 @@ impl AstStrRepr {
 	#[must_use]
 	pub fn is_str(&self, other: &str) -> bool {
 		match *self {
-			Self::Input(ref s) => s == other,
-			Self::String(s) => s == other,
-			Self::Dynamic(ref s) => s == other,
+			Self::String(ref s) => s == other,
+			Self::Static(s) => s == other,
 
 			// TODO: Properly implement these to avoid allocating a string
 			_ => self.str() == other,
@@ -317,8 +304,8 @@ impl AstStrRepr {
 	/// Writes this representation
 	pub fn write(&self, output: &mut String) {
 		match *self {
-			Self::Input(ref s) => output.push_str(s),
-			Self::String(s) => output.push_str(s),
+			Self::String(ref s) => output.push_str(s),
+			Self::Static(s) => output.push_str(s),
 			Self::Char(ch) => output.push(ch),
 			Self::Spaces {
 				len
@@ -344,15 +331,13 @@ impl AstStrRepr {
 				lhs.write(output);
 				rhs.write(output);
 			},
-			Self::Dynamic(ref s) => output.push_str(s),
 		}
 	}
 
-	/// Returns the string of this representation, if it comes from the input (or is static).
+	/// Returns the string of this representation, if it's cheap to get it
 	#[must_use]
-	pub fn str_input(&self) -> Option<&str> {
+	pub fn str_cheap(&self) -> Option<&str> {
 		match self {
-			Self::Input(input) => Some(input),
 			Self::String(s) => Some(s),
 
 			// Special case these to avoid a `String` allocation
@@ -364,18 +349,6 @@ impl AstStrRepr {
 			} => " ".into(),
 
 			_ => None,
-		}
-	}
-
-	/// Returns the string of this representation, if it's cheap to get it
-	#[must_use]
-	pub fn str_cheap(&self) -> Option<&str> {
-		match self.str_input() {
-			Some(s) => Some(s),
-			None => match self {
-				Self::Dynamic(s) => Some(s),
-				_ => None,
-			},
 		}
 	}
 

@@ -266,7 +266,7 @@ pub fn format(ws: &mut Whitespace, ctx: &mut crate::Context, kind: WhitespaceFor
 		if is_last && let Comment::Line(comment) = comment && !comment.0.has_newlines() {
 			let mut s = comment.0.str().into_owned();
 			s.push('\n');
-			comment.0.replace(AstStrRepr::Dynamic(s));
+			comment.0.replace(AstStrRepr::String(s.into()));
 		}
 	}
 }
