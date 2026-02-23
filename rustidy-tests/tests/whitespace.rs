@@ -19,7 +19,13 @@ struct Config {
 	indent_depth: usize,
 }
 
-fn test_case_with(source: &str, expected: &str, fmt_config: &rustidy_util::Config, config: &Config, kind: WhitespaceFormatKind,) -> Result<(), AppError> {
+fn test_case_with(
+	source: &str,
+	expected: &str,
+	fmt_config: &rustidy_util::Config,
+	config: &Config,
+	kind: WhitespaceFormatKind,
+) -> Result<(), AppError> {
 	let mut parser = Parser::new(source);
 	let mut whitespace = parser
 		.parse::<Whitespace>()
@@ -77,7 +83,11 @@ struct CaseKinds<'a> {
 	expected_set_prev_indent_or_remove: &'a str,
 }
 
-fn test_cases_with(cases: impl IntoIterator<Item = CaseKinds<'_>>, fmt_config: &rustidy_util::Config, config: &Config,) -> Result<(), AppError> {
+fn test_cases_with(
+	cases: impl IntoIterator<Item = CaseKinds<'_>>,
+	fmt_config: &rustidy_util::Config,
+	config: &Config,
+) -> Result<(), AppError> {
 	cases
 		.into_iter()
 		.map(|case| {

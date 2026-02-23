@@ -62,7 +62,12 @@ fn run() -> Result<(), AppError> {
 	self::format(packages, manifest_path.as_deref(), &args.extra_args, args.check)
 }
 
-fn format(packages: HashSet<String>, manifest_path: Option<&Path>, extra_args: &[OsString], check: bool) -> Result<(), AppError> {
+fn format(
+	packages: HashSet<String>,
+	manifest_path: Option<&Path>,
+	extra_args: &[OsString],
+	check: bool
+) -> Result<(), AppError> {
 	// If we got no targets, error out
 	let targets = self::get_targets(packages, manifest_path)?;
 	ensure!(!targets.is_empty(), "No targets found for formatting");
@@ -94,7 +99,10 @@ fn format(packages: HashSet<String>, manifest_path: Option<&Path>, extra_args: &
 }
 
 /// Based on the specified `CargoFmtStrategy`, returns a set of main source files.
-fn get_targets(mut packages: HashSet<String>, manifest_path: Option<&Path>) -> Result<Vec<PathBuf>, AppError> {
+fn get_targets(
+	mut packages: HashSet<String>,
+	manifest_path: Option<&Path>
+) -> Result<Vec<PathBuf>, AppError> {
 	let mut targets = vec![];
 
 	let metadata = {

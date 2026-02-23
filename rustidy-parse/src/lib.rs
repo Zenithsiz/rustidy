@@ -560,7 +560,11 @@ impl Parser {
 	}
 
 	/// Calls `f` with tags `tags` added to this parser
-	pub fn with_tags<O>(&mut self, tags: impl IntoIterator<Item = ParserTag>, f: impl FnOnce(&mut Self) -> O) -> O {
+	pub fn with_tags<O>(
+		&mut self,
+		tags: impl IntoIterator<Item = ParserTag>,
+		f: impl FnOnce(&mut Self) -> O
+	) -> O {
 		let tags_len = self.tags.len();
 
 		for tag in tags {
@@ -573,7 +577,11 @@ impl Parser {
 	}
 
 	/// Calls `f` with tag `tag` added to this parser
-	pub fn with_tag<O>(&mut self, tag: impl Into<ParserTag>, f: impl FnOnce(&mut Self) -> O) -> O {
+	pub fn with_tag<O>(
+		&mut self,
+		tag: impl Into<ParserTag>,
+		f: impl FnOnce(&mut Self) -> O
+	) -> O {
 		self.with_tags([tag.into()], f)
 	}
 

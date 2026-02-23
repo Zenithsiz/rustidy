@@ -62,7 +62,12 @@ pub struct MethodCallExpression {
 struct MethodCallExpressionFmt;
 
 impl Format<WhitespaceConfig, ()> for MethodCallExpression {
-	fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: WhitespaceConfig, _args: ()) -> FormatOutput {
+	fn format(
+		&mut self,
+		ctx: &mut rustidy_format::Context,
+		prefix_ws: WhitespaceConfig,
+		_args: ()
+	) -> FormatOutput {
 		let output = self
 			.format(ctx, prefix_ws, MethodCallExpressionFmt);
 

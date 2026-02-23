@@ -59,7 +59,10 @@ pub fn derive_print(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
 	self::try_derive(input, print::derive)
 }
 
-fn try_derive(input: proc_macro::TokenStream, f: impl FnOnce(proc_macro::TokenStream) -> Result<proc_macro::TokenStream, AppError> + UnwindSafe,) -> proc_macro::TokenStream {
+fn try_derive(
+	input: proc_macro::TokenStream,
+	f: impl FnOnce(proc_macro::TokenStream) -> Result<proc_macro::TokenStream, AppError> + UnwindSafe,
+) -> proc_macro::TokenStream {
 	std::panic::catch_unwind(move || f(input))
 		.map_err(|payload| app_error!("Derive macro panicked: {payload:?}"))
 		.flatten()

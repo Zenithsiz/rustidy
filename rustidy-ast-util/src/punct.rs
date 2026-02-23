@@ -284,7 +284,10 @@ impl<T, P> PunctuatedTrailing<T, P> {
 	}
 
 	/// Sorts the values in this punctuated by a key
-	pub fn sort_values_by_key(&mut self, mut f: impl for<'a> FnMut<(&'a T, Option<&'a P>), Output: Ord>)
+	pub fn sort_values_by_key(
+		&mut self,
+		mut f: impl for<'a> FnMut<(&'a T, Option<&'a P>), Output: Ord>
+	)
 	where
 		P: Default
 	{
@@ -405,7 +408,12 @@ pub struct FmtArgs<TA, PA> {
 }
 
 #[must_use]
-pub const fn fmt_with<TA, PA>(value: WhitespaceConfig, punct: WhitespaceConfig, value_args: TA, punct_args: PA,) -> FmtArgs<TA, PA> {
+pub const fn fmt_with<TA, PA>(
+	value: WhitespaceConfig,
+	punct: WhitespaceConfig,
+	value_args: TA,
+	punct_args: PA,
+) -> FmtArgs<TA, PA> {
 	FmtArgs {
 		value_prefix_ws: value,
 		punct_prefix_ws: punct,

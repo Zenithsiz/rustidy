@@ -45,7 +45,12 @@ where
 	R: Format<RPrefixWs, RArgs>,
 	// TODO: Not need this and get 2 copies of the arguments for empty and non-empty.
 	TArgs: Clone, {
-	fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: LPrefixWs, args: FmtArgs<TPrefixWs, RPrefixWs, LArgs, TArgs, RArgs>,) -> FormatOutput {
+	fn format(
+		&mut self,
+		ctx: &mut rustidy_format::Context,
+		prefix_ws: LPrefixWs,
+		args: FmtArgs<TPrefixWs, RPrefixWs, LArgs, TArgs, RArgs>,
+	) -> FormatOutput {
 		// TODO: Should we handle the case of the prefix being empty and needing to
 		//       pass the prefix whitespace along?
 		let mut output = ctx
@@ -175,7 +180,12 @@ pub const fn fmt_indent_if_non_blank() -> FmtArgs<WhitespaceConfig, WhitespaceCo
 pub struct FmtRemoveWith<TArgs>(pub TArgs);
 
 impl<T: Format<WhitespaceConfig, TArgs>, L: Format<WhitespaceConfig, ()>, R: Format<WhitespaceConfig, ()>, TArgs> Format<WhitespaceConfig, FmtRemoveWith<TArgs>> for Delimited<T, L, R> {
-	fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: WhitespaceConfig, args: FmtRemoveWith<TArgs>) -> FormatOutput {
+	fn format(
+		&mut self,
+		ctx: &mut rustidy_format::Context,
+		prefix_ws: WhitespaceConfig,
+		args: FmtRemoveWith<TArgs>
+	) -> FormatOutput {
 		#[rustidy::config(max_chain_len = 100)]
 		FormatOutput::from([
 			ctx.format(&mut self.prefix, prefix_ws),
@@ -188,7 +198,12 @@ impl<T: Format<WhitespaceConfig, TArgs>, L: Format<WhitespaceConfig, ()>, R: For
 pub struct FmtRemove;
 
 impl<T: Format<WhitespaceConfig, ()>, L: Format<WhitespaceConfig, ()>, R: Format<WhitespaceConfig, ()>> Format<WhitespaceConfig, FmtRemove> for Delimited<T, L, R> {
-	fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: WhitespaceConfig, _args: FmtRemove) -> FormatOutput {
+	fn format(
+		&mut self,
+		ctx: &mut rustidy_format::Context,
+		prefix_ws: WhitespaceConfig,
+		_args: FmtRemove
+	) -> FormatOutput {
 		self.format(ctx, prefix_ws, FmtRemoveWith(()))
 	}
 }
@@ -204,7 +219,11 @@ pub struct FmtArgsSingleOrIndentIfNonBlank<TArgs> {
 /// Formats a delimited with [`fmt_single_if_non_blank`] if under or equal to
 /// `max_len`, otherwise formats with [`fmt_indent_if_non_blank`].
 #[must_use]
-pub const fn fmt_single_or_indent_if_non_blank<TArgs>(max_len: usize, value_args_single: TArgs, value_args_indent: TArgs) -> FmtArgsSingleOrIndentIfNonBlank<TArgs> {
+pub const fn fmt_single_or_indent_if_non_blank<TArgs>(
+	max_len: usize,
+	value_args_single: TArgs,
+	value_args_indent: TArgs
+) -> FmtArgsSingleOrIndentIfNonBlank<TArgs> {
 	FmtArgsSingleOrIndentIfNonBlank { max_len, value_args_single, value_args_indent }
 }
 
@@ -214,7 +233,12 @@ where
 	T: Format<WhitespaceConfig, TArgs>,
 	R: Format<WhitespaceConfig, ()>,
 	TArgs: Clone {
-	fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: WhitespaceConfig, args: FmtArgsSingleOrIndentIfNonBlank<TArgs>) -> FormatOutput {
+	fn format(
+		&mut self,
+		ctx: &mut rustidy_format::Context,
+		prefix_ws: WhitespaceConfig,
+		args: FmtArgsSingleOrIndentIfNonBlank<TArgs>
+	) -> FormatOutput {
 		let output = self
 			.format(ctx, prefix_ws, self::fmt_single_if_non_blank_with_value(args.value_args_single));
 
@@ -237,7 +261,11 @@ pub struct FmtArgsRemoveOrIndentIfNonBlank<TArgs> {
 /// Formats a delimited with [`fmt_remove_if_non_blank`] if under or equal to
 /// `max_len`, otherwise formats with [`fmt_indent_if_non_blank`].
 #[must_use]
-pub const fn fmt_remove_or_indent_if_non_blank<TArgs>(max_len: usize, value_args_remove: TArgs, value_args_indent: TArgs) -> FmtArgsRemoveOrIndentIfNonBlank<TArgs> {
+pub const fn fmt_remove_or_indent_if_non_blank<TArgs>(
+	max_len: usize,
+	value_args_remove: TArgs,
+	value_args_indent: TArgs
+) -> FmtArgsRemoveOrIndentIfNonBlank<TArgs> {
 	FmtArgsRemoveOrIndentIfNonBlank { max_len, value_args_remove, value_args_indent }
 }
 
@@ -247,7 +275,12 @@ where
 	T: Format<WhitespaceConfig, TArgs>,
 	R: Format<WhitespaceConfig, ()>,
 	TArgs: Clone {
-	fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: WhitespaceConfig, args: FmtArgsRemoveOrIndentIfNonBlank<TArgs>) -> FormatOutput {
+	fn format(
+		&mut self,
+		ctx: &mut rustidy_format::Context,
+		prefix_ws: WhitespaceConfig,
+		args: FmtArgsRemoveOrIndentIfNonBlank<TArgs>
+	) -> FormatOutput {
 		let output = self
 			.format(ctx, prefix_ws, FmtRemoveWith(args.value_args_remove));
 

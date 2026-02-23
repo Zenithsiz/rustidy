@@ -338,7 +338,10 @@ impl ParsePeeked<ByteLiteral> for LiteralPattern {
 }
 
 impl ParsePeeked<ByteStringLiteral> for LiteralPattern {
-	fn parse_from_with_peeked(_parser: &mut rustidy_parse::Parser, parsed: ByteStringLiteral) -> Result<Self, Self::Error> {
+	fn parse_from_with_peeked(
+		_parser: &mut rustidy_parse::Parser,
+		parsed: ByteStringLiteral
+	) -> Result<Self, Self::Error> {
 		Ok(Self {
 			minus: None,
 			literal: LiteralExpression::ByteString(parsed),
@@ -362,7 +365,10 @@ pub struct IdentifierPattern {
 }
 
 impl ParsePeeked<(Option<token::Ref>, Option<token::Mut>, Identifier, token::At)> for IdentifierPattern {
-	fn parse_from_with_peeked(parser: &mut rustidy_parse::Parser, (ref_, mut_, ident, at): (Option<token::Ref>, Option<token::Mut>, Identifier, token::At),) -> Result<Self, Self::Error> {
+	fn parse_from_with_peeked(
+		parser: &mut rustidy_parse::Parser,
+		(ref_, mut_, ident, at): (Option<token::Ref>, Option<token::Mut>, Identifier, token::At),
+	) -> Result<Self, Self::Error> {
 		let pat = parser
 			.parse::<PatternNoTopAlt>()
 			.map_err(Self::Error::Pat)?;

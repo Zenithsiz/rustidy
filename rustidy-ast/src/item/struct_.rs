@@ -142,7 +142,12 @@ pub struct TupleStruct {
 }
 
 impl TupleStruct {
-	pub fn format_fields(fields: &mut Parenthesized<Option<TupleFields>>, ctx: &mut rustidy_format::Context, prefix_ws: WhitespaceConfig, _args: ()) -> FormatOutput {
+	pub fn format_fields(
+		fields: &mut Parenthesized<Option<TupleFields>>,
+		ctx: &mut rustidy_format::Context,
+		prefix_ws: WhitespaceConfig,
+		_args: ()
+	) -> FormatOutput {
 		if let Some(fields) = &mut fields.value {
 			fields.0.trailing = None;
 		}

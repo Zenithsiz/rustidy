@@ -40,14 +40,24 @@ impl<T> WithOuterAttributes<T> {
 }
 
 impl<T: Format<WhitespaceConfig, ()>> Format<WhitespaceConfig, ()> for WithOuterAttributes<T> {
-	fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: WhitespaceConfig, _args: ()) -> FormatOutput {
+	fn format(
+		&mut self,
+		ctx: &mut rustidy_format::Context,
+		prefix_ws: WhitespaceConfig,
+		_args: ()
+	) -> FormatOutput {
 		self
 			.format(ctx, prefix_ws, FmtArgs { inner_args: () })
 	}
 }
 
 impl<A, T: Format<WhitespaceConfig, A>> Format<WhitespaceConfig, FmtArgs<A>> for WithOuterAttributes<T> {
-	fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: WhitespaceConfig, args: FmtArgs<A>,) -> FormatOutput {
+	fn format(
+		&mut self,
+		ctx: &mut rustidy_format::Context,
+		prefix_ws: WhitespaceConfig,
+		args: FmtArgs<A>,
+	) -> FormatOutput {
 		let mut output = FormatOutput::default();
 
 		let mut is_after_newline = false;
@@ -138,14 +148,24 @@ where
 pub struct BracedWithInnerAttributes<T>(Braced<WithInnerAttributes<T>>);
 
 impl<T: Format<WhitespaceConfig, ()>> Format<WhitespaceConfig, ()> for BracedWithInnerAttributes<T> {
-	fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: WhitespaceConfig, _args: ()) -> FormatOutput {
+	fn format(
+		&mut self,
+		ctx: &mut rustidy_format::Context,
+		prefix_ws: WhitespaceConfig,
+		_args: ()
+	) -> FormatOutput {
 		self
 			.format(ctx, prefix_ws, FmtArgs { inner_args: () })
 	}
 }
 
 impl<T: Format<WhitespaceConfig, A>, A: Clone> Format<WhitespaceConfig, FmtArgs<A>> for BracedWithInnerAttributes<T> {
-	fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: WhitespaceConfig, args: FmtArgs<A>,) -> FormatOutput {
+	fn format(
+		&mut self,
+		ctx: &mut rustidy_format::Context,
+		prefix_ws: WhitespaceConfig,
+		args: FmtArgs<A>,
+	) -> FormatOutput {
 		let mut ctx = ctx.sub_context();
 		for attr in &self.0.value.attrs {
 			if let Some(attr) = attr.try_as_attr_ref() && let Err(err) = super::update_from_attr(&attr.attr.value, &mut ctx) {
@@ -169,7 +189,12 @@ struct WithInnerAttributes<T> {
 }
 
 impl<T: Format<WhitespaceConfig, A>, A> Format<WhitespaceConfig, FmtArgs<A>> for WithInnerAttributes<T> {
-	fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: WhitespaceConfig, args: FmtArgs<A>) -> FormatOutput {
+	fn format(
+		&mut self,
+		ctx: &mut rustidy_format::Context,
+		prefix_ws: WhitespaceConfig,
+		args: FmtArgs<A>
+	) -> FormatOutput {
 		let mut output = FormatOutput::default();
 
 		let mut is_after_newline = false;

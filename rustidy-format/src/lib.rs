@@ -39,7 +39,11 @@ pub trait Formattable {
 	/// - `Ok()` if the prefix whitespace was found.
 	/// - `Err(Break(()))` if no prefix whitespace existed and the type wasn't empty
 	/// - `Err(Continue(()))` if no prefix whitespace existed but the type was empty.
-	fn with_prefix_ws<O>(&mut self, ctx: &mut Context, f: &mut impl FnMut(&mut Whitespace,&mut Context) -> O,) -> Result<O, ControlFlow<()>>;
+	fn with_prefix_ws<O>(
+		&mut self,
+		ctx: &mut Context,
+		f: &mut impl FnMut(&mut Whitespace,&mut Context) -> O,
+	) -> Result<O, ControlFlow<()>>;
 
 	/// Returns if the prefix whitespace is pure.
 	fn prefix_ws_is_pure(&mut self, ctx: &mut Context) -> Option<bool> {
@@ -71,7 +75,12 @@ pub trait Formattable {
 	/// - `Break()` if `f` returned `Break()`
 	/// - `Continue(true)` if this type was empty.
 	/// - `Continue(false)` if this type was non-empty.
-	fn with_strings<O>(&mut self, ctx: &mut Context, exclude_prefix_ws: bool, f: &mut impl FnMut(&mut AstStr,&mut Context) -> ControlFlow<O>,) -> ControlFlow<O, bool>;
+	fn with_strings<O>(
+		&mut self,
+		ctx: &mut Context,
+		exclude_prefix_ws: bool,
+		f: &mut impl FnMut(&mut AstStr,&mut Context) -> ControlFlow<O>,
+	) -> ControlFlow<O, bool>;
 
 	/// Returns the formatting output for this type, without formatting it.
 	fn format_output(&mut self, ctx: &mut Context) -> FormatOutput;
@@ -185,15 +194,29 @@ impl Default for FormatOutput {
 pub trait Format<PrefixWs, Args>: Formattable {
 	/// Formats this type.
 	// TODO: Rename this to be less confusing with `Context::format`?
-	fn format(&mut self, ctx: &mut Context, prefix_ws: PrefixWs, args: Args) -> FormatOutput;
+	fn format(
+		&mut self,
+		ctx: &mut Context,
+		prefix_ws: PrefixWs,
+		args: Args
+	) -> FormatOutput;
 }
 
 impl<T: Formattable> Formattable for &'_ mut T {
-	fn with_prefix_ws<O>(&mut self, ctx: &mut Context, f: &mut impl FnMut(&mut Whitespace,&mut Context) -> O,) -> Result<O, ControlFlow<()>> {
+	fn with_prefix_ws<O>(
+		&mut self,
+		ctx: &mut Context,
+		f: &mut impl FnMut(&mut Whitespace,&mut Context) -> O,
+	) -> Result<O, ControlFlow<()>> {
 		(**self).with_prefix_ws(ctx, f)
 	}
 
-	fn with_strings<O>(&mut self, ctx: &mut Context, exclude_prefix_ws: bool, f: &mut impl FnMut(&mut AstStr,&mut Context) -> ControlFlow<O>,) -> ControlFlow<O, bool> {
+	fn with_strings<O>(
+		&mut self,
+		ctx: &mut Context,
+		exclude_prefix_ws: bool,
+		f: &mut impl FnMut(&mut AstStr,&mut Context) -> ControlFlow<O>,
+	) -> ControlFlow<O, bool> {
 		(**self).with_strings(ctx, exclude_prefix_ws, f)
 	}
 
@@ -203,17 +226,31 @@ impl<T: Formattable> Formattable for &'_ mut T {
 }
 
 impl<T: Format<PrefixWs, Args>, PrefixWs, Args> Format<PrefixWs, Args> for &'_ mut T {
-	fn format(&mut self, ctx: &mut Context, prefix_ws: PrefixWs, args: Args) -> FormatOutput {
+	fn format(
+		&mut self,
+		ctx: &mut Context,
+		prefix_ws: PrefixWs,
+		args: Args
+	) -> FormatOutput {
 		(**self).format(ctx, prefix_ws, args)
 	}
 }
 
 impl<T: Formattable> Formattable for Box<T> {
-	fn with_prefix_ws<O>(&mut self, ctx: &mut Context, f: &mut impl FnMut(&mut Whitespace,&mut Context) -> O,) -> Result<O, ControlFlow<()>> {
+	fn with_prefix_ws<O>(
+		&mut self,
+		ctx: &mut Context,
+		f: &mut impl FnMut(&mut Whitespace,&mut Context) -> O,
+	) -> Result<O, ControlFlow<()>> {
 		(**self).with_prefix_ws(ctx, f)
 	}
 
-	fn with_strings<O>(&mut self, ctx: &mut Context, exclude_prefix_ws: bool, f: &mut impl FnMut(&mut AstStr,&mut Context) -> ControlFlow<O>,) -> ControlFlow<O, bool> {
+	fn with_strings<O>(
+		&mut self,
+		ctx: &mut Context,
+		exclude_prefix_ws: bool,
+		f: &mut impl FnMut(&mut AstStr,&mut Context) -> ControlFlow<O>,
+	) -> ControlFlow<O, bool> {
 		(**self).with_strings(ctx, exclude_prefix_ws, f)
 	}
 
@@ -223,20 +260,34 @@ impl<T: Formattable> Formattable for Box<T> {
 }
 
 impl<T: Format<PrefixWs, Args>, PrefixWs, Args> Format<PrefixWs, Args> for Box<T> {
-	fn format(&mut self, ctx: &mut Context, prefix_ws: PrefixWs, args: Args) -> FormatOutput {
+	fn format(
+		&mut self,
+		ctx: &mut Context,
+		prefix_ws: PrefixWs,
+		args: Args
+	) -> FormatOutput {
 		(**self).format(ctx, prefix_ws, args)
 	}
 }
 
 impl<T: Formattable> Formattable for Option<T> {
-	fn with_prefix_ws<O>(&mut self, ctx: &mut Context, f: &mut impl FnMut(&mut Whitespace,&mut Context) -> O,) -> Result<O, ControlFlow<()>> {
+	fn with_prefix_ws<O>(
+		&mut self,
+		ctx: &mut Context,
+		f: &mut impl FnMut(&mut Whitespace,&mut Context) -> O,
+	) -> Result<O, ControlFlow<()>> {
 		match self {
 			Self::Some(value) => value.with_prefix_ws(ctx, f),
 			Self::None => Err(ControlFlow::Continue(())),
 		}
 	}
 
-	fn with_strings<O>(&mut self, ctx: &mut Context, exclude_prefix_ws: bool, f: &mut impl FnMut(&mut AstStr,&mut Context) -> ControlFlow<O>,) -> ControlFlow<O, bool> {
+	fn with_strings<O>(
+		&mut self,
+		ctx: &mut Context,
+		exclude_prefix_ws: bool,
+		f: &mut impl FnMut(&mut AstStr,&mut Context) -> ControlFlow<O>,
+	) -> ControlFlow<O, bool> {
 		match self {
 			Some(value) => value.with_strings(ctx, exclude_prefix_ws, f),
 			None => ControlFlow::Continue(true),
@@ -252,7 +303,12 @@ impl<T: Formattable> Formattable for Option<T> {
 }
 
 impl<T: Format<PrefixWs, Args>, PrefixWs, Args> Format<PrefixWs, Args> for Option<T> {
-	fn format(&mut self, ctx: &mut Context, prefix_ws: PrefixWs, args: Args) -> FormatOutput {
+	fn format(
+		&mut self,
+		ctx: &mut Context,
+		prefix_ws: PrefixWs,
+		args: Args
+	) -> FormatOutput {
 		match self {
 			Some(value) => value.format(ctx, prefix_ws, args),
 			_ => FormatOutput::default(),
@@ -261,11 +317,20 @@ impl<T: Format<PrefixWs, Args>, PrefixWs, Args> Format<PrefixWs, Args> for Optio
 }
 
 impl Formattable for ! {
-	fn with_prefix_ws<O>(&mut self, _ctx: &mut Context, _f: &mut impl FnMut(&mut Whitespace,&mut Context) -> O,) -> Result<O, ControlFlow<()>> {
+	fn with_prefix_ws<O>(
+		&mut self,
+		_ctx: &mut Context,
+		_f: &mut impl FnMut(&mut Whitespace,&mut Context) -> O,
+	) -> Result<O, ControlFlow<()>> {
 		*self
 	}
 
-	fn with_strings<O>(&mut self, _ctx: &mut Context, _exclude_prefix_ws: bool, _f: &mut impl FnMut(&mut AstStr,&mut Context) -> ControlFlow<O>,) -> ControlFlow<O, bool> {
+	fn with_strings<O>(
+		&mut self,
+		_ctx: &mut Context,
+		_exclude_prefix_ws: bool,
+		_f: &mut impl FnMut(&mut AstStr,&mut Context) -> ControlFlow<O>,
+	) -> ControlFlow<O, bool> {
 		*self
 	}
 
@@ -275,17 +340,31 @@ impl Formattable for ! {
 }
 
 impl<PrefixWs, Args> Format<PrefixWs, Args> for ! {
-	fn format(&mut self, _ctx: &mut Context, _prefix_ws: PrefixWs, _args: Args) -> FormatOutput {
+	fn format(
+		&mut self,
+		_ctx: &mut Context,
+		_prefix_ws: PrefixWs,
+		_args: Args
+	) -> FormatOutput {
 		*self
 	}
 }
 
 impl<T> Formattable for PhantomData<T> {
-	fn with_prefix_ws<O>(&mut self, _ctx: &mut Context, _f: &mut impl FnMut(&mut Whitespace,&mut Context) -> O,) -> Result<O, ControlFlow<()>> {
+	fn with_prefix_ws<O>(
+		&mut self,
+		_ctx: &mut Context,
+		_f: &mut impl FnMut(&mut Whitespace,&mut Context) -> O,
+	) -> Result<O, ControlFlow<()>> {
 		Err(ControlFlow::Continue(()))
 	}
 
-	fn with_strings<O>(&mut self, _ctx: &mut Context, _exclude_prefix_ws: bool, _f: &mut impl FnMut(&mut AstStr,&mut Context) -> ControlFlow<O>,) -> ControlFlow<O, bool> {
+	fn with_strings<O>(
+		&mut self,
+		_ctx: &mut Context,
+		_exclude_prefix_ws: bool,
+		_f: &mut impl FnMut(&mut AstStr,&mut Context) -> ControlFlow<O>,
+	) -> ControlFlow<O, bool> {
 		ControlFlow::Continue(true)
 	}
 
@@ -301,11 +380,20 @@ impl<T> Format<(), ()> for PhantomData<T> {
 }
 
 impl Formattable for () {
-	fn with_prefix_ws<O>(&mut self, _ctx: &mut Context, _f: &mut impl FnMut(&mut Whitespace,&mut Context) -> O,) -> Result<O, ControlFlow<()>> {
+	fn with_prefix_ws<O>(
+		&mut self,
+		_ctx: &mut Context,
+		_f: &mut impl FnMut(&mut Whitespace,&mut Context) -> O,
+	) -> Result<O, ControlFlow<()>> {
 		Err(ControlFlow::Continue(()))
 	}
 
-	fn with_strings<O>(&mut self, _ctx: &mut Context, _exclude_prefix_ws: bool, _f: &mut impl FnMut(&mut AstStr,&mut Context) -> ControlFlow<O>,) -> ControlFlow<O, bool> {
+	fn with_strings<O>(
+		&mut self,
+		_ctx: &mut Context,
+		_exclude_prefix_ws: bool,
+		_f: &mut impl FnMut(&mut AstStr,&mut Context) -> ControlFlow<O>,
+	) -> ControlFlow<O, bool> {
 		ControlFlow::Continue(true)
 	}
 
@@ -373,14 +461,23 @@ tuple_impl! { 2, T0, T1 }
 tuple_impl! { 3, T0, T1, T2 }
 
 impl Formattable for AstStr {
-	fn with_prefix_ws<O>(&mut self, _ctx: &mut Context, _f: &mut impl FnMut(&mut Whitespace,&mut Context) -> O,) -> Result<O, ControlFlow<()>> {
+	fn with_prefix_ws<O>(
+		&mut self,
+		_ctx: &mut Context,
+		_f: &mut impl FnMut(&mut Whitespace,&mut Context) -> O,
+	) -> Result<O, ControlFlow<()>> {
 		match self.is_empty() {
 			true => Err(ControlFlow::Continue(())),
 			false => Err(ControlFlow::Break(())),
 		}
 	}
 
-	fn with_strings<O>(&mut self, ctx: &mut Context, _exclude_prefix_ws: bool, f: &mut impl FnMut(&mut Self,&mut Context) -> ControlFlow<O>,) -> ControlFlow<O, bool> {
+	fn with_strings<O>(
+		&mut self,
+		ctx: &mut Context,
+		_exclude_prefix_ws: bool,
+		f: &mut impl FnMut(&mut Self,&mut Context) -> ControlFlow<O>,
+	) -> ControlFlow<O, bool> {
 		f(self, ctx)?;
 
 		ControlFlow::Continue(self.is_empty())
@@ -399,11 +496,20 @@ impl Formattable for AstStr {
 }
 
 impl<T: ArenaData + Formattable> Formattable for ArenaIdx<T> {
-	fn with_prefix_ws<O>(&mut self, ctx: &mut Context, f: &mut impl FnMut(&mut Whitespace,&mut Context) -> O,) -> Result<O, ControlFlow<()>> {
+	fn with_prefix_ws<O>(
+		&mut self,
+		ctx: &mut Context,
+		f: &mut impl FnMut(&mut Whitespace,&mut Context) -> O,
+	) -> Result<O, ControlFlow<()>> {
 		(**self).with_prefix_ws(ctx, f)
 	}
 
-	fn with_strings<O>(&mut self, ctx: &mut Context, exclude_prefix_ws: bool, f: &mut impl FnMut(&mut AstStr,&mut Context) -> ControlFlow<O>,) -> ControlFlow<O, bool> {
+	fn with_strings<O>(
+		&mut self,
+		ctx: &mut Context,
+		exclude_prefix_ws: bool,
+		f: &mut impl FnMut(&mut AstStr,&mut Context) -> ControlFlow<O>,
+	) -> ControlFlow<O, bool> {
 		(**self).with_strings(ctx, exclude_prefix_ws, f)
 	}
 
@@ -413,7 +519,12 @@ impl<T: ArenaData + Formattable> Formattable for ArenaIdx<T> {
 }
 
 impl<T: ArenaData + Format<PrefixWs, Args>, PrefixWs, Args> Format<PrefixWs, Args> for ArenaIdx<T> {
-	fn format(&mut self, ctx: &mut Context, prefix_ws: PrefixWs, args: Args) -> FormatOutput {
+	fn format(
+		&mut self,
+		ctx: &mut Context,
+		prefix_ws: PrefixWs,
+		args: Args
+	) -> FormatOutput {
 		(**self).format(ctx, prefix_ws, args)
 	}
 }
@@ -499,12 +610,20 @@ impl<'a> Context<'a> {
 
 	/// Runs `f` with one less indentation level if `pred` is true, otherwise
 	/// runs it with the current indent
-	pub fn without_indent_if<O>(&mut self, pred: bool, f: impl for<'b> FnOnce(&'b mut Self) -> O) -> O {
+	pub fn without_indent_if<O>(
+		&mut self,
+		pred: bool,
+		f: impl for<'b> FnOnce(&'b mut Self) -> O
+	) -> O {
 		self.with_indent_offset_if(-1, pred, f)
 	}
 
 	/// Runs `f` with an indentation offset of `offset`
-	pub fn with_indent_offset<O>(&mut self, offset: i16, f: impl for<'b> FnOnce(&'b mut Self) -> O) -> O {
+	pub fn with_indent_offset<O>(
+		&mut self,
+		offset: i16,
+		f: impl for<'b> FnOnce(&'b mut Self) -> O
+	) -> O {
 		let prev_depth = self.indent_depth;
 		self.indent_depth = prev_depth
 			.saturating_add_signed(isize::from(offset));
@@ -514,7 +633,12 @@ impl<'a> Context<'a> {
 	}
 
 	/// Runs `f` with an indentation offset of `offset` if `pred` is true
-	pub fn with_indent_offset_if<O>(&mut self, offset: i16, pred: bool, f: impl for<'b> FnOnce(&'b mut Self) -> O,) -> O {
+	pub fn with_indent_offset_if<O>(
+		&mut self,
+		offset: i16,
+		pred: bool,
+		f: impl for<'b> FnOnce(&'b mut Self) -> O,
+	) -> O {
 		match pred {
 			true => self.with_indent_offset(offset, f),
 			false => f(self),
@@ -566,7 +690,11 @@ impl<'a> Context<'a> {
 	}
 
 	/// Calls `f` with tags `tags` added to this context
-	pub fn with_tags<O>(&mut self, tags: impl IntoIterator<Item = FormatTag>, f: impl FnOnce(&mut Self) -> O) -> O {
+	pub fn with_tags<O>(
+		&mut self,
+		tags: impl IntoIterator<Item = FormatTag>,
+		f: impl FnOnce(&mut Self) -> O
+	) -> O {
 		let tags_len = self.tags.len();
 
 		for tag in tags {
@@ -581,12 +709,21 @@ impl<'a> Context<'a> {
 	}
 
 	/// Calls `f` with tag `tag` added to this context
-	pub fn with_tag<O>(&mut self, tag: impl Into<FormatTag>, f: impl FnOnce(&mut Self) -> O) -> O {
+	pub fn with_tag<O>(
+		&mut self,
+		tag: impl Into<FormatTag>,
+		f: impl FnOnce(&mut Self) -> O
+	) -> O {
 		self.with_tags([tag.into()], f)
 	}
 
 	/// Calls `f` with tag `tag` added to this context if `pred` is true
-	pub fn with_tag_if<O>(&mut self, pred: bool, tag: impl Into<FormatTag>, f: impl FnOnce(&mut Self) -> O) -> O {
+	pub fn with_tag_if<O>(
+		&mut self,
+		pred: bool,
+		tag: impl Into<FormatTag>,
+		f: impl FnOnce(&mut Self) -> O
+	) -> O {
 		match pred {
 			true => self.with_tag(tag, f),
 			false => f(self),

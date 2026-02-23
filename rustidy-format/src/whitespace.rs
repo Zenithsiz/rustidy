@@ -80,11 +80,20 @@ pub impl Whitespace {
 }
 
 impl Formattable for Whitespace {
-	fn with_prefix_ws<O>(&mut self, ctx: &mut crate::Context, f: &mut impl FnMut(&mut Self,&mut crate::Context) -> O,) -> Result<O, ControlFlow<()>> {
+	fn with_prefix_ws<O>(
+		&mut self,
+		ctx: &mut crate::Context,
+		f: &mut impl FnMut(&mut Self,&mut crate::Context) -> O,
+	) -> Result<O, ControlFlow<()>> {
 		Ok(f(self, ctx))
 	}
 
-	fn with_strings<O>(&mut self, ctx: &mut crate::Context, exclude_prefix_ws: bool, f: &mut impl FnMut(&mut AstStr,&mut crate::Context) -> ControlFlow<O>,) -> ControlFlow<O, bool> {
+	fn with_strings<O>(
+		&mut self,
+		ctx: &mut crate::Context,
+		exclude_prefix_ws: bool,
+		f: &mut impl FnMut(&mut AstStr,&mut crate::Context) -> ControlFlow<O>,
+	) -> ControlFlow<O, bool> {
 		let is_empty = self.0.first.0.is_empty() && self.0.rest.is_empty();
 
 		if !exclude_prefix_ws {
@@ -127,7 +136,12 @@ impl Formattable for Whitespace {
 //       that skips whitespace during parsing instead
 //       does it at the type level.
 impl Format<(), ()> for Whitespace {
-	fn format(&mut self, _ctx: &mut crate::Context, _prefix_ws: (), _args: ()) -> FormatOutput {
+	fn format(
+		&mut self,
+		_ctx: &mut crate::Context,
+		_prefix_ws: (),
+		_args: ()
+	) -> FormatOutput {
 		if !self.is_empty() {
 			tracing::warn!("Whitespace was not empty");
 		}
@@ -136,7 +150,12 @@ impl Format<(), ()> for Whitespace {
 }
 
 impl Format<WhitespaceConfig, ()> for Whitespace {
-	fn format(&mut self, ctx: &mut crate::Context, prefix_ws: WhitespaceConfig, _args: ()) -> FormatOutput {
+	fn format(
+		&mut self,
+		ctx: &mut crate::Context,
+		prefix_ws: WhitespaceConfig,
+		_args: ()
+	) -> FormatOutput {
 		if let Some(format) = prefix_ws.format {
 			self::format(self, ctx, format);
 		}
@@ -168,7 +187,11 @@ pub enum WhitespaceFormatKind {
 impl WhitespaceFormatKind {
 	/// Returns the indentation string, with a newline *before*
 	// TODO: Should we be checking for multiple newlines?
-	fn indent_str_nl(ctx: &mut crate::Context, cur_str: &AstStr, after_newline: bool) -> AstStrRepr {
+	fn indent_str_nl(
+		ctx: &mut crate::Context,
+		cur_str: &AstStr,
+		after_newline: bool
+	) -> AstStrRepr {
 		let min_newlines = ctx.config().min_empty_lines;
 		let max_newlines = ctx.config().max_empty_lines;
 		let (min_newlines, max_newlines) = match after_newline {
@@ -191,7 +214,13 @@ impl WhitespaceFormatKind {
 	}
 
 	/// Returns the prefix string
-	fn prefix_str(self, ctx: &mut crate::Context, cur_str: &AstStr, is_last: bool, after_newline: bool) -> AstStrRepr {
+	fn prefix_str(
+		self,
+		ctx: &mut crate::Context,
+		cur_str: &AstStr,
+		is_last: bool,
+		after_newline: bool
+	) -> AstStrRepr {
 		match self {
 			Self::Remove => "".into(),
 			Self::Spaces {
@@ -209,7 +238,12 @@ impl WhitespaceFormatKind {
 	}
 
 	/// Returns the string after a newline
-	fn after_newline_str(self, ctx: &mut crate::Context, cur_str: &AstStr, is_last: bool) -> AstStrRepr {
+	fn after_newline_str(
+		self,
+		ctx: &mut crate::Context,
+		cur_str: &AstStr,
+		is_last: bool
+	) -> AstStrRepr {
 		match self {
 			Self::Remove | Self::Spaces {
 				..
@@ -226,7 +260,12 @@ impl WhitespaceFormatKind {
 	}
 
 	/// Returns the normal string
-	fn normal_str(self, ctx: &mut crate::Context, cur_str: &AstStr, is_last: bool) -> AstStrRepr {
+	fn normal_str(
+		self,
+		ctx: &mut crate::Context,
+		cur_str: &AstStr,
+		is_last: bool
+	) -> AstStrRepr {
 		match self {
 			Self::Remove => "".into(),
 			Self::Spaces {
@@ -245,7 +284,11 @@ impl WhitespaceFormatKind {
 }
 
 #[doc(hidden)]
-pub fn format(ws: &mut Whitespace, ctx: &mut crate::Context, kind: WhitespaceFormatKind) {
+pub fn format(
+	ws: &mut Whitespace,
+	ctx: &mut crate::Context,
+	kind: WhitespaceFormatKind
+) {
 	// Note: If we're whitespace after a line doc comment, then we have a newline
 	//       prior to us that we need to take into account.
 	// TODO: We should do this even when we're preserving the whitespace

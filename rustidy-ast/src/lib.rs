@@ -68,7 +68,12 @@ pub struct Crate {
 }
 
 impl Format<(), ()> for Crate {
-	fn format(&mut self, ctx: &mut rustidy_format::Context, _prefix_ws: (), _args: ()) -> FormatOutput {
+	fn format(
+		&mut self,
+		ctx: &mut rustidy_format::Context,
+		_prefix_ws: (),
+		_args: ()
+	) -> FormatOutput {
 		let mut ctx = ctx.sub_context();
 		for attr in &self.inner_attrs {
 			if let Some(attr) = attr.try_as_attr_ref() && let Err(err) = attr::update_from_attr(&attr.attr.value, &mut ctx) {

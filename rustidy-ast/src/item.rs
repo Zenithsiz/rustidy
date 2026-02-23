@@ -114,7 +114,11 @@ impl Item {
 
 	// TODO: This needs to check for comments in the prefix whitespace.
 	#[expect(clippy::result_large_err, reason = "TODO")]
-	fn try_into_just_use_decl(self, ctx: &mut rustidy_format::Context, expected_vis: Option<&Visibility>,) -> Result<UseDeclaration, Self> {
+	fn try_into_just_use_decl(
+		self,
+		ctx: &mut rustidy_format::Context,
+		expected_vis: Option<&Visibility>,
+	) -> Result<UseDeclaration, Self> {
 		self.0
 			.try_take_map(|mut item| {
 				// Note: If no prefix whitespace exists, we can merge them anyway.

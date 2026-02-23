@@ -19,7 +19,13 @@ pub struct ArrayExpression(Bracketed<Option<ArrayElements>>);
 
 impl ArrayExpression {
 	/// Formats all `values` within a single-line.
-	fn format_single_line(prefix: &mut token::BracketOpen, values: &mut PunctuatedTrailing<Expression, token::Comma>, suffix: &mut token::BracketClose, ctx: &mut rustidy_format::Context, prefix_ws: WhitespaceConfig,) -> (FormatOutput, FormatOutput) {
+	fn format_single_line(
+		prefix: &mut token::BracketOpen,
+		values: &mut PunctuatedTrailing<Expression, token::Comma>,
+		suffix: &mut token::BracketClose,
+		ctx: &mut rustidy_format::Context,
+		prefix_ws: WhitespaceConfig,
+	) -> (FormatOutput, FormatOutput) {
 		let mut common_output = FormatOutput::default();
 		let mut single_line_output = FormatOutput::default();
 
@@ -53,7 +59,12 @@ impl ArrayExpression {
 }
 
 impl Format<WhitespaceConfig, ()> for ArrayExpression {
-	fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: WhitespaceConfig, _args: ()) -> FormatOutput {
+	fn format(
+		&mut self,
+		ctx: &mut rustidy_format::Context,
+		prefix_ws: WhitespaceConfig,
+		_args: ()
+	) -> FormatOutput {
 		match &mut self.0.value {
 			Some(ArrayElements::Punctuated(values)) => {
 				let (common_output, single_line_output) = Self::format_single_line(&mut self.0.prefix, values, &mut self.0.suffix, ctx, prefix_ws);

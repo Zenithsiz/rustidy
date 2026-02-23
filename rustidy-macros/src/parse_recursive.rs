@@ -586,7 +586,10 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 }
 
 /// Emits a transparent derive
-fn emit_transparent(attrs: &Attrs, root_conversion_impls: Option<&proc_macro2::TokenStream>,) -> Result<proc_macro::TokenStream, AppError> {
+fn emit_transparent(
+	attrs: &Attrs,
+	root_conversion_impls: Option<&proc_macro2::TokenStream>,
+) -> Result<proc_macro::TokenStream, AppError> {
 	let darling::ast::Data::Struct(fields) = &attrs.data else {
 		app_error::bail!("`#[parse_recursive(transparent)]` is only supported on structs");
 	};

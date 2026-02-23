@@ -9,7 +9,11 @@ use proc_macro2::Span;
 /// Creates new generics with an added trait bound of `path` on each variant of `item`
 ///
 /// If the item is not generic, no bounds are added.
-pub fn with_enum_bounds<V, F>(mut generics: syn::Generics, variants: &[V], create_bound: impl Fn(&V,&F) -> syn::WherePredicate,) -> syn::Generics
+pub fn with_enum_bounds<V, F>(
+	mut generics: syn::Generics,
+	variants: &[V],
+	create_bound: impl Fn(&V,&F) -> syn::WherePredicate,
+) -> syn::Generics
 where
 	V: AsRef<darling::ast::Fields<F>>,
 {
@@ -34,7 +38,11 @@ where
 /// Creates new generics with an added trait bound of `path` on each field of `item`
 ///
 /// If the item is not generic, no bounds are added.
-pub fn with_struct_bounds<F>(mut generics: syn::Generics, fields: &[F], create_bound: impl Fn(&F) -> syn::WherePredicate,) -> syn::Generics {
+pub fn with_struct_bounds<F>(
+	mut generics: syn::Generics,
+	fields: &[F],
+	create_bound: impl Fn(&F) -> syn::WherePredicate,
+) -> syn::Generics {
 	// If we have no generic parameters, just return them
 	if generics.params.is_empty() {
 		return generics;
@@ -52,7 +60,10 @@ pub fn with_struct_bounds<F>(mut generics: syn::Generics, fields: &[F], create_b
 /// Creates new generics with an added trait bound of `path` on each type the item holds.
 ///
 /// If the item is not generic, no bounds are added
-pub fn with_bounds<A, V, VF, F>(attrs: &A, create_bound: impl Fn(&syn::Type) -> syn::WherePredicate) -> syn::Generics
+pub fn with_bounds<A, V, VF, F>(
+	attrs: &A,
+	create_bound: impl Fn(&syn::Type) -> syn::WherePredicate
+) -> syn::Generics
 where
 	A: AsRef<syn::Generics> + AsRef<darling::ast::Data<V, F>>,
 	V: AsRef<darling::ast::Fields<VF>>,

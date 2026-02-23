@@ -8,7 +8,11 @@ use {
 };
 
 impl<T: Formattable> Formattable for Vec<T> {
-	fn with_prefix_ws<O>(&mut self, ctx: &mut Context, f: &mut impl FnMut(&mut rustidy_util::Whitespace,&mut Context) -> O,) -> Result<O, ControlFlow<()>> {
+	fn with_prefix_ws<O>(
+		&mut self,
+		ctx: &mut Context,
+		f: &mut impl FnMut(&mut rustidy_util::Whitespace,&mut Context) -> O,
+	) -> Result<O, ControlFlow<()>> {
 		for value in self {
 			match value.with_prefix_ws(ctx, f) {
 				Ok(output) => return Ok(output),
@@ -20,7 +24,12 @@ impl<T: Formattable> Formattable for Vec<T> {
 		Err(ControlFlow::Continue(()))
 	}
 
-	fn with_strings<O>(&mut self, ctx: &mut Context, mut exclude_prefix_ws: bool, f: &mut impl FnMut(&mut AstStr,&mut Context) -> ControlFlow<O>,) -> ControlFlow<O, bool> {
+	fn with_strings<O>(
+		&mut self,
+		ctx: &mut Context,
+		mut exclude_prefix_ws: bool,
+		f: &mut impl FnMut(&mut AstStr,&mut Context) -> ControlFlow<O>,
+	) -> ControlFlow<O, bool> {
 		let mut is_empty = true;
 		for value in self {
 			is_empty &= value.with_strings(ctx, exclude_prefix_ws, f)?;
@@ -46,7 +55,12 @@ where
 	T: Format<PrefixWs, A>,
 	PrefixWs: Clone,
 	A: Clone, {
-	fn format(&mut self, ctx: &mut Context, prefix_ws: PrefixWs, args: Args<PrefixWs, A>) -> FormatOutput {
+	fn format(
+		&mut self,
+		ctx: &mut Context,
+		prefix_ws: PrefixWs,
+		args: Args<PrefixWs, A>
+	) -> FormatOutput {
 		// Note: Due to the way we're parsed, the first element will never be non-empty,
 		//       but it's possible for the caller to create this value during formatting
 		//       and have that not be true, so we always check.

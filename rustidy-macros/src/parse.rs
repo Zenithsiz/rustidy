@@ -640,12 +640,14 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 	Ok(output.into())
 }
 
-fn derive_extra_error_variant(&ExtraErrorVariant {
-	ref name,
-	ref fmt,
-	transparent,
-	fatal,
-}: &ExtraErrorVariant,) -> Result<syn::Variant, AppError> {
+fn derive_extra_error_variant(
+	&ExtraErrorVariant {
+		ref name,
+		ref fmt,
+		transparent,
+		fatal,
+	}: &ExtraErrorVariant,
+) -> Result<syn::Variant, AppError> {
 	ensure!(
 		transparent || fmt.is_some(),
 		"Must specify exactly one of `fmt` or `transparent`"

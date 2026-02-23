@@ -114,7 +114,12 @@ fn run() -> Result<(), AppError> {
 	Ok(())
 }
 
-fn format_file(config: &rustidy_util::Config, files: Option<&mut Vec<PathBuf>>, file_path: Option<&Path>, check: bool) -> Result<(), AppError> {
+fn format_file(
+	config: &rustidy_util::Config,
+	files: Option<&mut Vec<PathBuf>>,
+	file_path: Option<&Path>,
+	check: bool
+) -> Result<(), AppError> {
 	// Parse
 	let input = match file_path {
 		Some(file_path) => fs::read_to_string(file_path)
@@ -166,7 +171,11 @@ fn format_file(config: &rustidy_util::Config, files: Option<&mut Vec<PathBuf>>, 
 }
 
 /// Returns a module's path
-fn mod_path<'a>(file_path: &Path, attrs: impl IntoIterator<Item = &'a OuterAttrOrDocComment>, mod_: &Module,) -> Result<PathBuf, AppError> {
+fn mod_path<'a>(
+	file_path: &Path,
+	attrs: impl IntoIterator<Item = &'a OuterAttrOrDocComment>,
+	mod_: &Module,
+) -> Result<PathBuf, AppError> {
 	let path = match self::find_path_attr(attrs)? {
 		// If it had a `#[path = ...]` attribute, use that
 		Some(name) => file_path.with_file_name("").join(&*name),
@@ -215,7 +224,9 @@ fn mod_path<'a>(file_path: &Path, attrs: impl IntoIterator<Item = &'a OuterAttrO
 
 /// Finds a `#[path = ...]` attribute
 // TODO: Support `cfg_attr(..., path = ...)` and others?
-fn find_path_attr<'a>(attrs: impl IntoIterator<Item = &'a OuterAttrOrDocComment>,) -> Result<Option<Cow<'a, str>>, AppError> {
+fn find_path_attr<'a>(
+	attrs: impl IntoIterator<Item = &'a OuterAttrOrDocComment>,
+) -> Result<Option<Cow<'a, str>>, AppError> {
 	for attr in attrs {
 		let Some(attr) = attr.try_as_attr_ref() else {
 			continue;

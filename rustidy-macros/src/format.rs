@@ -356,7 +356,20 @@ enum Args {
 
 #[expect(clippy::ref_option, clippy::needless_pass_by_value, reason = "This signature is more ergonomic")]
 #[expect(clippy::too_many_arguments, reason = "TODO")]
-fn derive_format(value: syn::Expr, prefix_ws: Option<syn::Expr>, after_format: Option<syn::Expr>, return_output: bool, with: &Option<syn::Expr>, with_self: &Option<syn::Expr>, default: syn::Expr, before_with: &[WithExprIf], with_tag: &[WithTag], without_tags: bool, args: Args, indent: &Option<Indent>,) -> Result<syn::Expr, AppError> {
+fn derive_format(
+	value: syn::Expr,
+	prefix_ws: Option<syn::Expr>,
+	after_format: Option<syn::Expr>,
+	return_output: bool,
+	with: &Option<syn::Expr>,
+	with_self: &Option<syn::Expr>,
+	default: syn::Expr,
+	before_with: &[WithExprIf],
+	with_tag: &[WithTag],
+	without_tags: bool,
+	args: Args,
+	indent: &Option<Indent>,
+) -> Result<syn::Expr, AppError> {
 	// TODO: Document the order in which we parse all attributes, since
 	//       it's not in declaration order (although maybe it should?).
 	ensure!(with.is_none() || with_self.is_none(), "Cannot specify both `#[format(with)]` and `#[format(with_self)]`");
