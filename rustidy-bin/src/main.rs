@@ -100,8 +100,7 @@ fn run() -> Result<(), AppError> {
 			let mut files = args.files;
 			while let Some(file_path) = files.pop() {
 				let start = Instant::now();
-				self::format_file(&config, Some(&mut files), Some(&file_path), args
-					.check)
+				self::format_file(&config, Some(&mut files), Some(&file_path), args.check)
 					.with_context(|| format!("While formatting {file_path:?}"))?;
 				let duration = start.elapsed();
 
