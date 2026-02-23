@@ -2,6 +2,7 @@
 
 // Imports
 use {
+	core::mem,
 	either::Either,
 	rustidy_format::{Format, Formattable, WhitespaceConfig},
 	rustidy_parse::Parse,
@@ -26,6 +27,22 @@ impl<T, P> Punctuated<T, P> {
 	/// Creates a punctuated from a single value
 	pub const fn single(value: T) -> Self {
 		Self { first: value, rest: vec![], }
+	}
+
+	/// Pushes a punctuation and value at the front of this punctuated
+	pub fn push_front(&mut self, value: T, punct: P) {
+		let first = mem::replace(&mut self.first, value);
+		self
+			.rest
+			.push(PunctuatedRest { punct, value: first });
+	}
+
+	/// Pushes a value onto the front of this punctuated, with a default punctuated
+	pub fn push_front_value(&mut self, value: T)
+	where
+		P: Default,
+	{
+		self.push_front(value, P::default());
 	}
 
 	/// Pushes a punctuation and value onto this punctuated
@@ -170,6 +187,19 @@ impl<T, P> PunctuatedTrailing<T, P> {
 			punctuated: Punctuated::single(value),
 			trailing: None,
 		}
+	}
+
+	/// Pushes a value onto this the front of this punctuated, with a default punctuated
+	pub fn push_front(&mut self, value: T, punct: P) {
+		self.punctuated.push_front(value, punct);
+	}
+
+	/// Pushes a value onto this the front of this punctuated, with a default punctuated
+	pub fn push_front_value(&mut self, value: T)
+	where
+		P: Default,
+	{
+		self.push_front(value, P::default());
 	}
 
 	/// Pushes a value onto this punctuated
