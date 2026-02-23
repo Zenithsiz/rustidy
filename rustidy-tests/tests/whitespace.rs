@@ -125,7 +125,8 @@ fn test_cases_with(
 	Ok(())
 }
 
-fn main() -> Result<(), AppError> {
+#[test]
+fn whitespace() -> Result<(), AppError> {
 	let _logger = zutil_logger::Logger::new();
 
 	let cases = [
