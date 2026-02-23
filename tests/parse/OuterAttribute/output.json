@@ -8,30 +8,18 @@
 					"Attr": {
 						"pound": {
 							"ws": {
-								"first": {
-									"start": 0,
-									"end": 0
-								},
+								"first": "",
 								"rest": []
 							},
-							"token": {
-								"start": 0,
-								"end": 1
-							}
+							"token": "#"
 						},
 						"open": {
 							"prefix": {
 								"ws": {
-									"first": {
-										"start": 1,
-										"end": 1
-									},
+									"first": "",
 									"rest": []
 								},
-								"token": {
-									"start": 1,
-									"end": 2
-								}
+								"token": "["
 							},
 							"value": {
 								"Meta": {
@@ -42,16 +30,10 @@
 												"Ident": {
 													"NonKw": [
 														{
-															"first": {
-																"start": 2,
-																"end": 2
-															},
+															"first": "",
 															"rest": []
 														},
-														{
-															"start": 2,
-															"end": 3
-														}
+														"a"
 													]
 												}
 											},
@@ -59,31 +41,19 @@
 												{
 													"punct": {
 														"ws": {
-															"first": {
-																"start": 3,
-																"end": 3
-															},
+															"first": "",
 															"rest": []
 														},
-														"token": {
-															"start": 3,
-															"end": 5
-														}
+														"token": "::"
 													},
 													"value": {
 														"Ident": {
 															"NonKw": [
 																{
-																	"first": {
-																		"start": 5,
-																		"end": 5
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																{
-																	"start": 5,
-																	"end": 6
-																}
+																"b"
 															]
 														}
 													}
@@ -91,31 +61,19 @@
 												{
 													"punct": {
 														"ws": {
-															"first": {
-																"start": 6,
-																"end": 6
-															},
+															"first": "",
 															"rest": []
 														},
-														"token": {
-															"start": 6,
-															"end": 8
-														}
+														"token": "::"
 													},
 													"value": {
 														"Ident": {
 															"NonKw": [
 																{
-																	"first": {
-																		"start": 8,
-																		"end": 8
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																{
-																	"start": 8,
-																	"end": 9
-																}
+																"c"
 															]
 														}
 													}
@@ -127,16 +85,10 @@
 							},
 							"suffix": {
 								"ws": {
-									"first": {
-										"start": 9,
-										"end": 9
-									},
+									"first": "",
 									"rest": []
 								},
-								"token": {
-									"start": 9,
-									"end": 10
-								}
+								"token": "]"
 							}
 						}
 					}
@@ -145,92 +97,56 @@
 					"Attr": {
 						"pound": {
 							"ws": {
-								"first": {
-									"start": 10,
-									"end": 11
-								},
+								"first": "\n",
 								"rest": []
 							},
-							"token": {
-								"start": 11,
-								"end": 12
-							}
+							"token": "#"
 						},
 						"open": {
 							"prefix": {
 								"ws": {
-									"first": {
-										"start": 12,
-										"end": 12
-									},
+									"first": "",
 									"rest": []
 								},
-								"token": {
-									"start": 12,
-									"end": 13
-								}
+								"token": "["
 							},
 							"value": {
 								"Meta": {
 									"Path": {
 										"prefix": {
 											"ws": {
-												"first": {
-													"start": 13,
-													"end": 13
-												},
+												"first": "",
 												"rest": []
 											},
-											"token": {
-												"start": 13,
-												"end": 15
-											}
+											"token": "::"
 										},
 										"segments": {
 											"first": {
 												"DollarCrate": {
 													"ws": {
-														"first": {
-															"start": 15,
-															"end": 15
-														},
+														"first": "",
 														"rest": []
 													},
-													"token": {
-														"start": 15,
-														"end": 21
-													}
+													"token": "$crate"
 												}
 											},
 											"rest": [
 												{
 													"punct": {
 														"ws": {
-															"first": {
-																"start": 21,
-																"end": 21
-															},
+															"first": "",
 															"rest": []
 														},
-														"token": {
-															"start": 21,
-															"end": 23
-														}
+														"token": "::"
 													},
 													"value": {
 														"Ident": {
 															"NonKw": [
 																{
-																	"first": {
-																		"start": 23,
-																		"end": 23
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																{
-																	"start": 23,
-																	"end": 24
-																}
+																"c"
 															]
 														}
 													}
@@ -242,16 +158,10 @@
 							},
 							"suffix": {
 								"ws": {
-									"first": {
-										"start": 24,
-										"end": 24
-									},
+									"first": "",
 									"rest": []
 								},
-								"token": {
-									"start": 24,
-									"end": 25
-								}
+								"token": "]"
 							}
 						}
 					}
@@ -261,21 +171,12 @@
 						"Line": {
 							"prefix": {
 								"ws": {
-									"first": {
-										"start": 25,
-										"end": 26
-									},
+									"first": "\n",
 									"rest": []
 								},
-								"token": {
-									"start": 26,
-									"end": 29
-								}
+								"token": "///"
 							},
-							"comment": {
-								"start": 29,
-								"end": 31
-							}
+							"comment": "a\n"
 						}
 					}
 				},
@@ -284,21 +185,12 @@
 						"Block": {
 							"prefix": {
 								"ws": {
-									"first": {
-										"start": 31,
-										"end": 31
-									},
+									"first": "",
 									"rest": []
 								},
-								"token": {
-									"start": 31,
-									"end": 34
-								}
+								"token": "/**"
 							},
-							"comment": {
-								"start": 34,
-								"end": 37
-							}
+							"comment": "a*/"
 						}
 					}
 				},
@@ -307,21 +199,12 @@
 						"Block": {
 							"prefix": {
 								"ws": {
-									"first": {
-										"start": 37,
-										"end": 38
-									},
+									"first": "\n",
 									"rest": []
 								},
-								"token": {
-									"start": 38,
-									"end": 41
-								}
+								"token": "/**"
 							},
-							"comment": {
-								"start": 41,
-								"end": 48
-							}
+							"comment": " /**/*/"
 						}
 					}
 				}
@@ -339,60 +222,36 @@
 							},
 							"fn_": {
 								"ws": {
-									"first": {
-										"start": 48,
-										"end": 49
-									},
+									"first": "\n",
 									"rest": []
 								},
-								"token": {
-									"start": 49,
-									"end": 51
-								}
+								"token": "fn"
 							},
 							"ident": {
 								"NonKw": [
 									{
-										"first": {
-											"start": 51,
-											"end": 52
-										},
+										"first": " ",
 										"rest": []
 									},
-									{
-										"start": 52,
-										"end": 53
-									}
+									"a"
 								]
 							},
 							"generics": null,
 							"params": {
 								"prefix": {
 									"ws": {
-										"first": {
-											"start": 53,
-											"end": 53
-										},
+										"first": "",
 										"rest": []
 									},
-									"token": {
-										"start": 53,
-										"end": 54
-									}
+									"token": "("
 								},
 								"value": null,
 								"suffix": {
 									"ws": {
-										"first": {
-											"start": 54,
-											"end": 54
-										},
+										"first": "",
 										"rest": []
 									},
-									"token": {
-										"start": 54,
-										"end": 55
-									}
+									"token": ")"
 								}
 							},
 							"ret": null,
@@ -401,16 +260,10 @@
 								"Expr": {
 									"prefix": {
 										"ws": {
-											"first": {
-												"start": 55,
-												"end": 56
-											},
+											"first": " ",
 											"rest": []
 										},
-										"token": {
-											"start": 56,
-											"end": 57
-										}
+										"token": "{"
 									},
 									"value": {
 										"attrs": [],
@@ -421,16 +274,10 @@
 									},
 									"suffix": {
 										"ws": {
-											"first": {
-												"start": 57,
-												"end": 57
-											},
+											"first": "",
 											"rest": []
 										},
-										"token": {
-											"start": 57,
-											"end": 58
-										}
+										"token": "}"
 									}
 								}
 							}
@@ -441,10 +288,7 @@
 		}
 	],
 	"suffix_ws": {
-		"first": {
-			"start": 58,
-			"end": 59
-		},
+		"first": "\n",
 		"rest": []
 	}
 }

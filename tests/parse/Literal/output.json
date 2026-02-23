@@ -17,60 +17,36 @@
 							},
 							"fn_": {
 								"ws": {
-									"first": {
-										"start": 0,
-										"end": 0
-									},
+									"first": "",
 									"rest": []
 								},
-								"token": {
-									"start": 0,
-									"end": 2
-								}
+								"token": "fn"
 							},
 							"ident": {
 								"NonKw": [
 									{
-										"first": {
-											"start": 2,
-											"end": 3
-										},
+										"first": " ",
 										"rest": []
 									},
-									{
-										"start": 3,
-										"end": 8
-									}
+									"char_"
 								]
 							},
 							"generics": null,
 							"params": {
 								"prefix": {
 									"ws": {
-										"first": {
-											"start": 8,
-											"end": 8
-										},
+										"first": "",
 										"rest": []
 									},
-									"token": {
-										"start": 8,
-										"end": 9
-									}
+									"token": "("
 								},
 								"value": null,
 								"suffix": {
 									"ws": {
-										"first": {
-											"start": 9,
-											"end": 9
-										},
+										"first": "",
 										"rest": []
 									},
-									"token": {
-										"start": 9,
-										"end": 10
-									}
+									"token": ")"
 								}
 							},
 							"ret": null,
@@ -79,16 +55,10 @@
 								"Expr": {
 									"prefix": {
 										"ws": {
-											"first": {
-												"start": 10,
-												"end": 11
-											},
+											"first": " ",
 											"rest": []
 										},
-										"token": {
-											"start": 11,
-											"end": 12
-										}
+										"token": "{"
 									},
 									"value": {
 										"attrs": [],
@@ -103,32 +73,20 @@
 																	"Literal": {
 																		"Char": [
 																			{
-																				"first": {
-																					"start": 12,
-																					"end": 14
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
-																			{
-																				"start": 14,
-																				"end": 17
-																			}
+																			"'a'"
 																		]
 																	}
 																}
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 17,
-																		"end": 17
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 17,
-																	"end": 18
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -142,32 +100,20 @@
 																	"Literal": {
 																		"Char": [
 																			{
-																				"first": {
-																					"start": 18,
-																					"end": 20
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
-																			{
-																				"start": 20,
-																				"end": 24
-																			}
+																			"'\\''"
 																		]
 																	}
 																}
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 24,
-																		"end": 24
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 24,
-																	"end": 25
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -181,32 +127,20 @@
 																	"Literal": {
 																		"Char": [
 																			{
-																				"first": {
-																					"start": 25,
-																					"end": 27
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
-																			{
-																				"start": 27,
-																				"end": 31
-																			}
+																			"'\\\"'"
 																		]
 																	}
 																}
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 31,
-																		"end": 31
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 31,
-																	"end": 32
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -220,32 +154,20 @@
 																	"Literal": {
 																		"Char": [
 																			{
-																				"first": {
-																					"start": 32,
-																					"end": 34
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
-																			{
-																				"start": 34,
-																				"end": 40
-																			}
+																			"'\\x7f'"
 																		]
 																	}
 																}
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 40,
-																		"end": 40
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 40,
-																	"end": 41
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -259,32 +181,20 @@
 																	"Literal": {
 																		"Char": [
 																			{
-																				"first": {
-																					"start": 41,
-																					"end": 43
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
-																			{
-																				"start": 43,
-																				"end": 47
-																			}
+																			"'\\n'"
 																		]
 																	}
 																}
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 47,
-																		"end": 47
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 47,
-																	"end": 48
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -298,32 +208,20 @@
 																	"Literal": {
 																		"Char": [
 																			{
-																				"first": {
-																					"start": 48,
-																					"end": 50
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
-																			{
-																				"start": 50,
-																				"end": 54
-																			}
+																			"'\\r'"
 																		]
 																	}
 																}
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 54,
-																		"end": 54
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 54,
-																	"end": 55
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -337,32 +235,20 @@
 																	"Literal": {
 																		"Char": [
 																			{
-																				"first": {
-																					"start": 55,
-																					"end": 57
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
-																			{
-																				"start": 57,
-																				"end": 61
-																			}
+																			"'\\t'"
 																		]
 																	}
 																}
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 61,
-																		"end": 61
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 61,
-																	"end": 62
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -376,32 +262,20 @@
 																	"Literal": {
 																		"Char": [
 																			{
-																				"first": {
-																					"start": 62,
-																					"end": 64
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
-																			{
-																				"start": 64,
-																				"end": 68
-																			}
+																			"'\\0'"
 																		]
 																	}
 																}
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 68,
-																		"end": 68
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 68,
-																	"end": 69
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -415,32 +289,20 @@
 																	"Literal": {
 																		"Char": [
 																			{
-																				"first": {
-																					"start": 69,
-																					"end": 71
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
-																			{
-																				"start": 71,
-																				"end": 78
-																			}
+																			"'\\u{0}'"
 																		]
 																	}
 																}
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 78,
-																		"end": 78
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 78,
-																	"end": 79
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -454,32 +316,20 @@
 																	"Literal": {
 																		"Char": [
 																			{
-																				"first": {
-																					"start": 79,
-																					"end": 81
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
-																			{
-																				"start": 81,
-																				"end": 89
-																			}
+																			"'\\u{0_}'"
 																		]
 																	}
 																}
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 89,
-																		"end": 89
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 89,
-																	"end": 90
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -493,32 +343,20 @@
 																	"Literal": {
 																		"Char": [
 																			{
-																				"first": {
-																					"start": 90,
-																					"end": 92
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
-																			{
-																				"start": 92,
-																				"end": 111
-																			}
+																			"'\\u{0___________1}'"
 																		]
 																	}
 																}
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 111,
-																		"end": 111
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 111,
-																	"end": 112
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -532,32 +370,20 @@
 																	"Literal": {
 																		"Char": [
 																			{
-																				"first": {
-																					"start": 112,
-																					"end": 114
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
-																			{
-																				"start": 114,
-																				"end": 125
-																			}
+																			"'\\u{12345}'"
 																		]
 																	}
 																}
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 125,
-																		"end": 125
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 125,
-																	"end": 126
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -571,32 +397,20 @@
 																	"Literal": {
 																		"Char": [
 																			{
-																				"first": {
-																					"start": 126,
-																					"end": 128
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
-																			{
-																				"start": 128,
-																				"end": 152
-																			}
+																			"'\\u{1__2__3__4__5__6__}'"
 																		]
 																	}
 																}
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 152,
-																		"end": 152
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 152,
-																	"end": 153
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -607,16 +421,10 @@
 									},
 									"suffix": {
 										"ws": {
-											"first": {
-												"start": 153,
-												"end": 154
-											},
+											"first": "\n",
 											"rest": []
 										},
-										"token": {
-											"start": 154,
-											"end": 155
-										}
+										"token": "}"
 									}
 								}
 							}
@@ -640,60 +448,36 @@
 							},
 							"fn_": {
 								"ws": {
-									"first": {
-										"start": 155,
-										"end": 157
-									},
+									"first": "\n\n",
 									"rest": []
 								},
-								"token": {
-									"start": 157,
-									"end": 159
-								}
+								"token": "fn"
 							},
 							"ident": {
 								"NonKw": [
 									{
-										"first": {
-											"start": 159,
-											"end": 160
-										},
+										"first": " ",
 										"rest": []
 									},
-									{
-										"start": 160,
-										"end": 166
-									}
+									"string"
 								]
 							},
 							"generics": null,
 							"params": {
 								"prefix": {
 									"ws": {
-										"first": {
-											"start": 166,
-											"end": 166
-										},
+										"first": "",
 										"rest": []
 									},
-									"token": {
-										"start": 166,
-										"end": 167
-									}
+									"token": "("
 								},
 								"value": null,
 								"suffix": {
 									"ws": {
-										"first": {
-											"start": 167,
-											"end": 167
-										},
+										"first": "",
 										"rest": []
 									},
-									"token": {
-										"start": 167,
-										"end": 168
-									}
+									"token": ")"
 								}
 							},
 							"ret": null,
@@ -702,16 +486,10 @@
 								"Expr": {
 									"prefix": {
 										"ws": {
-											"first": {
-												"start": 168,
-												"end": 169
-											},
+											"first": " ",
 											"rest": []
 										},
-										"token": {
-											"start": 169,
-											"end": 170
-										}
+										"token": "{"
 									},
 									"value": {
 										"attrs": [],
@@ -726,16 +504,10 @@
 																	"Literal": {
 																		"String": {
 																			"ws": {
-																				"first": {
-																					"start": 170,
-																					"end": 172
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
-																			"s": {
-																				"start": 172,
-																				"end": 174
-																			},
+																			"s": "\"\"",
 																			"suffix": null
 																		}
 																	}
@@ -743,16 +515,10 @@
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 174,
-																		"end": 174
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 174,
-																	"end": 175
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -766,28 +532,16 @@
 																	"Literal": {
 																		"String": {
 																			"ws": {
-																				"first": {
-																					"start": 175,
-																					"end": 177
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
-																			"s": {
-																				"start": 177,
-																				"end": 179
-																			},
+																			"s": "\"\"",
 																			"suffix": [
 																				{
-																					"first": {
-																						"start": 179,
-																						"end": 179
-																					},
+																					"first": "",
 																					"rest": []
 																				},
-																				{
-																					"start": 179,
-																					"end": 180
-																				}
+																				"e"
 																			]
 																		}
 																	}
@@ -795,16 +549,10 @@
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 180,
-																		"end": 180
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 180,
-																	"end": 181
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -818,28 +566,16 @@
 																	"Literal": {
 																		"String": {
 																			"ws": {
-																				"first": {
-																					"start": 181,
-																					"end": 183
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
-																			"s": {
-																				"start": 183,
-																				"end": 185
-																			},
+																			"s": "\"\"",
 																			"suffix": [
 																				{
-																					"first": {
-																						"start": 185,
-																						"end": 185
-																					},
+																					"first": "",
 																					"rest": []
 																				},
-																				{
-																					"start": 185,
-																					"end": 188
-																				}
+																				"abc"
 																			]
 																		}
 																	}
@@ -847,16 +583,10 @@
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 188,
-																		"end": 188
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 188,
-																	"end": 189
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -870,16 +600,10 @@
 																	"Literal": {
 																		"String": {
 																			"ws": {
-																				"first": {
-																					"start": 189,
-																					"end": 191
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
-																			"s": {
-																				"start": 191,
-																				"end": 194
-																			},
+																			"s": "\"a\"",
 																			"suffix": null
 																		}
 																	}
@@ -887,16 +611,10 @@
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 194,
-																		"end": 194
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 194,
-																	"end": 195
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -910,16 +628,10 @@
 																	"Literal": {
 																		"String": {
 																			"ws": {
-																				"first": {
-																					"start": 195,
-																					"end": 197
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
-																			"s": {
-																				"start": 197,
-																				"end": 201
-																			},
+																			"s": "\"\\'\"",
 																			"suffix": null
 																		}
 																	}
@@ -927,16 +639,10 @@
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 201,
-																		"end": 201
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 201,
-																	"end": 202
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -950,16 +656,10 @@
 																	"Literal": {
 																		"String": {
 																			"ws": {
-																				"first": {
-																					"start": 202,
-																					"end": 204
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
-																			"s": {
-																				"start": 204,
-																				"end": 208
-																			},
+																			"s": "\"\\\"\"",
 																			"suffix": null
 																		}
 																	}
@@ -967,16 +667,10 @@
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 208,
-																		"end": 208
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 208,
-																	"end": 209
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -990,16 +684,10 @@
 																	"Literal": {
 																		"String": {
 																			"ws": {
-																				"first": {
-																					"start": 209,
-																					"end": 211
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
-																			"s": {
-																				"start": 211,
-																				"end": 215
-																			},
+																			"s": "\"\\\\\"",
 																			"suffix": null
 																		}
 																	}
@@ -1007,16 +695,10 @@
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 215,
-																		"end": 215
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 215,
-																	"end": 216
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -1030,16 +712,10 @@
 																	"Literal": {
 																		"String": {
 																			"ws": {
-																				"first": {
-																					"start": 216,
-																					"end": 218
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
-																			"s": {
-																				"start": 218,
-																				"end": 224
-																			},
+																			"s": "\"\\x7f\"",
 																			"suffix": null
 																		}
 																	}
@@ -1047,16 +723,10 @@
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 224,
-																		"end": 224
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 224,
-																	"end": 225
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -1070,16 +740,10 @@
 																	"Literal": {
 																		"String": {
 																			"ws": {
-																				"first": {
-																					"start": 225,
-																					"end": 227
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
-																			"s": {
-																				"start": 227,
-																				"end": 231
-																			},
+																			"s": "\"\\n\"",
 																			"suffix": null
 																		}
 																	}
@@ -1087,16 +751,10 @@
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 231,
-																		"end": 231
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 231,
-																	"end": 232
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -1110,16 +768,10 @@
 																	"Literal": {
 																		"String": {
 																			"ws": {
-																				"first": {
-																					"start": 232,
-																					"end": 234
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
-																			"s": {
-																				"start": 234,
-																				"end": 238
-																			},
+																			"s": "\"\\r\"",
 																			"suffix": null
 																		}
 																	}
@@ -1127,16 +779,10 @@
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 238,
-																		"end": 238
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 238,
-																	"end": 239
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -1150,16 +796,10 @@
 																	"Literal": {
 																		"String": {
 																			"ws": {
-																				"first": {
-																					"start": 239,
-																					"end": 241
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
-																			"s": {
-																				"start": 241,
-																				"end": 245
-																			},
+																			"s": "\"\\t\"",
 																			"suffix": null
 																		}
 																	}
@@ -1167,16 +807,10 @@
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 245,
-																		"end": 245
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 245,
-																	"end": 246
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -1190,16 +824,10 @@
 																	"Literal": {
 																		"String": {
 																			"ws": {
-																				"first": {
-																					"start": 246,
-																					"end": 248
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
-																			"s": {
-																				"start": 248,
-																				"end": 252
-																			},
+																			"s": "\"\\0\"",
 																			"suffix": null
 																		}
 																	}
@@ -1207,16 +835,10 @@
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 252,
-																		"end": 252
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 252,
-																	"end": 253
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -1230,16 +852,10 @@
 																	"Literal": {
 																		"String": {
 																			"ws": {
-																				"first": {
-																					"start": 253,
-																					"end": 255
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
-																			"s": {
-																				"start": 255,
-																				"end": 262
-																			},
+																			"s": "\"\\u{0}\"",
 																			"suffix": null
 																		}
 																	}
@@ -1247,16 +863,10 @@
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 262,
-																		"end": 262
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 262,
-																	"end": 263
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -1270,16 +880,10 @@
 																	"Literal": {
 																		"String": {
 																			"ws": {
-																				"first": {
-																					"start": 263,
-																					"end": 265
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
-																			"s": {
-																				"start": 265,
-																				"end": 273
-																			},
+																			"s": "\"\\u{0_}\"",
 																			"suffix": null
 																		}
 																	}
@@ -1287,16 +891,10 @@
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 273,
-																		"end": 273
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 273,
-																	"end": 274
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -1310,16 +908,10 @@
 																	"Literal": {
 																		"String": {
 																			"ws": {
-																				"first": {
-																					"start": 274,
-																					"end": 276
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
-																			"s": {
-																				"start": 276,
-																				"end": 295
-																			},
+																			"s": "\"\\u{0___________1}\"",
 																			"suffix": null
 																		}
 																	}
@@ -1327,16 +919,10 @@
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 295,
-																		"end": 295
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 295,
-																	"end": 296
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -1350,16 +936,10 @@
 																	"Literal": {
 																		"String": {
 																			"ws": {
-																				"first": {
-																					"start": 296,
-																					"end": 298
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
-																			"s": {
-																				"start": 298,
-																				"end": 309
-																			},
+																			"s": "\"\\u{12345}\"",
 																			"suffix": null
 																		}
 																	}
@@ -1367,16 +947,10 @@
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 309,
-																		"end": 309
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 309,
-																	"end": 310
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -1390,16 +964,10 @@
 																	"Literal": {
 																		"String": {
 																			"ws": {
-																				"first": {
-																					"start": 310,
-																					"end": 312
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
-																			"s": {
-																				"start": 312,
-																				"end": 336
-																			},
+																			"s": "\"\\u{1__2__3__4__5__6__}\"",
 																			"suffix": null
 																		}
 																	}
@@ -1407,16 +975,10 @@
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 336,
-																		"end": 336
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 336,
-																	"end": 337
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -1430,16 +992,10 @@
 																	"Literal": {
 																		"String": {
 																			"ws": {
-																				"first": {
-																					"start": 337,
-																					"end": 339
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
-																			"s": {
-																				"start": 339,
-																				"end": 343
-																			},
+																			"s": "\"\\\n\"",
 																			"suffix": null
 																		}
 																	}
@@ -1447,16 +1003,10 @@
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 343,
-																		"end": 343
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 343,
-																	"end": 344
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -1467,16 +1017,10 @@
 									},
 									"suffix": {
 										"ws": {
-											"first": {
-												"start": 344,
-												"end": 345
-											},
+											"first": "\n",
 											"rest": []
 										},
-										"token": {
-											"start": 345,
-											"end": 346
-										}
+										"token": "}"
 									}
 								}
 							}
@@ -1500,60 +1044,36 @@
 							},
 							"fn_": {
 								"ws": {
-									"first": {
-										"start": 346,
-										"end": 348
-									},
+									"first": "\n\n",
 									"rest": []
 								},
-								"token": {
-									"start": 348,
-									"end": 350
-								}
+								"token": "fn"
 							},
 							"ident": {
 								"NonKw": [
 									{
-										"first": {
-											"start": 350,
-											"end": 351
-										},
+										"first": " ",
 										"rest": []
 									},
-									{
-										"start": 351,
-										"end": 361
-									}
+									"raw_string"
 								]
 							},
 							"generics": null,
 							"params": {
 								"prefix": {
 									"ws": {
-										"first": {
-											"start": 361,
-											"end": 361
-										},
+										"first": "",
 										"rest": []
 									},
-									"token": {
-										"start": 361,
-										"end": 362
-									}
+									"token": "("
 								},
 								"value": null,
 								"suffix": {
 									"ws": {
-										"first": {
-											"start": 362,
-											"end": 362
-										},
+										"first": "",
 										"rest": []
 									},
-									"token": {
-										"start": 362,
-										"end": 363
-									}
+									"token": ")"
 								}
 							},
 							"ret": null,
@@ -1562,16 +1082,10 @@
 								"Expr": {
 									"prefix": {
 										"ws": {
-											"first": {
-												"start": 363,
-												"end": 364
-											},
+											"first": " ",
 											"rest": []
 										},
-										"token": {
-											"start": 364,
-											"end": 365
-										}
+										"token": "{"
 									},
 									"value": {
 										"attrs": [],
@@ -1586,16 +1100,10 @@
 																	"Literal": {
 																		"RawString": {
 																			"ws": {
-																				"first": {
-																					"start": 365,
-																					"end": 367
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
-																			"s": {
-																				"start": 367,
-																				"end": 370
-																			},
+																			"s": "r\"\"",
 																			"suffix": null
 																		}
 																	}
@@ -1603,16 +1111,10 @@
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 370,
-																		"end": 370
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 370,
-																	"end": 371
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -1626,28 +1128,16 @@
 																	"Literal": {
 																		"RawString": {
 																			"ws": {
-																				"first": {
-																					"start": 371,
-																					"end": 373
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
-																			"s": {
-																				"start": 373,
-																				"end": 376
-																			},
+																			"s": "r\"\"",
 																			"suffix": [
 																				{
-																					"first": {
-																						"start": 376,
-																						"end": 376
-																					},
+																					"first": "",
 																					"rest": []
 																				},
-																				{
-																					"start": 376,
-																					"end": 377
-																				}
+																				"e"
 																			]
 																		}
 																	}
@@ -1655,16 +1145,10 @@
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 377,
-																		"end": 377
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 377,
-																	"end": 378
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -1678,28 +1162,16 @@
 																	"Literal": {
 																		"RawString": {
 																			"ws": {
-																				"first": {
-																					"start": 378,
-																					"end": 380
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
-																			"s": {
-																				"start": 380,
-																				"end": 383
-																			},
+																			"s": "r\"\"",
 																			"suffix": [
 																				{
-																					"first": {
-																						"start": 383,
-																						"end": 383
-																					},
+																					"first": "",
 																					"rest": []
 																				},
-																				{
-																					"start": 383,
-																					"end": 386
-																				}
+																				"abc"
 																			]
 																		}
 																	}
@@ -1707,16 +1179,10 @@
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 386,
-																		"end": 386
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 386,
-																	"end": 387
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -1730,16 +1196,10 @@
 																	"Literal": {
 																		"RawString": {
 																			"ws": {
-																				"first": {
-																					"start": 387,
-																					"end": 389
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
-																			"s": {
-																				"start": 389,
-																				"end": 393
-																			},
+																			"s": "r\"a\"",
 																			"suffix": null
 																		}
 																	}
@@ -1747,16 +1207,10 @@
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 393,
-																		"end": 393
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 393,
-																	"end": 394
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -1770,16 +1224,10 @@
 																	"Literal": {
 																		"RawString": {
 																			"ws": {
-																				"first": {
-																					"start": 394,
-																					"end": 396
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
-																			"s": {
-																				"start": 396,
-																				"end": 401
-																			},
+																			"s": "r#\"\"#",
 																			"suffix": null
 																		}
 																	}
@@ -1787,16 +1235,10 @@
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 401,
-																		"end": 401
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 401,
-																	"end": 402
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -1810,28 +1252,16 @@
 																	"Literal": {
 																		"RawString": {
 																			"ws": {
-																				"first": {
-																					"start": 402,
-																					"end": 404
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
-																			"s": {
-																				"start": 404,
-																				"end": 409
-																			},
+																			"s": "r#\"\"#",
 																			"suffix": [
 																				{
-																					"first": {
-																						"start": 409,
-																						"end": 409
-																					},
+																					"first": "",
 																					"rest": []
 																				},
-																				{
-																					"start": 409,
-																					"end": 410
-																				}
+																				"a"
 																			]
 																		}
 																	}
@@ -1839,16 +1269,10 @@
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 410,
-																		"end": 410
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 410,
-																	"end": 411
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -1862,16 +1286,10 @@
 																	"Literal": {
 																		"RawString": {
 																			"ws": {
-																				"first": {
-																					"start": 411,
-																					"end": 413
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
-																			"s": {
-																				"start": 413,
-																				"end": 419
-																			},
+																			"s": "r#\"\"\"#",
 																			"suffix": null
 																		}
 																	}
@@ -1879,16 +1297,10 @@
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 419,
-																		"end": 419
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 419,
-																	"end": 420
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -1902,16 +1314,10 @@
 																	"Literal": {
 																		"RawString": {
 																			"ws": {
-																				"first": {
-																					"start": 420,
-																					"end": 422
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
-																			"s": {
-																				"start": 422,
-																				"end": 431
-																			},
+																			"s": "r##\"\"#\"##",
 																			"suffix": null
 																		}
 																	}
@@ -1919,16 +1325,10 @@
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 431,
-																		"end": 431
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 431,
-																	"end": 432
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -1939,16 +1339,10 @@
 									},
 									"suffix": {
 										"ws": {
-											"first": {
-												"start": 432,
-												"end": 433
-											},
+											"first": "\n",
 											"rest": []
 										},
-										"token": {
-											"start": 433,
-											"end": 434
-										}
+										"token": "}"
 									}
 								}
 							}
@@ -1972,60 +1366,36 @@
 							},
 							"fn_": {
 								"ws": {
-									"first": {
-										"start": 434,
-										"end": 436
-									},
+									"first": "\n\n",
 									"rest": []
 								},
-								"token": {
-									"start": 436,
-									"end": 438
-								}
+								"token": "fn"
 							},
 							"ident": {
 								"NonKw": [
 									{
-										"first": {
-											"start": 438,
-											"end": 439
-										},
+										"first": " ",
 										"rest": []
 									},
-									{
-										"start": 439,
-										"end": 443
-									}
+									"byte"
 								]
 							},
 							"generics": null,
 							"params": {
 								"prefix": {
 									"ws": {
-										"first": {
-											"start": 443,
-											"end": 443
-										},
+										"first": "",
 										"rest": []
 									},
-									"token": {
-										"start": 443,
-										"end": 444
-									}
+									"token": "("
 								},
 								"value": null,
 								"suffix": {
 									"ws": {
-										"first": {
-											"start": 444,
-											"end": 444
-										},
+										"first": "",
 										"rest": []
 									},
-									"token": {
-										"start": 444,
-										"end": 445
-									}
+									"token": ")"
 								}
 							},
 							"ret": null,
@@ -2034,16 +1404,10 @@
 								"Expr": {
 									"prefix": {
 										"ws": {
-											"first": {
-												"start": 445,
-												"end": 446
-											},
+											"first": " ",
 											"rest": []
 										},
-										"token": {
-											"start": 446,
-											"end": 447
-										}
+										"token": "{"
 									},
 									"value": {
 										"attrs": [],
@@ -2058,32 +1422,20 @@
 																	"Literal": {
 																		"Byte": [
 																			{
-																				"first": {
-																					"start": 447,
-																					"end": 449
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
-																			{
-																				"start": 449,
-																				"end": 453
-																			}
+																			"b'a'"
 																		]
 																	}
 																}
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 453,
-																		"end": 453
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 453,
-																	"end": 454
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -2097,32 +1449,20 @@
 																	"Literal": {
 																		"Byte": [
 																			{
-																				"first": {
-																					"start": 454,
-																					"end": 456
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
-																			{
-																				"start": 456,
-																				"end": 461
-																			}
+																			"b'\\''"
 																		]
 																	}
 																}
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 461,
-																		"end": 461
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 461,
-																	"end": 462
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -2136,32 +1476,20 @@
 																	"Literal": {
 																		"Byte": [
 																			{
-																				"first": {
-																					"start": 462,
-																					"end": 464
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
-																			{
-																				"start": 464,
-																				"end": 469
-																			}
+																			"b'\\\"'"
 																		]
 																	}
 																}
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 469,
-																		"end": 469
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 469,
-																	"end": 470
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -2175,32 +1503,20 @@
 																	"Literal": {
 																		"Byte": [
 																			{
-																				"first": {
-																					"start": 470,
-																					"end": 472
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
-																			{
-																				"start": 472,
-																				"end": 479
-																			}
+																			"b'\\x7f'"
 																		]
 																	}
 																}
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 479,
-																		"end": 479
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 479,
-																	"end": 480
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -2214,32 +1530,20 @@
 																	"Literal": {
 																		"Byte": [
 																			{
-																				"first": {
-																					"start": 480,
-																					"end": 482
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
-																			{
-																				"start": 482,
-																				"end": 489
-																			}
+																			"b'\\xff'"
 																		]
 																	}
 																}
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 489,
-																		"end": 489
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 489,
-																	"end": 490
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -2253,32 +1557,20 @@
 																	"Literal": {
 																		"Byte": [
 																			{
-																				"first": {
-																					"start": 490,
-																					"end": 492
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
-																			{
-																				"start": 492,
-																				"end": 497
-																			}
+																			"b'\\n'"
 																		]
 																	}
 																}
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 497,
-																		"end": 497
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 497,
-																	"end": 498
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -2292,32 +1584,20 @@
 																	"Literal": {
 																		"Byte": [
 																			{
-																				"first": {
-																					"start": 498,
-																					"end": 500
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
-																			{
-																				"start": 500,
-																				"end": 505
-																			}
+																			"b'\\r'"
 																		]
 																	}
 																}
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 505,
-																		"end": 505
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 505,
-																	"end": 506
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -2331,32 +1611,20 @@
 																	"Literal": {
 																		"Byte": [
 																			{
-																				"first": {
-																					"start": 506,
-																					"end": 508
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
-																			{
-																				"start": 508,
-																				"end": 513
-																			}
+																			"b'\\t'"
 																		]
 																	}
 																}
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 513,
-																		"end": 513
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 513,
-																	"end": 514
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -2370,32 +1638,20 @@
 																	"Literal": {
 																		"Byte": [
 																			{
-																				"first": {
-																					"start": 514,
-																					"end": 516
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
-																			{
-																				"start": 516,
-																				"end": 521
-																			}
+																			"b'\\0'"
 																		]
 																	}
 																}
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 521,
-																		"end": 521
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 521,
-																	"end": 522
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -2406,16 +1662,10 @@
 									},
 									"suffix": {
 										"ws": {
-											"first": {
-												"start": 522,
-												"end": 523
-											},
+											"first": "\n",
 											"rest": []
 										},
-										"token": {
-											"start": 523,
-											"end": 524
-										}
+										"token": "}"
 									}
 								}
 							}
@@ -2439,60 +1689,36 @@
 							},
 							"fn_": {
 								"ws": {
-									"first": {
-										"start": 524,
-										"end": 526
-									},
+									"first": "\n\n",
 									"rest": []
 								},
-								"token": {
-									"start": 526,
-									"end": 528
-								}
+								"token": "fn"
 							},
 							"ident": {
 								"NonKw": [
 									{
-										"first": {
-											"start": 528,
-											"end": 529
-										},
+										"first": " ",
 										"rest": []
 									},
-									{
-										"start": 529,
-										"end": 540
-									}
+									"byte_string"
 								]
 							},
 							"generics": null,
 							"params": {
 								"prefix": {
 									"ws": {
-										"first": {
-											"start": 540,
-											"end": 540
-										},
+										"first": "",
 										"rest": []
 									},
-									"token": {
-										"start": 540,
-										"end": 541
-									}
+									"token": "("
 								},
 								"value": null,
 								"suffix": {
 									"ws": {
-										"first": {
-											"start": 541,
-											"end": 541
-										},
+										"first": "",
 										"rest": []
 									},
-									"token": {
-										"start": 541,
-										"end": 542
-									}
+									"token": ")"
 								}
 							},
 							"ret": null,
@@ -2501,16 +1727,10 @@
 								"Expr": {
 									"prefix": {
 										"ws": {
-											"first": {
-												"start": 542,
-												"end": 543
-											},
+											"first": " ",
 											"rest": []
 										},
-										"token": {
-											"start": 543,
-											"end": 544
-										}
+										"token": "{"
 									},
 									"value": {
 										"attrs": [],
@@ -2525,16 +1745,10 @@
 																	"Literal": {
 																		"ByteString": {
 																			"ws": {
-																				"first": {
-																					"start": 544,
-																					"end": 546
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
-																			"s": {
-																				"start": 546,
-																				"end": 549
-																			},
+																			"s": "b\"\"",
 																			"suffix": null
 																		}
 																	}
@@ -2542,16 +1756,10 @@
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 549,
-																		"end": 549
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 549,
-																	"end": 550
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -2565,28 +1773,16 @@
 																	"Literal": {
 																		"ByteString": {
 																			"ws": {
-																				"first": {
-																					"start": 550,
-																					"end": 552
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
-																			"s": {
-																				"start": 552,
-																				"end": 555
-																			},
+																			"s": "b\"\"",
 																			"suffix": [
 																				{
-																					"first": {
-																						"start": 555,
-																						"end": 555
-																					},
+																					"first": "",
 																					"rest": []
 																				},
-																				{
-																					"start": 555,
-																					"end": 556
-																				}
+																				"e"
 																			]
 																		}
 																	}
@@ -2594,16 +1790,10 @@
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 556,
-																		"end": 556
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 556,
-																	"end": 557
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -2617,28 +1807,16 @@
 																	"Literal": {
 																		"ByteString": {
 																			"ws": {
-																				"first": {
-																					"start": 557,
-																					"end": 559
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
-																			"s": {
-																				"start": 559,
-																				"end": 562
-																			},
+																			"s": "b\"\"",
 																			"suffix": [
 																				{
-																					"first": {
-																						"start": 562,
-																						"end": 562
-																					},
+																					"first": "",
 																					"rest": []
 																				},
-																				{
-																					"start": 562,
-																					"end": 565
-																				}
+																				"abc"
 																			]
 																		}
 																	}
@@ -2646,16 +1824,10 @@
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 565,
-																		"end": 565
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 565,
-																	"end": 566
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -2669,16 +1841,10 @@
 																	"Literal": {
 																		"ByteString": {
 																			"ws": {
-																				"first": {
-																					"start": 566,
-																					"end": 568
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
-																			"s": {
-																				"start": 568,
-																				"end": 572
-																			},
+																			"s": "b\"a\"",
 																			"suffix": null
 																		}
 																	}
@@ -2686,16 +1852,10 @@
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 572,
-																		"end": 572
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 572,
-																	"end": 573
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -2709,16 +1869,10 @@
 																	"Literal": {
 																		"ByteString": {
 																			"ws": {
-																				"first": {
-																					"start": 573,
-																					"end": 575
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
-																			"s": {
-																				"start": 575,
-																				"end": 580
-																			},
+																			"s": "b\"\\'\"",
 																			"suffix": null
 																		}
 																	}
@@ -2726,16 +1880,10 @@
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 580,
-																		"end": 580
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 580,
-																	"end": 581
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -2749,16 +1897,10 @@
 																	"Literal": {
 																		"ByteString": {
 																			"ws": {
-																				"first": {
-																					"start": 581,
-																					"end": 583
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
-																			"s": {
-																				"start": 583,
-																				"end": 588
-																			},
+																			"s": "b\"\\\"\"",
 																			"suffix": null
 																		}
 																	}
@@ -2766,16 +1908,10 @@
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 588,
-																		"end": 588
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 588,
-																	"end": 589
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -2789,16 +1925,10 @@
 																	"Literal": {
 																		"ByteString": {
 																			"ws": {
-																				"first": {
-																					"start": 589,
-																					"end": 591
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
-																			"s": {
-																				"start": 591,
-																				"end": 596
-																			},
+																			"s": "b\"\\\\\"",
 																			"suffix": null
 																		}
 																	}
@@ -2806,16 +1936,10 @@
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 596,
-																		"end": 596
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 596,
-																	"end": 597
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -2829,16 +1953,10 @@
 																	"Literal": {
 																		"ByteString": {
 																			"ws": {
-																				"first": {
-																					"start": 597,
-																					"end": 599
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
-																			"s": {
-																				"start": 599,
-																				"end": 606
-																			},
+																			"s": "b\"\\x7f\"",
 																			"suffix": null
 																		}
 																	}
@@ -2846,16 +1964,10 @@
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 606,
-																		"end": 606
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 606,
-																	"end": 607
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -2869,16 +1981,10 @@
 																	"Literal": {
 																		"ByteString": {
 																			"ws": {
-																				"first": {
-																					"start": 607,
-																					"end": 609
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
-																			"s": {
-																				"start": 609,
-																				"end": 616
-																			},
+																			"s": "b\"\\xff\"",
 																			"suffix": null
 																		}
 																	}
@@ -2886,16 +1992,10 @@
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 616,
-																		"end": 616
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 616,
-																	"end": 617
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -2909,16 +2009,10 @@
 																	"Literal": {
 																		"ByteString": {
 																			"ws": {
-																				"first": {
-																					"start": 617,
-																					"end": 619
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
-																			"s": {
-																				"start": 619,
-																				"end": 624
-																			},
+																			"s": "b\"\\n\"",
 																			"suffix": null
 																		}
 																	}
@@ -2926,16 +2020,10 @@
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 624,
-																		"end": 624
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 624,
-																	"end": 625
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -2949,16 +2037,10 @@
 																	"Literal": {
 																		"ByteString": {
 																			"ws": {
-																				"first": {
-																					"start": 625,
-																					"end": 627
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
-																			"s": {
-																				"start": 627,
-																				"end": 632
-																			},
+																			"s": "b\"\\r\"",
 																			"suffix": null
 																		}
 																	}
@@ -2966,16 +2048,10 @@
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 632,
-																		"end": 632
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 632,
-																	"end": 633
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -2989,16 +2065,10 @@
 																	"Literal": {
 																		"ByteString": {
 																			"ws": {
-																				"first": {
-																					"start": 633,
-																					"end": 635
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
-																			"s": {
-																				"start": 635,
-																				"end": 640
-																			},
+																			"s": "b\"\\t\"",
 																			"suffix": null
 																		}
 																	}
@@ -3006,16 +2076,10 @@
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 640,
-																		"end": 640
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 640,
-																	"end": 641
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -3029,16 +2093,10 @@
 																	"Literal": {
 																		"ByteString": {
 																			"ws": {
-																				"first": {
-																					"start": 641,
-																					"end": 643
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
-																			"s": {
-																				"start": 643,
-																				"end": 648
-																			},
+																			"s": "b\"\\0\"",
 																			"suffix": null
 																		}
 																	}
@@ -3046,16 +2104,10 @@
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 648,
-																		"end": 648
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 648,
-																	"end": 649
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -3069,16 +2121,10 @@
 																	"Literal": {
 																		"ByteString": {
 																			"ws": {
-																				"first": {
-																					"start": 649,
-																					"end": 651
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
-																			"s": {
-																				"start": 651,
-																				"end": 656
-																			},
+																			"s": "b\"\\\n\"",
 																			"suffix": null
 																		}
 																	}
@@ -3086,16 +2132,10 @@
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 656,
-																		"end": 656
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 656,
-																	"end": 657
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -3106,16 +2146,10 @@
 									},
 									"suffix": {
 										"ws": {
-											"first": {
-												"start": 657,
-												"end": 658
-											},
+											"first": "\n",
 											"rest": []
 										},
-										"token": {
-											"start": 658,
-											"end": 659
-										}
+										"token": "}"
 									}
 								}
 							}
@@ -3139,60 +2173,36 @@
 							},
 							"fn_": {
 								"ws": {
-									"first": {
-										"start": 659,
-										"end": 661
-									},
+									"first": "\n\n",
 									"rest": []
 								},
-								"token": {
-									"start": 661,
-									"end": 663
-								}
+								"token": "fn"
 							},
 							"ident": {
 								"NonKw": [
 									{
-										"first": {
-											"start": 663,
-											"end": 664
-										},
+										"first": " ",
 										"rest": []
 									},
-									{
-										"start": 664,
-										"end": 679
-									}
+									"raw_byte_string"
 								]
 							},
 							"generics": null,
 							"params": {
 								"prefix": {
 									"ws": {
-										"first": {
-											"start": 679,
-											"end": 679
-										},
+										"first": "",
 										"rest": []
 									},
-									"token": {
-										"start": 679,
-										"end": 680
-									}
+									"token": "("
 								},
 								"value": null,
 								"suffix": {
 									"ws": {
-										"first": {
-											"start": 680,
-											"end": 680
-										},
+										"first": "",
 										"rest": []
 									},
-									"token": {
-										"start": 680,
-										"end": 681
-									}
+									"token": ")"
 								}
 							},
 							"ret": null,
@@ -3201,16 +2211,10 @@
 								"Expr": {
 									"prefix": {
 										"ws": {
-											"first": {
-												"start": 681,
-												"end": 682
-											},
+											"first": " ",
 											"rest": []
 										},
-										"token": {
-											"start": 682,
-											"end": 683
-										}
+										"token": "{"
 									},
 									"value": {
 										"attrs": [],
@@ -3225,16 +2229,10 @@
 																	"Literal": {
 																		"RawByteString": {
 																			"ws": {
-																				"first": {
-																					"start": 683,
-																					"end": 685
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
-																			"s": {
-																				"start": 685,
-																				"end": 689
-																			},
+																			"s": "br\"\"",
 																			"suffix": null
 																		}
 																	}
@@ -3242,16 +2240,10 @@
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 689,
-																		"end": 689
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 689,
-																	"end": 690
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -3265,28 +2257,16 @@
 																	"Literal": {
 																		"RawByteString": {
 																			"ws": {
-																				"first": {
-																					"start": 690,
-																					"end": 692
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
-																			"s": {
-																				"start": 692,
-																				"end": 696
-																			},
+																			"s": "br\"\"",
 																			"suffix": [
 																				{
-																					"first": {
-																						"start": 696,
-																						"end": 696
-																					},
+																					"first": "",
 																					"rest": []
 																				},
-																				{
-																					"start": 696,
-																					"end": 697
-																				}
+																				"e"
 																			]
 																		}
 																	}
@@ -3294,16 +2274,10 @@
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 697,
-																		"end": 697
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 697,
-																	"end": 698
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -3317,28 +2291,16 @@
 																	"Literal": {
 																		"RawByteString": {
 																			"ws": {
-																				"first": {
-																					"start": 698,
-																					"end": 700
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
-																			"s": {
-																				"start": 700,
-																				"end": 704
-																			},
+																			"s": "br\"\"",
 																			"suffix": [
 																				{
-																					"first": {
-																						"start": 704,
-																						"end": 704
-																					},
+																					"first": "",
 																					"rest": []
 																				},
-																				{
-																					"start": 704,
-																					"end": 707
-																				}
+																				"abc"
 																			]
 																		}
 																	}
@@ -3346,16 +2308,10 @@
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 707,
-																		"end": 707
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 707,
-																	"end": 708
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -3369,16 +2325,10 @@
 																	"Literal": {
 																		"RawByteString": {
 																			"ws": {
-																				"first": {
-																					"start": 708,
-																					"end": 710
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
-																			"s": {
-																				"start": 710,
-																				"end": 715
-																			},
+																			"s": "br\"a\"",
 																			"suffix": null
 																		}
 																	}
@@ -3386,16 +2336,10 @@
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 715,
-																		"end": 715
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 715,
-																	"end": 716
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -3409,16 +2353,10 @@
 																	"Literal": {
 																		"RawByteString": {
 																			"ws": {
-																				"first": {
-																					"start": 716,
-																					"end": 718
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
-																			"s": {
-																				"start": 718,
-																				"end": 724
-																			},
+																			"s": "br#\"\"#",
 																			"suffix": null
 																		}
 																	}
@@ -3426,16 +2364,10 @@
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 724,
-																		"end": 724
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 724,
-																	"end": 725
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -3449,28 +2381,16 @@
 																	"Literal": {
 																		"RawByteString": {
 																			"ws": {
-																				"first": {
-																					"start": 725,
-																					"end": 727
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
-																			"s": {
-																				"start": 727,
-																				"end": 733
-																			},
+																			"s": "br#\"\"#",
 																			"suffix": [
 																				{
-																					"first": {
-																						"start": 733,
-																						"end": 733
-																					},
+																					"first": "",
 																					"rest": []
 																				},
-																				{
-																					"start": 733,
-																					"end": 734
-																				}
+																				"a"
 																			]
 																		}
 																	}
@@ -3478,16 +2398,10 @@
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 734,
-																		"end": 734
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 734,
-																	"end": 735
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -3501,16 +2415,10 @@
 																	"Literal": {
 																		"RawByteString": {
 																			"ws": {
-																				"first": {
-																					"start": 735,
-																					"end": 737
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
-																			"s": {
-																				"start": 737,
-																				"end": 744
-																			},
+																			"s": "br#\"\"\"#",
 																			"suffix": null
 																		}
 																	}
@@ -3518,16 +2426,10 @@
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 744,
-																		"end": 744
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 744,
-																	"end": 745
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -3541,16 +2443,10 @@
 																	"Literal": {
 																		"RawByteString": {
 																			"ws": {
-																				"first": {
-																					"start": 745,
-																					"end": 747
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
-																			"s": {
-																				"start": 747,
-																				"end": 757
-																			},
+																			"s": "br##\"\"#\"##",
 																			"suffix": null
 																		}
 																	}
@@ -3558,16 +2454,10 @@
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 757,
-																		"end": 757
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 757,
-																	"end": 758
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -3578,16 +2468,10 @@
 									},
 									"suffix": {
 										"ws": {
-											"first": {
-												"start": 758,
-												"end": 759
-											},
+											"first": "\n",
 											"rest": []
 										},
-										"token": {
-											"start": 759,
-											"end": 760
-										}
+										"token": "}"
 									}
 								}
 							}
@@ -3611,60 +2495,36 @@
 							},
 							"fn_": {
 								"ws": {
-									"first": {
-										"start": 760,
-										"end": 762
-									},
+									"first": "\n\n",
 									"rest": []
 								},
-								"token": {
-									"start": 762,
-									"end": 764
-								}
+								"token": "fn"
 							},
 							"ident": {
 								"NonKw": [
 									{
-										"first": {
-											"start": 764,
-											"end": 765
-										},
+										"first": " ",
 										"rest": []
 									},
-									{
-										"start": 765,
-										"end": 773
-									}
+									"c_string"
 								]
 							},
 							"generics": null,
 							"params": {
 								"prefix": {
 									"ws": {
-										"first": {
-											"start": 773,
-											"end": 773
-										},
+										"first": "",
 										"rest": []
 									},
-									"token": {
-										"start": 773,
-										"end": 774
-									}
+									"token": "("
 								},
 								"value": null,
 								"suffix": {
 									"ws": {
-										"first": {
-											"start": 774,
-											"end": 774
-										},
+										"first": "",
 										"rest": []
 									},
-									"token": {
-										"start": 774,
-										"end": 775
-									}
+									"token": ")"
 								}
 							},
 							"ret": null,
@@ -3673,16 +2533,10 @@
 								"Expr": {
 									"prefix": {
 										"ws": {
-											"first": {
-												"start": 775,
-												"end": 776
-											},
+											"first": " ",
 											"rest": []
 										},
-										"token": {
-											"start": 776,
-											"end": 777
-										}
+										"token": "{"
 									},
 									"value": {
 										"attrs": [],
@@ -3697,16 +2551,10 @@
 																	"Literal": {
 																		"CString": {
 																			"ws": {
-																				"first": {
-																					"start": 777,
-																					"end": 779
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
-																			"s": {
-																				"start": 779,
-																				"end": 782
-																			},
+																			"s": "c\"\"",
 																			"suffix": null
 																		}
 																	}
@@ -3714,16 +2562,10 @@
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 782,
-																		"end": 782
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 782,
-																	"end": 783
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -3737,28 +2579,16 @@
 																	"Literal": {
 																		"CString": {
 																			"ws": {
-																				"first": {
-																					"start": 783,
-																					"end": 785
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
-																			"s": {
-																				"start": 785,
-																				"end": 788
-																			},
+																			"s": "c\"\"",
 																			"suffix": [
 																				{
-																					"first": {
-																						"start": 788,
-																						"end": 788
-																					},
+																					"first": "",
 																					"rest": []
 																				},
-																				{
-																					"start": 788,
-																					"end": 789
-																				}
+																				"e"
 																			]
 																		}
 																	}
@@ -3766,16 +2596,10 @@
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 789,
-																		"end": 789
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 789,
-																	"end": 790
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -3789,28 +2613,16 @@
 																	"Literal": {
 																		"CString": {
 																			"ws": {
-																				"first": {
-																					"start": 790,
-																					"end": 792
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
-																			"s": {
-																				"start": 792,
-																				"end": 795
-																			},
+																			"s": "c\"\"",
 																			"suffix": [
 																				{
-																					"first": {
-																						"start": 795,
-																						"end": 795
-																					},
+																					"first": "",
 																					"rest": []
 																				},
-																				{
-																					"start": 795,
-																					"end": 798
-																				}
+																				"abc"
 																			]
 																		}
 																	}
@@ -3818,16 +2630,10 @@
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 798,
-																		"end": 798
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 798,
-																	"end": 799
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -3841,16 +2647,10 @@
 																	"Literal": {
 																		"CString": {
 																			"ws": {
-																				"first": {
-																					"start": 799,
-																					"end": 801
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
-																			"s": {
-																				"start": 801,
-																				"end": 805
-																			},
+																			"s": "c\"a\"",
 																			"suffix": null
 																		}
 																	}
@@ -3858,16 +2658,10 @@
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 805,
-																		"end": 805
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 805,
-																	"end": 806
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -3881,16 +2675,10 @@
 																	"Literal": {
 																		"CString": {
 																			"ws": {
-																				"first": {
-																					"start": 806,
-																					"end": 808
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
-																			"s": {
-																				"start": 808,
-																				"end": 813
-																			},
+																			"s": "c\"\\'\"",
 																			"suffix": null
 																		}
 																	}
@@ -3898,16 +2686,10 @@
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 813,
-																		"end": 813
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 813,
-																	"end": 814
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -3921,16 +2703,10 @@
 																	"Literal": {
 																		"CString": {
 																			"ws": {
-																				"first": {
-																					"start": 814,
-																					"end": 816
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
-																			"s": {
-																				"start": 816,
-																				"end": 821
-																			},
+																			"s": "c\"\\\"\"",
 																			"suffix": null
 																		}
 																	}
@@ -3938,16 +2714,10 @@
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 821,
-																		"end": 821
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 821,
-																	"end": 822
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -3961,16 +2731,10 @@
 																	"Literal": {
 																		"CString": {
 																			"ws": {
-																				"first": {
-																					"start": 822,
-																					"end": 824
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
-																			"s": {
-																				"start": 824,
-																				"end": 829
-																			},
+																			"s": "c\"\\\\\"",
 																			"suffix": null
 																		}
 																	}
@@ -3978,16 +2742,10 @@
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 829,
-																		"end": 829
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 829,
-																	"end": 830
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -4001,16 +2759,10 @@
 																	"Literal": {
 																		"CString": {
 																			"ws": {
-																				"first": {
-																					"start": 830,
-																					"end": 832
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
-																			"s": {
-																				"start": 832,
-																				"end": 839
-																			},
+																			"s": "c\"\\x7f\"",
 																			"suffix": null
 																		}
 																	}
@@ -4018,16 +2770,10 @@
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 839,
-																		"end": 839
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 839,
-																	"end": 840
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -4041,16 +2787,10 @@
 																	"Literal": {
 																		"CString": {
 																			"ws": {
-																				"first": {
-																					"start": 840,
-																					"end": 842
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
-																			"s": {
-																				"start": 842,
-																				"end": 849
-																			},
+																			"s": "c\"\\xff\"",
 																			"suffix": null
 																		}
 																	}
@@ -4058,16 +2798,10 @@
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 849,
-																		"end": 849
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 849,
-																	"end": 850
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -4081,16 +2815,10 @@
 																	"Literal": {
 																		"CString": {
 																			"ws": {
-																				"first": {
-																					"start": 850,
-																					"end": 852
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
-																			"s": {
-																				"start": 852,
-																				"end": 857
-																			},
+																			"s": "c\"\\n\"",
 																			"suffix": null
 																		}
 																	}
@@ -4098,16 +2826,10 @@
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 857,
-																		"end": 857
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 857,
-																	"end": 858
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -4121,16 +2843,10 @@
 																	"Literal": {
 																		"CString": {
 																			"ws": {
-																				"first": {
-																					"start": 858,
-																					"end": 860
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
-																			"s": {
-																				"start": 860,
-																				"end": 865
-																			},
+																			"s": "c\"\\r\"",
 																			"suffix": null
 																		}
 																	}
@@ -4138,16 +2854,10 @@
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 865,
-																		"end": 865
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 865,
-																	"end": 866
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -4161,16 +2871,10 @@
 																	"Literal": {
 																		"CString": {
 																			"ws": {
-																				"first": {
-																					"start": 866,
-																					"end": 868
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
-																			"s": {
-																				"start": 868,
-																				"end": 873
-																			},
+																			"s": "c\"\\t\"",
 																			"suffix": null
 																		}
 																	}
@@ -4178,16 +2882,10 @@
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 873,
-																		"end": 873
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 873,
-																	"end": 874
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -4201,16 +2899,10 @@
 																	"Literal": {
 																		"CString": {
 																			"ws": {
-																				"first": {
-																					"start": 874,
-																					"end": 876
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
-																			"s": {
-																				"start": 876,
-																				"end": 881
-																			},
+																			"s": "c\"\\\n\"",
 																			"suffix": null
 																		}
 																	}
@@ -4218,16 +2910,10 @@
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 881,
-																		"end": 881
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 881,
-																	"end": 882
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -4238,16 +2924,10 @@
 									},
 									"suffix": {
 										"ws": {
-											"first": {
-												"start": 882,
-												"end": 883
-											},
+											"first": "\n",
 											"rest": []
 										},
-										"token": {
-											"start": 883,
-											"end": 884
-										}
+										"token": "}"
 									}
 								}
 							}
@@ -4271,60 +2951,36 @@
 							},
 							"fn_": {
 								"ws": {
-									"first": {
-										"start": 884,
-										"end": 886
-									},
+									"first": "\n\n",
 									"rest": []
 								},
-								"token": {
-									"start": 886,
-									"end": 888
-								}
+								"token": "fn"
 							},
 							"ident": {
 								"NonKw": [
 									{
-										"first": {
-											"start": 888,
-											"end": 889
-										},
+										"first": " ",
 										"rest": []
 									},
-									{
-										"start": 889,
-										"end": 901
-									}
+									"raw_c_string"
 								]
 							},
 							"generics": null,
 							"params": {
 								"prefix": {
 									"ws": {
-										"first": {
-											"start": 901,
-											"end": 901
-										},
+										"first": "",
 										"rest": []
 									},
-									"token": {
-										"start": 901,
-										"end": 902
-									}
+									"token": "("
 								},
 								"value": null,
 								"suffix": {
 									"ws": {
-										"first": {
-											"start": 902,
-											"end": 902
-										},
+										"first": "",
 										"rest": []
 									},
-									"token": {
-										"start": 902,
-										"end": 903
-									}
+									"token": ")"
 								}
 							},
 							"ret": null,
@@ -4333,16 +2989,10 @@
 								"Expr": {
 									"prefix": {
 										"ws": {
-											"first": {
-												"start": 903,
-												"end": 904
-											},
+											"first": " ",
 											"rest": []
 										},
-										"token": {
-											"start": 904,
-											"end": 905
-										}
+										"token": "{"
 									},
 									"value": {
 										"attrs": [],
@@ -4357,16 +3007,10 @@
 																	"Literal": {
 																		"RawCString": {
 																			"ws": {
-																				"first": {
-																					"start": 905,
-																					"end": 907
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
-																			"s": {
-																				"start": 907,
-																				"end": 911
-																			},
+																			"s": "cr\"\"",
 																			"suffix": null
 																		}
 																	}
@@ -4374,16 +3018,10 @@
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 911,
-																		"end": 911
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 911,
-																	"end": 912
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -4397,28 +3035,16 @@
 																	"Literal": {
 																		"RawCString": {
 																			"ws": {
-																				"first": {
-																					"start": 912,
-																					"end": 914
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
-																			"s": {
-																				"start": 914,
-																				"end": 918
-																			},
+																			"s": "cr\"\"",
 																			"suffix": [
 																				{
-																					"first": {
-																						"start": 918,
-																						"end": 918
-																					},
+																					"first": "",
 																					"rest": []
 																				},
-																				{
-																					"start": 918,
-																					"end": 919
-																				}
+																				"e"
 																			]
 																		}
 																	}
@@ -4426,16 +3052,10 @@
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 919,
-																		"end": 919
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 919,
-																	"end": 920
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -4449,28 +3069,16 @@
 																	"Literal": {
 																		"RawCString": {
 																			"ws": {
-																				"first": {
-																					"start": 920,
-																					"end": 922
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
-																			"s": {
-																				"start": 922,
-																				"end": 926
-																			},
+																			"s": "cr\"\"",
 																			"suffix": [
 																				{
-																					"first": {
-																						"start": 926,
-																						"end": 926
-																					},
+																					"first": "",
 																					"rest": []
 																				},
-																				{
-																					"start": 926,
-																					"end": 929
-																				}
+																				"abc"
 																			]
 																		}
 																	}
@@ -4478,16 +3086,10 @@
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 929,
-																		"end": 929
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 929,
-																	"end": 930
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -4501,16 +3103,10 @@
 																	"Literal": {
 																		"RawCString": {
 																			"ws": {
-																				"first": {
-																					"start": 930,
-																					"end": 932
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
-																			"s": {
-																				"start": 932,
-																				"end": 937
-																			},
+																			"s": "cr\"a\"",
 																			"suffix": null
 																		}
 																	}
@@ -4518,16 +3114,10 @@
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 937,
-																		"end": 937
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 937,
-																	"end": 938
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -4541,16 +3131,10 @@
 																	"Literal": {
 																		"RawCString": {
 																			"ws": {
-																				"first": {
-																					"start": 938,
-																					"end": 940
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
-																			"s": {
-																				"start": 940,
-																				"end": 946
-																			},
+																			"s": "cr#\"\"#",
 																			"suffix": null
 																		}
 																	}
@@ -4558,16 +3142,10 @@
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 946,
-																		"end": 946
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 946,
-																	"end": 947
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -4581,28 +3159,16 @@
 																	"Literal": {
 																		"RawCString": {
 																			"ws": {
-																				"first": {
-																					"start": 947,
-																					"end": 949
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
-																			"s": {
-																				"start": 949,
-																				"end": 955
-																			},
+																			"s": "cr#\"\"#",
 																			"suffix": [
 																				{
-																					"first": {
-																						"start": 955,
-																						"end": 955
-																					},
+																					"first": "",
 																					"rest": []
 																				},
-																				{
-																					"start": 955,
-																					"end": 956
-																				}
+																				"a"
 																			]
 																		}
 																	}
@@ -4610,16 +3176,10 @@
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 956,
-																		"end": 956
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 956,
-																	"end": 957
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -4633,16 +3193,10 @@
 																	"Literal": {
 																		"RawCString": {
 																			"ws": {
-																				"first": {
-																					"start": 957,
-																					"end": 959
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
-																			"s": {
-																				"start": 959,
-																				"end": 966
-																			},
+																			"s": "cr#\"\"\"#",
 																			"suffix": null
 																		}
 																	}
@@ -4650,16 +3204,10 @@
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 966,
-																		"end": 966
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 966,
-																	"end": 967
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -4673,16 +3221,10 @@
 																	"Literal": {
 																		"RawCString": {
 																			"ws": {
-																				"first": {
-																					"start": 967,
-																					"end": 969
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
-																			"s": {
-																				"start": 969,
-																				"end": 979
-																			},
+																			"s": "cr##\"\"#\"##",
 																			"suffix": null
 																		}
 																	}
@@ -4690,16 +3232,10 @@
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 979,
-																		"end": 979
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 979,
-																	"end": 980
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -4710,16 +3246,10 @@
 									},
 									"suffix": {
 										"ws": {
-											"first": {
-												"start": 980,
-												"end": 981
-											},
+											"first": "\n",
 											"rest": []
 										},
-										"token": {
-											"start": 981,
-											"end": 982
-										}
+										"token": "}"
 									}
 								}
 							}
@@ -4743,60 +3273,36 @@
 							},
 							"fn_": {
 								"ws": {
-									"first": {
-										"start": 982,
-										"end": 984
-									},
+									"first": "\n\n",
 									"rest": []
 								},
-								"token": {
-									"start": 984,
-									"end": 986
-								}
+								"token": "fn"
 							},
 							"ident": {
 								"NonKw": [
 									{
-										"first": {
-											"start": 986,
-											"end": 987
-										},
+										"first": " ",
 										"rest": []
 									},
-									{
-										"start": 987,
-										"end": 994
-									}
+									"integer"
 								]
 							},
 							"generics": null,
 							"params": {
 								"prefix": {
 									"ws": {
-										"first": {
-											"start": 994,
-											"end": 994
-										},
+										"first": "",
 										"rest": []
 									},
-									"token": {
-										"start": 994,
-										"end": 995
-									}
+									"token": "("
 								},
 								"value": null,
 								"suffix": {
 									"ws": {
-										"first": {
-											"start": 995,
-											"end": 995
-										},
+										"first": "",
 										"rest": []
 									},
-									"token": {
-										"start": 995,
-										"end": 996
-									}
+									"token": ")"
 								}
 							},
 							"ret": null,
@@ -4805,16 +3311,10 @@
 								"Expr": {
 									"prefix": {
 										"ws": {
-											"first": {
-												"start": 996,
-												"end": 997
-											},
+											"first": " ",
 											"rest": []
 										},
-										"token": {
-											"start": 997,
-											"end": 998
-										}
+										"token": "{"
 									},
 									"value": {
 										"attrs": [],
@@ -4829,17 +3329,11 @@
 																	"Literal": {
 																		"Integer": {
 																			"ws": {
-																				"first": {
-																					"start": 998,
-																					"end": 1000
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
 																			"inner": {
-																				"Decimal": {
-																					"start": 1000,
-																					"end": 1001
-																				}
+																				"Decimal": "0"
 																			},
 																			"suffix": null
 																		}
@@ -4848,16 +3342,10 @@
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 1001,
-																		"end": 1001
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 1001,
-																	"end": 1002
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -4871,17 +3359,11 @@
 																	"Literal": {
 																		"Integer": {
 																			"ws": {
-																				"first": {
-																					"start": 1002,
-																					"end": 1004
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
 																			"inner": {
-																				"Decimal": {
-																					"start": 1004,
-																					"end": 1006
-																				}
+																				"Decimal": "00"
 																			},
 																			"suffix": null
 																		}
@@ -4890,16 +3372,10 @@
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 1006,
-																		"end": 1006
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 1006,
-																	"end": 1007
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -4913,17 +3389,11 @@
 																	"Literal": {
 																		"Integer": {
 																			"ws": {
-																				"first": {
-																					"start": 1007,
-																					"end": 1009
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
 																			"inner": {
-																				"Decimal": {
-																					"start": 1009,
-																					"end": 1019
-																				}
+																				"Decimal": "1234567890"
 																			},
 																			"suffix": null
 																		}
@@ -4932,16 +3402,10 @@
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 1019,
-																		"end": 1019
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 1019,
-																	"end": 1020
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -4955,17 +3419,11 @@
 																	"Literal": {
 																		"Integer": {
 																			"ws": {
-																				"first": {
-																					"start": 1020,
-																					"end": 1022
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
 																			"inner": {
-																				"Decimal": {
-																					"start": 1022,
-																					"end": 1040
-																				}
+																				"Decimal": "0__1__2__3__4__5__"
 																			},
 																			"suffix": null
 																		}
@@ -4974,16 +3432,10 @@
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 1040,
-																		"end": 1040
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 1040,
-																	"end": 1041
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -4997,30 +3449,18 @@
 																	"Literal": {
 																		"Integer": {
 																			"ws": {
-																				"first": {
-																					"start": 1041,
-																					"end": 1043
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
 																			"inner": {
-																				"Decimal": {
-																					"start": 1043,
-																					"end": 1044
-																				}
+																				"Decimal": "1"
 																			},
 																			"suffix": [
 																				{
-																					"first": {
-																						"start": 1044,
-																						"end": 1044
-																					},
+																					"first": "",
 																					"rest": []
 																				},
-																				{
-																					"start": 1044,
-																					"end": 1047
-																				}
+																				"abc"
 																			]
 																		}
 																	}
@@ -5028,16 +3468,10 @@
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 1047,
-																		"end": 1047
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 1047,
-																	"end": 1048
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -5051,30 +3485,18 @@
 																	"Literal": {
 																		"Integer": {
 																			"ws": {
-																				"first": {
-																					"start": 1048,
-																					"end": 1050
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
 																			"inner": {
-																				"Decimal": {
-																					"start": 1050,
-																					"end": 1052
-																				}
+																				"Decimal": "1_"
 																			},
 																			"suffix": [
 																				{
-																					"first": {
-																						"start": 1052,
-																						"end": 1052
-																					},
+																					"first": "",
 																					"rest": []
 																				},
-																				{
-																					"start": 1052,
-																					"end": 1055
-																				}
+																				"abc"
 																			]
 																		}
 																	}
@@ -5082,16 +3504,10 @@
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 1055,
-																		"end": 1055
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 1055,
-																	"end": 1056
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -5105,30 +3521,18 @@
 																	"Literal": {
 																		"Integer": {
 																			"ws": {
-																				"first": {
-																					"start": 1056,
-																					"end": 1059
-																				},
+																				"first": "\n\n\t",
 																				"rest": []
 																			},
 																			"inner": {
-																				"Decimal": {
-																					"start": 1059,
-																					"end": 1060
-																				}
+																				"Decimal": "0"
 																			},
 																			"suffix": [
 																				{
-																					"first": {
-																						"start": 1060,
-																						"end": 1060
-																					},
+																					"first": "",
 																					"rest": []
 																				},
-																				{
-																					"start": 1060,
-																					"end": 1062
-																				}
+																				"b0"
 																			]
 																		}
 																	}
@@ -5136,16 +3540,10 @@
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 1062,
-																		"end": 1062
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 1062,
-																	"end": 1063
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -5159,30 +3557,18 @@
 																	"Literal": {
 																		"Integer": {
 																			"ws": {
-																				"first": {
-																					"start": 1063,
-																					"end": 1065
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
 																			"inner": {
-																				"Decimal": {
-																					"start": 1065,
-																					"end": 1066
-																				}
+																				"Decimal": "0"
 																			},
 																			"suffix": [
 																				{
-																					"first": {
-																						"start": 1066,
-																						"end": 1066
-																					},
+																					"first": "",
 																					"rest": []
 																				},
-																				{
-																					"start": 1066,
-																					"end": 1074
-																				}
+																				"b______0"
 																			]
 																		}
 																	}
@@ -5190,16 +3576,10 @@
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 1074,
-																		"end": 1074
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 1074,
-																	"end": 1075
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -5213,30 +3593,18 @@
 																	"Literal": {
 																		"Integer": {
 																			"ws": {
-																				"first": {
-																					"start": 1075,
-																					"end": 1077
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
 																			"inner": {
-																				"Decimal": {
-																					"start": 1077,
-																					"end": 1078
-																				}
+																				"Decimal": "0"
 																			},
 																			"suffix": [
 																				{
-																					"first": {
-																						"start": 1078,
-																						"end": 1078
-																					},
+																					"first": "",
 																					"rest": []
 																				},
-																				{
-																					"start": 1078,
-																					"end": 1089
-																				}
+																				"b_0_1_0_1_0"
 																			]
 																		}
 																	}
@@ -5244,16 +3612,10 @@
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 1089,
-																		"end": 1089
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 1089,
-																	"end": 1090
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -5267,30 +3629,18 @@
 																	"Literal": {
 																		"Integer": {
 																			"ws": {
-																				"first": {
-																					"start": 1090,
-																					"end": 1093
-																				},
+																				"first": "\n\n\t",
 																				"rest": []
 																			},
 																			"inner": {
-																				"Decimal": {
-																					"start": 1093,
-																					"end": 1094
-																				}
+																				"Decimal": "0"
 																			},
 																			"suffix": [
 																				{
-																					"first": {
-																						"start": 1094,
-																						"end": 1094
-																					},
+																					"first": "",
 																					"rest": []
 																				},
-																				{
-																					"start": 1094,
-																					"end": 1100
-																				}
+																				"o_0_7_"
 																			]
 																		}
 																	}
@@ -5298,16 +3648,10 @@
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 1100,
-																		"end": 1100
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 1100,
-																	"end": 1101
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -5321,30 +3665,18 @@
 																	"Literal": {
 																		"Integer": {
 																			"ws": {
-																				"first": {
-																					"start": 1101,
-																					"end": 1103
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
 																			"inner": {
-																				"Decimal": {
-																					"start": 1103,
-																					"end": 1104
-																				}
+																				"Decimal": "0"
 																			},
 																			"suffix": [
 																				{
-																					"first": {
-																						"start": 1104,
-																						"end": 1104
-																					},
+																					"first": "",
 																					"rest": []
 																				},
-																				{
-																					"start": 1104,
-																					"end": 1114
-																				}
+																				"x_0_9_a_f_"
 																			]
 																		}
 																	}
@@ -5352,16 +3684,10 @@
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 1114,
-																		"end": 1114
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 1114,
-																	"end": 1115
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -5372,16 +3698,10 @@
 									},
 									"suffix": {
 										"ws": {
-											"first": {
-												"start": 1115,
-												"end": 1116
-											},
+											"first": "\n",
 											"rest": []
 										},
-										"token": {
-											"start": 1116,
-											"end": 1117
-										}
+										"token": "}"
 									}
 								}
 							}
@@ -5405,60 +3725,36 @@
 							},
 							"fn_": {
 								"ws": {
-									"first": {
-										"start": 1117,
-										"end": 1119
-									},
+									"first": "\n\n",
 									"rest": []
 								},
-								"token": {
-									"start": 1119,
-									"end": 1121
-								}
+								"token": "fn"
 							},
 							"ident": {
 								"NonKw": [
 									{
-										"first": {
-											"start": 1121,
-											"end": 1122
-										},
+										"first": " ",
 										"rest": []
 									},
-									{
-										"start": 1122,
-										"end": 1127
-									}
+									"float"
 								]
 							},
 							"generics": null,
 							"params": {
 								"prefix": {
 									"ws": {
-										"first": {
-											"start": 1127,
-											"end": 1127
-										},
+										"first": "",
 										"rest": []
 									},
-									"token": {
-										"start": 1127,
-										"end": 1128
-									}
+									"token": "("
 								},
 								"value": null,
 								"suffix": {
 									"ws": {
-										"first": {
-											"start": 1128,
-											"end": 1128
-										},
+										"first": "",
 										"rest": []
 									},
-									"token": {
-										"start": 1128,
-										"end": 1129
-									}
+									"token": ")"
 								}
 							},
 							"ret": null,
@@ -5467,16 +3763,10 @@
 								"Expr": {
 									"prefix": {
 										"ws": {
-											"first": {
-												"start": 1129,
-												"end": 1130
-											},
+											"first": " ",
 											"rest": []
 										},
-										"token": {
-											"start": 1130,
-											"end": 1131
-										}
+										"token": "{"
 									},
 									"value": {
 										"attrs": [],
@@ -5491,28 +3781,16 @@
 																	"Literal": {
 																		"Float": {
 																			"ws": {
-																				"first": {
-																					"start": 1131,
-																					"end": 1133
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
-																			"int": {
-																				"start": 1133,
-																				"end": 1134
-																			},
+																			"int": "0",
 																			"dot": {
 																				"ws": {
-																					"first": {
-																						"start": 1134,
-																						"end": 1134
-																					},
+																					"first": "",
 																					"rest": []
 																				},
-																				"token": {
-																					"start": 1134,
-																					"end": 1135
-																				}
+																				"token": "."
 																			},
 																			"frac": null,
 																			"exponent": null,
@@ -5523,16 +3801,10 @@
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 1135,
-																		"end": 1135
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 1135,
-																	"end": 1136
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -5546,33 +3818,18 @@
 																	"Literal": {
 																		"Float": {
 																			"ws": {
-																				"first": {
-																					"start": 1136,
-																					"end": 1138
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
-																			"int": {
-																				"start": 1138,
-																				"end": 1139
-																			},
+																			"int": "0",
 																			"dot": {
 																				"ws": {
-																					"first": {
-																						"start": 1139,
-																						"end": 1139
-																					},
+																					"first": "",
 																					"rest": []
 																				},
-																				"token": {
-																					"start": 1139,
-																					"end": 1140
-																				}
+																				"token": "."
 																			},
-																			"frac": {
-																				"start": 1140,
-																				"end": 1141
-																			},
+																			"frac": "0",
 																			"exponent": null,
 																			"suffix": null
 																		}
@@ -5581,16 +3838,10 @@
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 1141,
-																		"end": 1141
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 1141,
-																	"end": 1142
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -5604,33 +3855,18 @@
 																	"Literal": {
 																		"Float": {
 																			"ws": {
-																				"first": {
-																					"start": 1142,
-																					"end": 1144
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
-																			"int": {
-																				"start": 1144,
-																				"end": 1151
-																			},
+																			"int": "0_1_2_3",
 																			"dot": {
 																				"ws": {
-																					"first": {
-																						"start": 1151,
-																						"end": 1151
-																					},
+																					"first": "",
 																					"rest": []
 																				},
-																				"token": {
-																					"start": 1151,
-																					"end": 1152
-																				}
+																				"token": "."
 																			},
-																			"frac": {
-																				"start": 1152,
-																				"end": 1159
-																			},
+																			"frac": "0_1_2_3",
 																			"exponent": null,
 																			"suffix": null
 																		}
@@ -5639,16 +3875,10 @@
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 1159,
-																		"end": 1159
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 1159,
-																	"end": 1160
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -5662,46 +3892,25 @@
 																	"Literal": {
 																		"Float": {
 																			"ws": {
-																				"first": {
-																					"start": 1160,
-																					"end": 1162
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
-																			"int": {
-																				"start": 1162,
-																				"end": 1163
-																			},
+																			"int": "0",
 																			"dot": {
 																				"ws": {
-																					"first": {
-																						"start": 1163,
-																						"end": 1163
-																					},
+																					"first": "",
 																					"rest": []
 																				},
-																				"token": {
-																					"start": 1163,
-																					"end": 1164
-																				}
+																				"token": "."
 																			},
-																			"frac": {
-																				"start": 1164,
-																				"end": 1165
-																			},
+																			"frac": "0",
 																			"exponent": null,
 																			"suffix": [
 																				{
-																					"first": {
-																						"start": 1165,
-																						"end": 1165
-																					},
+																					"first": "",
 																					"rest": []
 																				},
-																				{
-																					"start": 1165,
-																					"end": 1168
-																				}
+																				"abc"
 																			]
 																		}
 																	}
@@ -5709,16 +3918,10 @@
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 1168,
-																		"end": 1168
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 1168,
-																	"end": 1169
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -5732,22 +3935,13 @@
 																	"Literal": {
 																		"Float": {
 																			"ws": {
-																				"first": {
-																					"start": 1169,
-																					"end": 1171
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
-																			"int": {
-																				"start": 1171,
-																				"end": 1172
-																			},
+																			"int": "0",
 																			"dot": null,
 																			"frac": null,
-																			"exponent": {
-																				"start": 1172,
-																				"end": 1174
-																			},
+																			"exponent": "e1",
 																			"suffix": null
 																		}
 																	}
@@ -5755,16 +3949,10 @@
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 1174,
-																		"end": 1174
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 1174,
-																	"end": 1175
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -5778,22 +3966,13 @@
 																	"Literal": {
 																		"Float": {
 																			"ws": {
-																				"first": {
-																					"start": 1175,
-																					"end": 1177
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
-																			"int": {
-																				"start": 1177,
-																				"end": 1178
-																			},
+																			"int": "0",
 																			"dot": null,
 																			"frac": null,
-																			"exponent": {
-																				"start": 1178,
-																				"end": 1180
-																			},
+																			"exponent": "E1",
 																			"suffix": null
 																		}
 																	}
@@ -5801,16 +3980,10 @@
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 1180,
-																		"end": 1180
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 1180,
-																	"end": 1181
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -5824,22 +3997,13 @@
 																	"Literal": {
 																		"Float": {
 																			"ws": {
-																				"first": {
-																					"start": 1181,
-																					"end": 1183
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
-																			"int": {
-																				"start": 1183,
-																				"end": 1184
-																			},
+																			"int": "0",
 																			"dot": null,
 																			"frac": null,
-																			"exponent": {
-																				"start": 1184,
-																				"end": 1187
-																			},
+																			"exponent": "e+1",
 																			"suffix": null
 																		}
 																	}
@@ -5847,16 +4011,10 @@
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 1187,
-																		"end": 1187
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 1187,
-																	"end": 1188
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -5870,22 +4028,13 @@
 																	"Literal": {
 																		"Float": {
 																			"ws": {
-																				"first": {
-																					"start": 1188,
-																					"end": 1190
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
-																			"int": {
-																				"start": 1190,
-																				"end": 1191
-																			},
+																			"int": "0",
 																			"dot": null,
 																			"frac": null,
-																			"exponent": {
-																				"start": 1191,
-																				"end": 1194
-																			},
+																			"exponent": "e-1",
 																			"suffix": null
 																		}
 																	}
@@ -5893,16 +4042,10 @@
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 1194,
-																		"end": 1194
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 1194,
-																	"end": 1195
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -5916,22 +4059,13 @@
 																	"Literal": {
 																		"Float": {
 																			"ws": {
-																				"first": {
-																					"start": 1195,
-																					"end": 1197
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
-																			"int": {
-																				"start": 1197,
-																				"end": 1198
-																			},
+																			"int": "0",
 																			"dot": null,
 																			"frac": null,
-																			"exponent": {
-																				"start": 1198,
-																				"end": 1206
-																			},
+																			"exponent": "e_1_2_3_",
 																			"suffix": null
 																		}
 																	}
@@ -5939,16 +4073,10 @@
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 1206,
-																		"end": 1206
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 1206,
-																	"end": 1207
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -5962,34 +4090,19 @@
 																	"Literal": {
 																		"Float": {
 																			"ws": {
-																				"first": {
-																					"start": 1207,
-																					"end": 1209
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
-																			"int": {
-																				"start": 1209,
-																				"end": 1210
-																			},
+																			"int": "0",
 																			"dot": null,
 																			"frac": null,
-																			"exponent": {
-																				"start": 1210,
-																				"end": 1218
-																			},
+																			"exponent": "e_1_2_3_",
 																			"suffix": [
 																				{
-																					"first": {
-																						"start": 1218,
-																						"end": 1218
-																					},
+																					"first": "",
 																					"rest": []
 																				},
-																				{
-																					"start": 1218,
-																					"end": 1221
-																				}
+																				"abc"
 																			]
 																		}
 																	}
@@ -5997,16 +4110,10 @@
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 1221,
-																		"end": 1221
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 1221,
-																	"end": 1222
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -6020,34 +4127,19 @@
 																	"Literal": {
 																		"Float": {
 																			"ws": {
-																				"first": {
-																					"start": 1222,
-																					"end": 1224
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
-																			"int": {
-																				"start": 1224,
-																				"end": 1225
-																			},
+																			"int": "0",
 																			"dot": null,
 																			"frac": null,
-																			"exponent": {
-																				"start": 1225,
-																				"end": 1232
-																			},
+																			"exponent": "e_1_2_3",
 																			"suffix": [
 																				{
-																					"first": {
-																						"start": 1232,
-																						"end": 1232
-																					},
+																					"first": "",
 																					"rest": []
 																				},
-																				{
-																					"start": 1232,
-																					"end": 1239
-																				}
+																				"e_1_2_3"
 																			]
 																		}
 																	}
@@ -6055,16 +4147,10 @@
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 1239,
-																		"end": 1239
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 1239,
-																	"end": 1240
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -6075,16 +4161,10 @@
 									},
 									"suffix": {
 										"ws": {
-											"first": {
-												"start": 1240,
-												"end": 1241
-											},
+											"first": "\n",
 											"rest": []
 										},
-										"token": {
-											"start": 1241,
-											"end": 1242
-										}
+										"token": "}"
 									}
 								}
 							}
@@ -6108,60 +4188,36 @@
 							},
 							"fn_": {
 								"ws": {
-									"first": {
-										"start": 1242,
-										"end": 1244
-									},
+									"first": "\n\n",
 									"rest": []
 								},
-								"token": {
-									"start": 1244,
-									"end": 1246
-								}
+								"token": "fn"
 							},
 							"ident": {
 								"NonKw": [
 									{
-										"first": {
-											"start": 1246,
-											"end": 1247
-										},
+										"first": " ",
 										"rest": []
 									},
-									{
-										"start": 1247,
-										"end": 1251
-									}
+									"bool"
 								]
 							},
 							"generics": null,
 							"params": {
 								"prefix": {
 									"ws": {
-										"first": {
-											"start": 1251,
-											"end": 1251
-										},
+										"first": "",
 										"rest": []
 									},
-									"token": {
-										"start": 1251,
-										"end": 1252
-									}
+									"token": "("
 								},
 								"value": null,
 								"suffix": {
 									"ws": {
-										"first": {
-											"start": 1252,
-											"end": 1252
-										},
+										"first": "",
 										"rest": []
 									},
-									"token": {
-										"start": 1252,
-										"end": 1253
-									}
+									"token": ")"
 								}
 							},
 							"ret": null,
@@ -6170,16 +4226,10 @@
 								"Expr": {
 									"prefix": {
 										"ws": {
-											"first": {
-												"start": 1253,
-												"end": 1254
-											},
+											"first": " ",
 											"rest": []
 										},
-										"token": {
-											"start": 1254,
-											"end": 1255
-										}
+										"token": "{"
 									},
 									"value": {
 										"attrs": [],
@@ -6194,32 +4244,20 @@
 																	"Literal": {
 																		"True": {
 																			"ws": {
-																				"first": {
-																					"start": 1255,
-																					"end": 1257
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
-																			"token": {
-																				"start": 1257,
-																				"end": 1261
-																			}
+																			"token": "true"
 																		}
 																	}
 																}
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 1261,
-																		"end": 1261
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 1261,
-																	"end": 1262
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -6233,32 +4271,20 @@
 																	"Literal": {
 																		"False": {
 																			"ws": {
-																				"first": {
-																					"start": 1262,
-																					"end": 1264
-																				},
+																				"first": "\n\t",
 																				"rest": []
 																			},
-																			"token": {
-																				"start": 1264,
-																				"end": 1269
-																			}
+																			"token": "false"
 																		}
 																	}
 																}
 															},
 															"semi": {
 																"ws": {
-																	"first": {
-																		"start": 1269,
-																		"end": 1269
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 1269,
-																	"end": 1270
-																}
+																"token": ";"
 															}
 														}
 													}
@@ -6269,16 +4295,10 @@
 									},
 									"suffix": {
 										"ws": {
-											"first": {
-												"start": 1270,
-												"end": 1271
-											},
+											"first": "\n",
 											"rest": []
 										},
-										"token": {
-											"start": 1271,
-											"end": 1272
-										}
+										"token": "}"
 									}
 								}
 							}
@@ -6289,10 +4309,7 @@
 		}
 	],
 	"suffix_ws": {
-		"first": {
-			"start": 1272,
-			"end": 1273
-		},
+		"first": "\n",
 		"rest": []
 	}
 }

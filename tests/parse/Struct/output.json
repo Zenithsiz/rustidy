@@ -12,30 +12,18 @@
 							"Struct": {
 								"struct_": {
 									"ws": {
-										"first": {
-											"start": 0,
-											"end": 0
-										},
+										"first": "",
 										"rest": []
 									},
-									"token": {
-										"start": 0,
-										"end": 6
-									}
+									"token": "struct"
 								},
 								"ident": {
 									"NonKw": [
 										{
-											"first": {
-												"start": 6,
-												"end": 7
-											},
+											"first": " ",
 											"rest": []
 										},
-										{
-											"start": 7,
-											"end": 8
-										}
+										"A"
 									]
 								},
 								"generics": null,
@@ -43,16 +31,10 @@
 								"inner": {
 									"Semi": {
 										"ws": {
-											"first": {
-												"start": 8,
-												"end": 8
-											},
+											"first": "",
 											"rest": []
 										},
-										"token": {
-											"start": 8,
-											"end": 9
-										}
+										"token": ";"
 									}
 								}
 							}
@@ -71,30 +53,18 @@
 							"Struct": {
 								"struct_": {
 									"ws": {
-										"first": {
-											"start": 9,
-											"end": 10
-										},
+										"first": "\n",
 										"rest": []
 									},
-									"token": {
-										"start": 10,
-										"end": 16
-									}
+									"token": "struct"
 								},
 								"ident": {
 									"NonKw": [
 										{
-											"first": {
-												"start": 16,
-												"end": 17
-											},
+											"first": " ",
 											"rest": []
 										},
-										{
-											"start": 17,
-											"end": 18
-										}
+										"A"
 									]
 								},
 								"generics": null,
@@ -103,30 +73,18 @@
 									"Fields": {
 										"prefix": {
 											"ws": {
-												"first": {
-													"start": 18,
-													"end": 19
-												},
+												"first": " ",
 												"rest": []
 											},
-											"token": {
-												"start": 19,
-												"end": 20
-											}
+											"token": "{"
 										},
 										"value": null,
 										"suffix": {
 											"ws": {
-												"first": {
-													"start": 20,
-													"end": 20
-												},
+												"first": "",
 												"rest": []
 											},
-											"token": {
-												"start": 20,
-												"end": 21
-											}
+											"token": "}"
 										}
 									}
 								}
@@ -146,75 +104,45 @@
 							"Tuple": {
 								"struct_": {
 									"ws": {
-										"first": {
-											"start": 21,
-											"end": 22
-										},
+										"first": "\n",
 										"rest": []
 									},
-									"token": {
-										"start": 22,
-										"end": 28
-									}
+									"token": "struct"
 								},
 								"ident": {
 									"NonKw": [
 										{
-											"first": {
-												"start": 28,
-												"end": 29
-											},
+											"first": " ",
 											"rest": []
 										},
-										{
-											"start": 29,
-											"end": 30
-										}
+										"A"
 									]
 								},
 								"generics": null,
 								"fields": {
 									"prefix": {
 										"ws": {
-											"first": {
-												"start": 30,
-												"end": 30
-											},
+											"first": "",
 											"rest": []
 										},
-										"token": {
-											"start": 30,
-											"end": 31
-										}
+										"token": "("
 									},
 									"value": null,
 									"suffix": {
 										"ws": {
-											"first": {
-												"start": 31,
-												"end": 31
-											},
+											"first": "",
 											"rest": []
 										},
-										"token": {
-											"start": 31,
-											"end": 32
-										}
+										"token": ")"
 									}
 								},
 								"where_": null,
 								"semi": {
 									"ws": {
-										"first": {
-											"start": 32,
-											"end": 32
-										},
+										"first": "",
 										"rest": []
 									},
-									"token": {
-										"start": 32,
-										"end": 33
-									}
+									"token": ";"
 								}
 							}
 						}
@@ -232,45 +160,27 @@
 							"Struct": {
 								"struct_": {
 									"ws": {
-										"first": {
-											"start": 33,
-											"end": 35
-										},
+										"first": "\n\n",
 										"rest": []
 									},
-									"token": {
-										"start": 35,
-										"end": 41
-									}
+									"token": "struct"
 								},
 								"ident": {
 									"NonKw": [
 										{
-											"first": {
-												"start": 41,
-												"end": 42
-											},
+											"first": " ",
 											"rest": []
 										},
-										{
-											"start": 42,
-											"end": 43
-										}
+										"A"
 									]
 								},
 								"generics": {
 									"prefix": {
 										"ws": {
-											"first": {
-												"start": 43,
-												"end": 43
-											},
+											"first": "",
 											"rest": []
 										},
-										"token": {
-											"start": 43,
-											"end": 44
-										}
+										"token": "<"
 									},
 									"value": {
 										"punctuated": {
@@ -281,16 +191,10 @@
 														"ident": {
 															"NonKw": [
 																{
-																	"first": {
-																		"start": 44,
-																		"end": 44
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																{
-																	"start": 44,
-																	"end": 45
-																}
+																"T"
 															]
 														},
 														"bounds": null,
@@ -304,16 +208,10 @@
 									},
 									"suffix": {
 										"ws": {
-											"first": {
-												"start": 45,
-												"end": 45
-											},
+											"first": "",
 											"rest": []
 										},
-										"token": {
-											"start": 45,
-											"end": 46
-										}
+										"token": ">"
 									}
 								},
 								"where_": null,
@@ -321,30 +219,18 @@
 									"Fields": {
 										"prefix": {
 											"ws": {
-												"first": {
-													"start": 46,
-													"end": 47
-												},
+												"first": " ",
 												"rest": []
 											},
-											"token": {
-												"start": 47,
-												"end": 48
-											}
+											"token": "{"
 										},
 										"value": null,
 										"suffix": {
 											"ws": {
-												"first": {
-													"start": 48,
-													"end": 48
-												},
+												"first": "",
 												"rest": []
 											},
-											"token": {
-												"start": 48,
-												"end": 49
-											}
+											"token": "}"
 										}
 									}
 								}
@@ -364,46 +250,28 @@
 							"Struct": {
 								"struct_": {
 									"ws": {
-										"first": {
-											"start": 49,
-											"end": 50
-										},
+										"first": "\n",
 										"rest": []
 									},
-									"token": {
-										"start": 50,
-										"end": 56
-									}
+									"token": "struct"
 								},
 								"ident": {
 									"NonKw": [
 										{
-											"first": {
-												"start": 56,
-												"end": 57
-											},
+											"first": " ",
 											"rest": []
 										},
-										{
-											"start": 57,
-											"end": 58
-										}
+										"A"
 									]
 								},
 								"generics": null,
 								"where_": {
 									"where_": {
 										"ws": {
-											"first": {
-												"start": 58,
-												"end": 59
-											},
+											"first": " ",
 											"rest": []
 										},
-										"token": {
-											"start": 59,
-											"end": 64
-										}
+										"token": "where"
 									},
 									"items": {
 										"punctuated": {
@@ -427,16 +295,10 @@
 																								"Ident": {
 																									"NonKw": [
 																										{
-																											"first": {
-																												"start": 64,
-																												"end": 65
-																											},
+																											"first": " ",
 																											"rest": []
 																										},
-																										{
-																											"start": 65,
-																											"end": 66
-																										}
+																										"T"
 																									]
 																								}
 																							},
@@ -456,16 +318,10 @@
 													},
 													"colon": {
 														"ws": {
-															"first": {
-																"start": 66,
-																"end": 66
-															},
+															"first": "",
 															"rest": []
 														},
-														"token": {
-															"start": 66,
-															"end": 67
-														}
+														"token": ":"
 													},
 													"bounds": {
 														"punctuated": {
@@ -481,16 +337,10 @@
 																						"Ident": {
 																							"NonKw": [
 																								{
-																									"first": {
-																										"start": 67,
-																										"end": 68
-																									},
+																									"first": " ",
 																									"rest": []
 																								},
-																								{
-																									"start": 68,
-																									"end": 69
-																								}
+																								"B"
 																							]
 																						}
 																					},
@@ -517,30 +367,18 @@
 									"Fields": {
 										"prefix": {
 											"ws": {
-												"first": {
-													"start": 69,
-													"end": 70
-												},
+												"first": " ",
 												"rest": []
 											},
-											"token": {
-												"start": 70,
-												"end": 71
-											}
+											"token": "{"
 										},
 										"value": null,
 										"suffix": {
 											"ws": {
-												"first": {
-													"start": 71,
-													"end": 71
-												},
+												"first": "",
 												"rest": []
 											},
-											"token": {
-												"start": 71,
-												"end": 72
-											}
+											"token": "}"
 										}
 									}
 								}
@@ -560,30 +398,18 @@
 							"Struct": {
 								"struct_": {
 									"ws": {
-										"first": {
-											"start": 72,
-											"end": 74
-										},
+										"first": "\n\n",
 										"rest": []
 									},
-									"token": {
-										"start": 74,
-										"end": 80
-									}
+									"token": "struct"
 								},
 								"ident": {
 									"NonKw": [
 										{
-											"first": {
-												"start": 80,
-												"end": 81
-											},
+											"first": " ",
 											"rest": []
 										},
-										{
-											"start": 81,
-											"end": 82
-										}
+										"A"
 									]
 								},
 								"generics": null,
@@ -592,16 +418,10 @@
 									"Fields": {
 										"prefix": {
 											"ws": {
-												"first": {
-													"start": 82,
-													"end": 83
-												},
+												"first": " ",
 												"rest": []
 											},
-											"token": {
-												"start": 83,
-												"end": 84
-											}
+											"token": "{"
 										},
 										"value": {
 											"punctuated": {
@@ -612,30 +432,18 @@
 														"ident": {
 															"NonKw": [
 																{
-																	"first": {
-																		"start": 84,
-																		"end": 85
-																	},
+																	"first": " ",
 																	"rest": []
 																},
-																{
-																	"start": 85,
-																	"end": 86
-																}
+																"a"
 															]
 														},
 														"colon": {
 															"ws": {
-																"first": {
-																	"start": 86,
-																	"end": 86
-																},
+																"first": "",
 																"rest": []
 															},
-															"token": {
-																"start": 86,
-																"end": 87
-															}
+															"token": ":"
 														},
 														"ty": {
 															"TraitObject": {
@@ -654,16 +462,10 @@
 																									"Ident": {
 																										"NonKw": [
 																											{
-																												"first": {
-																													"start": 87,
-																													"end": 88
-																												},
+																												"first": " ",
 																												"rest": []
 																											},
-																											{
-																												"start": 88,
-																												"end": 91
-																											}
+																											"u32"
 																										]
 																									}
 																								},
@@ -690,16 +492,10 @@
 										},
 										"suffix": {
 											"ws": {
-												"first": {
-													"start": 91,
-													"end": 92
-												},
+												"first": " ",
 												"rest": []
 											},
-											"token": {
-												"start": 92,
-												"end": 93
-											}
+											"token": "}"
 										}
 									}
 								}
@@ -719,30 +515,18 @@
 							"Struct": {
 								"struct_": {
 									"ws": {
-										"first": {
-											"start": 93,
-											"end": 94
-										},
+										"first": "\n",
 										"rest": []
 									},
-									"token": {
-										"start": 94,
-										"end": 100
-									}
+									"token": "struct"
 								},
 								"ident": {
 									"NonKw": [
 										{
-											"first": {
-												"start": 100,
-												"end": 101
-											},
+											"first": " ",
 											"rest": []
 										},
-										{
-											"start": 101,
-											"end": 102
-										}
+										"A"
 									]
 								},
 								"generics": null,
@@ -751,16 +535,10 @@
 									"Fields": {
 										"prefix": {
 											"ws": {
-												"first": {
-													"start": 102,
-													"end": 103
-												},
+												"first": " ",
 												"rest": []
 											},
-											"token": {
-												"start": 103,
-												"end": 104
-											}
+											"token": "{"
 										},
 										"value": {
 											"punctuated": {
@@ -770,46 +548,28 @@
 														"vis": {
 															"pub_": {
 																"ws": {
-																	"first": {
-																		"start": 104,
-																		"end": 105
-																	},
+																	"first": " ",
 																	"rest": []
 																},
-																"token": {
-																	"start": 105,
-																	"end": 108
-																}
+																"token": "pub"
 															},
 															"path": null
 														},
 														"ident": {
 															"NonKw": [
 																{
-																	"first": {
-																		"start": 108,
-																		"end": 109
-																	},
+																	"first": " ",
 																	"rest": []
 																},
-																{
-																	"start": 109,
-																	"end": 110
-																}
+																"a"
 															]
 														},
 														"colon": {
 															"ws": {
-																"first": {
-																	"start": 110,
-																	"end": 110
-																},
+																"first": "",
 																"rest": []
 															},
-															"token": {
-																"start": 110,
-																"end": 111
-															}
+															"token": ":"
 														},
 														"ty": {
 															"TraitObject": {
@@ -828,16 +588,10 @@
 																									"Ident": {
 																										"NonKw": [
 																											{
-																												"first": {
-																													"start": 111,
-																													"end": 112
-																												},
+																												"first": " ",
 																												"rest": []
 																											},
-																											{
-																												"start": 112,
-																												"end": 115
-																											}
+																											"u32"
 																										]
 																									}
 																								},
@@ -864,16 +618,10 @@
 										},
 										"suffix": {
 											"ws": {
-												"first": {
-													"start": 115,
-													"end": 116
-												},
+												"first": " ",
 												"rest": []
 											},
-											"token": {
-												"start": 116,
-												"end": 117
-											}
+											"token": "}"
 										}
 									}
 								}
@@ -893,30 +641,18 @@
 							"Struct": {
 								"struct_": {
 									"ws": {
-										"first": {
-											"start": 117,
-											"end": 118
-										},
+										"first": "\n",
 										"rest": []
 									},
-									"token": {
-										"start": 118,
-										"end": 124
-									}
+									"token": "struct"
 								},
 								"ident": {
 									"NonKw": [
 										{
-											"first": {
-												"start": 124,
-												"end": 125
-											},
+											"first": " ",
 											"rest": []
 										},
-										{
-											"start": 125,
-											"end": 126
-										}
+										"A"
 									]
 								},
 								"generics": null,
@@ -925,16 +661,10 @@
 									"Fields": {
 										"prefix": {
 											"ws": {
-												"first": {
-													"start": 126,
-													"end": 127
-												},
+												"first": " ",
 												"rest": []
 											},
-											"token": {
-												"start": 127,
-												"end": 128
-											}
+											"token": "{"
 										},
 										"value": {
 											"punctuated": {
@@ -944,30 +674,18 @@
 															"Attr": {
 																"pound": {
 																	"ws": {
-																		"first": {
-																			"start": 128,
-																			"end": 129
-																		},
+																		"first": " ",
 																		"rest": []
 																	},
-																	"token": {
-																		"start": 129,
-																		"end": 130
-																	}
+																	"token": "#"
 																},
 																"open": {
 																	"prefix": {
 																		"ws": {
-																			"first": {
-																				"start": 130,
-																				"end": 130
-																			},
+																			"first": "",
 																			"rest": []
 																		},
-																		"token": {
-																			"start": 130,
-																			"end": 131
-																		}
+																		"token": "["
 																	},
 																	"value": {
 																		"Meta": {
@@ -978,16 +696,10 @@
 																						"Ident": {
 																							"NonKw": [
 																								{
-																									"first": {
-																										"start": 131,
-																										"end": 131
-																									},
+																									"first": "",
 																									"rest": []
 																								},
-																								{
-																									"start": 131,
-																									"end": 132
-																								}
+																								"a"
 																							]
 																						}
 																					},
@@ -998,16 +710,10 @@
 																	},
 																	"suffix": {
 																		"ws": {
-																			"first": {
-																				"start": 132,
-																				"end": 132
-																			},
+																			"first": "",
 																			"rest": []
 																		},
-																		"token": {
-																			"start": 132,
-																			"end": 133
-																		}
+																		"token": "]"
 																	}
 																}
 															}
@@ -1018,30 +724,18 @@
 														"ident": {
 															"NonKw": [
 																{
-																	"first": {
-																		"start": 133,
-																		"end": 134
-																	},
+																	"first": " ",
 																	"rest": []
 																},
-																{
-																	"start": 134,
-																	"end": 135
-																}
+																"a"
 															]
 														},
 														"colon": {
 															"ws": {
-																"first": {
-																	"start": 135,
-																	"end": 135
-																},
+																"first": "",
 																"rest": []
 															},
-															"token": {
-																"start": 135,
-																"end": 136
-															}
+															"token": ":"
 														},
 														"ty": {
 															"TraitObject": {
@@ -1060,16 +754,10 @@
 																									"Ident": {
 																										"NonKw": [
 																											{
-																												"first": {
-																													"start": 136,
-																													"end": 137
-																												},
+																												"first": " ",
 																												"rest": []
 																											},
-																											{
-																												"start": 137,
-																												"end": 140
-																											}
+																											"u32"
 																										]
 																									}
 																								},
@@ -1096,16 +784,10 @@
 										},
 										"suffix": {
 											"ws": {
-												"first": {
-													"start": 140,
-													"end": 141
-												},
+												"first": " ",
 												"rest": []
 											},
-											"token": {
-												"start": 141,
-												"end": 142
-											}
+											"token": "}"
 										}
 									}
 								}
@@ -1125,30 +807,18 @@
 							"Struct": {
 								"struct_": {
 									"ws": {
-										"first": {
-											"start": 142,
-											"end": 143
-										},
+										"first": "\n",
 										"rest": []
 									},
-									"token": {
-										"start": 143,
-										"end": 149
-									}
+									"token": "struct"
 								},
 								"ident": {
 									"NonKw": [
 										{
-											"first": {
-												"start": 149,
-												"end": 150
-											},
+											"first": " ",
 											"rest": []
 										},
-										{
-											"start": 150,
-											"end": 151
-										}
+										"A"
 									]
 								},
 								"generics": null,
@@ -1157,16 +827,10 @@
 									"Fields": {
 										"prefix": {
 											"ws": {
-												"first": {
-													"start": 151,
-													"end": 152
-												},
+												"first": " ",
 												"rest": []
 											},
-											"token": {
-												"start": 152,
-												"end": 153
-											}
+											"token": "{"
 										},
 										"value": {
 											"punctuated": {
@@ -1177,30 +841,18 @@
 														"ident": {
 															"NonKw": [
 																{
-																	"first": {
-																		"start": 153,
-																		"end": 154
-																	},
+																	"first": " ",
 																	"rest": []
 																},
-																{
-																	"start": 154,
-																	"end": 155
-																}
+																"a"
 															]
 														},
 														"colon": {
 															"ws": {
-																"first": {
-																	"start": 155,
-																	"end": 155
-																},
+																"first": "",
 																"rest": []
 															},
-															"token": {
-																"start": 155,
-																"end": 156
-															}
+															"token": ":"
 														},
 														"ty": {
 															"TraitObject": {
@@ -1219,16 +871,10 @@
 																									"Ident": {
 																										"NonKw": [
 																											{
-																												"first": {
-																													"start": 156,
-																													"end": 157
-																												},
+																												"first": " ",
 																												"rest": []
 																											},
-																											{
-																												"start": 157,
-																												"end": 160
-																											}
+																											"u32"
 																										]
 																									}
 																								},
@@ -1253,16 +899,10 @@
 													{
 														"punct": {
 															"ws": {
-																"first": {
-																	"start": 160,
-																	"end": 160
-																},
+																"first": "",
 																"rest": []
 															},
-															"token": {
-																"start": 160,
-																"end": 161
-															}
+															"token": ","
 														},
 														"value": {
 															"attrs": [],
@@ -1271,30 +911,18 @@
 																"ident": {
 																	"NonKw": [
 																		{
-																			"first": {
-																				"start": 161,
-																				"end": 162
-																			},
+																			"first": " ",
 																			"rest": []
 																		},
-																		{
-																			"start": 162,
-																			"end": 163
-																		}
+																		"b"
 																	]
 																},
 																"colon": {
 																	"ws": {
-																		"first": {
-																			"start": 163,
-																			"end": 163
-																		},
+																		"first": "",
 																		"rest": []
 																	},
-																	"token": {
-																		"start": 163,
-																		"end": 164
-																	}
+																	"token": ":"
 																},
 																"ty": {
 																	"TraitObject": {
@@ -1313,16 +941,10 @@
 																											"Ident": {
 																												"NonKw": [
 																													{
-																														"first": {
-																															"start": 164,
-																															"end": 165
-																														},
+																														"first": " ",
 																														"rest": []
 																													},
-																													{
-																														"start": 165,
-																														"end": 168
-																													}
+																													"u32"
 																												]
 																											}
 																										},
@@ -1348,30 +970,18 @@
 											},
 											"trailing": {
 												"ws": {
-													"first": {
-														"start": 168,
-														"end": 168
-													},
+													"first": "",
 													"rest": []
 												},
-												"token": {
-													"start": 168,
-													"end": 169
-												}
+												"token": ","
 											}
 										},
 										"suffix": {
 											"ws": {
-												"first": {
-													"start": 169,
-													"end": 170
-												},
+												"first": " ",
 												"rest": []
 											},
-											"token": {
-												"start": 170,
-												"end": 171
-											}
+											"token": "}"
 										}
 									}
 								}
@@ -1391,45 +1001,27 @@
 							"Struct": {
 								"struct_": {
 									"ws": {
-										"first": {
-											"start": 171,
-											"end": 173
-										},
+										"first": "\n\n",
 										"rest": []
 									},
-									"token": {
-										"start": 173,
-										"end": 179
-									}
+									"token": "struct"
 								},
 								"ident": {
 									"NonKw": [
 										{
-											"first": {
-												"start": 179,
-												"end": 180
-											},
+											"first": " ",
 											"rest": []
 										},
-										{
-											"start": 180,
-											"end": 181
-										}
+										"A"
 									]
 								},
 								"generics": {
 									"prefix": {
 										"ws": {
-											"first": {
-												"start": 181,
-												"end": 181
-											},
+											"first": "",
 											"rest": []
 										},
-										"token": {
-											"start": 181,
-											"end": 182
-										}
+										"token": "<"
 									},
 									"value": {
 										"punctuated": {
@@ -1440,16 +1032,10 @@
 														"ident": {
 															"NonKw": [
 																{
-																	"first": {
-																		"start": 182,
-																		"end": 182
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																{
-																	"start": 182,
-																	"end": 183
-																}
+																"T"
 															]
 														},
 														"bounds": null,
@@ -1463,31 +1049,19 @@
 									},
 									"suffix": {
 										"ws": {
-											"first": {
-												"start": 183,
-												"end": 183
-											},
+											"first": "",
 											"rest": []
 										},
-										"token": {
-											"start": 183,
-											"end": 184
-										}
+										"token": ">"
 									}
 								},
 								"where_": {
 									"where_": {
 										"ws": {
-											"first": {
-												"start": 184,
-												"end": 185
-											},
+											"first": " ",
 											"rest": []
 										},
-										"token": {
-											"start": 185,
-											"end": 190
-										}
+										"token": "where"
 									},
 									"items": {
 										"punctuated": {
@@ -1511,16 +1085,10 @@
 																								"Ident": {
 																									"NonKw": [
 																										{
-																											"first": {
-																												"start": 190,
-																												"end": 191
-																											},
+																											"first": " ",
 																											"rest": []
 																										},
-																										{
-																											"start": 191,
-																											"end": 192
-																										}
+																										"T"
 																									]
 																								}
 																							},
@@ -1540,16 +1108,10 @@
 													},
 													"colon": {
 														"ws": {
-															"first": {
-																"start": 192,
-																"end": 192
-															},
+															"first": "",
 															"rest": []
 														},
-														"token": {
-															"start": 192,
-															"end": 193
-														}
+														"token": ":"
 													},
 													"bounds": {
 														"punctuated": {
@@ -1565,16 +1127,10 @@
 																						"Ident": {
 																							"NonKw": [
 																								{
-																									"first": {
-																										"start": 193,
-																										"end": 194
-																									},
+																									"first": " ",
 																									"rest": []
 																								},
-																								{
-																									"start": 194,
-																									"end": 195
-																								}
+																								"B"
 																							]
 																						}
 																					},
@@ -1601,16 +1157,10 @@
 									"Fields": {
 										"prefix": {
 											"ws": {
-												"first": {
-													"start": 195,
-													"end": 196
-												},
+												"first": " ",
 												"rest": []
 											},
-											"token": {
-												"start": 196,
-												"end": 197
-											}
+											"token": "{"
 										},
 										"value": {
 											"punctuated": {
@@ -1620,30 +1170,18 @@
 															"Attr": {
 																"pound": {
 																	"ws": {
-																		"first": {
-																			"start": 197,
-																			"end": 198
-																		},
+																		"first": " ",
 																		"rest": []
 																	},
-																	"token": {
-																		"start": 198,
-																		"end": 199
-																	}
+																	"token": "#"
 																},
 																"open": {
 																	"prefix": {
 																		"ws": {
-																			"first": {
-																				"start": 199,
-																				"end": 199
-																			},
+																			"first": "",
 																			"rest": []
 																		},
-																		"token": {
-																			"start": 199,
-																			"end": 200
-																		}
+																		"token": "["
 																	},
 																	"value": {
 																		"Meta": {
@@ -1654,16 +1192,10 @@
 																						"Ident": {
 																							"NonKw": [
 																								{
-																									"first": {
-																										"start": 200,
-																										"end": 200
-																									},
+																									"first": "",
 																									"rest": []
 																								},
-																								{
-																									"start": 200,
-																									"end": 201
-																								}
+																								"a"
 																							]
 																						}
 																					},
@@ -1674,16 +1206,10 @@
 																	},
 																	"suffix": {
 																		"ws": {
-																			"first": {
-																				"start": 201,
-																				"end": 201
-																			},
+																			"first": "",
 																			"rest": []
 																		},
-																		"token": {
-																			"start": 201,
-																			"end": 202
-																		}
+																		"token": "]"
 																	}
 																}
 															}
@@ -1693,46 +1219,28 @@
 														"vis": {
 															"pub_": {
 																"ws": {
-																	"first": {
-																		"start": 202,
-																		"end": 203
-																	},
+																	"first": " ",
 																	"rest": []
 																},
-																"token": {
-																	"start": 203,
-																	"end": 206
-																}
+																"token": "pub"
 															},
 															"path": null
 														},
 														"ident": {
 															"NonKw": [
 																{
-																	"first": {
-																		"start": 206,
-																		"end": 207
-																	},
+																	"first": " ",
 																	"rest": []
 																},
-																{
-																	"start": 207,
-																	"end": 208
-																}
+																"a"
 															]
 														},
 														"colon": {
 															"ws": {
-																"first": {
-																	"start": 208,
-																	"end": 208
-																},
+																"first": "",
 																"rest": []
 															},
-															"token": {
-																"start": 208,
-																"end": 209
-															}
+															"token": ":"
 														},
 														"ty": {
 															"TraitObject": {
@@ -1751,16 +1259,10 @@
 																									"Ident": {
 																										"NonKw": [
 																											{
-																												"first": {
-																													"start": 209,
-																													"end": 210
-																												},
+																												"first": " ",
 																												"rest": []
 																											},
-																											{
-																												"start": 210,
-																												"end": 213
-																											}
+																											"u32"
 																										]
 																									}
 																								},
@@ -1785,16 +1287,10 @@
 													{
 														"punct": {
 															"ws": {
-																"first": {
-																	"start": 213,
-																	"end": 213
-																},
+																"first": "",
 																"rest": []
 															},
-															"token": {
-																"start": 213,
-																"end": 214
-															}
+															"token": ","
 														},
 														"value": {
 															"attrs": [
@@ -1802,30 +1298,18 @@
 																	"Attr": {
 																		"pound": {
 																			"ws": {
-																				"first": {
-																					"start": 214,
-																					"end": 215
-																				},
+																				"first": " ",
 																				"rest": []
 																			},
-																			"token": {
-																				"start": 215,
-																				"end": 216
-																			}
+																			"token": "#"
 																		},
 																		"open": {
 																			"prefix": {
 																				"ws": {
-																					"first": {
-																						"start": 216,
-																						"end": 216
-																					},
+																					"first": "",
 																					"rest": []
 																				},
-																				"token": {
-																					"start": 216,
-																					"end": 217
-																				}
+																				"token": "["
 																			},
 																			"value": {
 																				"Meta": {
@@ -1836,16 +1320,10 @@
 																								"Ident": {
 																									"NonKw": [
 																										{
-																											"first": {
-																												"start": 217,
-																												"end": 217
-																											},
+																											"first": "",
 																											"rest": []
 																										},
-																										{
-																											"start": 217,
-																											"end": 218
-																										}
+																										"b"
 																									]
 																								}
 																							},
@@ -1856,16 +1334,10 @@
 																			},
 																			"suffix": {
 																				"ws": {
-																					"first": {
-																						"start": 218,
-																						"end": 218
-																					},
+																					"first": "",
 																					"rest": []
 																				},
-																				"token": {
-																					"start": 218,
-																					"end": 219
-																				}
+																				"token": "]"
 																			}
 																		}
 																	}
@@ -1875,46 +1347,28 @@
 																"vis": {
 																	"pub_": {
 																		"ws": {
-																			"first": {
-																				"start": 219,
-																				"end": 220
-																			},
+																			"first": " ",
 																			"rest": []
 																		},
-																		"token": {
-																			"start": 220,
-																			"end": 223
-																		}
+																		"token": "pub"
 																	},
 																	"path": null
 																},
 																"ident": {
 																	"NonKw": [
 																		{
-																			"first": {
-																				"start": 223,
-																				"end": 224
-																			},
+																			"first": " ",
 																			"rest": []
 																		},
-																		{
-																			"start": 224,
-																			"end": 225
-																		}
+																		"b"
 																	]
 																},
 																"colon": {
 																	"ws": {
-																		"first": {
-																			"start": 225,
-																			"end": 225
-																		},
+																		"first": "",
 																		"rest": []
 																	},
-																	"token": {
-																		"start": 225,
-																		"end": 226
-																	}
+																	"token": ":"
 																},
 																"ty": {
 																	"TraitObject": {
@@ -1933,16 +1387,10 @@
 																											"Ident": {
 																												"NonKw": [
 																													{
-																														"first": {
-																															"start": 226,
-																															"end": 227
-																														},
+																														"first": " ",
 																														"rest": []
 																													},
-																													{
-																														"start": 227,
-																														"end": 230
-																													}
+																													"u32"
 																												]
 																											}
 																										},
@@ -1968,30 +1416,18 @@
 											},
 											"trailing": {
 												"ws": {
-													"first": {
-														"start": 230,
-														"end": 230
-													},
+													"first": "",
 													"rest": []
 												},
-												"token": {
-													"start": 230,
-													"end": 231
-												}
+												"token": ","
 											}
 										},
 										"suffix": {
 											"ws": {
-												"first": {
-													"start": 231,
-													"end": 232
-												},
+												"first": " ",
 												"rest": []
 											},
-											"token": {
-												"start": 232,
-												"end": 233
-											}
+											"token": "}"
 										}
 									}
 								}
@@ -2011,46 +1447,28 @@
 							"Tuple": {
 								"struct_": {
 									"ws": {
-										"first": {
-											"start": 233,
-											"end": 235
-										},
+										"first": "\n\n",
 										"rest": []
 									},
-									"token": {
-										"start": 235,
-										"end": 241
-									}
+									"token": "struct"
 								},
 								"ident": {
 									"NonKw": [
 										{
-											"first": {
-												"start": 241,
-												"end": 242
-											},
+											"first": " ",
 											"rest": []
 										},
-										{
-											"start": 242,
-											"end": 243
-										}
+										"A"
 									]
 								},
 								"generics": null,
 								"fields": {
 									"prefix": {
 										"ws": {
-											"first": {
-												"start": 243,
-												"end": 243
-											},
+											"first": "",
 											"rest": []
 										},
-										"token": {
-											"start": 243,
-											"end": 244
-										}
+										"token": "("
 									},
 									"value": {
 										"punctuated": {
@@ -2060,16 +1478,10 @@
 													"vis": {
 														"pub_": {
 															"ws": {
-																"first": {
-																	"start": 244,
-																	"end": 244
-																},
+																"first": "",
 																"rest": []
 															},
-															"token": {
-																"start": 244,
-																"end": 247
-															}
+															"token": "pub"
 														},
 														"path": null
 													},
@@ -2090,16 +1502,10 @@
 																								"Ident": {
 																									"NonKw": [
 																										{
-																											"first": {
-																												"start": 247,
-																												"end": 248
-																											},
+																											"first": " ",
 																											"rest": []
 																										},
-																										{
-																											"start": 248,
-																											"end": 251
-																										}
+																										"u32"
 																									]
 																								}
 																							},
@@ -2123,16 +1529,10 @@
 												{
 													"punct": {
 														"ws": {
-															"first": {
-																"start": 251,
-																"end": 251
-															},
+															"first": "",
 															"rest": []
 														},
-														"token": {
-															"start": 251,
-															"end": 252
-														}
+														"token": ","
 													},
 													"value": {
 														"attrs": [],
@@ -2140,16 +1540,10 @@
 															"vis": {
 																"pub_": {
 																	"ws": {
-																		"first": {
-																			"start": 252,
-																			"end": 253
-																		},
+																		"first": " ",
 																		"rest": []
 																	},
-																	"token": {
-																		"start": 253,
-																		"end": 256
-																	}
+																	"token": "pub"
 																},
 																"path": null
 															},
@@ -2170,16 +1564,10 @@
 																										"Ident": {
 																											"NonKw": [
 																												{
-																													"first": {
-																														"start": 256,
-																														"end": 257
-																													},
+																													"first": " ",
 																													"rest": []
 																												},
-																												{
-																													"start": 257,
-																													"end": 260
-																												}
+																												"u32"
 																											]
 																										}
 																									},
@@ -2204,45 +1592,27 @@
 										},
 										"trailing": {
 											"ws": {
-												"first": {
-													"start": 260,
-													"end": 260
-												},
+												"first": "",
 												"rest": []
 											},
-											"token": {
-												"start": 260,
-												"end": 261
-											}
+											"token": ","
 										}
 									},
 									"suffix": {
 										"ws": {
-											"first": {
-												"start": 261,
-												"end": 261
-											},
+											"first": "",
 											"rest": []
 										},
-										"token": {
-											"start": 261,
-											"end": 262
-										}
+										"token": ")"
 									}
 								},
 								"where_": null,
 								"semi": {
 									"ws": {
-										"first": {
-											"start": 262,
-											"end": 262
-										},
+										"first": "",
 										"rest": []
 									},
-									"token": {
-										"start": 262,
-										"end": 263
-									}
+									"token": ";"
 								}
 							}
 						}
@@ -2260,45 +1630,27 @@
 							"Tuple": {
 								"struct_": {
 									"ws": {
-										"first": {
-											"start": 263,
-											"end": 265
-										},
+										"first": "\n\n",
 										"rest": []
 									},
-									"token": {
-										"start": 265,
-										"end": 271
-									}
+									"token": "struct"
 								},
 								"ident": {
 									"NonKw": [
 										{
-											"first": {
-												"start": 271,
-												"end": 272
-											},
+											"first": " ",
 											"rest": []
 										},
-										{
-											"start": 272,
-											"end": 273
-										}
+										"A"
 									]
 								},
 								"generics": {
 									"prefix": {
 										"ws": {
-											"first": {
-												"start": 273,
-												"end": 273
-											},
+											"first": "",
 											"rest": []
 										},
-										"token": {
-											"start": 273,
-											"end": 274
-										}
+										"token": "<"
 									},
 									"value": {
 										"punctuated": {
@@ -2309,16 +1661,10 @@
 														"ident": {
 															"NonKw": [
 																{
-																	"first": {
-																		"start": 274,
-																		"end": 274
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																{
-																	"start": 274,
-																	"end": 275
-																}
+																"T"
 															]
 														},
 														"bounds": null,
@@ -2332,60 +1678,36 @@
 									},
 									"suffix": {
 										"ws": {
-											"first": {
-												"start": 275,
-												"end": 275
-											},
+											"first": "",
 											"rest": []
 										},
-										"token": {
-											"start": 275,
-											"end": 276
-										}
+										"token": ">"
 									}
 								},
 								"fields": {
 									"prefix": {
 										"ws": {
-											"first": {
-												"start": 276,
-												"end": 276
-											},
+											"first": "",
 											"rest": []
 										},
-										"token": {
-											"start": 276,
-											"end": 277
-										}
+										"token": "("
 									},
 									"value": null,
 									"suffix": {
 										"ws": {
-											"first": {
-												"start": 277,
-												"end": 277
-											},
+											"first": "",
 											"rest": []
 										},
-										"token": {
-											"start": 277,
-											"end": 278
-										}
+										"token": ")"
 									}
 								},
 								"where_": null,
 								"semi": {
 									"ws": {
-										"first": {
-											"start": 278,
-											"end": 278
-										},
+										"first": "",
 										"rest": []
 									},
-									"token": {
-										"start": 278,
-										"end": 279
-									}
+									"token": ";"
 								}
 							}
 						}
@@ -2403,75 +1725,45 @@
 							"Tuple": {
 								"struct_": {
 									"ws": {
-										"first": {
-											"start": 279,
-											"end": 280
-										},
+										"first": "\n",
 										"rest": []
 									},
-									"token": {
-										"start": 280,
-										"end": 286
-									}
+									"token": "struct"
 								},
 								"ident": {
 									"NonKw": [
 										{
-											"first": {
-												"start": 286,
-												"end": 287
-											},
+											"first": " ",
 											"rest": []
 										},
-										{
-											"start": 287,
-											"end": 288
-										}
+										"A"
 									]
 								},
 								"generics": null,
 								"fields": {
 									"prefix": {
 										"ws": {
-											"first": {
-												"start": 288,
-												"end": 288
-											},
+											"first": "",
 											"rest": []
 										},
-										"token": {
-											"start": 288,
-											"end": 289
-										}
+										"token": "("
 									},
 									"value": null,
 									"suffix": {
 										"ws": {
-											"first": {
-												"start": 289,
-												"end": 289
-											},
+											"first": "",
 											"rest": []
 										},
-										"token": {
-											"start": 289,
-											"end": 290
-										}
+										"token": ")"
 									}
 								},
 								"where_": {
 									"where_": {
 										"ws": {
-											"first": {
-												"start": 290,
-												"end": 291
-											},
+											"first": " ",
 											"rest": []
 										},
-										"token": {
-											"start": 291,
-											"end": 296
-										}
+										"token": "where"
 									},
 									"items": {
 										"punctuated": {
@@ -2495,16 +1787,10 @@
 																								"Ident": {
 																									"NonKw": [
 																										{
-																											"first": {
-																												"start": 296,
-																												"end": 297
-																											},
+																											"first": " ",
 																											"rest": []
 																										},
-																										{
-																											"start": 297,
-																											"end": 298
-																										}
+																										"T"
 																									]
 																								}
 																							},
@@ -2524,16 +1810,10 @@
 													},
 													"colon": {
 														"ws": {
-															"first": {
-																"start": 298,
-																"end": 298
-															},
+															"first": "",
 															"rest": []
 														},
-														"token": {
-															"start": 298,
-															"end": 299
-														}
+														"token": ":"
 													},
 													"bounds": {
 														"punctuated": {
@@ -2549,16 +1829,10 @@
 																						"Ident": {
 																							"NonKw": [
 																								{
-																									"first": {
-																										"start": 299,
-																										"end": 300
-																									},
+																									"first": " ",
 																									"rest": []
 																								},
-																								{
-																									"start": 300,
-																									"end": 301
-																								}
+																								"B"
 																							]
 																						}
 																					},
@@ -2583,16 +1857,10 @@
 								},
 								"semi": {
 									"ws": {
-										"first": {
-											"start": 301,
-											"end": 301
-										},
+										"first": "",
 										"rest": []
 									},
-									"token": {
-										"start": 301,
-										"end": 302
-									}
+									"token": ";"
 								}
 							}
 						}
@@ -2610,46 +1878,28 @@
 							"Tuple": {
 								"struct_": {
 									"ws": {
-										"first": {
-											"start": 302,
-											"end": 304
-										},
+										"first": "\n\n",
 										"rest": []
 									},
-									"token": {
-										"start": 304,
-										"end": 310
-									}
+									"token": "struct"
 								},
 								"ident": {
 									"NonKw": [
 										{
-											"first": {
-												"start": 310,
-												"end": 311
-											},
+											"first": " ",
 											"rest": []
 										},
-										{
-											"start": 311,
-											"end": 312
-										}
+										"A"
 									]
 								},
 								"generics": null,
 								"fields": {
 									"prefix": {
 										"ws": {
-											"first": {
-												"start": 312,
-												"end": 312
-											},
+											"first": "",
 											"rest": []
 										},
-										"token": {
-											"start": 312,
-											"end": 313
-										}
+										"token": "("
 									},
 									"value": {
 										"punctuated": {
@@ -2674,16 +1924,10 @@
 																								"Ident": {
 																									"NonKw": [
 																										{
-																											"first": {
-																												"start": 313,
-																												"end": 313
-																											},
+																											"first": "",
 																											"rest": []
 																										},
-																										{
-																											"start": 313,
-																											"end": 316
-																										}
+																										"u32"
 																									]
 																								}
 																							},
@@ -2709,31 +1953,19 @@
 									},
 									"suffix": {
 										"ws": {
-											"first": {
-												"start": 316,
-												"end": 316
-											},
+											"first": "",
 											"rest": []
 										},
-										"token": {
-											"start": 316,
-											"end": 317
-										}
+										"token": ")"
 									}
 								},
 								"where_": null,
 								"semi": {
 									"ws": {
-										"first": {
-											"start": 317,
-											"end": 317
-										},
+										"first": "",
 										"rest": []
 									},
-									"token": {
-										"start": 317,
-										"end": 318
-									}
+									"token": ";"
 								}
 							}
 						}
@@ -2751,46 +1983,28 @@
 							"Tuple": {
 								"struct_": {
 									"ws": {
-										"first": {
-											"start": 318,
-											"end": 319
-										},
+										"first": "\n",
 										"rest": []
 									},
-									"token": {
-										"start": 319,
-										"end": 325
-									}
+									"token": "struct"
 								},
 								"ident": {
 									"NonKw": [
 										{
-											"first": {
-												"start": 325,
-												"end": 326
-											},
+											"first": " ",
 											"rest": []
 										},
-										{
-											"start": 326,
-											"end": 327
-										}
+										"A"
 									]
 								},
 								"generics": null,
 								"fields": {
 									"prefix": {
 										"ws": {
-											"first": {
-												"start": 327,
-												"end": 327
-											},
+											"first": "",
 											"rest": []
 										},
-										"token": {
-											"start": 327,
-											"end": 328
-										}
+										"token": "("
 									},
 									"value": {
 										"punctuated": {
@@ -2800,16 +2014,10 @@
 													"vis": {
 														"pub_": {
 															"ws": {
-																"first": {
-																	"start": 328,
-																	"end": 328
-																},
+																"first": "",
 																"rest": []
 															},
-															"token": {
-																"start": 328,
-																"end": 331
-															}
+															"token": "pub"
 														},
 														"path": null
 													},
@@ -2830,16 +2038,10 @@
 																								"Ident": {
 																									"NonKw": [
 																										{
-																											"first": {
-																												"start": 331,
-																												"end": 332
-																											},
+																											"first": " ",
 																											"rest": []
 																										},
-																										{
-																											"start": 332,
-																											"end": 335
-																										}
+																										"u32"
 																									]
 																								}
 																							},
@@ -2865,31 +2067,19 @@
 									},
 									"suffix": {
 										"ws": {
-											"first": {
-												"start": 335,
-												"end": 335
-											},
+											"first": "",
 											"rest": []
 										},
-										"token": {
-											"start": 335,
-											"end": 336
-										}
+										"token": ")"
 									}
 								},
 								"where_": null,
 								"semi": {
 									"ws": {
-										"first": {
-											"start": 336,
-											"end": 336
-										},
+										"first": "",
 										"rest": []
 									},
-									"token": {
-										"start": 336,
-										"end": 337
-									}
+									"token": ";"
 								}
 							}
 						}
@@ -2907,46 +2097,28 @@
 							"Tuple": {
 								"struct_": {
 									"ws": {
-										"first": {
-											"start": 337,
-											"end": 338
-										},
+										"first": "\n",
 										"rest": []
 									},
-									"token": {
-										"start": 338,
-										"end": 344
-									}
+									"token": "struct"
 								},
 								"ident": {
 									"NonKw": [
 										{
-											"first": {
-												"start": 344,
-												"end": 345
-											},
+											"first": " ",
 											"rest": []
 										},
-										{
-											"start": 345,
-											"end": 346
-										}
+										"A"
 									]
 								},
 								"generics": null,
 								"fields": {
 									"prefix": {
 										"ws": {
-											"first": {
-												"start": 346,
-												"end": 346
-											},
+											"first": "",
 											"rest": []
 										},
-										"token": {
-											"start": 346,
-											"end": 347
-										}
+										"token": "("
 									},
 									"value": {
 										"punctuated": {
@@ -2956,30 +2128,18 @@
 														"Attr": {
 															"pound": {
 																"ws": {
-																	"first": {
-																		"start": 347,
-																		"end": 347
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 347,
-																	"end": 348
-																}
+																"token": "#"
 															},
 															"open": {
 																"prefix": {
 																	"ws": {
-																		"first": {
-																			"start": 348,
-																			"end": 348
-																		},
+																		"first": "",
 																		"rest": []
 																	},
-																	"token": {
-																		"start": 348,
-																		"end": 349
-																	}
+																	"token": "["
 																},
 																"value": {
 																	"Meta": {
@@ -2990,16 +2150,10 @@
 																					"Ident": {
 																						"NonKw": [
 																							{
-																								"first": {
-																									"start": 349,
-																									"end": 349
-																								},
+																								"first": "",
 																								"rest": []
 																							},
-																							{
-																								"start": 349,
-																								"end": 350
-																							}
+																							"a"
 																						]
 																					}
 																				},
@@ -3010,16 +2164,10 @@
 																},
 																"suffix": {
 																	"ws": {
-																		"first": {
-																			"start": 350,
-																			"end": 350
-																		},
+																		"first": "",
 																		"rest": []
 																	},
-																	"token": {
-																		"start": 350,
-																		"end": 351
-																	}
+																	"token": "]"
 																}
 															}
 														}
@@ -3044,16 +2192,10 @@
 																								"Ident": {
 																									"NonKw": [
 																										{
-																											"first": {
-																												"start": 351,
-																												"end": 352
-																											},
+																											"first": " ",
 																											"rest": []
 																										},
-																										{
-																											"start": 352,
-																											"end": 355
-																										}
+																										"u32"
 																									]
 																								}
 																							},
@@ -3079,31 +2221,19 @@
 									},
 									"suffix": {
 										"ws": {
-											"first": {
-												"start": 355,
-												"end": 355
-											},
+											"first": "",
 											"rest": []
 										},
-										"token": {
-											"start": 355,
-											"end": 356
-										}
+										"token": ")"
 									}
 								},
 								"where_": null,
 								"semi": {
 									"ws": {
-										"first": {
-											"start": 356,
-											"end": 356
-										},
+										"first": "",
 										"rest": []
 									},
-									"token": {
-										"start": 356,
-										"end": 357
-									}
+									"token": ";"
 								}
 							}
 						}
@@ -3121,46 +2251,28 @@
 							"Tuple": {
 								"struct_": {
 									"ws": {
-										"first": {
-											"start": 357,
-											"end": 358
-										},
+										"first": "\n",
 										"rest": []
 									},
-									"token": {
-										"start": 358,
-										"end": 364
-									}
+									"token": "struct"
 								},
 								"ident": {
 									"NonKw": [
 										{
-											"first": {
-												"start": 364,
-												"end": 365
-											},
+											"first": " ",
 											"rest": []
 										},
-										{
-											"start": 365,
-											"end": 366
-										}
+										"A"
 									]
 								},
 								"generics": null,
 								"fields": {
 									"prefix": {
 										"ws": {
-											"first": {
-												"start": 366,
-												"end": 366
-											},
+											"first": "",
 											"rest": []
 										},
-										"token": {
-											"start": 366,
-											"end": 367
-										}
+										"token": "("
 									},
 									"value": {
 										"punctuated": {
@@ -3185,16 +2297,10 @@
 																								"Ident": {
 																									"NonKw": [
 																										{
-																											"first": {
-																												"start": 367,
-																												"end": 367
-																											},
+																											"first": "",
 																											"rest": []
 																										},
-																										{
-																											"start": 367,
-																											"end": 370
-																										}
+																										"u32"
 																									]
 																								}
 																							},
@@ -3218,16 +2324,10 @@
 												{
 													"punct": {
 														"ws": {
-															"first": {
-																"start": 370,
-																"end": 370
-															},
+															"first": "",
 															"rest": []
 														},
-														"token": {
-															"start": 370,
-															"end": 371
-														}
+														"token": ","
 													},
 													"value": {
 														"attrs": [],
@@ -3250,16 +2350,10 @@
 																										"Ident": {
 																											"NonKw": [
 																												{
-																													"first": {
-																														"start": 371,
-																														"end": 372
-																													},
+																													"first": " ",
 																													"rest": []
 																												},
-																												{
-																													"start": 372,
-																													"end": 375
-																												}
+																												"u32"
 																											]
 																										}
 																									},
@@ -3284,45 +2378,27 @@
 										},
 										"trailing": {
 											"ws": {
-												"first": {
-													"start": 375,
-													"end": 375
-												},
+												"first": "",
 												"rest": []
 											},
-											"token": {
-												"start": 375,
-												"end": 376
-											}
+											"token": ","
 										}
 									},
 									"suffix": {
 										"ws": {
-											"first": {
-												"start": 376,
-												"end": 376
-											},
+											"first": "",
 											"rest": []
 										},
-										"token": {
-											"start": 376,
-											"end": 377
-										}
+										"token": ")"
 									}
 								},
 								"where_": null,
 								"semi": {
 									"ws": {
-										"first": {
-											"start": 377,
-											"end": 377
-										},
+										"first": "",
 										"rest": []
 									},
-									"token": {
-										"start": 377,
-										"end": 378
-									}
+									"token": ";"
 								}
 							}
 						}
@@ -3340,45 +2416,27 @@
 							"Tuple": {
 								"struct_": {
 									"ws": {
-										"first": {
-											"start": 378,
-											"end": 380
-										},
+										"first": "\n\n",
 										"rest": []
 									},
-									"token": {
-										"start": 380,
-										"end": 386
-									}
+									"token": "struct"
 								},
 								"ident": {
 									"NonKw": [
 										{
-											"first": {
-												"start": 386,
-												"end": 387
-											},
+											"first": " ",
 											"rest": []
 										},
-										{
-											"start": 387,
-											"end": 388
-										}
+										"A"
 									]
 								},
 								"generics": {
 									"prefix": {
 										"ws": {
-											"first": {
-												"start": 388,
-												"end": 388
-											},
+											"first": "",
 											"rest": []
 										},
-										"token": {
-											"start": 388,
-											"end": 389
-										}
+										"token": "<"
 									},
 									"value": {
 										"punctuated": {
@@ -3389,16 +2447,10 @@
 														"ident": {
 															"NonKw": [
 																{
-																	"first": {
-																		"start": 389,
-																		"end": 389
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																{
-																	"start": 389,
-																	"end": 390
-																}
+																"T"
 															]
 														},
 														"bounds": null,
@@ -3412,31 +2464,19 @@
 									},
 									"suffix": {
 										"ws": {
-											"first": {
-												"start": 390,
-												"end": 390
-											},
+											"first": "",
 											"rest": []
 										},
-										"token": {
-											"start": 390,
-											"end": 391
-										}
+										"token": ">"
 									}
 								},
 								"fields": {
 									"prefix": {
 										"ws": {
-											"first": {
-												"start": 391,
-												"end": 391
-											},
+											"first": "",
 											"rest": []
 										},
-										"token": {
-											"start": 391,
-											"end": 392
-										}
+										"token": "("
 									},
 									"value": {
 										"punctuated": {
@@ -3446,30 +2486,18 @@
 														"Attr": {
 															"pound": {
 																"ws": {
-																	"first": {
-																		"start": 392,
-																		"end": 392
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 392,
-																	"end": 393
-																}
+																"token": "#"
 															},
 															"open": {
 																"prefix": {
 																	"ws": {
-																		"first": {
-																			"start": 393,
-																			"end": 393
-																		},
+																		"first": "",
 																		"rest": []
 																	},
-																	"token": {
-																		"start": 393,
-																		"end": 394
-																	}
+																	"token": "["
 																},
 																"value": {
 																	"Meta": {
@@ -3480,16 +2508,10 @@
 																					"Ident": {
 																						"NonKw": [
 																							{
-																								"first": {
-																									"start": 394,
-																									"end": 394
-																								},
+																								"first": "",
 																								"rest": []
 																							},
-																							{
-																								"start": 394,
-																								"end": 395
-																							}
+																							"a"
 																						]
 																					}
 																				},
@@ -3500,16 +2522,10 @@
 																},
 																"suffix": {
 																	"ws": {
-																		"first": {
-																			"start": 395,
-																			"end": 395
-																		},
+																		"first": "",
 																		"rest": []
 																	},
-																	"token": {
-																		"start": 395,
-																		"end": 396
-																	}
+																	"token": "]"
 																}
 															}
 														}
@@ -3519,16 +2535,10 @@
 													"vis": {
 														"pub_": {
 															"ws": {
-																"first": {
-																	"start": 396,
-																	"end": 397
-																},
+																"first": " ",
 																"rest": []
 															},
-															"token": {
-																"start": 397,
-																"end": 400
-															}
+															"token": "pub"
 														},
 														"path": null
 													},
@@ -3549,16 +2559,10 @@
 																								"Ident": {
 																									"NonKw": [
 																										{
-																											"first": {
-																												"start": 400,
-																												"end": 401
-																											},
+																											"first": " ",
 																											"rest": []
 																										},
-																										{
-																											"start": 401,
-																											"end": 404
-																										}
+																										"u32"
 																									]
 																								}
 																							},
@@ -3582,16 +2586,10 @@
 												{
 													"punct": {
 														"ws": {
-															"first": {
-																"start": 404,
-																"end": 404
-															},
+															"first": "",
 															"rest": []
 														},
-														"token": {
-															"start": 404,
-															"end": 405
-														}
+														"token": ","
 													},
 													"value": {
 														"attrs": [
@@ -3599,30 +2597,18 @@
 																"Attr": {
 																	"pound": {
 																		"ws": {
-																			"first": {
-																				"start": 405,
-																				"end": 406
-																			},
+																			"first": " ",
 																			"rest": []
 																		},
-																		"token": {
-																			"start": 406,
-																			"end": 407
-																		}
+																		"token": "#"
 																	},
 																	"open": {
 																		"prefix": {
 																			"ws": {
-																				"first": {
-																					"start": 407,
-																					"end": 407
-																				},
+																				"first": "",
 																				"rest": []
 																			},
-																			"token": {
-																				"start": 407,
-																				"end": 408
-																			}
+																			"token": "["
 																		},
 																		"value": {
 																			"Meta": {
@@ -3633,16 +2619,10 @@
 																							"Ident": {
 																								"NonKw": [
 																									{
-																										"first": {
-																											"start": 408,
-																											"end": 408
-																										},
+																										"first": "",
 																										"rest": []
 																									},
-																									{
-																										"start": 408,
-																										"end": 409
-																									}
+																									"b"
 																								]
 																							}
 																						},
@@ -3653,16 +2633,10 @@
 																		},
 																		"suffix": {
 																			"ws": {
-																				"first": {
-																					"start": 409,
-																					"end": 409
-																				},
+																				"first": "",
 																				"rest": []
 																			},
-																			"token": {
-																				"start": 409,
-																				"end": 410
-																			}
+																			"token": "]"
 																		}
 																	}
 																}
@@ -3672,16 +2646,10 @@
 															"vis": {
 																"pub_": {
 																	"ws": {
-																		"first": {
-																			"start": 410,
-																			"end": 411
-																		},
+																		"first": " ",
 																		"rest": []
 																	},
-																	"token": {
-																		"start": 411,
-																		"end": 414
-																	}
+																	"token": "pub"
 																},
 																"path": null
 															},
@@ -3702,16 +2670,10 @@
 																										"Ident": {
 																											"NonKw": [
 																												{
-																													"first": {
-																														"start": 414,
-																														"end": 415
-																													},
+																													"first": " ",
 																													"rest": []
 																												},
-																												{
-																													"start": 415,
-																													"end": 418
-																												}
+																												"u32"
 																											]
 																										}
 																									},
@@ -3736,45 +2698,27 @@
 										},
 										"trailing": {
 											"ws": {
-												"first": {
-													"start": 418,
-													"end": 418
-												},
+												"first": "",
 												"rest": []
 											},
-											"token": {
-												"start": 418,
-												"end": 419
-											}
+											"token": ","
 										}
 									},
 									"suffix": {
 										"ws": {
-											"first": {
-												"start": 419,
-												"end": 419
-											},
+											"first": "",
 											"rest": []
 										},
-										"token": {
-											"start": 419,
-											"end": 420
-										}
+										"token": ")"
 									}
 								},
 								"where_": {
 									"where_": {
 										"ws": {
-											"first": {
-												"start": 420,
-												"end": 421
-											},
+											"first": " ",
 											"rest": []
 										},
-										"token": {
-											"start": 421,
-											"end": 426
-										}
+										"token": "where"
 									},
 									"items": {
 										"punctuated": {
@@ -3798,16 +2742,10 @@
 																								"Ident": {
 																									"NonKw": [
 																										{
-																											"first": {
-																												"start": 426,
-																												"end": 427
-																											},
+																											"first": " ",
 																											"rest": []
 																										},
-																										{
-																											"start": 427,
-																											"end": 428
-																										}
+																										"T"
 																									]
 																								}
 																							},
@@ -3827,16 +2765,10 @@
 													},
 													"colon": {
 														"ws": {
-															"first": {
-																"start": 428,
-																"end": 428
-															},
+															"first": "",
 															"rest": []
 														},
-														"token": {
-															"start": 428,
-															"end": 429
-														}
+														"token": ":"
 													},
 													"bounds": {
 														"punctuated": {
@@ -3852,16 +2784,10 @@
 																						"Ident": {
 																							"NonKw": [
 																								{
-																									"first": {
-																										"start": 429,
-																										"end": 430
-																									},
+																									"first": " ",
 																									"rest": []
 																								},
-																								{
-																									"start": 430,
-																									"end": 431
-																								}
+																								"B"
 																							]
 																						}
 																					},
@@ -3886,16 +2812,10 @@
 								},
 								"semi": {
 									"ws": {
-										"first": {
-											"start": 431,
-											"end": 431
-										},
+										"first": "",
 										"rest": []
 									},
-									"token": {
-										"start": 431,
-										"end": 432
-									}
+									"token": ";"
 								}
 							}
 						}
@@ -3905,10 +2825,7 @@
 		}
 	],
 	"suffix_ws": {
-		"first": {
-			"start": 432,
-			"end": 433
-		},
+		"first": "\n",
 		"rest": []
 	}
 }

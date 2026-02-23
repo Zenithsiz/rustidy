@@ -10,7 +10,7 @@
 use {
 	app_error::{AppError, Context, ensure},
 	rustidy_format::FormatOutput,
-	rustidy_print::{Print, PrintFmt},
+	rustidy_print::Print,
 	std::{env, fs, path::Path},
 };
 
@@ -58,20 +58,17 @@ fn test_case(test_dir: &Path) -> Result<(), AppError> {
 	let config = rustidy_util::Config::default();
 	let _: FormatOutput = rustidy::format(&input, &config, &mut crate_);
 
-	let mut print_fmt = PrintFmt::new(&input);
-	crate_.print(&mut print_fmt);
-	let found_output = print_fmt.output().to_owned();
+	let found_output = crate_.print_to_string();
 
 	{
 		let _: FormatOutput = rustidy::format(&input, &config, &mut crate_);
 
-		let mut print_fmt = PrintFmt::new(&input);
-		crate_.print(&mut print_fmt);
+		let found_output2 = crate_.print_to_string();
 
 		ensure!(
-			found_output == print_fmt.output(),
+			found_output == found_output2,
 			"Formatting twice did not yield the same output:\n{}",
-			difference::Changeset::new(&found_output, print_fmt.output(), "\n")
+			difference::Changeset::new(&found_output, &found_output2, "\n")
 		);
 	}
 

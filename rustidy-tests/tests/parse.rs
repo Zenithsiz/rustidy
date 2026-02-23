@@ -9,7 +9,7 @@
 // Imports
 use {
 	app_error::{AppError, Context, app_error, ensure},
-	rustidy_print::{Print, PrintFmt},
+	rustidy_print::Print,
 	serde::Serialize,
 	std::{env, fs, path::Path},
 };
@@ -55,9 +55,8 @@ fn test_case(test_dir: &Path) -> Result<(), AppError> {
 	let crate_ = rustidy::parse(&input, &test_path)
 		.context("Unable to parse input")?;
 
-	let mut print_fmt = PrintFmt::new(&input);
-	crate_.print(&mut print_fmt);
-	ensure!(input == print_fmt.output(), "Crate output was not the same as input");
+	let output = crate_.print_to_string();
+	ensure!(input == output, "Crate output was not the same as input");
 
 	let output_path = test_dir.join("output.json");
 	match env::var("RUSTIDY_PARSE_UPDATE_OUTPUT")

@@ -16,7 +16,6 @@ use {
 		token,
 		util::{Braced, Bracketed, Parenthesized},
 	},
-	arcstr::ArcStr,
 	app_error::{AppError, Context, bail},
 	core::fmt::Debug,
 	rustidy_ast_util::{Longest, RemainingBlockComment, RemainingLine, delimited},
@@ -222,17 +221,17 @@ pub token::Token);
 // TODO: We need to return the position for better error messages.
 pub fn update_from_attr(attr: &AttrOrMetaItem, ctx: &mut rustidy_format::Context) -> Result<(), AppError> {
 	let meta = match attr {
-		AttrOrMetaItem::Meta(meta) => match meta.path().starts_with(ctx.input(), "rustidy") {
+		AttrOrMetaItem::Meta(meta) => match meta.path().starts_with("rustidy") {
 			true => meta,
 			false => return Ok(()),
 		},
-		AttrOrMetaItem::Attr(attr) => match attr.path.starts_with(ctx.input(), "rustidy") {
+		AttrOrMetaItem::Attr(attr) => match attr.path.starts_with("rustidy") {
 			true => bail!("`#[rustidy]` attributes must be meta items"),
 			false => return Ok(()),
 		},
 	};
 
-	match meta.path().as_str(ctx.input()).as_str() {
+	match meta.path().as_str().as_str() {
 		"rustidy::config" => self::update_config(meta, ctx)?,
 		"rustidy::skip" => ctx.config_mut().skip = true,
 		path => bail!("Unknown `#[rustidy]` attribute: {path:?}"),
@@ -251,7 +250,6 @@ fn update_config(meta: &MetaItem, ctx: &mut rustidy_format::Context) -> Result<(
 		return Ok(())
 	};
 
-	let input = ArcStr::clone(ctx.input());
 	for config in configs.0.values() {
 		let config = try {
 			config.try_as_meta_ref()?.try_as_eq_expr_ref()?
@@ -265,14 +263,14 @@ fn update_config(meta: &MetaItem, ctx: &mut rustidy_format::Context) -> Result<(
 				.expr
 				.as_string_literal()
 				.context("Expected a string literal")?
-				.contents(&input)
+				.contents()
 		}
 		macro int() {
 			config
 				.expr
 				.as_integer_literal()
 				.context("Expected an integer literal")?
-				.value(&input)
+				.value()
 				.context("Unable to parse integer")?
 				.try_into()
 				.expect("`u64` didn't fit into `usize`")
@@ -288,7 +286,7 @@ fn update_config(meta: &MetaItem, ctx: &mut rustidy_format::Context) -> Result<(
 				skip: _,
 			} = ctx.config_mut();
 
-			match config.path.as_str(&input).as_str() {
+			match config.path.as_str().as_str() {
 				$(
 					stringify!($field) => *$field = $value,
 				)*

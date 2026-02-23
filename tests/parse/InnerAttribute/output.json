@@ -5,43 +5,25 @@
 			"Attr": {
 				"pound": {
 					"ws": {
-						"first": {
-							"start": 0,
-							"end": 0
-						},
+						"first": "",
 						"rest": []
 					},
-					"token": {
-						"start": 0,
-						"end": 1
-					}
+					"token": "#"
 				},
 				"not": {
 					"ws": {
-						"first": {
-							"start": 1,
-							"end": 1
-						},
+						"first": "",
 						"rest": []
 					},
-					"token": {
-						"start": 1,
-						"end": 2
-					}
+					"token": "!"
 				},
 				"attr": {
 					"prefix": {
 						"ws": {
-							"first": {
-								"start": 2,
-								"end": 2
-							},
+							"first": "",
 							"rest": []
 						},
-						"token": {
-							"start": 2,
-							"end": 3
-						}
+						"token": "["
 					},
 					"value": {
 						"Meta": {
@@ -52,16 +34,10 @@
 										"Ident": {
 											"NonKw": [
 												{
-													"first": {
-														"start": 3,
-														"end": 3
-													},
+													"first": "",
 													"rest": []
 												},
-												{
-													"start": 3,
-													"end": 4
-												}
+												"a"
 											]
 										}
 									},
@@ -69,31 +45,19 @@
 										{
 											"punct": {
 												"ws": {
-													"first": {
-														"start": 4,
-														"end": 4
-													},
+													"first": "",
 													"rest": []
 												},
-												"token": {
-													"start": 4,
-													"end": 6
-												}
+												"token": "::"
 											},
 											"value": {
 												"Ident": {
 													"NonKw": [
 														{
-															"first": {
-																"start": 6,
-																"end": 6
-															},
+															"first": "",
 															"rest": []
 														},
-														{
-															"start": 6,
-															"end": 7
-														}
+														"b"
 													]
 												}
 											}
@@ -101,31 +65,19 @@
 										{
 											"punct": {
 												"ws": {
-													"first": {
-														"start": 7,
-														"end": 7
-													},
+													"first": "",
 													"rest": []
 												},
-												"token": {
-													"start": 7,
-													"end": 9
-												}
+												"token": "::"
 											},
 											"value": {
 												"Ident": {
 													"NonKw": [
 														{
-															"first": {
-																"start": 9,
-																"end": 9
-															},
+															"first": "",
 															"rest": []
 														},
-														{
-															"start": 9,
-															"end": 10
-														}
+														"c"
 													]
 												}
 											}
@@ -137,16 +89,10 @@
 					},
 					"suffix": {
 						"ws": {
-							"first": {
-								"start": 10,
-								"end": 10
-							},
+							"first": "",
 							"rest": []
 						},
-						"token": {
-							"start": 10,
-							"end": 11
-						}
+						"token": "]"
 					}
 				}
 			}
@@ -155,105 +101,63 @@
 			"Attr": {
 				"pound": {
 					"ws": {
-						"first": {
-							"start": 11,
-							"end": 12
-						},
+						"first": "\n",
 						"rest": []
 					},
-					"token": {
-						"start": 12,
-						"end": 13
-					}
+					"token": "#"
 				},
 				"not": {
 					"ws": {
-						"first": {
-							"start": 13,
-							"end": 13
-						},
+						"first": "",
 						"rest": []
 					},
-					"token": {
-						"start": 13,
-						"end": 14
-					}
+					"token": "!"
 				},
 				"attr": {
 					"prefix": {
 						"ws": {
-							"first": {
-								"start": 14,
-								"end": 14
-							},
+							"first": "",
 							"rest": []
 						},
-						"token": {
-							"start": 14,
-							"end": 15
-						}
+						"token": "["
 					},
 					"value": {
 						"Meta": {
 							"Path": {
 								"prefix": {
 									"ws": {
-										"first": {
-											"start": 15,
-											"end": 15
-										},
+										"first": "",
 										"rest": []
 									},
-									"token": {
-										"start": 15,
-										"end": 17
-									}
+									"token": "::"
 								},
 								"segments": {
 									"first": {
 										"DollarCrate": {
 											"ws": {
-												"first": {
-													"start": 17,
-													"end": 17
-												},
+												"first": "",
 												"rest": []
 											},
-											"token": {
-												"start": 17,
-												"end": 23
-											}
+											"token": "$crate"
 										}
 									},
 									"rest": [
 										{
 											"punct": {
 												"ws": {
-													"first": {
-														"start": 23,
-														"end": 23
-													},
+													"first": "",
 													"rest": []
 												},
-												"token": {
-													"start": 23,
-													"end": 25
-												}
+												"token": "::"
 											},
 											"value": {
 												"Ident": {
 													"NonKw": [
 														{
-															"first": {
-																"start": 25,
-																"end": 25
-															},
+															"first": "",
 															"rest": []
 														},
-														{
-															"start": 25,
-															"end": 26
-														}
+														"c"
 													]
 												}
 											}
@@ -265,16 +169,10 @@
 					},
 					"suffix": {
 						"ws": {
-							"first": {
-								"start": 26,
-								"end": 26
-							},
+							"first": "",
 							"rest": []
 						},
-						"token": {
-							"start": 26,
-							"end": 27
-						}
+						"token": "]"
 					}
 				}
 			}
@@ -284,21 +182,12 @@
 				"Line": {
 					"prefix": {
 						"ws": {
-							"first": {
-								"start": 27,
-								"end": 28
-							},
+							"first": "\n",
 							"rest": []
 						},
-						"token": {
-							"start": 28,
-							"end": 31
-						}
+						"token": "//!"
 					},
-					"comment": {
-						"start": 31,
-						"end": 33
-					}
+					"comment": "a\n"
 				}
 			}
 		},
@@ -307,21 +196,12 @@
 				"Block": {
 					"prefix": {
 						"ws": {
-							"first": {
-								"start": 33,
-								"end": 33
-							},
+							"first": "",
 							"rest": []
 						},
-						"token": {
-							"start": 33,
-							"end": 36
-						}
+						"token": "/*!"
 					},
-					"comment": {
-						"start": 36,
-						"end": 39
-					}
+					"comment": "a*/"
 				}
 			}
 		},
@@ -330,31 +210,19 @@
 				"Block": {
 					"prefix": {
 						"ws": {
-							"first": {
-								"start": 39,
-								"end": 40
-							},
+							"first": "\n",
 							"rest": []
 						},
-						"token": {
-							"start": 40,
-							"end": 43
-						}
+						"token": "/*!"
 					},
-					"comment": {
-						"start": 43,
-						"end": 49
-					}
+					"comment": "/**/*/"
 				}
 			}
 		}
 	],
 	"items": [],
 	"suffix_ws": {
-		"first": {
-			"start": 49,
-			"end": 50
-		},
+		"first": "\n",
 		"rest": []
 	}
 }

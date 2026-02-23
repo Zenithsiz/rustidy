@@ -386,14 +386,14 @@ impl Formattable for AstStr {
 		ControlFlow::Continue(self.is_empty())
 	}
 
-	fn format_output(&mut self, ctx: &mut Context) -> FormatOutput {
+	fn format_output(&mut self, _ctx: &mut Context) -> FormatOutput {
 		// TODO: Optimize these by not iterating over the string multiple times.
 		FormatOutput {
 			prefix_ws_len: None,
 			len: self.len(),
-			newlines: self.count_newlines(&ctx.input),
+			newlines: self.count_newlines(),
 			is_empty: self.is_empty(),
-			is_blank: self.is_blank(&ctx.input),
+			is_blank: self.is_blank(),
 		}
 	}
 }
@@ -461,12 +461,6 @@ impl<'a> Context<'a> {
 	#[must_use]
 	pub const fn input(&self) -> &ArcStr {
 		&self.input
-	}
-
-	/// Returns the string of a string
-	#[must_use]
-	pub fn str<'s>(&'s mut self, s: &'s AstStr) -> Cow<'s, str> {
-		s.str(&self.input)
 	}
 
 	/// Returns the config

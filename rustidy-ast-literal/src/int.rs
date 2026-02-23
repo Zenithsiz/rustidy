@@ -26,12 +26,12 @@ pub struct IntegerLiteral {
 
 impl IntegerLiteral {
 	/// Returns the value of this integer literal
-	pub fn value(&self, input: &str) -> Result<u64, AppError> {
+	pub fn value(&self) -> Result<u64, AppError> {
 		let (radix, prefix_len, mut digits) = match &self.inner {
-			IntegerLiteralInner::Decimal(dec) => (10, 0, dec.0.str(input)),
-			IntegerLiteralInner::Binary(bin) => (2, 2, bin.0.str(input)),
-			IntegerLiteralInner::Octal(oct) => (8, 2, oct.0.str(input)),
-			IntegerLiteralInner::Hex(hex) => (16, 2, hex.0.str(input)),
+			IntegerLiteralInner::Decimal(dec) => (10, 0, dec.0.str()),
+			IntegerLiteralInner::Binary(bin) => (2, 2, bin.0.str()),
+			IntegerLiteralInner::Octal(oct) => (8, 2, oct.0.str()),
+			IntegerLiteralInner::Hex(hex) => (16, 2, hex.0.str()),
 		};
 		if digits.contains('_') {
 			Cow::to_mut(&mut digits).remove_matches('_');

@@ -33,8 +33,8 @@ impl StringLiteral {
 	///
 	/// Doesn't include the quotes or suffix, and resolves any escapes
 	#[must_use]
-	pub fn contents<'s>(&'s self, input: &'s str) -> Cow<'s, str> {
-		let mut s = self.s.str(input);
+	pub fn contents(&self) -> Cow<'_, str> {
+		let mut s = self.s.str();
 
 		// Remove the quotes
 		match &mut s {
@@ -131,7 +131,7 @@ mod tests {
 				.parse::<StringLiteral>()
 				.unwrap_or_else(|err| panic!("Unable to parse input case {input:?}: {err:?}"));
 
-			let contents_found = literal.contents(input);
+			let contents_found = literal.contents();
 			assert_eq!(
 				contents_found, contents_expected,
 				"Found wrong contents for string {input:?}"

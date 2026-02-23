@@ -140,7 +140,7 @@ fn format_file(config: &rustidy_util::Config, files: Option<&mut Vec<PathBuf>>, 
 			}
 
 			// Then get it's path
-			let mod_path = self::mod_path(file_path, &input, &item.0.attrs, mod_)?;
+			let mod_path = self::mod_path(file_path, &item.0.attrs, mod_)?;
 			files.push(mod_path);
 		}
 	}
@@ -148,7 +148,7 @@ fn format_file(config: &rustidy_util::Config, files: Option<&mut Vec<PathBuf>>, 
 	// Format
 	let _: FormatOutput = rustidy::format(&input, config, &mut crate_);
 
-	let output = crate_.print_to_string(&input);
+	let output = crate_.print_to_string();
 	match check {
 		true => ensure!(input == output, "File was not formatted"),
 		false => {
@@ -166,8 +166,8 @@ fn format_file(config: &rustidy_util::Config, files: Option<&mut Vec<PathBuf>>, 
 }
 
 /// Returns a module's path
-fn mod_path<'a>(file_path: &Path, input: &'a str, attrs: impl IntoIterator<Item = &'a OuterAttrOrDocComment>, mod_: &Module,) -> Result<PathBuf, AppError> {
-	let path = match self::find_path_attr(input, attrs)? {
+fn mod_path<'a>(file_path: &Path, attrs: impl IntoIterator<Item = &'a OuterAttrOrDocComment>, mod_: &Module,) -> Result<PathBuf, AppError> {
+	let path = match self::find_path_attr(attrs)? {
 		// If it had a `#[path = ...]` attribute, use that
 		Some(name) => file_path.with_file_name("").join(&*name),
 
@@ -175,13 +175,13 @@ fn mod_path<'a>(file_path: &Path, input: &'a str, attrs: impl IntoIterator<Item 
 		None => {
 			let name = match &mod_.ident {
 				Identifier::Raw(ident) => {
-					super let ident = ident.1.str(input);
+					super let ident = ident.1.str();
 					let ident = ident
 						.strip_prefix("r#")
 						.expect("Raw identified didn't start with `r#`");
 					Cow::Borrowed(ident)
 				},
-				Identifier::NonKw(ident) => ident.0.1.str(input),
+				Identifier::NonKw(ident) => ident.0.1.str(),
 			};
 
 			// Try `<name>/mod.rs` first
@@ -215,7 +215,7 @@ fn mod_path<'a>(file_path: &Path, input: &'a str, attrs: impl IntoIterator<Item 
 
 /// Finds a `#[path = ...]` attribute
 // TODO: Support `cfg_attr(..., path = ...)` and others?
-fn find_path_attr<'a>(input: &'a str, attrs: impl IntoIterator<Item = &'a OuterAttrOrDocComment>,) -> Result<Option<Cow<'a, str>>, AppError> {
+fn find_path_attr<'a>(attrs: impl IntoIterator<Item = &'a OuterAttrOrDocComment>,) -> Result<Option<Cow<'a, str>>, AppError> {
 	for attr in attrs {
 		let Some(attr) = attr.try_as_attr_ref() else {
 			continue;
@@ -223,7 +223,7 @@ fn find_path_attr<'a>(input: &'a str, attrs: impl IntoIterator<Item = &'a OuterA
 		let Some(meta) = attr.open.value.try_as_meta_ref() else {
 			continue;
 		};
-		if !(meta.path().is_str(input, "path")) {
+		if !(meta.path().is_str("path")) {
 			continue;
 		}
 		let Some(meta) = meta.try_as_eq_expr_ref() else {
@@ -234,7 +234,7 @@ fn find_path_attr<'a>(input: &'a str, attrs: impl IntoIterator<Item = &'a OuterA
 			bail!("Expected a literal expression in `#[path = ...]` attribute");
 		};
 
-		return Ok(Some(literal.contents(input)));
+		return Ok(Some(literal.contents()));
 	}
 
 	Ok(None)

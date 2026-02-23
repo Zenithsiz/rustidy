@@ -6,7 +6,7 @@ use std::sync::Arc;
 decl_config! {
 	Config;
 
-	indent                     : Arc<str>      = "\t".into(),
+	indent                     : Arc<str>      = Arc::from("\t"),
 	skip                       : bool          = false,
 	min_empty_lines            : usize         = 0,
 	max_empty_lines            : usize         = 2,

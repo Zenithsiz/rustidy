@@ -12,45 +12,27 @@
 							"unsafe_": null,
 							"mod_": {
 								"ws": {
-									"first": {
-										"start": 0,
-										"end": 0
-									},
+									"first": "",
 									"rest": []
 								},
-								"token": {
-									"start": 0,
-									"end": 3
-								}
+								"token": "mod"
 							},
 							"ident": {
 								"NonKw": [
 									{
-										"first": {
-											"start": 3,
-											"end": 4
-										},
+										"first": " ",
 										"rest": []
 									},
-									{
-										"start": 4,
-										"end": 5
-									}
+									"a"
 								]
 							},
 							"inner": {
 								"None": {
 									"ws": {
-										"first": {
-											"start": 5,
-											"end": 5
-										},
+										"first": "",
 										"rest": []
 									},
-									"token": {
-										"start": 5,
-										"end": 6
-									}
+									"token": ";"
 								}
 							}
 						}
@@ -67,60 +49,36 @@
 						"ExternCrate": {
 							"extern_": {
 								"ws": {
-									"first": {
-										"start": 6,
-										"end": 7
-									},
+									"first": "\n",
 									"rest": []
 								},
-								"token": {
-									"start": 7,
-									"end": 13
-								}
+								"token": "extern"
 							},
 							"crate_": {
 								"ws": {
-									"first": {
-										"start": 13,
-										"end": 14
-									},
+									"first": " ",
 									"rest": []
 								},
-								"token": {
-									"start": 14,
-									"end": 19
-								}
+								"token": "crate"
 							},
 							"crate_ref": {
 								"Ident": {
 									"NonKw": [
 										{
-											"first": {
-												"start": 19,
-												"end": 20
-											},
+											"first": " ",
 											"rest": []
 										},
-										{
-											"start": 20,
-											"end": 21
-										}
+										"a"
 									]
 								}
 							},
 							"as_clause": null,
 							"semi": {
 								"ws": {
-									"first": {
-										"start": 21,
-										"end": 21
-									},
+									"first": "",
 									"rest": []
 								},
-								"token": {
-									"start": 21,
-									"end": 22
-								}
+								"token": ";"
 							}
 						}
 					}
@@ -136,16 +94,10 @@
 						"Use": {
 							"use_": {
 								"ws": {
-									"first": {
-										"start": 22,
-										"end": 23
-									},
+									"first": "\n",
 									"rest": []
 								},
-								"token": {
-									"start": 23,
-									"end": 26
-								}
+								"token": "use"
 							},
 							"tree": {
 								"Simple": {
@@ -156,16 +108,10 @@
 												"Ident": {
 													"NonKw": [
 														{
-															"first": {
-																"start": 26,
-																"end": 27
-															},
+															"first": " ",
 															"rest": []
 														},
-														{
-															"start": 27,
-															"end": 28
-														}
+														"a"
 													]
 												}
 											},
@@ -177,16 +123,10 @@
 							},
 							"semi": {
 								"ws": {
-									"first": {
-										"start": 28,
-										"end": 28
-									},
+									"first": "",
 									"rest": []
 								},
-								"token": {
-									"start": 28,
-									"end": 29
-								}
+								"token": ";"
 							}
 						}
 					}
@@ -208,60 +148,36 @@
 							},
 							"fn_": {
 								"ws": {
-									"first": {
-										"start": 29,
-										"end": 30
-									},
+									"first": "\n",
 									"rest": []
 								},
-								"token": {
-									"start": 30,
-									"end": 32
-								}
+								"token": "fn"
 							},
 							"ident": {
 								"NonKw": [
 									{
-										"first": {
-											"start": 32,
-											"end": 33
-										},
+										"first": " ",
 										"rest": []
 									},
-									{
-										"start": 33,
-										"end": 34
-									}
+									"a"
 								]
 							},
 							"generics": null,
 							"params": {
 								"prefix": {
 									"ws": {
-										"first": {
-											"start": 34,
-											"end": 34
-										},
+										"first": "",
 										"rest": []
 									},
-									"token": {
-										"start": 34,
-										"end": 35
-									}
+									"token": "("
 								},
 								"value": null,
 								"suffix": {
 									"ws": {
-										"first": {
-											"start": 35,
-											"end": 35
-										},
+										"first": "",
 										"rest": []
 									},
-									"token": {
-										"start": 35,
-										"end": 36
-									}
+									"token": ")"
 								}
 							},
 							"ret": null,
@@ -269,16 +185,10 @@
 							"body": {
 								"Semi": {
 									"ws": {
-										"first": {
-											"start": 36,
-											"end": 36
-										},
+										"first": "",
 										"rest": []
 									},
-									"token": {
-										"start": 36,
-										"end": 37
-									}
+									"token": ";"
 								}
 							}
 						}
@@ -295,30 +205,18 @@
 						"TypeAlias": {
 							"type_": {
 								"ws": {
-									"first": {
-										"start": 37,
-										"end": 38
-									},
+									"first": "\n",
 									"rest": []
 								},
-								"token": {
-									"start": 38,
-									"end": 42
-								}
+								"token": "type"
 							},
 							"ident": {
 								"NonKw": [
 									{
-										"first": {
-											"start": 42,
-											"end": 43
-										},
+										"first": " ",
 										"rest": []
 									},
-									{
-										"start": 43,
-										"end": 44
-									}
+									"A"
 								]
 							},
 							"generics": null,
@@ -327,16 +225,10 @@
 							"eq": null,
 							"semi": {
 								"ws": {
-									"first": {
-										"start": 44,
-										"end": 44
-									},
+									"first": "",
 									"rest": []
 								},
-								"token": {
-									"start": 44,
-									"end": 45
-								}
+								"token": ";"
 							}
 						}
 					}
@@ -353,30 +245,18 @@
 							"Struct": {
 								"struct_": {
 									"ws": {
-										"first": {
-											"start": 45,
-											"end": 46
-										},
+										"first": "\n",
 										"rest": []
 									},
-									"token": {
-										"start": 46,
-										"end": 52
-									}
+									"token": "struct"
 								},
 								"ident": {
 									"NonKw": [
 										{
-											"first": {
-												"start": 52,
-												"end": 53
-											},
+											"first": " ",
 											"rest": []
 										},
-										{
-											"start": 53,
-											"end": 54
-										}
+										"A"
 									]
 								},
 								"generics": null,
@@ -384,16 +264,10 @@
 								"inner": {
 									"Semi": {
 										"ws": {
-											"first": {
-												"start": 54,
-												"end": 54
-											},
+											"first": "",
 											"rest": []
 										},
-										"token": {
-											"start": 54,
-											"end": 55
-										}
+										"token": ";"
 									}
 								}
 							}
@@ -411,30 +285,18 @@
 						"Enum": {
 							"enum_": {
 								"ws": {
-									"first": {
-										"start": 55,
-										"end": 56
-									},
+									"first": "\n",
 									"rest": []
 								},
-								"token": {
-									"start": 56,
-									"end": 60
-								}
+								"token": "enum"
 							},
 							"ident": {
 								"NonKw": [
 									{
-										"first": {
-											"start": 60,
-											"end": 61
-										},
+										"first": " ",
 										"rest": []
 									},
-									{
-										"start": 61,
-										"end": 62
-									}
+									"A"
 								]
 							},
 							"generic": null,
@@ -442,30 +304,18 @@
 							"variants": {
 								"prefix": {
 									"ws": {
-										"first": {
-											"start": 62,
-											"end": 63
-										},
+										"first": " ",
 										"rest": []
 									},
-									"token": {
-										"start": 63,
-										"end": 64
-									}
+									"token": "{"
 								},
 								"value": null,
 								"suffix": {
 									"ws": {
-										"first": {
-											"start": 64,
-											"end": 64
-										},
+										"first": "",
 										"rest": []
 									},
-									"token": {
-										"start": 64,
-										"end": 65
-									}
+									"token": "}"
 								}
 							}
 						}
@@ -482,30 +332,18 @@
 						"Union": {
 							"union": {
 								"ws": {
-									"first": {
-										"start": 65,
-										"end": 66
-									},
+									"first": "\n",
 									"rest": []
 								},
-								"token": {
-									"start": 66,
-									"end": 71
-								}
+								"token": "union"
 							},
 							"ident": {
 								"NonKw": [
 									{
-										"first": {
-											"start": 71,
-											"end": 72
-										},
+										"first": " ",
 										"rest": []
 									},
-									{
-										"start": 72,
-										"end": 73
-									}
+									"A"
 								]
 							},
 							"generics": null,
@@ -513,30 +351,18 @@
 							"fields": {
 								"prefix": {
 									"ws": {
-										"first": {
-											"start": 73,
-											"end": 74
-										},
+										"first": " ",
 										"rest": []
 									},
-									"token": {
-										"start": 74,
-										"end": 75
-									}
+									"token": "{"
 								},
 								"value": null,
 								"suffix": {
 									"ws": {
-										"first": {
-											"start": 75,
-											"end": 75
-										},
+										"first": "",
 										"rest": []
 									},
-									"token": {
-										"start": 75,
-										"end": 76
-									}
+									"token": "}"
 								}
 							}
 						}
@@ -553,46 +379,28 @@
 						"Constant": {
 							"const_": {
 								"ws": {
-									"first": {
-										"start": 76,
-										"end": 77
-									},
+									"first": "\n",
 									"rest": []
 								},
-								"token": {
-									"start": 77,
-									"end": 82
-								}
+								"token": "const"
 							},
 							"name": {
 								"Ident": {
 									"NonKw": [
 										{
-											"first": {
-												"start": 82,
-												"end": 83
-											},
+											"first": " ",
 											"rest": []
 										},
-										{
-											"start": 83,
-											"end": 84
-										}
+										"A"
 									]
 								}
 							},
 							"colon": {
 								"ws": {
-									"first": {
-										"start": 84,
-										"end": 84
-									},
+									"first": "",
 									"rest": []
 								},
-								"token": {
-									"start": 84,
-									"end": 85
-								}
+								"token": ":"
 							},
 							"ty": {
 								"TraitObject": {
@@ -611,16 +419,10 @@
 																		"Ident": {
 																			"NonKw": [
 																				{
-																					"first": {
-																						"start": 85,
-																						"end": 86
-																					},
+																					"first": " ",
 																					"rest": []
 																				},
-																				{
-																					"start": 86,
-																					"end": 89
-																				}
+																				"u32"
 																			]
 																		}
 																	},
@@ -641,16 +443,10 @@
 							"value": null,
 							"semi": {
 								"ws": {
-									"first": {
-										"start": 89,
-										"end": 89
-									},
+									"first": "",
 									"rest": []
 								},
-								"token": {
-									"start": 89,
-									"end": 90
-								}
+								"token": ";"
 							}
 						}
 					}
@@ -667,45 +463,27 @@
 							"safety": null,
 							"static_": {
 								"ws": {
-									"first": {
-										"start": 90,
-										"end": 91
-									},
+									"first": "\n",
 									"rest": []
 								},
-								"token": {
-									"start": 91,
-									"end": 97
-								}
+								"token": "static"
 							},
 							"mut_": null,
 							"ident": {
 								"NonKw": [
 									{
-										"first": {
-											"start": 97,
-											"end": 98
-										},
+										"first": " ",
 										"rest": []
 									},
-									{
-										"start": 98,
-										"end": 99
-									}
+									"A"
 								]
 							},
 							"colon": {
 								"ws": {
-									"first": {
-										"start": 99,
-										"end": 99
-									},
+									"first": "",
 									"rest": []
 								},
-								"token": {
-									"start": 99,
-									"end": 100
-								}
+								"token": ":"
 							},
 							"ty": {
 								"TraitObject": {
@@ -724,16 +502,10 @@
 																		"Ident": {
 																			"NonKw": [
 																				{
-																					"first": {
-																						"start": 100,
-																						"end": 101
-																					},
+																					"first": " ",
 																					"rest": []
 																				},
-																				{
-																					"start": 101,
-																					"end": 104
-																				}
+																				"u32"
 																			]
 																		}
 																	},
@@ -754,16 +526,10 @@
 							"value": null,
 							"semi": {
 								"ws": {
-									"first": {
-										"start": 104,
-										"end": 104
-									},
+									"first": "",
 									"rest": []
 								},
-								"token": {
-									"start": 104,
-									"end": 105
-								}
+								"token": ";"
 							}
 						}
 					}
@@ -781,30 +547,18 @@
 							"auto": null,
 							"trait_": {
 								"ws": {
-									"first": {
-										"start": 105,
-										"end": 106
-									},
+									"first": "\n",
 									"rest": []
 								},
-								"token": {
-									"start": 106,
-									"end": 111
-								}
+								"token": "trait"
 							},
 							"ident": {
 								"NonKw": [
 									{
-										"first": {
-											"start": 111,
-											"end": 112
-										},
+										"first": " ",
 										"rest": []
 									},
-									{
-										"start": 112,
-										"end": 113
-									}
+									"A"
 								]
 							},
 							"generics": null,
@@ -814,16 +568,10 @@
 								"Full": {
 									"prefix": {
 										"ws": {
-											"first": {
-												"start": 113,
-												"end": 114
-											},
+											"first": " ",
 											"rest": []
 										},
-										"token": {
-											"start": 114,
-											"end": 115
-										}
+										"token": "{"
 									},
 									"value": {
 										"attrs": [],
@@ -831,16 +579,10 @@
 									},
 									"suffix": {
 										"ws": {
-											"first": {
-												"start": 115,
-												"end": 115
-											},
+											"first": "",
 											"rest": []
 										},
-										"token": {
-											"start": 115,
-											"end": 116
-										}
+										"token": "}"
 									}
 								}
 							}
@@ -859,16 +601,10 @@
 							"Inherent": {
 								"impl_": {
 									"ws": {
-										"first": {
-											"start": 116,
-											"end": 117
-										},
+										"first": "\n",
 										"rest": []
 									},
-									"token": {
-										"start": 117,
-										"end": 121
-									}
+									"token": "impl"
 								},
 								"generics": null,
 								"ty": {
@@ -888,16 +624,10 @@
 																			"Ident": {
 																				"NonKw": [
 																					{
-																						"first": {
-																							"start": 121,
-																							"end": 122
-																						},
+																						"first": " ",
 																						"rest": []
 																					},
-																					{
-																						"start": 122,
-																						"end": 123
-																					}
+																					"A"
 																				]
 																			}
 																		},
@@ -919,16 +649,10 @@
 								"body": {
 									"prefix": {
 										"ws": {
-											"first": {
-												"start": 123,
-												"end": 124
-											},
+											"first": " ",
 											"rest": []
 										},
-										"token": {
-											"start": 124,
-											"end": 125
-										}
+										"token": "{"
 									},
 									"value": {
 										"attrs": [],
@@ -936,16 +660,10 @@
 									},
 									"suffix": {
 										"ws": {
-											"first": {
-												"start": 125,
-												"end": 125
-											},
+											"first": "",
 											"rest": []
 										},
-										"token": {
-											"start": 125,
-											"end": 126
-										}
+										"token": "}"
 									}
 								}
 							}
@@ -964,31 +682,19 @@
 							"unsafe_": null,
 							"extern_": {
 								"ws": {
-									"first": {
-										"start": 126,
-										"end": 127
-									},
+									"first": "\n",
 									"rest": []
 								},
-								"token": {
-									"start": 127,
-									"end": 133
-								}
+								"token": "extern"
 							},
 							"abi": null,
 							"inner": {
 								"prefix": {
 									"ws": {
-										"first": {
-											"start": 133,
-											"end": 134
-										},
+										"first": " ",
 										"rest": []
 									},
-									"token": {
-										"start": 134,
-										"end": 135
-									}
+									"token": "{"
 								},
 								"value": {
 									"attrs": [],
@@ -996,16 +702,10 @@
 								},
 								"suffix": {
 									"ws": {
-										"first": {
-											"start": 135,
-											"end": 135
-										},
+										"first": "",
 										"rest": []
 									},
-									"token": {
-										"start": 135,
-										"end": 136
-									}
+									"token": "}"
 								}
 							}
 						}
@@ -1026,16 +726,10 @@
 										"Ident": {
 											"NonKw": [
 												{
-													"first": {
-														"start": 136,
-														"end": 138
-													},
+													"first": "\n\n",
 													"rest": []
 												},
-												{
-													"start": 138,
-													"end": 139
-												}
+												"a"
 											]
 										}
 									},
@@ -1044,44 +738,26 @@
 							},
 							"not": {
 								"ws": {
-									"first": {
-										"start": 139,
-										"end": 139
-									},
+									"first": "",
 									"rest": []
 								},
-								"token": {
-									"start": 139,
-									"end": 140
-								}
+								"token": "!"
 							},
 							"tokens": {
 								"prefix": {
 									"ws": {
-										"first": {
-											"start": 140,
-											"end": 141
-										},
+										"first": " ",
 										"rest": []
 									},
-									"token": {
-										"start": 141,
-										"end": 142
-									}
+									"token": "{"
 								},
 								"value": [],
 								"suffix": {
 									"ws": {
-										"first": {
-											"start": 142,
-											"end": 142
-										},
+										"first": "",
 										"rest": []
 									},
-									"token": {
-										"start": 142,
-										"end": 143
-									}
+									"token": "}"
 								}
 							}
 						}
@@ -1096,43 +772,25 @@
 					"Definition": {
 						"macro_rules": {
 							"ws": {
-								"first": {
-									"start": 143,
-									"end": 144
-								},
+								"first": "\n",
 								"rest": []
 							},
-							"token": {
-								"start": 144,
-								"end": 155
-							}
+							"token": "macro_rules"
 						},
 						"not": {
 							"ws": {
-								"first": {
-									"start": 155,
-									"end": 155
-								},
+								"first": "",
 								"rest": []
 							},
-							"token": {
-								"start": 155,
-								"end": 156
-							}
+							"token": "!"
 						},
 						"ident": {
 							"NonKw": [
 								{
-									"first": {
-										"start": 156,
-										"end": 157
-									},
+									"first": " ",
 									"rest": []
 								},
-								{
-									"start": 157,
-									"end": 158
-								}
+								"a"
 							]
 						},
 						"def": {
@@ -1140,16 +798,10 @@
 								"rules": {
 									"prefix": {
 										"ws": {
-											"first": {
-												"start": 158,
-												"end": 159
-											},
+											"first": " ",
 											"rest": []
 										},
-										"token": {
-											"start": 159,
-											"end": 160
-										}
+										"token": "{"
 									},
 									"value": {
 										"punctuated": {
@@ -1158,74 +810,44 @@
 													"Parens": {
 														"prefix": {
 															"ws": {
-																"first": {
-																	"start": 160,
-																	"end": 161
-																},
+																"first": " ",
 																"rest": []
 															},
-															"token": {
-																"start": 161,
-																"end": 162
-															}
+															"token": "("
 														},
 														"value": [],
 														"suffix": {
 															"ws": {
-																"first": {
-																	"start": 162,
-																	"end": 162
-																},
+																"first": "",
 																"rest": []
 															},
-															"token": {
-																"start": 162,
-																"end": 163
-															}
+															"token": ")"
 														}
 													}
 												},
 												"arrow": {
 													"ws": {
-														"first": {
-															"start": 163,
-															"end": 164
-														},
+														"first": " ",
 														"rest": []
 													},
-													"token": {
-														"start": 164,
-														"end": 166
-													}
+													"token": "=>"
 												},
 												"transcriber": {
 													"Parens": {
 														"prefix": {
 															"ws": {
-																"first": {
-																	"start": 166,
-																	"end": 167
-																},
+																"first": " ",
 																"rest": []
 															},
-															"token": {
-																"start": 167,
-																"end": 168
-															}
+															"token": "("
 														},
 														"value": [],
 														"suffix": {
 															"ws": {
-																"first": {
-																	"start": 168,
-																	"end": 168
-																},
+																"first": "",
 																"rest": []
 															},
-															"token": {
-																"start": 168,
-																"end": 169
-															}
+															"token": ")"
 														}
 													}
 												}
@@ -1236,16 +858,10 @@
 									},
 									"suffix": {
 										"ws": {
-											"first": {
-												"start": 169,
-												"end": 170
-											},
+											"first": " ",
 											"rest": []
 										},
-										"token": {
-											"start": 170,
-											"end": 171
-										}
+										"token": "}"
 									}
 								}
 							}
@@ -1256,10 +872,7 @@
 		}
 	],
 	"suffix_ws": {
-		"first": {
-			"start": 171,
-			"end": 171
-		},
+		"first": "",
 		"rest": []
 	}
 }

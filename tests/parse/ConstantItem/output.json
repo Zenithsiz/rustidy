@@ -11,46 +11,28 @@
 						"Constant": {
 							"const_": {
 								"ws": {
-									"first": {
-										"start": 0,
-										"end": 0
-									},
+									"first": "",
 									"rest": []
 								},
-								"token": {
-									"start": 0,
-									"end": 5
-								}
+								"token": "const"
 							},
 							"name": {
 								"Ident": {
 									"NonKw": [
 										{
-											"first": {
-												"start": 5,
-												"end": 6
-											},
+											"first": " ",
 											"rest": []
 										},
-										{
-											"start": 6,
-											"end": 7
-										}
+										"A"
 									]
 								}
 							},
 							"colon": {
 								"ws": {
-									"first": {
-										"start": 7,
-										"end": 7
-									},
+									"first": "",
 									"rest": []
 								},
-								"token": {
-									"start": 7,
-									"end": 8
-								}
+								"token": ":"
 							},
 							"ty": {
 								"TraitObject": {
@@ -69,16 +51,10 @@
 																		"Ident": {
 																			"NonKw": [
 																				{
-																					"first": {
-																						"start": 8,
-																						"end": 9
-																					},
+																					"first": " ",
 																					"rest": []
 																				},
-																				{
-																					"start": 9,
-																					"end": 12
-																				}
+																				"u32"
 																			]
 																		}
 																	},
@@ -99,16 +75,10 @@
 							"value": null,
 							"semi": {
 								"ws": {
-									"first": {
-										"start": 12,
-										"end": 12
-									},
+									"first": "",
 									"rest": []
 								},
-								"token": {
-									"start": 12,
-									"end": 13
-								}
+								"token": ";"
 							}
 						}
 					}
@@ -124,44 +94,26 @@
 						"Constant": {
 							"const_": {
 								"ws": {
-									"first": {
-										"start": 13,
-										"end": 14
-									},
+									"first": "\n",
 									"rest": []
 								},
-								"token": {
-									"start": 14,
-									"end": 19
-								}
+								"token": "const"
 							},
 							"name": {
 								"Underscore": {
 									"ws": {
-										"first": {
-											"start": 19,
-											"end": 20
-										},
+										"first": " ",
 										"rest": []
 									},
-									"token": {
-										"start": 20,
-										"end": 21
-									}
+									"token": "_"
 								}
 							},
 							"colon": {
 								"ws": {
-									"first": {
-										"start": 21,
-										"end": 21
-									},
+									"first": "",
 									"rest": []
 								},
-								"token": {
-									"start": 21,
-									"end": 22
-								}
+								"token": ":"
 							},
 							"ty": {
 								"TraitObject": {
@@ -180,16 +132,10 @@
 																		"Ident": {
 																			"NonKw": [
 																				{
-																					"first": {
-																						"start": 22,
-																						"end": 23
-																					},
+																					"first": " ",
 																					"rest": []
 																				},
-																				{
-																					"start": 23,
-																					"end": 26
-																				}
+																				"u32"
 																			]
 																		}
 																	},
@@ -210,16 +156,10 @@
 							"value": null,
 							"semi": {
 								"ws": {
-									"first": {
-										"start": 26,
-										"end": 26
-									},
+									"first": "",
 									"rest": []
 								},
-								"token": {
-									"start": 26,
-									"end": 27
-								}
+								"token": ";"
 							}
 						}
 					}
@@ -235,46 +175,28 @@
 						"Constant": {
 							"const_": {
 								"ws": {
-									"first": {
-										"start": 27,
-										"end": 29
-									},
+									"first": "\n\n",
 									"rest": []
 								},
-								"token": {
-									"start": 29,
-									"end": 34
-								}
+								"token": "const"
 							},
 							"name": {
 								"Ident": {
 									"NonKw": [
 										{
-											"first": {
-												"start": 34,
-												"end": 35
-											},
+											"first": " ",
 											"rest": []
 										},
-										{
-											"start": 35,
-											"end": 36
-										}
+										"A"
 									]
 								}
 							},
 							"colon": {
 								"ws": {
-									"first": {
-										"start": 36,
-										"end": 36
-									},
+									"first": "",
 									"rest": []
 								},
-								"token": {
-									"start": 36,
-									"end": 37
-								}
+								"token": ":"
 							},
 							"ty": {
 								"TraitObject": {
@@ -293,16 +215,10 @@
 																		"Ident": {
 																			"NonKw": [
 																				{
-																					"first": {
-																						"start": 37,
-																						"end": 38
-																					},
+																					"first": " ",
 																					"rest": []
 																				},
-																				{
-																					"start": 38,
-																					"end": 41
-																				}
+																				"u32"
 																			]
 																		}
 																	},
@@ -323,16 +239,10 @@
 							"value": {
 								"eq": {
 									"ws": {
-										"first": {
-											"start": 41,
-											"end": 42
-										},
+										"first": " ",
 										"rest": []
 									},
-									"token": {
-										"start": 42,
-										"end": 43
-									}
+									"token": "="
 								},
 								"expr": {
 									"WithoutBlock": {
@@ -341,17 +251,11 @@
 											"Literal": {
 												"Integer": {
 													"ws": {
-														"first": {
-															"start": 43,
-															"end": 44
-														},
+														"first": " ",
 														"rest": []
 													},
 													"inner": {
-														"Decimal": {
-															"start": 44,
-															"end": 45
-														}
+														"Decimal": "5"
 													},
 													"suffix": null
 												}
@@ -362,16 +266,10 @@
 							},
 							"semi": {
 								"ws": {
-									"first": {
-										"start": 45,
-										"end": 45
-									},
+									"first": "",
 									"rest": []
 								},
-								"token": {
-									"start": 45,
-									"end": 46
-								}
+								"token": ";"
 							}
 						}
 					}
@@ -380,10 +278,7 @@
 		}
 	],
 	"suffix_ws": {
-		"first": {
-			"start": 46,
-			"end": 47
-		},
+		"first": "\n",
 		"rest": []
 	}
 }

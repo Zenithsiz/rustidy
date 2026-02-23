@@ -29,16 +29,4 @@ impl AstRange {
 	pub const fn is_empty(&self) -> bool {
 		self.len() == 0
 	}
-
-	/// Slices the input string with this range
-	#[must_use]
-	pub fn str<'input>(&self, input: &'input str) -> &'input str {
-		&input[self.start.0..self.end.0]
-	}
-
-	/// Slices the input string before this range
-	#[must_use]
-	pub fn str_before<'input>(&self, input: &'input str) -> &'input str {
-		&input[..self.start.0]
-	}
 }

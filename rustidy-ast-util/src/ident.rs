@@ -27,11 +27,11 @@ pub enum Identifier {
 impl Identifier {
 	/// Returns this path as a string.
 	#[must_use]
-	pub fn as_str<'a>(&'a self, input: &'a str) -> Cow<'a, str> {
+	pub fn as_str(&self) -> Cow<'_, str> {
 		match self {
 			// TODO: How should we handle raw identifiers?
 			Self::Raw(_) => todo!("Raw identifiers aren't fully implemented"),
-			Self::NonKw(ident) => ident.0.1.str(input),
+			Self::NonKw(ident) => ident.0.1.str(),
 		}
 	}
 
@@ -40,10 +40,10 @@ impl Identifier {
 	/// For raw identifiers, the `r#` prefix isn't included in
 	/// the comparison, so `r#abc` would return true for `"abc"`.
 	#[must_use]
-	pub fn is_str(&self, input: &str, ident: &str) -> bool {
+	pub fn is_str(&self, ident: &str) -> bool {
 		match self {
 			Self::Raw(_) => todo!("Raw identifiers aren't fully implemented"),
-			Self::NonKw(this) => this.0.1.is_str(input, ident),
+			Self::NonKw(this) => this.0.1.is_str(ident),
 		}
 	}
 
@@ -66,9 +66,9 @@ impl Identifier {
 pub struct NonKeywordIdentifier(pub IdentifierOrKeyword);
 
 impl NonKeywordIdentifier {
-	pub fn check_strict_reserved(&mut self, parser: &mut Parser) -> Result<(), NonKeywordIdentifierError> {
+	pub fn check_strict_reserved(&mut self, _parser: &mut Parser) -> Result<(), NonKeywordIdentifierError> {
 		if STRICT_OR_RESERVED_KEYWORDS
-			.contains(&&*parser.str(&self.0.1)) {
+			.contains(&&*self.0.1.str()) {
 			return Err(NonKeywordIdentifierError::StrictOrReserved);
 		}
 

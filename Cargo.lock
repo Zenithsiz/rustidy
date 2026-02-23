@@ -511,7 +511,6 @@ name = "rustidy-ast"
 version = "0.1.10"
 dependencies = [
  "app-error",
- "arcstr",
  "derive_more",
  "replace_with",
  "rustidy-ast-literal",
@@ -654,7 +653,6 @@ dependencies = [
 name = "rustidy-print"
 version = "0.1.0"
 dependencies = [
- "arcstr",
  "rustidy-macros",
  "rustidy-util",
 ]
@@ -683,6 +681,7 @@ dependencies = [
 name = "rustidy-util"
 version = "0.1.0"
 dependencies = [
+ "arcstr",
  "derive_more",
  "extend",
  "serde",

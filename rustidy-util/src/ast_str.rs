@@ -2,9 +2,9 @@
 
 // Imports
 use {
-	crate::{ArenaData, ArenaIdx, AstRange},
+	crate::{ArenaData, ArenaIdx},
+	arcstr::Substr,
 	std::{borrow::Cow, sync::Arc},
-	serde::ser::Error,
 };
 
 /// Ast string
@@ -16,14 +16,14 @@ pub struct AstStr(ArenaIdx<Inner>);
 impl AstStr {
 	/// Creates a new ast string without any associated input range
 	pub fn new(repr: impl Into<AstStrRepr>) -> Self {
-		Self(ArenaIdx::new(Inner { repr: repr.into(), input_range: None, }))
+		Self(ArenaIdx::new(Inner { repr: repr.into(), input: None, }))
 	}
 
 	/// Creates a new ast string from an input range
-	pub fn from_input(input_range: AstRange) -> Self {
+	pub fn from_input(input: Substr) -> Self {
 		Self(ArenaIdx::new(Inner {
-			repr: AstStrRepr::AstRange(input_range),
-			input_range: Some(input_range),
+			repr: AstStrRepr::Input(Substr::clone(&input)),
+			input: Some(input),
 		}))
 	}
 
@@ -34,15 +34,24 @@ impl AstStr {
 
 	/// Joins two strings
 	pub fn join(self, other: Self) -> Self {
-		let input_range = match (self.0.input_range, other.0.input_range) {
+		let input = match (&self.0.input, &other.0.input) {
 			// TODO: Keep the range more than just when contiguous?
-			(Some(lhs), Some(rhs)) if lhs.end == rhs.start => Some(AstRange { start: lhs.start, end: rhs.end }),
+			(Some(lhs), Some(rhs)) => {
+				let input = lhs.parent();
+				let lhs = lhs.range();
+				let rhs = rhs.range();
+
+				match lhs.end == rhs.start {
+					true => Some(input.substr(lhs.start..rhs.end)),
+					false => None,
+				}
+			},
 			_ => None,
 		};
 
 		Self(ArenaIdx::new(Inner {
 			repr: AstStrRepr::Join { lhs: self, rhs: other },
-			input_range
+			input
 		}))
 	}
 
@@ -54,8 +63,8 @@ impl AstStr {
 
 	/// Returns the input range of this string
 	#[must_use]
-	pub fn input_range(&self) -> Option<AstRange> {
-		self.0.input_range
+	pub fn input(&self) -> Option<&Substr> {
+		self.0.input.as_ref()
 	}
 
 	/// Returns the length of this string
@@ -72,53 +81,53 @@ impl AstStr {
 
 	/// Returns if this string is blank
 	#[must_use]
-	pub fn is_blank(&self, input: &str) -> bool {
-		self.repr().is_blank(input)
+	pub fn is_blank(&self) -> bool {
+		self.repr().is_blank()
 	}
 
 	/// Returns the number of newlines in this string
 	#[must_use]
-	pub fn count_newlines(&self, input: &str) -> usize {
-		self.repr().count_newlines(input)
+	pub fn count_newlines(&self) -> usize {
+		self.repr().count_newlines()
 	}
 
 	/// Returns if this string has newlines
 	#[must_use]
-	pub fn has_newlines(&self, input: &str) -> bool {
-		self.repr().has_newlines(input)
+	pub fn has_newlines(&self) -> bool {
+		self.repr().has_newlines()
 	}
 
 	/// Returns if this string is equal to `other`
 	#[must_use]
-	pub fn is_str(&self, input: &str, other: &str) -> bool {
-		self.repr().is_str(input, other)
+	pub fn is_str(&self, other: &str) -> bool {
+		self.repr().is_str(other)
 	}
 
 	/// Writes this string
-	pub fn write(&self, input: &str, output: &mut String) {
-		self.repr().write(input, output);
+	pub fn write(&self, output: &mut String) {
+		self.repr().write(output);
 	}
 
 	/// Returns the string of this string, if it comes from the input (or is static)
 	#[must_use]
-	pub fn str_input<'input>(&self, input: &'input str) -> Option<&'input str> {
-		self.repr().str_input(input)
+	pub fn str_input(&self) -> Option<&str> {
+		self.repr().str_input()
 	}
 
 	/// Returns the string of this string, if it's cheap to get
 	#[must_use]
-	pub fn str_cheap<'a>(&'a self, input: &'a str) -> Option<&'a str> {
-		self.repr().str_input(input)
+	pub fn str_cheap(&self) -> Option<&str> {
+		self.repr().str_input()
 	}
 
 	/// Returns the string of this string
 	// TODO: This can be somewhat expensive, should we replace it with
 	//       functions performing whatever checks the callers need instead?
 	#[must_use]
-	pub fn str<'a>(&'a self, input: &'a str) -> Cow<'a, str> {
-		match self.0.repr.str_cheap(input) {
+	pub fn str(&self) -> Cow<'_, str> {
+		match self.0.repr.str_cheap() {
 			Some(s) => s.into(),
-			None => self.repr().str(input).into_owned().into(),
+			None => self.repr().str().into_owned().into(),
 		}
 	}
 }
@@ -129,10 +138,7 @@ impl serde::Serialize for AstStr {
 	where
 		S: serde::Serializer
 	{
-		match self.input_range() {
-			Some(input_range) => input_range.serialize(serializer),
-			None => Err(S::Error::custom(format!("Only strings with an input range may be serialized, found {:?}", *self.0))),
-		}
+		self.str().serialize(serializer)
 	}
 }
 
@@ -141,11 +147,8 @@ impl<'de> serde::Deserialize<'de> for AstStr {
 	where
 		D: serde::Deserializer<'de>,
 	{
-		let range = AstRange::deserialize(deserializer)?;
-		Ok(Self(ArenaIdx::new(Inner {
-			repr: AstStrRepr::AstRange(range),
-			input_range: Some(range)
-		})))
+		let s = String::deserialize(deserializer)?;
+		Ok(Self::new(AstStrRepr::Dynamic(s)))
 	}
 }
 
@@ -154,8 +157,8 @@ impl<'de> serde::Deserialize<'de> for AstStr {
 #[derive(ArenaData)]
 #[derive(derive_more::From)]
 struct Inner {
-	repr:        AstStrRepr,
-	input_range: Option<AstRange>,
+	repr:  AstStrRepr,
+	input: Option<Substr>,
 }
 
 /// Ast string representation
@@ -163,9 +166,9 @@ struct Inner {
 #[derive(ArenaData)]
 #[derive(derive_more::From)]
 pub enum AstStrRepr {
-	/// Input range
+	/// Input
 	#[from]
-	AstRange(AstRange),
+	Input(Substr),
 
 	/// Static string
 	#[from]
@@ -204,7 +207,7 @@ impl AstStrRepr {
 	#[must_use]
 	pub fn len(&self) -> usize {
 		match *self {
-			Self::AstRange(range) => range.len(),
+			Self::Input(ref s) => s.len(),
 			Self::String(s) => s.len(),
 			Self::Char(ch) => ch.len_utf8(),
 			Self::Spaces {
@@ -231,27 +234,27 @@ impl AstStrRepr {
 
 	/// Returns if this repr has the same string as another
 	#[must_use]
-	pub fn is_str_eq_to(&self, other: &Self, input: &str) -> bool {
+	pub fn is_str_eq_to(&self, other: &Self) -> bool {
 		match (self, other) {
 			// If they're equal, we're done
 			(lhs, rhs) if lhs == rhs => true,
 
 			// If one of them can be cheaply represented as a string, compare it.
-			(lhs, rhs) if let Some(lhs) = lhs.str_cheap(input) => rhs.is_str(input, lhs),
-			(lhs, rhs) if let Some(rhs) = rhs.str_cheap(input) => lhs.is_str(input, rhs),
+			(lhs, rhs) if let Some(lhs) = lhs.str_cheap() => rhs.is_str(lhs),
+			(lhs, rhs) if let Some(rhs) = rhs.str_cheap() => lhs.is_str(rhs),
 
 			// Otherwise, turn one of them into a string and compare.
 			// TODO: This is expensive, ensure we only get
 			//       here for very rare representations
-			_ => self.is_str(input, &other.str(input)),
+			_ => self.is_str(&other.str()),
 		}
 	}
 
 	/// Returns if this representation is blank
 	#[must_use]
-	pub fn is_blank(&self, input: &str) -> bool {
+	pub fn is_blank(&self) -> bool {
 		match *self {
-			Self::AstRange(range) => crate::is_str_blank(range.str(input)),
+			Self::Input(ref s) => crate::is_str_blank(s),
 			Self::String(s) => crate::is_str_blank(s),
 			Self::Char(ch) => ch.is_ascii_whitespace(),
 			Self::Spaces {
@@ -262,16 +265,16 @@ impl AstStrRepr {
 			Self::Join {
 				ref lhs,
 				ref rhs
-			} => lhs.is_blank(input) && rhs.is_blank(input),
+			} => lhs.is_blank() && rhs.is_blank(),
 			Self::Dynamic(ref s) => crate::is_str_blank(s),
 		}
 	}
 
 	/// Returns the number of newlines in this string
 	#[must_use]
-	pub fn count_newlines(&self, input: &str) -> usize {
+	pub fn count_newlines(&self) -> usize {
 		match *self {
-			Self::AstRange(range) => crate::str_count_newlines(range.str(input)),
+			Self::Input(ref s) => crate::str_count_newlines(s),
 			Self::String(s) => crate::str_count_newlines(s),
 			Self::Char(ch) => match ch == '\n' {
 				true => 1,
@@ -287,34 +290,34 @@ impl AstStrRepr {
 			Self::Join {
 				ref lhs,
 				ref rhs
-			} => lhs.count_newlines(input) + rhs.count_newlines(input),
+			} => lhs.count_newlines() + rhs.count_newlines(),
 			Self::Dynamic(ref s) => crate::str_count_newlines(s),
 		}
 	}
 
 	/// Returns if this representation has newlines
 	#[must_use]
-	pub fn has_newlines(&self, input: &str) -> bool {
-		self.count_newlines(input) != 0
+	pub fn has_newlines(&self) -> bool {
+		self.count_newlines() != 0
 	}
 
 	/// Returns if this representation is equal to `other`
 	#[must_use]
-	pub fn is_str(&self, input: &str, other: &str) -> bool {
+	pub fn is_str(&self, other: &str) -> bool {
 		match *self {
-			Self::AstRange(range) => range.str(input) == other,
+			Self::Input(ref s) => s == other,
 			Self::String(s) => s == other,
 			Self::Dynamic(ref s) => s == other,
 
 			// TODO: Properly implement these to avoid allocating a string
-			_ => self.str(input) == other,
+			_ => self.str() == other,
 		}
 	}
 
 	/// Writes this representation
-	pub fn write(&self, input: &str, output: &mut String) {
+	pub fn write(&self, output: &mut String) {
 		match *self {
-			Self::AstRange(range) => output.push_str(range.str(input)),
+			Self::Input(ref s) => output.push_str(s),
 			Self::String(s) => output.push_str(s),
 			Self::Char(ch) => output.push(ch),
 			Self::Spaces {
@@ -338,8 +341,8 @@ impl AstStrRepr {
 				ref lhs,
 				ref rhs
 			} => {
-				lhs.write(input, output);
-				rhs.write(input, output);
+				lhs.write(output);
+				rhs.write(output);
 			},
 			Self::Dynamic(ref s) => output.push_str(s),
 		}
@@ -347,9 +350,9 @@ impl AstStrRepr {
 
 	/// Returns the string of this representation, if it comes from the input (or is static).
 	#[must_use]
-	pub fn str_input<'input>(&self, input: &'input str) -> Option<&'input str> {
+	pub fn str_input(&self) -> Option<&str> {
 		match self {
-			Self::AstRange(range) => Some(range.str(input)),
+			Self::Input(input) => Some(input),
 			Self::String(s) => Some(s),
 
 			// Special case these to avoid a `String` allocation
@@ -366,8 +369,8 @@ impl AstStrRepr {
 
 	/// Returns the string of this representation, if it's cheap to get it
 	#[must_use]
-	pub fn str_cheap<'a>(&'a self, input: &'a str) -> Option<&'a str> {
-		match self.str_input(input) {
+	pub fn str_cheap(&self) -> Option<&str> {
+		match self.str_input() {
 			Some(s) => Some(s),
 			None => match self {
 				Self::Dynamic(s) => Some(s),
@@ -380,12 +383,12 @@ impl AstStrRepr {
 	// TODO: This can be somewhat expensive, should we replace it with
 	//       functions performing whatever checks the callers need instead?
 	#[must_use]
-	pub fn str<'a>(&'a self, input: &'a str) -> Cow<'a, str> {
-		match self.str_cheap(input) {
+	pub fn str(&self) -> Cow<'_, str> {
+		match self.str_cheap() {
 			Some(s) => s.into(),
 			None => {
 				let mut output = String::new();
-				self.write(input, &mut output);
+				self.write(&mut output);
 				output.into()
 			},
 		}

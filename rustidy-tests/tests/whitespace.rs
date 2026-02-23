@@ -10,7 +10,7 @@ use {
 	app_error::{AppError, Context, ensure},
 	rustidy_format::whitespace::{self, WhitespaceFormatKind},
 	rustidy_parse::{ParseError, Parser},
-	rustidy_print::{Print, PrintFmt},
+	rustidy_print::Print,
 	rustidy_util::Whitespace,
 };
 
@@ -35,9 +35,7 @@ fn test_case_with(source: &str, expected: &str, fmt_config: &rustidy_util::Confi
 	fmt_ctx.set_indent_depth(config.indent_depth);
 	whitespace::format(&mut whitespace, &mut fmt_ctx, kind);
 
-	let mut print_fmt = PrintFmt::new(source);
-	whitespace.print(&mut print_fmt);
-	let output = print_fmt.output().to_owned();
+	let output = whitespace.print_to_string();
 
 	let source_fmt = source.replace(' ', "·").replace('\t', "⭾");
 	let expected_fmt = expected.replace(' ', "·").replace('\t', "⭾");
@@ -54,16 +52,14 @@ fn test_case_with(source: &str, expected: &str, fmt_config: &rustidy_util::Confi
 		fmt_ctx.set_indent_depth(config.indent_depth);
 		whitespace::format(&mut whitespace, &mut fmt_ctx, kind);
 
-		let mut print_fmt = PrintFmt::new(source);
-		whitespace.print(&mut print_fmt);
+		let found_output = whitespace.print_to_string();
 
-		let output_fmt = print_fmt
-			.output()
+		let output_fmt = found_output
 			.replace(' ', "·")
 			.replace('\t', "⭾");
 
 		app_error::ensure!(
-			output == print_fmt.output(),
+			output == found_output,
 			"Formatting twice didn't preserve the formatting.\nKind    : {kind:?}\nInput   : {source_fmt:?}\nFirst   \
 			 : {expected_fmt:?}\nSecond  : {output_fmt:?}",
 		);

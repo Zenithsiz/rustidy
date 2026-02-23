@@ -9,43 +9,25 @@
 					"Definition": {
 						"macro_rules": {
 							"ws": {
-								"first": {
-									"start": 0,
-									"end": 0
-								},
+								"first": "",
 								"rest": []
 							},
-							"token": {
-								"start": 0,
-								"end": 11
-							}
+							"token": "macro_rules"
 						},
 						"not": {
 							"ws": {
-								"first": {
-									"start": 11,
-									"end": 12
-								},
+								"first": " ",
 								"rest": []
 							},
-							"token": {
-								"start": 12,
-								"end": 13
-							}
+							"token": "!"
 						},
 						"ident": {
 							"NonKw": [
 								{
-									"first": {
-										"start": 13,
-										"end": 14
-									},
+									"first": " ",
 									"rest": []
 								},
-								{
-									"start": 14,
-									"end": 15
-								}
+								"a"
 							]
 						},
 						"def": {
@@ -53,16 +35,10 @@
 								"rules": {
 									"prefix": {
 										"ws": {
-											"first": {
-												"start": 15,
-												"end": 16
-											},
+											"first": " ",
 											"rest": []
 										},
-										"token": {
-											"start": 16,
-											"end": 17
-										}
+										"token": "("
 									},
 									"value": {
 										"punctuated": {
@@ -71,74 +47,44 @@
 													"Parens": {
 														"prefix": {
 															"ws": {
-																"first": {
-																	"start": 17,
-																	"end": 18
-																},
+																"first": " ",
 																"rest": []
 															},
-															"token": {
-																"start": 18,
-																"end": 19
-															}
+															"token": "("
 														},
 														"value": [],
 														"suffix": {
 															"ws": {
-																"first": {
-																	"start": 19,
-																	"end": 19
-																},
+																"first": "",
 																"rest": []
 															},
-															"token": {
-																"start": 19,
-																"end": 20
-															}
+															"token": ")"
 														}
 													}
 												},
 												"arrow": {
 													"ws": {
-														"first": {
-															"start": 20,
-															"end": 21
-														},
+														"first": " ",
 														"rest": []
 													},
-													"token": {
-														"start": 21,
-														"end": 23
-													}
+													"token": "=>"
 												},
 												"transcriber": {
 													"Parens": {
 														"prefix": {
 															"ws": {
-																"first": {
-																	"start": 23,
-																	"end": 24
-																},
+																"first": " ",
 																"rest": []
 															},
-															"token": {
-																"start": 24,
-																"end": 25
-															}
+															"token": "("
 														},
 														"value": [],
 														"suffix": {
 															"ws": {
-																"first": {
-																	"start": 25,
-																	"end": 25
-																},
+																"first": "",
 																"rest": []
 															},
-															"token": {
-																"start": 25,
-																"end": 26
-															}
+															"token": ")"
 														}
 													}
 												}
@@ -149,30 +95,18 @@
 									},
 									"suffix": {
 										"ws": {
-											"first": {
-												"start": 26,
-												"end": 27
-											},
+											"first": " ",
 											"rest": []
 										},
-										"token": {
-											"start": 27,
-											"end": 28
-										}
+										"token": ")"
 									}
 								},
 								"semi": {
 									"ws": {
-										"first": {
-											"start": 28,
-											"end": 28
-										},
+										"first": "",
 										"rest": []
 									},
-									"token": {
-										"start": 28,
-										"end": 29
-									}
+									"token": ";"
 								}
 							}
 						}
@@ -187,43 +121,25 @@
 					"Definition": {
 						"macro_rules": {
 							"ws": {
-								"first": {
-									"start": 29,
-									"end": 30
-								},
+								"first": "\n",
 								"rest": []
 							},
-							"token": {
-								"start": 30,
-								"end": 41
-							}
+							"token": "macro_rules"
 						},
 						"not": {
 							"ws": {
-								"first": {
-									"start": 41,
-									"end": 42
-								},
+								"first": " ",
 								"rest": []
 							},
-							"token": {
-								"start": 42,
-								"end": 43
-							}
+							"token": "!"
 						},
 						"ident": {
 							"NonKw": [
 								{
-									"first": {
-										"start": 43,
-										"end": 44
-									},
+									"first": " ",
 									"rest": []
 								},
-								{
-									"start": 44,
-									"end": 45
-								}
+								"a"
 							]
 						},
 						"def": {
@@ -231,16 +147,10 @@
 								"rules": {
 									"prefix": {
 										"ws": {
-											"first": {
-												"start": 45,
-												"end": 46
-											},
+											"first": " ",
 											"rest": []
 										},
-										"token": {
-											"start": 46,
-											"end": 47
-										}
+										"token": "["
 									},
 									"value": {
 										"punctuated": {
@@ -249,74 +159,44 @@
 													"Parens": {
 														"prefix": {
 															"ws": {
-																"first": {
-																	"start": 47,
-																	"end": 48
-																},
+																"first": " ",
 																"rest": []
 															},
-															"token": {
-																"start": 48,
-																"end": 49
-															}
+															"token": "("
 														},
 														"value": [],
 														"suffix": {
 															"ws": {
-																"first": {
-																	"start": 49,
-																	"end": 49
-																},
+																"first": "",
 																"rest": []
 															},
-															"token": {
-																"start": 49,
-																"end": 50
-															}
+															"token": ")"
 														}
 													}
 												},
 												"arrow": {
 													"ws": {
-														"first": {
-															"start": 50,
-															"end": 51
-														},
+														"first": " ",
 														"rest": []
 													},
-													"token": {
-														"start": 51,
-														"end": 53
-													}
+													"token": "=>"
 												},
 												"transcriber": {
 													"Parens": {
 														"prefix": {
 															"ws": {
-																"first": {
-																	"start": 53,
-																	"end": 54
-																},
+																"first": " ",
 																"rest": []
 															},
-															"token": {
-																"start": 54,
-																"end": 55
-															}
+															"token": "("
 														},
 														"value": [],
 														"suffix": {
 															"ws": {
-																"first": {
-																	"start": 55,
-																	"end": 55
-																},
+																"first": "",
 																"rest": []
 															},
-															"token": {
-																"start": 55,
-																"end": 56
-															}
+															"token": ")"
 														}
 													}
 												}
@@ -327,30 +207,18 @@
 									},
 									"suffix": {
 										"ws": {
-											"first": {
-												"start": 56,
-												"end": 57
-											},
+											"first": " ",
 											"rest": []
 										},
-										"token": {
-											"start": 57,
-											"end": 58
-										}
+										"token": "]"
 									}
 								},
 								"semi": {
 									"ws": {
-										"first": {
-											"start": 58,
-											"end": 58
-										},
+										"first": "",
 										"rest": []
 									},
-									"token": {
-										"start": 58,
-										"end": 59
-									}
+									"token": ";"
 								}
 							}
 						}
@@ -365,43 +233,25 @@
 					"Definition": {
 						"macro_rules": {
 							"ws": {
-								"first": {
-									"start": 59,
-									"end": 60
-								},
+								"first": "\n",
 								"rest": []
 							},
-							"token": {
-								"start": 60,
-								"end": 71
-							}
+							"token": "macro_rules"
 						},
 						"not": {
 							"ws": {
-								"first": {
-									"start": 71,
-									"end": 72
-								},
+								"first": " ",
 								"rest": []
 							},
-							"token": {
-								"start": 72,
-								"end": 73
-							}
+							"token": "!"
 						},
 						"ident": {
 							"NonKw": [
 								{
-									"first": {
-										"start": 73,
-										"end": 74
-									},
+									"first": " ",
 									"rest": []
 								},
-								{
-									"start": 74,
-									"end": 75
-								}
+								"a"
 							]
 						},
 						"def": {
@@ -409,16 +259,10 @@
 								"rules": {
 									"prefix": {
 										"ws": {
-											"first": {
-												"start": 75,
-												"end": 76
-											},
+											"first": " ",
 											"rest": []
 										},
-										"token": {
-											"start": 76,
-											"end": 77
-										}
+										"token": "{"
 									},
 									"value": {
 										"punctuated": {
@@ -427,74 +271,44 @@
 													"Parens": {
 														"prefix": {
 															"ws": {
-																"first": {
-																	"start": 77,
-																	"end": 78
-																},
+																"first": " ",
 																"rest": []
 															},
-															"token": {
-																"start": 78,
-																"end": 79
-															}
+															"token": "("
 														},
 														"value": [],
 														"suffix": {
 															"ws": {
-																"first": {
-																	"start": 79,
-																	"end": 79
-																},
+																"first": "",
 																"rest": []
 															},
-															"token": {
-																"start": 79,
-																"end": 80
-															}
+															"token": ")"
 														}
 													}
 												},
 												"arrow": {
 													"ws": {
-														"first": {
-															"start": 80,
-															"end": 81
-														},
+														"first": " ",
 														"rest": []
 													},
-													"token": {
-														"start": 81,
-														"end": 83
-													}
+													"token": "=>"
 												},
 												"transcriber": {
 													"Parens": {
 														"prefix": {
 															"ws": {
-																"first": {
-																	"start": 83,
-																	"end": 84
-																},
+																"first": " ",
 																"rest": []
 															},
-															"token": {
-																"start": 84,
-																"end": 85
-															}
+															"token": "("
 														},
 														"value": [],
 														"suffix": {
 															"ws": {
-																"first": {
-																	"start": 85,
-																	"end": 85
-																},
+																"first": "",
 																"rest": []
 															},
-															"token": {
-																"start": 85,
-																"end": 86
-															}
+															"token": ")"
 														}
 													}
 												}
@@ -505,16 +319,10 @@
 									},
 									"suffix": {
 										"ws": {
-											"first": {
-												"start": 86,
-												"end": 87
-											},
+											"first": " ",
 											"rest": []
 										},
-										"token": {
-											"start": 87,
-											"end": 88
-										}
+										"token": "}"
 									}
 								}
 							}
@@ -530,43 +338,25 @@
 					"Definition": {
 						"macro_rules": {
 							"ws": {
-								"first": {
-									"start": 88,
-									"end": 90
-								},
+								"first": "\n\n",
 								"rest": []
 							},
-							"token": {
-								"start": 90,
-								"end": 101
-							}
+							"token": "macro_rules"
 						},
 						"not": {
 							"ws": {
-								"first": {
-									"start": 101,
-									"end": 101
-								},
+								"first": "",
 								"rest": []
 							},
-							"token": {
-								"start": 101,
-								"end": 102
-							}
+							"token": "!"
 						},
 						"ident": {
 							"NonKw": [
 								{
-									"first": {
-										"start": 102,
-										"end": 103
-									},
+									"first": " ",
 									"rest": []
 								},
-								{
-									"start": 103,
-									"end": 104
-								}
+								"a"
 							]
 						},
 						"def": {
@@ -574,16 +364,10 @@
 								"rules": {
 									"prefix": {
 										"ws": {
-											"first": {
-												"start": 104,
-												"end": 105
-											},
+											"first": " ",
 											"rest": []
 										},
-										"token": {
-											"start": 105,
-											"end": 106
-										}
+										"token": "{"
 									},
 									"value": {
 										"punctuated": {
@@ -592,74 +376,44 @@
 													"Parens": {
 														"prefix": {
 															"ws": {
-																"first": {
-																	"start": 106,
-																	"end": 107
-																},
+																"first": " ",
 																"rest": []
 															},
-															"token": {
-																"start": 107,
-																"end": 108
-															}
+															"token": "("
 														},
 														"value": [],
 														"suffix": {
 															"ws": {
-																"first": {
-																	"start": 108,
-																	"end": 108
-																},
+																"first": "",
 																"rest": []
 															},
-															"token": {
-																"start": 108,
-																"end": 109
-															}
+															"token": ")"
 														}
 													}
 												},
 												"arrow": {
 													"ws": {
-														"first": {
-															"start": 109,
-															"end": 110
-														},
+														"first": " ",
 														"rest": []
 													},
-													"token": {
-														"start": 110,
-														"end": 112
-													}
+													"token": "=>"
 												},
 												"transcriber": {
 													"Parens": {
 														"prefix": {
 															"ws": {
-																"first": {
-																	"start": 112,
-																	"end": 113
-																},
+																"first": " ",
 																"rest": []
 															},
-															"token": {
-																"start": 113,
-																"end": 114
-															}
+															"token": "("
 														},
 														"value": [],
 														"suffix": {
 															"ws": {
-																"first": {
-																	"start": 114,
-																	"end": 114
-																},
+																"first": "",
 																"rest": []
 															},
-															"token": {
-																"start": 114,
-																"end": 115
-															}
+															"token": ")"
 														}
 													}
 												}
@@ -668,90 +422,54 @@
 												{
 													"punct": {
 														"ws": {
-															"first": {
-																"start": 115,
-																"end": 115
-															},
+															"first": "",
 															"rest": []
 														},
-														"token": {
-															"start": 115,
-															"end": 116
-														}
+														"token": ";"
 													},
 													"value": {
 														"matcher": {
 															"Parens": {
 																"prefix": {
 																	"ws": {
-																		"first": {
-																			"start": 116,
-																			"end": 117
-																		},
+																		"first": " ",
 																		"rest": []
 																	},
-																	"token": {
-																		"start": 117,
-																		"end": 118
-																	}
+																	"token": "("
 																},
 																"value": [],
 																"suffix": {
 																	"ws": {
-																		"first": {
-																			"start": 118,
-																			"end": 118
-																		},
+																		"first": "",
 																		"rest": []
 																	},
-																	"token": {
-																		"start": 118,
-																		"end": 119
-																	}
+																	"token": ")"
 																}
 															}
 														},
 														"arrow": {
 															"ws": {
-																"first": {
-																	"start": 119,
-																	"end": 120
-																},
+																"first": " ",
 																"rest": []
 															},
-															"token": {
-																"start": 120,
-																"end": 122
-															}
+															"token": "=>"
 														},
 														"transcriber": {
 															"Parens": {
 																"prefix": {
 																	"ws": {
-																		"first": {
-																			"start": 122,
-																			"end": 123
-																		},
+																		"first": " ",
 																		"rest": []
 																	},
-																	"token": {
-																		"start": 123,
-																		"end": 124
-																	}
+																	"token": "("
 																},
 																"value": [],
 																"suffix": {
 																	"ws": {
-																		"first": {
-																			"start": 124,
-																			"end": 124
-																		},
+																		"first": "",
 																		"rest": []
 																	},
-																	"token": {
-																		"start": 124,
-																		"end": 125
-																	}
+																	"token": ")"
 																}
 															}
 														}
@@ -761,30 +479,18 @@
 										},
 										"trailing": {
 											"ws": {
-												"first": {
-													"start": 125,
-													"end": 125
-												},
+												"first": "",
 												"rest": []
 											},
-											"token": {
-												"start": 125,
-												"end": 126
-											}
+											"token": ";"
 										}
 									},
 									"suffix": {
 										"ws": {
-											"first": {
-												"start": 126,
-												"end": 127
-											},
+											"first": " ",
 											"rest": []
 										},
-										"token": {
-											"start": 127,
-											"end": 128
-										}
+										"token": "}"
 									}
 								}
 							}
@@ -800,43 +506,25 @@
 					"Definition": {
 						"macro_rules": {
 							"ws": {
-								"first": {
-									"start": 128,
-									"end": 130
-								},
+								"first": "\n\n",
 								"rest": []
 							},
-							"token": {
-								"start": 130,
-								"end": 141
-							}
+							"token": "macro_rules"
 						},
 						"not": {
 							"ws": {
-								"first": {
-									"start": 141,
-									"end": 141
-								},
+								"first": "",
 								"rest": []
 							},
-							"token": {
-								"start": 141,
-								"end": 142
-							}
+							"token": "!"
 						},
 						"ident": {
 							"NonKw": [
 								{
-									"first": {
-										"start": 142,
-										"end": 143
-									},
+									"first": " ",
 									"rest": []
 								},
-								{
-									"start": 143,
-									"end": 144
-								}
+								"a"
 							]
 						},
 						"def": {
@@ -844,16 +532,10 @@
 								"rules": {
 									"prefix": {
 										"ws": {
-											"first": {
-												"start": 144,
-												"end": 145
-											},
+											"first": " ",
 											"rest": []
 										},
-										"token": {
-											"start": 145,
-											"end": 146
-										}
+										"token": "{"
 									},
 									"value": {
 										"punctuated": {
@@ -862,74 +544,44 @@
 													"Parens": {
 														"prefix": {
 															"ws": {
-																"first": {
-																	"start": 146,
-																	"end": 147
-																},
+																"first": " ",
 																"rest": []
 															},
-															"token": {
-																"start": 147,
-																"end": 148
-															}
+															"token": "("
 														},
 														"value": [],
 														"suffix": {
 															"ws": {
-																"first": {
-																	"start": 148,
-																	"end": 148
-																},
+																"first": "",
 																"rest": []
 															},
-															"token": {
-																"start": 148,
-																"end": 149
-															}
+															"token": ")"
 														}
 													}
 												},
 												"arrow": {
 													"ws": {
-														"first": {
-															"start": 149,
-															"end": 150
-														},
+														"first": " ",
 														"rest": []
 													},
-													"token": {
-														"start": 150,
-														"end": 152
-													}
+													"token": "=>"
 												},
 												"transcriber": {
 													"Parens": {
 														"prefix": {
 															"ws": {
-																"first": {
-																	"start": 152,
-																	"end": 153
-																},
+																"first": " ",
 																"rest": []
 															},
-															"token": {
-																"start": 153,
-																"end": 154
-															}
+															"token": "("
 														},
 														"value": [],
 														"suffix": {
 															"ws": {
-																"first": {
-																	"start": 154,
-																	"end": 154
-																},
+																"first": "",
 																"rest": []
 															},
-															"token": {
-																"start": 154,
-																"end": 155
-															}
+															"token": ")"
 														}
 													}
 												}
@@ -940,16 +592,10 @@
 									},
 									"suffix": {
 										"ws": {
-											"first": {
-												"start": 155,
-												"end": 156
-											},
+											"first": " ",
 											"rest": []
 										},
-										"token": {
-											"start": 156,
-											"end": 157
-										}
+										"token": "}"
 									}
 								}
 							}
@@ -965,43 +611,25 @@
 					"Definition": {
 						"macro_rules": {
 							"ws": {
-								"first": {
-									"start": 157,
-									"end": 158
-								},
+								"first": "\n",
 								"rest": []
 							},
-							"token": {
-								"start": 158,
-								"end": 169
-							}
+							"token": "macro_rules"
 						},
 						"not": {
 							"ws": {
-								"first": {
-									"start": 169,
-									"end": 169
-								},
+								"first": "",
 								"rest": []
 							},
-							"token": {
-								"start": 169,
-								"end": 170
-							}
+							"token": "!"
 						},
 						"ident": {
 							"NonKw": [
 								{
-									"first": {
-										"start": 170,
-										"end": 171
-									},
+									"first": " ",
 									"rest": []
 								},
-								{
-									"start": 171,
-									"end": 172
-								}
+								"a"
 							]
 						},
 						"def": {
@@ -1009,16 +637,10 @@
 								"rules": {
 									"prefix": {
 										"ws": {
-											"first": {
-												"start": 172,
-												"end": 173
-											},
+											"first": " ",
 											"rest": []
 										},
-										"token": {
-											"start": 173,
-											"end": 174
-										}
+										"token": "{"
 									},
 									"value": {
 										"punctuated": {
@@ -1027,74 +649,44 @@
 													"Parens": {
 														"prefix": {
 															"ws": {
-																"first": {
-																	"start": 174,
-																	"end": 175
-																},
+																"first": " ",
 																"rest": []
 															},
-															"token": {
-																"start": 175,
-																"end": 176
-															}
+															"token": "("
 														},
 														"value": [],
 														"suffix": {
 															"ws": {
-																"first": {
-																	"start": 176,
-																	"end": 176
-																},
+																"first": "",
 																"rest": []
 															},
-															"token": {
-																"start": 176,
-																"end": 177
-															}
+															"token": ")"
 														}
 													}
 												},
 												"arrow": {
 													"ws": {
-														"first": {
-															"start": 177,
-															"end": 178
-														},
+														"first": " ",
 														"rest": []
 													},
-													"token": {
-														"start": 178,
-														"end": 180
-													}
+													"token": "=>"
 												},
 												"transcriber": {
 													"Brackets": {
 														"prefix": {
 															"ws": {
-																"first": {
-																	"start": 180,
-																	"end": 181
-																},
+																"first": " ",
 																"rest": []
 															},
-															"token": {
-																"start": 181,
-																"end": 182
-															}
+															"token": "["
 														},
 														"value": [],
 														"suffix": {
 															"ws": {
-																"first": {
-																	"start": 182,
-																	"end": 182
-																},
+																"first": "",
 																"rest": []
 															},
-															"token": {
-																"start": 182,
-																"end": 183
-															}
+															"token": "]"
 														}
 													}
 												}
@@ -1105,16 +697,10 @@
 									},
 									"suffix": {
 										"ws": {
-											"first": {
-												"start": 183,
-												"end": 184
-											},
+											"first": " ",
 											"rest": []
 										},
-										"token": {
-											"start": 184,
-											"end": 185
-										}
+										"token": "}"
 									}
 								}
 							}
@@ -1130,43 +716,25 @@
 					"Definition": {
 						"macro_rules": {
 							"ws": {
-								"first": {
-									"start": 185,
-									"end": 186
-								},
+								"first": "\n",
 								"rest": []
 							},
-							"token": {
-								"start": 186,
-								"end": 197
-							}
+							"token": "macro_rules"
 						},
 						"not": {
 							"ws": {
-								"first": {
-									"start": 197,
-									"end": 197
-								},
+								"first": "",
 								"rest": []
 							},
-							"token": {
-								"start": 197,
-								"end": 198
-							}
+							"token": "!"
 						},
 						"ident": {
 							"NonKw": [
 								{
-									"first": {
-										"start": 198,
-										"end": 199
-									},
+									"first": " ",
 									"rest": []
 								},
-								{
-									"start": 199,
-									"end": 200
-								}
+								"a"
 							]
 						},
 						"def": {
@@ -1174,16 +742,10 @@
 								"rules": {
 									"prefix": {
 										"ws": {
-											"first": {
-												"start": 200,
-												"end": 201
-											},
+											"first": " ",
 											"rest": []
 										},
-										"token": {
-											"start": 201,
-											"end": 202
-										}
+										"token": "{"
 									},
 									"value": {
 										"punctuated": {
@@ -1192,74 +754,44 @@
 													"Parens": {
 														"prefix": {
 															"ws": {
-																"first": {
-																	"start": 202,
-																	"end": 203
-																},
+																"first": " ",
 																"rest": []
 															},
-															"token": {
-																"start": 203,
-																"end": 204
-															}
+															"token": "("
 														},
 														"value": [],
 														"suffix": {
 															"ws": {
-																"first": {
-																	"start": 204,
-																	"end": 204
-																},
+																"first": "",
 																"rest": []
 															},
-															"token": {
-																"start": 204,
-																"end": 205
-															}
+															"token": ")"
 														}
 													}
 												},
 												"arrow": {
 													"ws": {
-														"first": {
-															"start": 205,
-															"end": 206
-														},
+														"first": " ",
 														"rest": []
 													},
-													"token": {
-														"start": 206,
-														"end": 208
-													}
+													"token": "=>"
 												},
 												"transcriber": {
 													"Braces": {
 														"prefix": {
 															"ws": {
-																"first": {
-																	"start": 208,
-																	"end": 209
-																},
+																"first": " ",
 																"rest": []
 															},
-															"token": {
-																"start": 209,
-																"end": 210
-															}
+															"token": "{"
 														},
 														"value": [],
 														"suffix": {
 															"ws": {
-																"first": {
-																	"start": 210,
-																	"end": 210
-																},
+																"first": "",
 																"rest": []
 															},
-															"token": {
-																"start": 210,
-																"end": 211
-															}
+															"token": "}"
 														}
 													}
 												}
@@ -1270,16 +802,10 @@
 									},
 									"suffix": {
 										"ws": {
-											"first": {
-												"start": 211,
-												"end": 212
-											},
+											"first": " ",
 											"rest": []
 										},
-										"token": {
-											"start": 212,
-											"end": 213
-										}
+										"token": "}"
 									}
 								}
 							}
@@ -1295,43 +821,25 @@
 					"Definition": {
 						"macro_rules": {
 							"ws": {
-								"first": {
-									"start": 213,
-									"end": 215
-								},
+								"first": "\n\n",
 								"rest": []
 							},
-							"token": {
-								"start": 215,
-								"end": 226
-							}
+							"token": "macro_rules"
 						},
 						"not": {
 							"ws": {
-								"first": {
-									"start": 226,
-									"end": 226
-								},
+								"first": "",
 								"rest": []
 							},
-							"token": {
-								"start": 226,
-								"end": 227
-							}
+							"token": "!"
 						},
 						"ident": {
 							"NonKw": [
 								{
-									"first": {
-										"start": 227,
-										"end": 228
-									},
+									"first": " ",
 									"rest": []
 								},
-								{
-									"start": 228,
-									"end": 229
-								}
+								"a"
 							]
 						},
 						"def": {
@@ -1339,16 +847,10 @@
 								"rules": {
 									"prefix": {
 										"ws": {
-											"first": {
-												"start": 229,
-												"end": 230
-											},
+											"first": " ",
 											"rest": []
 										},
-										"token": {
-											"start": 230,
-											"end": 231
-										}
+										"token": "{"
 									},
 									"value": {
 										"punctuated": {
@@ -1357,74 +859,44 @@
 													"Parens": {
 														"prefix": {
 															"ws": {
-																"first": {
-																	"start": 231,
-																	"end": 232
-																},
+																"first": " ",
 																"rest": []
 															},
-															"token": {
-																"start": 232,
-																"end": 233
-															}
+															"token": "("
 														},
 														"value": [],
 														"suffix": {
 															"ws": {
-																"first": {
-																	"start": 233,
-																	"end": 233
-																},
+																"first": "",
 																"rest": []
 															},
-															"token": {
-																"start": 233,
-																"end": 234
-															}
+															"token": ")"
 														}
 													}
 												},
 												"arrow": {
 													"ws": {
-														"first": {
-															"start": 234,
-															"end": 235
-														},
+														"first": " ",
 														"rest": []
 													},
-													"token": {
-														"start": 235,
-														"end": 237
-													}
+													"token": "=>"
 												},
 												"transcriber": {
 													"Parens": {
 														"prefix": {
 															"ws": {
-																"first": {
-																	"start": 237,
-																	"end": 238
-																},
+																"first": " ",
 																"rest": []
 															},
-															"token": {
-																"start": 238,
-																"end": 239
-															}
+															"token": "("
 														},
 														"value": [],
 														"suffix": {
 															"ws": {
-																"first": {
-																	"start": 239,
-																	"end": 239
-																},
+																"first": "",
 																"rest": []
 															},
-															"token": {
-																"start": 239,
-																"end": 240
-															}
+															"token": ")"
 														}
 													}
 												}
@@ -1435,16 +907,10 @@
 									},
 									"suffix": {
 										"ws": {
-											"first": {
-												"start": 240,
-												"end": 241
-											},
+											"first": " ",
 											"rest": []
 										},
-										"token": {
-											"start": 241,
-											"end": 242
-										}
+										"token": "}"
 									}
 								}
 							}
@@ -1460,43 +926,25 @@
 					"Definition": {
 						"macro_rules": {
 							"ws": {
-								"first": {
-									"start": 242,
-									"end": 243
-								},
+								"first": "\n",
 								"rest": []
 							},
-							"token": {
-								"start": 243,
-								"end": 254
-							}
+							"token": "macro_rules"
 						},
 						"not": {
 							"ws": {
-								"first": {
-									"start": 254,
-									"end": 254
-								},
+								"first": "",
 								"rest": []
 							},
-							"token": {
-								"start": 254,
-								"end": 255
-							}
+							"token": "!"
 						},
 						"ident": {
 							"NonKw": [
 								{
-									"first": {
-										"start": 255,
-										"end": 256
-									},
+									"first": " ",
 									"rest": []
 								},
-								{
-									"start": 256,
-									"end": 257
-								}
+								"a"
 							]
 						},
 						"def": {
@@ -1504,16 +952,10 @@
 								"rules": {
 									"prefix": {
 										"ws": {
-											"first": {
-												"start": 257,
-												"end": 258
-											},
+											"first": " ",
 											"rest": []
 										},
-										"token": {
-											"start": 258,
-											"end": 259
-										}
+										"token": "{"
 									},
 									"value": {
 										"punctuated": {
@@ -1522,74 +964,44 @@
 													"Brackets": {
 														"prefix": {
 															"ws": {
-																"first": {
-																	"start": 259,
-																	"end": 260
-																},
+																"first": " ",
 																"rest": []
 															},
-															"token": {
-																"start": 260,
-																"end": 261
-															}
+															"token": "["
 														},
 														"value": [],
 														"suffix": {
 															"ws": {
-																"first": {
-																	"start": 261,
-																	"end": 261
-																},
+																"first": "",
 																"rest": []
 															},
-															"token": {
-																"start": 261,
-																"end": 262
-															}
+															"token": "]"
 														}
 													}
 												},
 												"arrow": {
 													"ws": {
-														"first": {
-															"start": 262,
-															"end": 263
-														},
+														"first": " ",
 														"rest": []
 													},
-													"token": {
-														"start": 263,
-														"end": 265
-													}
+													"token": "=>"
 												},
 												"transcriber": {
 													"Parens": {
 														"prefix": {
 															"ws": {
-																"first": {
-																	"start": 265,
-																	"end": 266
-																},
+																"first": " ",
 																"rest": []
 															},
-															"token": {
-																"start": 266,
-																"end": 267
-															}
+															"token": "("
 														},
 														"value": [],
 														"suffix": {
 															"ws": {
-																"first": {
-																	"start": 267,
-																	"end": 267
-																},
+																"first": "",
 																"rest": []
 															},
-															"token": {
-																"start": 267,
-																"end": 268
-															}
+															"token": ")"
 														}
 													}
 												}
@@ -1600,16 +1012,10 @@
 									},
 									"suffix": {
 										"ws": {
-											"first": {
-												"start": 268,
-												"end": 269
-											},
+											"first": " ",
 											"rest": []
 										},
-										"token": {
-											"start": 269,
-											"end": 270
-										}
+										"token": "}"
 									}
 								}
 							}
@@ -1625,43 +1031,25 @@
 					"Definition": {
 						"macro_rules": {
 							"ws": {
-								"first": {
-									"start": 270,
-									"end": 271
-								},
+								"first": "\n",
 								"rest": []
 							},
-							"token": {
-								"start": 271,
-								"end": 282
-							}
+							"token": "macro_rules"
 						},
 						"not": {
 							"ws": {
-								"first": {
-									"start": 282,
-									"end": 282
-								},
+								"first": "",
 								"rest": []
 							},
-							"token": {
-								"start": 282,
-								"end": 283
-							}
+							"token": "!"
 						},
 						"ident": {
 							"NonKw": [
 								{
-									"first": {
-										"start": 283,
-										"end": 284
-									},
+									"first": " ",
 									"rest": []
 								},
-								{
-									"start": 284,
-									"end": 285
-								}
+								"a"
 							]
 						},
 						"def": {
@@ -1669,16 +1057,10 @@
 								"rules": {
 									"prefix": {
 										"ws": {
-											"first": {
-												"start": 285,
-												"end": 286
-											},
+											"first": " ",
 											"rest": []
 										},
-										"token": {
-											"start": 286,
-											"end": 287
-										}
+										"token": "{"
 									},
 									"value": {
 										"punctuated": {
@@ -1687,74 +1069,44 @@
 													"Braces": {
 														"prefix": {
 															"ws": {
-																"first": {
-																	"start": 287,
-																	"end": 288
-																},
+																"first": " ",
 																"rest": []
 															},
-															"token": {
-																"start": 288,
-																"end": 289
-															}
+															"token": "{"
 														},
 														"value": [],
 														"suffix": {
 															"ws": {
-																"first": {
-																	"start": 289,
-																	"end": 289
-																},
+																"first": "",
 																"rest": []
 															},
-															"token": {
-																"start": 289,
-																"end": 290
-															}
+															"token": "}"
 														}
 													}
 												},
 												"arrow": {
 													"ws": {
-														"first": {
-															"start": 290,
-															"end": 291
-														},
+														"first": " ",
 														"rest": []
 													},
-													"token": {
-														"start": 291,
-														"end": 293
-													}
+													"token": "=>"
 												},
 												"transcriber": {
 													"Parens": {
 														"prefix": {
 															"ws": {
-																"first": {
-																	"start": 293,
-																	"end": 294
-																},
+																"first": " ",
 																"rest": []
 															},
-															"token": {
-																"start": 294,
-																"end": 295
-															}
+															"token": "("
 														},
 														"value": [],
 														"suffix": {
 															"ws": {
-																"first": {
-																	"start": 295,
-																	"end": 295
-																},
+																"first": "",
 																"rest": []
 															},
-															"token": {
-																"start": 295,
-																"end": 296
-															}
+															"token": ")"
 														}
 													}
 												}
@@ -1765,16 +1117,10 @@
 									},
 									"suffix": {
 										"ws": {
-											"first": {
-												"start": 296,
-												"end": 297
-											},
+											"first": " ",
 											"rest": []
 										},
-										"token": {
-											"start": 297,
-											"end": 298
-										}
+										"token": "}"
 									}
 								}
 							}
@@ -1790,43 +1136,25 @@
 					"Definition": {
 						"macro_rules": {
 							"ws": {
-								"first": {
-									"start": 298,
-									"end": 300
-								},
+								"first": "\n\n",
 								"rest": []
 							},
-							"token": {
-								"start": 300,
-								"end": 311
-							}
+							"token": "macro_rules"
 						},
 						"not": {
 							"ws": {
-								"first": {
-									"start": 311,
-									"end": 311
-								},
+								"first": "",
 								"rest": []
 							},
-							"token": {
-								"start": 311,
-								"end": 312
-							}
+							"token": "!"
 						},
 						"ident": {
 							"NonKw": [
 								{
-									"first": {
-										"start": 312,
-										"end": 313
-									},
+									"first": " ",
 									"rest": []
 								},
-								{
-									"start": 313,
-									"end": 314
-								}
+								"a"
 							]
 						},
 						"def": {
@@ -1834,16 +1162,10 @@
 								"rules": {
 									"prefix": {
 										"ws": {
-											"first": {
-												"start": 314,
-												"end": 315
-											},
+											"first": " ",
 											"rest": []
 										},
-										"token": {
-											"start": 315,
-											"end": 316
-										}
+										"token": "{"
 									},
 									"value": {
 										"punctuated": {
@@ -1852,92 +1174,56 @@
 													"Parens": {
 														"prefix": {
 															"ws": {
-																"first": {
-																	"start": 316,
-																	"end": 317
-																},
+																"first": " ",
 																"rest": []
 															},
-															"token": {
-																"start": 317,
-																"end": 318
-															}
+															"token": "("
 														},
 														"value": [
 															{
 																"Token": {
 																	"IdentOrKeyword": [
 																		{
-																			"first": {
-																				"start": 318,
-																				"end": 318
-																			},
+																			"first": "",
 																			"rest": []
 																		},
-																		{
-																			"start": 318,
-																			"end": 319
-																		}
+																		"a"
 																	]
 																}
 															}
 														],
 														"suffix": {
 															"ws": {
-																"first": {
-																	"start": 319,
-																	"end": 319
-																},
+																"first": "",
 																"rest": []
 															},
-															"token": {
-																"start": 319,
-																"end": 320
-															}
+															"token": ")"
 														}
 													}
 												},
 												"arrow": {
 													"ws": {
-														"first": {
-															"start": 320,
-															"end": 321
-														},
+														"first": " ",
 														"rest": []
 													},
-													"token": {
-														"start": 321,
-														"end": 323
-													}
+													"token": "=>"
 												},
 												"transcriber": {
 													"Parens": {
 														"prefix": {
 															"ws": {
-																"first": {
-																	"start": 323,
-																	"end": 324
-																},
+																"first": " ",
 																"rest": []
 															},
-															"token": {
-																"start": 324,
-																"end": 325
-															}
+															"token": "("
 														},
 														"value": [],
 														"suffix": {
 															"ws": {
-																"first": {
-																	"start": 325,
-																	"end": 325
-																},
+																"first": "",
 																"rest": []
 															},
-															"token": {
-																"start": 325,
-																"end": 326
-															}
+															"token": ")"
 														}
 													}
 												}
@@ -1948,16 +1234,10 @@
 									},
 									"suffix": {
 										"ws": {
-											"first": {
-												"start": 326,
-												"end": 327
-											},
+											"first": " ",
 											"rest": []
 										},
-										"token": {
-											"start": 327,
-											"end": 328
-										}
+										"token": "}"
 									}
 								}
 							}
@@ -1973,43 +1253,25 @@
 					"Definition": {
 						"macro_rules": {
 							"ws": {
-								"first": {
-									"start": 328,
-									"end": 329
-								},
+								"first": "\n",
 								"rest": []
 							},
-							"token": {
-								"start": 329,
-								"end": 340
-							}
+							"token": "macro_rules"
 						},
 						"not": {
 							"ws": {
-								"first": {
-									"start": 340,
-									"end": 340
-								},
+								"first": "",
 								"rest": []
 							},
-							"token": {
-								"start": 340,
-								"end": 341
-							}
+							"token": "!"
 						},
 						"ident": {
 							"NonKw": [
 								{
-									"first": {
-										"start": 341,
-										"end": 342
-									},
+									"first": " ",
 									"rest": []
 								},
-								{
-									"start": 342,
-									"end": 343
-								}
+								"a"
 							]
 						},
 						"def": {
@@ -2017,16 +1279,10 @@
 								"rules": {
 									"prefix": {
 										"ws": {
-											"first": {
-												"start": 343,
-												"end": 344
-											},
+											"first": " ",
 											"rest": []
 										},
-										"token": {
-											"start": 344,
-											"end": 345
-										}
+										"token": "{"
 									},
 									"value": {
 										"punctuated": {
@@ -2035,16 +1291,10 @@
 													"Parens": {
 														"prefix": {
 															"ws": {
-																"first": {
-																	"start": 345,
-																	"end": 346
-																},
+																"first": " ",
 																"rest": []
 															},
-															"token": {
-																"start": 346,
-																"end": 347
-															}
+															"token": "("
 														},
 														"value": [
 															{
@@ -2052,30 +1302,18 @@
 																	"Parens": {
 																		"prefix": {
 																			"ws": {
-																				"first": {
-																					"start": 347,
-																					"end": 347
-																				},
+																				"first": "",
 																				"rest": []
 																			},
-																			"token": {
-																				"start": 347,
-																				"end": 348
-																			}
+																			"token": "("
 																		},
 																		"value": [],
 																		"suffix": {
 																			"ws": {
-																				"first": {
-																					"start": 348,
-																					"end": 348
-																				},
+																				"first": "",
 																				"rest": []
 																			},
-																			"token": {
-																				"start": 348,
-																				"end": 349
-																			}
+																			"token": ")"
 																		}
 																	}
 																}
@@ -2083,60 +1321,36 @@
 														],
 														"suffix": {
 															"ws": {
-																"first": {
-																	"start": 349,
-																	"end": 349
-																},
+																"first": "",
 																"rest": []
 															},
-															"token": {
-																"start": 349,
-																"end": 350
-															}
+															"token": ")"
 														}
 													}
 												},
 												"arrow": {
 													"ws": {
-														"first": {
-															"start": 350,
-															"end": 351
-														},
+														"first": " ",
 														"rest": []
 													},
-													"token": {
-														"start": 351,
-														"end": 353
-													}
+													"token": "=>"
 												},
 												"transcriber": {
 													"Parens": {
 														"prefix": {
 															"ws": {
-																"first": {
-																	"start": 353,
-																	"end": 354
-																},
+																"first": " ",
 																"rest": []
 															},
-															"token": {
-																"start": 354,
-																"end": 355
-															}
+															"token": "("
 														},
 														"value": [],
 														"suffix": {
 															"ws": {
-																"first": {
-																	"start": 355,
-																	"end": 355
-																},
+																"first": "",
 																"rest": []
 															},
-															"token": {
-																"start": 355,
-																"end": 356
-															}
+															"token": ")"
 														}
 													}
 												}
@@ -2147,16 +1361,10 @@
 									},
 									"suffix": {
 										"ws": {
-											"first": {
-												"start": 356,
-												"end": 357
-											},
+											"first": " ",
 											"rest": []
 										},
-										"token": {
-											"start": 357,
-											"end": 358
-										}
+										"token": "}"
 									}
 								}
 							}
@@ -2172,43 +1380,25 @@
 					"Definition": {
 						"macro_rules": {
 							"ws": {
-								"first": {
-									"start": 358,
-									"end": 359
-								},
+								"first": "\n",
 								"rest": []
 							},
-							"token": {
-								"start": 359,
-								"end": 370
-							}
+							"token": "macro_rules"
 						},
 						"not": {
 							"ws": {
-								"first": {
-									"start": 370,
-									"end": 370
-								},
+								"first": "",
 								"rest": []
 							},
-							"token": {
-								"start": 370,
-								"end": 371
-							}
+							"token": "!"
 						},
 						"ident": {
 							"NonKw": [
 								{
-									"first": {
-										"start": 371,
-										"end": 372
-									},
+									"first": " ",
 									"rest": []
 								},
-								{
-									"start": 372,
-									"end": 373
-								}
+								"a"
 							]
 						},
 						"def": {
@@ -2216,16 +1406,10 @@
 								"rules": {
 									"prefix": {
 										"ws": {
-											"first": {
-												"start": 373,
-												"end": 374
-											},
+											"first": " ",
 											"rest": []
 										},
-										"token": {
-											"start": 374,
-											"end": 375
-										}
+										"token": "{"
 									},
 									"value": {
 										"punctuated": {
@@ -2234,74 +1418,44 @@
 													"Parens": {
 														"prefix": {
 															"ws": {
-																"first": {
-																	"start": 375,
-																	"end": 376
-																},
+																"first": " ",
 																"rest": []
 															},
-															"token": {
-																"start": 376,
-																"end": 377
-															}
+															"token": "("
 														},
 														"value": [
 															{
 																"DollarIdent": {
 																	"dollar": {
 																		"ws": {
-																			"first": {
-																				"start": 377,
-																				"end": 377
-																			},
+																			"first": "",
 																			"rest": []
 																		},
-																		"token": {
-																			"start": 377,
-																			"end": 378
-																		}
+																		"token": "$"
 																	},
 																	"ident": {
 																		"IdentOrKw": [
 																			{
-																				"first": {
-																					"start": 378,
-																					"end": 378
-																				},
+																				"first": "",
 																				"rest": []
 																			},
-																			{
-																				"start": 378,
-																				"end": 379
-																			}
+																			"a"
 																		]
 																	},
 																	"colon": {
 																		"ws": {
-																			"first": {
-																				"start": 379,
-																				"end": 379
-																			},
+																			"first": "",
 																			"rest": []
 																		},
-																		"token": {
-																			"start": 379,
-																			"end": 380
-																		}
+																		"token": ":"
 																	},
 																	"spec": {
 																		"Expr": {
 																			"ws": {
-																				"first": {
-																					"start": 380,
-																					"end": 380
-																				},
+																				"first": "",
 																				"rest": []
 																			},
-																			"token": {
-																				"start": 380,
-																				"end": 384
-																			}
+																			"token": "expr"
 																		}
 																	}
 																}
@@ -2309,60 +1463,36 @@
 														],
 														"suffix": {
 															"ws": {
-																"first": {
-																	"start": 384,
-																	"end": 384
-																},
+																"first": "",
 																"rest": []
 															},
-															"token": {
-																"start": 384,
-																"end": 385
-															}
+															"token": ")"
 														}
 													}
 												},
 												"arrow": {
 													"ws": {
-														"first": {
-															"start": 385,
-															"end": 386
-														},
+														"first": " ",
 														"rest": []
 													},
-													"token": {
-														"start": 386,
-														"end": 388
-													}
+													"token": "=>"
 												},
 												"transcriber": {
 													"Parens": {
 														"prefix": {
 															"ws": {
-																"first": {
-																	"start": 388,
-																	"end": 389
-																},
+																"first": " ",
 																"rest": []
 															},
-															"token": {
-																"start": 389,
-																"end": 390
-															}
+															"token": "("
 														},
 														"value": [],
 														"suffix": {
 															"ws": {
-																"first": {
-																	"start": 390,
-																	"end": 390
-																},
+																"first": "",
 																"rest": []
 															},
-															"token": {
-																"start": 390,
-																"end": 391
-															}
+															"token": ")"
 														}
 													}
 												}
@@ -2373,16 +1503,10 @@
 									},
 									"suffix": {
 										"ws": {
-											"first": {
-												"start": 391,
-												"end": 392
-											},
+											"first": " ",
 											"rest": []
 										},
-										"token": {
-											"start": 392,
-											"end": 393
-										}
+										"token": "}"
 									}
 								}
 							}
@@ -2398,43 +1522,25 @@
 					"Definition": {
 						"macro_rules": {
 							"ws": {
-								"first": {
-									"start": 393,
-									"end": 394
-								},
+								"first": "\n",
 								"rest": []
 							},
-							"token": {
-								"start": 394,
-								"end": 405
-							}
+							"token": "macro_rules"
 						},
 						"not": {
 							"ws": {
-								"first": {
-									"start": 405,
-									"end": 405
-								},
+								"first": "",
 								"rest": []
 							},
-							"token": {
-								"start": 405,
-								"end": 406
-							}
+							"token": "!"
 						},
 						"ident": {
 							"NonKw": [
 								{
-									"first": {
-										"start": 406,
-										"end": 407
-									},
+									"first": " ",
 									"rest": []
 								},
-								{
-									"start": 407,
-									"end": 408
-								}
+								"a"
 							]
 						},
 						"def": {
@@ -2442,16 +1548,10 @@
 								"rules": {
 									"prefix": {
 										"ws": {
-											"first": {
-												"start": 408,
-												"end": 409
-											},
+											"first": " ",
 											"rest": []
 										},
-										"token": {
-											"start": 409,
-											"end": 410
-										}
+										"token": "{"
 									},
 									"value": {
 										"punctuated": {
@@ -2460,74 +1560,44 @@
 													"Parens": {
 														"prefix": {
 															"ws": {
-																"first": {
-																	"start": 410,
-																	"end": 411
-																},
+																"first": " ",
 																"rest": []
 															},
-															"token": {
-																"start": 411,
-																"end": 412
-															}
+															"token": "("
 														},
 														"value": [
 															{
 																"DollarIdent": {
 																	"dollar": {
 																		"ws": {
-																			"first": {
-																				"start": 412,
-																				"end": 412
-																			},
+																			"first": "",
 																			"rest": []
 																		},
-																		"token": {
-																			"start": 412,
-																			"end": 413
-																		}
+																		"token": "$"
 																	},
 																	"ident": {
 																		"Underscore": {
 																			"ws": {
-																				"first": {
-																					"start": 413,
-																					"end": 413
-																				},
+																				"first": "",
 																				"rest": []
 																			},
-																			"token": {
-																				"start": 413,
-																				"end": 414
-																			}
+																			"token": "_"
 																		}
 																	},
 																	"colon": {
 																		"ws": {
-																			"first": {
-																				"start": 414,
-																				"end": 414
-																			},
+																			"first": "",
 																			"rest": []
 																		},
-																		"token": {
-																			"start": 414,
-																			"end": 415
-																		}
+																		"token": ":"
 																	},
 																	"spec": {
 																		"Expr": {
 																			"ws": {
-																				"first": {
-																					"start": 415,
-																					"end": 415
-																				},
+																				"first": "",
 																				"rest": []
 																			},
-																			"token": {
-																				"start": 415,
-																				"end": 419
-																			}
+																			"token": "expr"
 																		}
 																	}
 																}
@@ -2535,60 +1605,36 @@
 														],
 														"suffix": {
 															"ws": {
-																"first": {
-																	"start": 419,
-																	"end": 419
-																},
+																"first": "",
 																"rest": []
 															},
-															"token": {
-																"start": 419,
-																"end": 420
-															}
+															"token": ")"
 														}
 													}
 												},
 												"arrow": {
 													"ws": {
-														"first": {
-															"start": 420,
-															"end": 421
-														},
+														"first": " ",
 														"rest": []
 													},
-													"token": {
-														"start": 421,
-														"end": 423
-													}
+													"token": "=>"
 												},
 												"transcriber": {
 													"Parens": {
 														"prefix": {
 															"ws": {
-																"first": {
-																	"start": 423,
-																	"end": 424
-																},
+																"first": " ",
 																"rest": []
 															},
-															"token": {
-																"start": 424,
-																"end": 425
-															}
+															"token": "("
 														},
 														"value": [],
 														"suffix": {
 															"ws": {
-																"first": {
-																	"start": 425,
-																	"end": 425
-																},
+																"first": "",
 																"rest": []
 															},
-															"token": {
-																"start": 425,
-																"end": 426
-															}
+															"token": ")"
 														}
 													}
 												}
@@ -2599,16 +1645,10 @@
 									},
 									"suffix": {
 										"ws": {
-											"first": {
-												"start": 426,
-												"end": 427
-											},
+											"first": " ",
 											"rest": []
 										},
-										"token": {
-											"start": 427,
-											"end": 428
-										}
+										"token": "}"
 									}
 								}
 							}
@@ -2624,43 +1664,25 @@
 					"Definition": {
 						"macro_rules": {
 							"ws": {
-								"first": {
-									"start": 428,
-									"end": 429
-								},
+								"first": "\n",
 								"rest": []
 							},
-							"token": {
-								"start": 429,
-								"end": 440
-							}
+							"token": "macro_rules"
 						},
 						"not": {
 							"ws": {
-								"first": {
-									"start": 440,
-									"end": 440
-								},
+								"first": "",
 								"rest": []
 							},
-							"token": {
-								"start": 440,
-								"end": 441
-							}
+							"token": "!"
 						},
 						"ident": {
 							"NonKw": [
 								{
-									"first": {
-										"start": 441,
-										"end": 442
-									},
+									"first": " ",
 									"rest": []
 								},
-								{
-									"start": 442,
-									"end": 443
-								}
+								"a"
 							]
 						},
 						"def": {
@@ -2668,16 +1690,10 @@
 								"rules": {
 									"prefix": {
 										"ws": {
-											"first": {
-												"start": 443,
-												"end": 444
-											},
+											"first": " ",
 											"rest": []
 										},
-										"token": {
-											"start": 444,
-											"end": 445
-										}
+										"token": "{"
 									},
 									"value": {
 										"punctuated": {
@@ -2686,62 +1702,38 @@
 													"Parens": {
 														"prefix": {
 															"ws": {
-																"first": {
-																	"start": 445,
-																	"end": 446
-																},
+																"first": " ",
 																"rest": []
 															},
-															"token": {
-																"start": 446,
-																"end": 447
-															}
+															"token": "("
 														},
 														"value": [
 															{
 																"DollarRep": {
 																	"dollar": {
 																		"ws": {
-																			"first": {
-																				"start": 447,
-																				"end": 447
-																			},
+																			"first": "",
 																			"rest": []
 																		},
-																		"token": {
-																			"start": 447,
-																			"end": 448
-																		}
+																		"token": "$"
 																	},
 																	"matches": {
 																		"prefix": {
 																			"ws": {
-																				"first": {
-																					"start": 448,
-																					"end": 448
-																				},
+																				"first": "",
 																				"rest": []
 																			},
-																			"token": {
-																				"start": 448,
-																				"end": 449
-																			}
+																			"token": "("
 																		},
 																		"value": {
 																			"first": {
 																				"Token": {
 																					"IdentOrKeyword": [
 																						{
-																							"first": {
-																								"start": 449,
-																								"end": 449
-																							},
+																							"first": "",
 																							"rest": []
 																						},
-																						{
-																							"start": 449,
-																							"end": 450
-																						}
+																						"a"
 																					]
 																				}
 																			},
@@ -2749,32 +1741,20 @@
 																		},
 																		"suffix": {
 																			"ws": {
-																				"first": {
-																					"start": 450,
-																					"end": 450
-																				},
+																				"first": "",
 																				"rest": []
 																			},
-																			"token": {
-																				"start": 450,
-																				"end": 451
-																			}
+																			"token": ")"
 																		}
 																	},
 																	"rep_sep": null,
 																	"rep_op": {
 																		"Star": {
 																			"ws": {
-																				"first": {
-																					"start": 451,
-																					"end": 451
-																				},
+																				"first": "",
 																				"rest": []
 																			},
-																			"token": {
-																				"start": 451,
-																				"end": 452
-																			}
+																			"token": "*"
 																		}
 																	}
 																}
@@ -2782,60 +1762,36 @@
 														],
 														"suffix": {
 															"ws": {
-																"first": {
-																	"start": 452,
-																	"end": 452
-																},
+																"first": "",
 																"rest": []
 															},
-															"token": {
-																"start": 452,
-																"end": 453
-															}
+															"token": ")"
 														}
 													}
 												},
 												"arrow": {
 													"ws": {
-														"first": {
-															"start": 453,
-															"end": 454
-														},
+														"first": " ",
 														"rest": []
 													},
-													"token": {
-														"start": 454,
-														"end": 456
-													}
+													"token": "=>"
 												},
 												"transcriber": {
 													"Parens": {
 														"prefix": {
 															"ws": {
-																"first": {
-																	"start": 456,
-																	"end": 457
-																},
+																"first": " ",
 																"rest": []
 															},
-															"token": {
-																"start": 457,
-																"end": 458
-															}
+															"token": "("
 														},
 														"value": [],
 														"suffix": {
 															"ws": {
-																"first": {
-																	"start": 458,
-																	"end": 458
-																},
+																"first": "",
 																"rest": []
 															},
-															"token": {
-																"start": 458,
-																"end": 459
-															}
+															"token": ")"
 														}
 													}
 												}
@@ -2846,16 +1802,10 @@
 									},
 									"suffix": {
 										"ws": {
-											"first": {
-												"start": 459,
-												"end": 460
-											},
+											"first": " ",
 											"rest": []
 										},
-										"token": {
-											"start": 460,
-											"end": 461
-										}
+										"token": "}"
 									}
 								}
 							}
@@ -2871,43 +1821,25 @@
 					"Definition": {
 						"macro_rules": {
 							"ws": {
-								"first": {
-									"start": 461,
-									"end": 462
-								},
+								"first": "\n",
 								"rest": []
 							},
-							"token": {
-								"start": 462,
-								"end": 473
-							}
+							"token": "macro_rules"
 						},
 						"not": {
 							"ws": {
-								"first": {
-									"start": 473,
-									"end": 473
-								},
+								"first": "",
 								"rest": []
 							},
-							"token": {
-								"start": 473,
-								"end": 474
-							}
+							"token": "!"
 						},
 						"ident": {
 							"NonKw": [
 								{
-									"first": {
-										"start": 474,
-										"end": 475
-									},
+									"first": " ",
 									"rest": []
 								},
-								{
-									"start": 475,
-									"end": 476
-								}
+								"a"
 							]
 						},
 						"def": {
@@ -2915,16 +1847,10 @@
 								"rules": {
 									"prefix": {
 										"ws": {
-											"first": {
-												"start": 476,
-												"end": 477
-											},
+											"first": " ",
 											"rest": []
 										},
-										"token": {
-											"start": 477,
-											"end": 478
-										}
+										"token": "{"
 									},
 									"value": {
 										"punctuated": {
@@ -2933,62 +1859,38 @@
 													"Parens": {
 														"prefix": {
 															"ws": {
-																"first": {
-																	"start": 478,
-																	"end": 479
-																},
+																"first": " ",
 																"rest": []
 															},
-															"token": {
-																"start": 479,
-																"end": 480
-															}
+															"token": "("
 														},
 														"value": [
 															{
 																"DollarRep": {
 																	"dollar": {
 																		"ws": {
-																			"first": {
-																				"start": 480,
-																				"end": 480
-																			},
+																			"first": "",
 																			"rest": []
 																		},
-																		"token": {
-																			"start": 480,
-																			"end": 481
-																		}
+																		"token": "$"
 																	},
 																	"matches": {
 																		"prefix": {
 																			"ws": {
-																				"first": {
-																					"start": 481,
-																					"end": 481
-																				},
+																				"first": "",
 																				"rest": []
 																			},
-																			"token": {
-																				"start": 481,
-																				"end": 482
-																			}
+																			"token": "("
 																		},
 																		"value": {
 																			"first": {
 																				"Token": {
 																					"IdentOrKeyword": [
 																						{
-																							"first": {
-																								"start": 482,
-																								"end": 482
-																							},
+																							"first": "",
 																							"rest": []
 																						},
-																						{
-																							"start": 482,
-																							"end": 483
-																						}
+																						"a"
 																					]
 																				}
 																			},
@@ -2996,32 +1898,20 @@
 																		},
 																		"suffix": {
 																			"ws": {
-																				"first": {
-																					"start": 483,
-																					"end": 483
-																				},
+																				"first": "",
 																				"rest": []
 																			},
-																			"token": {
-																				"start": 483,
-																				"end": 484
-																			}
+																			"token": ")"
 																		}
 																	},
 																	"rep_sep": null,
 																	"rep_op": {
 																		"Plus": {
 																			"ws": {
-																				"first": {
-																					"start": 484,
-																					"end": 484
-																				},
+																				"first": "",
 																				"rest": []
 																			},
-																			"token": {
-																				"start": 484,
-																				"end": 485
-																			}
+																			"token": "+"
 																		}
 																	}
 																}
@@ -3029,60 +1919,36 @@
 														],
 														"suffix": {
 															"ws": {
-																"first": {
-																	"start": 485,
-																	"end": 485
-																},
+																"first": "",
 																"rest": []
 															},
-															"token": {
-																"start": 485,
-																"end": 486
-															}
+															"token": ")"
 														}
 													}
 												},
 												"arrow": {
 													"ws": {
-														"first": {
-															"start": 486,
-															"end": 487
-														},
+														"first": " ",
 														"rest": []
 													},
-													"token": {
-														"start": 487,
-														"end": 489
-													}
+													"token": "=>"
 												},
 												"transcriber": {
 													"Parens": {
 														"prefix": {
 															"ws": {
-																"first": {
-																	"start": 489,
-																	"end": 490
-																},
+																"first": " ",
 																"rest": []
 															},
-															"token": {
-																"start": 490,
-																"end": 491
-															}
+															"token": "("
 														},
 														"value": [],
 														"suffix": {
 															"ws": {
-																"first": {
-																	"start": 491,
-																	"end": 491
-																},
+																"first": "",
 																"rest": []
 															},
-															"token": {
-																"start": 491,
-																"end": 492
-															}
+															"token": ")"
 														}
 													}
 												}
@@ -3093,16 +1959,10 @@
 									},
 									"suffix": {
 										"ws": {
-											"first": {
-												"start": 492,
-												"end": 493
-											},
+											"first": " ",
 											"rest": []
 										},
-										"token": {
-											"start": 493,
-											"end": 494
-										}
+										"token": "}"
 									}
 								}
 							}
@@ -3118,43 +1978,25 @@
 					"Definition": {
 						"macro_rules": {
 							"ws": {
-								"first": {
-									"start": 494,
-									"end": 495
-								},
+								"first": "\n",
 								"rest": []
 							},
-							"token": {
-								"start": 495,
-								"end": 506
-							}
+							"token": "macro_rules"
 						},
 						"not": {
 							"ws": {
-								"first": {
-									"start": 506,
-									"end": 506
-								},
+								"first": "",
 								"rest": []
 							},
-							"token": {
-								"start": 506,
-								"end": 507
-							}
+							"token": "!"
 						},
 						"ident": {
 							"NonKw": [
 								{
-									"first": {
-										"start": 507,
-										"end": 508
-									},
+									"first": " ",
 									"rest": []
 								},
-								{
-									"start": 508,
-									"end": 509
-								}
+								"a"
 							]
 						},
 						"def": {
@@ -3162,16 +2004,10 @@
 								"rules": {
 									"prefix": {
 										"ws": {
-											"first": {
-												"start": 509,
-												"end": 510
-											},
+											"first": " ",
 											"rest": []
 										},
-										"token": {
-											"start": 510,
-											"end": 511
-										}
+										"token": "{"
 									},
 									"value": {
 										"punctuated": {
@@ -3180,62 +2016,38 @@
 													"Parens": {
 														"prefix": {
 															"ws": {
-																"first": {
-																	"start": 511,
-																	"end": 512
-																},
+																"first": " ",
 																"rest": []
 															},
-															"token": {
-																"start": 512,
-																"end": 513
-															}
+															"token": "("
 														},
 														"value": [
 															{
 																"DollarRep": {
 																	"dollar": {
 																		"ws": {
-																			"first": {
-																				"start": 513,
-																				"end": 513
-																			},
+																			"first": "",
 																			"rest": []
 																		},
-																		"token": {
-																			"start": 513,
-																			"end": 514
-																		}
+																		"token": "$"
 																	},
 																	"matches": {
 																		"prefix": {
 																			"ws": {
-																				"first": {
-																					"start": 514,
-																					"end": 514
-																				},
+																				"first": "",
 																				"rest": []
 																			},
-																			"token": {
-																				"start": 514,
-																				"end": 515
-																			}
+																			"token": "("
 																		},
 																		"value": {
 																			"first": {
 																				"Token": {
 																					"IdentOrKeyword": [
 																						{
-																							"first": {
-																								"start": 515,
-																								"end": 515
-																							},
+																							"first": "",
 																							"rest": []
 																						},
-																						{
-																							"start": 515,
-																							"end": 516
-																						}
+																						"a"
 																					]
 																				}
 																			},
@@ -3243,32 +2055,20 @@
 																		},
 																		"suffix": {
 																			"ws": {
-																				"first": {
-																					"start": 516,
-																					"end": 516
-																				},
+																				"first": "",
 																				"rest": []
 																			},
-																			"token": {
-																				"start": 516,
-																				"end": 517
-																			}
+																			"token": ")"
 																		}
 																	},
 																	"rep_sep": null,
 																	"rep_op": {
 																		"Question": {
 																			"ws": {
-																				"first": {
-																					"start": 517,
-																					"end": 517
-																				},
+																				"first": "",
 																				"rest": []
 																			},
-																			"token": {
-																				"start": 517,
-																				"end": 518
-																			}
+																			"token": "?"
 																		}
 																	}
 																}
@@ -3276,60 +2076,36 @@
 														],
 														"suffix": {
 															"ws": {
-																"first": {
-																	"start": 518,
-																	"end": 518
-																},
+																"first": "",
 																"rest": []
 															},
-															"token": {
-																"start": 518,
-																"end": 519
-															}
+															"token": ")"
 														}
 													}
 												},
 												"arrow": {
 													"ws": {
-														"first": {
-															"start": 519,
-															"end": 520
-														},
+														"first": " ",
 														"rest": []
 													},
-													"token": {
-														"start": 520,
-														"end": 522
-													}
+													"token": "=>"
 												},
 												"transcriber": {
 													"Parens": {
 														"prefix": {
 															"ws": {
-																"first": {
-																	"start": 522,
-																	"end": 523
-																},
+																"first": " ",
 																"rest": []
 															},
-															"token": {
-																"start": 523,
-																"end": 524
-															}
+															"token": "("
 														},
 														"value": [],
 														"suffix": {
 															"ws": {
-																"first": {
-																	"start": 524,
-																	"end": 524
-																},
+																"first": "",
 																"rest": []
 															},
-															"token": {
-																"start": 524,
-																"end": 525
-															}
+															"token": ")"
 														}
 													}
 												}
@@ -3340,16 +2116,10 @@
 									},
 									"suffix": {
 										"ws": {
-											"first": {
-												"start": 525,
-												"end": 526
-											},
+											"first": " ",
 											"rest": []
 										},
-										"token": {
-											"start": 526,
-											"end": 527
-										}
+										"token": "}"
 									}
 								}
 							}
@@ -3365,43 +2135,25 @@
 					"Definition": {
 						"macro_rules": {
 							"ws": {
-								"first": {
-									"start": 527,
-									"end": 529
-								},
+								"first": "\n\n",
 								"rest": []
 							},
-							"token": {
-								"start": 529,
-								"end": 540
-							}
+							"token": "macro_rules"
 						},
 						"not": {
 							"ws": {
-								"first": {
-									"start": 540,
-									"end": 540
-								},
+								"first": "",
 								"rest": []
 							},
-							"token": {
-								"start": 540,
-								"end": 541
-							}
+							"token": "!"
 						},
 						"ident": {
 							"NonKw": [
 								{
-									"first": {
-										"start": 541,
-										"end": 542
-									},
+									"first": " ",
 									"rest": []
 								},
-								{
-									"start": 542,
-									"end": 543
-								}
+								"a"
 							]
 						},
 						"def": {
@@ -3409,16 +2161,10 @@
 								"rules": {
 									"prefix": {
 										"ws": {
-											"first": {
-												"start": 543,
-												"end": 544
-											},
+											"first": " ",
 											"rest": []
 										},
-										"token": {
-											"start": 544,
-											"end": 545
-										}
+										"token": "{"
 									},
 									"value": {
 										"punctuated": {
@@ -3427,62 +2173,38 @@
 													"Parens": {
 														"prefix": {
 															"ws": {
-																"first": {
-																	"start": 545,
-																	"end": 546
-																},
+																"first": " ",
 																"rest": []
 															},
-															"token": {
-																"start": 546,
-																"end": 547
-															}
+															"token": "("
 														},
 														"value": [
 															{
 																"DollarRep": {
 																	"dollar": {
 																		"ws": {
-																			"first": {
-																				"start": 547,
-																				"end": 547
-																			},
+																			"first": "",
 																			"rest": []
 																		},
-																		"token": {
-																			"start": 547,
-																			"end": 548
-																		}
+																		"token": "$"
 																	},
 																	"matches": {
 																		"prefix": {
 																			"ws": {
-																				"first": {
-																					"start": 548,
-																					"end": 548
-																				},
+																				"first": "",
 																				"rest": []
 																			},
-																			"token": {
-																				"start": 548,
-																				"end": 549
-																			}
+																			"token": "("
 																		},
 																		"value": {
 																			"first": {
 																				"Token": {
 																					"IdentOrKeyword": [
 																						{
-																							"first": {
-																								"start": 549,
-																								"end": 549
-																							},
+																							"first": "",
 																							"rest": []
 																						},
-																						{
-																							"start": 549,
-																							"end": 550
-																						}
+																						"a"
 																					]
 																				}
 																			},
@@ -3490,46 +2212,28 @@
 																		},
 																		"suffix": {
 																			"ws": {
-																				"first": {
-																					"start": 550,
-																					"end": 550
-																				},
+																				"first": "",
 																				"rest": []
 																			},
-																			"token": {
-																				"start": 550,
-																				"end": 551
-																			}
+																			"token": ")"
 																		}
 																	},
 																	"rep_sep": {
 																		"IdentOrKeyword": [
 																			{
-																				"first": {
-																					"start": 551,
-																					"end": 551
-																				},
+																				"first": "",
 																				"rest": []
 																			},
-																			{
-																				"start": 551,
-																				"end": 552
-																			}
+																			"b"
 																		]
 																	},
 																	"rep_op": {
 																		"Star": {
 																			"ws": {
-																				"first": {
-																					"start": 552,
-																					"end": 552
-																				},
+																				"first": "",
 																				"rest": []
 																			},
-																			"token": {
-																				"start": 552,
-																				"end": 553
-																			}
+																			"token": "*"
 																		}
 																	}
 																}
@@ -3537,60 +2241,36 @@
 														],
 														"suffix": {
 															"ws": {
-																"first": {
-																	"start": 553,
-																	"end": 553
-																},
+																"first": "",
 																"rest": []
 															},
-															"token": {
-																"start": 553,
-																"end": 554
-															}
+															"token": ")"
 														}
 													}
 												},
 												"arrow": {
 													"ws": {
-														"first": {
-															"start": 554,
-															"end": 555
-														},
+														"first": " ",
 														"rest": []
 													},
-													"token": {
-														"start": 555,
-														"end": 557
-													}
+													"token": "=>"
 												},
 												"transcriber": {
 													"Parens": {
 														"prefix": {
 															"ws": {
-																"first": {
-																	"start": 557,
-																	"end": 558
-																},
+																"first": " ",
 																"rest": []
 															},
-															"token": {
-																"start": 558,
-																"end": 559
-															}
+															"token": "("
 														},
 														"value": [],
 														"suffix": {
 															"ws": {
-																"first": {
-																	"start": 559,
-																	"end": 559
-																},
+																"first": "",
 																"rest": []
 															},
-															"token": {
-																"start": 559,
-																"end": 560
-															}
+															"token": ")"
 														}
 													}
 												}
@@ -3601,16 +2281,10 @@
 									},
 									"suffix": {
 										"ws": {
-											"first": {
-												"start": 560,
-												"end": 561
-											},
+											"first": " ",
 											"rest": []
 										},
-										"token": {
-											"start": 561,
-											"end": 562
-										}
+										"token": "}"
 									}
 								}
 							}
@@ -3626,43 +2300,25 @@
 					"Definition": {
 						"macro_rules": {
 							"ws": {
-								"first": {
-									"start": 562,
-									"end": 564
-								},
+								"first": "\n\n",
 								"rest": []
 							},
-							"token": {
-								"start": 564,
-								"end": 575
-							}
+							"token": "macro_rules"
 						},
 						"not": {
 							"ws": {
-								"first": {
-									"start": 575,
-									"end": 575
-								},
+								"first": "",
 								"rest": []
 							},
-							"token": {
-								"start": 575,
-								"end": 576
-							}
+							"token": "!"
 						},
 						"ident": {
 							"NonKw": [
 								{
-									"first": {
-										"start": 576,
-										"end": 577
-									},
+									"first": " ",
 									"rest": []
 								},
-								{
-									"start": 577,
-									"end": 578
-								}
+								"a"
 							]
 						},
 						"def": {
@@ -3670,16 +2326,10 @@
 								"rules": {
 									"prefix": {
 										"ws": {
-											"first": {
-												"start": 578,
-												"end": 579
-											},
+											"first": " ",
 											"rest": []
 										},
-										"token": {
-											"start": 579,
-											"end": 580
-										}
+										"token": "{"
 									},
 									"value": {
 										"punctuated": {
@@ -3688,74 +2338,44 @@
 													"Parens": {
 														"prefix": {
 															"ws": {
-																"first": {
-																	"start": 580,
-																	"end": 581
-																},
+																"first": " ",
 																"rest": []
 															},
-															"token": {
-																"start": 581,
-																"end": 582
-															}
+															"token": "("
 														},
 														"value": [
 															{
 																"DollarIdent": {
 																	"dollar": {
 																		"ws": {
-																			"first": {
-																				"start": 582,
-																				"end": 582
-																			},
+																			"first": "",
 																			"rest": []
 																		},
-																		"token": {
-																			"start": 582,
-																			"end": 583
-																		}
+																		"token": "$"
 																	},
 																	"ident": {
 																		"IdentOrKw": [
 																			{
-																				"first": {
-																					"start": 583,
-																					"end": 583
-																				},
+																				"first": "",
 																				"rest": []
 																			},
-																			{
-																				"start": 583,
-																				"end": 584
-																			}
+																			"a"
 																		]
 																	},
 																	"colon": {
 																		"ws": {
-																			"first": {
-																				"start": 584,
-																				"end": 584
-																			},
+																			"first": "",
 																			"rest": []
 																		},
-																		"token": {
-																			"start": 584,
-																			"end": 585
-																		}
+																		"token": ":"
 																	},
 																	"spec": {
 																		"Block": {
 																			"ws": {
-																				"first": {
-																					"start": 585,
-																					"end": 585
-																				},
+																				"first": "",
 																				"rest": []
 																			},
-																			"token": {
-																				"start": 585,
-																				"end": 590
-																			}
+																			"token": "block"
 																		}
 																	}
 																}
@@ -3763,60 +2383,36 @@
 														],
 														"suffix": {
 															"ws": {
-																"first": {
-																	"start": 590,
-																	"end": 590
-																},
+																"first": "",
 																"rest": []
 															},
-															"token": {
-																"start": 590,
-																"end": 591
-															}
+															"token": ")"
 														}
 													}
 												},
 												"arrow": {
 													"ws": {
-														"first": {
-															"start": 591,
-															"end": 592
-														},
+														"first": " ",
 														"rest": []
 													},
-													"token": {
-														"start": 592,
-														"end": 594
-													}
+													"token": "=>"
 												},
 												"transcriber": {
 													"Parens": {
 														"prefix": {
 															"ws": {
-																"first": {
-																	"start": 594,
-																	"end": 595
-																},
+																"first": " ",
 																"rest": []
 															},
-															"token": {
-																"start": 595,
-																"end": 596
-															}
+															"token": "("
 														},
 														"value": [],
 														"suffix": {
 															"ws": {
-																"first": {
-																	"start": 596,
-																	"end": 596
-																},
+																"first": "",
 																"rest": []
 															},
-															"token": {
-																"start": 596,
-																"end": 597
-															}
+															"token": ")"
 														}
 													}
 												}
@@ -3827,16 +2423,10 @@
 									},
 									"suffix": {
 										"ws": {
-											"first": {
-												"start": 597,
-												"end": 598
-											},
+											"first": " ",
 											"rest": []
 										},
-										"token": {
-											"start": 598,
-											"end": 599
-										}
+										"token": "}"
 									}
 								}
 							}
@@ -3852,43 +2442,25 @@
 					"Definition": {
 						"macro_rules": {
 							"ws": {
-								"first": {
-									"start": 599,
-									"end": 600
-								},
+								"first": "\n",
 								"rest": []
 							},
-							"token": {
-								"start": 600,
-								"end": 611
-							}
+							"token": "macro_rules"
 						},
 						"not": {
 							"ws": {
-								"first": {
-									"start": 611,
-									"end": 611
-								},
+								"first": "",
 								"rest": []
 							},
-							"token": {
-								"start": 611,
-								"end": 612
-							}
+							"token": "!"
 						},
 						"ident": {
 							"NonKw": [
 								{
-									"first": {
-										"start": 612,
-										"end": 613
-									},
+									"first": " ",
 									"rest": []
 								},
-								{
-									"start": 613,
-									"end": 614
-								}
+								"a"
 							]
 						},
 						"def": {
@@ -3896,16 +2468,10 @@
 								"rules": {
 									"prefix": {
 										"ws": {
-											"first": {
-												"start": 614,
-												"end": 615
-											},
+											"first": " ",
 											"rest": []
 										},
-										"token": {
-											"start": 615,
-											"end": 616
-										}
+										"token": "{"
 									},
 									"value": {
 										"punctuated": {
@@ -3914,74 +2480,44 @@
 													"Parens": {
 														"prefix": {
 															"ws": {
-																"first": {
-																	"start": 616,
-																	"end": 617
-																},
+																"first": " ",
 																"rest": []
 															},
-															"token": {
-																"start": 617,
-																"end": 618
-															}
+															"token": "("
 														},
 														"value": [
 															{
 																"DollarIdent": {
 																	"dollar": {
 																		"ws": {
-																			"first": {
-																				"start": 618,
-																				"end": 618
-																			},
+																			"first": "",
 																			"rest": []
 																		},
-																		"token": {
-																			"start": 618,
-																			"end": 619
-																		}
+																		"token": "$"
 																	},
 																	"ident": {
 																		"IdentOrKw": [
 																			{
-																				"first": {
-																					"start": 619,
-																					"end": 619
-																				},
+																				"first": "",
 																				"rest": []
 																			},
-																			{
-																				"start": 619,
-																				"end": 620
-																			}
+																			"a"
 																		]
 																	},
 																	"colon": {
 																		"ws": {
-																			"first": {
-																				"start": 620,
-																				"end": 620
-																			},
+																			"first": "",
 																			"rest": []
 																		},
-																		"token": {
-																			"start": 620,
-																			"end": 621
-																		}
+																		"token": ":"
 																	},
 																	"spec": {
 																		"Expr": {
 																			"ws": {
-																				"first": {
-																					"start": 621,
-																					"end": 621
-																				},
+																				"first": "",
 																				"rest": []
 																			},
-																			"token": {
-																				"start": 621,
-																				"end": 625
-																			}
+																			"token": "expr"
 																		}
 																	}
 																}
@@ -3989,60 +2525,36 @@
 														],
 														"suffix": {
 															"ws": {
-																"first": {
-																	"start": 625,
-																	"end": 625
-																},
+																"first": "",
 																"rest": []
 															},
-															"token": {
-																"start": 625,
-																"end": 626
-															}
+															"token": ")"
 														}
 													}
 												},
 												"arrow": {
 													"ws": {
-														"first": {
-															"start": 626,
-															"end": 627
-														},
+														"first": " ",
 														"rest": []
 													},
-													"token": {
-														"start": 627,
-														"end": 629
-													}
+													"token": "=>"
 												},
 												"transcriber": {
 													"Parens": {
 														"prefix": {
 															"ws": {
-																"first": {
-																	"start": 629,
-																	"end": 630
-																},
+																"first": " ",
 																"rest": []
 															},
-															"token": {
-																"start": 630,
-																"end": 631
-															}
+															"token": "("
 														},
 														"value": [],
 														"suffix": {
 															"ws": {
-																"first": {
-																	"start": 631,
-																	"end": 631
-																},
+																"first": "",
 																"rest": []
 															},
-															"token": {
-																"start": 631,
-																"end": 632
-															}
+															"token": ")"
 														}
 													}
 												}
@@ -4053,16 +2565,10 @@
 									},
 									"suffix": {
 										"ws": {
-											"first": {
-												"start": 632,
-												"end": 633
-											},
+											"first": " ",
 											"rest": []
 										},
-										"token": {
-											"start": 633,
-											"end": 634
-										}
+										"token": "}"
 									}
 								}
 							}
@@ -4078,43 +2584,25 @@
 					"Definition": {
 						"macro_rules": {
 							"ws": {
-								"first": {
-									"start": 634,
-									"end": 635
-								},
+								"first": "\n",
 								"rest": []
 							},
-							"token": {
-								"start": 635,
-								"end": 646
-							}
+							"token": "macro_rules"
 						},
 						"not": {
 							"ws": {
-								"first": {
-									"start": 646,
-									"end": 646
-								},
+								"first": "",
 								"rest": []
 							},
-							"token": {
-								"start": 646,
-								"end": 647
-							}
+							"token": "!"
 						},
 						"ident": {
 							"NonKw": [
 								{
-									"first": {
-										"start": 647,
-										"end": 648
-									},
+									"first": " ",
 									"rest": []
 								},
-								{
-									"start": 648,
-									"end": 649
-								}
+								"a"
 							]
 						},
 						"def": {
@@ -4122,16 +2610,10 @@
 								"rules": {
 									"prefix": {
 										"ws": {
-											"first": {
-												"start": 649,
-												"end": 650
-											},
+											"first": " ",
 											"rest": []
 										},
-										"token": {
-											"start": 650,
-											"end": 651
-										}
+										"token": "{"
 									},
 									"value": {
 										"punctuated": {
@@ -4140,74 +2622,44 @@
 													"Parens": {
 														"prefix": {
 															"ws": {
-																"first": {
-																	"start": 651,
-																	"end": 652
-																},
+																"first": " ",
 																"rest": []
 															},
-															"token": {
-																"start": 652,
-																"end": 653
-															}
+															"token": "("
 														},
 														"value": [
 															{
 																"DollarIdent": {
 																	"dollar": {
 																		"ws": {
-																			"first": {
-																				"start": 653,
-																				"end": 653
-																			},
+																			"first": "",
 																			"rest": []
 																		},
-																		"token": {
-																			"start": 653,
-																			"end": 654
-																		}
+																		"token": "$"
 																	},
 																	"ident": {
 																		"IdentOrKw": [
 																			{
-																				"first": {
-																					"start": 654,
-																					"end": 654
-																				},
+																				"first": "",
 																				"rest": []
 																			},
-																			{
-																				"start": 654,
-																				"end": 655
-																			}
+																			"a"
 																		]
 																	},
 																	"colon": {
 																		"ws": {
-																			"first": {
-																				"start": 655,
-																				"end": 655
-																			},
+																			"first": "",
 																			"rest": []
 																		},
-																		"token": {
-																			"start": 655,
-																			"end": 656
-																		}
+																		"token": ":"
 																	},
 																	"spec": {
 																		"Expr2021": {
 																			"ws": {
-																				"first": {
-																					"start": 656,
-																					"end": 656
-																				},
+																				"first": "",
 																				"rest": []
 																			},
-																			"token": {
-																				"start": 656,
-																				"end": 665
-																			}
+																			"token": "expr_2021"
 																		}
 																	}
 																}
@@ -4215,60 +2667,36 @@
 														],
 														"suffix": {
 															"ws": {
-																"first": {
-																	"start": 665,
-																	"end": 665
-																},
+																"first": "",
 																"rest": []
 															},
-															"token": {
-																"start": 665,
-																"end": 666
-															}
+															"token": ")"
 														}
 													}
 												},
 												"arrow": {
 													"ws": {
-														"first": {
-															"start": 666,
-															"end": 667
-														},
+														"first": " ",
 														"rest": []
 													},
-													"token": {
-														"start": 667,
-														"end": 669
-													}
+													"token": "=>"
 												},
 												"transcriber": {
 													"Parens": {
 														"prefix": {
 															"ws": {
-																"first": {
-																	"start": 669,
-																	"end": 670
-																},
+																"first": " ",
 																"rest": []
 															},
-															"token": {
-																"start": 670,
-																"end": 671
-															}
+															"token": "("
 														},
 														"value": [],
 														"suffix": {
 															"ws": {
-																"first": {
-																	"start": 671,
-																	"end": 671
-																},
+																"first": "",
 																"rest": []
 															},
-															"token": {
-																"start": 671,
-																"end": 672
-															}
+															"token": ")"
 														}
 													}
 												}
@@ -4279,16 +2707,10 @@
 									},
 									"suffix": {
 										"ws": {
-											"first": {
-												"start": 672,
-												"end": 673
-											},
+											"first": " ",
 											"rest": []
 										},
-										"token": {
-											"start": 673,
-											"end": 674
-										}
+										"token": "}"
 									}
 								}
 							}
@@ -4304,43 +2726,25 @@
 					"Definition": {
 						"macro_rules": {
 							"ws": {
-								"first": {
-									"start": 674,
-									"end": 675
-								},
+								"first": "\n",
 								"rest": []
 							},
-							"token": {
-								"start": 675,
-								"end": 686
-							}
+							"token": "macro_rules"
 						},
 						"not": {
 							"ws": {
-								"first": {
-									"start": 686,
-									"end": 686
-								},
+								"first": "",
 								"rest": []
 							},
-							"token": {
-								"start": 686,
-								"end": 687
-							}
+							"token": "!"
 						},
 						"ident": {
 							"NonKw": [
 								{
-									"first": {
-										"start": 687,
-										"end": 688
-									},
+									"first": " ",
 									"rest": []
 								},
-								{
-									"start": 688,
-									"end": 689
-								}
+								"a"
 							]
 						},
 						"def": {
@@ -4348,16 +2752,10 @@
 								"rules": {
 									"prefix": {
 										"ws": {
-											"first": {
-												"start": 689,
-												"end": 690
-											},
+											"first": " ",
 											"rest": []
 										},
-										"token": {
-											"start": 690,
-											"end": 691
-										}
+										"token": "{"
 									},
 									"value": {
 										"punctuated": {
@@ -4366,74 +2764,44 @@
 													"Parens": {
 														"prefix": {
 															"ws": {
-																"first": {
-																	"start": 691,
-																	"end": 692
-																},
+																"first": " ",
 																"rest": []
 															},
-															"token": {
-																"start": 692,
-																"end": 693
-															}
+															"token": "("
 														},
 														"value": [
 															{
 																"DollarIdent": {
 																	"dollar": {
 																		"ws": {
-																			"first": {
-																				"start": 693,
-																				"end": 693
-																			},
+																			"first": "",
 																			"rest": []
 																		},
-																		"token": {
-																			"start": 693,
-																			"end": 694
-																		}
+																		"token": "$"
 																	},
 																	"ident": {
 																		"IdentOrKw": [
 																			{
-																				"first": {
-																					"start": 694,
-																					"end": 694
-																				},
+																				"first": "",
 																				"rest": []
 																			},
-																			{
-																				"start": 694,
-																				"end": 695
-																			}
+																			"a"
 																		]
 																	},
 																	"colon": {
 																		"ws": {
-																			"first": {
-																				"start": 695,
-																				"end": 695
-																			},
+																			"first": "",
 																			"rest": []
 																		},
-																		"token": {
-																			"start": 695,
-																			"end": 696
-																		}
+																		"token": ":"
 																	},
 																	"spec": {
 																		"Ident": {
 																			"ws": {
-																				"first": {
-																					"start": 696,
-																					"end": 696
-																				},
+																				"first": "",
 																				"rest": []
 																			},
-																			"token": {
-																				"start": 696,
-																				"end": 701
-																			}
+																			"token": "ident"
 																		}
 																	}
 																}
@@ -4441,60 +2809,36 @@
 														],
 														"suffix": {
 															"ws": {
-																"first": {
-																	"start": 701,
-																	"end": 701
-																},
+																"first": "",
 																"rest": []
 															},
-															"token": {
-																"start": 701,
-																"end": 702
-															}
+															"token": ")"
 														}
 													}
 												},
 												"arrow": {
 													"ws": {
-														"first": {
-															"start": 702,
-															"end": 703
-														},
+														"first": " ",
 														"rest": []
 													},
-													"token": {
-														"start": 703,
-														"end": 705
-													}
+													"token": "=>"
 												},
 												"transcriber": {
 													"Parens": {
 														"prefix": {
 															"ws": {
-																"first": {
-																	"start": 705,
-																	"end": 706
-																},
+																"first": " ",
 																"rest": []
 															},
-															"token": {
-																"start": 706,
-																"end": 707
-															}
+															"token": "("
 														},
 														"value": [],
 														"suffix": {
 															"ws": {
-																"first": {
-																	"start": 707,
-																	"end": 707
-																},
+																"first": "",
 																"rest": []
 															},
-															"token": {
-																"start": 707,
-																"end": 708
-															}
+															"token": ")"
 														}
 													}
 												}
@@ -4505,16 +2849,10 @@
 									},
 									"suffix": {
 										"ws": {
-											"first": {
-												"start": 708,
-												"end": 709
-											},
+											"first": " ",
 											"rest": []
 										},
-										"token": {
-											"start": 709,
-											"end": 710
-										}
+										"token": "}"
 									}
 								}
 							}
@@ -4530,43 +2868,25 @@
 					"Definition": {
 						"macro_rules": {
 							"ws": {
-								"first": {
-									"start": 710,
-									"end": 711
-								},
+								"first": "\n",
 								"rest": []
 							},
-							"token": {
-								"start": 711,
-								"end": 722
-							}
+							"token": "macro_rules"
 						},
 						"not": {
 							"ws": {
-								"first": {
-									"start": 722,
-									"end": 722
-								},
+								"first": "",
 								"rest": []
 							},
-							"token": {
-								"start": 722,
-								"end": 723
-							}
+							"token": "!"
 						},
 						"ident": {
 							"NonKw": [
 								{
-									"first": {
-										"start": 723,
-										"end": 724
-									},
+									"first": " ",
 									"rest": []
 								},
-								{
-									"start": 724,
-									"end": 725
-								}
+								"a"
 							]
 						},
 						"def": {
@@ -4574,16 +2894,10 @@
 								"rules": {
 									"prefix": {
 										"ws": {
-											"first": {
-												"start": 725,
-												"end": 726
-											},
+											"first": " ",
 											"rest": []
 										},
-										"token": {
-											"start": 726,
-											"end": 727
-										}
+										"token": "{"
 									},
 									"value": {
 										"punctuated": {
@@ -4592,74 +2906,44 @@
 													"Parens": {
 														"prefix": {
 															"ws": {
-																"first": {
-																	"start": 727,
-																	"end": 728
-																},
+																"first": " ",
 																"rest": []
 															},
-															"token": {
-																"start": 728,
-																"end": 729
-															}
+															"token": "("
 														},
 														"value": [
 															{
 																"DollarIdent": {
 																	"dollar": {
 																		"ws": {
-																			"first": {
-																				"start": 729,
-																				"end": 729
-																			},
+																			"first": "",
 																			"rest": []
 																		},
-																		"token": {
-																			"start": 729,
-																			"end": 730
-																		}
+																		"token": "$"
 																	},
 																	"ident": {
 																		"IdentOrKw": [
 																			{
-																				"first": {
-																					"start": 730,
-																					"end": 730
-																				},
+																				"first": "",
 																				"rest": []
 																			},
-																			{
-																				"start": 730,
-																				"end": 731
-																			}
+																			"a"
 																		]
 																	},
 																	"colon": {
 																		"ws": {
-																			"first": {
-																				"start": 731,
-																				"end": 731
-																			},
+																			"first": "",
 																			"rest": []
 																		},
-																		"token": {
-																			"start": 731,
-																			"end": 732
-																		}
+																		"token": ":"
 																	},
 																	"spec": {
 																		"Item": {
 																			"ws": {
-																				"first": {
-																					"start": 732,
-																					"end": 732
-																				},
+																				"first": "",
 																				"rest": []
 																			},
-																			"token": {
-																				"start": 732,
-																				"end": 736
-																			}
+																			"token": "item"
 																		}
 																	}
 																}
@@ -4667,60 +2951,36 @@
 														],
 														"suffix": {
 															"ws": {
-																"first": {
-																	"start": 736,
-																	"end": 736
-																},
+																"first": "",
 																"rest": []
 															},
-															"token": {
-																"start": 736,
-																"end": 737
-															}
+															"token": ")"
 														}
 													}
 												},
 												"arrow": {
 													"ws": {
-														"first": {
-															"start": 737,
-															"end": 738
-														},
+														"first": " ",
 														"rest": []
 													},
-													"token": {
-														"start": 738,
-														"end": 740
-													}
+													"token": "=>"
 												},
 												"transcriber": {
 													"Parens": {
 														"prefix": {
 															"ws": {
-																"first": {
-																	"start": 740,
-																	"end": 741
-																},
+																"first": " ",
 																"rest": []
 															},
-															"token": {
-																"start": 741,
-																"end": 742
-															}
+															"token": "("
 														},
 														"value": [],
 														"suffix": {
 															"ws": {
-																"first": {
-																	"start": 742,
-																	"end": 742
-																},
+																"first": "",
 																"rest": []
 															},
-															"token": {
-																"start": 742,
-																"end": 743
-															}
+															"token": ")"
 														}
 													}
 												}
@@ -4731,16 +2991,10 @@
 									},
 									"suffix": {
 										"ws": {
-											"first": {
-												"start": 743,
-												"end": 744
-											},
+											"first": " ",
 											"rest": []
 										},
-										"token": {
-											"start": 744,
-											"end": 745
-										}
+										"token": "}"
 									}
 								}
 							}
@@ -4756,43 +3010,25 @@
 					"Definition": {
 						"macro_rules": {
 							"ws": {
-								"first": {
-									"start": 745,
-									"end": 746
-								},
+								"first": "\n",
 								"rest": []
 							},
-							"token": {
-								"start": 746,
-								"end": 757
-							}
+							"token": "macro_rules"
 						},
 						"not": {
 							"ws": {
-								"first": {
-									"start": 757,
-									"end": 757
-								},
+								"first": "",
 								"rest": []
 							},
-							"token": {
-								"start": 757,
-								"end": 758
-							}
+							"token": "!"
 						},
 						"ident": {
 							"NonKw": [
 								{
-									"first": {
-										"start": 758,
-										"end": 759
-									},
+									"first": " ",
 									"rest": []
 								},
-								{
-									"start": 759,
-									"end": 760
-								}
+								"a"
 							]
 						},
 						"def": {
@@ -4800,16 +3036,10 @@
 								"rules": {
 									"prefix": {
 										"ws": {
-											"first": {
-												"start": 760,
-												"end": 761
-											},
+											"first": " ",
 											"rest": []
 										},
-										"token": {
-											"start": 761,
-											"end": 762
-										}
+										"token": "{"
 									},
 									"value": {
 										"punctuated": {
@@ -4818,74 +3048,44 @@
 													"Parens": {
 														"prefix": {
 															"ws": {
-																"first": {
-																	"start": 762,
-																	"end": 763
-																},
+																"first": " ",
 																"rest": []
 															},
-															"token": {
-																"start": 763,
-																"end": 764
-															}
+															"token": "("
 														},
 														"value": [
 															{
 																"DollarIdent": {
 																	"dollar": {
 																		"ws": {
-																			"first": {
-																				"start": 764,
-																				"end": 764
-																			},
+																			"first": "",
 																			"rest": []
 																		},
-																		"token": {
-																			"start": 764,
-																			"end": 765
-																		}
+																		"token": "$"
 																	},
 																	"ident": {
 																		"IdentOrKw": [
 																			{
-																				"first": {
-																					"start": 765,
-																					"end": 765
-																				},
+																				"first": "",
 																				"rest": []
 																			},
-																			{
-																				"start": 765,
-																				"end": 766
-																			}
+																			"a"
 																		]
 																	},
 																	"colon": {
 																		"ws": {
-																			"first": {
-																				"start": 766,
-																				"end": 766
-																			},
+																			"first": "",
 																			"rest": []
 																		},
-																		"token": {
-																			"start": 766,
-																			"end": 767
-																		}
+																		"token": ":"
 																	},
 																	"spec": {
 																		"Lifetime": {
 																			"ws": {
-																				"first": {
-																					"start": 767,
-																					"end": 767
-																				},
+																				"first": "",
 																				"rest": []
 																			},
-																			"token": {
-																				"start": 767,
-																				"end": 775
-																			}
+																			"token": "lifetime"
 																		}
 																	}
 																}
@@ -4893,60 +3093,36 @@
 														],
 														"suffix": {
 															"ws": {
-																"first": {
-																	"start": 775,
-																	"end": 775
-																},
+																"first": "",
 																"rest": []
 															},
-															"token": {
-																"start": 775,
-																"end": 776
-															}
+															"token": ")"
 														}
 													}
 												},
 												"arrow": {
 													"ws": {
-														"first": {
-															"start": 776,
-															"end": 777
-														},
+														"first": " ",
 														"rest": []
 													},
-													"token": {
-														"start": 777,
-														"end": 779
-													}
+													"token": "=>"
 												},
 												"transcriber": {
 													"Parens": {
 														"prefix": {
 															"ws": {
-																"first": {
-																	"start": 779,
-																	"end": 780
-																},
+																"first": " ",
 																"rest": []
 															},
-															"token": {
-																"start": 780,
-																"end": 781
-															}
+															"token": "("
 														},
 														"value": [],
 														"suffix": {
 															"ws": {
-																"first": {
-																	"start": 781,
-																	"end": 781
-																},
+																"first": "",
 																"rest": []
 															},
-															"token": {
-																"start": 781,
-																"end": 782
-															}
+															"token": ")"
 														}
 													}
 												}
@@ -4957,16 +3133,10 @@
 									},
 									"suffix": {
 										"ws": {
-											"first": {
-												"start": 782,
-												"end": 783
-											},
+											"first": " ",
 											"rest": []
 										},
-										"token": {
-											"start": 783,
-											"end": 784
-										}
+										"token": "}"
 									}
 								}
 							}
@@ -4982,43 +3152,25 @@
 					"Definition": {
 						"macro_rules": {
 							"ws": {
-								"first": {
-									"start": 784,
-									"end": 785
-								},
+								"first": "\n",
 								"rest": []
 							},
-							"token": {
-								"start": 785,
-								"end": 796
-							}
+							"token": "macro_rules"
 						},
 						"not": {
 							"ws": {
-								"first": {
-									"start": 796,
-									"end": 796
-								},
+								"first": "",
 								"rest": []
 							},
-							"token": {
-								"start": 796,
-								"end": 797
-							}
+							"token": "!"
 						},
 						"ident": {
 							"NonKw": [
 								{
-									"first": {
-										"start": 797,
-										"end": 798
-									},
+									"first": " ",
 									"rest": []
 								},
-								{
-									"start": 798,
-									"end": 799
-								}
+								"a"
 							]
 						},
 						"def": {
@@ -5026,16 +3178,10 @@
 								"rules": {
 									"prefix": {
 										"ws": {
-											"first": {
-												"start": 799,
-												"end": 800
-											},
+											"first": " ",
 											"rest": []
 										},
-										"token": {
-											"start": 800,
-											"end": 801
-										}
+										"token": "{"
 									},
 									"value": {
 										"punctuated": {
@@ -5044,74 +3190,44 @@
 													"Parens": {
 														"prefix": {
 															"ws": {
-																"first": {
-																	"start": 801,
-																	"end": 802
-																},
+																"first": " ",
 																"rest": []
 															},
-															"token": {
-																"start": 802,
-																"end": 803
-															}
+															"token": "("
 														},
 														"value": [
 															{
 																"DollarIdent": {
 																	"dollar": {
 																		"ws": {
-																			"first": {
-																				"start": 803,
-																				"end": 803
-																			},
+																			"first": "",
 																			"rest": []
 																		},
-																		"token": {
-																			"start": 803,
-																			"end": 804
-																		}
+																		"token": "$"
 																	},
 																	"ident": {
 																		"IdentOrKw": [
 																			{
-																				"first": {
-																					"start": 804,
-																					"end": 804
-																				},
+																				"first": "",
 																				"rest": []
 																			},
-																			{
-																				"start": 804,
-																				"end": 805
-																			}
+																			"a"
 																		]
 																	},
 																	"colon": {
 																		"ws": {
-																			"first": {
-																				"start": 805,
-																				"end": 805
-																			},
+																			"first": "",
 																			"rest": []
 																		},
-																		"token": {
-																			"start": 805,
-																			"end": 806
-																		}
+																		"token": ":"
 																	},
 																	"spec": {
 																		"Literal": {
 																			"ws": {
-																				"first": {
-																					"start": 806,
-																					"end": 806
-																				},
+																				"first": "",
 																				"rest": []
 																			},
-																			"token": {
-																				"start": 806,
-																				"end": 813
-																			}
+																			"token": "literal"
 																		}
 																	}
 																}
@@ -5119,60 +3235,36 @@
 														],
 														"suffix": {
 															"ws": {
-																"first": {
-																	"start": 813,
-																	"end": 813
-																},
+																"first": "",
 																"rest": []
 															},
-															"token": {
-																"start": 813,
-																"end": 814
-															}
+															"token": ")"
 														}
 													}
 												},
 												"arrow": {
 													"ws": {
-														"first": {
-															"start": 814,
-															"end": 815
-														},
+														"first": " ",
 														"rest": []
 													},
-													"token": {
-														"start": 815,
-														"end": 817
-													}
+													"token": "=>"
 												},
 												"transcriber": {
 													"Parens": {
 														"prefix": {
 															"ws": {
-																"first": {
-																	"start": 817,
-																	"end": 818
-																},
+																"first": " ",
 																"rest": []
 															},
-															"token": {
-																"start": 818,
-																"end": 819
-															}
+															"token": "("
 														},
 														"value": [],
 														"suffix": {
 															"ws": {
-																"first": {
-																	"start": 819,
-																	"end": 819
-																},
+																"first": "",
 																"rest": []
 															},
-															"token": {
-																"start": 819,
-																"end": 820
-															}
+															"token": ")"
 														}
 													}
 												}
@@ -5183,16 +3275,10 @@
 									},
 									"suffix": {
 										"ws": {
-											"first": {
-												"start": 820,
-												"end": 821
-											},
+											"first": " ",
 											"rest": []
 										},
-										"token": {
-											"start": 821,
-											"end": 822
-										}
+										"token": "}"
 									}
 								}
 							}
@@ -5208,43 +3294,25 @@
 					"Definition": {
 						"macro_rules": {
 							"ws": {
-								"first": {
-									"start": 822,
-									"end": 823
-								},
+								"first": "\n",
 								"rest": []
 							},
-							"token": {
-								"start": 823,
-								"end": 834
-							}
+							"token": "macro_rules"
 						},
 						"not": {
 							"ws": {
-								"first": {
-									"start": 834,
-									"end": 834
-								},
+								"first": "",
 								"rest": []
 							},
-							"token": {
-								"start": 834,
-								"end": 835
-							}
+							"token": "!"
 						},
 						"ident": {
 							"NonKw": [
 								{
-									"first": {
-										"start": 835,
-										"end": 836
-									},
+									"first": " ",
 									"rest": []
 								},
-								{
-									"start": 836,
-									"end": 837
-								}
+								"a"
 							]
 						},
 						"def": {
@@ -5252,16 +3320,10 @@
 								"rules": {
 									"prefix": {
 										"ws": {
-											"first": {
-												"start": 837,
-												"end": 838
-											},
+											"first": " ",
 											"rest": []
 										},
-										"token": {
-											"start": 838,
-											"end": 839
-										}
+										"token": "{"
 									},
 									"value": {
 										"punctuated": {
@@ -5270,74 +3332,44 @@
 													"Parens": {
 														"prefix": {
 															"ws": {
-																"first": {
-																	"start": 839,
-																	"end": 840
-																},
+																"first": " ",
 																"rest": []
 															},
-															"token": {
-																"start": 840,
-																"end": 841
-															}
+															"token": "("
 														},
 														"value": [
 															{
 																"DollarIdent": {
 																	"dollar": {
 																		"ws": {
-																			"first": {
-																				"start": 841,
-																				"end": 841
-																			},
+																			"first": "",
 																			"rest": []
 																		},
-																		"token": {
-																			"start": 841,
-																			"end": 842
-																		}
+																		"token": "$"
 																	},
 																	"ident": {
 																		"IdentOrKw": [
 																			{
-																				"first": {
-																					"start": 842,
-																					"end": 842
-																				},
+																				"first": "",
 																				"rest": []
 																			},
-																			{
-																				"start": 842,
-																				"end": 843
-																			}
+																			"a"
 																		]
 																	},
 																	"colon": {
 																		"ws": {
-																			"first": {
-																				"start": 843,
-																				"end": 843
-																			},
+																			"first": "",
 																			"rest": []
 																		},
-																		"token": {
-																			"start": 843,
-																			"end": 844
-																		}
+																		"token": ":"
 																	},
 																	"spec": {
 																		"Meta": {
 																			"ws": {
-																				"first": {
-																					"start": 844,
-																					"end": 844
-																				},
+																				"first": "",
 																				"rest": []
 																			},
-																			"token": {
-																				"start": 844,
-																				"end": 848
-																			}
+																			"token": "meta"
 																		}
 																	}
 																}
@@ -5345,60 +3377,36 @@
 														],
 														"suffix": {
 															"ws": {
-																"first": {
-																	"start": 848,
-																	"end": 848
-																},
+																"first": "",
 																"rest": []
 															},
-															"token": {
-																"start": 848,
-																"end": 849
-															}
+															"token": ")"
 														}
 													}
 												},
 												"arrow": {
 													"ws": {
-														"first": {
-															"start": 849,
-															"end": 850
-														},
+														"first": " ",
 														"rest": []
 													},
-													"token": {
-														"start": 850,
-														"end": 852
-													}
+													"token": "=>"
 												},
 												"transcriber": {
 													"Parens": {
 														"prefix": {
 															"ws": {
-																"first": {
-																	"start": 852,
-																	"end": 853
-																},
+																"first": " ",
 																"rest": []
 															},
-															"token": {
-																"start": 853,
-																"end": 854
-															}
+															"token": "("
 														},
 														"value": [],
 														"suffix": {
 															"ws": {
-																"first": {
-																	"start": 854,
-																	"end": 854
-																},
+																"first": "",
 																"rest": []
 															},
-															"token": {
-																"start": 854,
-																"end": 855
-															}
+															"token": ")"
 														}
 													}
 												}
@@ -5409,16 +3417,10 @@
 									},
 									"suffix": {
 										"ws": {
-											"first": {
-												"start": 855,
-												"end": 856
-											},
+											"first": " ",
 											"rest": []
 										},
-										"token": {
-											"start": 856,
-											"end": 857
-										}
+										"token": "}"
 									}
 								}
 							}
@@ -5434,43 +3436,25 @@
 					"Definition": {
 						"macro_rules": {
 							"ws": {
-								"first": {
-									"start": 857,
-									"end": 858
-								},
+								"first": "\n",
 								"rest": []
 							},
-							"token": {
-								"start": 858,
-								"end": 869
-							}
+							"token": "macro_rules"
 						},
 						"not": {
 							"ws": {
-								"first": {
-									"start": 869,
-									"end": 869
-								},
+								"first": "",
 								"rest": []
 							},
-							"token": {
-								"start": 869,
-								"end": 870
-							}
+							"token": "!"
 						},
 						"ident": {
 							"NonKw": [
 								{
-									"first": {
-										"start": 870,
-										"end": 871
-									},
+									"first": " ",
 									"rest": []
 								},
-								{
-									"start": 871,
-									"end": 872
-								}
+								"a"
 							]
 						},
 						"def": {
@@ -5478,16 +3462,10 @@
 								"rules": {
 									"prefix": {
 										"ws": {
-											"first": {
-												"start": 872,
-												"end": 873
-											},
+											"first": " ",
 											"rest": []
 										},
-										"token": {
-											"start": 873,
-											"end": 874
-										}
+										"token": "{"
 									},
 									"value": {
 										"punctuated": {
@@ -5496,74 +3474,44 @@
 													"Parens": {
 														"prefix": {
 															"ws": {
-																"first": {
-																	"start": 874,
-																	"end": 875
-																},
+																"first": " ",
 																"rest": []
 															},
-															"token": {
-																"start": 875,
-																"end": 876
-															}
+															"token": "("
 														},
 														"value": [
 															{
 																"DollarIdent": {
 																	"dollar": {
 																		"ws": {
-																			"first": {
-																				"start": 876,
-																				"end": 876
-																			},
+																			"first": "",
 																			"rest": []
 																		},
-																		"token": {
-																			"start": 876,
-																			"end": 877
-																		}
+																		"token": "$"
 																	},
 																	"ident": {
 																		"IdentOrKw": [
 																			{
-																				"first": {
-																					"start": 877,
-																					"end": 877
-																				},
+																				"first": "",
 																				"rest": []
 																			},
-																			{
-																				"start": 877,
-																				"end": 878
-																			}
+																			"a"
 																		]
 																	},
 																	"colon": {
 																		"ws": {
-																			"first": {
-																				"start": 878,
-																				"end": 878
-																			},
+																			"first": "",
 																			"rest": []
 																		},
-																		"token": {
-																			"start": 878,
-																			"end": 879
-																		}
+																		"token": ":"
 																	},
 																	"spec": {
 																		"Pat": {
 																			"ws": {
-																				"first": {
-																					"start": 879,
-																					"end": 879
-																				},
+																				"first": "",
 																				"rest": []
 																			},
-																			"token": {
-																				"start": 879,
-																				"end": 882
-																			}
+																			"token": "pat"
 																		}
 																	}
 																}
@@ -5571,60 +3519,36 @@
 														],
 														"suffix": {
 															"ws": {
-																"first": {
-																	"start": 882,
-																	"end": 882
-																},
+																"first": "",
 																"rest": []
 															},
-															"token": {
-																"start": 882,
-																"end": 883
-															}
+															"token": ")"
 														}
 													}
 												},
 												"arrow": {
 													"ws": {
-														"first": {
-															"start": 883,
-															"end": 884
-														},
+														"first": " ",
 														"rest": []
 													},
-													"token": {
-														"start": 884,
-														"end": 886
-													}
+													"token": "=>"
 												},
 												"transcriber": {
 													"Parens": {
 														"prefix": {
 															"ws": {
-																"first": {
-																	"start": 886,
-																	"end": 887
-																},
+																"first": " ",
 																"rest": []
 															},
-															"token": {
-																"start": 887,
-																"end": 888
-															}
+															"token": "("
 														},
 														"value": [],
 														"suffix": {
 															"ws": {
-																"first": {
-																	"start": 888,
-																	"end": 888
-																},
+																"first": "",
 																"rest": []
 															},
-															"token": {
-																"start": 888,
-																"end": 889
-															}
+															"token": ")"
 														}
 													}
 												}
@@ -5635,16 +3559,10 @@
 									},
 									"suffix": {
 										"ws": {
-											"first": {
-												"start": 889,
-												"end": 890
-											},
+											"first": " ",
 											"rest": []
 										},
-										"token": {
-											"start": 890,
-											"end": 891
-										}
+										"token": "}"
 									}
 								}
 							}
@@ -5660,43 +3578,25 @@
 					"Definition": {
 						"macro_rules": {
 							"ws": {
-								"first": {
-									"start": 891,
-									"end": 892
-								},
+								"first": "\n",
 								"rest": []
 							},
-							"token": {
-								"start": 892,
-								"end": 903
-							}
+							"token": "macro_rules"
 						},
 						"not": {
 							"ws": {
-								"first": {
-									"start": 903,
-									"end": 903
-								},
+								"first": "",
 								"rest": []
 							},
-							"token": {
-								"start": 903,
-								"end": 904
-							}
+							"token": "!"
 						},
 						"ident": {
 							"NonKw": [
 								{
-									"first": {
-										"start": 904,
-										"end": 905
-									},
+									"first": " ",
 									"rest": []
 								},
-								{
-									"start": 905,
-									"end": 906
-								}
+								"a"
 							]
 						},
 						"def": {
@@ -5704,16 +3604,10 @@
 								"rules": {
 									"prefix": {
 										"ws": {
-											"first": {
-												"start": 906,
-												"end": 907
-											},
+											"first": " ",
 											"rest": []
 										},
-										"token": {
-											"start": 907,
-											"end": 908
-										}
+										"token": "{"
 									},
 									"value": {
 										"punctuated": {
@@ -5722,74 +3616,44 @@
 													"Parens": {
 														"prefix": {
 															"ws": {
-																"first": {
-																	"start": 908,
-																	"end": 909
-																},
+																"first": " ",
 																"rest": []
 															},
-															"token": {
-																"start": 909,
-																"end": 910
-															}
+															"token": "("
 														},
 														"value": [
 															{
 																"DollarIdent": {
 																	"dollar": {
 																		"ws": {
-																			"first": {
-																				"start": 910,
-																				"end": 910
-																			},
+																			"first": "",
 																			"rest": []
 																		},
-																		"token": {
-																			"start": 910,
-																			"end": 911
-																		}
+																		"token": "$"
 																	},
 																	"ident": {
 																		"IdentOrKw": [
 																			{
-																				"first": {
-																					"start": 911,
-																					"end": 911
-																				},
+																				"first": "",
 																				"rest": []
 																			},
-																			{
-																				"start": 911,
-																				"end": 912
-																			}
+																			"a"
 																		]
 																	},
 																	"colon": {
 																		"ws": {
-																			"first": {
-																				"start": 912,
-																				"end": 912
-																			},
+																			"first": "",
 																			"rest": []
 																		},
-																		"token": {
-																			"start": 912,
-																			"end": 913
-																		}
+																		"token": ":"
 																	},
 																	"spec": {
 																		"PatParam": {
 																			"ws": {
-																				"first": {
-																					"start": 913,
-																					"end": 913
-																				},
+																				"first": "",
 																				"rest": []
 																			},
-																			"token": {
-																				"start": 913,
-																				"end": 922
-																			}
+																			"token": "pat_param"
 																		}
 																	}
 																}
@@ -5797,60 +3661,36 @@
 														],
 														"suffix": {
 															"ws": {
-																"first": {
-																	"start": 922,
-																	"end": 922
-																},
+																"first": "",
 																"rest": []
 															},
-															"token": {
-																"start": 922,
-																"end": 923
-															}
+															"token": ")"
 														}
 													}
 												},
 												"arrow": {
 													"ws": {
-														"first": {
-															"start": 923,
-															"end": 924
-														},
+														"first": " ",
 														"rest": []
 													},
-													"token": {
-														"start": 924,
-														"end": 926
-													}
+													"token": "=>"
 												},
 												"transcriber": {
 													"Parens": {
 														"prefix": {
 															"ws": {
-																"first": {
-																	"start": 926,
-																	"end": 927
-																},
+																"first": " ",
 																"rest": []
 															},
-															"token": {
-																"start": 927,
-																"end": 928
-															}
+															"token": "("
 														},
 														"value": [],
 														"suffix": {
 															"ws": {
-																"first": {
-																	"start": 928,
-																	"end": 928
-																},
+																"first": "",
 																"rest": []
 															},
-															"token": {
-																"start": 928,
-																"end": 929
-															}
+															"token": ")"
 														}
 													}
 												}
@@ -5861,16 +3701,10 @@
 									},
 									"suffix": {
 										"ws": {
-											"first": {
-												"start": 929,
-												"end": 930
-											},
+											"first": " ",
 											"rest": []
 										},
-										"token": {
-											"start": 930,
-											"end": 931
-										}
+										"token": "}"
 									}
 								}
 							}
@@ -5886,43 +3720,25 @@
 					"Definition": {
 						"macro_rules": {
 							"ws": {
-								"first": {
-									"start": 931,
-									"end": 932
-								},
+								"first": "\n",
 								"rest": []
 							},
-							"token": {
-								"start": 932,
-								"end": 943
-							}
+							"token": "macro_rules"
 						},
 						"not": {
 							"ws": {
-								"first": {
-									"start": 943,
-									"end": 943
-								},
+								"first": "",
 								"rest": []
 							},
-							"token": {
-								"start": 943,
-								"end": 944
-							}
+							"token": "!"
 						},
 						"ident": {
 							"NonKw": [
 								{
-									"first": {
-										"start": 944,
-										"end": 945
-									},
+									"first": " ",
 									"rest": []
 								},
-								{
-									"start": 945,
-									"end": 946
-								}
+								"a"
 							]
 						},
 						"def": {
@@ -5930,16 +3746,10 @@
 								"rules": {
 									"prefix": {
 										"ws": {
-											"first": {
-												"start": 946,
-												"end": 947
-											},
+											"first": " ",
 											"rest": []
 										},
-										"token": {
-											"start": 947,
-											"end": 948
-										}
+										"token": "{"
 									},
 									"value": {
 										"punctuated": {
@@ -5948,74 +3758,44 @@
 													"Parens": {
 														"prefix": {
 															"ws": {
-																"first": {
-																	"start": 948,
-																	"end": 949
-																},
+																"first": " ",
 																"rest": []
 															},
-															"token": {
-																"start": 949,
-																"end": 950
-															}
+															"token": "("
 														},
 														"value": [
 															{
 																"DollarIdent": {
 																	"dollar": {
 																		"ws": {
-																			"first": {
-																				"start": 950,
-																				"end": 950
-																			},
+																			"first": "",
 																			"rest": []
 																		},
-																		"token": {
-																			"start": 950,
-																			"end": 951
-																		}
+																		"token": "$"
 																	},
 																	"ident": {
 																		"IdentOrKw": [
 																			{
-																				"first": {
-																					"start": 951,
-																					"end": 951
-																				},
+																				"first": "",
 																				"rest": []
 																			},
-																			{
-																				"start": 951,
-																				"end": 952
-																			}
+																			"a"
 																		]
 																	},
 																	"colon": {
 																		"ws": {
-																			"first": {
-																				"start": 952,
-																				"end": 952
-																			},
+																			"first": "",
 																			"rest": []
 																		},
-																		"token": {
-																			"start": 952,
-																			"end": 953
-																		}
+																		"token": ":"
 																	},
 																	"spec": {
 																		"Path": {
 																			"ws": {
-																				"first": {
-																					"start": 953,
-																					"end": 953
-																				},
+																				"first": "",
 																				"rest": []
 																			},
-																			"token": {
-																				"start": 953,
-																				"end": 957
-																			}
+																			"token": "path"
 																		}
 																	}
 																}
@@ -6023,60 +3803,36 @@
 														],
 														"suffix": {
 															"ws": {
-																"first": {
-																	"start": 957,
-																	"end": 957
-																},
+																"first": "",
 																"rest": []
 															},
-															"token": {
-																"start": 957,
-																"end": 958
-															}
+															"token": ")"
 														}
 													}
 												},
 												"arrow": {
 													"ws": {
-														"first": {
-															"start": 958,
-															"end": 959
-														},
+														"first": " ",
 														"rest": []
 													},
-													"token": {
-														"start": 959,
-														"end": 961
-													}
+													"token": "=>"
 												},
 												"transcriber": {
 													"Parens": {
 														"prefix": {
 															"ws": {
-																"first": {
-																	"start": 961,
-																	"end": 962
-																},
+																"first": " ",
 																"rest": []
 															},
-															"token": {
-																"start": 962,
-																"end": 963
-															}
+															"token": "("
 														},
 														"value": [],
 														"suffix": {
 															"ws": {
-																"first": {
-																	"start": 963,
-																	"end": 963
-																},
+																"first": "",
 																"rest": []
 															},
-															"token": {
-																"start": 963,
-																"end": 964
-															}
+															"token": ")"
 														}
 													}
 												}
@@ -6087,16 +3843,10 @@
 									},
 									"suffix": {
 										"ws": {
-											"first": {
-												"start": 964,
-												"end": 965
-											},
+											"first": " ",
 											"rest": []
 										},
-										"token": {
-											"start": 965,
-											"end": 966
-										}
+										"token": "}"
 									}
 								}
 							}
@@ -6112,43 +3862,25 @@
 					"Definition": {
 						"macro_rules": {
 							"ws": {
-								"first": {
-									"start": 966,
-									"end": 967
-								},
+								"first": "\n",
 								"rest": []
 							},
-							"token": {
-								"start": 967,
-								"end": 978
-							}
+							"token": "macro_rules"
 						},
 						"not": {
 							"ws": {
-								"first": {
-									"start": 978,
-									"end": 978
-								},
+								"first": "",
 								"rest": []
 							},
-							"token": {
-								"start": 978,
-								"end": 979
-							}
+							"token": "!"
 						},
 						"ident": {
 							"NonKw": [
 								{
-									"first": {
-										"start": 979,
-										"end": 980
-									},
+									"first": " ",
 									"rest": []
 								},
-								{
-									"start": 980,
-									"end": 981
-								}
+								"a"
 							]
 						},
 						"def": {
@@ -6156,16 +3888,10 @@
 								"rules": {
 									"prefix": {
 										"ws": {
-											"first": {
-												"start": 981,
-												"end": 982
-											},
+											"first": " ",
 											"rest": []
 										},
-										"token": {
-											"start": 982,
-											"end": 983
-										}
+										"token": "{"
 									},
 									"value": {
 										"punctuated": {
@@ -6174,74 +3900,44 @@
 													"Parens": {
 														"prefix": {
 															"ws": {
-																"first": {
-																	"start": 983,
-																	"end": 984
-																},
+																"first": " ",
 																"rest": []
 															},
-															"token": {
-																"start": 984,
-																"end": 985
-															}
+															"token": "("
 														},
 														"value": [
 															{
 																"DollarIdent": {
 																	"dollar": {
 																		"ws": {
-																			"first": {
-																				"start": 985,
-																				"end": 985
-																			},
+																			"first": "",
 																			"rest": []
 																		},
-																		"token": {
-																			"start": 985,
-																			"end": 986
-																		}
+																		"token": "$"
 																	},
 																	"ident": {
 																		"IdentOrKw": [
 																			{
-																				"first": {
-																					"start": 986,
-																					"end": 986
-																				},
+																				"first": "",
 																				"rest": []
 																			},
-																			{
-																				"start": 986,
-																				"end": 987
-																			}
+																			"a"
 																		]
 																	},
 																	"colon": {
 																		"ws": {
-																			"first": {
-																				"start": 987,
-																				"end": 987
-																			},
+																			"first": "",
 																			"rest": []
 																		},
-																		"token": {
-																			"start": 987,
-																			"end": 988
-																		}
+																		"token": ":"
 																	},
 																	"spec": {
 																		"Stmt": {
 																			"ws": {
-																				"first": {
-																					"start": 988,
-																					"end": 988
-																				},
+																				"first": "",
 																				"rest": []
 																			},
-																			"token": {
-																				"start": 988,
-																				"end": 992
-																			}
+																			"token": "stmt"
 																		}
 																	}
 																}
@@ -6249,60 +3945,36 @@
 														],
 														"suffix": {
 															"ws": {
-																"first": {
-																	"start": 992,
-																	"end": 992
-																},
+																"first": "",
 																"rest": []
 															},
-															"token": {
-																"start": 992,
-																"end": 993
-															}
+															"token": ")"
 														}
 													}
 												},
 												"arrow": {
 													"ws": {
-														"first": {
-															"start": 993,
-															"end": 994
-														},
+														"first": " ",
 														"rest": []
 													},
-													"token": {
-														"start": 994,
-														"end": 996
-													}
+													"token": "=>"
 												},
 												"transcriber": {
 													"Parens": {
 														"prefix": {
 															"ws": {
-																"first": {
-																	"start": 996,
-																	"end": 997
-																},
+																"first": " ",
 																"rest": []
 															},
-															"token": {
-																"start": 997,
-																"end": 998
-															}
+															"token": "("
 														},
 														"value": [],
 														"suffix": {
 															"ws": {
-																"first": {
-																	"start": 998,
-																	"end": 998
-																},
+																"first": "",
 																"rest": []
 															},
-															"token": {
-																"start": 998,
-																"end": 999
-															}
+															"token": ")"
 														}
 													}
 												}
@@ -6313,16 +3985,10 @@
 									},
 									"suffix": {
 										"ws": {
-											"first": {
-												"start": 999,
-												"end": 1000
-											},
+											"first": " ",
 											"rest": []
 										},
-										"token": {
-											"start": 1000,
-											"end": 1001
-										}
+										"token": "}"
 									}
 								}
 							}
@@ -6338,43 +4004,25 @@
 					"Definition": {
 						"macro_rules": {
 							"ws": {
-								"first": {
-									"start": 1001,
-									"end": 1002
-								},
+								"first": "\n",
 								"rest": []
 							},
-							"token": {
-								"start": 1002,
-								"end": 1013
-							}
+							"token": "macro_rules"
 						},
 						"not": {
 							"ws": {
-								"first": {
-									"start": 1013,
-									"end": 1013
-								},
+								"first": "",
 								"rest": []
 							},
-							"token": {
-								"start": 1013,
-								"end": 1014
-							}
+							"token": "!"
 						},
 						"ident": {
 							"NonKw": [
 								{
-									"first": {
-										"start": 1014,
-										"end": 1015
-									},
+									"first": " ",
 									"rest": []
 								},
-								{
-									"start": 1015,
-									"end": 1016
-								}
+								"a"
 							]
 						},
 						"def": {
@@ -6382,16 +4030,10 @@
 								"rules": {
 									"prefix": {
 										"ws": {
-											"first": {
-												"start": 1016,
-												"end": 1017
-											},
+											"first": " ",
 											"rest": []
 										},
-										"token": {
-											"start": 1017,
-											"end": 1018
-										}
+										"token": "{"
 									},
 									"value": {
 										"punctuated": {
@@ -6400,74 +4042,44 @@
 													"Parens": {
 														"prefix": {
 															"ws": {
-																"first": {
-																	"start": 1018,
-																	"end": 1019
-																},
+																"first": " ",
 																"rest": []
 															},
-															"token": {
-																"start": 1019,
-																"end": 1020
-															}
+															"token": "("
 														},
 														"value": [
 															{
 																"DollarIdent": {
 																	"dollar": {
 																		"ws": {
-																			"first": {
-																				"start": 1020,
-																				"end": 1020
-																			},
+																			"first": "",
 																			"rest": []
 																		},
-																		"token": {
-																			"start": 1020,
-																			"end": 1021
-																		}
+																		"token": "$"
 																	},
 																	"ident": {
 																		"IdentOrKw": [
 																			{
-																				"first": {
-																					"start": 1021,
-																					"end": 1021
-																				},
+																				"first": "",
 																				"rest": []
 																			},
-																			{
-																				"start": 1021,
-																				"end": 1022
-																			}
+																			"a"
 																		]
 																	},
 																	"colon": {
 																		"ws": {
-																			"first": {
-																				"start": 1022,
-																				"end": 1022
-																			},
+																			"first": "",
 																			"rest": []
 																		},
-																		"token": {
-																			"start": 1022,
-																			"end": 1023
-																		}
+																		"token": ":"
 																	},
 																	"spec": {
 																		"Tt": {
 																			"ws": {
-																				"first": {
-																					"start": 1023,
-																					"end": 1023
-																				},
+																				"first": "",
 																				"rest": []
 																			},
-																			"token": {
-																				"start": 1023,
-																				"end": 1025
-																			}
+																			"token": "tt"
 																		}
 																	}
 																}
@@ -6475,60 +4087,36 @@
 														],
 														"suffix": {
 															"ws": {
-																"first": {
-																	"start": 1025,
-																	"end": 1025
-																},
+																"first": "",
 																"rest": []
 															},
-															"token": {
-																"start": 1025,
-																"end": 1026
-															}
+															"token": ")"
 														}
 													}
 												},
 												"arrow": {
 													"ws": {
-														"first": {
-															"start": 1026,
-															"end": 1027
-														},
+														"first": " ",
 														"rest": []
 													},
-													"token": {
-														"start": 1027,
-														"end": 1029
-													}
+													"token": "=>"
 												},
 												"transcriber": {
 													"Parens": {
 														"prefix": {
 															"ws": {
-																"first": {
-																	"start": 1029,
-																	"end": 1030
-																},
+																"first": " ",
 																"rest": []
 															},
-															"token": {
-																"start": 1030,
-																"end": 1031
-															}
+															"token": "("
 														},
 														"value": [],
 														"suffix": {
 															"ws": {
-																"first": {
-																	"start": 1031,
-																	"end": 1031
-																},
+																"first": "",
 																"rest": []
 															},
-															"token": {
-																"start": 1031,
-																"end": 1032
-															}
+															"token": ")"
 														}
 													}
 												}
@@ -6539,16 +4127,10 @@
 									},
 									"suffix": {
 										"ws": {
-											"first": {
-												"start": 1032,
-												"end": 1033
-											},
+											"first": " ",
 											"rest": []
 										},
-										"token": {
-											"start": 1033,
-											"end": 1034
-										}
+										"token": "}"
 									}
 								}
 							}
@@ -6564,43 +4146,25 @@
 					"Definition": {
 						"macro_rules": {
 							"ws": {
-								"first": {
-									"start": 1034,
-									"end": 1035
-								},
+								"first": "\n",
 								"rest": []
 							},
-							"token": {
-								"start": 1035,
-								"end": 1046
-							}
+							"token": "macro_rules"
 						},
 						"not": {
 							"ws": {
-								"first": {
-									"start": 1046,
-									"end": 1046
-								},
+								"first": "",
 								"rest": []
 							},
-							"token": {
-								"start": 1046,
-								"end": 1047
-							}
+							"token": "!"
 						},
 						"ident": {
 							"NonKw": [
 								{
-									"first": {
-										"start": 1047,
-										"end": 1048
-									},
+									"first": " ",
 									"rest": []
 								},
-								{
-									"start": 1048,
-									"end": 1049
-								}
+								"a"
 							]
 						},
 						"def": {
@@ -6608,16 +4172,10 @@
 								"rules": {
 									"prefix": {
 										"ws": {
-											"first": {
-												"start": 1049,
-												"end": 1050
-											},
+											"first": " ",
 											"rest": []
 										},
-										"token": {
-											"start": 1050,
-											"end": 1051
-										}
+										"token": "{"
 									},
 									"value": {
 										"punctuated": {
@@ -6626,74 +4184,44 @@
 													"Parens": {
 														"prefix": {
 															"ws": {
-																"first": {
-																	"start": 1051,
-																	"end": 1052
-																},
+																"first": " ",
 																"rest": []
 															},
-															"token": {
-																"start": 1052,
-																"end": 1053
-															}
+															"token": "("
 														},
 														"value": [
 															{
 																"DollarIdent": {
 																	"dollar": {
 																		"ws": {
-																			"first": {
-																				"start": 1053,
-																				"end": 1053
-																			},
+																			"first": "",
 																			"rest": []
 																		},
-																		"token": {
-																			"start": 1053,
-																			"end": 1054
-																		}
+																		"token": "$"
 																	},
 																	"ident": {
 																		"IdentOrKw": [
 																			{
-																				"first": {
-																					"start": 1054,
-																					"end": 1054
-																				},
+																				"first": "",
 																				"rest": []
 																			},
-																			{
-																				"start": 1054,
-																				"end": 1055
-																			}
+																			"a"
 																		]
 																	},
 																	"colon": {
 																		"ws": {
-																			"first": {
-																				"start": 1055,
-																				"end": 1055
-																			},
+																			"first": "",
 																			"rest": []
 																		},
-																		"token": {
-																			"start": 1055,
-																			"end": 1056
-																		}
+																		"token": ":"
 																	},
 																	"spec": {
 																		"Ty": {
 																			"ws": {
-																				"first": {
-																					"start": 1056,
-																					"end": 1056
-																				},
+																				"first": "",
 																				"rest": []
 																			},
-																			"token": {
-																				"start": 1056,
-																				"end": 1058
-																			}
+																			"token": "ty"
 																		}
 																	}
 																}
@@ -6701,60 +4229,36 @@
 														],
 														"suffix": {
 															"ws": {
-																"first": {
-																	"start": 1058,
-																	"end": 1058
-																},
+																"first": "",
 																"rest": []
 															},
-															"token": {
-																"start": 1058,
-																"end": 1059
-															}
+															"token": ")"
 														}
 													}
 												},
 												"arrow": {
 													"ws": {
-														"first": {
-															"start": 1059,
-															"end": 1060
-														},
+														"first": " ",
 														"rest": []
 													},
-													"token": {
-														"start": 1060,
-														"end": 1062
-													}
+													"token": "=>"
 												},
 												"transcriber": {
 													"Parens": {
 														"prefix": {
 															"ws": {
-																"first": {
-																	"start": 1062,
-																	"end": 1063
-																},
+																"first": " ",
 																"rest": []
 															},
-															"token": {
-																"start": 1063,
-																"end": 1064
-															}
+															"token": "("
 														},
 														"value": [],
 														"suffix": {
 															"ws": {
-																"first": {
-																	"start": 1064,
-																	"end": 1064
-																},
+																"first": "",
 																"rest": []
 															},
-															"token": {
-																"start": 1064,
-																"end": 1065
-															}
+															"token": ")"
 														}
 													}
 												}
@@ -6765,16 +4269,10 @@
 									},
 									"suffix": {
 										"ws": {
-											"first": {
-												"start": 1065,
-												"end": 1066
-											},
+											"first": " ",
 											"rest": []
 										},
-										"token": {
-											"start": 1066,
-											"end": 1067
-										}
+										"token": "}"
 									}
 								}
 							}
@@ -6790,43 +4288,25 @@
 					"Definition": {
 						"macro_rules": {
 							"ws": {
-								"first": {
-									"start": 1067,
-									"end": 1068
-								},
+								"first": "\n",
 								"rest": []
 							},
-							"token": {
-								"start": 1068,
-								"end": 1079
-							}
+							"token": "macro_rules"
 						},
 						"not": {
 							"ws": {
-								"first": {
-									"start": 1079,
-									"end": 1079
-								},
+								"first": "",
 								"rest": []
 							},
-							"token": {
-								"start": 1079,
-								"end": 1080
-							}
+							"token": "!"
 						},
 						"ident": {
 							"NonKw": [
 								{
-									"first": {
-										"start": 1080,
-										"end": 1081
-									},
+									"first": " ",
 									"rest": []
 								},
-								{
-									"start": 1081,
-									"end": 1082
-								}
+								"a"
 							]
 						},
 						"def": {
@@ -6834,16 +4314,10 @@
 								"rules": {
 									"prefix": {
 										"ws": {
-											"first": {
-												"start": 1082,
-												"end": 1083
-											},
+											"first": " ",
 											"rest": []
 										},
-										"token": {
-											"start": 1083,
-											"end": 1084
-										}
+										"token": "{"
 									},
 									"value": {
 										"punctuated": {
@@ -6852,74 +4326,44 @@
 													"Parens": {
 														"prefix": {
 															"ws": {
-																"first": {
-																	"start": 1084,
-																	"end": 1085
-																},
+																"first": " ",
 																"rest": []
 															},
-															"token": {
-																"start": 1085,
-																"end": 1086
-															}
+															"token": "("
 														},
 														"value": [
 															{
 																"DollarIdent": {
 																	"dollar": {
 																		"ws": {
-																			"first": {
-																				"start": 1086,
-																				"end": 1086
-																			},
+																			"first": "",
 																			"rest": []
 																		},
-																		"token": {
-																			"start": 1086,
-																			"end": 1087
-																		}
+																		"token": "$"
 																	},
 																	"ident": {
 																		"IdentOrKw": [
 																			{
-																				"first": {
-																					"start": 1087,
-																					"end": 1087
-																				},
+																				"first": "",
 																				"rest": []
 																			},
-																			{
-																				"start": 1087,
-																				"end": 1088
-																			}
+																			"a"
 																		]
 																	},
 																	"colon": {
 																		"ws": {
-																			"first": {
-																				"start": 1088,
-																				"end": 1088
-																			},
+																			"first": "",
 																			"rest": []
 																		},
-																		"token": {
-																			"start": 1088,
-																			"end": 1089
-																		}
+																		"token": ":"
 																	},
 																	"spec": {
 																		"Vis": {
 																			"ws": {
-																				"first": {
-																					"start": 1089,
-																					"end": 1089
-																				},
+																				"first": "",
 																				"rest": []
 																			},
-																			"token": {
-																				"start": 1089,
-																				"end": 1092
-																			}
+																			"token": "vis"
 																		}
 																	}
 																}
@@ -6927,60 +4371,36 @@
 														],
 														"suffix": {
 															"ws": {
-																"first": {
-																	"start": 1092,
-																	"end": 1092
-																},
+																"first": "",
 																"rest": []
 															},
-															"token": {
-																"start": 1092,
-																"end": 1093
-															}
+															"token": ")"
 														}
 													}
 												},
 												"arrow": {
 													"ws": {
-														"first": {
-															"start": 1093,
-															"end": 1094
-														},
+														"first": " ",
 														"rest": []
 													},
-													"token": {
-														"start": 1094,
-														"end": 1096
-													}
+													"token": "=>"
 												},
 												"transcriber": {
 													"Parens": {
 														"prefix": {
 															"ws": {
-																"first": {
-																	"start": 1096,
-																	"end": 1097
-																},
+																"first": " ",
 																"rest": []
 															},
-															"token": {
-																"start": 1097,
-																"end": 1098
-															}
+															"token": "("
 														},
 														"value": [],
 														"suffix": {
 															"ws": {
-																"first": {
-																	"start": 1098,
-																	"end": 1098
-																},
+																"first": "",
 																"rest": []
 															},
-															"token": {
-																"start": 1098,
-																"end": 1099
-															}
+															"token": ")"
 														}
 													}
 												}
@@ -6991,16 +4411,10 @@
 									},
 									"suffix": {
 										"ws": {
-											"first": {
-												"start": 1099,
-												"end": 1100
-											},
+											"first": " ",
 											"rest": []
 										},
-										"token": {
-											"start": 1100,
-											"end": 1101
-										}
+										"token": "}"
 									}
 								}
 							}
@@ -7016,43 +4430,25 @@
 					"Definition": {
 						"macro_rules": {
 							"ws": {
-								"first": {
-									"start": 1101,
-									"end": 1103
-								},
+								"first": "\n\n",
 								"rest": []
 							},
-							"token": {
-								"start": 1103,
-								"end": 1114
-							}
+							"token": "macro_rules"
 						},
 						"not": {
 							"ws": {
-								"first": {
-									"start": 1114,
-									"end": 1114
-								},
+								"first": "",
 								"rest": []
 							},
-							"token": {
-								"start": 1114,
-								"end": 1115
-							}
+							"token": "!"
 						},
 						"ident": {
 							"NonKw": [
 								{
-									"first": {
-										"start": 1115,
-										"end": 1116
-									},
+									"first": " ",
 									"rest": []
 								},
-								{
-									"start": 1116,
-									"end": 1117
-								}
+								"a"
 							]
 						},
 						"def": {
@@ -7060,16 +4456,10 @@
 								"rules": {
 									"prefix": {
 										"ws": {
-											"first": {
-												"start": 1117,
-												"end": 1118
-											},
+											"first": " ",
 											"rest": []
 										},
-										"token": {
-											"start": 1118,
-											"end": 1119
-										}
+										"token": "{"
 									},
 									"value": {
 										"punctuated": {
@@ -7078,104 +4468,62 @@
 													"Parens": {
 														"prefix": {
 															"ws": {
-																"first": {
-																	"start": 1119,
-																	"end": 1120
-																},
+																"first": " ",
 																"rest": []
 															},
-															"token": {
-																"start": 1120,
-																"end": 1121
-															}
+															"token": "("
 														},
 														"value": [
 															{
 																"DollarRep": {
 																	"dollar": {
 																		"ws": {
-																			"first": {
-																				"start": 1121,
-																				"end": 1122
-																			},
+																			"first": " ",
 																			"rest": []
 																		},
-																		"token": {
-																			"start": 1122,
-																			"end": 1123
-																		}
+																		"token": "$"
 																	},
 																	"matches": {
 																		"prefix": {
 																			"ws": {
-																				"first": {
-																					"start": 1123,
-																					"end": 1123
-																				},
+																				"first": "",
 																				"rest": []
 																			},
-																			"token": {
-																				"start": 1123,
-																				"end": 1124
-																			}
+																			"token": "("
 																		},
 																		"value": {
 																			"first": {
 																				"DollarIdent": {
 																					"dollar": {
 																						"ws": {
-																							"first": {
-																								"start": 1124,
-																								"end": 1124
-																							},
+																							"first": "",
 																							"rest": []
 																						},
-																						"token": {
-																							"start": 1124,
-																							"end": 1125
-																						}
+																						"token": "$"
 																					},
 																					"ident": {
 																						"IdentOrKw": [
 																							{
-																								"first": {
-																									"start": 1125,
-																									"end": 1125
-																								},
+																								"first": "",
 																								"rest": []
 																							},
-																							{
-																								"start": 1125,
-																								"end": 1126
-																							}
+																							"a"
 																						]
 																					},
 																					"colon": {
 																						"ws": {
-																							"first": {
-																								"start": 1126,
-																								"end": 1126
-																							},
+																							"first": "",
 																							"rest": []
 																						},
-																						"token": {
-																							"start": 1126,
-																							"end": 1127
-																						}
+																						"token": ":"
 																					},
 																					"spec": {
 																						"Expr": {
 																							"ws": {
-																								"first": {
-																									"start": 1127,
-																									"end": 1127
-																								},
+																								"first": "",
 																								"rest": []
 																							},
-																							"token": {
-																								"start": 1127,
-																								"end": 1131
-																							}
+																							"token": "expr"
 																						}
 																					}
 																				}
@@ -7186,16 +4534,10 @@
 																						"Punctuation": {
 																							"FatArrow": {
 																								"ws": {
-																									"first": {
-																										"start": 1131,
-																										"end": 1132
-																									},
+																									"first": " ",
 																									"rest": []
 																								},
-																								"token": {
-																									"start": 1132,
-																									"end": 1134
-																								}
+																								"token": "=>"
 																							}
 																						}
 																					}
@@ -7204,58 +4546,34 @@
 																					"DollarIdent": {
 																						"dollar": {
 																							"ws": {
-																								"first": {
-																									"start": 1134,
-																									"end": 1135
-																								},
+																								"first": " ",
 																								"rest": []
 																							},
-																							"token": {
-																								"start": 1135,
-																								"end": 1136
-																							}
+																							"token": "$"
 																						},
 																						"ident": {
 																							"IdentOrKw": [
 																								{
-																									"first": {
-																										"start": 1136,
-																										"end": 1136
-																									},
+																									"first": "",
 																									"rest": []
 																								},
-																								{
-																									"start": 1136,
-																									"end": 1137
-																								}
+																								"b"
 																							]
 																						},
 																						"colon": {
 																							"ws": {
-																								"first": {
-																									"start": 1137,
-																									"end": 1137
-																								},
+																								"first": "",
 																								"rest": []
 																							},
-																							"token": {
-																								"start": 1137,
-																								"end": 1138
-																							}
+																							"token": ":"
 																						},
 																						"spec": {
 																							"Expr": {
 																								"ws": {
-																									"first": {
-																										"start": 1138,
-																										"end": 1138
-																									},
+																									"first": "",
 																									"rest": []
 																								},
-																								"token": {
-																									"start": 1138,
-																									"end": 1142
-																								}
+																								"token": "expr"
 																							}
 																						}
 																					}
@@ -7264,48 +4582,30 @@
 																		},
 																		"suffix": {
 																			"ws": {
-																				"first": {
-																					"start": 1142,
-																					"end": 1142
-																				},
+																				"first": "",
 																				"rest": []
 																			},
-																			"token": {
-																				"start": 1142,
-																				"end": 1143
-																			}
+																			"token": ")"
 																		}
 																	},
 																	"rep_sep": {
 																		"Punctuation": {
 																			"Comma": {
 																				"ws": {
-																					"first": {
-																						"start": 1143,
-																						"end": 1143
-																					},
+																					"first": "",
 																					"rest": []
 																				},
-																				"token": {
-																					"start": 1143,
-																					"end": 1144
-																				}
+																				"token": ","
 																			}
 																		}
 																	},
 																	"rep_op": {
 																		"Star": {
 																			"ws": {
-																				"first": {
-																					"start": 1144,
-																					"end": 1144
-																				},
+																				"first": "",
 																				"rest": []
 																			},
-																			"token": {
-																				"start": 1144,
-																				"end": 1145
-																			}
+																			"token": "*"
 																		}
 																	}
 																}
@@ -7314,30 +4614,18 @@
 																"DollarRep": {
 																	"dollar": {
 																		"ws": {
-																			"first": {
-																				"start": 1145,
-																				"end": 1146
-																			},
+																			"first": " ",
 																			"rest": []
 																		},
-																		"token": {
-																			"start": 1146,
-																			"end": 1147
-																		}
+																		"token": "$"
 																	},
 																	"matches": {
 																		"prefix": {
 																			"ws": {
-																				"first": {
-																					"start": 1147,
-																					"end": 1147
-																				},
+																				"first": "",
 																				"rest": []
 																			},
-																			"token": {
-																				"start": 1147,
-																				"end": 1148
-																			}
+																			"token": "("
 																		},
 																		"value": {
 																			"first": {
@@ -7345,16 +4633,10 @@
 																					"Punctuation": {
 																						"Comma": {
 																							"ws": {
-																								"first": {
-																									"start": 1148,
-																									"end": 1148
-																								},
+																								"first": "",
 																								"rest": []
 																							},
-																							"token": {
-																								"start": 1148,
-																								"end": 1149
-																							}
+																							"token": ","
 																						}
 																					}
 																				}
@@ -7363,32 +4645,20 @@
 																		},
 																		"suffix": {
 																			"ws": {
-																				"first": {
-																					"start": 1149,
-																					"end": 1149
-																				},
+																				"first": "",
 																				"rest": []
 																			},
-																			"token": {
-																				"start": 1149,
-																				"end": 1150
-																			}
+																			"token": ")"
 																		}
 																	},
 																	"rep_sep": null,
 																	"rep_op": {
 																		"Question": {
 																			"ws": {
-																				"first": {
-																					"start": 1150,
-																					"end": 1150
-																				},
+																				"first": "",
 																				"rest": []
 																			},
-																			"token": {
-																				"start": 1150,
-																				"end": 1151
-																			}
+																			"token": "?"
 																		}
 																	}
 																}
@@ -7396,60 +4666,36 @@
 														],
 														"suffix": {
 															"ws": {
-																"first": {
-																	"start": 1151,
-																	"end": 1152
-																},
+																"first": " ",
 																"rest": []
 															},
-															"token": {
-																"start": 1152,
-																"end": 1153
-															}
+															"token": ")"
 														}
 													}
 												},
 												"arrow": {
 													"ws": {
-														"first": {
-															"start": 1153,
-															"end": 1154
-														},
+														"first": " ",
 														"rest": []
 													},
-													"token": {
-														"start": 1154,
-														"end": 1156
-													}
+													"token": "=>"
 												},
 												"transcriber": {
 													"Parens": {
 														"prefix": {
 															"ws": {
-																"first": {
-																	"start": 1156,
-																	"end": 1157
-																},
+																"first": " ",
 																"rest": []
 															},
-															"token": {
-																"start": 1157,
-																"end": 1158
-															}
+															"token": "("
 														},
 														"value": [],
 														"suffix": {
 															"ws": {
-																"first": {
-																	"start": 1158,
-																	"end": 1158
-																},
+																"first": "",
 																"rest": []
 															},
-															"token": {
-																"start": 1158,
-																"end": 1159
-															}
+															"token": ")"
 														}
 													}
 												}
@@ -7460,16 +4706,10 @@
 									},
 									"suffix": {
 										"ws": {
-											"first": {
-												"start": 1159,
-												"end": 1160
-											},
+											"first": " ",
 											"rest": []
 										},
-										"token": {
-											"start": 1160,
-											"end": 1161
-										}
+										"token": "}"
 									}
 								}
 							}
@@ -7480,10 +4720,7 @@
 		}
 	],
 	"suffix_ws": {
-		"first": {
-			"start": 1161,
-			"end": 1161
-		},
+		"first": "",
 		"rest": []
 	}
 }

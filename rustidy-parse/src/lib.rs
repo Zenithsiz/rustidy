@@ -45,10 +45,10 @@ pub use {
 // Imports
 use {
 	app_error::AppError,
-	arcstr::{ArcStr, Substr},
+	arcstr::ArcStr,
 	core::{marker::PhantomData, ops::{Residual, Try}},
 	rustidy_util::{ArenaData, ArenaIdx, AstPos, AstRange, AstStr},
-	std::{borrow::Cow, fmt},
+	std::fmt,
 };
 #[cfg(feature = "flamegraph-traces")]
 use {
@@ -273,10 +273,6 @@ pub struct Parser {
 impl Parser {
 	/// Creates a new parser
 	#[must_use]
-	#[cfg_attr(
-		not(feature = "flamegraph-traces"),
-		expect(clippy::missing_const_for_fn, reason = "It can't be const with some features")
-	)]
 	pub fn new(input: impl Into<ArcStr>) -> Self {
 		Self {
 			input: input.into(),
@@ -355,7 +351,7 @@ impl Parser {
 
 	/// Returns the current line of the parser, not including the end
 	#[must_use]
-	pub fn cur_line(&self) -> Substr {
+	pub fn cur_line(&self) -> &str {
 		let start = self
 			.input[..self
 			.cur_pos.0]
@@ -367,7 +363,7 @@ impl Parser {
 			.find('\n')
 			.unwrap_or(self.input.len() - self.cur_pos.0);
 
-		self.input.substr(start..end)
+		&self.input[start..end]
 	}
 
 	/// Gets the position (0-indexed) of the parser at a position
@@ -390,12 +386,6 @@ impl Parser {
 	#[must_use]
 	pub fn cur_loc(&self) -> ParserLoc {
 		self.loc(self.cur_pos)
-	}
-
-	/// Returns the string of an range
-	#[must_use]
-	pub fn str<'a>(&'a mut self, s: &'a AstStr) -> Cow<'a, str> {
-		s.str(&self.input)
 	}
 
 	/// Returns if the parser is finished
@@ -443,16 +433,13 @@ impl Parser {
 			.expect("Result was not a substring of the input");
 		assert_eq!(self.cur_pos.0 + remaining_range.end, self.input.len(), "Updated string truncated input");
 
-		let output_range = AstRange {
-			start: self.cur_pos,
-			end: AstPos(self.cur_pos.0 + remaining_range.start),
-		};
+		let output_range = self.cur_pos.0..self.cur_pos.0 + remaining_range.start;
 		self.cur_pos.0 += remaining_range.start;
 
 		// After updating the remaining, quit if an error occurred
 		let value = res?;
 
-		<_>::from_output((AstStr::from_input(output_range), value))
+		<_>::from_output((AstStr::from_input(self.input.substr(output_range)), value))
 	}
 
 	/// Parses `T` from this parser

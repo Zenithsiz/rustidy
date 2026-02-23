@@ -27,26 +27,26 @@ pub struct SimplePath {
 impl SimplePath {
 	/// Returns this path as a string
 	#[must_use]
-	pub fn as_str<'a>(&'a self, input: &'a str) -> Cow<'a, str> {
+	pub fn as_str(&self) -> Cow<'_, str> {
 		// Optimize single segment paths with no prefix first
 		if self.prefix.is_none() && self.segments.rest.is_empty() {
-			return self.segments.first.as_str(input);
+			return self.segments.first.as_str();
 		}
 
 		// TODO: Optimize this by returning a borrowed string more often
-		self.print_to_string(input).into()
+		self.print_to_string().into()
 	}
 
 	/// Returns if the first segment of this path is `segment`
 	#[must_use]
-	pub fn starts_with(&self, input: &str, segment: &str) -> bool {
+	pub fn starts_with(&self, segment: &str) -> bool {
 		// TODO: Should we care about the prefix here?
-		self.segments.first.is_str(input, segment)
+		self.segments.first.is_str(segment)
 	}
 
 	/// Returns if this path is the same as `path`.
 	#[must_use]
-	pub fn is_str(&self, input: &str, path: &str) -> bool {
+	pub fn is_str(&self, path: &str) -> bool {
 		// Check for prefix
 		let (path, has_prefix) = match path.strip_prefix("::") {
 			Some(path) => (path, true),
@@ -63,7 +63,7 @@ impl SimplePath {
 			match (lhs_segments.next(), rhs_segments.next()) {
 				(None, None) => break,
 				(None, Some(_)) | (Some(_), None) => return false,
-				(Some(lhs), Some(rhs)) => if !lhs.is_str(input, rhs) {
+				(Some(lhs), Some(rhs)) => if !lhs.is_str(rhs) {
 					return false;
 				},
 			}
@@ -89,25 +89,25 @@ pub enum SimplePathSegment {
 impl SimplePathSegment {
 	/// Returns this path as a string
 	#[must_use]
-	pub fn as_str<'a>(&'a self, input: &'a str) -> Cow<'a, str> {
+	pub fn as_str(&self) -> Cow<'_, str> {
 		match self {
 			Self::Super(_) => "super".into(),
 			Self::SelfLower(_) => "self".into(),
 			Self::Crate(_) => "crate".into(),
 			Self::DollarCrate(_) => "$crate".into(),
-			Self::Ident(ident) => ident.as_str(input),
+			Self::Ident(ident) => ident.as_str(),
 		}
 	}
 
 	/// Returns if this segment is the same as `segment`.
 	#[must_use]
-	pub fn is_str(&self, input: &str, segment: &str) -> bool {
+	pub fn is_str(&self, segment: &str) -> bool {
 		match self {
 			Self::Super(_) => segment == "super",
 			Self::SelfLower(_) => segment == "self",
 			Self::Crate(_) => segment == "crate",
 			Self::DollarCrate(_) => segment == "$crate",
-			Self::Ident(ident) => ident.is_str(input, segment),
+			Self::Ident(ident) => ident.is_str(segment),
 		}
 	}
 }

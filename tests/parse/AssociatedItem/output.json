@@ -12,16 +12,10 @@
 							"Inherent": {
 								"impl_": {
 									"ws": {
-										"first": {
-											"start": 0,
-											"end": 0
-										},
+										"first": "",
 										"rest": []
 									},
-									"token": {
-										"start": 0,
-										"end": 4
-									}
+									"token": "impl"
 								},
 								"generics": null,
 								"ty": {
@@ -41,16 +35,10 @@
 																			"Ident": {
 																				"NonKw": [
 																					{
-																						"first": {
-																							"start": 4,
-																							"end": 5
-																						},
+																						"first": " ",
 																						"rest": []
 																					},
-																					{
-																						"start": 5,
-																						"end": 6
-																					}
+																					"A"
 																				]
 																			}
 																		},
@@ -72,16 +60,10 @@
 								"body": {
 									"prefix": {
 										"ws": {
-											"first": {
-												"start": 6,
-												"end": 7
-											},
+											"first": " ",
 											"rest": []
 										},
-										"token": {
-											"start": 7,
-											"end": 8
-										}
+										"token": "{"
 									},
 									"value": {
 										"attrs": [],
@@ -98,16 +80,10 @@
 																		"Ident": {
 																			"NonKw": [
 																				{
-																					"first": {
-																						"start": 8,
-																						"end": 10
-																					},
+																					"first": "\n\t",
 																					"rest": []
 																				},
-																				{
-																					"start": 10,
-																					"end": 11
-																				}
+																				"a"
 																			]
 																		}
 																	},
@@ -116,44 +92,26 @@
 															},
 															"not": {
 																"ws": {
-																	"first": {
-																		"start": 11,
-																		"end": 11
-																	},
+																	"first": "",
 																	"rest": []
 																},
-																"token": {
-																	"start": 11,
-																	"end": 12
-																}
+																"token": "!"
 															},
 															"tokens": {
 																"prefix": {
 																	"ws": {
-																		"first": {
-																			"start": 12,
-																			"end": 13
-																		},
+																		"first": " ",
 																		"rest": []
 																	},
-																	"token": {
-																		"start": 13,
-																		"end": 14
-																	}
+																	"token": "{"
 																},
 																"value": [],
 																"suffix": {
 																	"ws": {
-																		"first": {
-																			"start": 14,
-																			"end": 14
-																		},
+																		"first": "",
 																		"rest": []
 																	},
-																	"token": {
-																		"start": 14,
-																		"end": 15
-																	}
+																	"token": "}"
 																}
 															}
 														}
@@ -169,30 +127,18 @@
 															"TypeAlias": {
 																"type_": {
 																	"ws": {
-																		"first": {
-																			"start": 15,
-																			"end": 17
-																		},
+																		"first": "\n\t",
 																		"rest": []
 																	},
-																	"token": {
-																		"start": 17,
-																		"end": 21
-																	}
+																	"token": "type"
 																},
 																"ident": {
 																	"NonKw": [
 																		{
-																			"first": {
-																				"start": 21,
-																				"end": 22
-																			},
+																			"first": " ",
 																			"rest": []
 																		},
-																		{
-																			"start": 22,
-																			"end": 23
-																		}
+																		"A"
 																	]
 																},
 																"generics": null,
@@ -201,16 +147,10 @@
 																"eq": null,
 																"semi": {
 																	"ws": {
-																		"first": {
-																			"start": 23,
-																			"end": 23
-																		},
+																		"first": "",
 																		"rest": []
 																	},
-																	"token": {
-																		"start": 23,
-																		"end": 24
-																	}
+																	"token": ";"
 																}
 															}
 														}
@@ -226,46 +166,28 @@
 															"Constant": {
 																"const_": {
 																	"ws": {
-																		"first": {
-																			"start": 24,
-																			"end": 26
-																		},
+																		"first": "\n\t",
 																		"rest": []
 																	},
-																	"token": {
-																		"start": 26,
-																		"end": 31
-																	}
+																	"token": "const"
 																},
 																"name": {
 																	"Ident": {
 																		"NonKw": [
 																			{
-																				"first": {
-																					"start": 31,
-																					"end": 32
-																				},
+																				"first": " ",
 																				"rest": []
 																			},
-																			{
-																				"start": 32,
-																				"end": 33
-																			}
+																			"A"
 																		]
 																	}
 																},
 																"colon": {
 																	"ws": {
-																		"first": {
-																			"start": 33,
-																			"end": 33
-																		},
+																		"first": "",
 																		"rest": []
 																	},
-																	"token": {
-																		"start": 33,
-																		"end": 34
-																	}
+																	"token": ":"
 																},
 																"ty": {
 																	"TraitObject": {
@@ -284,16 +206,10 @@
 																											"Ident": {
 																												"NonKw": [
 																													{
-																														"first": {
-																															"start": 34,
-																															"end": 35
-																														},
+																														"first": " ",
 																														"rest": []
 																													},
-																													{
-																														"start": 35,
-																														"end": 38
-																													}
+																													"u32"
 																												]
 																											}
 																										},
@@ -314,16 +230,10 @@
 																"value": null,
 																"semi": {
 																	"ws": {
-																		"first": {
-																			"start": 38,
-																			"end": 38
-																		},
+																		"first": "",
 																		"rest": []
 																	},
-																	"token": {
-																		"start": 38,
-																		"end": 39
-																	}
+																	"token": ";"
 																}
 															}
 														}
@@ -345,60 +255,36 @@
 																},
 																"fn_": {
 																	"ws": {
-																		"first": {
-																			"start": 39,
-																			"end": 41
-																		},
+																		"first": "\n\t",
 																		"rest": []
 																	},
-																	"token": {
-																		"start": 41,
-																		"end": 43
-																	}
+																	"token": "fn"
 																},
 																"ident": {
 																	"NonKw": [
 																		{
-																			"first": {
-																				"start": 43,
-																				"end": 44
-																			},
+																			"first": " ",
 																			"rest": []
 																		},
-																		{
-																			"start": 44,
-																			"end": 45
-																		}
+																		"a"
 																	]
 																},
 																"generics": null,
 																"params": {
 																	"prefix": {
 																		"ws": {
-																			"first": {
-																				"start": 45,
-																				"end": 45
-																			},
+																			"first": "",
 																			"rest": []
 																		},
-																		"token": {
-																			"start": 45,
-																			"end": 46
-																		}
+																		"token": "("
 																	},
 																	"value": null,
 																	"suffix": {
 																		"ws": {
-																			"first": {
-																				"start": 46,
-																				"end": 46
-																			},
+																			"first": "",
 																			"rest": []
 																		},
-																		"token": {
-																			"start": 46,
-																			"end": 47
-																		}
+																		"token": ")"
 																	}
 																},
 																"ret": null,
@@ -406,16 +292,10 @@
 																"body": {
 																	"Semi": {
 																		"ws": {
-																			"first": {
-																				"start": 47,
-																				"end": 47
-																			},
+																			"first": "",
 																			"rest": []
 																		},
-																		"token": {
-																			"start": 47,
-																			"end": 48
-																		}
+																		"token": ";"
 																	}
 																}
 															}
@@ -430,16 +310,10 @@
 														"vis": {
 															"pub_": {
 																"ws": {
-																	"first": {
-																		"start": 48,
-																		"end": 51
-																	},
+																	"first": "\n\n\t",
 																	"rest": []
 																},
-																"token": {
-																	"start": 51,
-																	"end": 54
-																}
+																"token": "pub"
 															},
 															"path": null
 														},
@@ -447,30 +321,18 @@
 															"TypeAlias": {
 																"type_": {
 																	"ws": {
-																		"first": {
-																			"start": 54,
-																			"end": 55
-																		},
+																		"first": " ",
 																		"rest": []
 																	},
-																	"token": {
-																		"start": 55,
-																		"end": 59
-																	}
+																	"token": "type"
 																},
 																"ident": {
 																	"NonKw": [
 																		{
-																			"first": {
-																				"start": 59,
-																				"end": 60
-																			},
+																			"first": " ",
 																			"rest": []
 																		},
-																		{
-																			"start": 60,
-																			"end": 61
-																		}
+																		"A"
 																	]
 																},
 																"generics": null,
@@ -479,16 +341,10 @@
 																"eq": null,
 																"semi": {
 																	"ws": {
-																		"first": {
-																			"start": 61,
-																			"end": 61
-																		},
+																		"first": "",
 																		"rest": []
 																	},
-																	"token": {
-																		"start": 61,
-																		"end": 62
-																	}
+																	"token": ";"
 																}
 															}
 														}
@@ -502,16 +358,10 @@
 														"vis": {
 															"pub_": {
 																"ws": {
-																	"first": {
-																		"start": 62,
-																		"end": 64
-																	},
+																	"first": "\n\t",
 																	"rest": []
 																},
-																"token": {
-																	"start": 64,
-																	"end": 67
-																}
+																"token": "pub"
 															},
 															"path": null
 														},
@@ -519,46 +369,28 @@
 															"Constant": {
 																"const_": {
 																	"ws": {
-																		"first": {
-																			"start": 67,
-																			"end": 68
-																		},
+																		"first": " ",
 																		"rest": []
 																	},
-																	"token": {
-																		"start": 68,
-																		"end": 73
-																	}
+																	"token": "const"
 																},
 																"name": {
 																	"Ident": {
 																		"NonKw": [
 																			{
-																				"first": {
-																					"start": 73,
-																					"end": 74
-																				},
+																				"first": " ",
 																				"rest": []
 																			},
-																			{
-																				"start": 74,
-																				"end": 75
-																			}
+																			"A"
 																		]
 																	}
 																},
 																"colon": {
 																	"ws": {
-																		"first": {
-																			"start": 75,
-																			"end": 75
-																		},
+																		"first": "",
 																		"rest": []
 																	},
-																	"token": {
-																		"start": 75,
-																		"end": 76
-																	}
+																	"token": ":"
 																},
 																"ty": {
 																	"TraitObject": {
@@ -577,16 +409,10 @@
 																											"Ident": {
 																												"NonKw": [
 																													{
-																														"first": {
-																															"start": 76,
-																															"end": 77
-																														},
+																														"first": " ",
 																														"rest": []
 																													},
-																													{
-																														"start": 77,
-																														"end": 80
-																													}
+																													"u32"
 																												]
 																											}
 																										},
@@ -607,16 +433,10 @@
 																"value": null,
 																"semi": {
 																	"ws": {
-																		"first": {
-																			"start": 80,
-																			"end": 80
-																		},
+																		"first": "",
 																		"rest": []
 																	},
-																	"token": {
-																		"start": 80,
-																		"end": 81
-																	}
+																	"token": ";"
 																}
 															}
 														}
@@ -630,16 +450,10 @@
 														"vis": {
 															"pub_": {
 																"ws": {
-																	"first": {
-																		"start": 81,
-																		"end": 83
-																	},
+																	"first": "\n\t",
 																	"rest": []
 																},
-																"token": {
-																	"start": 83,
-																	"end": 86
-																}
+																"token": "pub"
 															},
 															"path": null
 														},
@@ -653,60 +467,36 @@
 																},
 																"fn_": {
 																	"ws": {
-																		"first": {
-																			"start": 86,
-																			"end": 87
-																		},
+																		"first": " ",
 																		"rest": []
 																	},
-																	"token": {
-																		"start": 87,
-																		"end": 89
-																	}
+																	"token": "fn"
 																},
 																"ident": {
 																	"NonKw": [
 																		{
-																			"first": {
-																				"start": 89,
-																				"end": 90
-																			},
+																			"first": " ",
 																			"rest": []
 																		},
-																		{
-																			"start": 90,
-																			"end": 91
-																		}
+																		"a"
 																	]
 																},
 																"generics": null,
 																"params": {
 																	"prefix": {
 																		"ws": {
-																			"first": {
-																				"start": 91,
-																				"end": 91
-																			},
+																			"first": "",
 																			"rest": []
 																		},
-																		"token": {
-																			"start": 91,
-																			"end": 92
-																		}
+																		"token": "("
 																	},
 																	"value": null,
 																	"suffix": {
 																		"ws": {
-																			"first": {
-																				"start": 92,
-																				"end": 92
-																			},
+																			"first": "",
 																			"rest": []
 																		},
-																		"token": {
-																			"start": 92,
-																			"end": 93
-																		}
+																		"token": ")"
 																	}
 																},
 																"ret": null,
@@ -714,16 +504,10 @@
 																"body": {
 																	"Semi": {
 																		"ws": {
-																			"first": {
-																				"start": 93,
-																				"end": 93
-																			},
+																			"first": "",
 																			"rest": []
 																		},
-																		"token": {
-																			"start": 93,
-																			"end": 94
-																		}
+																		"token": ";"
 																	}
 																}
 															}
@@ -735,16 +519,10 @@
 									},
 									"suffix": {
 										"ws": {
-											"first": {
-												"start": 94,
-												"end": 95
-											},
+											"first": "\n",
 											"rest": []
 										},
-										"token": {
-											"start": 95,
-											"end": 96
-										}
+										"token": "}"
 									}
 								}
 							}
@@ -755,10 +533,7 @@
 		}
 	],
 	"suffix_ws": {
-		"first": {
-			"start": 96,
-			"end": 96
-		},
+		"first": "",
 		"rest": []
 	}
 }
