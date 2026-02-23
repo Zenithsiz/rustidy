@@ -2,7 +2,6 @@
 
 // Imports
 use {
-	super::function::{GenericParams, WhereClause},
 	crate::{
 		attr::{WithOuterAttributes, with},
 		expr::Expression,
@@ -11,6 +10,7 @@ use {
 		util::{Braced, Parenthesized},
 		vis::Visibility,
 	},
+	super::function::{GenericParams, WhereClause},
 	rustidy_ast_util::{Identifier, PunctuatedTrailing, delimited, punct},
 	rustidy_format::{Format, FormatOutput, Formattable, WhitespaceConfig, WhitespaceFormat},
 	rustidy_parse::Parse,

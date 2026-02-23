@@ -2,8 +2,8 @@
 
 // Imports
 use {
-	super::Type,
 	crate::{expr::Expression, token, util::Bracketed},
+	super::Type,
 	rustidy_ast_util::delimited,
 	rustidy_format::{Format, Formattable, WhitespaceFormat},
 	rustidy_parse::Parse,

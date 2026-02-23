@@ -1,8 +1,8 @@
 //! Tuple indexing expression
 
 use {
-	super::{ExpressionWithoutBlockInner, TupleIndex},
 	crate::{expr::{Expression, ExpressionInner}, token},
+	super::{ExpressionWithoutBlockInner, TupleIndex},
 	rustidy_format::{Format, Formattable, WhitespaceFormat},
 	rustidy_parse::ParseRecursive,
 	rustidy_print::Print,

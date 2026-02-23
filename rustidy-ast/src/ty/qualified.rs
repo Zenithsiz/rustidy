@@ -2,8 +2,8 @@
 
 // Imports
 use {
-	super::path::TypePathSegment,
 	crate::{expr::without_block::path::QualifiedPathType, token},
+	super::path::TypePathSegment,
 	rustidy_ast_util::{AtLeast1, at_least},
 	rustidy_format::{Format, Formattable, WhitespaceFormat},
 	rustidy_parse::Parse,

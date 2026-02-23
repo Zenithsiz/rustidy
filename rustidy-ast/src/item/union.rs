@@ -2,8 +2,8 @@
 
 // Imports
 use {
-	super::{function::{GenericParams, WhereClause}, struct_::StructFields},
 	crate::{token, util::Braced},
+	super::{function::{GenericParams, WhereClause}, struct_::StructFields},
 	rustidy_ast_util::{Identifier, delimited},
 	rustidy_format::{Format, Formattable, WhitespaceFormat},
 	rustidy_parse::Parse,

@@ -2,8 +2,8 @@
 
 // Imports
 use {
-	super::{Suffix, escape::{ByteEscapeError, StringContinueError}},
 	crate::{ByteEscape, StringContinue},
+	super::{Suffix, escape::{ByteEscapeError, StringContinueError}},
 	rustidy_format::{Format, Formattable},
 	rustidy_parse::Parse,
 	rustidy_print::Print,

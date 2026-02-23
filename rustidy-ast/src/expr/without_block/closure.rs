@@ -2,7 +2,6 @@
 
 // Imports
 use {
-	super::ExpressionWithoutBlockInner,
 	crate::{
 		attr::WithOuterAttributes,
 		expr::{Expression, ExpressionInner},
@@ -11,6 +10,7 @@ use {
 		token,
 		ty::{Type, TypeNoBounds},
 	},
+	super::ExpressionWithoutBlockInner,
 	rustidy_ast_util::{Delimited, PunctuatedTrailing, delimited, punct},
 	rustidy_format::{Format, Formattable, WhitespaceFormat},
 	rustidy_parse::{Parse, ParseRecursive},

@@ -2,13 +2,13 @@
 
 // Imports
 use {
-	super::Conditions,
 	crate::{
 		attr::{BracedWithInnerAttributes, WithOuterAttributes},
 		expr::{Expression, ExpressionInner, ExpressionWithBlock, ExpressionWithoutBlock},
 		pat::Pattern,
 		token,
 	},
+	super::Conditions,
 	core::ops::ControlFlow,
 	rustidy_format::{Format, Formattable, WhitespaceFormat},
 	rustidy_parse::{FromRecursiveRoot, Parse, ParseError, Parser, ParserError, ParserTag},

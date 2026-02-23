@@ -2,13 +2,13 @@
 
 // Imports
 use {
-	super::{Type, TypeNoBounds},
 	crate::{
 		attr::WithOuterAttributes,
 		item::function::{ExternAbi, ForLifetimes},
 		token,
 		util::Parenthesized,
 	},
+	super::{Type, TypeNoBounds},
 	rustidy_ast_util::{Identifier, Punctuated, PunctuatedTrailing, delimited, punct},
 	rustidy_format::{Format, Formattable, WhitespaceFormat},
 	rustidy_parse::Parse,

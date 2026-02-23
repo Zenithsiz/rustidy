@@ -2,8 +2,8 @@
 
 // Imports
 use {
-	super::function::{GenericParams, TypeParamBounds, WhereClause},
 	crate::{token, ty::Type},
+	super::function::{GenericParams, TypeParamBounds, WhereClause},
 	rustidy_ast_util::Identifier,
 	rustidy_format::{Format, Formattable, WhitespaceFormat},
 	rustidy_parse::Parse,

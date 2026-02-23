@@ -2,8 +2,8 @@
 
 // Imports
 use {
-	super::Items,
 	crate::{attr::BracedWithInnerAttributes, token},
+	super::Items,
 	rustidy_ast_util::Identifier,
 	rustidy_format::{Format, Formattable, WhitespaceFormat},
 	rustidy_parse::Parse,

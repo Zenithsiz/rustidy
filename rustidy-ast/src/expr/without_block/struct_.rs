@@ -2,8 +2,8 @@
 
 // Imports
 use {
-	super::{TupleIndex, path::PathInExpression},
 	crate::{attr::WithOuterAttributes, expr::Expression, token, util::Braced},
+	super::{TupleIndex, path::PathInExpression},
 	rustidy_ast_util::{Identifier, Punctuated, delimited, punct},
 	rustidy_format::{Format, Formattable, WhitespaceConfig, WhitespaceFormat},
 	rustidy_parse::{Parse, ParserTag},

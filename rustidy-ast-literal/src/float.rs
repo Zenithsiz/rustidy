@@ -2,8 +2,8 @@
 
 // Imports
 use {
-	super::{Suffix, int::DecLiteral},
 	crate::SuffixNoE,
+	super::{Suffix, int::DecLiteral},
 	rustidy_format::{Format, Formattable, WhitespaceFormat},
 	rustidy_macros::ParseError,
 	rustidy_parse::{Parse, Parser, ParserError, ParserTag},

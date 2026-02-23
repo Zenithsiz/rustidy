@@ -2,8 +2,8 @@
 
 // Imports
 use {
-	super::{function::{GenericParams, WhereClause}, trait_::AssociatedItem},
 	crate::{attr::BracedWithInnerAttributes, token, ty::{Type, TypePath}},
+	super::{function::{GenericParams, WhereClause}, trait_::AssociatedItem},
 	rustidy_format::{Format, Formattable, WhitespaceFormat},
 	rustidy_parse::Parse,
 	rustidy_print::Print,

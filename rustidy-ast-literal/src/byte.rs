@@ -2,8 +2,8 @@
 
 // Imports
 use {
-	super::escape::ByteEscapeError,
 	crate::ByteEscape,
+	super::escape::ByteEscapeError,
 	rustidy_format::{Format, Formattable},
 	rustidy_parse::Parse,
 	rustidy_print::Print,

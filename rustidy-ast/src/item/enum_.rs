@@ -2,16 +2,16 @@
 
 // Imports
 use {
-	super::{
-		function::{GenericParams, WhereClause},
-		struct_::{StructFields, TupleFields, TupleStruct},
-	},
 	crate::{
 		attr::WithOuterAttributes,
 		expr::Expression,
 		token,
 		util::{Braced, Parenthesized},
 		vis::Visibility,
+	},
+	super::{
+		function::{GenericParams, WhereClause},
+		struct_::{StructFields, TupleFields, TupleStruct},
 	},
 	rustidy_ast_util::{Identifier, PunctuatedTrailing, delimited, punct},
 	rustidy_format::{Format, Formattable, WhitespaceFormat},

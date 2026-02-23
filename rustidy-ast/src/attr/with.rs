@@ -2,8 +2,8 @@
 
 // Imports
 use {
-	super::{InnerAttrOrDocComment, OuterAttrOrDocComment},
 	crate::{attr::{InnerDocComment, OuterDocComment}, util::Braced},
+	super::{InnerAttrOrDocComment, OuterAttrOrDocComment},
 	rustidy_ast_util::delimited,
 	rustidy_format::{
 		Format,

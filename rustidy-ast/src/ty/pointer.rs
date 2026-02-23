@@ -2,8 +2,8 @@
 
 // Imports
 use {
-	super::TypeNoBounds,
 	crate::token,
+	super::TypeNoBounds,
 	rustidy_format::{Format, Formattable, WhitespaceFormat},
 	rustidy_parse::Parse,
 	rustidy_print::Print,

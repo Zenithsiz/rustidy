@@ -2,8 +2,8 @@
 
 // Imports
 use {
-	super::function::ItemSafety,
 	crate::{expr::Expression, token, ty::Type},
+	super::function::ItemSafety,
 	rustidy_ast_util::Identifier,
 	rustidy_format::{Format, Formattable, WhitespaceFormat},
 	rustidy_parse::Parse,

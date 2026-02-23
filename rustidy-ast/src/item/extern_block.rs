@@ -2,12 +2,12 @@
 
 // Imports
 use {
-	super::{Function, MacroInvocationSemi, StaticItem, TypeAlias, function::Abi},
 	crate::{
 		attr::{BracedWithInnerAttributes, WithOuterAttributes},
 		token,
 		vis::Visibility,
 	},
+	super::{Function, MacroInvocationSemi, StaticItem, TypeAlias, function::Abi},
 	rustidy_format::{Format, Formattable, WhitespaceFormat},
 	rustidy_parse::Parse,
 	rustidy_print::Print,

@@ -9,13 +9,13 @@ pub use self::with::{BracedWithInnerAttributes, WithOuterAttributes};
 
 // Imports
 use {
-	self::meta::MetaItem,
 	super::{
 		expr::Expression,
 		path::SimplePath,
 		token,
 		util::{Braced, Bracketed, Parenthesized},
 	},
+	self::meta::MetaItem,
 	app_error::{AppError, Context, bail},
 	core::fmt::Debug,
 	rustidy_ast_util::{Longest, RemainingBlockComment, RemainingLine, delimited},

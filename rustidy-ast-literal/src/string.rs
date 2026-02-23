@@ -2,8 +2,8 @@
 
 // Imports
 use {
-	super::Suffix,
 	crate::{AsciiEscape, QuoteEscape, StringContinue, UnicodeEscape},
+	super::Suffix,
 	rustidy_format::{Format, Formattable},
 	rustidy_parse::Parse,
 	rustidy_print::Print,

@@ -1,8 +1,8 @@
 //! Field expression
 
 use {
-	super::ExpressionWithoutBlockInner,
 	crate::{expr::{Expression, ExpressionInner}, token},
+	super::ExpressionWithoutBlockInner,
 	rustidy_ast_util::Identifier,
 	rustidy_format::{
 		Format,

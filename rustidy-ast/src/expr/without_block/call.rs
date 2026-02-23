@@ -1,8 +1,8 @@
 //! Method call expression
 
 use {
-	super::{ExpressionWithoutBlockInner, path::PathExprSegment},
 	crate::{expr::{Expression, ExpressionInner}, token, util::Parenthesized},
+	super::{ExpressionWithoutBlockInner, path::PathExprSegment},
 	rustidy_ast_util::{PunctuatedTrailing, delimited, punct},
 	rustidy_format::{
 		Format,

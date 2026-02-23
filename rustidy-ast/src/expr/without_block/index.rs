@@ -2,8 +2,8 @@
 
 // Imports
 use {
-	super::ExpressionWithoutBlockInner,
 	crate::{expr::{Expression, ExpressionInner}, util::Bracketed},
+	super::ExpressionWithoutBlockInner,
 	rustidy_ast_util::delimited,
 	rustidy_format::{Format, Formattable, WhitespaceFormat},
 	rustidy_parse::ParseRecursive,

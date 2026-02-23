@@ -1,7 +1,6 @@
 //! Path expression
 
 use {
-	super::LiteralExpression,
 	crate::{
 		expr::with_block::BlockExpression,
 		item::function::TypeParamBounds,
@@ -11,6 +10,7 @@ use {
 		ty::{Type, TypeNoBounds, TypePath, path::TypePathSegment},
 		util::Parenthesized,
 	},
+	super::LiteralExpression,
 	rustidy_ast_util::{
 		AtLeast1,
 		Delimited,

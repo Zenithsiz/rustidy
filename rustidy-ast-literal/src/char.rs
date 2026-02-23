@@ -2,8 +2,8 @@
 
 // Imports
 use {
-	super::escape::{AsciiEscapeError, QuoteEscapeError, UnicodeEscapeError},
 	crate::{AsciiEscape, QuoteEscape, UnicodeEscape},
+	super::escape::{AsciiEscapeError, QuoteEscapeError, UnicodeEscapeError},
 	rustidy_format::{Format, Formattable},
 	rustidy_parse::Parse,
 	rustidy_print::Print,

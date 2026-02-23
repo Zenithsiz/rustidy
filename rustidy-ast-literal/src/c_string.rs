@@ -2,11 +2,11 @@
 
 // Imports
 use {
+	crate::{NonNulByteEscape, NonNulUnicodeEscape, StringContinue},
 	super::{
 		Suffix,
 		escape::{NonNulByteEscapeError, NonNulUnicodeEscapeError, StringContinueError},
 	},
-	crate::{NonNulByteEscape, NonNulUnicodeEscape, StringContinue},
 	rustidy_format::{Format, Formattable},
 	rustidy_parse::Parse,
 	rustidy_print::Print,
