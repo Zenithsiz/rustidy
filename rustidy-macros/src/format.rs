@@ -427,7 +427,7 @@ fn derive_format(value: syn::Expr, prefix_ws: Option<syn::Expr>, after_format: O
 	let format = match before_with.is_empty() {
 		true => format,
 		false => parse_quote! {{
-			#( #before_with )*;
+			#( #before_with; )*
 			#format
 		}},
 	};
