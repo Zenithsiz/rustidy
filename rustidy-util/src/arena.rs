@@ -246,14 +246,17 @@ impl<T: ArenaData> Drop for ArenaIdx<T> {
 	}
 }
 
-impl<T: ArenaData> PartialEq for ArenaIdx<T> {
+impl<T: ArenaData + PartialEq> PartialEq for ArenaIdx<T> {
 	fn eq(&self, other: &Self) -> bool {
-		// TODO: Should we do deep equality if this returns false?
-		self.inner == other.inner
+		if self.inner == other.inner {
+			return true;
+		}
+
+		(**self) == (**other)
 	}
 }
 
-impl<T: ArenaData> Eq for ArenaIdx<T> {}
+impl<T: ArenaData + Eq> Eq for ArenaIdx<T> {}
 
 impl<T: ArenaData> Hash for ArenaIdx<T> {
 	fn hash<H: Hasher>(&self, state: &mut H) {
