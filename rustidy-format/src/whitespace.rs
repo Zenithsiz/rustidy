@@ -21,6 +21,9 @@ pub impl Whitespace {
 	const INDENT_CLOSE_REMOVE_IF_PURE: WhitespaceConfig = WhitespaceConfig {
 		format: Some(WhitespaceFormatKind::Indent { use_prev: true, remove_if_pure: true, }),
 	};
+	const INDENT_REMOVE_IF_PURE: WhitespaceConfig = WhitespaceConfig {
+		format: Some(WhitespaceFormatKind::Indent { use_prev: false, remove_if_pure: true, }),
+	};
 	const REMOVE: WhitespaceConfig = WhitespaceConfig { format: Some(WhitespaceFormatKind::Remove), };
 	const SINGLE: WhitespaceConfig = WhitespaceConfig {
 		format: Some(WhitespaceFormatKind::Spaces { len: 1 }),

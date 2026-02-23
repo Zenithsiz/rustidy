@@ -87,10 +87,14 @@ impl Format<(), ()> for Crate {
 			.format(&mut self.shebang, ())
 			.append_to(&mut output);
 
+		if self.shebang.is_some() {
+			ctx.add_tag(FormatTag::AfterNewline);
+		}
+
 		let mut is_first = true;
 		for attr in &mut self.inner_attrs {
 			let prefix_ws = match is_first {
-				true => Whitespace::REMOVE,
+				true => Whitespace::INDENT_REMOVE_IF_PURE,
 				false => Whitespace::INDENT,
 			};
 			ctx
@@ -104,7 +108,7 @@ impl Format<(), ()> for Crate {
 		}
 
 		let prefix_ws = match is_first {
-			true => Whitespace::REMOVE,
+			true => Whitespace::INDENT_REMOVE_IF_PURE,
 			false => Whitespace::INDENT,
 		};
 		ctx
