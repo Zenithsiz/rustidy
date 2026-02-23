@@ -76,6 +76,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "arcstr"
+version = "1.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "03918c3dbd7701a85c6b9887732e2921175f26c350b4563841d0958c21d57e6d"
+
+[[package]]
 name = "assert-json-diff"
 version = "2.0.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -505,6 +511,7 @@ name = "rustidy-ast"
 version = "0.1.10"
 dependencies = [
  "app-error",
+ "arcstr",
  "derive_more",
  "replace_with",
  "rustidy-ast-literal",
@@ -604,6 +611,7 @@ dependencies = [
 name = "rustidy-format"
 version = "0.1.0"
 dependencies = [
+ "arcstr",
  "extend",
  "itertools",
  "replace_with",
@@ -633,6 +641,7 @@ name = "rustidy-parse"
 version = "0.1.0"
 dependencies = [
  "app-error",
+ "arcstr",
  "derive_more",
  "either",
  "flate2",
@@ -645,6 +654,7 @@ dependencies = [
 name = "rustidy-print"
 version = "0.1.0"
 dependencies = [
+ "arcstr",
  "rustidy-macros",
  "rustidy-util",
 ]

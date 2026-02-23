@@ -10,7 +10,11 @@ mod whitespace;
 pub use rustidy_macros::Print;
 
 // Imports
-use {core::marker::PhantomData, rustidy_util::{ArenaData, ArenaIdx, AstStr}};
+use {
+	arcstr::ArcStr,
+	core::marker::PhantomData,
+	rustidy_util::{ArenaData, ArenaIdx, AstStr},
+};
 
 /// Printable types
 pub trait Print: Sized {
@@ -88,7 +92,7 @@ tuple_impl! { 3, T0, T1, T2 }
 
 impl Print for AstStr {
 	fn print(&self, f: &mut PrintFmt) {
-		self.write(f.input, &mut f.output);
+		self.write(&f.input, &mut f.output);
 	}
 }
 
@@ -99,16 +103,16 @@ impl<T: ArenaData + Print> Print for ArenaIdx<T> {
 }
 
 /// Print formatter
-pub struct PrintFmt<'input> {
-	input:  &'input str,
+pub struct PrintFmt {
+	input:  ArcStr,
 	output: String,
 }
 
-impl<'input> PrintFmt<'input> {
+impl PrintFmt {
 	/// Creates a new formatter
 	#[must_use]
-	pub const fn new(input: &'input str) -> Self {
-		Self { input, output: String::new(), }
+	pub fn new(input: impl Into<ArcStr>) -> Self {
+		Self { input: input.into(), output: String::new(), }
 	}
 
 	/// Returns the output

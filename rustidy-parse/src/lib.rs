@@ -45,6 +45,7 @@ pub use {
 // Imports
 use {
 	app_error::AppError,
+	arcstr::{ArcStr, Substr},
 	core::{marker::PhantomData, ops::{Residual, Try}},
 	rustidy_util::{ArenaData, ArenaIdx, AstPos, AstRange, AstStr},
 	std::{borrow::Cow, fmt},
@@ -245,9 +246,9 @@ impl<T: ArenaData + Parse> Parse for ArenaIdx<T> {
 
 /// Parser
 #[derive(Debug)]
-pub struct Parser<'input> {
+pub struct Parser {
 	/// Input
-	input:           &'input str,
+	input:           ArcStr,
 
 	/// Current position
 	cur_pos:         AstPos,
@@ -269,16 +270,16 @@ pub struct Parser<'input> {
 	trace_file:      BufWriter<GzEncoder<fs::File>>,
 }
 
-impl<'input> Parser<'input> {
+impl Parser {
 	/// Creates a new parser
 	#[must_use]
 	#[cfg_attr(
 		not(feature = "flamegraph-traces"),
 		expect(clippy::missing_const_for_fn, reason = "It can't be const with some features")
 	)]
-	pub fn new(input: &'input str) -> Self {
+	pub fn new(input: impl Into<ArcStr>) -> Self {
 		Self {
-			input,
+			input: input.into(),
 			cur_pos: AstPos::from_usize(0),
 			tags: vec![],
 			tags_offset: 0,
@@ -314,13 +315,13 @@ impl<'input> Parser<'input> {
 
 	/// Returns the whole input of the parser
 	#[must_use]
-	pub const fn input(&self) -> &'input str {
-		self.input
+	pub const fn input(&self) -> &ArcStr {
+		&self.input
 	}
 
 	/// Returns the remaining string for the parser
 	#[must_use]
-	pub fn remaining(&self) -> &'input str {
+	pub fn remaining(&self) -> &str {
 		&self.input[self.cur_pos.0..]
 	}
 
@@ -354,7 +355,7 @@ impl<'input> Parser<'input> {
 
 	/// Returns the current line of the parser, not including the end
 	#[must_use]
-	pub fn cur_line(&self) -> &'input str {
+	pub fn cur_line(&self) -> Substr {
 		let start = self
 			.input[..self
 			.cur_pos.0]
@@ -366,7 +367,7 @@ impl<'input> Parser<'input> {
 			.find('\n')
 			.unwrap_or(self.input.len() - self.cur_pos.0);
 
-		&self.input[start..end]
+		self.input.substr(start..end)
 	}
 
 	/// Gets the position (0-indexed) of the parser at a position
@@ -393,11 +394,8 @@ impl<'input> Parser<'input> {
 
 	/// Returns the string of an range
 	#[must_use]
-	pub fn str<'s>(&mut self, s: &'s AstStr) -> Cow<'s, str>
-	where
-		'input: 's
-	{
-		s.str(self.input)
+	pub fn str<'a>(&'a mut self, s: &'a AstStr) -> Cow<'a, str> {
+		s.str(&self.input)
 	}
 
 	/// Returns if the parser is finished
@@ -411,7 +409,7 @@ impl<'input> Parser<'input> {
 	/// See [`Self::try_update_with`] for more details.
 	pub fn update_with<F, O>(&mut self, f: F) -> (AstStr, O)
 	where
-		F: FnOnce(&mut &'input str) -> O,
+		F: FnOnce(&mut &str) -> O,
 	{
 		self
 			.try_update_with(|remaining| Ok::<_, !>(f(remaining)))
@@ -433,34 +431,26 @@ impl<'input> Parser<'input> {
 	/// with the latest change to the string as it's position.
 	pub fn try_update_with<F, T>(&mut self, f: F) -> <T::Residual as Residual<(AstStr, T::Output)>>::TryType
 	where
-		F: FnOnce(&mut &'input str) -> T,
+		F: FnOnce(&mut &str) -> T,
 		T: Try<Residual: Residual<(AstStr, T::Output)>>,
 	{
 		let mut remaining = self.remaining();
 		let res = f(&mut remaining);
 
-		let range = self
+		let remaining_range = self
 			.remaining()
 			.substr_range(remaining)
 			.expect("Result was not a substring of the input");
-		assert_eq!(self.cur_pos.0 + range.end, self.input.len());
+		assert_eq!(self.cur_pos.0 + remaining_range.end, self.input.len(), "Updated string truncated input");
 
-		let output = &self.remaining()[..range.start];
-		self.cur_pos.0 += range.start;
+		let output_range = AstRange {
+			start: self.cur_pos,
+			end: AstPos(self.cur_pos.0 + remaining_range.start),
+		};
+		self.cur_pos.0 += remaining_range.start;
 
 		// After updating the remaining, quit if an error occurred
 		let value = res?;
-
-		// Else get the output string
-		let output_range = self
-			.input
-			.substr_range(output)
-			.expect("Output was not a substring of the input");
-
-		let output_range = AstRange {
-			start: AstPos(output_range.start),
-			end: AstPos(output_range.end),
-		};
 
 		<_>::from_output((AstStr::from_input(output_range), value))
 	}

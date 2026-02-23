@@ -25,6 +25,7 @@ pub use {
 // Imports
 use {
 	crate as rustidy_format,
+	arcstr::ArcStr,
 	core::{marker::PhantomData, mem, ops::ControlFlow},
 	rustidy_util::{ArenaData, ArenaIdx, AstStr, Config, Oob, Whitespace},
 	std::borrow::Cow,
@@ -390,9 +391,9 @@ impl Formattable for AstStr {
 		FormatOutput {
 			prefix_ws_len: None,
 			len: self.len(),
-			newlines: self.count_newlines(ctx.input),
+			newlines: self.count_newlines(&ctx.input),
 			is_empty: self.is_empty(),
-			is_blank: self.is_blank(ctx.input),
+			is_blank: self.is_blank(&ctx.input),
 		}
 	}
 }
@@ -418,19 +419,19 @@ impl<T: ArenaData + Format<PrefixWs, Args>, PrefixWs, Args> Format<PrefixWs, Arg
 }
 
 /// Format context
-pub struct Context<'a, 'input> {
-	input:        &'input str,
+pub struct Context<'a> {
+	input:        ArcStr,
 	config:       Cow<'a, Config>,
 	indent_depth: usize,
 	tags:         Oob<'a, Vec<FormatTag>>,
 }
 
-impl<'a, 'input> Context<'a, 'input> {
+impl<'a> Context<'a> {
 	/// Creates a new context
 	#[must_use]
-	pub const fn new(input: &'input str, config: &'a Config) -> Self {
+	pub fn new(input: impl Into<ArcStr>, config: &'a Config) -> Self {
 		Self {
-			input,
+			input: input.into(),
 			config: Cow::Borrowed(config),
 			indent_depth: 0,
 			tags: Oob::Owned(vec![]),
@@ -458,17 +459,14 @@ impl<'a, 'input> Context<'a, 'input> {
 
 	/// Returns the input
 	#[must_use]
-	pub const fn input(&self) -> &'input str {
-		self.input
+	pub const fn input(&self) -> &ArcStr {
+		&self.input
 	}
 
 	/// Returns the string of a string
 	#[must_use]
-	pub fn str<'s>(&mut self, s: &'s AstStr) -> Cow<'s, str>
-	where
-		'input: 's
-	{
-		s.str(self.input)
+	pub fn str<'s>(&'s mut self, s: &'s AstStr) -> Cow<'s, str> {
+		s.str(&self.input)
 	}
 
 	/// Returns the config
@@ -537,9 +535,9 @@ impl<'a, 'input> Context<'a, 'input> {
 	/// Creates a sub-context.
 	///
 	/// Sub contexts have their own configuration
-	pub fn sub_context(&mut self) -> Context<'_, 'input> {
+	pub fn sub_context(&mut self) -> Context<'_> {
 		Context {
-			input: self.input,
+			input: ArcStr::clone(&self.input),
 			config: Cow::Borrowed(&self.config),
 			indent_depth: self.indent_depth,
 			tags: Oob::Borrowed(&mut self.tags),

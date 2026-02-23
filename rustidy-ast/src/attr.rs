@@ -16,6 +16,7 @@ use {
 		token,
 		util::{Braced, Bracketed, Parenthesized},
 	},
+	arcstr::ArcStr,
 	app_error::{AppError, Context, bail},
 	core::fmt::Debug,
 	rustidy_ast_util::{Longest, RemainingBlockComment, RemainingLine, delimited},
@@ -250,6 +251,7 @@ fn update_config(meta: &MetaItem, ctx: &mut rustidy_format::Context) -> Result<(
 		return Ok(())
 	};
 
+	let input = ArcStr::clone(ctx.input());
 	for config in configs.0.values() {
 		let config = try {
 			config.try_as_meta_ref()?.try_as_eq_expr_ref()?
@@ -258,20 +260,19 @@ fn update_config(meta: &MetaItem, ctx: &mut rustidy_format::Context) -> Result<(
 			bail!("Expected `rustidy::config(<config-name> = <value>)`");
 		};
 
-		let input = ctx.input();
 		macro str() {
 			config
 				.expr
 				.as_string_literal()
 				.context("Expected a string literal")?
-				.contents(input)
+				.contents(&input)
 		}
 		macro int() {
 			config
 				.expr
 				.as_integer_literal()
 				.context("Expected an integer literal")?
-				.value(input)
+				.value(&input)
 				.context("Unable to parse integer")?
 				.try_into()
 				.expect("`u64` didn't fit into `usize`")
@@ -287,7 +288,7 @@ fn update_config(meta: &MetaItem, ctx: &mut rustidy_format::Context) -> Result<(
 				skip: _,
 			} = ctx.config_mut();
 
-			match config.path.as_str(input).as_str() {
+			match config.path.as_str(&input).as_str() {
 				$(
 					stringify!($field) => *$field = $value,
 				)*

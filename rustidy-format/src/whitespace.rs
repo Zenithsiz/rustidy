@@ -178,8 +178,8 @@ impl WhitespaceFormatKind {
 		// Note: We try to use the input's number of newlines, since we might
 		//       have been changed.
 		let newlines = match cur_str.input_range() {
-			Some(input_range) => rustidy_util::str_count_newlines(input_range.str(ctx.input)),
-			None => cur_str.count_newlines(ctx.input),
+			Some(input_range) => rustidy_util::str_count_newlines(input_range.str(ctx.input())),
+			None => cur_str.count_newlines(ctx.input()),
 		};
 		let newlines = newlines.clamp(min_newlines, max_newlines);
 
@@ -263,8 +263,8 @@ pub fn format(ws: &mut Whitespace, ctx: &mut crate::Context, kind: WhitespaceFor
 		};
 		ws.0.replace(ws_str);
 
-		if is_last && let Comment::Line(comment) = comment && !comment.0.has_newlines(ctx.input) {
-			let mut s = comment.0.str(ctx.input).into_owned();
+		if is_last && let Comment::Line(comment) = comment && !comment.0.has_newlines(ctx.input()) {
+			let mut s = comment.0.str(ctx.input()).into_owned();
 			s.push('\n');
 			comment.0.replace(AstStrRepr::Dynamic(s));
 		}
