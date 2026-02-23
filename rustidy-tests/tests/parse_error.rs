@@ -68,9 +68,8 @@ fn test_case(test_dir: &Path) -> Result<(), AppError> {
 
 			ensure!(
 				err == output,
-				"Output differed\n\nExpected:\n---\n{}\n---\n\nFound:\n---\n{}\n---",
-				output.replace(' ', "·").replace('\t', "⭾").replace('\n', "␤\n"),
-				err.replace(' ', "·").replace('\t', "⭾").replace('\n', "␤\n")
+				"Output differed:\n{}",
+				difference::Changeset::new(&err, output, "\n")
 			);
 		},
 	}

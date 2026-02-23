@@ -10,9 +10,7 @@
 use {
 	app_error::{AppError, Context, ensure},
 	rustidy_format::FormatOutput,
-	rustidy_parse::Parser,
 	rustidy_print::{Print, PrintFmt},
-	rustidy_util::AstPos,
 	std::{env, fs, path::Path},
 };
 
@@ -72,7 +70,8 @@ fn test_case(test_dir: &Path) -> Result<(), AppError> {
 
 		ensure!(
 			found_output == print_fmt.output(),
-			"Formatting twice did not yield the same output"
+			"Formatting twice did not yield the same output:\n{}",
+			difference::Changeset::new(&found_output, print_fmt.output(), "\n")
 		);
 	}
 
@@ -86,41 +85,12 @@ fn test_case(test_dir: &Path) -> Result<(), AppError> {
 		false => {
 			let output = fs::read_to_string(&output_path)
 				.context("Unable to read output path")?;
-			if let Some(idx) = found_output
-				.char_indices()
-				.zip(output.char_indices())
-				.find_map(|((idx, lhs), (_, rhs))| (lhs != rhs)
-					.then_some(idx))
-				.or_else(|| (found_output
-					.len() != output
-					.len())
-					.then(|| usize::min(found_output.len(), output.len()))) {
-				let mut parser = Parser::new(&found_output);
-				parser.set_pos(AstPos::from_usize(idx));
-				parser.reverse_line();
-				let idx = parser.cur_pos().to_usize();
 
-				let len = output[idx..]
-					.find('\n')
-					.map_or_else(|| output[idx..].len(), |idx| idx + 1);
-				let found_len = found_output[idx..]
-					.find('\n')
-					.map_or_else(|| found_output[idx..].len(), |idx| idx + 1);
-				ensure!(
-					found_output == output,
-					"Found differences at {}:{}\n\nExpected:\n---\n{}\n---\n\nFound:\n---\n{}\n---",
-					output_path.display(),
-					parser.cur_loc(),
-					output[idx..][..len]
-						.replace(' ', "·")
-						.replace('\t', "⭾")
-						.replace('\n', "␤"),
-					found_output[idx..][..found_len]
-						.replace(' ', "·")
-						.replace('\t', "⭾")
-						.replace('\n', "␤"),
-				);
-			}
+			ensure!(
+				found_output == output,
+				"Output differed:\n{}",
+				difference::Changeset::new(&found_output, &output, "\n")
+			);
 		},
 	}
 
