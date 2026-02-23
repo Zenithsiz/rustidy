@@ -4,6 +4,7 @@
 use {
 	super::token,
 	core::fmt::Debug,
+	either::Either,
 	rustidy_ast_util::{Identifier, Punctuated, punct},
 	rustidy_format::{Format, Formattable, WhitespaceFormat},
 	rustidy_parse::Parse,
@@ -33,8 +34,19 @@ impl SimplePath {
 			return self.segments.first.as_str();
 		}
 
-		// TODO: Optimize this by returning a borrowed string more often
-		self.print_to_string().into()
+		// TODO: Optimize this
+		let mut output = String::new();
+		if self.prefix.is_some() {
+			output.push_str("::");
+		}
+		for segment in self.segments.iter() {
+			match segment {
+				Either::Left(segment) => output.push_str(&segment.as_str()),
+				Either::Right(_) => output.push_str("::"),
+			}
+		}
+
+		output.into()
 	}
 
 	/// Returns if the first segment of this path is `segment`
