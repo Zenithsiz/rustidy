@@ -26,6 +26,8 @@ use {
 #[parse_recursive(kind = "left")]
 pub struct CallExpression {
 	pub expr:   Expression,
+	// TODO: Is it fine to remove *all* tags?
+	#[format(without_tags)]
 	#[format(prefix_ws = Whitespace::REMOVE)]
 	#[format(args = delimited::FmtRemove)]
 	pub params: Parenthesized<Option<CallParams>>,
