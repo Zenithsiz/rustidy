@@ -87,9 +87,9 @@ impl Format<(), ()> for Crate {
 			.format(&mut self.shebang, ())
 			.append_to(&mut output);
 
-		if self.shebang.is_some() {
-			ctx.add_tag(FormatTag::AfterNewline);
-		}
+		// Note: We always say we're after a newline to ensure any comments
+		//       aren't forced to have a newline before them.
+		ctx.add_tag(FormatTag::AfterNewline);
 
 		let mut is_first = true;
 		for attr in &mut self.inner_attrs {
