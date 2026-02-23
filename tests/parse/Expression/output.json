@@ -10720,6 +10720,7 @@
 																			"attrs": [],
 																			"inner": {
 																				"Closure": {
+																					"for_": null,
 																					"async_": null,
 																					"move_": null,
 																					"params": {
@@ -10815,6 +10816,7 @@
 																			"attrs": [],
 																			"inner": {
 																				"Closure": {
+																					"for_": null,
 																					"async_": {
 																						"ws": {
 																							"first": " ",
@@ -10916,6 +10918,7 @@
 																			"attrs": [],
 																			"inner": {
 																				"Closure": {
+																					"for_": null,
 																					"async_": null,
 																					"move_": {
 																						"ws": {
@@ -11017,6 +11020,7 @@
 																			"attrs": [],
 																			"inner": {
 																				"Closure": {
+																					"for_": null,
 																					"async_": null,
 																					"move_": null,
 																					"params": {
@@ -11159,6 +11163,7 @@
 																			"attrs": [],
 																			"inner": {
 																				"Closure": {
+																					"for_": null,
 																					"async_": null,
 																					"move_": null,
 																					"params": {
@@ -11355,6 +11360,7 @@
 																			"attrs": [],
 																			"inner": {
 																				"Closure": {
+																					"for_": null,
 																					"async_": null,
 																					"move_": null,
 																					"params": {
@@ -11546,6 +11552,7 @@
 																			"attrs": [],
 																			"inner": {
 																				"Closure": {
+																					"for_": null,
 																					"async_": null,
 																					"move_": null,
 																					"params": {
@@ -11694,6 +11701,7 @@
 																			"attrs": [],
 																			"inner": {
 																				"Closure": {
+																					"for_": null,
 																					"async_": null,
 																					"move_": null,
 																					"params": {
@@ -11878,6 +11886,7 @@
 																			"attrs": [],
 																			"inner": {
 																				"Closure": {
+																					"for_": null,
 																					"async_": null,
 																					"move_": null,
 																					"params": {
@@ -12068,6 +12077,7 @@
 																			"attrs": [],
 																			"inner": {
 																				"Closure": {
+																					"for_": null,
 																					"async_": null,
 																					"move_": null,
 																					"params": {
@@ -12256,6 +12266,7 @@
 																			"attrs": [],
 																			"inner": {
 																				"Closure": {
+																					"for_": null,
 																					"async_": null,
 																					"move_": null,
 																					"params": {
@@ -12498,6 +12509,7 @@
 																			"attrs": [],
 																			"inner": {
 																				"Closure": {
+																					"for_": null,
 																					"async_": null,
 																					"move_": null,
 																					"params": {
@@ -12593,6 +12605,158 @@
 															"super_": null,
 															"let_": {
 																"ws": {
+																	"first": "\n\t",
+																	"rest": []
+																},
+																"token": "let"
+															},
+															"pat": {
+																"WithoutRange": {
+																	"Wildcard": {
+																		"ws": {
+																			"first": " ",
+																			"rest": []
+																		},
+																		"token": "_"
+																	}
+																}
+															},
+															"ty": null,
+															"eq": {
+																"Normal": {
+																	"eq": {
+																		"ws": {
+																			"first": " ",
+																			"rest": []
+																		},
+																		"token": "="
+																	},
+																	"expr": {
+																		"WithoutBlock": {
+																			"attrs": [],
+																			"inner": {
+																				"Closure": {
+																					"for_": {
+																						"for_": {
+																							"ws": {
+																								"first": " ",
+																								"rest": []
+																							},
+																							"token": "for"
+																						},
+																						"params": {
+																							"prefix": {
+																								"ws": {
+																									"first": "",
+																									"rest": []
+																								},
+																								"token": "<"
+																							},
+																							"value": {
+																								"punctuated": {
+																									"first": {
+																										"attrs": [],
+																										"inner": {
+																											"Lifetime": {
+																												"lifetime": {
+																													"IdentOrKeyword": {
+																														"quote": {
+																															"ws": {
+																																"first": "",
+																																"rest": []
+																															},
+																															"token": "'"
+																														},
+																														"value": [
+																															{
+																																"first": "",
+																																"rest": []
+																															},
+																															"a"
+																														]
+																													}
+																												},
+																												"bounds": null
+																											}
+																										}
+																									},
+																									"rest": []
+																								},
+																								"trailing": null
+																							},
+																							"suffix": {
+																								"ws": {
+																									"first": "",
+																									"rest": []
+																								},
+																								"token": ">"
+																							}
+																						}
+																					},
+																					"async_": null,
+																					"move_": null,
+																					"params": {
+																						"NoParams": {
+																							"ws": {
+																								"first": " ",
+																								"rest": []
+																							},
+																							"token": "||"
+																						}
+																					},
+																					"ret": null,
+																					"expr": {
+																						"WithoutBlock": {
+																							"attrs": [],
+																							"inner": {
+																								"Path": {
+																									"Normal": {
+																										"prefix": null,
+																										"segments": {
+																											"first": {
+																												"ident": {
+																													"Ident": {
+																														"NonKw": [
+																															{
+																																"first": " ",
+																																"rest": []
+																															},
+																															"a"
+																														]
+																													}
+																												},
+																												"generic": null
+																											},
+																											"rest": []
+																										}
+																									}
+																								}
+																							}
+																						}
+																					}
+																				}
+																			}
+																		}
+																	}
+																}
+															},
+															"semi": {
+																"ws": {
+																	"first": "",
+																	"rest": []
+																},
+																"token": ";"
+															}
+														}
+													}
+												},
+												{
+													"Let": {
+														"attrs": [],
+														"inner": {
+															"super_": null,
+															"let_": {
+																"ws": {
 																	"first": "\n\n\t",
 																	"rest": []
 																},
@@ -12624,6 +12788,63 @@
 																			"attrs": [],
 																			"inner": {
 																				"Closure": {
+																					"for_": {
+																						"for_": {
+																							"ws": {
+																								"first": " ",
+																								"rest": []
+																							},
+																							"token": "for"
+																						},
+																						"params": {
+																							"prefix": {
+																								"ws": {
+																									"first": "",
+																									"rest": []
+																								},
+																								"token": "<"
+																							},
+																							"value": {
+																								"punctuated": {
+																									"first": {
+																										"attrs": [],
+																										"inner": {
+																											"Lifetime": {
+																												"lifetime": {
+																													"IdentOrKeyword": {
+																														"quote": {
+																															"ws": {
+																																"first": "",
+																																"rest": []
+																															},
+																															"token": "'"
+																														},
+																														"value": [
+																															{
+																																"first": "",
+																																"rest": []
+																															},
+																															"a"
+																														]
+																													}
+																												},
+																												"bounds": null
+																											}
+																										}
+																									},
+																									"rest": []
+																								},
+																								"trailing": null
+																							},
+																							"suffix": {
+																								"ws": {
+																									"first": "",
+																									"rest": []
+																								},
+																								"token": ">"
+																							}
+																						}
+																					},
 																					"async_": {
 																						"ws": {
 																							"first": " ",

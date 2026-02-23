@@ -6,6 +6,7 @@ use {
 	crate::{
 		attr::WithOuterAttributes,
 		expr::{Expression, ExpressionInner},
+		item::function::ForLifetimes,
 		pat::PatternNoTopAlt,
 		token,
 		ty::{Type, TypeNoBounds},
@@ -24,10 +25,17 @@ use {
 #[parse_recursive(into_root = ExpressionWithoutBlockInner)]
 #[parse_recursive(kind = "right")]
 pub struct ClosureExpression {
+	pub for_:   Option<ForLifetimes>,
+	#[format(prefix_ws(expr = Whitespace::SINGLE, if_ = self.for_.is_some()))]
 	pub async_: Option<token::Async>,
-	#[format(prefix_ws(expr = Whitespace::SINGLE, if_ = self.async_.is_some()))]
+	#[format(prefix_ws(expr = Whitespace::SINGLE, if_ = self.for_.is_some() || self.async_.is_some()))]
 	pub move_:  Option<token::Move>,
-	#[format(prefix_ws(expr = Whitespace::SINGLE, if_ = self.async_.is_some() || self.move_.is_some()))]
+	#[format(
+		prefix_ws(
+			expr = Whitespace::SINGLE,
+			if_ = self.for_.is_some() || self.async_.is_some() || self.move_.is_some()
+		)
+	)]
 	pub params: ClosureParams,
 	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub ret:    Option<ClosureRet>,

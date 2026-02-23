@@ -146,8 +146,9 @@ fn closure() {
 	let _ = |a: u32| a;
 	let _ = |A(a): A| a;
 	let _ = || -> u32 {};
+	let _ = for<'a> || a;
 
-	let _ = async move |#[a] A(a): u32, b, C(c): i32,| -> u32 {};
+	let _ = for<'a> async move |#[a] A(a): u32, b, C(c): i32,| -> u32 {};
 }
 
 fn async_block() {
