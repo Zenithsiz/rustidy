@@ -189,6 +189,27 @@ impl<T, P> PunctuatedTrailing<T, P> {
 		}
 	}
 
+	/// Extends this container with another punctuated trailing
+	pub fn extend_from_punctuated_trailing(&mut self, other: Self)
+	where
+		P: Default
+	{
+		self
+			.punctuated
+			.rest
+			.push(PunctuatedRest {
+				punct: self.trailing.take().unwrap_or_default(),
+				value: other.punctuated.first
+			});
+
+		self
+			.punctuated
+			.rest
+			.extend(other.punctuated.rest);
+
+		self.trailing = other.trailing;
+	}
+
 	/// Pushes a value onto this the front of this punctuated, with a default punctuated
 	pub fn push_front(&mut self, value: T, punct: P) {
 		self.punctuated.push_front(value, punct);
