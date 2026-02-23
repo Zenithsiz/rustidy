@@ -73,14 +73,12 @@ impl Items {
 		while let Some(mut item) = items.next() {
 			item = match item.try_into_use_decl() {
 				Ok((attrs, vis, mut first_use_decl)) => {
-					let mut use_decls = vec![];
 					while let Some(use_decl) = items
 						.next_if_map(|item| item
 							.try_into_just_use_decl(ctx, vis.as_ref())) {
-						use_decls.push(use_decl);
+						first_use_decl.merge(use_decl);
 					}
 
-					first_use_decl.merge(use_decls);
 					Item(ArenaIdx::new(WithOuterAttributes {
 						attrs,
 						inner: ItemInner::Vis(VisItem { vis, inner: VisItemInner::Use(first_use_decl), }),

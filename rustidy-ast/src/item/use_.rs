@@ -31,45 +31,9 @@ pub struct UseDeclaration {
 }
 
 impl UseDeclaration {
-	/// Merges several use declarations into this one
-	// TODO: Merge `a::{b::c, b::d}`.
-	pub fn merge(&mut self, others: Vec<Self>) {
-		// Note: This is to avoid creating an unnecessary group
-		if others.is_empty() {
-			return;
-		}
-
-		// If all the others have the same prefix as this one, we can merge them into this one.
-		let all_group_same_prefix = others
-			.iter()
-			.all(|use_decl| match (&use_decl.tree, &self.tree) {
-				(UseTree::Group(lhs), UseTree::Group(rhs)) => lhs.prefix == rhs.prefix,
-				_ => false,
-			});
-
-
-		replace_with::replace_with_or_abort(&mut self.tree, |tree| match all_group_same_prefix {
-			true => {
-				let mut group_tree = tree.into_group();
-				for use_decl in others {
-					// TODO: Here we're discarding the whitespace after `use` and before `;`,
-					//       we should probably instead return an error saying we couldn't merge.
-					group_tree.push(use_decl.tree);
-				}
-				UseTree::Group(group_tree)
-			},
-			false => {
-				let mut group_tree = PunctuatedTrailing::single(Box::new(tree));
-				for use_decl in others {
-					group_tree.push_value(Box::new(use_decl.tree));
-				}
-
-				UseTree::Group(UseTreeGroup {
-					prefix: None,
-					tree: Braced::from_value(Some(group_tree)),
-				})
-			},
-		});
+	/// Merges another use declaration into this one
+	pub fn merge(&mut self, other: Self) {
+		self.tree.merge(other.tree);
 	}
 }
 
@@ -95,6 +59,26 @@ impl UseTree {
 				prefix: None,
 				tree: Braced::from_value(Some(PunctuatedTrailing::single(Box::new(self)))),
 			},
+		}
+	}
+
+	/// Merges another tree into this one
+	pub fn merge(&mut self, other: Self) {
+		match (self, other) {
+			(Self::Group(lhs), rhs) => lhs.push_back(rhs),
+			(lhs, Self::Group(mut rhs)) => replace_with::replace_with_or_abort(lhs, |lhs| {
+				rhs.push_front(lhs);
+				Self::Group(rhs)
+			}),
+
+			(lhs, rhs) => replace_with::replace_with_or_abort(lhs, |lhs| {
+				let mut values = PunctuatedTrailing::single(Box::new(lhs));
+				values.push_value(Box::new(rhs));
+				Self::Group(UseTreeGroup {
+					prefix: None,
+					tree: Braced::from_value(Some(values))
+				})
+			}),
 		}
 	}
 }
@@ -129,15 +113,62 @@ pub struct UseTreeGroup {
 }
 
 impl UseTreeGroup {
-	/// Pushes a tree into this group
-	pub fn push(&mut self, tree: UseTree) {
-		// TODO: We should probably flatten group use declarations here to avoid duplicate work.
-		match &mut self.tree.value {
-			Some(inner) => inner.push_value(Box::new(tree)),
-			None => self.tree.value = Some(PunctuatedTrailing::single(Box::new(tree))),
+	/// Pushes a tree at the front of this group
+	pub fn push_front(&mut self, tree: UseTree) {
+		match tree {
+			UseTree::Group(rhs) if self.prefix == rhs.prefix => match &mut self.tree.value {
+				Some(lhs) => if let Some(mut rhs) = rhs.tree.value {
+					replace_with::replace_with_or_abort(lhs, |lhs| {
+						rhs.extend_from_punctuated_trailing(lhs);
+						rhs
+					});
+				},
+				None => self.tree.value = rhs.tree.value,
+			},
+
+			UseTree::Group(rhs) => replace_with::replace_with_or_abort(self, |lhs| {
+				let mut values = PunctuatedTrailing::single(Box::new(UseTree::Group(rhs)));
+				values.push_value(Box::new(UseTree::Group(lhs)));
+				Self {
+					prefix: None,
+					tree: Braced::from_value(Some(values))
+				}
+			}),
+
+			_ => match &mut self.tree.value {
+				Some(lhs) => lhs.push_front_value(Box::new(tree)),
+				None => self.tree.value = Some(PunctuatedTrailing::single(Box::new(tree))),
+			},
 		}
 	}
 
+	/// Pushes a tree at the back of this group
+	pub fn push_back(&mut self, tree: UseTree) {
+		match tree {
+			UseTree::Group(rhs) if self.prefix == rhs.prefix => match &mut self.tree.value {
+				Some(lhs) => if let Some(rhs) = rhs.tree.value {
+					lhs.extend_from_punctuated_trailing(rhs);
+				},
+				None => self.tree.value = rhs.tree.value,
+			},
+
+			UseTree::Group(rhs) => replace_with::replace_with_or_abort(self, |lhs| {
+				let mut values = PunctuatedTrailing::single(Box::new(UseTree::Group(lhs)));
+				values.push_value(Box::new(UseTree::Group(rhs)));
+				Self {
+					prefix: None,
+					tree: Braced::from_value(Some(values))
+				}
+			}),
+
+			_ => match &mut self.tree.value {
+				Some(lhs) => lhs.push_value(Box::new(tree)),
+				None => self.tree.value = Some(PunctuatedTrailing::single(Box::new(tree))),
+			},
+		}
+	}
+
+	/// Flattens this use group
 	pub fn flatten(&mut self, ctx: &mut rustidy_format::Context) {
 		replace_with::replace_with_or_abort(&mut self.tree.value, |trees| {
 			let mut trees = trees?;
