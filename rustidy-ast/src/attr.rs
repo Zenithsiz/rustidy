@@ -51,6 +51,7 @@ pub struct InnerAttribute {
 
 /// Inner Doc comment
 #[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(strum::EnumIs)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub enum InnerDocComment {

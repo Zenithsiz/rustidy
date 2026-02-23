@@ -49,7 +49,7 @@ pub mod vis;
 use {
 	self::{attr::InnerAttrOrDocComment, item::Items, shebang::Shebang},
 	core::fmt::Debug,
-	rustidy_format::{Format, FormatOutput, Formattable, WhitespaceFormat},
+	rustidy_format::{Format, FormatOutput, FormatTag, Formattable, WhitespaceFormat},
 	rustidy_parse::Parse,
 	rustidy_print::Print,
 	rustidy_util::Whitespace,
@@ -86,16 +86,29 @@ impl Format<(), ()> for Crate {
 		ctx
 			.format(&mut self.shebang, ())
 			.append_to(&mut output);
-		ctx
-			.format_with(&mut self.inner_attrs, Whitespace::REMOVE, rustidy_format::vec::args_prefix_ws(Whitespace::INDENT))
-			.append_to(&mut output);
 
-		// TODO: We need to set `FormatTag::AfterNewline` for `items`.
-		ctx
-			.format(&mut self.items, match self.inner_attrs.is_empty() {
+		let mut is_first = true;
+		for attr in &mut self.inner_attrs {
+			let prefix_ws = match is_first {
 				true => Whitespace::REMOVE,
 				false => Whitespace::INDENT,
-			})
+			};
+			ctx
+				.format(attr, prefix_ws)
+				.append_to(&mut output);
+			is_first = false;
+
+			if let Some(doc) = attr.try_as_doc_comment_ref() && doc.is_line() {
+				ctx.add_tag(FormatTag::AfterNewline);
+			}
+		}
+
+		let prefix_ws = match is_first {
+			true => Whitespace::REMOVE,
+			false => Whitespace::INDENT,
+		};
+		ctx
+			.format(&mut self.items, prefix_ws)
 			.append_to(&mut output);
 
 		ctx
