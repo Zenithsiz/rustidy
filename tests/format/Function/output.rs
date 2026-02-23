@@ -51,3 +51,10 @@ fn a(&'a mut self);
 fn a(&'a mut self,);
 fn a(a: u32, b: u32);
 fn a(a: u32, b: u32);
+
+fn a(
+	&self,
+	a: u32,
+	loooooooooooooooooooooooooooooooooooong: u32,
+	b: u32
+);
