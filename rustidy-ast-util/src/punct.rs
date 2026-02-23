@@ -236,6 +236,68 @@ impl<T, P> PunctuatedTrailing<T, P> {
 		self.push(P::default(), value);
 	}
 
+	/// Uses this punctuated as a `Vec<(T, Option<P>)>`
+	fn with_values_vec(&mut self, f: impl FnOnce(&mut Vec<(T, Option<P>)>))
+	where
+		P: Default
+	{
+		replace_with::replace_with_or_abort(self, |this| {
+			let mut values = vec![];
+
+			let mut next_value = Some(this.punctuated.first);
+			let mut rest = this.punctuated.rest.into_iter();
+			while let Some(cur_value) = next_value.take() {
+				match rest.next() {
+					Some(PunctuatedRest {
+						punct,
+						value
+					}) => {
+						next_value = Some(value);
+						values.push((cur_value, Some(punct)));
+					},
+					None => {
+						values.push((cur_value, this.trailing));
+						break;
+					},
+				}
+			}
+
+			f(&mut values);
+
+			let mut values = values.into_iter();
+			let (first, mut next_punct) = values
+				.next()
+				.expect("Should have at least one element");
+
+			let mut punctuated = Punctuated { first, rest: vec![], };
+			for (value, punct) in values {
+				let cur_punct = next_punct.unwrap_or_default();
+				next_punct = punct;
+				punctuated
+					.rest
+					.push(PunctuatedRest { punct: cur_punct, value });
+			}
+
+
+			Self { punctuated, trailing: next_punct }
+		});
+	}
+
+	/// Sorts the values in this punctuated by a key
+	pub fn sort_values_by_key(&mut self, mut f: impl for<'a> FnMut<(&'a T, Option<&'a P>), Output: Ord>)
+	where
+		P: Default
+	{
+		self
+			.with_values_vec(|values| values
+				.sort_by(|(lhs_value, lhs_punct), (rhs_value, rhs_punct)| {
+					let lhs = f(lhs_value, lhs_punct.as_ref());
+					let rhs = f(rhs_value, rhs_punct.as_ref());
+
+					lhs.cmp(&rhs)
+				}));
+	}
+
 	/// Splits this punctuated at the last value
 	pub fn split_last_mut(&mut self) -> (SplitLastMut<'_, T, P>, &mut T, &mut Option<P>) {
 		let (iter, last) = self.punctuated.split_last_mut();

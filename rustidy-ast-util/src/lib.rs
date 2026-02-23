@@ -10,7 +10,8 @@
 	yeet_expr,
 	anonymous_lifetime_in_impl_trait,
 	register_tool,
-	stmt_expr_attributes
+	stmt_expr_attributes,
+	unboxed_closures
 )]
 
 // Modules
