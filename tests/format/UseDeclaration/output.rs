@@ -18,8 +18,8 @@ use a::{
 	e,
 	f::{
 		g,
-		loooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong,
 		h,
+		loooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong,
 	},
 	j,
 };
@@ -49,3 +49,5 @@ use {a/*a*//*b*//*c*/};
 use {/*a0*//*a1*/a/*a2*//*a3*/, /*b0*/ b/*b1*/};
 //
 use {a::{a1, a2}, b::{b1, b2}};
+//
+use {crate::a, super::a, self::a, $crate::a, a, ::a};

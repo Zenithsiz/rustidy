@@ -2,7 +2,7 @@
 
 // Imports
 use {
-	crate::{path::SimplePath, token, util::Braced},
+	crate::{path::{SimplePath, SimplePathSegment}, token, util::Braced},
 	rustidy_ast_util::{
 		Identifier,
 		Punctuated,
@@ -14,6 +14,7 @@ use {
 	rustidy_parse::Parse,
 	rustidy_print::Print,
 	rustidy_util::Whitespace,
+	std::{borrow::Cow, cmp},
 };
 
 /// `UseDeclaration`
@@ -105,6 +106,7 @@ pub struct UseTreeGlobPrefix {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 #[format(before_with = Self::flatten)]
+#[format(before_with = Self::sort)]
 pub struct UseTreeGroup {
 	pub prefix: Option<UseTreeGroupPrefix>,
 	#[format(prefix_ws(expr = Whitespace::REMOVE, if_ = self.prefix.is_some()))]
@@ -166,6 +168,97 @@ impl UseTreeGroup {
 				None => self.tree.value = Some(PunctuatedTrailing::single(Box::new(tree))),
 			},
 		}
+	}
+
+	/// Sorts all trees inside
+	pub fn sort(&mut self, _ctx: &mut rustidy_format::Context) {
+		let Some(trees) = &mut self.tree.value else {
+			return
+		};
+
+		// TODO: Move this wrapper elsewhere
+		struct SimplePathSortOrder<'a>(&'a SimplePath);
+
+		impl PartialEq for SimplePathSortOrder<'_> {
+			fn eq(&self, other: &Self) -> bool {
+				self.cmp(other).is_eq()
+			}
+		}
+		impl Eq for SimplePathSortOrder<'_> {}
+		impl PartialOrd for SimplePathSortOrder<'_> {
+			fn partial_cmp(&self, other: &Self) -> Option<cmp::Ordering> {
+				Some(self.cmp(other))
+			}
+		}
+		impl Ord for SimplePathSortOrder<'_> {
+			fn cmp(&self, other: &Self) -> cmp::Ordering {
+				let prefix_cmp = self.0
+					.prefix
+					.is_some()
+					.cmp(&other.0.prefix.is_some());
+				if !prefix_cmp.is_eq() {
+					return prefix_cmp;
+				}
+
+				let mut lhs = self.0.segments.values();
+				let mut rhs = other.0.segments.values();
+				loop {
+					let (lhs, rhs) = match (lhs.next(), rhs.next()) {
+						(Some(lhs), Some(rhs)) => (lhs, rhs),
+						(Some(_), None) => return cmp::Ordering::Less,
+						(None, Some(_)) => return cmp::Ordering::Greater,
+						(None, None) => return cmp::Ordering::Equal,
+					};
+
+					#[derive(PartialEq, Eq, PartialOrd, Ord)]
+					pub enum Segment<'a> {
+						Crate,
+						Super,
+						SelfLower,
+						DollarCrate,
+						Ident(Cow<'a, str>),
+					}
+					fn segment(segment: &SimplePathSegment) -> Segment<'_> {
+						match segment {
+							SimplePathSegment::Super(_) => Segment::Super,
+							SimplePathSegment::SelfLower(_) => Segment::SelfLower,
+							SimplePathSegment::Crate(_) => Segment::Crate,
+							SimplePathSegment::DollarCrate(_) => Segment::DollarCrate,
+							SimplePathSegment::Ident(ident) => Segment::Ident(ident.as_str()),
+						}
+					}
+
+					let segment_cmp = segment(lhs).cmp(&segment(rhs));
+					if !segment_cmp.is_eq() {
+						return segment_cmp;
+					}
+				}
+			}
+		}
+
+		#[derive(PartialEq, Eq, PartialOrd, Ord)]
+		enum SortOrder<'a> {
+			GroupWithPrefixRoot,
+			Glob,
+			WithPath(SimplePathSortOrder<'a>),
+			GroupNoPrefix,
+		}
+
+		#[expect(clippy::borrowed_box, reason = "It's necessary for the closure")]
+		trees
+			.sort_values_by_key(for<'a> |tree: &'a Box<UseTree>, _: Option<&'a token::Comma>| -> SortOrder<'a> {
+				match &**tree {
+					UseTree::Glob(_) => SortOrder::Glob,
+					UseTree::Group(tree) => match &tree.prefix {
+						Some(prefix) => match &prefix.path {
+							Some(path) => SortOrder::WithPath(SimplePathSortOrder(path)),
+							None => SortOrder::GroupWithPrefixRoot,
+						},
+						None => SortOrder::GroupNoPrefix,
+					},
+					UseTree::Simple(tree) => SortOrder::WithPath(SimplePathSortOrder(&tree.path)),
+				}
+			});
 	}
 
 	/// Flattens this use group

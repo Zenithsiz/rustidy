@@ -27,7 +27,8 @@
 	str_as_str,
 	thread_local,
 	type_changing_struct_update,
-	try_blocks
+	try_blocks,
+	closure_lifetime_binder
 )]
 
 // Modules
