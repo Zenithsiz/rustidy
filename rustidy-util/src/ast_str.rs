@@ -115,14 +115,9 @@ impl AstStr {
 	}
 
 	/// Returns the string of this string
-	// TODO: This can be somewhat expensive, should we replace it with
-	//       functions performing whatever checks the callers need instead?
 	#[must_use]
 	pub fn str(&self) -> Cow<'_, str> {
-		match self.0.repr.str_cheap() {
-			Some(s) => s.into(),
-			None => self.repr().str().into_owned().into(),
-		}
+		self.repr().str()
 	}
 }
 
