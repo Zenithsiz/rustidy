@@ -29,7 +29,9 @@ pub struct CallExpression {
 	// TODO: Is it fine to remove *all* tags?
 	#[format(without_tags)]
 	#[format(prefix_ws = Whitespace::REMOVE)]
-	#[format(args = delimited::FmtRemove)]
+	#[format(
+		args = delimited::fmt_remove_or_indent_if_non_blank(50, CallParamsFmt::Inline, CallParamsFmt::Indent)
+	)]
 	pub params: Parenthesized<Option<CallParams>>,
 }
 
@@ -54,10 +56,12 @@ pub struct MethodCallExpression {
 	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub segment: PathExprSegment,
 	#[format(prefix_ws = Whitespace::REMOVE)]
-	#[format(args = delimited::FmtRemove)]
 	// TODO: Is it fine to remove *all* tags?
 	#[format(without_tags)]
 	#[format(indent(if_has_tag = FormatTag::InsideChain))]
+	#[format(
+		args = delimited::fmt_remove_or_indent_if_non_blank(50, CallParamsFmt::Inline, CallParamsFmt::Indent)
+	)]
 	pub params:  Parenthesized<Option<CallParams>>,
 }
 
@@ -92,7 +96,23 @@ impl Format<WhitespaceConfig, ()> for MethodCallExpression {
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
+#[format(args(ty = "CallParamsFmt"))]
 pub struct CallParams(
-	#[format(args = punct::fmt(Whitespace::SINGLE, Whitespace::REMOVE))]
+	#[format(args = punct::fmt(args.prefix_ws(), Whitespace::REMOVE))]
 	pub PunctuatedTrailing<Expression, token::Comma>,
 );
+
+#[derive(Clone, Copy, Debug)]
+enum CallParamsFmt {
+	Inline,
+	Indent,
+}
+
+impl CallParamsFmt {
+	const fn prefix_ws(self) -> WhitespaceConfig {
+		match self {
+			Self::Inline => Whitespace::SINGLE,
+			Self::Indent => Whitespace::INDENT,
+		}
+	}
+}

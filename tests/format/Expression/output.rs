@@ -58,6 +58,23 @@ fn closure_inside_call() {
 	});
 }
 
+fn function_call() {
+	a(a, b, c);
+	a.a(a, b, c);
+
+	a(
+		a,
+		looooooooooooooooooooooooooooooooooooooooooooooooong,
+		c
+	);
+	a
+		.a(
+			a,
+			looooooooooooooooooooooooooooooooooooooooooooooooong,
+			c
+		);
+}
+
 fn doc_comment_newline() {
 	fn a() {
 		//! A1
