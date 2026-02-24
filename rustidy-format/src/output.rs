@@ -1,7 +1,7 @@
 //! Format output
 
 /// Formatting output
-#[derive(Clone, Copy, Debug)]
+#[derive(PartialEq, Eq, Clone, Copy, Debug)]
 #[must_use = "Should not ignore format output"]
 pub struct FormatOutput {
 	/// Prefix whitespace length, if any
