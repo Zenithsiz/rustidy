@@ -146,6 +146,9 @@ impl Formattable for Whitespace {
 			ws.0.format_output(ctx).append_to(&mut output);
 		}
 		output.prefix_ws_len = Some(output.len);
+		if let Some(multiline) = &mut output.multiline {
+			multiline.prefix_ws_len = Some(multiline.prefix_len);
+		}
 
 		output
 	}

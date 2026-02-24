@@ -19,7 +19,7 @@ pub mod output;
 // Exports
 pub use {
 	self::{
-		output::FormatOutput,
+		output::{FormatMultilineOutput, FormatOutput},
 		tag::{FormatTag, FormatTags},
 		whitespace::{WhitespaceFormat, WhitespaceFormatKind},
 	},
@@ -99,6 +99,8 @@ pub trait Formattable {
 pub trait Format<PrefixWs, Args>: Formattable {
 	/// Formats this type.
 	// TODO: Rename this to be less confusing with `Context::format`?
+	// TODO: Since `FormatOutput` is getting pretty big, we should pass
+	//       it by reference instead.
 	fn format(
 		&mut self,
 		ctx: &mut Context,
@@ -396,6 +398,7 @@ impl Formattable for AstStr {
 			newlines: self.count_newlines(),
 			is_empty: self.is_empty(),
 			is_blank: self.is_blank(),
+			multiline: FormatMultilineOutput::from_ast_str_repr(self.repr())
 		}
 	}
 }

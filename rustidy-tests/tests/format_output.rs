@@ -11,7 +11,7 @@ use {
 	app_error::{AppError, Context, ensure},
 	rustidy_ast::Crate,
 	rustidy_ast_util::IdentifierOrKeyword,
-	rustidy_format::{FormatOutput, Formattable},
+	rustidy_format::{FormatMultilineOutput, FormatOutput, Formattable},
 	rustidy_parse::{Parse, ParseError, Parser},
 	rustidy_util::Config,
 };
@@ -40,6 +40,7 @@ pub fn format_output() -> Result<(), AppError> {
 			newlines: 0,
 			is_empty: false,
 			is_blank: false,
+			multiline: None,
 		},
 		"  abc" as IdentifierOrKeyword: FormatOutput {
 			prefix_ws_len: Some(2),
@@ -47,6 +48,7 @@ pub fn format_output() -> Result<(), AppError> {
 			newlines: 0,
 			is_empty: false,
 			is_blank: false,
+			multiline: None,
 		},
 		"//\nabc" as IdentifierOrKeyword: FormatOutput {
 			prefix_ws_len: Some(3),
@@ -54,6 +56,15 @@ pub fn format_output() -> Result<(), AppError> {
 			newlines: 1,
 			is_empty: false,
 			is_blank: false,
+			multiline: Some(FormatMultilineOutput { prefix_ws_len: Some(2), prefix_len: 2, suffix_len: 3 }),
+		},
+		"//\n//\nabc" as IdentifierOrKeyword: FormatOutput {
+			prefix_ws_len: Some(6),
+			len: 9,
+			newlines: 2,
+			is_empty: false,
+			is_blank: false,
+			multiline: Some(FormatMultilineOutput { prefix_ws_len: Some(2), prefix_len: 2, suffix_len: 3 }),
 		},
 	}
 
@@ -77,6 +88,32 @@ pub fn test_case<T: Parse + Formattable>(input: &str, expected: FormatOutput) ->
 		&format!("{output:#?}"),
 		"\n")
 	);
+
+	Ok(())
+}
+
+#[test]
+pub fn format_multiline_output_from_str() -> Result<(), AppError> {
+	let cases = [
+		("", None),
+		("abc", None),
+		("01234\n567", Some(
+			FormatMultilineOutput {
+				prefix_ws_len: None,
+				prefix_len: 5,
+				suffix_len: 3,
+			}
+		)),
+	];
+
+	for (input, expected) in cases {
+		let output = FormatMultilineOutput::from_str(input);
+		ensure!(output == expected, "Format output was different for input {input:?}\n{}", difference::Changeset::new(
+			&format!("{expected:#?}"),
+			&format!("{output:#?}"),
+			"\n")
+		);
+	}
 
 	Ok(())
 }
