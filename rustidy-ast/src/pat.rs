@@ -8,7 +8,7 @@ pub use self::range::RangePattern;
 
 // Imports
 use {
-	crate::attr,
+	crate::{attr, util::FmtSingleOrIndent},
 	super::{
 		attr::WithOuterAttributes,
 		expr::{
@@ -152,8 +152,11 @@ pub enum ReferencePatternRef {
 pub struct StructPattern {
 	pub top:   PathInExpression,
 	#[format(prefix_ws = Whitespace::SINGLE)]
-	// TODO: Use `delimited::fmt_single_or_indent_if_non_blank`
-	#[format(args = delimited::fmt_indent_if_non_blank())]
+	#[format(args = delimited::fmt_single_or_indent_if_non_blank(
+		50,
+		FmtSingleOrIndent::Single,
+		FmtSingleOrIndent::Indent
+	))]
 	pub items: Braced<Option<StructPatternElements>>,
 }
 
@@ -161,7 +164,9 @@ pub struct StructPattern {
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
+#[format(args(ty = "FmtSingleOrIndent"))]
 pub enum StructPatternElements {
+	#[format(args = args)]
 	Fields(StructPatternElementsFields),
 	EtCetera(StructPatternEtCetera),
 }
@@ -169,18 +174,22 @@ pub enum StructPatternElements {
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
+#[format(args(ty = "FmtSingleOrIndent"))]
 pub struct StructPatternElementsFields {
+	#[format(args = args)]
 	pub fields:    StructPatternFields,
 	#[format(prefix_ws = Whitespace::REMOVE)]
+	#[format(args = args)]
 	pub et_cetera: Option<StructPatternElementsFieldsEtCetera>,
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
+#[format(args(ty = "FmtSingleOrIndent"))]
 pub struct StructPatternElementsFieldsEtCetera {
 	pub comma:     token::Comma,
-	#[format(prefix_ws = Whitespace::INDENT)]
+	#[format(prefix_ws = args.prefix_ws())]
 	pub et_cetera: Option<StructPatternEtCetera>,
 }
 
@@ -188,8 +197,9 @@ pub struct StructPatternElementsFieldsEtCetera {
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
+#[format(args(ty = "FmtSingleOrIndent"))]
 pub struct StructPatternFields(
-	#[format(args = punct::fmt(Whitespace::INDENT, Whitespace::REMOVE))]
+	#[format(args = punct::fmt(args.prefix_ws(), Whitespace::REMOVE))]
 	Punctuated<StructPatternField, token::Comma>,
 );
 
