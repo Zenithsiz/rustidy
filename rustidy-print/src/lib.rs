@@ -23,10 +23,10 @@ pub trait Print: Sized {
 	/// won't provide valid rust code.
 	fn print_non_ws(&self, f: &mut PrintFmt);
 
-	/// Prints this type onto a string
-	fn print_to_string(&self) -> String {
+	/// Prints this type onto a string using `p` as the printer function
+	fn print_to_string(&self, p: impl FnOnce(&Self,&mut PrintFmt)) -> String {
 		let mut f = PrintFmt::new();
-		self.print(&mut f);
+		p(self, &mut f);
 		f.output
 	}
 }

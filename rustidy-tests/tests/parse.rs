@@ -55,7 +55,7 @@ fn test_case(test_dir: &Path) -> Result<(), AppError> {
 	let crate_ = rustidy::parse(&input, &test_path)
 		.context("Unable to parse input")?;
 
-	let output = crate_.print_to_string();
+	let output = crate_.print_to_string(Print::print);
 	ensure!(input == output, "Crate output was not the same as input");
 
 	let output_path = test_dir.join("output.json");

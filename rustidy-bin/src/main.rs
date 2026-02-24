@@ -152,7 +152,7 @@ fn format_file(
 	// Format
 	let _: FormatOutput = rustidy::format(&input, config, &mut crate_);
 
-	let output = crate_.print_to_string();
+	let output = crate_.print_to_string(Print::print);
 	match check {
 		true => ensure!(input == output, "File was not formatted"),
 		false => {

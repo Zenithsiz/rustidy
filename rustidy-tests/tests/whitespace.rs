@@ -41,7 +41,7 @@ fn test_case_with(
 	fmt_ctx.set_indent_depth(config.indent_depth);
 	whitespace::format(&mut whitespace, &mut fmt_ctx, kind);
 
-	let output = whitespace.print_to_string();
+	let output = whitespace.print_to_string(Print::print);
 
 	let source_fmt = source.replace(' ', "·").replace('\t', "⭾");
 	let expected_fmt = expected.replace(' ', "·").replace('\t', "⭾");
@@ -58,7 +58,7 @@ fn test_case_with(
 		fmt_ctx.set_indent_depth(config.indent_depth);
 		whitespace::format(&mut whitespace, &mut fmt_ctx, kind);
 
-		let found_output = whitespace.print_to_string();
+		let found_output = whitespace.print_to_string(Print::print);
 
 		let output_fmt = found_output
 			.replace(' ', "·")

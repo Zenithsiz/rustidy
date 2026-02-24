@@ -58,12 +58,12 @@ fn test_case(test_dir: &Path) -> Result<(), AppError> {
 	let config = rustidy_util::Config::default();
 	let _: FormatOutput = rustidy::format(&input, &config, &mut crate_);
 
-	let found_output = crate_.print_to_string();
+	let found_output = crate_.print_to_string(Print::print);
 
 	{
 		let _: FormatOutput = rustidy::format(&input, &config, &mut crate_);
 
-		let found_output2 = crate_.print_to_string();
+		let found_output2 = crate_.print_to_string(Print::print);
 
 		ensure!(
 			found_output == found_output2,
