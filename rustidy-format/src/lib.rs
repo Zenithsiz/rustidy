@@ -392,7 +392,6 @@ impl Formattable for AstStr {
 		FormatOutput {
 			prefix_ws_len: None,
 			len: self.len(),
-			newlines: self.count_newlines(),
 			is_empty: self.is_empty(),
 			is_blank: self.is_blank(),
 			multiline: FormatMultilineOutput::from_ast_str_repr(self.repr())

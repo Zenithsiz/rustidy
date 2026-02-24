@@ -37,7 +37,6 @@ pub fn format_output() -> Result<(), AppError> {
 		"abc" as IdentifierOrKeyword: FormatOutput {
 			prefix_ws_len: Some(0),
 			len: 3,
-			newlines: 0,
 			is_empty: false,
 			is_blank: false,
 			multiline: None,
@@ -45,7 +44,6 @@ pub fn format_output() -> Result<(), AppError> {
 		"  abc" as IdentifierOrKeyword: FormatOutput {
 			prefix_ws_len: Some(2),
 			len: 5,
-			newlines: 0,
 			is_empty: false,
 			is_blank: false,
 			multiline: None,
@@ -53,7 +51,6 @@ pub fn format_output() -> Result<(), AppError> {
 		"//\nabc" as IdentifierOrKeyword: FormatOutput {
 			prefix_ws_len: Some(3),
 			len: 6,
-			newlines: 1,
 			is_empty: false,
 			is_blank: false,
 			multiline: Some(FormatMultilineOutput { prefix_ws_len: Some(2), prefix_len: 2, suffix_len: 3 }),
@@ -61,7 +58,6 @@ pub fn format_output() -> Result<(), AppError> {
 		"//\n//\nabc" as IdentifierOrKeyword: FormatOutput {
 			prefix_ws_len: Some(6),
 			len: 9,
-			newlines: 2,
 			is_empty: false,
 			is_blank: false,
 			multiline: Some(FormatMultilineOutput { prefix_ws_len: Some(2), prefix_len: 2, suffix_len: 3 }),

@@ -13,9 +13,6 @@ pub struct FormatOutput {
 	/// Total length of this type
 	pub len:           usize,
 
-	/// Number of newlines in the input
-	pub newlines:      usize,
-
 	/// Whether the type was empty
 	pub is_empty:      bool,
 
@@ -31,12 +28,6 @@ impl FormatOutput {
 	#[must_use]
 	pub const fn has_prefix_ws(&self) -> bool {
 		self.prefix_ws_len.is_some()
-	}
-
-	/// Returns if this format output has any newlines
-	#[must_use]
-	pub const fn has_newlines(&self) -> bool {
-		self.newlines != 0
 	}
 
 	/// Returns the length of this type, excluding the prefix whitespace, if any
@@ -62,7 +53,6 @@ impl FormatOutput {
 		Self {
 			prefix_ws_len: self::join_prefix_ws(lhs.prefix_ws_len, rhs.prefix_ws_len, lhs.len),
 			len: lhs.len + rhs.len,
-			newlines: lhs.newlines + rhs.newlines,
 			is_empty: lhs.is_empty && rhs.is_empty,
 			is_blank: lhs.is_blank && rhs.is_blank,
 			multiline: FormatMultilineOutput::join(lhs.multiline, rhs.multiline, lhs.len, rhs.len),
@@ -103,7 +93,6 @@ impl Default for FormatOutput {
 		Self {
 			prefix_ws_len: None,
 			len: 0,
-			newlines: 0,
 			is_empty: true,
 			is_blank: true,
 			multiline: None,
