@@ -46,7 +46,7 @@ pub use self::{
 
 // Imports
 use {
-	crate::{attr::{OuterAttrOrDocComment, WithOuterAttributes}, token},
+	crate::{attr::{self, OuterAttrOrDocComment, WithOuterAttributes}, token},
 	super::{Expression, ExpressionInner},
 	rustidy_ast_literal::{IntegerLiteral, LiteralExpression},
 	rustidy_format::{Format, Formattable, WhitespaceFormat},
@@ -63,7 +63,11 @@ use {
 #[parse_recursive(root = ExpressionInner)]
 #[parse_recursive(transparent)]
 #[parse_recursive(into_root = ExpressionInner)]
-pub struct ExpressionWithoutBlock(pub WithOuterAttributes<ExpressionWithoutBlockInner>);
+pub struct ExpressionWithoutBlock(
+	// TODO: If it fits, this should be `SINGLE`
+	#[format(args = attr::with::fmt(Whitespace::INDENT))]
+	pub WithOuterAttributes<ExpressionWithoutBlockInner>,
+);
 
 impl From<ExpressionWithoutBlockInner> for ExpressionWithoutBlock {
 	fn from(expr: ExpressionWithoutBlockInner) -> Self {

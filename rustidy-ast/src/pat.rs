@@ -8,6 +8,7 @@ pub use self::range::RangePattern;
 
 // Imports
 use {
+	crate::attr,
 	super::{
 		attr::WithOuterAttributes,
 		expr::{
@@ -198,7 +199,10 @@ pub struct StructPatternFields(
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
-pub struct StructPatternField(pub WithOuterAttributes<StructPatternFieldInner>);
+pub struct StructPatternField(
+	#[format(args = attr::with::fmt(Whitespace::INDENT))]
+	pub WithOuterAttributes<StructPatternFieldInner>,
+);
 
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]

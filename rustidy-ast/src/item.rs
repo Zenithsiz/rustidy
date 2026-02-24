@@ -38,6 +38,7 @@ pub use self::{
 
 // Imports
 use {
+	crate::attr,
 	super::{
 		attr::{
 			DelimTokenTree,
@@ -98,7 +99,10 @@ impl Items {
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
-pub struct Item(pub ArenaIdx<WithOuterAttributes<ItemInner>>);
+pub struct Item(
+	#[format(args = attr::with::fmt(Whitespace::INDENT))]
+	pub ArenaIdx<WithOuterAttributes<ItemInner>>,
+);
 
 impl Item {
 	#[expect(clippy::result_large_err, reason = "TODO")]

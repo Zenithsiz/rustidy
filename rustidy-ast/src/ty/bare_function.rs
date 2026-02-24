@@ -3,7 +3,7 @@
 // Imports
 use {
 	crate::{
-		attr::WithOuterAttributes,
+		attr::{self, WithOuterAttributes},
 		item::function::{ExternAbi, ForLifetimes},
 		token,
 		util::Parenthesized,
@@ -71,7 +71,10 @@ pub struct MaybeNamedFunctionParameters(
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
-pub struct MaybeNamedParam(pub WithOuterAttributes<MaybeNamedParamInner>);
+pub struct MaybeNamedParam(
+	#[format(args = attr::with::fmt(Whitespace::SINGLE))]
+	pub WithOuterAttributes<MaybeNamedParamInner>,
+);
 
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
@@ -112,6 +115,7 @@ pub struct MaybeNamedFunctionParametersVariadic {
 	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub comma:    token::Comma,
 	#[format(prefix_ws = Whitespace::SINGLE)]
+	#[format(args = attr::with::fmt(Whitespace::SINGLE))]
 	pub variadic: WithOuterAttributes<token::DotDotDot>,
 }
 

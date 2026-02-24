@@ -3,7 +3,7 @@
 // Imports
 use {
 	crate::{
-		attr::WithOuterAttributes,
+		attr::{self, WithOuterAttributes},
 		expr::{Expression, ExpressionInner},
 		item::function::ForLifetimes,
 		pat::PatternNoTopAlt,
@@ -75,7 +75,10 @@ pub struct ClosureParameters(
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
-pub struct ClosureParameter(pub WithOuterAttributes<ClosureParameterInner>);
+pub struct ClosureParameter(
+	#[format(args = attr::with::fmt(Whitespace::SINGLE))]
+	pub WithOuterAttributes<ClosureParameterInner>,
+);
 
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]

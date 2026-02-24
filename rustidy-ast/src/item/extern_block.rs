@@ -3,7 +3,7 @@
 // Imports
 use {
 	crate::{
-		attr::{BracedWithInnerAttributes, WithOuterAttributes},
+		attr::{self, BracedWithInnerAttributes, WithOuterAttributes},
 		token,
 		vis::Visibility,
 	},
@@ -40,7 +40,10 @@ pub struct ExternBlockItems(
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
-pub struct ExternalItem(pub WithOuterAttributes<ExternalItemInner>);
+pub struct ExternalItem(
+	#[format(args = attr::with::fmt(Whitespace::INDENT))]
+	pub WithOuterAttributes<ExternalItemInner>,
+);
 
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]

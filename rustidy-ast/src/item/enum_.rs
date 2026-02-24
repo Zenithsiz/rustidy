@@ -3,7 +3,7 @@
 // Imports
 use {
 	crate::{
-		attr::WithOuterAttributes,
+		attr::{self, WithOuterAttributes},
 		expr::Expression,
 		token,
 		util::{Braced, Parenthesized},
@@ -51,7 +51,10 @@ pub struct EnumVariants(
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
-pub struct EnumVariant(pub WithOuterAttributes<EnumVariantInner>);
+pub struct EnumVariant(
+	#[format(args = attr::with::fmt(Whitespace::INDENT))]
+	pub WithOuterAttributes<EnumVariantInner>,
+);
 
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]

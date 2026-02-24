@@ -3,7 +3,7 @@
 // Imports
 use {
 	crate::{
-		attr::{BracedWithInnerAttributes, WithOuterAttributes},
+		attr::{self, BracedWithInnerAttributes, WithOuterAttributes},
 		expr::{Expression, ExpressionInner, ExpressionWithBlock, ExpressionWithoutBlock},
 		pat::Pattern,
 		token,
@@ -169,7 +169,10 @@ pub struct MatchArmWithExpr {
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
-pub struct MatchArm(pub WithOuterAttributes<MatchArmInner>);
+pub struct MatchArm(
+	#[format(args = attr::with::fmt(Whitespace::INDENT))]
+	pub WithOuterAttributes<MatchArmInner>,
+);
 
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]

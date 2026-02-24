@@ -11,3 +11,7 @@ struct A(
 	
 	Loooooooooooooooooooonooooooooooooooooooooooooooooooooooooooooooooooooooooog
 );
+
+struct A(#[a] #[b] #[c] u32);
+
+struct A(#[a] #[b] #[c] Loooooooooooooooooooonooooooooooooooooooooooooooooooooooooooooooooooooooooog);

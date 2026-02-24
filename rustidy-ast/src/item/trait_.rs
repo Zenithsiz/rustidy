@@ -2,7 +2,7 @@
 
 // Imports
 use {
-	crate::{attr::{BracedWithInnerAttributes, WithOuterAttributes}, token},
+	crate::{attr::{self, BracedWithInnerAttributes, WithOuterAttributes}, token},
 	super::{
 		ConstantItem,
 		Function,
@@ -84,7 +84,10 @@ pub struct TraitColonBounds {
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
-pub struct AssociatedItem(pub WithOuterAttributes<AssociatedItemInner>);
+pub struct AssociatedItem(
+	#[format(args = attr::with::fmt(Whitespace::INDENT))]
+	pub WithOuterAttributes<AssociatedItemInner>,
+);
 
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]

@@ -39,18 +39,6 @@ impl<T> WithOuterAttributes<T> {
 	}
 }
 
-impl<T: Format<WhitespaceConfig, ()>> Format<WhitespaceConfig, ()> for WithOuterAttributes<T> {
-	fn format(
-		&mut self,
-		ctx: &mut rustidy_format::Context,
-		prefix_ws: WhitespaceConfig,
-		_args: ()
-	) -> FormatOutput {
-		self
-			.format(ctx, prefix_ws, FmtArgs { inner_args: () })
-	}
-}
-
 impl<A, T: Format<WhitespaceConfig, A>> Format<WhitespaceConfig, FmtArgs<A>> for WithOuterAttributes<T> {
 	fn format(
 		&mut self,
@@ -69,7 +57,7 @@ impl<A, T: Format<WhitespaceConfig, A>> Format<WhitespaceConfig, FmtArgs<A>> for
 
 			match has_prefix_ws {
 				true => ctx.format(attr, prefix_ws),
-				false => ctx.format(attr, Whitespace::INDENT),
+				false => ctx.format(attr, args.prefix_ws),
 			}.append_to(&mut output);
 
 			is_after_newline = matches!(attr, OuterAttrOrDocComment::DocComment(OuterDocComment::Line(_)));
@@ -91,12 +79,8 @@ impl<A, T: Format<WhitespaceConfig, A>> Format<WhitespaceConfig, FmtArgs<A>> for
 		match has_prefix_ws {
 			true => value_ctx
 				.format_with(&mut self.inner, prefix_ws, args.inner_args),
-			// TODO: The user should be able to choose this
-			false => value_ctx.format_with(
-				&mut self.inner,
-				Whitespace::INDENT,
-				args.inner_args
-			),
+			false => value_ctx
+				.format_with(&mut self.inner, args.prefix_ws, args.inner_args),
 		}.append_to(&mut output);
 
 		output
@@ -159,8 +143,11 @@ impl<T: Format<WhitespaceConfig, ()>> Format<WhitespaceConfig, ()> for BracedWit
 		prefix_ws: WhitespaceConfig,
 		_args: ()
 	) -> FormatOutput {
-		self
-			.format(ctx, prefix_ws, FmtArgs { inner_args: () })
+		self.format(
+			ctx,
+			prefix_ws,
+			FmtArgs { prefix_ws: Whitespace::INDENT, inner_args: () }
+		)
 	}
 }
 
@@ -214,7 +201,7 @@ impl<T: Format<WhitespaceConfig, A>, A> Format<WhitespaceConfig, FmtArgs<A>> for
 
 			let prefix_ws = match has_prefix_ws {
 				true => prefix_ws,
-				false => Whitespace::INDENT,
+				false => args.prefix_ws,
 			};
 
 			ctx
@@ -233,7 +220,7 @@ impl<T: Format<WhitespaceConfig, A>, A> Format<WhitespaceConfig, FmtArgs<A>> for
 
 		let prefix_ws = match has_prefix_ws {
 			true => prefix_ws,
-			false => Whitespace::INDENT,
+			false => args.prefix_ws,
 		};
 		ctx
 			.format_with(&mut self.inner, prefix_ws, args.inner_args)
@@ -246,10 +233,16 @@ impl<T: Format<WhitespaceConfig, A>, A> Format<WhitespaceConfig, FmtArgs<A>> for
 /// Formatting arguments
 #[derive(Clone, Copy, Debug)]
 pub struct FmtArgs<A> {
+	pub prefix_ws:  WhitespaceConfig,
 	pub inner_args: A,
 }
 
 #[must_use]
-pub const fn fmt<A>(inner_args: A) -> FmtArgs<A> {
-	FmtArgs { inner_args }
+pub const fn fmt(prefix_ws: WhitespaceConfig) -> FmtArgs<()> {
+	self::fmt_with(prefix_ws, ())
+}
+
+#[must_use]
+pub const fn fmt_with<A>(prefix_ws: WhitespaceConfig, inner_args: A) -> FmtArgs<A> {
+	FmtArgs { prefix_ws, inner_args }
 }

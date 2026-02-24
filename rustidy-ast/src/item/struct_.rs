@@ -3,7 +3,7 @@
 // Imports
 use {
 	crate::{
-		attr::{WithOuterAttributes, with},
+		attr::{self, WithOuterAttributes, with},
 		expr::Expression,
 		token,
 		ty::Type,
@@ -80,8 +80,10 @@ PunctuatedTrailing<StructField, token::Comma>);
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 #[format(args(ty = "StructFieldInnerArgs"))]
-pub struct StructField(#[format(args = with::fmt(args))]
-pub WithOuterAttributes<StructFieldInner>);
+pub struct StructField(
+	#[format(args = with::fmt_with(Whitespace::INDENT, args))]
+	pub WithOuterAttributes<StructFieldInner>,
+);
 
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
@@ -178,7 +180,12 @@ impl TupleStruct {
 #[derive(Parse, Formattable, Format, Print)]
 #[format(args(ty = "TupleFieldsFmt"))]
 pub struct TupleFields(
-	#[format(args = punct::fmt(args.field_prefix_ws, Whitespace::REMOVE))]
+	#[format(args = punct::fmt_with(
+		args.field_prefix_ws,
+		Whitespace::REMOVE,
+		args,
+		()
+	))]
 	pub PunctuatedTrailing<TupleField, token::Comma>,
 );
 
@@ -191,7 +198,11 @@ struct TupleFieldsFmt {
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
-pub struct TupleField(pub WithOuterAttributes<TupleFieldInner>);
+#[format(args(ty = "TupleFieldsFmt"))]
+pub struct TupleField(
+	#[format(args = attr::with::fmt(args.field_prefix_ws))]
+	pub WithOuterAttributes<TupleFieldInner>,
+);
 
 /// `TupleFieldInner`
 #[derive(PartialEq, Eq, Clone, Debug)]

@@ -9,7 +9,12 @@ pub use self::{block::BlockExpression, match_::{MatchExpression, Scrutinee}};
 
 // Imports
 use {
-	crate::{attr::WithOuterAttributes, lifetime::LifetimeOrLabel, pat::Pattern, token},
+	crate::{
+		attr::{self, WithOuterAttributes},
+		lifetime::LifetimeOrLabel,
+		pat::Pattern,
+		token,
+	},
 	super::Expression,
 	rustidy_ast_util::{Longest, Punctuated, punct},
 	rustidy_format::{Format, Formattable, WhitespaceFormat},
@@ -22,7 +27,11 @@ use {
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
-pub struct ExpressionWithBlock(pub WithOuterAttributes<ExpressionWithBlockInner>);
+pub struct ExpressionWithBlock(
+	// TODO: Should this ever be SINGLE?
+	#[format(args = attr::with::fmt(Whitespace::INDENT))]
+	pub WithOuterAttributes<ExpressionWithBlockInner>,
+);
 
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
@@ -142,6 +151,7 @@ pub struct LetChain(
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub enum LetChainCondition {
+	#[format(args = attr::with::fmt(Whitespace::SINGLE))]
 	Let(WithOuterAttributes<LetChainConditionLet>),
 	#[parse(with_tag = ParserTag::SkipStructExpression)]
 	#[parse(with_tag = ParserTag::SkipLazyBooleanExpression)]

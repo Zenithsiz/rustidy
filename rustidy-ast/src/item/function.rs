@@ -3,7 +3,7 @@
 // Imports
 use {
 	crate::{
-		attr::WithOuterAttributes,
+		attr::{self, WithOuterAttributes},
 		expr::BlockExpression,
 		lifetime::Lifetime,
 		pat::PatternNoTopAlt,
@@ -186,7 +186,10 @@ pub struct FunctionParametersFullSelf {
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
-pub struct FunctionParam(pub WithOuterAttributes<FunctionParamInner>);
+pub struct FunctionParam(
+	#[format(args = attr::with::fmt(Whitespace::SINGLE))]
+	pub WithOuterAttributes<FunctionParamInner>,
+);
 
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
@@ -214,7 +217,10 @@ pub struct FunctionParamPattern {
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
-pub struct SelfParam(pub WithOuterAttributes<ShorthandOrTypedSelf>);
+pub struct SelfParam(
+	#[format(args = attr::with::fmt(Whitespace::SINGLE))]
+	pub WithOuterAttributes<ShorthandOrTypedSelf>,
+);
 
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
@@ -304,7 +310,10 @@ pub struct GenericParamsInner(
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
-pub struct GenericParam(pub WithOuterAttributes<GenericParamInner>);
+pub struct GenericParam(
+	#[format(args = attr::with::fmt(Whitespace::SINGLE))]
+	pub WithOuterAttributes<GenericParamInner>,
+);
 
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]

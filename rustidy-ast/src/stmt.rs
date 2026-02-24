@@ -2,6 +2,7 @@
 
 // Imports
 use {
+	crate::attr,
 	super::{
 		attr::WithOuterAttributes,
 		expr::{BlockExpression, Expression, ExpressionWithBlock, ExpressionWithoutBlock},
@@ -32,7 +33,10 @@ pub enum Statement {
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
-pub struct LetStatement(pub WithOuterAttributes<LetStatementInner>);
+pub struct LetStatement(
+	#[format(args = attr::with::fmt(Whitespace::INDENT))]
+	pub WithOuterAttributes<LetStatementInner>,
+);
 
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
