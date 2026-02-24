@@ -244,9 +244,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 					let output = match &*field_idents {
 						[] => {
 							ensure!(!variant.transparent, "Empty variants may not be transparent");
-							let Fmt {
-								parts
-							} = variant.fmt.as_ref().context(
+							let Fmt { parts } = variant.fmt.as_ref().context(
 								"Expected either `#[parse_error(transparent)]` or `#[parse_error(fmt = \"...\")]`",
 							)?;
 
@@ -312,9 +310,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 					quote! { #field_access.to_app_error(parser) }
 				},
 				None => {
-					let Fmt {
-						parts
-					} = item_error_fmt.as_ref().context(
+					let Fmt { parts } = item_error_fmt.as_ref().context(
 						"Expected either `#[parse_error(transparent)]` or `#[parse_error(fmt = \"...\")]`"
 					)?;
 

@@ -64,20 +64,14 @@ impl<T, P> Punctuated<T, P> {
 		(&mut self.first, self
 			.rest
 			.iter_mut()
-			.map(|PunctuatedRest {
-				punct,
-				value
-			}| (punct, value)),)
+			.map(|PunctuatedRest { punct, value }| (punct, value)),)
 	}
 
 	/// Splits this punctuated at the last value
 	pub fn split_last_mut(&mut self) -> (SplitLastMut<'_, T, P>, &mut T) {
 		let mut rest = self.rest.iter_mut();
 		match rest.next_back() {
-			Some(PunctuatedRest {
-				punct,
-				value
-			}) => {
+			Some(PunctuatedRest { punct, value }) => {
 				let iter = SplitLastMut {
 					next_value: Some(&mut self.first),
 					last_punct: Some(punct),
@@ -154,18 +148,18 @@ impl<T, P> Punctuated<T, P> {
 
 	/// Returns an iterator over all punctuation
 	pub fn puncts(&self) -> impl Iterator<Item = &P> {
-		self.rest.iter().map(|PunctuatedRest {
-			punct,
-			..
-		}| punct)
+		self
+			.rest
+			.iter()
+			.map(|PunctuatedRest { punct, .. }| punct)
 	}
 
 	/// Returns a mutable iterator over all punctuation
 	pub fn puncts_mut(&mut self) -> impl Iterator<Item = &mut P> {
-		self.rest.iter_mut().map(|PunctuatedRest {
-			punct,
-			..
-		}| punct)
+		self
+			.rest
+			.iter_mut()
+			.map(|PunctuatedRest { punct, .. }| punct)
 	}
 }
 
@@ -248,10 +242,7 @@ impl<T, P> PunctuatedTrailing<T, P> {
 			let mut rest = this.punctuated.rest.into_iter();
 			while let Some(cur_value) = next_value.take() {
 				match rest.next() {
-					Some(PunctuatedRest {
-						punct,
-						value
-					}) => {
+					Some(PunctuatedRest { punct, value }) => {
 						next_value = Some(value);
 						values.push((cur_value, Some(punct)));
 					},
@@ -366,10 +357,7 @@ impl<'a, T, P> Iterator for SplitLastMut<'a, T, P> {
 		let punct = match self.rest.next() {
 			// If there's still something in the slice, save the value
 			// for the next iteration
-			Some(PunctuatedRest {
-				punct,
-				value
-			}) => {
+			Some(PunctuatedRest { punct, value }) => {
 				self.next_value = Some(value);
 				punct
 			},

@@ -61,11 +61,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 		darling::ast::Data::Struct(fields) => self::derive_struct(fields),
 	};
 
-	let Impls {
-		with_strings,
-		with_prefix_ws,
-		format_output,
-	} = impls;
+	let Impls { with_strings, with_prefix_ws, format_output, } = impls;
 
 	let impl_generics = util::with_bounds(
 		&attrs,
@@ -116,11 +112,7 @@ fn derive_enum(variants: &[VariantAttrs]) -> Impls<syn::Expr, syn::Expr, syn::Ex
 		.collect::<Impls<Vec<syn::Arm>, Vec<syn::Arm>, Vec<syn::Arm>>>();
 
 
-	let Impls {
-		with_strings,
-		with_prefix_ws,
-		format_output,
-	} = variant_impls;
+	let Impls { with_strings, with_prefix_ws, format_output, } = variant_impls;
 	let with_strings = parse_quote! { match *self { #( #with_strings )* } };
 	let with_prefix_ws = parse_quote! { match *self { #( #with_prefix_ws )* } };
 	let format_output = parse_quote! { match *self { #( #format_output )* } };
@@ -129,11 +121,7 @@ fn derive_enum(variants: &[VariantAttrs]) -> Impls<syn::Expr, syn::Expr, syn::Ex
 }
 
 fn derive_struct(fields: &darling::ast::Fields<FieldAttrs>) -> Impls<syn::Expr, syn::Expr, syn::Expr> {
-	let Impls {
-		with_strings,
-		with_prefix_ws,
-		format_output,
-	} = fields
+	let Impls { with_strings, with_prefix_ws, format_output, } = fields
 		.iter()
 		.enumerate()
 		.map(

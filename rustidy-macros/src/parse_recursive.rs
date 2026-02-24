@@ -27,10 +27,7 @@ struct VariantFieldAttrs {
 
 impl quote::ToTokens for VariantFieldAttrs {
 	fn to_tokens(&self, tokens: &mut proc_macro2::TokenStream) {
-		let Self {
-			ident,
-			ty
-		} = self;
+		let Self { ident, ty } = self;
 		match ident {
 			Some(ident) => quote! { #ident: #ty },
 			None => quote! { #ty },
@@ -50,11 +47,7 @@ struct VariantAttrs {
 
 impl quote::ToTokens for VariantAttrs {
 	fn to_tokens(&self, tokens: &mut proc_macro2::TokenStream) {
-		let Self {
-			ident,
-			fields,
-			recursive: _,
-		} = self;
+		let Self { ident, fields, recursive: _, } = self;
 		quote! { #ident #fields }.to_tokens(tokens);
 	}
 }
@@ -70,10 +63,7 @@ struct FieldAttrs {
 
 impl quote::ToTokens for FieldAttrs {
 	fn to_tokens(&self, tokens: &mut proc_macro2::TokenStream) {
-		let Self {
-			ident,
-			ty
-		} = self;
+		let Self { ident, ty } = self;
 		match ident {
 			Some(ident) => quote! { #ident: #ty },
 			None => quote! { #ty },

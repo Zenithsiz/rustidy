@@ -47,10 +47,7 @@ impl WithExprIf {
 	/// If this contains an `if` condition, then `else_expr` will be used
 	/// when that fails.
 	pub fn eval(&self, else_expr: Option<syn::Expr>) -> syn::Expr {
-		let Self {
-			expr,
-			if_
-		} = self;
+		let Self { expr, if_ } = self;
 		match if_ {
 			Some(cond) => match else_expr {
 				Some(else_expr) => parse_quote! {
@@ -438,30 +435,24 @@ fn derive_format(
 		None => format,
 	};
 
-	let format = without_tag
-		.iter()
-		.fold(format, |format, WithExprIf {
-			expr: tag,
-			if_
-		}| match if_ {
+	let format = without_tag.iter().fold(
+		format,
+		|format, WithExprIf { expr: tag, if_ }| match if_ {
 			Some(cond) => parse_quote! { ctx.without_tag_if(#cond, #tag, |ctx| #format) },
 			None => parse_quote! { ctx.without_tag(#tag, |ctx| #format) },
-		});
+		}
+	);
 
-	let format = with_tag
-		.iter()
-		.fold(format, |format, WithExprIf {
-			expr: tag,
-			if_
-		}| match if_ {
+	let format = with_tag.iter().fold(
+		format,
+		|format, WithExprIf { expr: tag, if_ }| match if_ {
 			Some(cond) => parse_quote! { ctx.with_tag_if(#cond, #tag, |ctx| #format) },
 			None => parse_quote! { ctx.with_tag(#tag, |ctx| #format) },
-		});
+		}
+	);
 
 	let format = match indent {
-		Some(Indent {
-			if_has_tag
-		}) => match if_has_tag {
+		Some(Indent { if_has_tag }) => match if_has_tag {
 			Some(cond) => parse_quote! { ctx.with_indent_if(ctx.has_tag(#cond), |ctx| #format) },
 			None => parse_quote! { ctx.with_indent(|ctx| #format) },
 		},

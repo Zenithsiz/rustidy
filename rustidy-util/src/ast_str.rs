@@ -198,18 +198,9 @@ impl AstStrRepr {
 			Self::String(ref s) => s.len(),
 			Self::Static(s) => s.len(),
 			Self::Char(ch) => ch.len_utf8(),
-			Self::Spaces {
-				len
-			} => usize::from(len),
-			Self::Indentation {
-				ref indent,
-				newlines,
-				depth,
-			} => newlines + depth * indent.len(),
-			Self::Join {
-				ref lhs,
-				ref rhs
-			} => lhs.len() + rhs.len(),
+			Self::Spaces { len } => usize::from(len),
+			Self::Indentation { ref indent, newlines, depth, } => newlines + depth * indent.len(),
+			Self::Join { ref lhs, ref rhs } => lhs.len() + rhs.len(),
 		}
 	}
 
@@ -244,15 +235,8 @@ impl AstStrRepr {
 			Self::String(ref s) => crate::is_str_blank(s),
 			Self::Static(s) => crate::is_str_blank(s),
 			Self::Char(ch) => ch.is_ascii_whitespace(),
-			Self::Spaces {
-				..
-			} | Self::Indentation {
-				..
-			} => true,
-			Self::Join {
-				ref lhs,
-				ref rhs
-			} => lhs.is_blank() && rhs.is_blank(),
+			Self::Spaces { .. } | Self::Indentation { .. } => true,
+			Self::Join { ref lhs, ref rhs } => lhs.is_blank() && rhs.is_blank(),
 		}
 	}
 
@@ -266,17 +250,9 @@ impl AstStrRepr {
 				true => 1,
 				false => 0,
 			},
-			Self::Spaces {
-				..
-			} => 0,
-			Self::Indentation {
-				newlines,
-				..
-			} => newlines,
-			Self::Join {
-				ref lhs,
-				ref rhs
-			} => lhs.count_newlines() + rhs.count_newlines(),
+			Self::Spaces { .. } => 0,
+			Self::Indentation { newlines, .. } => newlines,
+			Self::Join { ref lhs, ref rhs } => lhs.count_newlines() + rhs.count_newlines(),
 		}
 	}
 
@@ -302,22 +278,13 @@ impl AstStrRepr {
 				other.next().is_none()
 			},
 
-			Self::Spaces {
-				len
-			} => other.len() == usize::from(len) && other.chars().all(|ch| ch == ' '),
+			Self::Spaces { len } => other.len() == usize::from(len) && other.chars().all(|ch| ch == ' '),
 
-			Self::Indentation {
-				ref indent,
-				newlines,
-				depth
-			} => other.len() == newlines + depth && other[..newlines].chars().all(|ch| ch == '\n') && other[newlines..]
+			Self::Indentation { ref indent, newlines, depth } => other.len() == newlines + depth && other[..newlines].chars().all(|ch| ch == '\n') && other[newlines..]
 				.chunk(indent.len())
 				.all(|other_indent| other_indent == other),
 
-			Self::Join {
-				ref lhs,
-				ref rhs
-			} => {
+			Self::Join { ref lhs, ref rhs } => {
 				let Some((lhs_other, rhs_other)) = other.split_at_checked(lhs.len()) else {
 					return false;
 				};
@@ -332,16 +299,10 @@ impl AstStrRepr {
 			Self::String(ref s) => output.push_str(s),
 			Self::Static(s) => output.push_str(s),
 			Self::Char(ch) => output.push(ch),
-			Self::Spaces {
-				len
-			} => for _ in 0..len {
+			Self::Spaces { len } => for _ in 0..len {
 				output.push(' ');
 			},
-			Self::Indentation {
-				ref indent,
-				newlines,
-				depth,
-			} => {
+			Self::Indentation { ref indent, newlines, depth, } => {
 				for _ in 0..newlines {
 					output.push('\n');
 				}
@@ -349,10 +310,7 @@ impl AstStrRepr {
 					output.push_str(indent);
 				}
 			},
-			Self::Join {
-				ref lhs,
-				ref rhs
-			} => {
+			Self::Join { ref lhs, ref rhs } => {
 				lhs.write(output);
 				rhs.write(output);
 			},
@@ -366,12 +324,8 @@ impl AstStrRepr {
 			Self::String(s) => Some(s),
 
 			// Special case these to avoid a `String` allocation
-			Self::Spaces {
-				len: 0
-			} => "".into(),
-			Self::Spaces {
-				len: 1
-			} => " ".into(),
+			Self::Spaces { len: 0 } => "".into(),
+			Self::Spaces { len: 1 } => " ".into(),
 
 			_ => None,
 		}

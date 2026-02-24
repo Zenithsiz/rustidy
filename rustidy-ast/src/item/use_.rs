@@ -278,19 +278,13 @@ impl UseTreeGroup {
 
 			// Note: We process the trees backwards to ensure that we always have
 			//       somewhere to add the whitespace of the braces we're removing.
-			while let Some(PunctuatedRest {
-				punct: mut comma,
-				value: tree,
-			}) = sub_trees
+			while let Some(PunctuatedRest { punct: mut comma, value: tree, }) = sub_trees
 				.pop()
 				.or_else(|| trees.punctuated.rest.pop())
 				.or_else(|| trees_first.take()) {
 				// Joins a prefix whitespace to the latest whitespace we have
 				let mut latest_ws_join_prefix = |ws: Whitespace| match new_trees.last_mut() {
-					Some(PunctuatedRest {
-						punct: last_comma,
-						..
-					}) => last_comma.ws.join_prefix(ws),
+					Some(PunctuatedRest { punct: last_comma, .. }) => last_comma.ws.join_prefix(ws),
 					None => match &mut trailing_comma {
 						Some(trailing_comma) => trailing_comma.ws.join_prefix(ws),
 						None => self.tree.suffix.ws.join_prefix(ws),
@@ -321,20 +315,19 @@ impl UseTreeGroup {
 				}
 			}
 
-			new_trees.pop().map(|PunctuatedRest {
-				punct: first_comma,
-				value: mut first,
-			}| {
-				first
-					.prefix_ws_join_prefix(ctx, first_comma.ws)
-					.expect("Use tree should have prefix whitespace");
+			new_trees.pop().map(
+				|PunctuatedRest { punct: first_comma, value: mut first }| {
+					first
+						.prefix_ws_join_prefix(ctx, first_comma.ws)
+						.expect("Use tree should have prefix whitespace");
 
-				new_trees.reverse();
-				PunctuatedTrailing {
-					punctuated: Punctuated { first, rest: new_trees },
-					trailing: trailing_comma,
-				}
-			},)
+					new_trees.reverse();
+					PunctuatedTrailing {
+						punctuated: Punctuated { first, rest: new_trees },
+						trailing: trailing_comma,
+					}
+				},
+			)
 		});
 	}
 

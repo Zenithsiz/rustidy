@@ -108,10 +108,7 @@ impl Item {
 	#[expect(clippy::result_large_err, reason = "TODO")]
 	fn try_into_use_decl(self) -> Result<(Vec<OuterAttrOrDocComment>, Option<Visibility>, UseDeclaration), Self> {
 		self.0.try_take_map(|item| match item.inner {
-			ItemInner::Vis(VisItem {
-				vis,
-				inner: VisItemInner::Use(use_decl),
-			}) => Ok((item.attrs, vis, use_decl)),
+			ItemInner::Vis(VisItem { vis, inner: VisItemInner::Use(use_decl), }) => Ok((item.attrs, vis, use_decl)),
 			_ => Err(item),
 		}).map_err(Self)
 	}
@@ -133,10 +130,7 @@ impl Item {
 			}
 
 			match item.inner {
-				ItemInner::Vis(VisItem {
-					vis,
-					inner: VisItemInner::Use(use_decl),
-				}) if vis.as_ref() == expected_vis => Ok(use_decl),
+				ItemInner::Vis(VisItem { vis, inner: VisItemInner::Use(use_decl), }) if vis.as_ref() == expected_vis => Ok(use_decl),
 				_ => Err(item),
 			}
 		}).map_err(Self)

@@ -232,13 +232,8 @@ impl WhitespaceFormatKind {
 	) -> AstStrRepr {
 		match self {
 			Self::Remove => "".into(),
-			Self::Spaces {
-				len
-			} => AstStrRepr::Spaces { len },
-			Self::Indent {
-				use_prev,
-				remove_if_pure
-			} => match remove_if_pure && is_last {
+			Self::Spaces { len } => AstStrRepr::Spaces { len },
+			Self::Indent { use_prev, remove_if_pure } => match remove_if_pure && is_last {
 				true => "".into(),
 				false => ctx.with_indent_offset_if(
 					-1,
@@ -257,13 +252,8 @@ impl WhitespaceFormatKind {
 		is_last: bool
 	) -> AstStrRepr {
 		match self {
-			Self::Remove | Self::Spaces {
-				..
-			} => "".into(),
-			Self::Indent {
-				use_prev,
-				..
-			} => match is_last {
+			Self::Remove | Self::Spaces { .. } => "".into(),
+			Self::Indent { use_prev, .. } => match is_last {
 				true => ctx.with_indent_offset_if(
 					-1,
 					use_prev,
@@ -283,13 +273,8 @@ impl WhitespaceFormatKind {
 	) -> AstStrRepr {
 		match self {
 			Self::Remove => "".into(),
-			Self::Spaces {
-				len
-			} => AstStrRepr::Spaces { len },
-			Self::Indent {
-				use_prev,
-				..
-			} => match is_last {
+			Self::Spaces { len } => AstStrRepr::Spaces { len },
+			Self::Indent { use_prev, .. } => match is_last {
 				true => ctx.with_indent_offset_if(
 					-1,
 					use_prev,

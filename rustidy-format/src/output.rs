@@ -178,14 +178,8 @@ impl FormatMultilineOutput {
 				}),
 				false => None,
 			},
-			AstStrRepr::Spaces {
-				..
-			} => None,
-			AstStrRepr::Indentation {
-				ref indent,
-				newlines,
-				depth
-			} => match newlines {
+			AstStrRepr::Spaces { .. } => None,
+			AstStrRepr::Indentation { ref indent, newlines, depth } => match newlines {
 				0 => None,
 				_ => Some(Self {
 					prefix_ws_len: None,
@@ -193,10 +187,7 @@ impl FormatMultilineOutput {
 					suffix_len: depth * indent.len(),
 				})
 			},
-			AstStrRepr::Join {
-				ref lhs,
-				ref rhs
-			} => Self::join(
+			AstStrRepr::Join { ref lhs, ref rhs } => Self::join(
 				Self::from_ast_str_repr(lhs.repr()),
 				Self::from_ast_str_repr(rhs.repr()),
 				lhs.len(),
