@@ -74,7 +74,7 @@ impl Format<WhitespaceConfig, ()> for ArrayExpression {
 				let cols = ctx.config().array_expr_cols;
 				let is_single_line = !single_line_output.has_newlines() && match cols {
 					Some(cols) => cols >= values.values_len(),
-					None => single_line_output.len_without_prefix_ws() <= ctx.config().max_array_expr_len,
+					None => single_line_output.len_non_multiline_ws() <= ctx.config().max_array_expr_len,
 				};
 
 				// If we don't fit in a single line, format it multi-line

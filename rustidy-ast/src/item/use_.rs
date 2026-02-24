@@ -394,6 +394,9 @@ impl UseTreeGroup {
 	) -> FormatOutput {
 		let compact_output = Self::format_tree_compact(tree, ctx, prefix_ws);
 
+		// Note: We don't use `len_non_multiline_ws` because we never want to emit
+		//       something like `{a, b::{\n...\n}, c, d}`, and if any newlines are
+		//       found we'd instead want to make it multi-line.
 		match compact_output.len_without_prefix_ws() > ctx.config().max_use_tree_len {
 			true => {
 				if let Some(punct) = &mut tree.value && punct.trailing.is_none() {

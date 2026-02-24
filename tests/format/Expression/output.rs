@@ -67,19 +67,16 @@ fn function_call() {
 		looooooooooooooooooooooooooooooooooooooooooooooooong,
 		c
 	);
-	a
-		.a(
-			a,
-			looooooooooooooooooooooooooooooooooooooooooooooooong,
-			c
-		);
-
-
-	a(
-		|| {
-			looooooooooooooooooooooooooooooooooooooooooooooooong;
-		}
+	a.a(
+		a,
+		looooooooooooooooooooooooooooooooooooooooooooooooong,
+		c
 	);
+
+
+	a(|| {
+		looooooooooooooooooooooooooooooooooooooooooooooooong;
+	});
 }
 
 fn doc_comment_newline() {

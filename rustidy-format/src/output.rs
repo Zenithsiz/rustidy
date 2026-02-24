@@ -46,6 +46,15 @@ impl FormatOutput {
 		self.len - self.prefix_ws_len.unwrap_or(0)
 	}
 
+	/// Returns the non-whitespace non-multiline whitespace length of this type
+	#[must_use]
+	pub fn len_non_multiline_ws(&self) -> usize {
+		match self.multiline {
+			Some(multiline) => multiline.prefix_len + multiline.suffix_len,
+			None => self.len_without_prefix_ws(),
+		}
+	}
+
 	/// Joins two format outputs.
 	///
 	/// You must ensure that `rhs` directly follows `lhs`.

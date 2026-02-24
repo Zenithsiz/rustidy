@@ -165,7 +165,7 @@ impl TupleStruct {
 				)
 			);
 
-		match output.len_without_prefix_ws() <= ctx.config().max_inline_tuple_struct_len {
+		match output.len_non_multiline_ws() <= ctx.config().max_inline_tuple_struct_len {
 			true => output,
 			false => {
 				if let Some(fields) = &mut fields.value && fields.0.trailing.is_none() {

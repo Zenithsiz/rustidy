@@ -263,7 +263,7 @@ where
 				self::fmt_single_if_non_blank_with_value(args.value_args_single)
 			);
 
-		match output.len_without_prefix_ws() <= args.max_len {
+		match output.len_non_multiline_ws() <= args.max_len {
 			true => output,
 			false => self
 				.format(
@@ -313,7 +313,7 @@ where
 				FmtRemoveWith(args.value_args_remove)
 			);
 
-		match output.len_without_prefix_ws() <= args.max_len {
+		match output.len_non_multiline_ws() <= args.max_len {
 			true => output,
 			false => self
 				.format(

@@ -77,7 +77,7 @@ impl Format<WhitespaceConfig, ()> for MethodCallExpression {
 
 		match ctx.has_tag(FormatTag::InsideChain) {
 			true => output,
-			false => match output.len_without_prefix_ws() >= ctx.config().max_chain_len {
+			false => match output.len_non_multiline_ws() >= ctx.config().max_chain_len {
 				// TODO: Ideally we wouldn't re-format everything here.
 				true => ctx
 					.with_tag(
