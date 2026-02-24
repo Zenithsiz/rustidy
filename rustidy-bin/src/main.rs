@@ -165,8 +165,10 @@ fn format_file(
 		true => ensure!(input == output.as_str(), "File was not formatted"),
 		false => {
 			match file_path {
-				Some(file_path) => fs::write(file_path, output.as_str())
-					.context("Unable to write file")?,
+				Some(file_path) => if input != output.as_str() {
+					fs::write(file_path, output.as_str())
+						.context("Unable to write file")?;
+				},
 				None => io::stdout()
 					.write_all(output.as_str().as_bytes())
 					.context("Unable to write to stdout")?,
