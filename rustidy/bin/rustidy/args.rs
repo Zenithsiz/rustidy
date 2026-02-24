@@ -3,7 +3,7 @@
 // Imports
 use std::path::PathBuf;
 
-/// Rust-tidy formatter
+/// Rustidy formatter
 #[derive(Debug)]
 #[derive(clap::Parser)]
 #[clap(author, version, about)]

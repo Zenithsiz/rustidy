@@ -1,4 +1,4 @@
-//! Rust-tidy formatter
+//! Rustidy formatter
 
 // Features
 #![cfg_attr(doc, recursion_limit = "512")]

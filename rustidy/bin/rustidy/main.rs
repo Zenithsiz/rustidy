@@ -1,4 +1,4 @@
-//! Rust-tidy formatter
+//! Rustidy formatter
 
 // Features
 #![feature(
