@@ -1,7 +1,11 @@
 //! Method call expression
 
 use {
-	crate::{expr::{Expression, ExpressionInner}, token, util::Parenthesized},
+	crate::{
+		expr::{Expression, ExpressionInner},
+		token,
+		util::{FmtSingleOrIndent, Parenthesized},
+	},
 	super::{ExpressionWithoutBlockInner, path::PathExprSegment},
 	rustidy_ast_util::{PunctuatedTrailing, delimited, punct},
 	rustidy_format::{
@@ -28,9 +32,11 @@ pub struct CallExpression {
 	pub expr:   Expression,
 	#[format(without_tag = FormatTag::InsideChain)]
 	#[format(prefix_ws = Whitespace::REMOVE)]
-	#[format(
-		args = delimited::fmt_remove_or_indent_if_non_blank(50, CallParamsFmt::Inline, CallParamsFmt::Indent)
-	)]
+	#[format(args = delimited::fmt_remove_or_indent_if_non_blank(
+		50,
+		FmtSingleOrIndent::Single,
+		FmtSingleOrIndent::Indent
+	))]
 	pub params: Parenthesized<Option<CallParams>>,
 }
 
@@ -55,9 +61,11 @@ pub struct MethodCallExpression {
 	#[format(prefix_ws = Whitespace::REMOVE)]
 	#[format(without_tag = FormatTag::InsideChain)]
 	#[format(indent(if_has_tag = FormatTag::InsideChain))]
-	#[format(
-		args = delimited::fmt_remove_or_indent_if_non_blank(50, CallParamsFmt::Inline, CallParamsFmt::Indent)
-	)]
+	#[format(args = delimited::fmt_remove_or_indent_if_non_blank(
+		50,
+		FmtSingleOrIndent::Single,
+		FmtSingleOrIndent::Indent
+	))]
 	pub params:  Parenthesized<Option<CallParams>>,
 }
 
@@ -92,23 +100,8 @@ impl Format<WhitespaceConfig, ()> for MethodCallExpression {
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
-#[format(args(ty = "CallParamsFmt"))]
+#[format(args(ty = "FmtSingleOrIndent"))]
 pub struct CallParams(
 	#[format(args = punct::fmt(args.prefix_ws(), Whitespace::REMOVE))]
 	pub PunctuatedTrailing<Expression, token::Comma>,
 );
-
-#[derive(Clone, Copy, Debug)]
-enum CallParamsFmt {
-	Inline,
-	Indent,
-}
-
-impl CallParamsFmt {
-	const fn prefix_ws(self) -> WhitespaceConfig {
-		match self {
-			Self::Inline => Whitespace::SINGLE,
-			Self::Indent => Whitespace::INDENT,
-		}
-	}
-}

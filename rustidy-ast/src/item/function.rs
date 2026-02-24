@@ -9,11 +9,11 @@ use {
 		pat::PatternNoTopAlt,
 		token,
 		ty::{Type, TypePath},
-		util::Parenthesized,
+		util::{FmtSingleOrIndent, Parenthesized},
 	},
 	rustidy_ast_literal::{LiteralExpression, RawStringLiteral, StringLiteral},
 	rustidy_ast_util::{Delimited, Follows, Identifier, PunctuatedTrailing, delimited, punct},
-	rustidy_format::{Format, Formattable, WhitespaceConfig, WhitespaceFormat},
+	rustidy_format::{Format, Formattable, WhitespaceFormat},
 	rustidy_parse::{Parse, ParsePeeked},
 	rustidy_print::Print,
 	rustidy_util::Whitespace,
@@ -36,8 +36,8 @@ pub struct Function {
 	#[format(prefix_ws = Whitespace::REMOVE)]
 	#[format(args = delimited::fmt_remove_or_indent_if_non_blank(
 		60,
-		FunctionParametersFmt::Inline,
-		FunctionParametersFmt::Indent
+		FmtSingleOrIndent::Single,
+		FmtSingleOrIndent::Indent
 	))]
 	pub params:     Parenthesized<Option<FunctionParameters>>,
 	#[format(prefix_ws = Whitespace::SINGLE)]
@@ -121,27 +121,12 @@ pub enum ItemSafety {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 #[parse(name = "function parameters")]
-#[format(args(ty = "FunctionParametersFmt"))]
+#[format(args(ty = "FmtSingleOrIndent"))]
 pub enum FunctionParameters {
 	#[format(args = args)]
 	Full(FunctionParametersFull),
 	#[parse(peek = (SelfParam, Option::<token::Comma>, Follows::<token::ParenClose>))]
 	OnlySelf(FunctionParametersOnlySelf),
-}
-
-#[derive(Clone, Copy, Debug)]
-enum FunctionParametersFmt {
-	Inline,
-	Indent,
-}
-
-impl FunctionParametersFmt {
-	const fn prefix_ws(self) -> WhitespaceConfig {
-		match self {
-			Self::Inline => Whitespace::SINGLE,
-			Self::Indent => Whitespace::INDENT,
-		}
-	}
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]
@@ -165,7 +150,7 @@ impl ParsePeeked<(SelfParam, Option<token::Comma>, Follows<token::ParenClose>)> 
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
-#[format(args(ty = "FunctionParametersFmt"))]
+#[format(args(ty = "FmtSingleOrIndent"))]
 pub struct FunctionParametersFull {
 	pub self_: Option<FunctionParametersFullSelf>,
 	#[format(prefix_ws(if_ = self.self_.is_some(), expr = args.prefix_ws()))]
