@@ -2,7 +2,7 @@
 
 // Imports
 use {
-	crate::{ArenaData, ArenaIdx},
+	crate::{ArenaData, ArenaIdx, StrChunk},
 	arcstr::Substr,
 	std::{borrow::Cow, sync::Arc},
 };
@@ -291,8 +291,36 @@ impl AstStrRepr {
 			Self::String(ref s) => s == other,
 			Self::Static(s) => s == other,
 
-			// TODO: Properly implement these to avoid allocating a string
-			_ => self.str() == other,
+			Self::Char(ch) => {
+				let mut other = other.chars();
+				if other.next() != Some(ch) {
+					return false;
+				}
+
+				other.next().is_none()
+			},
+
+			Self::Spaces {
+				len
+			} => other.len() == usize::from(len) && other.chars().all(|ch| ch == ' '),
+
+			Self::Indentation {
+				ref indent,
+				newlines,
+				depth
+			} => other.len() == newlines + depth && other[..newlines].chars().all(|ch| ch == '\n') && other[newlines..]
+				.chunk(indent.len())
+				.all(|other_indent| other_indent == other),
+
+			Self::Join {
+				ref lhs,
+				ref rhs
+			} => {
+				let Some((lhs_other, rhs_other)) = other.split_at_checked(lhs.len()) else {
+					return false;
+				};
+				lhs.is_str(lhs_other) && rhs.is_str(rhs_other)
+			},
 		}
 	}
 
