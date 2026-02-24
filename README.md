@@ -48,6 +48,13 @@ fn main() {
 }
 ```
 
+Disclaimer: To use these attributes, you'll need a nightly toolchain with the feature `register_tool`:
+
+```rust
+#![feature(register_tool)]
+#![register_tool(rustidy)]
+```
+
 ## Installation
 
 ### From source
