@@ -8,13 +8,10 @@ members = [
 	"rustidy-ast-literal",
 	"rustidy-ast-tokens",
 	"rustidy-ast-util",
-	"rustidy-bin",
-	"rustidy-cargo",
 	"rustidy-format",
 	"rustidy-macros",
 	"rustidy-parse",
 	"rustidy-print",
-	"rustidy-tests",
 	"rustidy-util",
 ]
 resolver = "2"
@@ -35,13 +32,10 @@ rustidy-ast         = { path = "rustidy-ast" }
 rustidy-ast-literal = { path = "rustidy-ast-literal" }
 rustidy-ast-tokens  = { path = "rustidy-ast-tokens" }
 rustidy-ast-util    = { path = "rustidy-ast-util" }
-rustidy-bin         = { path = "rustidy-bin" }
-rustidy-cargo       = { path = "rustidy-cargo" }
 rustidy-format      = { path = "rustidy-format" }
 rustidy-macros      = { path = "rustidy-macros" }
 rustidy-parse       = { path = "rustidy-parse" }
 rustidy-print       = { path = "rustidy-print" }
-rustidy-tests       = { path = "rustidy-tests" }
 rustidy-util        = { path = "rustidy-util" }
 
 app-error        = { git = "https://github.com/Zenithsiz/app-error", rev = "2ff4c7b54f57e189042171718032fbb27eea18d8" }

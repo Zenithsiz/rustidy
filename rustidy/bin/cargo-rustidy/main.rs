@@ -3,6 +3,9 @@
 // Features
 #![feature(yeet_expr, exit_status_error)]
 
+// Lints
+#![expect(unused_crate_dependencies, reason = "They're used in other crates in this package")]
+
 // Module
 mod args;
 

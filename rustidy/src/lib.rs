@@ -26,6 +26,9 @@
 	if_let_guard
 )]
 
+// Lints
+#![expect(unused_crate_dependencies, reason = "They're used in other crates in this package")]
+
 // Imports
 use {
 	app_error::{AppError, app_error},

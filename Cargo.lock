@@ -500,10 +500,22 @@ name = "rustidy"
 version = "0.1.0"
 dependencies = [
  "app-error",
+ "assert-json-diff",
+ "cargo_metadata",
+ "clap",
+ "clap-cargo",
+ "difference",
  "rustidy-ast",
+ "rustidy-ast-util",
  "rustidy-format",
  "rustidy-parse",
+ "rustidy-print",
  "rustidy-util",
+ "serde",
+ "serde_json",
+ "toml",
+ "tracing",
+ "zutil-logger",
 ]
 
 [[package]]
@@ -580,35 +592,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "rustidy-bin"
-version = "0.1.0"
-dependencies = [
- "app-error",
- "clap",
- "rustidy",
- "rustidy-ast",
- "rustidy-ast-util",
- "rustidy-format",
- "rustidy-print",
- "rustidy-util",
- "toml",
- "tracing",
- "zutil-logger",
-]
-
-[[package]]
-name = "rustidy-cargo"
-version = "0.1.0"
-dependencies = [
- "app-error",
- "cargo_metadata",
- "clap",
- "clap-cargo",
- "tracing",
- "zutil-logger",
-]
-
-[[package]]
 name = "rustidy-format"
 version = "0.1.0"
 dependencies = [
@@ -658,26 +641,6 @@ dependencies = [
  "arcstr",
  "rustidy-macros",
  "rustidy-util",
-]
-
-[[package]]
-name = "rustidy-tests"
-version = "0.1.0"
-dependencies = [
- "app-error",
- "assert-json-diff",
- "difference",
- "rustidy",
- "rustidy-ast",
- "rustidy-ast-util",
- "rustidy-format",
- "rustidy-parse",
- "rustidy-print",
- "rustidy-util",
- "serde",
- "serde_json",
- "tracing",
- "zutil-logger",
 ]
 
 [[package]]

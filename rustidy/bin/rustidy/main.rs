@@ -17,6 +17,9 @@
 	anonymous_lifetime_in_impl_trait
 )]
 
+// Lints
+#![expect(unused_crate_dependencies, reason = "They're used in other crates in this package")]
+
 // Modules
 mod args;
 

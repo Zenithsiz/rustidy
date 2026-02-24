@@ -4,7 +4,7 @@
 #![feature(yeet_expr)]
 
 // Lints
-#![expect(unused_crate_dependencies, reason = "They're used in other tests")]
+#![expect(unused_crate_dependencies, reason = "They're used in other crates in this package")]
 
 // Imports
 use {app_error::{AppError, Context, ensure}, std::{env, fs, path::Path}};

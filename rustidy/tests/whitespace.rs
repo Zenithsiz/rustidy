@@ -4,7 +4,7 @@
 #![feature(yeet_expr, anonymous_lifetime_in_impl_trait)]
 
 // Lints
-#![expect(unused_crate_dependencies, reason = "They're used in other tests")]
+#![expect(unused_crate_dependencies, reason = "They're used in other crates in this package")]
 
 use {
 	app_error::{AppError, Context, ensure},
