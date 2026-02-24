@@ -1,7 +1,11 @@
 [package]
-name    = "rustidy-cargo"
-version = "0.1.0"
-edition = "2024"
+name        = "rustidy-cargo"
+edition     = { workspace = true }
+description = { workspace = true }
+license     = { workspace = true }
+version     = { workspace = true }
+repository  = { workspace = true }
+publish     = { workspace = true }
 
 [[bin]]
 name = "cargo-rustidy"
