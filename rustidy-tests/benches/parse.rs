@@ -27,7 +27,7 @@ fn parse_crate_empty(bencher: &mut Bencher) {
 
 #[bench]
 fn parse_crate_hello_world(bencher: &mut Bencher) {
-	self::parse::<Crate>(bencher, r#"fn main() { println!("Hello world!"); }"#);
+	self::parse::<Crate>(bencher, r#"fn main() { println!("Hello, world!"); }"#);
 }
 
 #[bench]
