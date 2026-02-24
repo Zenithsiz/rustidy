@@ -211,13 +211,11 @@ pub struct MacroMatchDollarRepMatches(
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
-pub struct MacroRepSep(
-	#[parse(with_tag = ParserTag::SkipDelimiters)]
-	#[parse(with_tag = ParserTag::SkipTokenStar)]
-	#[parse(with_tag = ParserTag::SkipTokenPlus)]
-	#[parse(with_tag = ParserTag::SkipTokenQuestion)]
-	Token,
-);
+pub struct MacroRepSep(#[parse(with_tag = ParserTag::SkipDelimiters)]
+#[parse(with_tag = ParserTag::SkipTokenStar)]
+#[parse(with_tag = ParserTag::SkipTokenPlus)]
+#[parse(with_tag = ParserTag::SkipTokenQuestion)]
+Token);
 
 /// `MacroRepOp`
 #[derive(PartialEq, Eq, Clone, Debug)]

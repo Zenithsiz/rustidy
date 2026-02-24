@@ -349,20 +349,16 @@ impl Parse for ParseBracesOpen {
 			return Err(());
 		}
 
-		parser
-			.try_update_with(
-				|s| {
-					// TODO: Parse proper whitespace here
-					*s = s.trim_start();
-					match s.strip_prefix('{') {
-						Some(rest) => {
-							*s = rest;
-							Ok(())
-						},
-						None => Err(()),
-					}
-				}
-			)
-			.map(|_| Self)
+		parser.try_update_with(|s| {
+			// TODO: Parse proper whitespace here
+			*s = s.trim_start();
+			match s.strip_prefix('{') {
+				Some(rest) => {
+					*s = rest;
+					Ok(())
+				},
+				None => Err(()),
+			}
+		}).map(|_| Self)
 	}
 }

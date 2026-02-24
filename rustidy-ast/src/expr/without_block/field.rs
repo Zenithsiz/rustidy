@@ -28,12 +28,10 @@ use {
 pub struct FieldExpression {
 	pub expr:  Expression,
 	#[format(indent(if_has_tag = FormatTag::InsideChain))]
-	#[format(
-		prefix_ws = match ctx.has_tag(FormatTag::InsideChain) {
-			true => Whitespace::INDENT,
-			false => Whitespace::REMOVE,
-		}
-	)]
+	#[format(prefix_ws = match ctx.has_tag(FormatTag::InsideChain) {
+		true => Whitespace::INDENT,
+		false => Whitespace::REMOVE,
+	})]
 	pub dot:   token::Dot,
 	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub ident: Identifier,
@@ -55,12 +53,10 @@ impl Format<WhitespaceConfig, ()> for FieldExpression {
 			false => match output.len_non_multiline_ws() >= ctx.config().max_chain_len {
 				// TODO: Ideally we wouldn't re-format everything here.
 				true => ctx
-					.with_tag(
-						FormatTag::InsideChain,
-						|ctx| {
-							self.format(ctx, prefix_ws, FieldExpressionFmt)
-						}
-					),
+					.with_tag(FormatTag::InsideChain, |ctx| {
+						self
+							.format(ctx, prefix_ws, FieldExpressionFmt)
+					}),
 				false => output,
 			},
 		}

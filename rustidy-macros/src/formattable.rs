@@ -104,17 +104,15 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 fn derive_enum(variants: &[VariantAttrs]) -> Impls<syn::Expr, syn::Expr, syn::Expr> {
 	let variant_impls = variants
 		.iter()
-		.map(
-			|variant| {
-				let variant_ident = &variant.ident;
-				let with_strings = parse_quote! { Self::#variant_ident(ref mut value) => rustidy_format::Formattable::with_strings(value, ctx, exclude_prefix_ws, f), };
+		.map(|variant| {
+			let variant_ident = &variant.ident;
+			let with_strings = parse_quote! { Self::#variant_ident(ref mut value) => rustidy_format::Formattable::with_strings(value, ctx, exclude_prefix_ws, f), };
 
-				let with_prefix_ws = parse_quote! { Self::#variant_ident(ref mut value) => rustidy_format::Formattable::with_prefix_ws(value, ctx, f), };
-				let format_output = parse_quote! { Self::#variant_ident(ref mut value) => rustidy_format::Formattable::format_output(value, ctx), };
+			let with_prefix_ws = parse_quote! { Self::#variant_ident(ref mut value) => rustidy_format::Formattable::with_prefix_ws(value, ctx, f), };
+			let format_output = parse_quote! { Self::#variant_ident(ref mut value) => rustidy_format::Formattable::format_output(value, ctx), };
 
-				Impls { with_strings, with_prefix_ws, format_output, }
-			}
-		)
+			Impls { with_strings, with_prefix_ws, format_output, }
+		})
 		.collect::<Impls<Vec<syn::Arm>, Vec<syn::Arm>, Vec<syn::Arm>>>();
 
 

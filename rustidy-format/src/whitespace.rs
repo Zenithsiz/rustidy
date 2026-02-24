@@ -11,27 +11,19 @@ use {
 
 #[extend::ext(name = WhitespaceFormat)]
 pub impl Whitespace {
-	const INDENT: WhitespaceConfig = WhitespaceConfig {
-		format: Some(
-			WhitespaceFormatKind::Indent { use_prev: false, remove_if_pure: false, }
-		),
-	};
+	const INDENT: WhitespaceConfig = WhitespaceConfig { format: Some(
+		WhitespaceFormatKind::Indent { use_prev: false, remove_if_pure: false, }
+	), };
 	const PRESERVE: WhitespaceConfig = WhitespaceConfig { format: None };
-	const INDENT_CLOSE: WhitespaceConfig = WhitespaceConfig {
-		format: Some(
-			WhitespaceFormatKind::Indent { use_prev: true, remove_if_pure: false, }
-		),
-	};
-	const INDENT_CLOSE_REMOVE_IF_PURE: WhitespaceConfig = WhitespaceConfig {
-		format: Some(
-			WhitespaceFormatKind::Indent { use_prev: true, remove_if_pure: true, }
-		),
-	};
-	const INDENT_REMOVE_IF_PURE: WhitespaceConfig = WhitespaceConfig {
-		format: Some(
-			WhitespaceFormatKind::Indent { use_prev: false, remove_if_pure: true, }
-		),
-	};
+	const INDENT_CLOSE: WhitespaceConfig = WhitespaceConfig { format: Some(
+		WhitespaceFormatKind::Indent { use_prev: true, remove_if_pure: false, }
+	), };
+	const INDENT_CLOSE_REMOVE_IF_PURE: WhitespaceConfig = WhitespaceConfig { format: Some(
+		WhitespaceFormatKind::Indent { use_prev: true, remove_if_pure: true, }
+	), };
+	const INDENT_REMOVE_IF_PURE: WhitespaceConfig = WhitespaceConfig { format: Some(
+		WhitespaceFormatKind::Indent { use_prev: false, remove_if_pure: true, }
+	), };
 	const REMOVE: WhitespaceConfig = WhitespaceConfig { format: Some(WhitespaceFormatKind::Remove), };
 	const SINGLE: WhitespaceConfig = WhitespaceConfig {
 		format: Some(WhitespaceFormatKind::Spaces { len: 1 }),
@@ -46,19 +38,15 @@ pub impl Whitespace {
 	}
 
 	fn indent(remove_if_pure: bool) -> WhitespaceConfig {
-		WhitespaceConfig {
-			format: Some(
-				WhitespaceFormatKind::Indent { use_prev: false, remove_if_pure }
-			),
-		}
+		WhitespaceConfig { format: Some(
+			WhitespaceFormatKind::Indent { use_prev: false, remove_if_pure }
+		), }
 	}
 
 	fn prev_indent(remove_if_pure: bool) -> WhitespaceConfig {
-		WhitespaceConfig {
-			format: Some(
-				WhitespaceFormatKind::Indent { use_prev: true, remove_if_pure }
-			),
-		}
+		WhitespaceConfig { format: Some(
+			WhitespaceFormatKind::Indent { use_prev: true, remove_if_pure }
+		), }
 	}
 
 	/// Returns if this whitespace is empty
@@ -90,13 +78,10 @@ pub impl Whitespace {
 
 	/// Joins `other` to this whitespace as a prefix
 	fn join_prefix(&mut self, mut other: Self) {
-		replace_with::replace_with_or_abort(
-			self,
-			|this| {
-				other.join_suffix(this);
-				other
-			}
-		);
+		replace_with::replace_with_or_abort(self, |this| {
+			other.join_suffix(this);
+			other
+		});
 	}
 }
 
@@ -255,12 +240,11 @@ impl WhitespaceFormatKind {
 				remove_if_pure
 			} => match remove_if_pure && is_last {
 				true => "".into(),
-				false => ctx
-					.with_indent_offset_if(
-						-1,
-						use_prev && is_last,
-						|ctx| Self::indent_str_nl(ctx, cur_str, after_newline)
-					),
+				false => ctx.with_indent_offset_if(
+					-1,
+					use_prev && is_last,
+					|ctx| Self::indent_str_nl(ctx, cur_str, after_newline)
+				),
 			},
 		}
 	}
@@ -280,12 +264,11 @@ impl WhitespaceFormatKind {
 				use_prev,
 				..
 			} => match is_last {
-				true => ctx
-					.with_indent_offset_if(
-						-1,
-						use_prev,
-						|ctx| Self::indent_str_nl(ctx, cur_str, true)
-					),
+				true => ctx.with_indent_offset_if(
+					-1,
+					use_prev,
+					|ctx| Self::indent_str_nl(ctx, cur_str, true)
+				),
 				false => Self::indent_str_nl(ctx, cur_str, true),
 			},
 		}
@@ -307,12 +290,11 @@ impl WhitespaceFormatKind {
 				use_prev,
 				..
 			} => match is_last {
-				true => ctx
-					.with_indent_offset_if(
-						-1,
-						use_prev,
-						|ctx| Self::indent_str_nl(ctx, cur_str, false)
-					),
+				true => ctx.with_indent_offset_if(
+					-1,
+					use_prev,
+					|ctx| Self::indent_str_nl(ctx, cur_str, false)
+				),
 				false => Self::indent_str_nl(ctx, cur_str, false),
 			},
 		}
@@ -330,13 +312,12 @@ pub fn format(
 	// TODO: We should do this even when we're preserving the whitespace
 	let after_newline = ctx.remove_tag(FormatTag::AfterNewline);
 
-	let prefix_str = kind
-		.prefix_str(
-			ctx,
-			&ws.0.first.0,
-			ws.0.rest.is_empty(),
-			after_newline
-		);
+	let prefix_str = kind.prefix_str(
+		ctx,
+		&ws.0.first.0,
+		ws.0.rest.is_empty(),
+		after_newline
+	);
 	ws.0.first.0.replace(prefix_str);
 
 	for (pos, (comment, ws)) in ws.0.rest.iter_mut().with_position() {
@@ -350,7 +331,8 @@ pub fn format(
 		if is_last && let Comment::Line(comment) = comment && !comment.0.has_newlines() {
 			let mut s = comment.0.str().into_owned();
 			s.push('\n');
-			comment.0.replace(AstStrRepr::String(s.into()));
+			comment.0
+				.replace(AstStrRepr::String(s.into()));
 		}
 	}
 }

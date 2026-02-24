@@ -81,10 +81,8 @@ pub enum TypeNoBounds {
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
-pub struct ParenthesizedPath(
-	#[format(args = delimited::fmt_single_if_non_blank())]
-	Parenthesized<Box<Type>>,
-);
+pub struct ParenthesizedPath(#[format(args = delimited::fmt_single_if_non_blank())]
+Parenthesized<Box<Type>>);
 
 /// `NeverType`
 #[derive(PartialEq, Eq, Clone, Debug)]
@@ -101,19 +99,15 @@ pub struct ReferenceType {
 	pub ref_:     token::AndTy,
 	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub lifetime: Option<Lifetime>,
-	#[format(
-		prefix_ws = match self.lifetime.is_some() {
-			true => Whitespace::SINGLE,
-			false => Whitespace::REMOVE,
-		}
-	)]
+	#[format(prefix_ws = match self.lifetime.is_some() {
+		true => Whitespace::SINGLE,
+		false => Whitespace::REMOVE,
+	})]
 	pub mut_:     Option<token::Mut>,
-	#[format(
-		prefix_ws = match self.lifetime.is_some() || self.mut_.is_some() {
-			true => Whitespace::SINGLE,
-			false => Whitespace::REMOVE,
-		}
-	)]
+	#[format(prefix_ws = match self.lifetime.is_some() || self.mut_.is_some() {
+		true => Whitespace::SINGLE,
+		false => Whitespace::REMOVE,
+	})]
 	pub ty:       Box<TypeNoBounds>,
 }
 

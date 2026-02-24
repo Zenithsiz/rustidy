@@ -86,8 +86,7 @@ impl<T: Parse<Error: fmt::Debug>> fmt::Debug for ParserError<T> {
 		f
 			.debug_struct("ParserError")
 			.field("source", &self.source)
-			.field("span", &self.range)
-			.finish()
+			.field("span", &self.range).finish()
 	}
 }
 
@@ -128,10 +127,9 @@ impl<T: Parse> ParseError for ParserError<T> {
 	fn to_app_error(&self, parser: &Parser) -> AppError {
 		let err = self.source.to_app_error(parser).flatten();
 		match self::name_of::<T>() {
-			Some(name) => err
-				.with_context(
-					|| format!("Expected {name} at {}", parser.loc(self.range.start))
-				),
+			Some(name) => err.with_context(
+				|| format!("Expected {name} at {}", parser.loc(self.range.start))
+			),
 			None => err,
 		}
 	}

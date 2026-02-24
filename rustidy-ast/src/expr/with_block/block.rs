@@ -54,10 +54,9 @@ impl Parse for Statements {
 			//       operator.
 			if let Ok((expr, ..)) = parser
 				.try_parse::<(ExpressionStatementWithBlock, NotFollows<token::Dot>, NotFollows<token::Question>,)>()? {
-				stmts
-					.push(
-						Statement::Expression(ExpressionStatement::WithBlock(expr))
-					);
+				stmts.push(
+					Statement::Expression(ExpressionStatement::WithBlock(expr))
+				);
 				continue;
 			}
 
@@ -66,18 +65,14 @@ impl Parse for Statements {
 				Ok(((expr, semi), peek_expr_state)) => match semi {
 					Some(semi) => {
 						parser.set_peeked(peek_expr_state);
-						stmts
-							.push(
-								Statement::Expression(
-									ExpressionStatement::WithoutBlock(ExpressionStatementWithoutBlock { expr, semi },)
-								)
-							);
+						stmts.push(Statement::Expression(
+							ExpressionStatement::WithoutBlock(ExpressionStatementWithoutBlock { expr, semi },)
+						));
 					},
-					None => match parser
-						.with_tag(
-							ParserTag::SkipExpressionWithoutBlock,
-							Parser::peek::<Statement>
-						)? {
+					None => match parser.with_tag(
+						ParserTag::SkipExpressionWithoutBlock,
+						Parser::peek::<Statement>
+					)? {
 						// Note: On macros, we want to ensure we parse a statement macro instead of expression macro,
 						//       since braced statement macros don't need a semi-colon, while expression ones do.
 						//       Since both have the same length, we prefer statements to expressions if they have
@@ -93,11 +88,10 @@ impl Parse for Statements {
 						},
 					},
 				},
-				Err(_) => match parser
-					.with_tag(
-						ParserTag::SkipExpressionWithoutBlock,
-						Parser::try_parse::<Statement>
-					)? {
+				Err(_) => match parser.with_tag(
+					ParserTag::SkipExpressionWithoutBlock,
+					Parser::try_parse::<Statement>
+				)? {
 					Ok(stmt) => stmts.push(stmt),
 					Err(_) => break None,
 				},

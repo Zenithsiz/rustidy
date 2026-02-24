@@ -110,10 +110,9 @@ impl Parse for MatchArms {
 				),
 			};
 
-			arms
-				.push(
-					MatchArmWithExpr { arm, arrow, expr, trailing_comma, }
-				);
+			arms.push(
+				MatchArmWithExpr { arm, arrow, expr, trailing_comma, }
+			);
 
 			if control_flow.is_break() {
 				break;

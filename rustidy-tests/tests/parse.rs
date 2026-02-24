@@ -82,10 +82,9 @@ fn test_case(test_dir: &Path) -> Result<(), AppError> {
 				&crate_,
 				&output,
 				assert_json_diff::Config::new(assert_json_diff::CompareMode::Strict),
-			)
-				.map_err(
-					|err| app_error!("Crate differed from expected:\n{err}")
-				)?;
+			).map_err(
+				|err| app_error!("Crate differed from expected:\n{err}")
+			)?;
 		},
 	}
 

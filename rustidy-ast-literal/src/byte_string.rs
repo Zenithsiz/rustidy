@@ -36,10 +36,9 @@ impl ByteStringLiteral {
 			.ok_or(ByteStringLiteralError::StartQuote)?;
 
 		loop {
-			match s
-				.strip_prefix(
-					|ch: char| ch.is_ascii() && !matches!(ch, '"' | '\\' | '\r')
-				) {
+			match s.strip_prefix(
+				|ch: char| ch.is_ascii() && !matches!(ch, '"' | '\\' | '\r')
+			) {
 				Some(rest) => *s = rest,
 				None => {
 					macro try_parse(

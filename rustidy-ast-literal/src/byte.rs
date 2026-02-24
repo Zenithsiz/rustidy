@@ -19,22 +19,18 @@ use {
 #[parse(error(name = ByteEscape(ByteEscapeError), transparent))]
 #[parse(error(name = CharOrEscape, fmt = "Expected character or escape", fatal))]
 #[parse(error(name = EndQuote, fmt = "Expected `'` after `b'`", fatal))]
-pub struct ByteLiteral(
-	pub Whitespace,
-	#[parse(try_update_with = Self::parse)]
-	#[format(str)]
-	pub AstStr,
-);
+pub struct ByteLiteral(pub Whitespace, #[parse(try_update_with = Self::parse)]
+#[format(str)]
+pub AstStr);
 
 impl ByteLiteral {
 	fn parse(s: &mut &str) -> Result<(), ByteLiteralError> {
 		*s = s
 			.strip_prefix("b\'")
 			.ok_or(ByteLiteralError::StartQuote)?;
-		match s
-			.strip_prefix(
-				|ch: char| ch.is_ascii() && !matches!(ch, '\'' | '\\' | '\n' | '\r' | '\t')
-			) {
+		match s.strip_prefix(
+			|ch: char| ch.is_ascii() && !matches!(ch, '\'' | '\\' | '\n' | '\r' | '\t')
+		) {
 			Some(rest) => *s = rest,
 			None => _ = rustidy_parse::try_parse_from_str(s, ByteEscape::parse)
 				.map_err(ByteLiteralError::ByteEscape)?

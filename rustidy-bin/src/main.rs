@@ -133,7 +133,8 @@ fn format_file(
 	};
 	let mut crate_ = rustidy::parse(
 		&input,
-		file_path.unwrap_or_else(|| Path::new("<stdin>"))
+		file_path
+			.unwrap_or_else(|| Path::new("<stdin>"))
 	)?;
 
 	// Queue modules for formatting.
@@ -206,8 +207,7 @@ fn mod_path<'a>(
 			let mod_rs_path = file_path
 				.parent()
 				.expect("File had no parent")
-				.join(&*name)
-				.join("mod.rs");
+				.join(&*name).join("mod.rs");
 			match mod_rs_path
 				.try_exists()
 				.context("Unable to check if file exists")? {

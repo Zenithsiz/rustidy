@@ -82,11 +82,9 @@ impl Parse for LetStatementEq {
 		match parser.try_parse::<token::Else>()? {
 			Ok(else_) => {
 				let else_expr = parser.parse()?;
-				Ok(
-					Self::Else(
-						LetStatementEqElse { eq, expr, else_, else_expr, }
-					)
-				)
+				Ok(Self::Else(
+					LetStatementEqElse { eq, expr, else_, else_expr, }
+				))
 			},
 			Err(_) => Ok(Self::Normal(LetStatementEqNormal { eq, expr })),
 		}

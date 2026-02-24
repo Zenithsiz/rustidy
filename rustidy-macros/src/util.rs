@@ -51,7 +51,9 @@ pub fn with_struct_bounds<F>(
 	// Add each field's type
 	let where_clause = generics.make_where_clause();
 	for field in fields {
-		where_clause.predicates.push(create_bound(field));
+		where_clause
+			.predicates
+			.push(create_bound(field));
 	}
 
 	generics
@@ -91,13 +93,11 @@ where
 pub fn field_member_access<F: AsRef<Option<syn::Ident>>>(field_idx: usize, field: F) -> syn::Member {
 	match field.as_ref() {
 		Some(ident) => syn::Member::Named(ident.clone()),
-		None => syn::Member::Unnamed(
-			syn::Index {
-				#[expect(clippy::cast_possible_truncation, reason = "There shouldn't be more than 2^32 fields in a struct")]
-				index: field_idx as u32,
-				span: Span::call_site(),
-			}
-		),
+		None => syn::Member::Unnamed(syn::Index {
+			#[expect(clippy::cast_possible_truncation, reason = "There shouldn't be more than 2^32 fields in a struct")]
+			index: field_idx as u32,
+			span: Span::call_site(),
+		}),
 	}
 }
 
@@ -134,28 +134,20 @@ impl darling::FromMeta for Fmt {
 	fn from_list(items: &[darling::ast::NestedMeta]) -> darling::Result<Self> {
 		let parts = items
 			.iter()
-			.map(
-				|meta| match meta {
-					darling::ast::NestedMeta::Meta(meta) => match meta {
-						syn::Meta::Path(path) => Ok(
-							syn::Expr::Path(
-								syn::ExprPath {
-									attrs: vec![],
-									qself: None,
-									path: path.clone(),
-								}
-							)
-						),
-						syn::Meta::List(_) => todo!("Expected a literal or path"),
-						syn::Meta::NameValue(_) => todo!("Expected a literal or path"),
-					},
-					darling::ast::NestedMeta::Lit(lit) => Ok(
-						syn::Expr::Lit(
-							syn::ExprLit { attrs: vec![], lit: lit.clone(), }
-						)
-					),
-				}
-			)
+			.map(|meta| match meta {
+				darling::ast::NestedMeta::Meta(meta) => match meta {
+					syn::Meta::Path(path) => Ok(syn::Expr::Path(syn::ExprPath {
+						attrs: vec![],
+						qself: None,
+						path: path.clone(),
+					})),
+					syn::Meta::List(_) => todo!("Expected a literal or path"),
+					syn::Meta::NameValue(_) => todo!("Expected a literal or path"),
+				},
+				darling::ast::NestedMeta::Lit(lit) => Ok(syn::Expr::Lit(
+					syn::ExprLit { attrs: vec![], lit: lit.clone(), }
+				)),
+			})
 			.collect::<Result<Vec<_>, darling::Error>>()?;
 
 		Ok(Self { parts })

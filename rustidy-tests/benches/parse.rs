@@ -46,15 +46,12 @@ fn parse_expr_addition(bencher: &mut Bencher) {
 
 fn parse<T: Parse>(bencher: &mut Bencher, input: &str) {
 	let mut parser = Parser::new(input);
-	bencher
-		.iter(
-			|| {
-				parser.set_pos(AstPos(0));
-				let _: T = parser
-					.parse::<T>()
-					.unwrap_or_else(|err| self::on_err(&parser, &err));
-			}
-		);
+	bencher.iter(|| {
+		parser.set_pos(AstPos(0));
+		let _: T = parser
+			.parse::<T>()
+			.unwrap_or_else(|err| self::on_err(&parser, &err));
+	});
 }
 
 #[cold]

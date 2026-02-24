@@ -23,12 +23,10 @@ pub struct Module {
 	#[parse(fatal)]
 	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub ident:   Identifier,
-	#[format(
-		prefix_ws = match self.inner.is_none() {
-			true => Whitespace::REMOVE,
-			false => Whitespace::SINGLE,
-		}
-	)]
+	#[format(prefix_ws = match self.inner.is_none() {
+		true => Whitespace::REMOVE,
+		false => Whitespace::SINGLE,
+	})]
 	pub inner:   ModuleInner,
 }
 

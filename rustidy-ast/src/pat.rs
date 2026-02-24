@@ -131,12 +131,10 @@ pub struct ReferencePattern {
 	pub ref_: ReferencePatternRef,
 	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub mut_: Option<token::Mut>,
-	#[format(
-		prefix_ws = match self.mut_.is_some() {
-			true => Whitespace::SINGLE,
-			false => Whitespace::REMOVE,
-		}
-	)]
+	#[format(prefix_ws = match self.mut_.is_some() {
+		true => Whitespace::SINGLE,
+		false => Whitespace::REMOVE,
+	})]
 	pub pat:  Box<PatternWithoutRange>,
 }
 
@@ -274,10 +272,8 @@ pub struct TupleStructItems(
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
-pub struct TuplePattern(
-	#[format(args = delimited::FmtRemove)]
-	Parenthesized<Option<TuplePatternItems>>,
-);
+pub struct TuplePattern(#[format(args = delimited::FmtRemove)]
+Parenthesized<Option<TuplePatternItems>>);
 
 /// `TuplePatternItems`
 #[derive(PartialEq, Eq, Clone, Debug)]
@@ -330,12 +326,10 @@ pub struct LiteralPattern {
 
 impl ParsePeeked<ByteLiteral> for LiteralPattern {
 	fn parse_from_with_peeked(_parser: &mut rustidy_parse::Parser, parsed: ByteLiteral) -> Result<Self, Self::Error> {
-		Ok(
-			Self {
-				minus: None,
-				literal: LiteralExpression::Byte(parsed),
-			}
-		)
+		Ok(Self {
+			minus: None,
+			literal: LiteralExpression::Byte(parsed),
+		})
 	}
 }
 
@@ -344,12 +338,10 @@ impl ParsePeeked<ByteStringLiteral> for LiteralPattern {
 		_parser: &mut rustidy_parse::Parser,
 		parsed: ByteStringLiteral
 	) -> Result<Self, Self::Error> {
-		Ok(
-			Self {
-				minus: None,
-				literal: LiteralExpression::ByteString(parsed),
-			}
-		)
+		Ok(Self {
+			minus: None,
+			literal: LiteralExpression::ByteString(parsed),
+		})
 	}
 }
 
@@ -376,14 +368,12 @@ impl ParsePeeked<(Option<token::Ref>, Option<token::Mut>, Identifier, token::At)
 		let pat = parser
 			.parse::<PatternNoTopAlt>()
 			.map_err(Self::Error::Pat)?;
-		Ok(
-			Self {
-				ref_,
-				mut_,
-				ident,
-				rest: Some(IdentifierPatternRest { at, pat: Box::new(pat) }),
-			}
-		)
+		Ok(Self {
+			ref_,
+			mut_,
+			ident,
+			rest: Some(IdentifierPatternRest { at, pat: Box::new(pat) }),
+		})
 	}
 }
 

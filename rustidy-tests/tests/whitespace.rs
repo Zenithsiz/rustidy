@@ -29,10 +29,9 @@ fn test_case_with(
 	let mut parser = Parser::new(source);
 	let mut whitespace = parser
 		.parse::<Whitespace>()
-		.map_err(|err| err.to_app_error(&parser))
-		.with_context(
-			|| format!("Unable to parse whitespace: {source:?}")
-		)?;
+		.map_err(|err| err.to_app_error(&parser)).with_context(
+		|| format!("Unable to parse whitespace: {source:?}")
+	)?;
 	ensure!(
 		parser.is_finished(),
 		"Parser didn't parse all the whitespace: {source:?}"
@@ -94,45 +93,25 @@ fn test_cases_with(
 	fmt_config: &rustidy_util::Config,
 	config: &Config,
 ) -> Result<(), AppError> {
-	cases
-		.into_iter()
-		.map(
-			|case| {
-				[
-					(case
-						.expected_remove, WhitespaceFormatKind::Remove),
-					(case
-						.expected_set_single, WhitespaceFormatKind::Spaces { len: 1 }),
-					(case
-						.expected_set_indent, WhitespaceFormatKind::Indent { use_prev: false, remove_if_pure: false, }),
-					(case
-						.expected_set_prev_indent, WhitespaceFormatKind::Indent { use_prev: true, remove_if_pure: false, }),
-					(case
-						.expected_set_prev_indent_or_remove, WhitespaceFormatKind::Indent { use_prev: true, remove_if_pure: true, }),
-				]
-					.into_iter()
-					.map(
-						|(expected, kind)| {
-							let mods = [("", ""), ("  ", ""), ("", "  "), ("  ", "  ")];
-							mods
-								.into_iter()
-								.map(
-									|(prefix, suffix)| {
-										let source = format!("{prefix}{}{suffix}", case.source);
-										test_case_with(&source, expected, fmt_config, config, kind)
-									}
-								)
-								.collect::<app_error::AllErrs<()>>()?;
+	cases.into_iter().map(|case| {
+		[
+			(case.expected_remove, WhitespaceFormatKind::Remove),
+			(case.expected_set_single, WhitespaceFormatKind::Spaces { len: 1 }),
+			(case.expected_set_indent, WhitespaceFormatKind::Indent { use_prev: false, remove_if_pure: false, }),
+			(case.expected_set_prev_indent, WhitespaceFormatKind::Indent { use_prev: true, remove_if_pure: false, }),
+			(case.expected_set_prev_indent_or_remove, WhitespaceFormatKind::Indent { use_prev: true, remove_if_pure: true, }),
+		].into_iter().map(|(expected, kind)| {
+			let mods = [("", ""), ("  ", ""), ("", "  "), ("  ", "  ")];
+			mods.into_iter().map(|(prefix, suffix)| {
+				let source = format!("{prefix}{}{suffix}", case.source);
+				test_case_with(&source, expected, fmt_config, config, kind)
+			}).collect::<app_error::AllErrs<()>>()?;
 
-							Ok(())
-						}
-					)
-					.collect::<app_error::AllErrs<()>>()?;
+			Ok(())
+		}).collect::<app_error::AllErrs<()>>()?;
 
-				Ok(())
-			}
-		)
-		.collect::<app_error::AllErrs<()>>()?;
+		Ok(())
+	}).collect::<app_error::AllErrs<()>>()?;
 
 	Ok(())
 }

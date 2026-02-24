@@ -68,12 +68,9 @@ impl<A, T: Format<WhitespaceConfig, A>> Format<WhitespaceConfig, FmtArgs<A>> for
 			}
 
 			match has_prefix_ws {
-				true => ctx
-					.format(attr, prefix_ws),
-				false => ctx
-					.format(attr, Whitespace::INDENT),
-			}
-				.append_to(&mut output);
+				true => ctx.format(attr, prefix_ws),
+				false => ctx.format(attr, Whitespace::INDENT),
+			}.append_to(&mut output);
 
 			is_after_newline = matches!(attr, OuterAttrOrDocComment::DocComment(OuterDocComment::Line(_)));
 			has_prefix_ws = false;
@@ -95,14 +92,12 @@ impl<A, T: Format<WhitespaceConfig, A>> Format<WhitespaceConfig, FmtArgs<A>> for
 			true => value_ctx
 				.format_with(&mut self.inner, prefix_ws, args.inner_args),
 			// TODO: The user should be able to choose this
-			false => value_ctx
-				.format_with(
-					&mut self.inner,
-					Whitespace::INDENT,
-					args.inner_args
-				),
-		}
-			.append_to(&mut output);
+			false => value_ctx.format_with(
+				&mut self.inner,
+				Whitespace::INDENT,
+				args.inner_args
+			),
+		}.append_to(&mut output);
 
 		output
 	}
@@ -183,12 +178,11 @@ impl<T: Format<WhitespaceConfig, A>, A: Clone> Format<WhitespaceConfig, FmtArgs<
 			}
 		}
 
-		ctx
-			.format_with(
-				&mut self.0,
-				prefix_ws,
-				delimited::fmt_indent_if_non_blank_with_value(args)
-			)
+		ctx.format_with(
+			&mut self.0,
+			prefix_ws,
+			delimited::fmt_indent_if_non_blank_with_value(args)
+		)
 
 	}
 }

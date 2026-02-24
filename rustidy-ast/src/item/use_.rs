@@ -67,27 +67,19 @@ impl UseTree {
 	pub fn merge(&mut self, other: Self) {
 		match (self, other) {
 			(Self::Group(lhs), rhs) => lhs.push_back(rhs),
-			(lhs, Self::Group(mut rhs)) => replace_with::replace_with_or_abort(
-				lhs,
-				|lhs| {
-					rhs.push_front(lhs);
-					Self::Group(rhs)
-				}
-			),
+			(lhs, Self::Group(mut rhs)) => replace_with::replace_with_or_abort(lhs, |lhs| {
+				rhs.push_front(lhs);
+				Self::Group(rhs)
+			}),
 
-			(lhs, rhs) => replace_with::replace_with_or_abort(
-				lhs,
-				|lhs| {
-					let mut values = PunctuatedTrailing::single(Box::new(lhs));
-					values.push_value(Box::new(rhs));
-					Self::Group(
-						UseTreeGroup {
-							prefix: None,
-							tree: Braced::from_value(Some(values))
-						}
-					)
-				}
-			),
+			(lhs, rhs) => replace_with::replace_with_or_abort(lhs, |lhs| {
+				let mut values = PunctuatedTrailing::single(Box::new(lhs));
+				values.push_value(Box::new(rhs));
+				Self::Group(UseTreeGroup {
+					prefix: None,
+					tree: Braced::from_value(Some(values))
+				})
+			}),
 		}
 	}
 }
@@ -128,28 +120,23 @@ impl UseTreeGroup {
 		match tree {
 			UseTree::Group(rhs) if self.prefix == rhs.prefix => match &mut self.tree.value {
 				Some(lhs) => if let Some(mut rhs) = rhs.tree.value {
-					replace_with::replace_with_or_abort(
-						lhs,
-						|lhs| {
-							rhs.extend_from_punctuated_trailing(lhs);
-							rhs
-						}
-					);
+					replace_with::replace_with_or_abort(lhs, |lhs| {
+						rhs.extend_from_punctuated_trailing(lhs);
+						rhs
+					});
 				},
 				None => self.tree.value = rhs.tree.value,
 			},
 
-			UseTree::Group(rhs) => replace_with::replace_with_or_abort(
-				self,
-				|lhs| {
-					let mut values = PunctuatedTrailing::single(Box::new(UseTree::Group(rhs)));
-					values.push_value(Box::new(UseTree::Group(lhs)));
-					Self {
-						prefix: None,
-						tree: Braced::from_value(Some(values))
-					}
+			UseTree::Group(rhs) => replace_with::replace_with_or_abort(self, |lhs| {
+				let mut values = PunctuatedTrailing::single(Box::new(UseTree::Group(rhs)));
+				values
+					.push_value(Box::new(UseTree::Group(lhs)));
+				Self {
+					prefix: None,
+					tree: Braced::from_value(Some(values))
 				}
-			),
+			}),
 
 			_ => match &mut self.tree.value {
 				Some(lhs) => lhs.push_front_value(Box::new(tree)),
@@ -168,17 +155,15 @@ impl UseTreeGroup {
 				None => self.tree.value = rhs.tree.value,
 			},
 
-			UseTree::Group(rhs) => replace_with::replace_with_or_abort(
-				self,
-				|lhs| {
-					let mut values = PunctuatedTrailing::single(Box::new(UseTree::Group(lhs)));
-					values.push_value(Box::new(UseTree::Group(rhs)));
-					Self {
-						prefix: None,
-						tree: Braced::from_value(Some(values))
-					}
+			UseTree::Group(rhs) => replace_with::replace_with_or_abort(self, |lhs| {
+				let mut values = PunctuatedTrailing::single(Box::new(UseTree::Group(lhs)));
+				values
+					.push_value(Box::new(UseTree::Group(rhs)));
+				Self {
+					prefix: None,
+					tree: Braced::from_value(Some(values))
 				}
-			),
+			}),
 
 			_ => match &mut self.tree.value {
 				Some(lhs) => lhs.push_value(Box::new(tree)),
@@ -262,104 +247,95 @@ impl UseTreeGroup {
 		}
 
 		#[expect(clippy::borrowed_box, reason = "It's necessary for the closure")]
-		trees
-			.sort_values_by_key(
-				for<'a> |tree: &'a Box<UseTree>, _: Option<&'a token::Comma>| -> SortOrder<'a> {
-					match &**tree {
-						UseTree::Glob(_) => SortOrder::Glob,
-						UseTree::Group(tree) => match &tree.prefix {
-							Some(prefix) => match &prefix.path {
-								Some(path) => SortOrder::WithPath(SimplePathSortOrder(path)),
-								None => SortOrder::GroupWithPrefixRoot,
-							},
-							None => SortOrder::GroupNoPrefix,
+		trees.sort_values_by_key(
+			for<'a> |tree: &'a Box<UseTree>, _: Option<&'a token::Comma>| -> SortOrder<'a> {
+				match &**tree {
+					UseTree::Glob(_) => SortOrder::Glob,
+					UseTree::Group(tree) => match &tree.prefix {
+						Some(prefix) => match &prefix.path {
+							Some(path) => SortOrder::WithPath(SimplePathSortOrder(path)),
+							None => SortOrder::GroupWithPrefixRoot,
 						},
-						UseTree::Simple(tree) => SortOrder::WithPath(SimplePathSortOrder(&tree.path)),
-					}
+						None => SortOrder::GroupNoPrefix,
+					},
+					UseTree::Simple(tree) => SortOrder::WithPath(SimplePathSortOrder(&tree.path)),
 				}
-			);
+			}
+		);
 	}
 
 	/// Flattens this use group
 	pub fn flatten(&mut self, ctx: &mut rustidy_format::Context) {
-		replace_with::replace_with_or_abort(
-			&mut self.tree.value,
-			|trees| {
-				let mut trees = trees?;
-				let mut trees_first = Some(
-					PunctuatedRest {
-						punct: token::Comma::new(),
-						value: trees.punctuated.first,
-					}
-				);
-				let mut sub_trees = vec![];
-				let mut new_trees: Vec<PunctuatedRest<_, token::Comma>> = vec![];
-				let mut trailing_comma = trees.trailing;
+		replace_with::replace_with_or_abort(&mut self.tree.value, |trees| {
+			let mut trees = trees?;
+			let mut trees_first = Some(PunctuatedRest {
+				punct: token::Comma::new(),
+				value: trees.punctuated.first,
+			});
+			let mut sub_trees = vec![];
+			let mut new_trees: Vec<PunctuatedRest<_, token::Comma>> = vec![];
+			let mut trailing_comma = trees.trailing;
 
-				// Note: We process the trees backwards to ensure that we always have
-				//       somewhere to add the whitespace of the braces we're removing.
-				while let Some(PunctuatedRest {
-					punct: mut comma,
-					value: tree,
-				}) = sub_trees
-					.pop()
-					.or_else(|| trees.punctuated.rest.pop())
-					.or_else(|| trees_first.take()) {
-					// Joins a prefix whitespace to the latest whitespace we have
-					let mut latest_ws_join_prefix = |ws: Whitespace| match new_trees.last_mut() {
-						Some(PunctuatedRest {
-							punct: last_comma,
-							..
-						}) => last_comma.ws.join_prefix(ws),
-						None => match &mut trailing_comma {
-							Some(trailing_comma) => trailing_comma.ws.join_prefix(ws),
-							None => self.tree.suffix.ws.join_prefix(ws),
-						},
-					};
+			// Note: We process the trees backwards to ensure that we always have
+			//       somewhere to add the whitespace of the braces we're removing.
+			while let Some(PunctuatedRest {
+				punct: mut comma,
+				value: tree,
+			}) = sub_trees
+				.pop()
+				.or_else(|| trees.punctuated.rest.pop())
+				.or_else(|| trees_first.take()) {
+				// Joins a prefix whitespace to the latest whitespace we have
+				let mut latest_ws_join_prefix = |ws: Whitespace| match new_trees.last_mut() {
+					Some(PunctuatedRest {
+						punct: last_comma,
+						..
+					}) => last_comma.ws.join_prefix(ws),
+					None => match &mut trailing_comma {
+						Some(trailing_comma) => trailing_comma.ws.join_prefix(ws),
+						None => self.tree.suffix.ws.join_prefix(ws),
+					},
+				};
 
-					match *tree {
-						UseTree::Group(group) if group.prefix.is_none() => {
-							latest_ws_join_prefix(group.tree.suffix.ws);
+				match *tree {
+					UseTree::Group(group) if group.prefix.is_none() => {
+						latest_ws_join_prefix(group.tree.suffix.ws);
 
-							match group.tree.value {
-								Some(trees) => {
-									comma.ws.join_prefix(group.tree.prefix.ws);
-									sub_trees
-										.push(
-											PunctuatedRest { punct: comma, value: trees.punctuated.first, }
-										);
-									for rest in trees.punctuated.rest {
-										sub_trees.push(rest);
-									}
-								},
-								None => latest_ws_join_prefix(group.tree.prefix.ws),
-							}
-						},
-						_ => new_trees
-							.push(PunctuatedRest { punct: comma, value: tree, }),
-					}
+						match group.tree.value {
+							Some(trees) => {
+								comma
+									.ws
+									.join_prefix(group.tree.prefix.ws);
+								sub_trees.push(
+									PunctuatedRest { punct: comma, value: trees.punctuated.first, }
+								);
+								for rest in trees.punctuated.rest {
+									sub_trees.push(rest);
+								}
+							},
+							None => latest_ws_join_prefix(group.tree.prefix.ws),
+						}
+					},
+					_ => new_trees
+						.push(PunctuatedRest { punct: comma, value: tree, }),
 				}
-
-				new_trees
-					.pop()
-					.map(
-						|PunctuatedRest {
-							punct: first_comma,
-							value: mut first,
-						}| {
-							first
-								.prefix_ws_join_prefix(ctx, first_comma.ws)
-								.expect("Use tree should have prefix whitespace");
-
-							new_trees.reverse();
-							PunctuatedTrailing {
-								punctuated: Punctuated { first, rest: new_trees },
-								trailing: trailing_comma,
-							}
-						},
-					)
 			}
-		);
+
+			new_trees.pop().map(|PunctuatedRest {
+				punct: first_comma,
+				value: mut first,
+			}| {
+				first
+					.prefix_ws_join_prefix(ctx, first_comma.ws)
+					.expect("Use tree should have prefix whitespace");
+
+				new_trees.reverse();
+				PunctuatedTrailing {
+					punctuated: Punctuated { first, rest: new_trees },
+					trailing: trailing_comma,
+				}
+			},)
+		});
 	}
 
 	fn format_tree_compact(
@@ -371,19 +347,16 @@ impl UseTreeGroup {
 			punct.trailing = None;
 		}
 
-		tree
-			.format(
-				ctx,
-				prefix_ws,
-				delimited::FmtRemoveWith(
-					punct::FmtArgs {
-						value_prefix_ws: Whitespace::SINGLE,
-						punct_prefix_ws: Whitespace::REMOVE,
-						value_args: (),
-						punct_args: (),
-					}
-				),
-			)
+		tree.format(
+			ctx,
+			prefix_ws,
+			delimited::FmtRemoveWith(punct::FmtArgs {
+				value_prefix_ws: Whitespace::SINGLE,
+				punct_prefix_ws: Whitespace::REMOVE,
+				value_args: (),
+				punct_args: (),
+			}),
+		)
 	}
 
 	fn format_tree(
@@ -403,21 +376,16 @@ impl UseTreeGroup {
 					punct.trailing = Some(token::Comma::new());
 				}
 
-				tree
-					.format(
-						ctx,
-						prefix_ws,
-						delimited::fmt_indent_if_non_blank_with(
-							(),
-							punct::FmtArgs {
-								value_prefix_ws: Whitespace::INDENT,
-								punct_prefix_ws: Whitespace::REMOVE,
-								value_args: (),
-								punct_args: (),
-							},
-							(),
-						),
-					)
+				tree.format(
+					ctx,
+					prefix_ws,
+					delimited::fmt_indent_if_non_blank_with((), punct::FmtArgs {
+						value_prefix_ws: Whitespace::INDENT,
+						punct_prefix_ws: Whitespace::REMOVE,
+						value_args: (),
+						punct_args: (),
+					}, (),),
+				)
 			},
 			false => compact_output,
 		}

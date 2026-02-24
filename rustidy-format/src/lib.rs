@@ -59,18 +59,13 @@ pub trait Formattable {
 	/// Joins a string as a prefix onto the prefix whitespace of this type.
 	fn prefix_ws_join_prefix(&mut self, ctx: &mut Context, ws: Whitespace) -> Result<(), Whitespace> {
 		let mut join_ws = Some(ws);
-		let _ = self
-			.with_prefix_ws(
-				ctx,
-				&mut |ws, _| {
-					ws
-						.join_prefix(
-							join_ws
-								.take()
-								.expect("`with_prefix_ws` called multiple times")
-						);
-				}
+		let _ = self.with_prefix_ws(ctx, &mut |ws, _| {
+			ws.join_prefix(
+				join_ws
+					.take()
+					.expect("`with_prefix_ws` called multiple times")
 			);
+		});
 
 		match join_ws {
 			Some(ws) => Err(ws),
@@ -124,7 +119,8 @@ impl<T: Formattable> Formattable for &'_ mut T {
 		exclude_prefix_ws: bool,
 		f: &mut impl FnMut(&mut AstStr,&mut Context) -> ControlFlow<O>,
 	) -> ControlFlow<O, bool> {
-		(**self).with_strings(ctx, exclude_prefix_ws, f)
+		(**self)
+			.with_strings(ctx, exclude_prefix_ws, f)
 	}
 
 	fn format_output(&mut self, ctx: &mut Context) -> FormatOutput {
@@ -158,7 +154,8 @@ impl<T: Formattable> Formattable for Box<T> {
 		exclude_prefix_ws: bool,
 		f: &mut impl FnMut(&mut AstStr,&mut Context) -> ControlFlow<O>,
 	) -> ControlFlow<O, bool> {
-		(**self).with_strings(ctx, exclude_prefix_ws, f)
+		(**self)
+			.with_strings(ctx, exclude_prefix_ws, f)
 	}
 
 	fn format_output(&mut self, ctx: &mut Context) -> FormatOutput {
@@ -418,7 +415,8 @@ impl<T: ArenaData + Formattable> Formattable for ArenaIdx<T> {
 		exclude_prefix_ws: bool,
 		f: &mut impl FnMut(&mut AstStr,&mut Context) -> ControlFlow<O>,
 	) -> ControlFlow<O, bool> {
-		(**self).with_strings(ctx, exclude_prefix_ws, f)
+		(**self)
+			.with_strings(ctx, exclude_prefix_ws, f)
 	}
 
 	fn format_output(&mut self, ctx: &mut Context) -> FormatOutput {

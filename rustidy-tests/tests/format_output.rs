@@ -97,13 +97,11 @@ pub fn format_multiline_output_from_str() -> Result<(), AppError> {
 	let cases = [
 		("", None),
 		("abc", None),
-		("01234\n567", Some(
-			FormatMultilineOutput {
-				prefix_ws_len: None,
-				prefix_len: 5,
-				suffix_len: 3,
-			}
-		)),
+		("01234\n567", Some(FormatMultilineOutput {
+			prefix_ws_len: None,
+			prefix_len: 5,
+			suffix_len: 3,
+		})),
 	];
 
 	for (input, expected) in cases {

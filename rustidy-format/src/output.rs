@@ -133,13 +133,11 @@ impl FormatMultilineOutput {
 		let (prefix, _) = s.split_once('\n')?;
 		let (_, suffix) = s.rsplit_once('\n')?;
 
-		Some(
-			Self {
-				prefix_ws_len: None,
-				prefix_len: prefix.len(),
-				suffix_len: suffix.len(),
-			}
-		)
+		Some(Self {
+			prefix_ws_len: None,
+			prefix_len: prefix.len(),
+			suffix_len: suffix.len(),
+		})
 	}
 
 	/// Joins two multiline outputs.
@@ -151,34 +149,28 @@ impl FormatMultilineOutput {
 		rhs_len: usize
 	) -> Option<Self> {
 		match (lhs, rhs) {
-			(Some(lhs), Some(rhs)) => Some(
-				Self {
-					prefix_ws_len: self::join_prefix_ws(
-						lhs.prefix_ws_len,
-						rhs.prefix_ws_len,
-						lhs.prefix_len
-					),
-					prefix_len: lhs.prefix_len,
-					suffix_len: rhs.suffix_len
-				}
-			),
-			(Some(lhs), None) => Some(
-				Self {
-					prefix_ws_len: lhs.prefix_ws_len,
-					prefix_len: lhs.prefix_len,
-					suffix_len: lhs.suffix_len + rhs_len,
-				}
-			),
-			(None, Some(rhs)) => Some(
-				Self {
-					prefix_ws_len: match lhs_len == 0 {
-						true => rhs.prefix_ws_len,
-						false => None,
-					},
-					prefix_len: rhs.prefix_len + lhs_len,
-					suffix_len: rhs.suffix_len
-				}
-			),
+			(Some(lhs), Some(rhs)) => Some(Self {
+				prefix_ws_len: self::join_prefix_ws(
+					lhs.prefix_ws_len,
+					rhs.prefix_ws_len,
+					lhs.prefix_len
+				),
+				prefix_len: lhs.prefix_len,
+				suffix_len: rhs.suffix_len
+			}),
+			(Some(lhs), None) => Some(Self {
+				prefix_ws_len: lhs.prefix_ws_len,
+				prefix_len: lhs.prefix_len,
+				suffix_len: lhs.suffix_len + rhs_len,
+			}),
+			(None, Some(rhs)) => Some(Self {
+				prefix_ws_len: match lhs_len == 0 {
+					true => rhs.prefix_ws_len,
+					false => None,
+				},
+				prefix_len: rhs.prefix_len + lhs_len,
+				suffix_len: rhs.suffix_len
+			}),
 			(None, None) => None,
 		}
 	}
@@ -190,13 +182,11 @@ impl FormatMultilineOutput {
 			AstStrRepr::String(ref s) => Self::from_str(s),
 			AstStrRepr::Static(s) => Self::from_str(s),
 			AstStrRepr::Char(ch) => match ch == '\n' {
-				true => Some(
-					Self {
-						prefix_ws_len: None,
-						prefix_len: 0,
-						suffix_len: 0,
-					}
-				),
+				true => Some(Self {
+					prefix_ws_len: None,
+					prefix_len: 0,
+					suffix_len: 0,
+				}),
 				false => None,
 			},
 			AstStrRepr::Spaces {
@@ -208,13 +198,11 @@ impl FormatMultilineOutput {
 				depth
 			} => match newlines {
 				0 => None,
-				_ => Some(
-					Self {
-						prefix_ws_len: None,
-						prefix_len: 0,
-						suffix_len: depth * indent.len(),
-					}
-				)
+				_ => Some(Self {
+					prefix_ws_len: None,
+					prefix_len: 0,
+					suffix_len: depth * indent.len(),
+				})
 			},
 			AstStrRepr::Join {
 				ref lhs,

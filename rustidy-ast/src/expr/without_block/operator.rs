@@ -65,12 +65,10 @@ pub struct BorrowExpression {
 	pub ref_: BorrowExpressionKindRef,
 	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub rest: Option<BorrowExpressionKindRest>,
-	#[format(
-		prefix_ws = match self.rest.is_some() {
-			true => Whitespace::SINGLE,
-			false => Whitespace::REMOVE,
-		}
-	)]
+	#[format(prefix_ws = match self.rest.is_some() {
+		true => Whitespace::SINGLE,
+		false => Whitespace::REMOVE,
+	})]
 	pub expr: Expression,
 }
 

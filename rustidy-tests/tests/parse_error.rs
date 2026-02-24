@@ -18,11 +18,9 @@ pub fn parse_error() -> Result<(), AppError> {
 	let tests_dir = Path::new("tests/parse-error/");
 	match env::var_os("RUSTIDY_PARSE_ERROR_UPDATE_TESTS") {
 		Some(tests) => {
-			let tests = tests
-				.to_str()
-				.context(
-					"`RUSTIDY_PARSE_ERROR_UPDATE_TESTS` must be utf-8"
-				)?;
+			let tests = tests.to_str().context(
+				"`RUSTIDY_PARSE_ERROR_UPDATE_TESTS` must be utf-8"
+			)?;
 			for test_dir in tests.split(':') {
 				self::test_case(Path::new(test_dir))
 					.with_context(|| format!("Test {test_dir:?} failed"))?;

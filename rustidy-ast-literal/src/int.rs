@@ -39,10 +39,9 @@ impl IntegerLiteral {
 		let digits = &digits[prefix_len..];
 
 
-		u64::from_str_radix(digits, radix)
-			.with_context(
-				|| format!("Unable to parse {digits:?} as a base {radix} number")
-			)
+		u64::from_str_radix(digits, radix).with_context(
+			|| format!("Unable to parse {digits:?} as a base {radix} number")
+		)
 	}
 }
 
@@ -125,10 +124,9 @@ impl OctLiteral {
 		*s = s
 			.strip_prefix(|ch: char| ch.is_ascii_octdigit())
 			.ok_or(OctLiteralError::Digit)?;
-		*s = s
-			.trim_start_matches(
-				|ch: char| ch.is_ascii_octdigit() || matches!(ch, '_')
-			);
+		*s = s.trim_start_matches(
+			|ch: char| ch.is_ascii_octdigit() || matches!(ch, '_')
+		);
 
 		Ok(())
 	}
@@ -154,10 +152,9 @@ impl HexLiteral {
 		*s = s
 			.strip_prefix(|ch: char| ch.is_ascii_hexdigit())
 			.ok_or(HexLiteralError::Digit)?;
-		*s = s
-			.trim_start_matches(
-				|ch: char| ch.is_ascii_hexdigit() || matches!(ch, '_')
-			);
+		*s = s.trim_start_matches(
+			|ch: char| ch.is_ascii_hexdigit() || matches!(ch, '_')
+		);
 
 		Ok(())
 	}

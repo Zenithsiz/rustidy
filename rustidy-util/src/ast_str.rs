@@ -23,14 +23,10 @@ impl AstStr {
 
 	/// Creates a new ast string from an input range
 	pub fn from_input(input: Substr) -> Self {
-		Self(
-			ArenaIdx::new(
-				Inner {
-					repr: AstStrRepr::String(Substr::clone(&input)),
-					input: Some(input),
-				}
-			)
-		)
+		Self(ArenaIdx::new(Inner {
+			repr: AstStrRepr::String(Substr::clone(&input)),
+			input: Some(input),
+		}))
 	}
 
 	/// Replaces this ast string
@@ -55,14 +51,10 @@ impl AstStr {
 			_ => None,
 		};
 
-		Self(
-			ArenaIdx::new(
-				Inner {
-					repr: AstStrRepr::Join { lhs: self, rhs: other },
-					input
-				}
-			)
-		)
+		Self(ArenaIdx::new(Inner {
+			repr: AstStrRepr::Join { lhs: self, rhs: other },
+			input
+		}))
 	}
 
 	/// Returns the inner representation of this string

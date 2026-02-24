@@ -34,27 +34,23 @@ pub struct Function {
 	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub generics:   Option<GenericParams>,
 	#[format(prefix_ws = Whitespace::REMOVE)]
-	#[format(
-		args = delimited::fmt_remove_or_indent_if_non_blank(
-			60,
-			FunctionParametersFmt::Inline,
-			FunctionParametersFmt::Indent
-		)
-	)]
+	#[format(args = delimited::fmt_remove_or_indent_if_non_blank(
+		60,
+		FunctionParametersFmt::Inline,
+		FunctionParametersFmt::Indent
+	))]
 	pub params:     Parenthesized<Option<FunctionParameters>>,
 	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub ret:        Option<FunctionReturnType>,
 	#[format(prefix_ws = Whitespace::INDENT)]
 	pub where_:     Option<WhereClause>,
-	#[format(
-		prefix_ws = match self.body.is_semi() {
-			true => Whitespace::REMOVE,
-			false => match self.where_.is_some() {
-				true => Whitespace::INDENT,
-				false => Whitespace::SINGLE,
-			}
+	#[format(prefix_ws = match self.body.is_semi() {
+		true => Whitespace::REMOVE,
+		false => match self.where_.is_some() {
+			true => Whitespace::INDENT,
+			false => Whitespace::SINGLE,
 		}
-	)]
+	})]
 	pub body:       FunctionBody,
 }
 
@@ -78,12 +74,10 @@ pub struct FunctionQualifiers {
 	pub async_:  Option<token::Async>,
 	#[format(prefix_ws(if_ = self.const_.is_some() || self.async_.is_some(), expr = Whitespace::SINGLE))]
 	pub safety:  Option<ItemSafety>,
-	#[format(
-		prefix_ws(
-			if_ = self.const_.is_some() || self.async_.is_some() || self.safety.is_some(),
-			expr = Whitespace::SINGLE
-		)
-	)]
+	#[format(prefix_ws(
+		if_ = self.const_.is_some() || self.async_.is_some() || self.safety.is_some(),
+		expr = Whitespace::SINGLE
+	))]
 	pub extern_: Option<ExternAbi>,
 }
 
@@ -241,18 +235,13 @@ pub struct ShorthandSelf {
 		false => Whitespace::REMOVE,
 	}))]
 	pub mut_:  Option<token::Mut>,
-	#[format(
-		prefix_ws(
-			if_ = self.ref_.is_some() || self.mut_.is_some(),
-			expr = match self
-				.ref_
-				.as_ref()
-				.is_some_and(|ref_| ref_.lifetime.is_some()) || self.mut_.is_some() {
-				true => Whitespace::SINGLE,
-				false => Whitespace::REMOVE,
-			}
-		)
-	)]
+	#[format(prefix_ws(if_ = self.ref_.is_some() || self.mut_.is_some(), expr = match self
+		.ref_
+		.as_ref()
+		.is_some_and(|ref_| ref_.lifetime.is_some()) || self.mut_.is_some() {
+		true => Whitespace::SINGLE,
+		false => Whitespace::REMOVE,
+	}))]
 	pub self_: token::SelfLower,
 }
 

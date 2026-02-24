@@ -49,13 +49,10 @@ where
 		.parse::<T>()
 		.unwrap_or_else(|err| self::on_err(&parser, &err));
 
-	bencher
-		.iter(
-			|| {
-				let mut f = rustidy_print::PrintFmt::new();
-				value.print(&mut f);
-			}
-		);
+	bencher.iter(|| {
+		let mut f = rustidy_print::PrintFmt::new();
+		value.print(&mut f);
+	});
 }
 
 #[cold]

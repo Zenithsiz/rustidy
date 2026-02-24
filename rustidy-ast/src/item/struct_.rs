@@ -39,12 +39,10 @@ pub struct StructStruct {
 	pub generics: Option<GenericParams>,
 	#[format(prefix_ws = Whitespace::INDENT)]
 	pub where_:   Option<WhereClause>,
-	#[format(
-		prefix_ws = match self.inner {
-			StructStructInner::Fields(_) => Whitespace::SINGLE,
-			StructStructInner::Semi(_) => Whitespace::REMOVE,
-		}
-	)]
+	#[format(prefix_ws = match self.inner {
+		StructStructInner::Fields(_) => Whitespace::SINGLE,
+		StructStructInner::Semi(_) => Whitespace::REMOVE,
+	})]
 	pub inner:    StructStructInner,
 }
 
@@ -62,24 +60,20 @@ pub enum StructStructInner {
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
-pub struct StructFields(
-	#[format(
-		args = {
-			let max_ident_len = self.0
-				.values()
-				.map(|field| field.0.inner.ident.non_ws_len())
-				.max()
-				.expect("At least one element exists");
-			punct::fmt_with(
-				Whitespace::INDENT,
-				Whitespace::REMOVE,
-				StructFieldInnerArgs { max_ident_len },
-				()
-			)
-		}
-	)]
-	PunctuatedTrailing<StructField, token::Comma>,
-);
+pub struct StructFields(#[format(args = {
+	let max_ident_len = self.0
+		.values()
+		.map(|field| field.0.inner.ident.non_ws_len())
+		.max()
+		.expect("At least one element exists");
+	punct::fmt_with(
+		Whitespace::INDENT,
+		Whitespace::REMOVE,
+		StructFieldInnerArgs { max_ident_len },
+		()
+	)
+})]
+PunctuatedTrailing<StructField, token::Comma>);
 
 /// `StructField`
 #[derive(PartialEq, Eq, Clone, Debug)]
@@ -99,13 +93,11 @@ pub struct StructFieldInner {
 	pub ident: Identifier,
 	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub colon: token::Colon,
-	#[format(
-		prefix_ws = {
-			let ident_len = self.ident.non_ws_len();
-			let ty_prefix_ws_len = 1 + args.max_ident_len - ident_len;
-			Whitespace::spaces(ty_prefix_ws_len)
-		}
-	)]
+	#[format(prefix_ws = {
+		let ident_len = self.ident.non_ws_len();
+		let ty_prefix_ws_len = 1 + args.max_ident_len - ident_len;
+		Whitespace::spaces(ty_prefix_ws_len)
+	})]
 	pub ty:    Type,
 	// Note: Nightly-only
 	#[format(prefix_ws = Whitespace::SINGLE)]
@@ -157,13 +149,9 @@ impl TupleStruct {
 			fields.0.trailing = None;
 		}
 		let output = fields
-			.format(
-				ctx,
-				prefix_ws,
-				delimited::FmtRemoveWith(
-					TupleFieldsFmt { field_prefix_ws: Whitespace::SINGLE }
-				)
-			);
+			.format(ctx, prefix_ws, delimited::FmtRemoveWith(
+				TupleFieldsFmt { field_prefix_ws: Whitespace::SINGLE }
+			));
 
 		match output.len_non_multiline_ws() <= ctx.config().max_inline_tuple_struct_len {
 			true => output,
@@ -172,14 +160,13 @@ impl TupleStruct {
 					fields.0.trailing = Some(token::Comma::new());
 				}
 
-				fields
-					.format(
-						ctx,
-						prefix_ws,
-						delimited::fmt_indent_if_non_blank_with_value(
-							TupleFieldsFmt { field_prefix_ws: Whitespace::INDENT }
-						)
+				fields.format(
+					ctx,
+					prefix_ws,
+					delimited::fmt_indent_if_non_blank_with_value(
+						TupleFieldsFmt { field_prefix_ws: Whitespace::INDENT }
 					)
+				)
 			},
 		}
 	}
