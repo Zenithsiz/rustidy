@@ -30,7 +30,9 @@ pub struct BareFunctionType {
 			if_ = self.for_lifetimes.is_some() || self
 				.qualifiers
 				.as_ref()
-				.is_some_and(|qualifiers| qualifiers.unsafe_.is_some() || qualifiers.extern_.is_some())
+				.is_some_and(
+					|qualifiers| qualifiers.unsafe_.is_some() || qualifiers.extern_.is_some()
+				)
 		)
 	)]
 	pub fn_:           token::Fn,

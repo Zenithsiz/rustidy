@@ -129,7 +129,9 @@ mod tests {
 			let mut parser = Parser::new(input);
 			let literal = parser
 				.parse::<StringLiteral>()
-				.unwrap_or_else(|err| panic!("Unable to parse input case {input:?}: {err:?}"));
+				.unwrap_or_else(
+					|err| panic!("Unable to parse input case {input:?}: {err:?}")
+				);
 
 			let contents_found = literal.contents();
 			assert_eq!(

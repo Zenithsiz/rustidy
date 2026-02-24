@@ -82,10 +82,13 @@ impl Format<WhitespaceConfig, ()> for MethodCallExpression {
 			false => match output.len_without_prefix_ws() >= ctx.config().max_chain_len {
 				// TODO: Ideally we wouldn't re-format everything here.
 				true => ctx
-					.with_tag(FormatTag::InsideChain, |ctx| {
-						self
-							.format(ctx, prefix_ws, MethodCallExpressionFmt)
-					}),
+					.with_tag(
+						FormatTag::InsideChain,
+						|ctx| {
+							self
+								.format(ctx, prefix_ws, MethodCallExpressionFmt)
+						}
+					),
 				false => output,
 			},
 		}

@@ -38,7 +38,12 @@ fn format_use_decl_simple(bencher: &mut Bencher) {
 
 #[bench]
 fn format_use_decl_group(bencher: &mut Bencher) {
-	self::format_with::<UseDeclaration, _, _>(bencher, "use {a, b, c};", Whitespace::PRESERVE, ());
+	self::format_with::<UseDeclaration, _, _>(
+		bencher,
+		"use {a, b, c};",
+		Whitespace::PRESERVE,
+		()
+	);
 }
 
 fn format<T: Parse + Format<(), ()>>(bencher: &mut Bencher, input: &str) {
@@ -64,9 +69,11 @@ where
 	let config = Config::default();
 	let mut ctx = rustidy_format::Context::new(input, &config);
 	bencher
-		.iter(|| {
-			value.format(&mut ctx, prefix_ws, args)
-		});
+		.iter(
+			|| {
+				value.format(&mut ctx, prefix_ws, args)
+			}
+		);
 }
 
 #[cold]

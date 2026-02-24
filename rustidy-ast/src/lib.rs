@@ -116,7 +116,10 @@ impl Format<(), ()> for Crate {
 			.append_to(&mut output);
 
 		ctx
-			.format(&mut self.suffix_ws, Whitespace::indent(output.is_empty))
+			.format(
+				&mut self.suffix_ws,
+				Whitespace::indent(output.is_empty)
+			)
 			.append_to(&mut output);
 
 		output

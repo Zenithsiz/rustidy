@@ -110,9 +110,15 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 	let item_ident = &attrs.ident;
 
 	let ident_base = syn::Ident::new(&format!("{item_ident}Base"), item_ident.span());
-	let ident_prefix = syn::Ident::new(&format!("{item_ident}Prefix"), item_ident.span());
+	let ident_prefix = syn::Ident::new(
+		&format!("{item_ident}Prefix"),
+		item_ident.span()
+	);
 	let ident_infix = syn::Ident::new(&format!("{item_ident}Infix"), item_ident.span());
-	let ident_suffix = syn::Ident::new(&format!("{item_ident}Suffix"), item_ident.span());
+	let ident_suffix = syn::Ident::new(
+		&format!("{item_ident}Suffix"),
+		item_ident.span()
+	);
 
 	let root_ty = &attrs.root;
 
@@ -120,8 +126,9 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 	let root_conversion_impls = attrs
 		.into_root
 		.as_ref()
-		.map(|into_root_ty| {
-			quote! {
+		.map(
+			|into_root_ty| {
+				quote! {
 			#[automatically_derived]
 			impl rustidy_parse::IntoRecursiveRoot<#root_ty> for #item_ident {
 				fn into_recursive_root(self, parser: &mut rustidy_parse::Parser) -> #root_ty {
@@ -143,7 +150,8 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 				}
 			}
 		}
-		});
+			}
+		);
 
 	if attrs.transparent {
 		return self::emit_transparent(&attrs, root_conversion_impls.as_ref());
@@ -164,19 +172,25 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 			let mut suffix_variants = recursive_variants.clone();
 			let suffix_match_arms = suffix_variants
 				.iter()
-				.map(|variant| try {
-					let field = self::get_variant_as_unnamed_single(variant)
-						.context("Enum variants must be tuple variants with a single field")?;
+				.map(
+					|variant| try {
+						let field = self::get_variant_as_unnamed_single(variant)
+							.context(
+								"Enum variants must be tuple variants with a single field"
+							)?;
 
-					let ty = &field.ty;
-					let variant_ident = &variant.ident;
+						let ty = &field.ty;
+						let variant_ident = &variant.ident;
 
-					quote! { #ident_suffix::#variant_ident(suffix) => Self::#variant_ident(<#ty as rustidy_parse::ParsableRecursive<#root_ty>>::join_suffix(root, suffix, parser)), }
-				})
+						quote! { #ident_suffix::#variant_ident(suffix) => Self::#variant_ident(<#ty as rustidy_parse::ParsableRecursive<#root_ty>>::join_suffix(root, suffix, parser)), }
+					}
+				)
 				.collect::<Result<Vec<_>, _>>()?;
 			for variant in &mut suffix_variants {
 				let field = self::get_variant_as_unnamed_single_mut(variant)
-					.context("Enum variants must be tuple variants with a single field")?;
+					.context(
+						"Enum variants must be tuple variants with a single field"
+					)?;
 				let ty = &field.ty;
 				field.ty = parse_quote! { <#ty as rustidy_parse::ParsableRecursive<#root_ty>>::Suffix };
 			}
@@ -203,19 +217,25 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 			let mut prefix_variants = recursive_variants.clone();
 			let prefix_match_arms = prefix_variants
 				.iter()
-				.map(|variant| try {
-					let field = self::get_variant_as_unnamed_single(variant)
-						.context("Enum variants must be tuple variants with a single field")?;
+				.map(
+					|variant| try {
+						let field = self::get_variant_as_unnamed_single(variant)
+							.context(
+								"Enum variants must be tuple variants with a single field"
+							)?;
 
-					let ty = &field.ty;
-					let variant_ident = &variant.ident;
+						let ty = &field.ty;
+						let variant_ident = &variant.ident;
 
-					quote! { #ident_prefix::#variant_ident(prefix) => Self::#variant_ident(<#ty as rustidy_parse::ParsableRecursive<#root_ty>>::join_prefix(prefix, root, parser)), }
-				})
+						quote! { #ident_prefix::#variant_ident(prefix) => Self::#variant_ident(<#ty as rustidy_parse::ParsableRecursive<#root_ty>>::join_prefix(prefix, root, parser)), }
+					}
+				)
 				.collect::<Result<Vec<_>, AppError>>()?;
 			for variant in &mut prefix_variants {
 				let field = self::get_variant_as_unnamed_single_mut(variant)
-					.context("Enum variants must be tuple variants with a single field")?;
+					.context(
+						"Enum variants must be tuple variants with a single field"
+					)?;
 				let ty = &field.ty;
 				field.ty = parse_quote! { <#ty as rustidy_parse::ParsableRecursive<#root_ty>>::Prefix };
 			}
@@ -241,19 +261,25 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 			let mut infix_variants = recursive_variants.clone();
 			let infix_match_arms = infix_variants
 				.iter()
-				.map(|variant| try {
-					let field = self::get_variant_as_unnamed_single(variant)
-						.context("Enum variants must be tuple variants with a single field")?;
+				.map(
+					|variant| try {
+						let field = self::get_variant_as_unnamed_single(variant)
+							.context(
+								"Enum variants must be tuple variants with a single field"
+							)?;
 
-					let ty = &field.ty;
-					let variant_ident = &variant.ident;
+						let ty = &field.ty;
+						let variant_ident = &variant.ident;
 
-					quote! { #ident_infix::#variant_ident(infix) => Self::#variant_ident(<#ty as rustidy_parse::ParsableRecursive<#root_ty>>::join_infix(lhs, infix, rhs, parser)), }
-				})
+						quote! { #ident_infix::#variant_ident(infix) => Self::#variant_ident(<#ty as rustidy_parse::ParsableRecursive<#root_ty>>::join_infix(lhs, infix, rhs, parser)), }
+					}
+				)
 				.collect::<Result<Vec<_>, AppError>>()?;
 			for variant in &mut infix_variants {
 				let field = self::get_variant_as_unnamed_single_mut(variant)
-					.context("Enum variants must be tuple variants with a single field")?;
+					.context(
+						"Enum variants must be tuple variants with a single field"
+					)?;
 				let ty = &field.ty;
 				field.ty = parse_quote! { <#ty as rustidy_parse::ParsableRecursive<#root_ty>>::Infix };
 			}
@@ -280,19 +306,25 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 			let mut base_variants = recursive_variants.clone();
 			let mut base_match_arms = base_variants
 				.iter()
-				.map(|variant| try {
-					let field = self::get_variant_as_unnamed_single(variant)
-						.context("Enum variants must be tuple variants with a single field")?;
+				.map(
+					|variant| try {
+						let field = self::get_variant_as_unnamed_single(variant)
+							.context(
+								"Enum variants must be tuple variants with a single field"
+							)?;
 
-					let ty = &field.ty;
-					let variant_ident = &variant.ident;
+						let ty = &field.ty;
+						let variant_ident = &variant.ident;
 
-					quote! { #ident_base::#variant_ident(base) => Self::#variant_ident(<#ty as rustidy_parse::ParsableRecursive<#root_ty>>::from_base(base, parser)), }
-				})
+						quote! { #ident_base::#variant_ident(base) => Self::#variant_ident(<#ty as rustidy_parse::ParsableRecursive<#root_ty>>::from_base(base, parser)), }
+					}
+				)
 				.collect::<Result<Vec<_>, AppError>>()?;
 			for variant in &mut base_variants {
 				let field = self::get_variant_as_unnamed_single_mut(variant)
-					.context("Enum variants must be tuple variants with a single field")?;
+					.context(
+						"Enum variants must be tuple variants with a single field"
+					)?;
 				let ty = &field.ty;
 				field.ty = parse_quote! { <#ty as rustidy_parse::ParsableRecursive<#root_ty>>::Base };
 			}
@@ -300,7 +332,9 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 			for variant in variants {
 				if recursive_variants
 					.iter()
-					.any(|existing_variant| existing_variant.ident == variant.ident) {
+					.any(
+						|existing_variant| existing_variant.ident == variant.ident
+					) {
 					continue;
 				}
 
@@ -308,9 +342,11 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 
 				let variant_ident = &variant.ident;
 				base_match_arms
-					.push(quote! {
+					.push(
+						quote! {
 					#ident_base::#variant_ident(base) => Self::#variant_ident(base),
-				});
+				}
+					);
 			}
 
 			let impl_base = quote! {
@@ -351,7 +387,9 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 		darling::ast::Data::Struct(fields) => {
 			let kind = attrs
 				.kind
-				.context("Expected `#[parse_recursive(kind = <kind>)]` with `kind` equal to `left`, `right` or `fully`",)?;
+				.context(
+					"Expected `#[parse_recursive(kind = <kind>)]` with `kind` equal to `left`, `right` or `fully`",
+				)?;
 
 			let (suffix_impl, suffix_ty) = match kind {
 				Kind::Left => {
@@ -370,10 +408,12 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 							let field_ty = &field.ty;
 							let suffix_fields_ident = suffix_fields
 								.iter()
-								.map(|field| field
-									.ident
-									.as_ref()
-									.context("Should have an ident"))
+								.map(
+									|field| field
+										.ident
+										.as_ref()
+										.context("Should have an ident")
+								)
 								.collect::<Result<Vec<_>, _>>()?;
 
 							quote! {
@@ -434,10 +474,12 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 							let field_ty = &field.ty;
 							let prefix_fields_ident = prefix_fields
 								.iter()
-								.map(|field| field
-									.ident
-									.as_ref()
-									.context("Should have an ident"))
+								.map(
+									|field| field
+										.ident
+										.as_ref()
+										.context("Should have an ident")
+								)
 								.collect::<Result<Vec<_>, _>>()?;
 
 							quote! {
@@ -510,10 +552,12 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 							let rhs_field_ty = &rhs_field.ty;
 							let infix_fields_ident = infix_fields
 								.iter()
-								.map(|field| field
-									.ident
-									.as_ref()
-									.context("Should have an ident"))
+								.map(
+									|field| field
+										.ident
+										.as_ref()
+										.context("Should have an ident")
+								)
 								.collect::<Result<Vec<_>, _>>()?;
 
 							quote! {
@@ -601,7 +645,9 @@ fn emit_transparent(
 		.fields
 		.iter()
 		.exactly_one()
-		.context("`#[parse_recursive(transparent)]` expects a single field")?;
+		.context(
+			"`#[parse_recursive(transparent)]` expects a single field"
+		)?;
 	let field_ty = &field.ty;
 
 	let output = quote! {

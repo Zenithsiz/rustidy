@@ -56,7 +56,11 @@ pub struct MetaItemSeq {
 	pub path: SimplePath,
 	#[format(prefix_ws = Whitespace::REMOVE)]
 	#[format(
-		args = delimited::fmt_remove_or_indent_if_non_blank(100, MetaSeqFmt { inner: Whitespace::SINGLE }, MetaSeqFmt { inner: Whitespace::INDENT },)
+		args = delimited::fmt_remove_or_indent_if_non_blank(
+			100,
+			MetaSeqFmt { inner: Whitespace::SINGLE },
+			MetaSeqFmt { inner: Whitespace::INDENT },
+		)
 	)]
 	pub seq:  Parenthesized<Option<MetaSeq>>
 }

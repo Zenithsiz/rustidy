@@ -11,7 +11,9 @@ use {
 
 #[derive(Debug, darling::FromMeta)]
 // TODO: Something better than this...
-#[darling(from_expr = |expr| Ok(Self { ty: parse_quote! { #expr }, generics: vec![] }))]
+#[darling(from_expr = |expr| Ok(
+	Self { ty: parse_quote! { #expr }, generics: vec![] }
+))]
 struct ArgsTy {
 	ty:       syn::Type,
 
@@ -181,7 +183,20 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 		darling::ast::Data::Struct(fields) => self::derive_struct(&attrs, fields)?,
 	};
 
-	let format = self::derive_format(parse_quote! { self }, None, None, true, &None, &None, format, &attrs.before_with, &attrs.with_tag, attrs.without_tags, Args::Skip, &attrs.indent,)?;
+	let format = self::derive_format(
+		parse_quote! { self },
+		None,
+		None,
+		true,
+		&None,
+		&None,
+		format,
+		&attrs.before_with,
+		&attrs.with_tag,
+		attrs.without_tags,
+		Args::Skip,
+		&attrs.indent,
+	)?;
 
 	let prefix_ws_ty: syn::Type = match attrs.no_prefix_ws {
 		true => parse_quote! { () },
@@ -202,20 +217,28 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 		None => {
 			let generics = attrs.generics.clone();
 			match &attrs.data {
-				darling::ast::Data::Enum(variants) => util::with_enum_bounds(generics, variants, |variant, field| {
-					let ty = &field.ty;
-					match variant.args.is_some() {
-						true => parse_quote! { #ty: rustidy_format::Formattable },
-						false => parse_quote! { #ty: rustidy_format::Format<#prefix_ws_ty, ()> },
+				darling::ast::Data::Enum(variants) => util::with_enum_bounds(
+					generics,
+					variants,
+					|variant, field| {
+						let ty = &field.ty;
+						match variant.args.is_some() {
+							true => parse_quote! { #ty: rustidy_format::Formattable },
+							false => parse_quote! { #ty: rustidy_format::Format<#prefix_ws_ty, ()> },
+						}
 					}
-				}),
-				darling::ast::Data::Struct(fields) => util::with_struct_bounds(generics, &fields.fields, |field| {
-					let ty = &field.ty;
-					match field.args.is_some() {
-						true => parse_quote! { #ty: rustidy_format::Formattable },
-						false => parse_quote! { #ty: rustidy_format::Format<#prefix_ws_ty, ()> },
+				),
+				darling::ast::Data::Struct(fields) => util::with_struct_bounds(
+					generics,
+					&fields.fields,
+					|field| {
+						let ty = &field.ty;
+						match field.args.is_some() {
+							true => parse_quote! { #ty: rustidy_format::Formattable },
+							false => parse_quote! { #ty: rustidy_format::Format<#prefix_ws_ty, ()> },
+						}
 					}
-				}),
+				),
 			}
 		},
 	};
@@ -249,60 +272,89 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 fn derive_enum(variants: &[VariantAttrs]) -> Result<syn::Expr, AppError> {
 	let format_variants = variants
 		.iter()
-		.map(|variant| {
-			let variant_ident = &variant.ident;
+		.map(
+			|variant| {
+				let variant_ident = &variant.ident;
 
-			let prefix_ws = variant
-				.prefix_ws
-				.as_ref()
-				.map(|prefix_ws| prefix_ws
-					.eval(Some(parse_quote! { prefix_ws })));
+				let prefix_ws = variant
+					.prefix_ws
+					.as_ref()
+					.map(
+						|prefix_ws| prefix_ws
+							.eval(Some(parse_quote! { prefix_ws }))
+					);
 
-			let format = parse_quote! { ctx.format_with(value, prefix_ws, args) };
-			let format = self::derive_format(parse_quote! { value }, prefix_ws, None, true, &variant.with, &None, format, &variant.before_with, &variant.with_tag, variant.without_tags, Args::Set(variant.args.clone()), &variant.indent)?;
+				let format = parse_quote! { ctx.format_with(value, prefix_ws, args) };
+				let format = self::derive_format(
+					parse_quote! { value },
+					prefix_ws,
+					None,
+					true,
+					&variant.with,
+					&None,
+					format,
+					&variant.before_with,
+					&variant.with_tag,
+					variant.without_tags,
+					Args::Set(variant.args.clone()),
+					&variant.indent
+				)?;
 
-			Ok(parse_quote! {
+				Ok(
+					parse_quote! {
 				Self::#variant_ident(ref mut value) => #format,
-			})
-		})
+			}
+				)
+			}
+		)
 		.collect::<Result<Vec<syn::Arm>, AppError>>()?;
 
-	Ok(parse_quote! { match *self { #( #format_variants )* } })
+	Ok(
+		parse_quote! { match *self { #( #format_variants )* } }
+	)
 }
 
 fn derive_struct(attrs: &Attrs, fields: &darling::ast::Fields<FieldAttrs>) -> Result<syn::Expr, AppError> {
 	let format_fields = fields
 		.iter()
 		.enumerate()
-		.map(|(field_idx, field)| self::derive_struct_field(attrs, field_idx, field))
+		.map(
+			|(field_idx, field)| self::derive_struct_field(attrs, field_idx, field)
+		)
 		.collect::<Result<Vec<_>, _>>()?;
 
 	let assert_prefix_ws: Option<syn::Expr> = (!attrs
 		.no_prefix_ws)
-		.then(|| parse_quote! {
+		.then(
+			|| parse_quote! {
 			if !output.is_empty && !output.has_prefix_ws() {
 				tracing::warn!("Non-empty type did not use prefix whitespace: {}", std::any::type_name::<Self>())
 			}
-		});
+		}
+		);
 
-	Ok(parse_quote! {{
+	Ok(
+		parse_quote! {{
 		let mut output = rustidy_format::FormatOutput::default();
 		let mut has_prefix_ws = true;
 		#( #format_fields; )*
 
 		#assert_prefix_ws;
 		output
-	}})
+	}}
+	)
 }
 
 fn derive_struct_field(attrs: &Attrs, field_idx: usize, field: &FieldAttrs) -> Result<syn::Expr, AppError> {
 	let field_ident = util::field_member_access(field_idx, field);
 
 	let prefix_ws = match &field.prefix_ws {
-		Some(prefix_ws) => Some(prefix_ws
-			.map(|prefix_ws| match attrs.no_prefix_ws {
-				true => prefix_ws.clone(),
-				false => parse_quote! {{
+		Some(prefix_ws) => Some(
+			prefix_ws
+				.map(
+					|prefix_ws| match attrs.no_prefix_ws {
+						true => prefix_ws.clone(),
+						false => parse_quote! {{
 					if has_prefix_ws {
 						tracing::warn!(
 							"Overwriting prefix whitespace of {}::{}",
@@ -313,13 +365,16 @@ fn derive_struct_field(attrs: &Attrs, field_idx: usize, field: &FieldAttrs) -> R
 
 					#prefix_ws
 				}},
-			})
-			.eval(Some(parse_quote! { prefix_ws })),),
+					}
+				)
+				.eval(Some(parse_quote! { prefix_ws })),
+		),
 		None => match field.str {
 			true => None,
 			false => match attrs.no_prefix_ws {
 				true => None,
-				false => Some(parse_quote! { match has_prefix_ws {
+				false => Some(
+					parse_quote! { match has_prefix_ws {
 					true => prefix_ws,
 					false => {
 						tracing::warn!(
@@ -330,7 +385,8 @@ fn derive_struct_field(attrs: &Attrs, field_idx: usize, field: &FieldAttrs) -> R
 
 						<rustidy_util::Whitespace as rustidy_format::WhitespaceFormat>::PRESERVE
 					},
-				}})
+				}}
+				)
 			},
 		},
 	};
@@ -346,7 +402,20 @@ fn derive_struct_field(attrs: &Attrs, field_idx: usize, field: &FieldAttrs) -> R
 		}
 	};
 
-	self::derive_format(parse_quote! { &mut self.#field_ident }, prefix_ws, Some(after_format), false, &field.with, &field.with_self, format, &field.before_with, &field.with_tag, field.without_tags, Args::Set(field.args.clone()), &field.indent,)
+	self::derive_format(
+		parse_quote! { &mut self.#field_ident },
+		prefix_ws,
+		Some(after_format),
+		false,
+		&field.with,
+		&field.with_self,
+		format,
+		&field.before_with,
+		&field.with_tag,
+		field.without_tags,
+		Args::Set(field.args.clone()),
+		&field.indent,
+	)
 }
 
 enum Args {
@@ -434,9 +503,11 @@ fn derive_format(
 
 	let before_with = before_with
 		.iter()
-		.map(|before_with| before_with
-			.map(|expr| parse_quote! { (#expr)(#value, ctx) })
-			.eval(None));
+		.map(
+			|before_with| before_with
+				.map(|expr| parse_quote! { (#expr)(#value, ctx) })
+				.eval(None)
+		);
 	let format = match before_with.is_empty() {
 		true => format,
 		false => parse_quote! {{

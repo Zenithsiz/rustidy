@@ -129,7 +129,9 @@ impl<T: Parse> ParseError for ParserError<T> {
 		let err = self.source.to_app_error(parser).flatten();
 		match self::name_of::<T>() {
 			Some(name) => err
-				.with_context(|| format!("Expected {name} at {}", parser.loc(self.range.start))),
+				.with_context(
+					|| format!("Expected {name} at {}", parser.loc(self.range.start))
+				),
 			None => err,
 		}
 	}
@@ -140,8 +142,10 @@ fn name_of<T: Parse>() -> Option<String> {
 	let name = T::name().map(|s| s.to_string());
 
 	#[cfg(feature = "parse-debug-name")]
-	let name = Some(name
-		.unwrap_or_else(|| std::any::type_name::<T>().to_owned()));
+	let name = Some(
+		name
+			.unwrap_or_else(|| std::any::type_name::<T>().to_owned())
+	);
 
 	name
 }

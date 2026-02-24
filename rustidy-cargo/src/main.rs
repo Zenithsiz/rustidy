@@ -59,7 +59,12 @@ fn run() -> Result<(), AppError> {
 		None => None,
 	};
 
-	self::format(packages, manifest_path.as_deref(), &args.extra_args, args.check)
+	self::format(
+		packages,
+		manifest_path.as_deref(),
+		&args.extra_args,
+		args.check
+	)
 }
 
 fn format(
@@ -87,11 +92,13 @@ fn format(
 
 	command
 		.status()
-		.map_err(|e| match e.kind() {
-			io::ErrorKind::NotFound => app_error!("Unable to find `rustidy` binary {rustidy:?}, ensure it's in your `$PATH`"),
-			_ => AppError::new(&e)
-				.context("Unable to spawn rustidy"),
-		})?
+		.map_err(
+			|e| match e.kind() {
+				io::ErrorKind::NotFound => app_error!("Unable to find `rustidy` binary {rustidy:?}, ensure it's in your `$PATH`"),
+				_ => AppError::new(&e)
+					.context("Unable to spawn rustidy"),
+			}
+		)?
 		.exit_ok()
 		.context("rustidy returned an error")?;
 

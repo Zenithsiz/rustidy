@@ -74,7 +74,10 @@ impl Parse for MatchArms {
 					Some(trailing_comma) => {
 						parser.set_peeked(without_block_peek_state);
 
-						let expr = Expression::from_recursive_root(ExpressionInner::from(expr_without_block), parser);
+						let expr = Expression::from_recursive_root(
+							ExpressionInner::from(expr_without_block),
+							parser
+						);
 						(expr, Some(trailing_comma), ControlFlow::Continue(()))
 					},
 					None => {
@@ -102,11 +105,15 @@ impl Parse for MatchArms {
 
 					(expr, trailing_comma, control_flow)
 				},
-				(Err(with_block), Err(without_block)) => return Err(Self::Error::Expression { with_block, without_block, }),
+				(Err(with_block), Err(without_block)) => return Err(
+					Self::Error::Expression { with_block, without_block, }
+				),
 			};
 
 			arms
-				.push(MatchArmWithExpr { arm, arrow, expr, trailing_comma, });
+				.push(
+					MatchArmWithExpr { arm, arrow, expr, trailing_comma, }
+				);
 
 			if control_flow.is_break() {
 				break;

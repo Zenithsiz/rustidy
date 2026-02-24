@@ -21,7 +21,11 @@ pub struct StructExpression {
 	pub path:  PathInExpression,
 	#[format(prefix_ws = Whitespace::SINGLE)]
 	#[format(
-		args = delimited::fmt_single_or_indent_if_non_blank(50, StructExprFieldsFmt { field_prefix_ws: Whitespace::SINGLE }, StructExprFieldsFmt { field_prefix_ws: Whitespace::INDENT })
+		args = delimited::fmt_single_or_indent_if_non_blank(
+			50,
+			StructExprFieldsFmt { field_prefix_ws: Whitespace::SINGLE },
+			StructExprFieldsFmt { field_prefix_ws: Whitespace::INDENT }
+		)
 	)]
 	pub inner: Braced<Option<StructExpressionInner>>,
 }

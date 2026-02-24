@@ -74,15 +74,23 @@ impl Items {
 			item = match item.try_into_use_decl() {
 				Ok((attrs, vis, mut first_use_decl)) => {
 					while let Some(use_decl) = items
-						.next_if_map(|item| item
-							.try_into_just_use_decl(ctx, vis.as_ref())) {
+						.next_if_map(
+							|item| item
+								.try_into_just_use_decl(ctx, vis.as_ref())
+						) {
 						first_use_decl.merge(use_decl);
 					}
 
-					Item(ArenaIdx::new(WithOuterAttributes {
-						attrs,
-						inner: ItemInner::Vis(VisItem { vis, inner: VisItemInner::Use(first_use_decl), }),
-					}))
+					Item(
+						ArenaIdx::new(
+							WithOuterAttributes {
+								attrs,
+								inner: ItemInner::Vis(
+									VisItem { vis, inner: VisItemInner::Use(first_use_decl), }
+								),
+							}
+						)
+					)
 				},
 				Err(item) => item,
 			};
@@ -102,13 +110,15 @@ impl Item {
 	#[expect(clippy::result_large_err, reason = "TODO")]
 	fn try_into_use_decl(self) -> Result<(Vec<OuterAttrOrDocComment>, Option<Visibility>, UseDeclaration), Self> {
 		self.0
-			.try_take_map(|item| match item.inner {
-				ItemInner::Vis(VisItem {
-					vis,
-					inner: VisItemInner::Use(use_decl),
-				}) => Ok((item.attrs, vis, use_decl)),
-				_ => Err(item),
-			})
+			.try_take_map(
+				|item| match item.inner {
+					ItemInner::Vis(VisItem {
+						vis,
+						inner: VisItemInner::Use(use_decl),
+					}) => Ok((item.attrs, vis, use_decl)),
+					_ => Err(item),
+				}
+			)
 			.map_err(Self)
 	}
 
@@ -120,23 +130,25 @@ impl Item {
 		expected_vis: Option<&Visibility>,
 	) -> Result<UseDeclaration, Self> {
 		self.0
-			.try_take_map(|mut item| {
-				// Note: If no prefix whitespace exists, we can merge them anyway.
-				if matches!(item.prefix_ws_is_pure(ctx), Some(false)) {
-					return Err(item);
-				}
-				if !item.attrs.is_empty() {
-					return Err(item);
-				}
+			.try_take_map(
+				|mut item| {
+					// Note: If no prefix whitespace exists, we can merge them anyway.
+					if matches!(item.prefix_ws_is_pure(ctx), Some(false)) {
+						return Err(item);
+					}
+					if !item.attrs.is_empty() {
+						return Err(item);
+					}
 
-				match item.inner {
-					ItemInner::Vis(VisItem {
-						vis,
-						inner: VisItemInner::Use(use_decl),
-					}) if vis.as_ref() == expected_vis => Ok(use_decl),
-					_ => Err(item),
+					match item.inner {
+						ItemInner::Vis(VisItem {
+							vis,
+							inner: VisItemInner::Use(use_decl),
+						}) if vis.as_ref() == expected_vis => Ok(use_decl),
+						_ => Err(item),
+					}
 				}
-			})
+			)
 			.map_err(Self)
 	}
 }

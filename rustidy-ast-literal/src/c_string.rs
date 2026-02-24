@@ -40,7 +40,9 @@ impl CStringLiteral {
 
 		loop {
 			match s
-				.strip_prefix(|ch: char| !matches!(ch, '"' | '\\' | '\r' | '\0')) {
+				.strip_prefix(
+					|ch: char| !matches!(ch, '"' | '\\' | '\r' | '\0')
+				) {
 				Some(rest) => *s = rest,
 				None => {
 					macro try_parse(

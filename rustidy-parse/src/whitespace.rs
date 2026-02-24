@@ -76,7 +76,9 @@ impl Parse for Comment {
 			Err(err) => err,
 		};
 
-		Err(CommentError::None { block: block_err, line: line_err, })
+		Err(
+			CommentError::None { block: block_err, line: line_err, }
+		)
 	}
 }
 
@@ -101,34 +103,36 @@ impl Parse for BlockComment {
 
 	fn parse_from(parser: &mut Parser) -> Result<Self, Self::Error> {
 		parser
-			.try_update_with(|s| {
-				let is_doc_comment = (s.starts_with("/**") && !s.starts_with("/***") && !s.starts_with("/**/")) || s.starts_with("/*!");
+			.try_update_with(
+				|s| {
+					let is_doc_comment = (s.starts_with("/**") && !s.starts_with("/***") && !s.starts_with("/**/")) || s.starts_with("/*!");
 
-				match s.strip_prefix("/*") {
-					Some(rest) if !is_doc_comment => {
-						*s = rest;
-						let mut depth = 1;
-						while depth != 0 {
-							let close_idx = s
-								.find("*/")
-								.ok_or(BlockCommentError::MissingCommentEnd)?;
+					match s.strip_prefix("/*") {
+						Some(rest) if !is_doc_comment => {
+							*s = rest;
+							let mut depth = 1;
+							while depth != 0 {
+								let close_idx = s
+									.find("*/")
+									.ok_or(BlockCommentError::MissingCommentEnd)?;
 
-							match s[..close_idx].find("/*") {
-								Some(open_idx) => {
-									*s = &s[open_idx + 2..];
-									depth += 1;
-								},
-								None => {
-									*s = &s[close_idx + 2..];
-									depth -= 1;
-								},
+								match s[..close_idx].find("/*") {
+									Some(open_idx) => {
+										*s = &s[open_idx + 2..];
+										depth += 1;
+									},
+									None => {
+										*s = &s[close_idx + 2..];
+										depth -= 1;
+									},
+								}
 							}
-						}
-						Ok(())
-					},
-					_ => Err(BlockCommentError::NoComment),
+							Ok(())
+						},
+						_ => Err(BlockCommentError::NoComment),
+					}
 				}
-			})
+			)
 			.map(|(s, ())| Self(s))
 	}
 }
@@ -148,19 +152,21 @@ impl Parse for LineComment {
 
 	fn parse_from(parser: &mut Parser) -> Result<Self, Self::Error> {
 		parser
-			.try_update_with(|s| {
-				let is_doc_comment = (s.starts_with("///") && !s.starts_with("////")) || s.starts_with("//!");
-				match s.starts_with("//") && !is_doc_comment {
-					true => {
-						*s = match s.find('\n') {
-							Some(idx) => &s[idx + 1..],
-							None => &s[s.len()..],
-						};
-						Ok(())
-					},
-					false => Err(LineCommentError::NoComment),
+			.try_update_with(
+				|s| {
+					let is_doc_comment = (s.starts_with("///") && !s.starts_with("////")) || s.starts_with("//!");
+					match s.starts_with("//") && !is_doc_comment {
+						true => {
+							*s = match s.find('\n') {
+								Some(idx) => &s[idx + 1..],
+								None => &s[s.len()..],
+							};
+							Ok(())
+						},
+						false => Err(LineCommentError::NoComment),
+					}
 				}
-			})
+			)
 			.map(|(s, ())| Self(s))
 	}
 }

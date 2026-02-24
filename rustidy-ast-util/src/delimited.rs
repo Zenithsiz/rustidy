@@ -60,24 +60,39 @@ where
 		}
 
 		ctx
-			.with_indent_if(args.indent, |ctx| {
-				let value_output = ctx
-					.format_with(&mut self.value, args.value_non_blank, args.value_args.clone());
-				let value_output = match value_output.is_blank {
-					true => ctx
-						.format_with(&mut self.value, args.value_blank, args.value_args),
-					false => value_output,
-				};
-				value_output.append_to(&mut output);
+			.with_indent_if(
+				args.indent,
+				|ctx| {
+					let value_output = ctx
+						.format_with(
+							&mut self.value,
+							args.value_non_blank,
+							args.value_args.clone()
+						);
+					let value_output = match value_output.is_blank {
+						true => ctx
+							.format_with(
+								&mut self.value,
+								args.value_blank,
+								args.value_args
+							),
+						false => value_output,
+					};
+					value_output.append_to(&mut output);
 
-				let suffix_prefix_ws = match value_output.is_blank {
-					true => args.suffix_blank,
-					false => args.suffix_non_blank,
-				};
-				ctx
-					.format_with(&mut self.suffix, suffix_prefix_ws, args.suffix_args)
-					.append_to(&mut output);
-			});
+					let suffix_prefix_ws = match value_output.is_blank {
+						true => args.suffix_blank,
+						false => args.suffix_non_blank,
+					};
+					ctx
+						.format_with(
+							&mut self.suffix,
+							suffix_prefix_ws,
+							args.suffix_args
+						)
+						.append_to(&mut output);
+				}
+			);
 
 		output
 	}
@@ -187,11 +202,13 @@ impl<T: Format<WhitespaceConfig, TArgs>, L: Format<WhitespaceConfig, ()>, R: For
 		args: FmtRemoveWith<TArgs>
 	) -> FormatOutput {
 		#[rustidy::config(max_chain_len = 100)]
-		FormatOutput::from([
-			ctx.format(&mut self.prefix, prefix_ws),
-			ctx.format_with(&mut self.value, Whitespace::REMOVE, args.0),
-			ctx.format(&mut self.suffix, Whitespace::REMOVE),
-		])
+		FormatOutput::from(
+			[
+				ctx.format(&mut self.prefix, prefix_ws),
+				ctx.format_with(&mut self.value, Whitespace::REMOVE, args.0),
+				ctx.format(&mut self.suffix, Whitespace::REMOVE),
+			]
+		)
 	}
 }
 
@@ -240,12 +257,20 @@ where
 		args: FmtArgsSingleOrIndentIfNonBlank<TArgs>
 	) -> FormatOutput {
 		let output = self
-			.format(ctx, prefix_ws, self::fmt_single_if_non_blank_with_value(args.value_args_single));
+			.format(
+				ctx,
+				prefix_ws,
+				self::fmt_single_if_non_blank_with_value(args.value_args_single)
+			);
 
 		match output.len_without_prefix_ws() <= args.max_len {
 			true => output,
 			false => self
-				.format(ctx, prefix_ws, self::fmt_indent_if_non_blank_with_value(args.value_args_indent)),
+				.format(
+					ctx,
+					prefix_ws,
+					self::fmt_indent_if_non_blank_with_value(args.value_args_indent)
+				),
 		}
 	}
 }
@@ -282,12 +307,20 @@ where
 		args: FmtArgsRemoveOrIndentIfNonBlank<TArgs>
 	) -> FormatOutput {
 		let output = self
-			.format(ctx, prefix_ws, FmtRemoveWith(args.value_args_remove));
+			.format(
+				ctx,
+				prefix_ws,
+				FmtRemoveWith(args.value_args_remove)
+			);
 
 		match output.len_without_prefix_ws() <= args.max_len {
 			true => output,
 			false => self
-				.format(ctx, prefix_ws, self::fmt_indent_if_non_blank_with_value(args.value_args_indent)),
+				.format(
+					ctx,
+					prefix_ws,
+					self::fmt_indent_if_non_blank_with_value(args.value_args_indent)
+				),
 		}
 	}
 }

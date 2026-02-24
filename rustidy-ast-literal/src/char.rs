@@ -35,7 +35,9 @@ impl CharLiteral {
 			.strip_prefix('\'')
 			.ok_or(CharLiteralError::StartQuote)?;
 		match s
-			.strip_prefix(|ch| !matches!(ch, '\'' | '\\' | '\n' | '\r' | '\t')) {
+			.strip_prefix(
+				|ch| !matches!(ch, '\'' | '\\' | '\n' | '\r' | '\t')
+			) {
 			Some(rest) => *s = rest,
 			None => {
 				// TODO: Better way to express this

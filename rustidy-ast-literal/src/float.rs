@@ -45,12 +45,17 @@ impl Parse for FloatLiteral {
 		let int = parser.parse::<DecLiteral>()?;
 
 		let (dot, frac) = match parser
-			.with_tag(ParserTag::SkipWhitespace, Parser::try_parse::<rustidy_ast_tokens::Dot>)? {
+			.with_tag(
+				ParserTag::SkipWhitespace,
+				Parser::try_parse::<rustidy_ast_tokens::Dot>
+			)? {
 			Ok(dot) => match parser.try_parse::<DecLiteral>()? {
 				Ok(frac) => (Some(dot), Some(frac)),
 				Err(_) => match parser
 					.remaining()
-					.starts_with(|ch| matches!(ch, '.' | '_') || unicode_ident::is_xid_start(ch)) {
+					.starts_with(
+						|ch| matches!(ch, '.' | '_') || unicode_ident::is_xid_start(ch)
+					) {
 					true => return Err(Self::Error::FractionalPartMissing),
 					false => (Some(dot), None),
 				},

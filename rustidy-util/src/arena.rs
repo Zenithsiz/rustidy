@@ -96,46 +96,48 @@ pub struct ArenaIdx<T: ArenaData> {
 impl<T: ArenaData> ArenaIdx<T> {
 	/// Creates a new value in the arena
 	pub fn new(value: T) -> Self {
-		T::with_arena(|arena| {
-			// SAFETY: We create no other references to `arena` in this block
-			let arena = unsafe {
-				arena.as_mut_unchecked()
-			};
+		T::with_arena(
+			|arena| {
+				// SAFETY: We create no other references to `arena` in this block
+				let arena = unsafe {
+					arena.as_mut_unchecked()
+				};
 
-			// Before inserting, remove any trailing dead values
-			arena.clean_trailing();
+				// Before inserting, remove any trailing dead values
+				arena.clean_trailing();
 
-			// Then find our slot.
-			let idx = arena.init.len();
-			let row = match arena.rows.get(idx / CAPACITY) {
-				Some(row) => row,
-				// Note: If the row we're looking for doesn't exist, then
-				//       we must be at the end of the last row, so create
-				//       a new one.
-				None => {
-					// SAFETY: We're initializing an array of uninitialized values
-					let row = unsafe {
-						Box::<[Slot<T>; CAPACITY]>::new_uninit()
-							.assume_init()
-					};
-					arena.rows.push_mut(row)
-				},
-			};
-			let slot = &row[idx % CAPACITY];
+				// Then find our slot.
+				let idx = arena.init.len();
+				let row = match arena.rows.get(idx / CAPACITY) {
+					Some(row) => row,
+					// Note: If the row we're looking for doesn't exist, then
+					//       we must be at the end of the last row, so create
+					//       a new one.
+					None => {
+						// SAFETY: We're initializing an array of uninitialized values
+						let row = unsafe {
+							Box::<[Slot<T>; CAPACITY]>::new_uninit()
+								.assume_init()
+						};
+						arena.rows.push_mut(row)
+					},
+				};
+				let slot = &row[idx % CAPACITY];
 
-			// Finally push the new value and set it as initialized.
-			// SAFETY: No other mutable references to `slot` exist, since
-			//         the slot was empty.
-			unsafe {
-				slot.as_mut_unchecked().write(value)
-			};
-			arena.init.push(true);
+				// Finally push the new value and set it as initialized.
+				// SAFETY: No other mutable references to `slot` exist, since
+				//         the slot was empty.
+				unsafe {
+					slot.as_mut_unchecked().write(value)
+				};
+				arena.init.push(true);
 
-			Self {
-				inner: idx.try_into().expect("Too many indices"),
-				phantom: PhantomData,
+				Self {
+					inner: idx.try_into().expect("Too many indices"),
+					phantom: PhantomData,
+				}
 			}
-		})
+		)
 	}
 
 	/// Moves out of this value
@@ -144,17 +146,19 @@ impl<T: ArenaData> ArenaIdx<T> {
 		let idx = self.inner as usize;
 		mem::forget(self);
 
-		T::with_arena(|arena| {
-			// SAFETY: We create no other references to `arena` in this block
-			let arena = unsafe {
-				arena.as_mut_unchecked()
-			};
+		T::with_arena(
+			|arena| {
+				// SAFETY: We create no other references to `arena` in this block
+				let arena = unsafe {
+					arena.as_mut_unchecked()
+				};
 
-			// SAFETY: No other mutable references to the slot exist, since we take `self`
-			unsafe {
-				arena.take_slot(idx)
+				// SAFETY: No other mutable references to the slot exist, since we take `self`
+				unsafe {
+					arena.take_slot(idx)
+				}
 			}
-		})
+		)
 	}
 
 	/// Moves out of this value if `f` returns `Ok`.
@@ -191,19 +195,21 @@ impl<T: ArenaData> ops::Deref for ArenaIdx<T> {
 	fn deref(&self) -> &Self::Target {
 		let idx = self.inner as usize;
 
-		T::with_arena(|arena| {
-			// SAFETY: We create no other references to `arena` in this block
-			let arena = unsafe {
-				arena.as_ref_unchecked()
-			};
+		T::with_arena(
+			|arena| {
+				// SAFETY: We create no other references to `arena` in this block
+				let arena = unsafe {
+					arena.as_ref_unchecked()
+				};
 
-			let slot = arena.slot(idx);
+				let slot = arena.slot(idx);
 
-			// SAFETY: No mutable reference to the value exists since we take `&self`
-			unsafe {
-				MaybeUninit::assume_init_ref(&*slot)
+				// SAFETY: No mutable reference to the value exists since we take `&self`
+				unsafe {
+					MaybeUninit::assume_init_ref(&*slot)
+				}
 			}
-		})
+		)
 	}
 }
 
@@ -211,19 +217,21 @@ impl<T: ArenaData> ops::DerefMut for ArenaIdx<T> {
 	fn deref_mut(&mut self) -> &mut Self::Target {
 		let idx = self.inner as usize;
 
-		T::with_arena(|arena| {
-			// SAFETY: We create no other references to `arena` in this block
-			let arena = unsafe {
-				arena.as_ref_unchecked()
-			};
+		T::with_arena(
+			|arena| {
+				// SAFETY: We create no other references to `arena` in this block
+				let arena = unsafe {
+					arena.as_ref_unchecked()
+				};
 
-			let slot = arena.slot(idx);
+				let slot = arena.slot(idx);
 
-			// SAFETY: No other references to the value exist since we take `&mut self`
-			unsafe {
-				MaybeUninit::assume_init_mut(&mut *slot)
+				// SAFETY: No other references to the value exist since we take `&mut self`
+				unsafe {
+					MaybeUninit::assume_init_mut(&mut *slot)
+				}
 			}
-		})
+		)
 	}
 }
 
@@ -231,18 +239,20 @@ impl<T: ArenaData> Drop for ArenaIdx<T> {
 	fn drop(&mut self) {
 		let idx = self.inner as usize;
 
-		T::with_arena(|arena| {
-			// SAFETY: We create no other references to `arena` in this block
-			let arena = unsafe {
-				arena.as_mut_unchecked()
-			};
+		T::with_arena(
+			|arena| {
+				// SAFETY: We create no other references to `arena` in this block
+				let arena = unsafe {
+					arena.as_mut_unchecked()
+				};
 
-			// SAFETY: No other mutable references to the slot exist, since we take `&mut self`
-			// TODO: Should we manually implement this to avoid moving the value onto the stack?
-			let _ = unsafe {
-				arena.take_slot(idx)
-			};
-		});
+				// SAFETY: No other mutable references to the slot exist, since we take `&mut self`
+				// TODO: Should we manually implement this to avoid moving the value onto the stack?
+				let _ = unsafe {
+					arena.take_slot(idx)
+				};
+			}
+		);
 	}
 }
 

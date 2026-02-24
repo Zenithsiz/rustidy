@@ -89,7 +89,9 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 				.fields
 				.iter()
 				.exactly_one()
-				.context("`#[parse_error(transparent)]` is only supported for single-field structs")?;
+				.context(
+					"`#[parse_error(transparent)]` is only supported for single-field structs"
+				)?;
 
 			let field_ident = util::field_member_access(0, field);
 			Some((field, quote! { self.#field_ident }))
@@ -118,40 +120,47 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 
 			let (is_fatal_variants, pos_variants) = variants
 				.iter()
-				.map(|variant| {
-					let variant_ident = &variant.ident;
+				.map(
+					|variant| {
+						let variant_ident = &variant.ident;
 
-					ensure!(
+						ensure!(
 						!(variant.transparent && variant.multiple),
 						"Error variant cannot be transparent and multiple at the same time"
 					);
 
-					let res = match variant.multiple {
-						true => {
-							let fields_ident = variant
-								.fields
-								.iter()
-								.map(|variant_field| {
-									variant_field
-										.ident
-										.as_ref()
-										.context("`#[parse_error(multiple)]` is only supported on named variants")
-								})
-								.collect::<Result<Vec<_>, _>>()?;
+						let res = match variant.multiple {
+							true => {
+								let fields_ident = variant
+									.fields
+									.iter()
+									.map(
+										|variant_field| {
+											variant_field
+												.ident
+												.as_ref()
+												.context(
+													"`#[parse_error(multiple)]` is only supported on named variants"
+												)
+										}
+									)
+									.collect::<Result<Vec<_>, _>>()?;
 
-							let variants_pos = fields_ident
-								.iter()
-								.map(|field_ident| {
-									quote! { let #field_ident = #field_ident.pos(); }
-								})
-								.collect::<Vec<_>>();
+								let variants_pos = fields_ident
+									.iter()
+									.map(
+										|field_ident| {
+											quote! { let #field_ident = #field_ident.pos(); }
+										}
+									)
+									.collect::<Vec<_>>();
 
-							match fields_ident.is_empty() {
-								true => (quote! { Self::#variant_ident {} => false, }, quote! { Self::#variant_ident {} => None, }),
-								false => {
-									let is_fatal = quote! { Self::#variant_ident { #( ref #fields_ident, )* } => #( #fields_ident.is_fatal() )||*, };
+								match fields_ident.is_empty() {
+									true => (quote! { Self::#variant_ident {} => false, }, quote! { Self::#variant_ident {} => None, }),
+									false => {
+										let is_fatal = quote! { Self::#variant_ident { #( ref #fields_ident, )* } => #( #fields_ident.is_fatal() )||*, };
 
-									let pos = quote! { Self::#variant_ident { #( ref #fields_ident, )* } => {
+										let pos = quote! { Self::#variant_ident { #( ref #fields_ident, )* } => {
 										#( #variants_pos )*
 
 										[ #( #fields_ident, )* ]
@@ -160,60 +169,67 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 											.max()
 									}, };
 
-									(is_fatal, pos)
-								},
-							}
-						},
-						false => {
-							let field = match variant.transparent {
-								true => {
-									let field = variant
+										(is_fatal, pos)
+									},
+								}
+							},
+							false => {
+								let field = match variant.transparent {
+									true => {
+										let field = variant
+											.fields
+											.iter()
+											.enumerate()
+											.exactly_one()
+											.context(
+												"Exactly 1 field must exist on `#[parse_error(transparent)]` variants"
+											)?;
+										Some(field)
+									},
+									false => variant
 										.fields
 										.iter()
 										.enumerate()
-										.exactly_one()
-										.context("Exactly 1 field must exist on `#[parse_error(transparent)]` variants")?;
-									Some(field)
-								},
-								false => variant
-									.fields
-									.iter()
-									.enumerate()
-									.filter(|(_, variant_field)| {
-										variant_field.source
-									})
-									.at_most_one()
-									.context("At most 1 field may have `#[parse_error(source)]`")?,
-							};
+										.filter(
+											|(_, variant_field)| {
+												variant_field.source
+											}
+										)
+										.at_most_one()
+										.context(
+											"At most 1 field may have `#[parse_error(source)]`"
+										)?,
+								};
 
-							let is_fatal = variant.fatal;
-							match field {
-								Some((field_idx, field)) => match &field.ident {
-									Some(field_ident) => (quote! { Self::#variant_ident { ref #field_ident, .. } => #is_fatal || #field_ident.is_fatal(), }, quote! { Self::#variant_ident { ref #field_ident, .. } => #field_ident.pos(), },),
-									None => {
-										ensure!(
+								let is_fatal = variant.fatal;
+								match field {
+									Some((field_idx, field)) => match &field.ident {
+										Some(field_ident) => (quote! { Self::#variant_ident { ref #field_ident, .. } => #is_fatal || #field_ident.is_fatal(), }, quote! { Self::#variant_ident { ref #field_ident, .. } => #field_ident.pos(), },),
+										None => {
+											ensure!(
 											field_idx == 0,
 											"Non-first unnamed `#[parse_error(source)]` aren't supported yet"
 										);
 
-										let is_fatal = quote! { Self::#variant_ident(ref err, ..) => #is_fatal || err.is_fatal(), };
-										let pos = quote! { Self::#variant_ident(ref err, ..) => err.pos(), };
+											let is_fatal = quote! { Self::#variant_ident(ref err, ..) => #is_fatal || err.is_fatal(), };
+											let pos = quote! { Self::#variant_ident(ref err, ..) => err.pos(), };
+
+											(is_fatal, pos)
+										},
+									},
+									None => {
+										let is_fatal = quote! { Self::#variant_ident { .. } => #is_fatal, };
+										let pos = quote! { Self::#variant_ident { .. } => None, };
 
 										(is_fatal, pos)
 									},
-								},
-								None => {
-									let is_fatal = quote! { Self::#variant_ident { .. } => #is_fatal, };
-									let pos = quote! { Self::#variant_ident { .. } => None, };
+								}
+							},
+						};
 
-									(is_fatal, pos)
-								},
-							}
-						},
-					};
-
-					Ok::<_, AppError>(res)
-				})
+						Ok::<_, AppError>(res)
+					}
+				)
 				.try_unzip::<Vec<_>, Vec<_>>()?;
 
 			let is_fatal = quote! { match *self {
@@ -225,56 +241,65 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 			} };
 
 			let to_app_error_variants = itertools::izip!(variants)
-				.map(|variant| {
-					let variant_ident = &variant.ident;
+				.map(
+					|variant| {
+						let variant_ident = &variant.ident;
 
-					let field_idents = variant
-						.fields
-						.fields
-						.iter()
-						.enumerate()
-						.map(|(variant_field_idx, variant_field)| match &variant_field.ident {
-							Some(ident) => ident.clone(),
-							None => syn::Ident::new(&format!("_{variant_field_idx}"), Span::mixed_site()),
-						})
-						.collect::<Vec<_>>();
+						let field_idents = variant
+							.fields
+							.fields
+							.iter()
+							.enumerate()
+							.map(
+								|(variant_field_idx, variant_field)| match &variant_field.ident {
+									Some(ident) => ident.clone(),
+									None => syn::Ident::new(
+										&format!("_{variant_field_idx}"),
+										Span::mixed_site()
+									),
+								}
+							)
+							.collect::<Vec<_>>();
 
-					let output = match &*field_idents {
-						[] => {
-							ensure!(!variant.transparent, "Empty variants may not be transparent");
-							let Fmt {
-								parts
-							} = variant
-								.fmt
-								.as_ref()
-								.context("Expected either `#[parse_error(transparent)]` or `#[parse_error(fmt = \"...\")]`",)?;
+						let output = match &*field_idents {
+							[] => {
+								ensure!(!variant.transparent, "Empty variants may not be transparent");
+								let Fmt {
+									parts
+								} = variant
+									.fmt
+									.as_ref()
+									.context(
+										"Expected either `#[parse_error(transparent)]` or `#[parse_error(fmt = \"...\")]`",
+									)?;
 
-							quote! {
+								quote! {
 								match format_args!(#( #parts, )*).as_str() {
 									Some(fmt) => app_error::AppError::msg(fmt),
 									None => app_error::AppError::fmt(format!(#( #parts, )*)),
 								}
 							}
-						},
-						[field_ident] => {
-							quote! { rustidy_parse::ParseError::to_app_error(#field_ident, parser) }
-						},
-						_ => quote! { app_error::AppError::from_multiple([
+							},
+							[field_ident] => {
+								quote! { rustidy_parse::ParseError::to_app_error(#field_ident, parser) }
+							},
+							_ => quote! { app_error::AppError::from_multiple([
 							#( rustidy_parse::ParseError::to_app_error(#field_idents, parser), )*
 						]) },
-					};
+						};
 
-					let pat = match variant.fields.style {
-						_ if field_idents.is_empty() => quote! { {} },
-						darling::ast::Style::Unit => unreachable!("Unit should be empty"),
+						let pat = match variant.fields.style {
+							_ if field_idents.is_empty() => quote! { {} },
+							darling::ast::Style::Unit => unreachable!("Unit should be empty"),
 
-						darling::ast::Style::Tuple => quote! { (#( ref #field_idents, )*) },
+							darling::ast::Style::Tuple => quote! { (#( ref #field_idents, )*) },
 
-						darling::ast::Style::Struct => quote! { { #( ref #field_idents, )* } },
-					};
+							darling::ast::Style::Struct => quote! { { #( ref #field_idents, )* } },
+						};
 
-					Ok(quote! { Self::#variant_ident #pat => #output, })
-				})
+						Ok(quote! { Self::#variant_ident #pat => #output, })
+					}
+				)
 				.collect::<Result<Vec<_>, AppError>>()?;
 
 			let to_app_error = quote! {
@@ -315,13 +340,17 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 						parts
 					} = item_error_fmt
 						.as_ref()
-						.context("Expected either `#[parse_error(transparent)]` or `#[parse_error(fmt = \"...\")]`")?;
+						.context(
+							"Expected either `#[parse_error(transparent)]` or `#[parse_error(fmt = \"...\")]`"
+						)?;
 
 					let field_idents = fields
 						.fields
 						.iter()
 						.enumerate()
-						.map(|(field_idx, field)| util::field_member_access(field_idx, field))
+						.map(
+							|(field_idx, field)| util::field_member_access(field_idx, field)
+						)
 						.collect::<Vec<_>>();
 
 

@@ -233,7 +233,9 @@ fn parse<R: ParsableRecursive<R>>(parser: &mut Parser) -> Result<RecursiveWrappe
 			},
 			(Ok((prefix, prefix_state)), Err(_)) => Either::Left((prefix, prefix_state)),
 			(Err(_), Ok((base, base_state))) => Either::Right((base, Some(base_state))),
-			(Err(prefix), Err(base)) => return Err(RecursiveWrapperError::PrefixOrBase { prefix, base }),
+			(Err(prefix), Err(base)) => return Err(
+				RecursiveWrapperError::PrefixOrBase { prefix, base }
+			),
 		};
 
 		match parsed {
@@ -348,17 +350,19 @@ impl Parse for ParseBracesOpen {
 		}
 
 		parser
-			.try_update_with(|s| {
-				// TODO: Parse proper whitespace here
-				*s = s.trim_start();
-				match s.strip_prefix('{') {
-					Some(rest) => {
-						*s = rest;
-						Ok(())
-					},
-					None => Err(()),
+			.try_update_with(
+				|s| {
+					// TODO: Parse proper whitespace here
+					*s = s.trim_start();
+					match s.strip_prefix('{') {
+						Some(rest) => {
+							*s = rest;
+							Ok(())
+						},
+						None => Err(()),
+					}
 				}
-			})
+			)
 			.map(|_| Self)
 	}
 }

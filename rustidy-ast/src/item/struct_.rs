@@ -70,7 +70,12 @@ pub struct StructFields(
 				.map(|field| field.0.inner.ident.non_ws_len())
 				.max()
 				.expect("At least one element exists");
-			punct::fmt_with(Whitespace::INDENT, Whitespace::REMOVE, StructFieldInnerArgs { max_ident_len }, ())
+			punct::fmt_with(
+				Whitespace::INDENT,
+				Whitespace::REMOVE,
+				StructFieldInnerArgs { max_ident_len },
+				()
+			)
 		}
 	)]
 	PunctuatedTrailing<StructField, token::Comma>,
@@ -152,7 +157,13 @@ impl TupleStruct {
 			fields.0.trailing = None;
 		}
 		let output = fields
-			.format(ctx, prefix_ws, delimited::FmtRemoveWith(TupleFieldsFmt { field_prefix_ws: Whitespace::SINGLE }));
+			.format(
+				ctx,
+				prefix_ws,
+				delimited::FmtRemoveWith(
+					TupleFieldsFmt { field_prefix_ws: Whitespace::SINGLE }
+				)
+			);
 
 		match output.len_without_prefix_ws() <= ctx.config().max_inline_tuple_struct_len {
 			true => output,
@@ -162,7 +173,13 @@ impl TupleStruct {
 				}
 
 				fields
-					.format(ctx, prefix_ws, delimited::fmt_indent_if_non_blank_with_value(TupleFieldsFmt { field_prefix_ws: Whitespace::INDENT }))
+					.format(
+						ctx,
+						prefix_ws,
+						delimited::fmt_indent_if_non_blank_with_value(
+							TupleFieldsFmt { field_prefix_ws: Whitespace::INDENT }
+						)
+					)
 			},
 		}
 	}

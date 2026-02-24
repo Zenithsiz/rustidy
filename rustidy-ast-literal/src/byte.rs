@@ -32,7 +32,9 @@ impl ByteLiteral {
 			.strip_prefix("b\'")
 			.ok_or(ByteLiteralError::StartQuote)?;
 		match s
-			.strip_prefix(|ch: char| ch.is_ascii() && !matches!(ch, '\'' | '\\' | '\n' | '\r' | '\t')) {
+			.strip_prefix(
+				|ch: char| ch.is_ascii() && !matches!(ch, '\'' | '\\' | '\n' | '\r' | '\t')
+			) {
 			Some(rest) => *s = rest,
 			None => _ = rustidy_parse::try_parse_from_str(s, ByteEscape::parse)
 				.map_err(ByteLiteralError::ByteEscape)?

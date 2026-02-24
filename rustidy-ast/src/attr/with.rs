@@ -64,10 +64,14 @@ impl<A, T: Format<WhitespaceConfig, A>> Format<WhitespaceConfig, FmtArgs<A>> for
 		let mut has_prefix_ws = true;
 		for attr in &mut self.attrs {
 			ctx
-				.with_tag_if(is_after_newline, FormatTag::AfterNewline, |ctx| match has_prefix_ws {
-					true => ctx.format(attr, prefix_ws),
-					false => ctx.format(attr, Whitespace::INDENT),
-				})
+				.with_tag_if(
+					is_after_newline,
+					FormatTag::AfterNewline,
+					|ctx| match has_prefix_ws {
+						true => ctx.format(attr, prefix_ws),
+						false => ctx.format(attr, Whitespace::INDENT),
+					}
+				)
 				.append_to(&mut output);
 
 			is_after_newline = matches!(attr, OuterAttrOrDocComment::DocComment(OuterDocComment::Line(_)));
@@ -83,16 +87,24 @@ impl<A, T: Format<WhitespaceConfig, A>> Format<WhitespaceConfig, FmtArgs<A>> for
 
 
 		value_ctx
-			.with_tag_if(is_after_newline, FormatTag::AfterNewline, |ctx| {
-				match has_prefix_ws {
-					true => ctx
-						.format_with(&mut self.inner, prefix_ws, args.inner_args),
-					// TODO: The user should be able to choose this
-					false => ctx
-						.format_with(&mut self.inner, Whitespace::INDENT, args.inner_args),
+			.with_tag_if(
+				is_after_newline,
+				FormatTag::AfterNewline,
+				|ctx| {
+					match has_prefix_ws {
+						true => ctx
+							.format_with(&mut self.inner, prefix_ws, args.inner_args),
+						// TODO: The user should be able to choose this
+						false => ctx
+							.format_with(
+								&mut self.inner,
+								Whitespace::INDENT,
+								args.inner_args
+							),
+					}
+						.append_to(&mut output);
 				}
-					.append_to(&mut output);
-			});
+			);
 
 		output
 	}
@@ -174,7 +186,11 @@ impl<T: Format<WhitespaceConfig, A>, A: Clone> Format<WhitespaceConfig, FmtArgs<
 		}
 
 		ctx
-			.format_with(&mut self.0, prefix_ws, delimited::fmt_indent_if_non_blank_with_value(args))
+			.format_with(
+				&mut self.0,
+				prefix_ws,
+				delimited::fmt_indent_if_non_blank_with_value(args)
+			)
 
 	}
 }
@@ -201,16 +217,20 @@ impl<T: Format<WhitespaceConfig, A>, A> Format<WhitespaceConfig, FmtArgs<A>> for
 		let mut has_prefix_ws = true;
 		for attr in &mut self.attrs {
 			ctx
-				.with_tag_if(is_after_newline, FormatTag::AfterNewline, |ctx| {
-					let prefix_ws = match has_prefix_ws {
-						true => prefix_ws,
-						false => Whitespace::INDENT,
-					};
+				.with_tag_if(
+					is_after_newline,
+					FormatTag::AfterNewline,
+					|ctx| {
+						let prefix_ws = match has_prefix_ws {
+							true => prefix_ws,
+							false => Whitespace::INDENT,
+						};
 
-					ctx
-						.format(attr, prefix_ws)
-						.append_to(&mut output);
-				});
+						ctx
+							.format(attr, prefix_ws)
+							.append_to(&mut output);
+					}
+				);
 
 			is_after_newline = matches!(attr, InnerAttrOrDocComment::DocComment(InnerDocComment::Line(_)));
 			has_prefix_ws = false;

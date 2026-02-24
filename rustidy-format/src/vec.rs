@@ -71,7 +71,11 @@ where
 				Some(prefix_ws) => ctx
 					.format_with(value, prefix_ws.clone(), args.args.clone()),
 				None => ctx
-					.format_with(value, args.rest_prefix_ws.clone(), args.args.clone()),
+					.format_with(
+						value,
+						args.rest_prefix_ws.clone(),
+						args.args.clone()
+					),
 			};
 			value_output.append_to(&mut output);
 

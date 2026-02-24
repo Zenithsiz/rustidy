@@ -35,7 +35,11 @@ pub struct Function {
 	pub generics:   Option<GenericParams>,
 	#[format(prefix_ws = Whitespace::REMOVE)]
 	#[format(
-		args = delimited::fmt_remove_or_indent_if_non_blank(60, FunctionParametersFmt::Inline, FunctionParametersFmt::Indent)
+		args = delimited::fmt_remove_or_indent_if_non_blank(
+			60,
+			FunctionParametersFmt::Inline,
+			FunctionParametersFmt::Indent
+		)
 	)]
 	pub params:     Parenthesized<Option<FunctionParameters>>,
 	#[format(prefix_ws = Whitespace::SINGLE)]

@@ -22,7 +22,10 @@ fn print_crate_empty(bencher: &mut Bencher) {
 
 #[bench]
 fn print_crate_hello_world(bencher: &mut Bencher) {
-	self::print::<Crate>(bencher, r#"fn main() { println!("Hello, World!"); }"#);
+	self::print::<Crate>(
+		bencher,
+		r#"fn main() { println!("Hello, World!"); }"#
+	);
 }
 
 #[bench]
@@ -47,10 +50,12 @@ where
 		.unwrap_or_else(|err| self::on_err(&parser, &err));
 
 	bencher
-		.iter(|| {
-			let mut f = rustidy_print::PrintFmt::new();
-			value.print(&mut f);
-		});
+		.iter(
+			|| {
+				let mut f = rustidy_print::PrintFmt::new();
+				value.print(&mut f);
+			}
+		);
 }
 
 #[cold]

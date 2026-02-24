@@ -67,7 +67,13 @@ impl Format<WhitespaceConfig, ()> for ArrayExpression {
 	) -> FormatOutput {
 		match &mut self.0.value {
 			Some(ArrayElements::Punctuated(values)) => {
-				let (common_output, single_line_output) = Self::format_single_line(&mut self.0.prefix, values, &mut self.0.suffix, ctx, prefix_ws);
+				let (common_output, single_line_output) = Self::format_single_line(
+					&mut self.0.prefix,
+					values,
+					&mut self.0.suffix,
+					ctx,
+					prefix_ws
+				);
 				let single_line_output = FormatOutput::join(common_output, single_line_output);
 
 				// Then check if we can fit into a single line.
@@ -87,33 +93,35 @@ impl Format<WhitespaceConfig, ()> for ArrayExpression {
 						let mut output = common_output;
 
 						ctx
-							.with_indent(|ctx| {
-								// Format the first value in each column as indentation
-								let mut values_iter = values.values_mut();
-								loop {
-									let mut row_values = (&mut values_iter).take(cols.unwrap_or(1));
-									let Some(first) = row_values.next() else {
-										break
-									};
-									ctx
-										.format(first, Whitespace::INDENT)
-										.append_to(&mut output);
-
-									for value in row_values {
+							.with_indent(
+								|ctx| {
+									// Format the first value in each column as indentation
+									let mut values_iter = values.values_mut();
+									loop {
+										let mut row_values = (&mut values_iter).take(cols.unwrap_or(1));
+										let Some(first) = row_values.next() else {
+											break
+										};
 										ctx
-											.format(value, Whitespace::SINGLE)
+											.format(first, Whitespace::INDENT)
 											.append_to(&mut output);
-									}
-								}
-								drop(values_iter);
 
-								if values.trailing.is_none() {
-									values.trailing = Some(token::Comma::new());
+										for value in row_values {
+											ctx
+												.format(value, Whitespace::SINGLE)
+												.append_to(&mut output);
+										}
+									}
+									drop(values_iter);
+
+									if values.trailing.is_none() {
+										values.trailing = Some(token::Comma::new());
+									}
+									ctx
+										.format(&mut values.trailing, Whitespace::REMOVE)
+										.append_to(&mut output);
 								}
-								ctx
-									.format(&mut values.trailing, Whitespace::REMOVE)
-									.append_to(&mut output);
-							});
+							);
 
 						// Finally, close the indentation on the `]`
 						// TODO: This should use `Whitespace::INDENT_CLOSE`

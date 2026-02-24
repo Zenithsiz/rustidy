@@ -40,7 +40,9 @@ impl IntegerLiteral {
 
 
 		u64::from_str_radix(digits, radix)
-			.with_context(|| format!("Unable to parse {digits:?} as a base {radix} number"))
+			.with_context(
+				|| format!("Unable to parse {digits:?} as a base {radix} number")
+			)
 	}
 }
 
@@ -124,7 +126,9 @@ impl OctLiteral {
 			.strip_prefix(|ch: char| ch.is_ascii_octdigit())
 			.ok_or(OctLiteralError::Digit)?;
 		*s = s
-			.trim_start_matches(|ch: char| ch.is_ascii_octdigit() || matches!(ch, '_'));
+			.trim_start_matches(
+				|ch: char| ch.is_ascii_octdigit() || matches!(ch, '_')
+			);
 
 		Ok(())
 	}
@@ -151,7 +155,9 @@ impl HexLiteral {
 			.strip_prefix(|ch: char| ch.is_ascii_hexdigit())
 			.ok_or(HexLiteralError::Digit)?;
 		*s = s
-			.trim_start_matches(|ch: char| ch.is_ascii_hexdigit() || matches!(ch, '_'));
+			.trim_start_matches(
+				|ch: char| ch.is_ascii_hexdigit() || matches!(ch, '_')
+			);
 
 		Ok(())
 	}

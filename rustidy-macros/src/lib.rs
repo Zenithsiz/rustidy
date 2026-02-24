@@ -64,13 +64,17 @@ fn try_derive(
 	f: impl FnOnce(proc_macro::TokenStream) -> Result<proc_macro::TokenStream, AppError> + UnwindSafe,
 ) -> proc_macro::TokenStream {
 	std::panic::catch_unwind(move || f(input))
-		.map_err(|payload| app_error!("Derive macro panicked: {payload:?}"))
+		.map_err(
+			|payload| app_error!("Derive macro panicked: {payload:?}")
+		)
 		.flatten()
-		.unwrap_or_else(|err| {
-			let err = err.to_string();
-			quote::quote! {
+		.unwrap_or_else(
+			|err| {
+				let err = err.to_string();
+				quote::quote! {
 				compile_error! { #err }
 			}
-				.into()
-		})
+					.into()
+			}
+		)
 }

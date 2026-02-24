@@ -56,12 +56,17 @@ pub trait Formattable {
 	fn prefix_ws_join_prefix(&mut self, ctx: &mut Context, ws: Whitespace) -> Result<(), Whitespace> {
 		let mut join_ws = Some(ws);
 		let _ = self
-			.with_prefix_ws(ctx, &mut |ws, _| {
-				ws
-					.join_prefix(join_ws
-						.take()
-						.expect("`with_prefix_ws` called multiple times"));
-			});
+			.with_prefix_ws(
+				ctx,
+				&mut |ws, _| {
+					ws
+						.join_prefix(
+							join_ws
+								.take()
+								.expect("`with_prefix_ws` called multiple times")
+						);
+				}
+			);
 
 		match join_ws {
 			Some(ws) => Err(ws),

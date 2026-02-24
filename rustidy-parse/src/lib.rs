@@ -304,7 +304,9 @@ impl Parser {
 				let default = "output.gz";
 
 				self::open_flamegraph_trace_file(var, default)
-					.unwrap_or_else(|err| panic!("Unable to create {var:?}: {err:?}"))
+					.unwrap_or_else(
+						|err| panic!("Unable to create {var:?}: {err:?}")
+					)
 			},
 		}
 	}
@@ -439,7 +441,9 @@ impl Parser {
 		// After updating the remaining, quit if an error occurred
 		let value = res?;
 
-		<_>::from_output((AstStr::from_input(self.input.substr(output_range)), value))
+		<_>::from_output(
+			(AstStr::from_input(self.input.substr(output_range)), value)
+		)
 	}
 
 	/// Parses `T` from this parser
@@ -457,7 +461,9 @@ impl Parser {
 
 		let start_pos = self.cur_pos;
 		let res = T::parse_from(self)
-			.map_err(|source| ParserError::new(source, AstRange::new(start_pos, self.cur_pos)));
+			.map_err(
+				|source| ParserError::new(source, AstRange::new(start_pos, self.cur_pos))
+			);
 
 		#[cfg(feature = "flamegraph-traces")]
 		let end = self::flamegraph_trace_get_timestamp();
@@ -481,7 +487,9 @@ impl Parser {
 	pub fn parse_with_peeked<T: ParsePeeked<U>, U>(&mut self, parsed: U) -> Result<T, ParserError<T>> {
 		let start_pos = self.cur_pos;
 		T::parse_from_with_peeked(self, parsed)
-			.map_err(|source| ParserError::new(source, AstRange::new(start_pos, self.cur_pos)))
+			.map_err(
+				|source| ParserError::new(source, AstRange::new(start_pos, self.cur_pos))
+			)
 	}
 
 	/// Tries to parses `T` from this parser using `parser` for parsing.

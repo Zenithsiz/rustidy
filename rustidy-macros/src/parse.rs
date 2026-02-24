@@ -134,36 +134,42 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 	let name_impl = attrs
 		.name
 		.as_ref()
-		.map(|name| {
-			quote! {
+		.map(
+			|name| {
+				quote! {
 			fn name() -> Option<impl std::fmt::Display> {
 				Some(#name)
 			}
 		}
-		});
+			}
+		);
 
 	let skip_if_tag_err_variant_ident = syn::Ident::new("Tag", Span::mixed_site());
 	let skip_if_tag_expr = attrs
 		.skip_if_tag
 		.as_ref()
-		.map(|tag| {
-			quote! {
+		.map(
+			|tag| {
+				quote! {
 			if parser.has_tag(#tag) {
 				return Err(#error_ident::#skip_if_tag_err_variant_ident);
 			}
 		}
-		});
+			}
+		);
 
 	let skip_if_tag_err_variant = attrs
 		.skip_if_tag
 		.as_ref()
-		.map(|tag| {
-			quote! {
+		.map(
+			|tag| {
+				quote! {
 			#[parse_error(fmt("Tag `{:?}` was present", #tag))]
 			#[debug("Tag({:?})", #tag)]
 			#skip_if_tag_err_variant_ident,
 		}
-		});
+			}
+		);
 
 	// Parse body, parsable impl and error enum (with it's impls)
 	// TODO: Instead of getting the whole error enum here, we should just
@@ -210,15 +216,17 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 
 				let variant_tys = variants
 					.iter()
-					.map(|variant| try {
-						let field = variant
-							.fields
-							.iter()
-							.exactly_one()
-							.context("Enum variant must have a single field")?;
+					.map(
+						|variant| try {
+							let field = variant
+								.fields
+								.iter()
+								.exactly_one()
+								.context("Enum variant must have a single field")?;
 
-						&field.ty
-					})
+							&field.ty
+						}
+					)
 					.collect::<Result<Vec<_>, AppError>>()?;
 
 				struct Peek<'a> {
@@ -228,82 +236,96 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 					err_variant: syn::Ident,
 				}
 				let peeks = itertools::izip!(variants, &variant_tys)
-					.flat_map(|(variant, variant_ty)| {
-						variant
-							.peek
-							.iter()
-							.enumerate()
-							.map(|(idx, ty)| {
-								let err_variant = syn::Ident::new(&format!("{}Peek{idx}", variant.ident), variant.ident.span());
-								Peek { variant, variant_ty, peek_ty: ty, err_variant, }
-							})
-					})
+					.flat_map(
+						|(variant, variant_ty)| {
+							variant
+								.peek
+								.iter()
+								.enumerate()
+								.map(
+									|(idx, ty)| {
+										let err_variant = syn::Ident::new(
+											&format!("{}Peek{idx}", variant.ident),
+											variant.ident.span()
+										);
+										Peek { variant, variant_ty, peek_ty: ty, err_variant, }
+									}
+								)
+						}
+					)
 					.collect::<Vec<_>>();
 				let parse_peeks = peeks
 					.iter()
-					.map(|peek| {
-						let Peek {
-							variant,
-							variant_ty,
-							peek_ty: PeekAttrs(ty),
-							err_variant,
-						} = peek;
-						let variant_ident = &variant.ident;
+					.map(
+						|peek| {
+							let Peek {
+								variant,
+								variant_ty,
+								peek_ty: PeekAttrs(ty),
+								err_variant,
+							} = peek;
+							let variant_ident = &variant.ident;
 
-						quote! {
+							quote! {
 						if let Ok(value) = parser.try_parse::<#ty>().map_err(#error_ident::#err_variant)?
 						{
 							let variant = parser.parse_with_peeked::<#variant_ty, #ty>(value).map_err(#error_ident::#variant_ident)?;
 							return Ok(Self::#variant_ident(variant));
 						}
 					}
-					});
+						}
+					);
 
 				let err_idents = variants
 					.iter()
-					.map(|variant| {
-						let name = variant
-							.ident
-							.to_string()
-							.to_case(convert_case::Case::Snake);
-						let name = match name.ends_with('_') {
-							true => format!("{name}err"),
-							false => format!("{name}_err"),
-						};
-						syn::Ident::new(&name, item_ident.span())
-					})
+					.map(
+						|variant| {
+							let name = variant
+								.ident
+								.to_string()
+								.to_case(convert_case::Case::Snake);
+							let name = match name.ends_with('_') {
+								true => format!("{name}err"),
+								false => format!("{name}_err"),
+							};
+							syn::Ident::new(&name, item_ident.span())
+						}
+					)
 					.collect::<Vec<_>>();
 
 				let parse_variants = variants
 					.iter()
 					.zip(&err_idents)
-					.map(|(variant, err_ident)| {
-						let mut expr = match variant.not_fatal {
-							true => quote! { parser.parse() },
-							false => quote! { parser.try_parse() },
-						};
+					.map(
+						|(variant, err_ident)| {
+							let mut expr = match variant.not_fatal {
+								true => quote! { parser.parse() },
+								false => quote! { parser.try_parse() },
+							};
 
-						if variant.without_tags {
-							expr = quote! { parser.without_tags(|parser| #expr) };
-						}
+							if variant.without_tags {
+								expr = quote! { parser.without_tags(|parser| #expr) };
+							}
 
-						for tag in &variant.with_tag {
-							expr = quote! { parser.with_tag(#tag, |parser| #expr) };
-						}
+							for tag in &variant.with_tag {
+								expr = quote! { parser.with_tag(#tag, |parser| #expr) };
+							}
 
-						let box_error = match variant.box_error {
-							true => quote! { .map_err(Box::new) },
-							false => quote! {},
-						};
+							let box_error = match variant.box_error {
+								true => quote! { .map_err(Box::new) },
+								false => quote! {},
+							};
 
-						let variant_ident = &variant.ident;
+							let variant_ident = &variant.ident;
 
-						let on_err = match variant.not_fatal {
-							true => None,
-							false => Some(quote! { .map_err(#error_ident::#variant_ident)? }),
-						};
+							let on_err = match variant.not_fatal {
+								true => None,
+								false => Some(
+									quote! { .map_err(#error_ident::#variant_ident)? }
+								),
+							};
 
-						quote! {
+							quote! {
 							let #err_ident = match #expr #box_error #on_err {
 								// Note: This can be unreachable if `value: !`
 								#[allow(unreachable_code)]
@@ -311,16 +333,19 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 								Err(err) => err,
 							};
 						}
-					})
+						}
+					)
 					.collect::<Vec<_>>();
 
 				let unknown_errs_create = variants
 					.iter()
 					.zip(&err_idents)
-					.map(|(variant, error_ident)| match variant.box_error {
-						true => quote! { #error_ident: Box::new(#error_ident), },
-						false => quote! { #error_ident, },
-					})
+					.map(
+						|(variant, error_ident)| match variant.box_error {
+							true => quote! { #error_ident: Box::new(#error_ident), },
+							false => quote! { #error_ident, },
+						}
+					)
 					.collect::<Vec<_>>();
 
 				let body = quote! {
@@ -336,52 +361,63 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 				let error_enum_variants = variants
 					.iter()
 					.zip(&variant_tys)
-					.map(|(variant, variant_ty)| {
-						let ty = quote! { rustidy_parse::ParserError<#variant_ty> };
-						let ty = match variant.box_error {
-							true => quote! { Box<#ty> },
-							false => ty,
-						};
+					.map(
+						|(variant, variant_ty)| {
+							let ty = quote! { rustidy_parse::ParserError<#variant_ty> };
+							let ty = match variant.box_error {
+								true => quote! { Box<#ty> },
+								false => ty,
+							};
 
-						let variant_ident = &variant.ident;
-						quote! {
+							let variant_ident = &variant.ident;
+							quote! {
 							#[parse_error(transparent)]
 							#variant_ident(#ty),
 						}
-					})
-					.chain(peeks
-						.iter()
-						.map(|peek| {
-							let Peek {
-								variant: _,
-								variant_ty: _,
-								peek_ty: PeekAttrs(ty),
-								err_variant,
-							} = peek;
-							let err_ty = quote! { rustidy_parse::ParserError<#ty> };
+						}
+					)
+					.chain(
+						peeks
+							.iter()
+							.map(
+								|peek| {
+									let Peek {
+										variant: _,
+										variant_ty: _,
+										peek_ty: PeekAttrs(ty),
+										err_variant,
+									} = peek;
+									let err_ty = quote! { rustidy_parse::ParserError<#ty> };
 
-							quote! {
+									quote! {
 							#[parse_error(transparent)]
 							#err_variant(#err_ty),
 						}
-						}))
+								}
+							)
+					)
 					.collect::<Vec<_>>();
 
 				let unknown_errs_decl = itertools::izip!(variants, &err_idents, &variant_tys)
-					.map(|(variant, err_ident, variant_ty)| {
-						let ty = quote! { rustidy_parse::ParserError<#variant_ty> };
-						let ty = match variant.box_error {
-							true => quote! { Box<#ty> },
-							false => ty,
-						};
+					.map(
+						|(variant, err_ident, variant_ty)| {
+							let ty = quote! { rustidy_parse::ParserError<#variant_ty> };
+							let ty = match variant.box_error {
+								true => quote! { Box<#ty> },
+								false => ty,
+							};
 
-						quote! {
+							quote! {
 							#err_ident: #ty,
 						}
-					})
+						}
+					)
 					.collect::<Vec<_>>();
 
-				let error_generics = util::with_bounds(&attrs, |ty| parse_quote! { #ty: rustidy_parse::Parse });
+				let error_generics = util::with_bounds(
+					&attrs,
+					|ty| parse_quote! { #ty: rustidy_parse::Parse }
+				);
 
 				// TODO: Figure out why using just `#error_generics` doesn't work here
 				let (impl_generics, _, where_clause) = error_generics.split_for_impl();
@@ -415,39 +451,48 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 					.fields
 					.iter()
 					.enumerate()
-					.map(|(field_idx, field)| match &field.ident {
-						Some(field_ident) => field_ident.clone(),
-						None => syn::Ident::new(&format!("_{field_idx}"), Span::mixed_site()),
-					})
+					.map(
+						|(field_idx, field)| match &field.ident {
+							Some(field_ident) => field_ident.clone(),
+							None => syn::Ident::new(&format!("_{field_idx}"), Span::mixed_site()),
+						}
+					)
 					.collect::<Punctuated<_, syn::Token![,]>>();
 
 				let error_names = itertools::izip!(&fields.fields, &field_idents)
-					.map(|(field, field_ident)| {
-						if field.update_with.is_some() || field.try_update_with.is_some() {
-							return None;
-						}
+					.map(
+						|(field, field_ident)| {
+							if field.update_with.is_some() || field.try_update_with.is_some() {
+								return None;
+							}
 
-						let mut name = field_ident
-							.to_string()
-							.to_case(convert_case::Case::Pascal);
-						if matches!(name.as_str(), "Self") {
-							name.push('_');
-						}
-						if name.starts_with(|ch: char| ch.is_ascii_digit()) {
-							name.insert(0, '_');
-						}
+							let mut name = field_ident
+								.to_string()
+								.to_case(convert_case::Case::Pascal);
+							if matches!(name.as_str(), "Self") {
+								name.push('_');
+							}
+							if name.starts_with(|ch: char| ch.is_ascii_digit()) {
+								name.insert(0, '_');
+							}
 
-						Some(syn::Ident::new(&name, field_ident.span()))
-					})
+							Some(syn::Ident::new(&name, field_ident.span()))
+						}
+					)
 					.collect::<Vec<_>>();
 
 				let skip_if_tag_exists_name = itertools::izip!(&fields.fields, &field_idents)
-					.filter_map(|(field, field_ident)| {
-						let tag = field.skip_if_tag.as_ref()?;
-						let error_ident = syn::Ident::new(&format!("tag_exists_{field_ident}"), field_ident.span());
+					.filter_map(
+						|(field, field_ident)| {
+							let tag = field.skip_if_tag.as_ref()?;
+							let error_ident = syn::Ident::new(
+								&format!("tag_exists_{field_ident}"),
+								field_ident.span()
+							);
 
-						Some((tag, error_ident))
-					})
+							Some((tag, error_ident))
+						}
+					)
 					.collect::<HashMap<_, _>>();
 
 				let field_tys = fields
@@ -459,68 +504,76 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 				let get_tag_exists = fields
 					.fields
 					.iter()
-					.filter_map(|field| {
-						let tag = field.skip_if_tag.as_ref()?;
-						let exists_name = &skip_if_tag_exists_name[tag];
-						Some(quote! {
+					.filter_map(
+						|field| {
+							let tag = field.skip_if_tag.as_ref()?;
+							let exists_name = &skip_if_tag_exists_name[tag];
+							Some(
+								quote! {
 							let #exists_name = parser.has_tag(#tag);
-						})
-					})
+						}
+							)
+						}
+					)
 					.collect::<Vec<_>>();
 
 				let parse_fields = itertools::izip!(&fields.fields, &error_names, &field_idents)
-					.map(|(field, error_name, field_ident)| try {
-						let mut expr = match &field.try_update_with {
-							Some(expr) => {
-								ensure!(
+					.map(
+						|(field, error_name, field_ident)| try {
+							let mut expr = match &field.try_update_with {
+								Some(expr) => {
+									ensure!(
 									field.update_with.is_none(),
 									"Cannot specify both `update_with` and `try_update_with`."
 								);
-								quote! { parser.try_update_with(#expr).map(|(s, ())| s) }
-							},
-							None => match &field.update_with {
-								Some(expr) => quote! { parser.update_with(#expr).0 },
-								None => quote! { parser.parse() },
-							},
-						};
+									quote! { parser.try_update_with(#expr).map(|(s, ())| s) }
+								},
+								None => match &field.update_with {
+									Some(expr) => quote! { parser.update_with(#expr).0 },
+									None => quote! { parser.parse() },
+								},
+							};
 
 
-						if let Some(tag) = &field.skip_if_tag {
-							let exists_name = &skip_if_tag_exists_name[tag];
-							expr = quote! {
+							if let Some(tag) = &field.skip_if_tag {
+								let exists_name = &skip_if_tag_exists_name[tag];
+								expr = quote! {
 								match #exists_name {
 									true => Ok(Default::default()),
 									false => #expr,
 								}
 							};
+							}
+
+							if field.without_tags {
+								expr = quote! { parser.without_tags(|parser| #expr) };
+							}
+
+							for tag in &field.with_tag {
+								expr = quote! { parser.with_tag(#tag, |parser| #expr) };
+							}
+
+							let map_err = error_name
+								.as_ref()
+								.map(
+									|error_name| {
+										let box_error = match field.box_error {
+											true => Some(quote! { .map_err(Box::new) }),
+											false => None,
+										};
+
+										quote! { #box_error .map_err(#error_ident::#error_name) }
+									}
+								);
+
+							let propagate_error = match field.update_with.is_some() {
+								true => None,
+								false => Some(quote! { ? }),
+							};
+
+							quote! { let #field_ident = #expr #map_err #propagate_error; }
 						}
-
-						if field.without_tags {
-							expr = quote! { parser.without_tags(|parser| #expr) };
-						}
-
-						for tag in &field.with_tag {
-							expr = quote! { parser.with_tag(#tag, |parser| #expr) };
-						}
-
-						let map_err = error_name
-							.as_ref()
-							.map(|error_name| {
-								let box_error = match field.box_error {
-									true => Some(quote! { .map_err(Box::new) }),
-									false => None,
-								};
-
-								quote! { #box_error .map_err(#error_ident::#error_name) }
-							});
-
-						let propagate_error = match field.update_with.is_some() {
-							true => None,
-							false => Some(quote! { ? }),
-						};
-
-						quote! { let #field_ident = #expr #map_err #propagate_error; }
-					})
+					)
 					.collect::<Result<Vec<_>, AppError>>()?;
 
 				let body_res = match fields.style {
@@ -540,44 +593,58 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 				let fatal_fields = fields
 					.fields
 					.iter()
-					.scan(false, |is_fatal, field| {
-						let is_cur_fatal = field.fatal;
-						if *is_fatal && is_cur_fatal {
-							return Some(Err(app_error!("Cannot specify `#[parser(fatal)]` more than once")));
-						}
-						*is_fatal |= is_cur_fatal;
+					.scan(
+						false,
+						|is_fatal, field| {
+							let is_cur_fatal = field.fatal;
+							if *is_fatal && is_cur_fatal {
+								return Some(
+									Err(
+										app_error!("Cannot specify `#[parser(fatal)]` more than once")
+									)
+								);
+							}
+							*is_fatal |= is_cur_fatal;
 
-						Some(Ok(*is_fatal))
-					})
+							Some(Ok(*is_fatal))
+						}
+					)
 					.collect::<Result<Vec<_>, AppError>>()?;
 
 				let error_enum_variants = itertools::izip!(&fields.fields, &error_names, &field_tys, &fatal_fields)
-					.filter_map(|(field, error_name, field_ty, is_fatal)| {
-						let Some(error_name) = error_name else {
-							return None
-						};
+					.filter_map(
+						|(field, error_name, field_ty, is_fatal)| {
+							let Some(error_name) = error_name else {
+								return None
+							};
 
-						let fatal = match is_fatal {
-							true => quote! { #[parse_error(fatal)] },
-							false => quote! {},
-						};
+							let fatal = match is_fatal {
+								true => quote! { #[parse_error(fatal)] },
+								false => quote! {},
+							};
 
-						let ty = quote! { rustidy_parse::ParserError<#field_ty> };
-						let ty = match field.box_error {
-							true => quote! { Box<#ty> },
-							false => ty,
-						};
+							let ty = quote! { rustidy_parse::ParserError<#field_ty> };
+							let ty = match field.box_error {
+								true => quote! { Box<#ty> },
+								false => ty,
+							};
 
-						Some(quote! {
+							Some(
+								quote! {
 							#[parse_error(transparent)]
 							#fatal
 							#error_name(#ty),
-						})
-					})
+						}
+							)
+						}
+					)
 					.collect::<Vec<_>>();
 
 				// TODO: Figure out why using just `#error_generics` doesn't work here
-				let error_generics = util::with_bounds(&attrs, |ty| parse_quote! { #ty: rustidy_parse::Parse });
+				let error_generics = util::with_bounds(
+					&attrs,
+					|ty| parse_quote! { #ty: rustidy_parse::Parse }
+				);
 				let (impl_generics, _, where_clause) = error_generics.split_for_impl();
 				let extra_variants = attrs
 					.error
@@ -601,7 +668,10 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 	};
 
 	let parse_impl = {
-		let generics = util::with_bounds(&attrs, |ty| parse_quote! { #ty: rustidy_parse::Parse });
+		let generics = util::with_bounds(
+			&attrs,
+			|ty| parse_quote! { #ty: rustidy_parse::Parse }
+		);
 		let (impl_generics, ty_generics, where_clause) = generics.split_for_impl();
 		let try_with = attrs.try_with;
 		let and_try_with = attrs.and_try_with;

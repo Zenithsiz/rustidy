@@ -73,8 +73,16 @@ where
 	let generics = <A as AsRef<syn::Generics>>::as_ref(attrs)
 		.clone();
 	match <A as AsRef<darling::ast::Data<V, F>>>::as_ref(attrs) {
-		darling::ast::Data::Enum(variants) => self::with_enum_bounds(generics, variants, |_, field| create_bound(field.as_ref())),
-		darling::ast::Data::Struct(fields) => self::with_struct_bounds(generics, &fields.fields, |field| create_bound(field.as_ref())),
+		darling::ast::Data::Enum(variants) => self::with_enum_bounds(
+			generics,
+			variants,
+			|_, field| create_bound(field.as_ref())
+		),
+		darling::ast::Data::Struct(fields) => self::with_struct_bounds(
+			generics,
+			&fields.fields,
+			|field| create_bound(field.as_ref())
+		),
 	}
 }
 
@@ -83,11 +91,13 @@ where
 pub fn field_member_access<F: AsRef<Option<syn::Ident>>>(field_idx: usize, field: F) -> syn::Member {
 	match field.as_ref() {
 		Some(ident) => syn::Member::Named(ident.clone()),
-		None => syn::Member::Unnamed(syn::Index {
-			#[expect(clippy::cast_possible_truncation, reason = "There shouldn't be more than 2^32 fields in a struct")]
-			index: field_idx as u32,
-			span: Span::call_site(),
-		}),
+		None => syn::Member::Unnamed(
+			syn::Index {
+				#[expect(clippy::cast_possible_truncation, reason = "There shouldn't be more than 2^32 fields in a struct")]
+				index: field_idx as u32,
+				span: Span::call_site(),
+			}
+		),
 	}
 }
 
@@ -124,18 +134,28 @@ impl darling::FromMeta for Fmt {
 	fn from_list(items: &[darling::ast::NestedMeta]) -> darling::Result<Self> {
 		let parts = items
 			.iter()
-			.map(|meta| match meta {
-				darling::ast::NestedMeta::Meta(meta) => match meta {
-					syn::Meta::Path(path) => Ok(syn::Expr::Path(syn::ExprPath {
-						attrs: vec![],
-						qself: None,
-						path: path.clone(),
-					})),
-					syn::Meta::List(_) => todo!("Expected a literal or path"),
-					syn::Meta::NameValue(_) => todo!("Expected a literal or path"),
-				},
-				darling::ast::NestedMeta::Lit(lit) => Ok(syn::Expr::Lit(syn::ExprLit { attrs: vec![], lit: lit.clone(), })),
-			})
+			.map(
+				|meta| match meta {
+					darling::ast::NestedMeta::Meta(meta) => match meta {
+						syn::Meta::Path(path) => Ok(
+							syn::Expr::Path(
+								syn::ExprPath {
+									attrs: vec![],
+									qself: None,
+									path: path.clone(),
+								}
+							)
+						),
+						syn::Meta::List(_) => todo!("Expected a literal or path"),
+						syn::Meta::NameValue(_) => todo!("Expected a literal or path"),
+					},
+					darling::ast::NestedMeta::Lit(lit) => Ok(
+						syn::Expr::Lit(
+							syn::ExprLit { attrs: vec![], lit: lit.clone(), }
+						)
+					),
+				}
+			)
 			.collect::<Result<Vec<_>, darling::Error>>()?;
 
 		Ok(Self { parts })

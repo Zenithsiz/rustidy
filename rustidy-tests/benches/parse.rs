@@ -27,7 +27,10 @@ fn parse_crate_empty(bencher: &mut Bencher) {
 
 #[bench]
 fn parse_crate_hello_world(bencher: &mut Bencher) {
-	self::parse::<Crate>(bencher, r#"fn main() { println!("Hello, world!"); }"#);
+	self::parse::<Crate>(
+		bencher,
+		r#"fn main() { println!("Hello, world!"); }"#
+	);
 }
 
 #[bench]
@@ -44,12 +47,14 @@ fn parse_expr_addition(bencher: &mut Bencher) {
 fn parse<T: Parse>(bencher: &mut Bencher, input: &str) {
 	let mut parser = Parser::new(input);
 	bencher
-		.iter(|| {
-			parser.set_pos(AstPos(0));
-			let _: T = parser
-				.parse::<T>()
-				.unwrap_or_else(|err| self::on_err(&parser, &err));
-		});
+		.iter(
+			|| {
+				parser.set_pos(AstPos(0));
+				let _: T = parser
+					.parse::<T>()
+					.unwrap_or_else(|err| self::on_err(&parser, &err));
+			}
+		);
 }
 
 #[cold]

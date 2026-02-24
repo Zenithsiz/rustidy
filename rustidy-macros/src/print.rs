@@ -55,13 +55,15 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 		darling::ast::Data::Enum(variants) => {
 			let (print, print_non_ws) = variants
 				.iter()
-				.map(|variant| {
-					let variant_ident = &variant.ident;
-					let print = quote! { Self::#variant_ident(ref value) => rustidy_print::Print::print(value, f), };
-					let print_non_ws = quote! { Self::#variant_ident(ref value) => rustidy_print::Print::print_non_ws(value, f), };
+				.map(
+					|variant| {
+						let variant_ident = &variant.ident;
+						let print = quote! { Self::#variant_ident(ref value) => rustidy_print::Print::print(value, f), };
+						let print_non_ws = quote! { Self::#variant_ident(ref value) => rustidy_print::Print::print_non_ws(value, f), };
 
-					(print, print_non_ws)
-				})
+						(print, print_non_ws)
+					}
+				)
 				.collect::<(Vec<_>, Vec<_>)>();
 
 			let print = quote! { match *self { #( #print )* } };
@@ -75,13 +77,15 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 				.fields
 				.iter()
 				.enumerate()
-				.map(|(field_idx, field)| {
-					let field_ident = util::field_member_access(field_idx, field);
-					let print = quote! { rustidy_print::Print::print(&self.#field_ident, f); };
-					let print_non_ws = quote! { rustidy_print::Print::print_non_ws(&self.#field_ident, f); };
+				.map(
+					|(field_idx, field)| {
+						let field_ident = util::field_member_access(field_idx, field);
+						let print = quote! { rustidy_print::Print::print(&self.#field_ident, f); };
+						let print_non_ws = quote! { rustidy_print::Print::print_non_ws(&self.#field_ident, f); };
 
-					(print, print_non_ws)
-				})
+						(print, print_non_ws)
+					}
+				)
 				.collect::<(Vec<_>, Vec<_>)>();
 
 			let print = quote! { #( #print )* };
@@ -91,7 +95,10 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 		},
 	};
 
-	let impl_generics = util::with_bounds(&attrs, |ty| parse_quote! { #ty: rustidy_print::Print });
+	let impl_generics = util::with_bounds(
+		&attrs,
+		|ty| parse_quote! { #ty: rustidy_print::Print }
+	);
 	let (impl_generics, ty_generics, fmt_where_clause) = impl_generics.split_for_impl();
 	let output = quote! {
 		impl #impl_generics rustidy_print::Print for #item_ident #ty_generics #fmt_where_clause {

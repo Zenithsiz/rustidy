@@ -12,17 +12,25 @@ use {
 #[extend::ext(name = WhitespaceFormat)]
 pub impl Whitespace {
 	const INDENT: WhitespaceConfig = WhitespaceConfig {
-		format: Some(WhitespaceFormatKind::Indent { use_prev: false, remove_if_pure: false, }),
+		format: Some(
+			WhitespaceFormatKind::Indent { use_prev: false, remove_if_pure: false, }
+		),
 	};
 	const PRESERVE: WhitespaceConfig = WhitespaceConfig { format: None };
 	const INDENT_CLOSE: WhitespaceConfig = WhitespaceConfig {
-		format: Some(WhitespaceFormatKind::Indent { use_prev: true, remove_if_pure: false, }),
+		format: Some(
+			WhitespaceFormatKind::Indent { use_prev: true, remove_if_pure: false, }
+		),
 	};
 	const INDENT_CLOSE_REMOVE_IF_PURE: WhitespaceConfig = WhitespaceConfig {
-		format: Some(WhitespaceFormatKind::Indent { use_prev: true, remove_if_pure: true, }),
+		format: Some(
+			WhitespaceFormatKind::Indent { use_prev: true, remove_if_pure: true, }
+		),
 	};
 	const INDENT_REMOVE_IF_PURE: WhitespaceConfig = WhitespaceConfig {
-		format: Some(WhitespaceFormatKind::Indent { use_prev: false, remove_if_pure: true, }),
+		format: Some(
+			WhitespaceFormatKind::Indent { use_prev: false, remove_if_pure: true, }
+		),
 	};
 	const REMOVE: WhitespaceConfig = WhitespaceConfig { format: Some(WhitespaceFormatKind::Remove), };
 	const SINGLE: WhitespaceConfig = WhitespaceConfig {
@@ -39,13 +47,17 @@ pub impl Whitespace {
 
 	fn indent(remove_if_pure: bool) -> WhitespaceConfig {
 		WhitespaceConfig {
-			format: Some(WhitespaceFormatKind::Indent { use_prev: false, remove_if_pure }),
+			format: Some(
+				WhitespaceFormatKind::Indent { use_prev: false, remove_if_pure }
+			),
 		}
 	}
 
 	fn prev_indent(remove_if_pure: bool) -> WhitespaceConfig {
 		WhitespaceConfig {
-			format: Some(WhitespaceFormatKind::Indent { use_prev: true, remove_if_pure }),
+			format: Some(
+				WhitespaceFormatKind::Indent { use_prev: true, remove_if_pure }
+			),
 		}
 	}
 
@@ -69,16 +81,22 @@ pub impl Whitespace {
 			None => &mut lhs.first,
 		};
 
-		replace_with::replace_with_or_abort(&mut lhs_last.0, |lhs_last| AstStr::join(lhs_last, rhs.first.0));
+		replace_with::replace_with_or_abort(
+			&mut lhs_last.0,
+			|lhs_last| AstStr::join(lhs_last, rhs.first.0)
+		);
 		lhs.rest.append(&mut rhs.rest);
 	}
 
 	/// Joins `other` to this whitespace as a prefix
 	fn join_prefix(&mut self, mut other: Self) {
-		replace_with::replace_with_or_abort(self, |this| {
-			other.join_suffix(this);
-			other
-		});
+		replace_with::replace_with_or_abort(
+			self,
+			|this| {
+				other.join_suffix(this);
+				other
+			}
+		);
 	}
 }
 
@@ -235,7 +253,11 @@ impl WhitespaceFormatKind {
 			} => match remove_if_pure && is_last {
 				true => "".into(),
 				false => ctx
-					.with_indent_offset_if(-1, use_prev && is_last, |ctx| Self::indent_str_nl(ctx, cur_str, after_newline)),
+					.with_indent_offset_if(
+						-1,
+						use_prev && is_last,
+						|ctx| Self::indent_str_nl(ctx, cur_str, after_newline)
+					),
 			},
 		}
 	}
@@ -256,7 +278,11 @@ impl WhitespaceFormatKind {
 				..
 			} => match is_last {
 				true => ctx
-					.with_indent_offset_if(-1, use_prev, |ctx| Self::indent_str_nl(ctx, cur_str, true)),
+					.with_indent_offset_if(
+						-1,
+						use_prev,
+						|ctx| Self::indent_str_nl(ctx, cur_str, true)
+					),
 				false => Self::indent_str_nl(ctx, cur_str, true),
 			},
 		}
@@ -279,7 +305,11 @@ impl WhitespaceFormatKind {
 				..
 			} => match is_last {
 				true => ctx
-					.with_indent_offset_if(-1, use_prev, |ctx| Self::indent_str_nl(ctx, cur_str, false)),
+					.with_indent_offset_if(
+						-1,
+						use_prev,
+						|ctx| Self::indent_str_nl(ctx, cur_str, false)
+					),
 				false => Self::indent_str_nl(ctx, cur_str, false),
 			},
 		}
@@ -298,7 +328,12 @@ pub fn format(
 	let after_newline = ctx.take_tag(FormatTag::AfterNewline);
 
 	let prefix_str = kind
-		.prefix_str(ctx, &ws.0.first.0, ws.0.rest.is_empty(), after_newline);
+		.prefix_str(
+			ctx,
+			&ws.0.first.0,
+			ws.0.rest.is_empty(),
+			after_newline
+		);
 	ws.0.first.0.replace(prefix_str);
 
 	for (pos, (comment, ws)) in ws.0.rest.iter_mut().with_position() {

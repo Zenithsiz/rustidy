@@ -78,8 +78,14 @@ fn test_case(test_dir: &Path) -> Result<(), AppError> {
 			let output = serde_json::from_str::<rustidy_ast::Crate>(&output)
 				.context("Unable to deserialize output")?;
 
-			assert_json_diff::assert_json_matches_no_panic(&crate_, &output, assert_json_diff::Config::new(assert_json_diff::CompareMode::Strict),)
-				.map_err(|err| app_error!("Crate differed from expected:\n{err}"))?;
+			assert_json_diff::assert_json_matches_no_panic(
+				&crate_,
+				&output,
+				assert_json_diff::Config::new(assert_json_diff::CompareMode::Strict),
+			)
+				.map_err(
+					|err| app_error!("Crate differed from expected:\n{err}")
+				)?;
 		},
 	}
 

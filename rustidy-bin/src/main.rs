@@ -100,7 +100,12 @@ fn run() -> Result<(), AppError> {
 			let mut files = args.files;
 			while let Some(file_path) = files.pop() {
 				let start = Instant::now();
-				self::format_file(&config, Some(&mut files), Some(&file_path), args.check)
+				self::format_file(
+					&config,
+					Some(&mut files),
+					Some(&file_path),
+					args.check
+				)
 					.with_context(|| format!("While formatting {file_path:?}"))?;
 				let duration = start.elapsed();
 
@@ -126,7 +131,10 @@ fn format_file(
 		None => io::read_to_string(io::stdin())
 			.context("Unable to read stdin")?,
 	};
-	let mut crate_ = rustidy::parse(&input, file_path.unwrap_or_else(|| Path::new("<stdin>")))?;
+	let mut crate_ = rustidy::parse(
+		&input,
+		file_path.unwrap_or_else(|| Path::new("<stdin>"))
+	)?;
 
 	// Queue modules for formatting.
 	if let Some(file_path) = file_path && let Some(files) = files {

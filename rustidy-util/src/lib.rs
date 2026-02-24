@@ -62,15 +62,17 @@ pub impl &str {
 pub impl str {
 	fn chunk(&self, len: usize) -> impl Iterator<Item = &str> {
 		let mut s = self;
-		iter::from_fn(move || match s.is_empty() {
-			true => None,
-			false => {
-				let (cur, next) = s
-					.split_at_checked(len)
-					.unwrap_or_else(|| (s, &s[s.len()..]));
-				s = next;
-				Some(cur)
+		iter::from_fn(
+			move || match s.is_empty() {
+				true => None,
+				false => {
+					let (cur, next) = s
+						.split_at_checked(len)
+						.unwrap_or_else(|| (s, &s[s.len()..]));
+					s = next;
+					Some(cur)
+				}
 			}
-		})
+		)
 	}
 }
