@@ -196,9 +196,11 @@ pub enum DelimTokenTree {
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
-pub struct DelimTokenTreeInner(#[parse(fatal)]
-#[format(args = rustidy_format::vec::args_prefix_ws(Whitespace::PRESERVE))]
-pub Vec<TokenTree>);
+pub struct DelimTokenTreeInner(
+	#[parse(fatal)]
+	#[format(args = rustidy_format::vec::args_prefix_ws(Whitespace::PRESERVE))]
+	pub Vec<TokenTree>,
+);
 
 /// `TokenTree`
 #[derive(PartialEq, Eq, Clone, Debug)]
@@ -213,8 +215,7 @@ pub enum TokenTree {
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
-pub struct TokenNonDelimited(#[parse(with_tag = ParserTag::SkipDelimiters)]
-pub token::Token);
+pub struct TokenNonDelimited(#[parse(with_tag = ParserTag::SkipDelimiters)] pub token::Token);
 
 /// Updates the configuration based on an attribute
 // TODO: We need to return the position for better error messages.

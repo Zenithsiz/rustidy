@@ -72,8 +72,7 @@ pub struct StructFields(#[format(args = {
 		StructFieldInnerArgs { max_ident_len },
 		()
 	)
-})]
-PunctuatedTrailing<StructField, token::Comma>);
+})] PunctuatedTrailing<StructField, token::Comma>);
 
 /// `StructField`
 #[derive(PartialEq, Eq, Clone, Debug)]

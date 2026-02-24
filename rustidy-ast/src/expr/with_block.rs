@@ -133,9 +133,11 @@ impl ParsableFrom<Longest<LetChain, ConditionsExpr>> for Conditions {
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
-pub struct ConditionsExpr(#[parse(with_tag = ParserTag::SkipStructExpression)]
-#[parse(with_tag = ParserTag::SkipOptionalTrailingBlockExpression)]
-Expression);
+pub struct ConditionsExpr(
+	#[parse(with_tag = ParserTag::SkipStructExpression)]
+	#[parse(with_tag = ParserTag::SkipOptionalTrailingBlockExpression)]
+	Expression,
+);
 
 /// `LetChain`
 #[derive(PartialEq, Eq, Clone, Debug)]
