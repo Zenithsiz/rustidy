@@ -26,8 +26,7 @@ use {
 #[parse_recursive(kind = "left")]
 pub struct CallExpression {
 	pub expr:   Expression,
-	// TODO: Is it fine to remove *all* tags?
-	#[format(without_tags)]
+	#[format(without_tag = FormatTag::InsideChain)]
 	#[format(prefix_ws = Whitespace::REMOVE)]
 	#[format(
 		args = delimited::fmt_remove_or_indent_if_non_blank(50, CallParamsFmt::Inline, CallParamsFmt::Indent)
@@ -56,8 +55,7 @@ pub struct MethodCallExpression {
 	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub segment: PathExprSegment,
 	#[format(prefix_ws = Whitespace::REMOVE)]
-	// TODO: Is it fine to remove *all* tags?
-	#[format(without_tags)]
+	#[format(without_tag = FormatTag::InsideChain)]
 	#[format(indent(if_has_tag = FormatTag::InsideChain))]
 	#[format(
 		args = delimited::fmt_remove_or_indent_if_non_blank(50, CallParamsFmt::Inline, CallParamsFmt::Indent)

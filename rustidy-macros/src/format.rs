@@ -29,13 +29,6 @@ struct Indent {
 	if_has_tag: Option<syn::Expr>,
 }
 
-#[derive(Debug, darling::FromMeta)]
-#[darling(from_expr = |expr| Ok(Self { tag: expr.clone(), if_: None }))]
-struct WithTag {
-	tag: syn::Expr,
-	if_: Option<syn::Expr>,
-}
-
 #[derive(Clone, Debug, darling::FromMeta)]
 #[darling(from_expr = |expr| Ok(Self { expr: expr.clone(), if_: None }))]
 struct WithExprIf {
@@ -84,60 +77,60 @@ struct VariantFieldAttrs {
 #[darling(attributes(format))]
 struct VariantAttrs {
 	#[as_ref]
-	ident:        syn::Ident,
+	ident:       syn::Ident,
 	#[as_ref]
-	fields:       darling::ast::Fields<VariantFieldAttrs>,
+	fields:      darling::ast::Fields<VariantFieldAttrs>,
 
 	#[darling(default)]
-	indent:       Option<Indent>,
+	indent:      Option<Indent>,
 
-	with:         Option<syn::Expr>,
+	with:        Option<syn::Expr>,
 
 	#[darling(default)]
-	prefix_ws:    Option<WithExprIf>,
+	prefix_ws:   Option<WithExprIf>,
 
 	#[darling(multiple)]
-	before_with:  Vec<WithExprIf>,
+	before_with: Vec<WithExprIf>,
 
 	#[darling(multiple)]
-	with_tag:     Vec<WithTag>,
+	with_tag:    Vec<WithExprIf>,
 
-	#[darling(default)]
-	without_tags: bool,
+	#[darling(multiple)]
+	without_tag: Vec<WithExprIf>,
 
-	args:         Option<syn::Expr>,
+	args:        Option<syn::Expr>,
 }
 
 #[derive(Debug, darling::FromField, derive_more::AsRef)]
 #[darling(attributes(format))]
 struct FieldAttrs {
 	#[as_ref]
-	ident:        Option<syn::Ident>,
+	ident:       Option<syn::Ident>,
 	#[as_ref]
-	ty:           syn::Type,
+	ty:          syn::Type,
 
 	#[darling(default)]
-	str:          bool,
+	str:         bool,
 
 	#[darling(default)]
-	indent:       Option<Indent>,
+	indent:      Option<Indent>,
 
-	with:         Option<syn::Expr>,
-	with_self:    Option<syn::Expr>,
+	with:        Option<syn::Expr>,
+	with_self:   Option<syn::Expr>,
 
 	#[darling(default)]
-	prefix_ws:    Option<WithExprIf>,
+	prefix_ws:   Option<WithExprIf>,
 
 	#[darling(multiple)]
-	before_with:  Vec<WithExprIf>,
+	before_with: Vec<WithExprIf>,
 
 	#[darling(multiple)]
-	with_tag:     Vec<WithTag>,
+	with_tag:    Vec<WithExprIf>,
 
-	#[darling(default)]
-	without_tags: bool,
+	#[darling(multiple)]
+	without_tag: Vec<WithExprIf>,
 
-	args:         Option<syn::Expr>,
+	args:        Option<syn::Expr>,
 }
 
 #[derive(Debug, darling::FromDeriveInput, derive_more::AsRef)]
@@ -159,10 +152,10 @@ struct Attrs {
 	before_with:  Vec<WithExprIf>,
 
 	#[darling(multiple)]
-	with_tag:     Vec<WithTag>,
+	with_tag:     Vec<WithExprIf>,
 
-	#[darling(default)]
-	without_tags: bool,
+	#[darling(multiple)]
+	without_tag:  Vec<WithExprIf>,
 
 	args:         Option<ArgsTy>,
 
@@ -193,7 +186,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 		format,
 		&attrs.before_with,
 		&attrs.with_tag,
-		attrs.without_tags,
+		&attrs.without_tag,
 		Args::Skip,
 		&attrs.indent,
 	)?;
@@ -295,7 +288,7 @@ fn derive_enum(variants: &[VariantAttrs]) -> Result<syn::Expr, AppError> {
 					format,
 					&variant.before_with,
 					&variant.with_tag,
-					variant.without_tags,
+					&variant.without_tag,
 					Args::Set(variant.args.clone()),
 					&variant.indent
 				)?;
@@ -412,7 +405,7 @@ fn derive_struct_field(attrs: &Attrs, field_idx: usize, field: &FieldAttrs) -> R
 		format,
 		&field.before_with,
 		&field.with_tag,
-		field.without_tags,
+		&field.without_tag,
 		Args::Set(field.args.clone()),
 		&field.indent,
 	)
@@ -434,8 +427,8 @@ fn derive_format(
 	with_self: &Option<syn::Expr>,
 	default: syn::Expr,
 	before_with: &[WithExprIf],
-	with_tag: &[WithTag],
-	without_tags: bool,
+	with_tag: &[WithExprIf],
+	without_tag: &[WithExprIf],
 	args: Args,
 	indent: &Option<Indent>,
 ) -> Result<syn::Expr, AppError> {
@@ -472,24 +465,31 @@ fn derive_format(
 		None => format,
 	};
 
-	let mut format = match without_tags {
-		true => parse_quote! { ctx.without_tags(|ctx| #format) },
-		false => format,
-	};
-	for WithTag {
-		tag,
-		if_
-	} in with_tag {
-		let cond = if_
-			.clone()
-			.unwrap_or_else(|| parse_quote! { true });
-		format = parse_quote! {
-			match #cond {
-				true => ctx.with_tag(#tag, |ctx| #format),
-				false => #format,
+	let format = without_tag
+		.iter()
+		.fold(
+			format,
+			|format, WithExprIf {
+				expr: tag,
+				if_
+			}| match if_ {
+				Some(cond) => parse_quote! { ctx.without_tag_if(#cond, #tag, |ctx| #format) },
+				None => parse_quote! { ctx.without_tag(#tag, |ctx| #format) },
 			}
-		}
-	}
+		);
+
+	let format = with_tag
+		.iter()
+		.fold(
+			format,
+			|format, WithExprIf {
+				expr: tag,
+				if_
+			}| match if_ {
+				Some(cond) => parse_quote! { ctx.with_tag_if(#cond, #tag, |ctx| #format) },
+				None => parse_quote! { ctx.with_tag(#tag, |ctx| #format) },
+			}
+		);
 
 	let format = match indent {
 		Some(Indent {

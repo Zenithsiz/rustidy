@@ -63,15 +63,16 @@ impl<A, T: Format<WhitespaceConfig, A>> Format<WhitespaceConfig, FmtArgs<A>> for
 		let mut is_after_newline = false;
 		let mut has_prefix_ws = true;
 		for attr in &mut self.attrs {
-			ctx
-				.with_tag_if(
-					is_after_newline,
-					FormatTag::AfterNewline,
-					|ctx| match has_prefix_ws {
-						true => ctx.format(attr, prefix_ws),
-						false => ctx.format(attr, Whitespace::INDENT),
-					}
-				)
+			if is_after_newline {
+				ctx.add_tag(FormatTag::AfterNewline);
+			}
+
+			match has_prefix_ws {
+				true => ctx
+					.format(attr, prefix_ws),
+				false => ctx
+					.format(attr, Whitespace::INDENT),
+			}
 				.append_to(&mut output);
 
 			is_after_newline = matches!(attr, OuterAttrOrDocComment::DocComment(OuterDocComment::Line(_)));
@@ -86,25 +87,22 @@ impl<A, T: Format<WhitespaceConfig, A>> Format<WhitespaceConfig, FmtArgs<A>> for
 		}
 
 
-		value_ctx
-			.with_tag_if(
-				is_after_newline,
-				FormatTag::AfterNewline,
-				|ctx| {
-					match has_prefix_ws {
-						true => ctx
-							.format_with(&mut self.inner, prefix_ws, args.inner_args),
-						// TODO: The user should be able to choose this
-						false => ctx
-							.format_with(
-								&mut self.inner,
-								Whitespace::INDENT,
-								args.inner_args
-							),
-					}
-						.append_to(&mut output);
-				}
-			);
+		if is_after_newline {
+			value_ctx.add_tag(FormatTag::AfterNewline);
+		}
+
+		match has_prefix_ws {
+			true => value_ctx
+				.format_with(&mut self.inner, prefix_ws, args.inner_args),
+			// TODO: The user should be able to choose this
+			false => value_ctx
+				.format_with(
+					&mut self.inner,
+					Whitespace::INDENT,
+					args.inner_args
+				),
+		}
+			.append_to(&mut output);
 
 		output
 	}
@@ -216,21 +214,18 @@ impl<T: Format<WhitespaceConfig, A>, A> Format<WhitespaceConfig, FmtArgs<A>> for
 		let mut is_after_newline = false;
 		let mut has_prefix_ws = true;
 		for attr in &mut self.attrs {
-			ctx
-				.with_tag_if(
-					is_after_newline,
-					FormatTag::AfterNewline,
-					|ctx| {
-						let prefix_ws = match has_prefix_ws {
-							true => prefix_ws,
-							false => Whitespace::INDENT,
-						};
+			if is_after_newline {
+				ctx.add_tag(FormatTag::AfterNewline);
+			}
 
-						ctx
-							.format(attr, prefix_ws)
-							.append_to(&mut output);
-					}
-				);
+			let prefix_ws = match has_prefix_ws {
+				true => prefix_ws,
+				false => Whitespace::INDENT,
+			};
+
+			ctx
+				.format(attr, prefix_ws)
+				.append_to(&mut output);
 
 			is_after_newline = matches!(attr, InnerAttrOrDocComment::DocComment(InnerDocComment::Line(_)));
 			has_prefix_ws = false;

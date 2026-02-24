@@ -19,14 +19,14 @@ pub mod whitespace;
 pub use {
 	self::{whitespace::{WhitespaceFormat, WhitespaceFormatKind}},
 	rustidy_macros::{Format, Formattable},
-	tag::FormatTag,
+	tag::{FormatTag, FormatTags},
 };
 
 // Imports
 use {
 	crate as rustidy_format,
 	arcstr::ArcStr,
-	core::{marker::PhantomData, mem, ops::ControlFlow},
+	core::{marker::PhantomData, ops::ControlFlow},
 	rustidy_util::{ArenaData, ArenaIdx, AstStr, Config, Oob, Whitespace},
 	std::borrow::Cow,
 };
@@ -539,7 +539,7 @@ pub struct Context<'a> {
 	input:        ArcStr,
 	config:       Cow<'a, Config>,
 	indent_depth: usize,
-	tags:         Oob<'a, Vec<FormatTag>>,
+	tags:         Oob<'a, FormatTags>,
 }
 
 impl<'a> Context<'a> {
@@ -550,7 +550,7 @@ impl<'a> Context<'a> {
 			input: input.into(),
 			config: Cow::Borrowed(config),
 			indent_depth: 0,
-			tags: Oob::Owned(vec![]),
+			tags: Oob::Owned(FormatTags::new()),
 		}
 	}
 
@@ -667,66 +667,47 @@ impl<'a> Context<'a> {
 		}
 	}
 
-	/// Returns all tags
-	pub fn tags(&self) -> impl Iterator<Item = FormatTag> {
-		self.tags.iter().copied()
+	/// Adds a tag.
+	///
+	/// Returns if the tag was present
+	pub fn add_tag(&mut self, tag: FormatTag) -> bool {
+		self.tags.add(tag)
 	}
 
-	/// Returns if this context has a tag
+	/// Removes a tag.
+	///
+	/// Returns if the tag was present
+	pub fn remove_tag(&mut self, tag: FormatTag) -> bool {
+		self.tags.remove(tag)
+	}
+
+	/// Sets whether a tag is present.
+	///
+	/// Returns if the tag was present
+	pub fn set_tag(&mut self, tag: FormatTag, present: bool) -> bool {
+		self.tags.set(tag, present)
+	}
+
+	/// Returns if a tag exists
 	#[must_use]
-	pub fn has_tag(&self, tag: impl Into<FormatTag>) -> bool {
-		let tag = tag.into();
-		self.tags().any(|cur_tag| cur_tag == tag)
+	pub fn has_tag(&self, tag: FormatTag) -> bool {
+		self.tags.contains(tag)
 	}
 
-	/// Adds `tag` to this context
-	pub fn add_tag(&mut self, tag: impl Into<FormatTag>) {
-		self.tags.push(tag.into());
-	}
-
-	/// Returns if this context has a tag and removes it
-	#[must_use]
-	pub fn take_tag(&mut self, tag: impl Into<FormatTag>) -> bool {
-		let tag = tag.into();
-
-		let prev_len = self.tags.len();
-		self.tags.retain(|cur_tag| *cur_tag != tag);
-		self.tags.len() != prev_len
-	}
-
-	/// Calls `f` with tags `tags` added to this context
-	pub fn with_tags<O>(
-		&mut self,
-		tags: impl IntoIterator<Item = FormatTag>,
-		f: impl FnOnce(&mut Self) -> O
-	) -> O {
-		let tags_len = self.tags.len();
-
-		for tag in tags {
-			self.tags.push(tag);
-		}
+	/// Runs `f` with a tag, removing it after
+	pub fn with_tag<O>(&mut self, tag: FormatTag, f: impl FnOnce(&mut Self) -> O) -> O {
+		let was_present = self.add_tag(tag);
 		let output = f(self);
-		if self.tags.len() != tags_len {
-			self.tags.truncate(tags_len);
-		}
+		self.set_tag(tag, was_present);
 
 		output
 	}
 
-	/// Calls `f` with tag `tag` added to this context
-	pub fn with_tag<O>(
-		&mut self,
-		tag: impl Into<FormatTag>,
-		f: impl FnOnce(&mut Self) -> O
-	) -> O {
-		self.with_tags([tag.into()], f)
-	}
-
-	/// Calls `f` with tag `tag` added to this context if `pred` is true
+	/// Runs `f` with a tag if `pred` is true, removing it after
 	pub fn with_tag_if<O>(
 		&mut self,
 		pred: bool,
-		tag: impl Into<FormatTag>,
+		tag: FormatTag,
 		f: impl FnOnce(&mut Self) -> O
 	) -> O {
 		match pred {
@@ -735,15 +716,26 @@ impl<'a> Context<'a> {
 		}
 	}
 
-	/// Calls `f` with all tags removed.
-	pub fn without_tags<O>(&mut self, f: impl FnOnce(&mut Self) -> O) -> O {
-		// TODO: Just add an offset to the start of the new tags
-		//       to reduce an allocation?
-		let tags = mem::take(&mut *self.tags);
+	/// Runs `f` without a tag, adding it after if it existed
+	pub fn without_tag<O>(&mut self, tag: FormatTag, f: impl FnOnce(&mut Self) -> O) -> O {
+		let was_present = self.remove_tag(tag);
 		let output = f(self);
-		*self.tags = tags;
+		self.set_tag(tag, was_present);
 
 		output
+	}
+
+	/// Runs `f` without a tag if `pred` is true, adding it after if it existed
+	pub fn without_tag_if<O>(
+		&mut self,
+		pred: bool,
+		tag: FormatTag,
+		f: impl FnOnce(&mut Self) -> O
+	) -> O {
+		match pred {
+			true => self.without_tag(tag, f),
+			false => f(self),
+		}
 	}
 }
 
