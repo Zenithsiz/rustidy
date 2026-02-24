@@ -3,7 +3,7 @@
 // Imports
 use std::{ffi::OsString, path::PathBuf};
 
-/// Rustidy formatter
+/// Rustidy cargo subcommand
 #[derive(Debug)]
 #[derive(clap::Parser)]
 #[clap(author, version, about)]
