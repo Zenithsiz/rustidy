@@ -4,9 +4,10 @@
 use {
 	core::mem,
 	either::Either,
-	rustidy_format::{Format, Formattable, WhitespaceConfig},
+	rustidy_format::{Format, FormatOutput, Formattable, WhitespaceConfig, WhitespaceFormat},
 	rustidy_parse::Parse,
 	rustidy_print::Print,
+	rustidy_util::Whitespace,
 };
 
 /// Punctuated type `T`, separated by `P`
@@ -134,6 +135,25 @@ impl<T, P> Punctuated<T, P> {
 		1 + self.rest.len()
 	}
 
+	/// Gets a value by index mutably
+	pub fn value_mut(&mut self, idx: usize) -> Option<&mut T> {
+		match idx.checked_sub(1) {
+			Some(idx) => self
+				.rest
+				.get_mut(idx)
+				.map(|rest| &mut rest.value),
+			None => Some(&mut self.first),
+		}
+	}
+
+	/// Gets a punctuation by index mutably
+	pub fn punct_mut(&mut self, idx: usize) -> Option<&mut P> {
+		self
+			.rest
+			.get_mut(idx)
+			.map(|rest| &mut rest.punct)
+	}
+
 	/// Returns an iterator over all punctuation
 	pub fn puncts(&self) -> impl Iterator<Item = &P> {
 		self
@@ -147,17 +167,6 @@ impl<T, P> Punctuated<T, P> {
 
 	/// Returns a mutable iterator over all punctuation
 	pub fn puncts_mut(&mut self) -> impl Iterator<Item = &mut P> {
-		self
-			.rest
-			.iter_mut()
-			.map(|PunctuatedRest {
-				punct,
-				..
-			}| punct)
-	}
-
-	/// Returns a mutable iterator over all punctuation
-	pub fn punct_mut(&mut self) -> impl Iterator<Item = &mut P> {
 		self
 			.rest
 			.iter_mut()
@@ -436,4 +445,81 @@ pub const fn fmt_with<TA, PA>(
 #[must_use]
 pub const fn fmt(value: WhitespaceConfig, punct: WhitespaceConfig) -> FmtArgs<(), ()> {
 	self::fmt_with(value, punct, (), ())
+}
+
+#[derive(Clone, Copy, Debug)]
+pub struct FmtIndentColumns {
+	pub columns: Option<usize>,
+}
+
+impl<T: Format<WhitespaceConfig, ()>, P: Format<WhitespaceConfig, ()>> Format<WhitespaceConfig, FmtIndentColumns> for Punctuated<T, P> {
+	fn format(
+		&mut self,
+		ctx: &mut rustidy_format::Context,
+		prefix_ws: WhitespaceConfig,
+		args: FmtIndentColumns
+	) -> rustidy_format::FormatOutput {
+		let mut output = FormatOutput::default();
+
+		let mut cur_idx = 0;
+		let mut prefix_ws = Some(prefix_ws);
+		'values: while let Some(first) = self.value_mut(cur_idx) {
+			ctx
+				.format(first, prefix_ws.unwrap_or(Whitespace::INDENT))
+				.append_to(&mut output);
+			prefix_ws.take_if(|_| !output.is_empty);
+
+			let Some(punct) = self.punct_mut(cur_idx) else {
+				break;
+			};
+			ctx
+				.format(punct, prefix_ws.unwrap_or(Whitespace::REMOVE))
+				.append_to(&mut output);
+			prefix_ws.take_if(|_| !output.is_empty);
+			cur_idx += 1;
+
+			let row_len = args.columns.unwrap_or(1);
+			let row_rest_len = row_len.saturating_sub(1);
+			for _ in 0..row_rest_len {
+				let Some(value) = self.value_mut(cur_idx) else {
+					break 'values;
+				};
+				ctx
+					.format(value, prefix_ws.unwrap_or(Whitespace::SINGLE))
+					.append_to(&mut output);
+				prefix_ws.take_if(|_| !output.is_empty);
+
+				let Some(punct) = self.punct_mut(cur_idx) else {
+					break 'values;
+				};
+				ctx
+					.format(punct, prefix_ws.unwrap_or(Whitespace::REMOVE))
+					.append_to(&mut output);
+				prefix_ws.take_if(|_| !output.is_empty);
+
+				cur_idx += 1;
+			}
+		}
+
+		output
+	}
+}
+
+impl<T: Format<WhitespaceConfig, ()>, P: Format<WhitespaceConfig, ()>> Format<WhitespaceConfig, FmtIndentColumns> for PunctuatedTrailing<T, P> {
+	fn format(
+		&mut self,
+		ctx: &mut rustidy_format::Context,
+		prefix_ws: WhitespaceConfig,
+		args: FmtIndentColumns
+	) -> rustidy_format::FormatOutput {
+		let mut output = FormatOutput::default();
+		ctx
+			.format_with(&mut self.punctuated, prefix_ws, args)
+			.append_to(&mut output);
+		ctx
+			.format(&mut self.trailing, Whitespace::REMOVE)
+			.append_to(&mut output);
+
+		output
+	}
 }

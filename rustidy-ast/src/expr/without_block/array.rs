@@ -3,7 +3,7 @@
 // Imports
 use {
 	crate::{expr::Expression, token, util::Bracketed},
-	rustidy_ast_util::punct::{PunctuatedRest, PunctuatedTrailing},
+	rustidy_ast_util::{Delimited, delimited, punct::{self, PunctuatedTrailing}},
 	rustidy_format::{Format, FormatOutput, Formattable, WhitespaceConfig, WhitespaceFormat},
 	rustidy_parse::Parse,
 	rustidy_print::Print,
@@ -25,36 +25,27 @@ impl ArrayExpression {
 		suffix: &mut token::BracketClose,
 		ctx: &mut rustidy_format::Context,
 		prefix_ws: WhitespaceConfig,
-	) -> (FormatOutput, FormatOutput) {
-		let mut common_output = FormatOutput::default();
-		let mut single_line_output = FormatOutput::default();
+	) -> FormatOutput {
+		let mut delimited = Delimited { prefix, value: values, suffix, };
+		let args = delimited::FmtRemoveWith(
+			punct::fmt(Whitespace::SINGLE, Whitespace::REMOVE)
+		);
+		delimited.format(ctx, prefix_ws, args)
+	}
 
-		ctx
-			.format(prefix, prefix_ws)
-			.append_to(&mut common_output);
-		ctx
-			.format(&mut values.punctuated.first, Whitespace::REMOVE)
-			.append_to(&mut common_output);
-
-		for PunctuatedRest {
-			punct: comma,
-			value
-		} in &mut values.punctuated.rest {
-			ctx
-				.format(comma, Whitespace::REMOVE)
-				.append_to(&mut common_output);
-			ctx
-				.format(value, Whitespace::SINGLE)
-				.append_to(&mut single_line_output);
-		}
-
-		// TODO: Should we preserve the original comma by returning it?
-		values.trailing = None;
-		ctx
-			.format(suffix, Whitespace::REMOVE)
-			.append_to(&mut single_line_output);
-
-		(common_output, single_line_output)
+	/// Formats all `values` as multi-line
+	fn format_multi_line(
+		prefix: &mut token::BracketOpen,
+		values: &mut PunctuatedTrailing<Expression, token::Comma>,
+		suffix: &mut token::BracketClose,
+		ctx: &mut rustidy_format::Context,
+		prefix_ws: WhitespaceConfig,
+	) -> FormatOutput {
+		let mut delimited = Delimited { prefix, value: values, suffix, };
+		let args = delimited::fmt_indent_if_non_blank_with_value(
+			punct::FmtIndentColumns { columns: ctx.config().array_expr_cols, }
+		);
+		delimited.format(ctx, prefix_ws, args)
 	}
 }
 
@@ -67,14 +58,14 @@ impl Format<WhitespaceConfig, ()> for ArrayExpression {
 	) -> FormatOutput {
 		match &mut self.0.value {
 			Some(ArrayElements::Punctuated(values)) => {
-				let (common_output, single_line_output) = Self::format_single_line(
+				let trailing_comma = values.trailing.take();
+				let single_line_output = Self::format_single_line(
 					&mut self.0.prefix,
 					values,
 					&mut self.0.suffix,
 					ctx,
 					prefix_ws
 				);
-				let single_line_output = FormatOutput::join(common_output, single_line_output);
 
 				// Then check if we can fit into a single line.
 				// Note: If the user specified a number of columns, only
@@ -90,46 +81,14 @@ impl Format<WhitespaceConfig, ()> for ArrayExpression {
 				match is_single_line {
 					true => single_line_output,
 					false => {
-						let mut output = common_output;
-
-						ctx
-							.with_indent(
-								|ctx| {
-									// Format the first value in each column as indentation
-									let mut values_iter = values.values_mut();
-									loop {
-										let mut row_values = (&mut values_iter).take(cols.unwrap_or(1));
-										let Some(first) = row_values.next() else {
-											break
-										};
-										ctx
-											.format(first, Whitespace::INDENT)
-											.append_to(&mut output);
-
-										for value in row_values {
-											ctx
-												.format(value, Whitespace::SINGLE)
-												.append_to(&mut output);
-										}
-									}
-									drop(values_iter);
-
-									if values.trailing.is_none() {
-										values.trailing = Some(token::Comma::new());
-									}
-									ctx
-										.format(&mut values.trailing, Whitespace::REMOVE)
-										.append_to(&mut output);
-								}
-							);
-
-						// Finally, close the indentation on the `]`
-						// TODO: This should use `Whitespace::INDENT_CLOSE`
-						ctx
-							.format(&mut self.0.suffix, Whitespace::INDENT)
-							.append_to(&mut output);
-
-						output
+						values.trailing = Some(trailing_comma.unwrap_or_default());
+						Self::format_multi_line(
+							&mut self.0.prefix,
+							values,
+							&mut self.0.suffix,
+							ctx,
+							prefix_ws,
+						)
 					},
 				}
 			},

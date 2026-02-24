@@ -8,7 +8,7 @@ fn a() {
 	];
 	let _ = [
 		1,
-	// Comment
+		// Comment
 	];
 
 	let _ = [1, 2, 3, 4, 5, 6];
