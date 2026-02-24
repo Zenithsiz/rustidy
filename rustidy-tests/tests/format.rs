@@ -58,17 +58,17 @@ fn test_case(test_dir: &Path) -> Result<(), AppError> {
 	let config = rustidy_util::Config::default();
 	let _: FormatOutput = rustidy::format(&input, &config, &mut crate_);
 
-	let found_output = crate_.print_to_string(Print::print);
+	let found_output = crate_.print_to(Print::print);
 
 	{
 		let _: FormatOutput = rustidy::format(&input, &config, &mut crate_);
 
-		let found_output2 = crate_.print_to_string(Print::print);
+		let found_output2 = crate_.print_to(Print::print);
 
 		ensure!(
-			found_output == found_output2,
+			found_output.as_str() == found_output2.as_str(),
 			"Formatting twice did not yield the same output:\n{}",
-			difference::Changeset::new(&found_output, &found_output2, "\n")
+			difference::Changeset::new(found_output.as_str(), found_output2.as_str(), "\n")
 		);
 	}
 
@@ -76,7 +76,7 @@ fn test_case(test_dir: &Path) -> Result<(), AppError> {
 	match env::var("RUSTIDY_FORMAT_UPDATE_OUTPUT")
 		.is_ok_and(|value| !value.trim().is_empty()) {
 		true => {
-			fs::write(output_path, found_output)
+			fs::write(output_path, found_output.as_str())
 				.context("Unable to update output")?;
 		},
 		false => {
@@ -84,9 +84,9 @@ fn test_case(test_dir: &Path) -> Result<(), AppError> {
 				.context("Unable to read output path")?;
 
 			ensure!(
-				found_output == output,
+				found_output.as_str() == output,
 				"Output differed:\n{}",
-				difference::Changeset::new(&found_output, &output, "\n")
+				difference::Changeset::new(found_output.as_str(), &output, "\n")
 			);
 		},
 	}

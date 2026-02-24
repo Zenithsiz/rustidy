@@ -5,9 +5,12 @@
 
 // Modules
 mod whitespace;
+mod str;
+mod output;
 
 // Exports
 pub use rustidy_macros::Print;
+pub use self::output::PrintOutput;
 
 // Imports
 use {core::marker::PhantomData, rustidy_util::{ArenaData, ArenaIdx, AstStr}};
@@ -23,8 +26,8 @@ pub trait Print: Sized {
 	/// won't provide valid rust code.
 	fn print_non_ws(&self, f: &mut PrintFmt);
 
-	/// Prints this type onto a string using `p` as the printer function
-	fn print_to_string(&self, p: impl FnOnce(&Self,&mut PrintFmt)) -> String {
+	/// Prints this type using `p` as the printer function and returns the output
+	fn print_to(&self, p: impl FnOnce(&Self,&mut PrintFmt)) -> PrintOutput {
 		let mut f = PrintFmt::new();
 		p(self, &mut f);
 		f.output
@@ -130,11 +133,11 @@ tuple_impl! { 3, T0, T1, T2 }
 
 impl Print for AstStr {
 	fn print(&self, f: &mut PrintFmt) {
-		self.write(&mut f.output);
+		str::write(self, &mut f.output);
 	}
 
 	fn print_non_ws(&self, f: &mut PrintFmt) {
-		self.write(&mut f.output);
+		str::write(self, &mut f.output);
 	}
 }
 
@@ -149,20 +152,21 @@ impl<T: ArenaData + Print> Print for ArenaIdx<T> {
 }
 
 /// Print formatter
+#[derive(Debug)]
 pub struct PrintFmt {
-	output: String,
+	output: PrintOutput,
 }
 
 impl PrintFmt {
 	/// Creates a new formatter
 	#[must_use]
 	pub const fn new() -> Self {
-		Self { output: String::new() }
+		Self { output: PrintOutput::Empty }
 	}
 
 	/// Returns the output
 	#[must_use]
-	pub fn output(&self) -> &str {
+	pub const fn output(&self) -> &PrintOutput {
 		&self.output
 	}
 }

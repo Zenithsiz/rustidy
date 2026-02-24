@@ -41,14 +41,17 @@ fn test_case_with(
 	fmt_ctx.set_indent_depth(config.indent_depth);
 	whitespace::format(&mut whitespace, &mut fmt_ctx, kind);
 
-	let output = whitespace.print_to_string(Print::print);
+	let output = whitespace.print_to(Print::print);
 
 	let source_fmt = source.replace(' ', "·").replace('\t', "⭾");
 	let expected_fmt = expected.replace(' ', "·").replace('\t', "⭾");
-	let output_fmt = output.replace(' ', "·").replace('\t', "⭾");
+	let output_fmt = output
+		.as_str()
+		.replace(' ', "·")
+		.replace('\t', "⭾");
 
 	ensure!(
-		output == expected,
+		output.as_str() == expected,
 		"Found wrong output.\nKind    : {kind:?}\nInput   : {source_fmt:?}\nExpected: {expected_fmt:?}\nFound   : \
 		 {output_fmt:?}"
 	);
@@ -58,14 +61,15 @@ fn test_case_with(
 		fmt_ctx.set_indent_depth(config.indent_depth);
 		whitespace::format(&mut whitespace, &mut fmt_ctx, kind);
 
-		let found_output = whitespace.print_to_string(Print::print);
+		let found_output = whitespace.print_to(Print::print);
 
 		let output_fmt = found_output
+			.as_str()
 			.replace(' ', "·")
 			.replace('\t', "⭾");
 
 		app_error::ensure!(
-			output == found_output,
+			output.as_str() == found_output.as_str(),
 			"Formatting twice didn't preserve the formatting.\nKind    : {kind:?}\nInput   : {source_fmt:?}\nFirst   \
 			 : {expected_fmt:?}\nSecond  : {output_fmt:?}",
 		);
