@@ -73,6 +73,13 @@ fn function_call() {
 			looooooooooooooooooooooooooooooooooooooooooooooooong,
 			c
 		);
+
+
+	a(
+		|| {
+			looooooooooooooooooooooooooooooooooooooooooooooooong;
+		}
+	);
 }
 
 fn doc_comment_newline() {
