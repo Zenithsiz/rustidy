@@ -58,11 +58,7 @@ You can install `rustidy` using `cargo install` on a nightly toolchain:
 cargo +nightly install --locked rustidy
 ```
 
-You should also install the cargo extension `cargo rustidy`:
-
-```sh
-cargo +nightly install --locked cargo-rustidy
-```
+This will also install the `cargo-rustidy` cargo extension to allow you to use `cargo rustidy`.
 
 ### From binaries
 
