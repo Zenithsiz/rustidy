@@ -17,6 +17,12 @@ pub trait Print: Sized {
 	/// Prints this type onto a writer
 	fn print(&self, f: &mut PrintFmt);
 
+	/// Prints this type onto a writer excluding whitespace
+	///
+	/// Note that this excludes necessary whitespace too, so this
+	/// won't provide valid rust code.
+	fn print_non_ws(&self, f: &mut PrintFmt);
+
 	/// Prints this type onto a string
 	fn print_to_string(&self) -> String {
 		let mut f = PrintFmt::new();
@@ -29,10 +35,18 @@ impl<T: Print> Print for &'_ T {
 	fn print(&self, f: &mut PrintFmt) {
 		(**self).print(f);
 	}
+
+	fn print_non_ws(&self, f: &mut PrintFmt) {
+		(**self).print(f);
+	}
 }
 
 impl<T: Print> Print for Box<T> {
 	fn print(&self, f: &mut PrintFmt) {
+		(**self).print(f);
+	}
+
+	fn print_non_ws(&self, f: &mut PrintFmt) {
 		(**self).print(f);
 	}
 }
@@ -43,6 +57,12 @@ impl<T: Print> Print for Option<T> {
 			value.print(f);
 		}
 	}
+
+	fn print_non_ws(&self, f: &mut PrintFmt) {
+		if let Some(value) = self {
+			value.print_non_ws(f);
+		}
+	}
 }
 
 impl<T: Print> Print for Vec<T> {
@@ -51,20 +71,34 @@ impl<T: Print> Print for Vec<T> {
 			value.print(f);
 		}
 	}
+
+	fn print_non_ws(&self, f: &mut PrintFmt) {
+		for value in self {
+			value.print_non_ws(f);
+		}
+	}
 }
 
 impl Print for ! {
 	fn print(&self, _f: &mut PrintFmt) {
 		*self
 	}
+
+	fn print_non_ws(&self, _f: &mut PrintFmt) {
+		*self
+	}
 }
 
 impl<T> Print for PhantomData<T> {
 	fn print(&self, _f: &mut PrintFmt) {}
+
+	fn print_non_ws(&self, _f: &mut PrintFmt) {}
 }
 
 impl Print for () {
 	fn print(&self, _f: &mut PrintFmt) {}
+
+	fn print_non_ws(&self, _f: &mut PrintFmt) {}
 }
 
 macro tuple_impl(
@@ -79,6 +113,14 @@ macro tuple_impl(
 				$T.print(f);
 			)*
 		}
+
+		#[expect(non_snake_case)]
+		fn print_non_ws(&self, f: &mut PrintFmt) {
+			let ( $($T,)* ) = self;
+			$(
+				$T.print_non_ws(f);
+			)*
+		}
 	}
 }
 
@@ -90,10 +132,18 @@ impl Print for AstStr {
 	fn print(&self, f: &mut PrintFmt) {
 		self.write(&mut f.output);
 	}
+
+	fn print_non_ws(&self, f: &mut PrintFmt) {
+		self.write(&mut f.output);
+	}
 }
 
 impl<T: ArenaData + Print> Print for ArenaIdx<T> {
 	fn print(&self, f: &mut PrintFmt) {
+		(**self).print(f);
+	}
+
+	fn print_non_ws(&self, f: &mut PrintFmt) {
 		(**self).print(f);
 	}
 }

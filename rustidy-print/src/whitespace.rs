@@ -13,6 +13,10 @@ impl Print for Whitespace {
 	fn print(&self, f: &mut crate::PrintFmt) {
 		self.0.print(f);
 	}
+
+	fn print_non_ws(&self, _f: &mut crate::PrintFmt) {
+		// Note: Don't print any whitespace
+	}
 }
 
 impl Print for WhitespaceInner {
@@ -23,6 +27,8 @@ impl Print for WhitespaceInner {
 			pure.print(f);
 		}
 	}
+
+	fn print_non_ws(&self, _f: &mut crate::PrintFmt) {}
 }
 
 impl Print for Comment {
@@ -32,22 +38,30 @@ impl Print for Comment {
 			Self::Block(comment) => comment.print(f),
 		}
 	}
+
+	fn print_non_ws(&self, _f: &mut crate::PrintFmt) {}
 }
 
 impl Print for BlockComment {
 	fn print(&self, f: &mut crate::PrintFmt) {
 		self.0.print(f);
 	}
+
+	fn print_non_ws(&self, _f: &mut crate::PrintFmt) {}
 }
 
 impl Print for LineComment {
 	fn print(&self, f: &mut crate::PrintFmt) {
 		self.0.print(f);
 	}
+
+	fn print_non_ws(&self, _f: &mut crate::PrintFmt) {}
 }
 
 impl Print for PureWhitespace {
 	fn print(&self, f: &mut crate::PrintFmt) {
 		self.0.print(f);
 	}
+
+	fn print_non_ws(&self, _f: &mut crate::PrintFmt) {}
 }

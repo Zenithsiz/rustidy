@@ -51,41 +51,43 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 	let item_ident = &attrs.ident;
 
 	// Parse body, parsable impl and error enum (with it's impls)
-	let fmt_body = match &attrs.data {
+	let (print, print_non_ws) = match &attrs.data {
 		darling::ast::Data::Enum(variants) => {
-			let fmt_variant = variants
+			let (print, print_non_ws) = variants
 				.iter()
 				.map(|variant| {
 					let variant_ident = &variant.ident;
-					quote! { Self::#variant_ident(ref value) => rustidy_print::Print::print(value, f), }
+					let print = quote! { Self::#variant_ident(ref value) => rustidy_print::Print::print(value, f), };
+					let print_non_ws = quote! { Self::#variant_ident(ref value) => rustidy_print::Print::print_non_ws(value, f), };
+
+					(print, print_non_ws)
 				})
-				.collect::<Vec<_>>();
+				.collect::<(Vec<_>, Vec<_>)>();
 
-			let body = quote! {
-				match *self {
-					#( #fmt_variant )*
-				}
-			};
+			let print = quote! { match *self { #( #print )* } };
+			let print_non_ws = quote! { match *self { #( #print_non_ws )* } };
 
-			body
+			(print, print_non_ws)
 		},
 
 		darling::ast::Data::Struct(fields) => {
-			let fmt_fields = fields
+			let (print, print_non_ws) = fields
 				.fields
 				.iter()
 				.enumerate()
 				.map(|(field_idx, field)| {
 					let field_ident = util::field_member_access(field_idx, field);
-					quote! { rustidy_print::Print::print(&self.#field_ident, f); }
+					let print = quote! { rustidy_print::Print::print(&self.#field_ident, f); };
+					let print_non_ws = quote! { rustidy_print::Print::print_non_ws(&self.#field_ident, f); };
+
+					(print, print_non_ws)
 				})
-				.collect::<Vec<_>>();
+				.collect::<(Vec<_>, Vec<_>)>();
 
-			let body = quote! {
-				#( #fmt_fields )*
-			};
+			let print = quote! { #( #print )* };
+			let print_non_ws = quote! { #( #print_non_ws )* };
 
-			body
+			(print, print_non_ws)
 		},
 	};
 
@@ -95,7 +97,12 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 		impl #impl_generics rustidy_print::Print for #item_ident #ty_generics #fmt_where_clause {
 			#[coverage(on)]
 			fn print(&self, f: &mut rustidy_print::PrintFmt) {
-				#fmt_body
+				#print
+			}
+
+			#[coverage(on)]
+			fn print_non_ws(&self, f: &mut rustidy_print::PrintFmt) {
+				#print_non_ws
 			}
 		}
 	};
