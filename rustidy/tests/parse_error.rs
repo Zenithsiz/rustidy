@@ -13,8 +13,6 @@ use {app_error::{AppError, Context, ensure}, std::{env, fs, path::Path}};
 pub fn parse_error() -> Result<(), AppError> {
 	let _logger = zutil_logger::Logger::new();
 
-	std::env::set_current_dir("..")
-		.context("Unable to ascend a directory")?;
 	let tests_dir = Path::new("tests/parse-error/");
 	match env::var_os("RUSTIDY_PARSE_ERROR_UPDATE_TESTS") {
 		Some(tests) => {

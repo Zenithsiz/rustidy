@@ -18,8 +18,6 @@ use {
 pub fn format() -> Result<(), AppError> {
 	let _logger = zutil_logger::Logger::new();
 
-	env::set_current_dir("..")
-		.context("Unable to ascend a directory")?;
 	let tests_dir = Path::new("tests/format/");
 	match env::var_os("RUSTIDY_FORMAT_UPDATE_TESTS") {
 		Some(tests) => {
