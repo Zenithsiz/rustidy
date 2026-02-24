@@ -32,6 +32,9 @@ pub use self::{
 	whitespace::Whitespace,
 };
 
+// Imports
+use core::iter;
+
 /// Returns if a string is blank
 #[must_use]
 pub fn is_str_blank(s: &str) -> bool {
@@ -52,5 +55,22 @@ pub impl &str {
 		*self = chars.as_str();
 
 		Some(ch)
+	}
+}
+
+#[extend::ext(name = StrChunk)]
+pub impl str {
+	fn chunk(&self, len: usize) -> impl Iterator<Item = &str> {
+		let mut s = self;
+		iter::from_fn(move || match s.is_empty() {
+			true => None,
+			false => {
+				let (cur, next) = s
+					.split_at_checked(len)
+					.unwrap_or_else(|| (s, &s[s.len()..]));
+				s = next;
+				Some(cur)
+			}
+		})
 	}
 }
