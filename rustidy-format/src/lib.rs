@@ -133,11 +133,7 @@ impl FormatOutput {
 
 	/// Joins two format outputs.
 	///
-	/// You must ensure `lhs` was formatted *before* `rhs`,
-	/// to ensure the semantics of the type.
-	///
-	/// It's fine if `lhs` and `rhs` have any "holes", so long
-	/// as you ensure the above point.
+	/// You must ensure that `rhs` directly follows `lhs`.
 	pub const fn join(lhs: Self, rhs: Self) -> Self {
 		Self {
 			prefix_ws_len: match lhs.prefix_ws_len {
