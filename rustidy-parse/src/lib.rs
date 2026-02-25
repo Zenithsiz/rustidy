@@ -510,6 +510,25 @@ impl Parser {
 		self.try_parse_with(Self::parse::<T>)
 	}
 
+	/// Parses a `T` from this parser using `parser` for parsing, ignoring any errors that occur (including fatal)
+	// TODO: Give this a better name.
+	pub fn parse_not_fatal_with<T, E>(&mut self, parser: impl FnOnce(&mut Self) -> Result<T, E>,) -> Result<T, E> {
+		let prev_pos = self.cur_pos;
+		match parser(self) {
+			Ok(value) => Ok(value),
+			Err(err) => {
+				self.cur_pos = prev_pos;
+				Err(err)
+			},
+		}
+	}
+
+	/// Parses a `T` from this parser, ignoring any errors that occur (including fatal)
+	// TODO: Give this a better name.
+	pub fn parse_not_fatal<T: Parse>(&mut self) -> Result<T, ParserError<T>> {
+		self.parse_not_fatal_with(Self::parse::<T>)
+	}
+
 	/// Peeks a `T` from this parser using `parser` for parsing.
 	///
 	/// Parser is only advanced is a fatal error occurs

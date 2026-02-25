@@ -267,7 +267,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 					.zip(&err_idents)
 					.map(|(variant, err_ident)| {
 						let mut expr = match variant.not_fatal {
-							true => quote! { parser.parse() },
+							true => quote! { parser.parse_not_fatal() },
 							false => quote! { parser.try_parse() },
 						};
 
