@@ -54,7 +54,11 @@ fn test_case(test_dir: &Path) -> Result<(), AppError> {
 		.context("Unable to parse input")?;
 
 	let output = crate_.print_to(Print::print);
-	ensure!(input == output.as_str(), "Crate output was not the same as input");
+	ensure!(
+		input == output.as_str(),
+		"Crate output was not the same as input\n{}",
+		difference::Changeset::new(&input, output.as_str(), "\n")
+	);
 
 	let output_path = test_dir.join("output.json");
 	match env::var("RUSTIDY_PARSE_UPDATE_OUTPUT")
