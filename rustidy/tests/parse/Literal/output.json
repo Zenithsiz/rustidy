@@ -63,360 +63,364 @@
 									"value": {
 										"attrs": [],
 										"inner": {
-											"stmts": [
-												{
-													"Expression": {
-														"WithoutBlock": {
-															"expr": {
-																"attrs": [],
-																"inner": {
-																	"Literal": {
-																		"Char": [
-																			{
-																				"first": "\n\t",
-																				"rest": []
-																			},
-																			"'a'"
-																		]
+											"Full": {
+												"stmts": {
+													"first": {
+														"Expression": {
+															"WithoutBlock": {
+																"expr": {
+																	"attrs": [],
+																	"inner": {
+																		"Literal": {
+																			"Char": [
+																				{
+																					"first": "\n\t",
+																					"rest": []
+																				},
+																				"'a'"
+																			]
+																		}
 																	}
-																}
-															},
-															"semi": {
-																"ws": {
-																	"first": "",
-																	"rest": []
 																},
-																"token": ";"
+																"semi": {
+																	"ws": {
+																		"first": "",
+																		"rest": []
+																	},
+																	"token": ";"
+																}
 															}
 														}
-													}
+													},
+													"rest": [
+														{
+															"Expression": {
+																"WithoutBlock": {
+																	"expr": {
+																		"attrs": [],
+																		"inner": {
+																			"Literal": {
+																				"Char": [
+																					{
+																						"first": "\n\t",
+																						"rest": []
+																					},
+																					"'\\''"
+																				]
+																			}
+																		}
+																	},
+																	"semi": {
+																		"ws": {
+																			"first": "",
+																			"rest": []
+																		},
+																		"token": ";"
+																	}
+																}
+															}
+														},
+														{
+															"Expression": {
+																"WithoutBlock": {
+																	"expr": {
+																		"attrs": [],
+																		"inner": {
+																			"Literal": {
+																				"Char": [
+																					{
+																						"first": "\n\t",
+																						"rest": []
+																					},
+																					"'\\\"'"
+																				]
+																			}
+																		}
+																	},
+																	"semi": {
+																		"ws": {
+																			"first": "",
+																			"rest": []
+																		},
+																		"token": ";"
+																	}
+																}
+															}
+														},
+														{
+															"Expression": {
+																"WithoutBlock": {
+																	"expr": {
+																		"attrs": [],
+																		"inner": {
+																			"Literal": {
+																				"Char": [
+																					{
+																						"first": "\n\t",
+																						"rest": []
+																					},
+																					"'\\x7f'"
+																				]
+																			}
+																		}
+																	},
+																	"semi": {
+																		"ws": {
+																			"first": "",
+																			"rest": []
+																		},
+																		"token": ";"
+																	}
+																}
+															}
+														},
+														{
+															"Expression": {
+																"WithoutBlock": {
+																	"expr": {
+																		"attrs": [],
+																		"inner": {
+																			"Literal": {
+																				"Char": [
+																					{
+																						"first": "\n\t",
+																						"rest": []
+																					},
+																					"'\\n'"
+																				]
+																			}
+																		}
+																	},
+																	"semi": {
+																		"ws": {
+																			"first": "",
+																			"rest": []
+																		},
+																		"token": ";"
+																	}
+																}
+															}
+														},
+														{
+															"Expression": {
+																"WithoutBlock": {
+																	"expr": {
+																		"attrs": [],
+																		"inner": {
+																			"Literal": {
+																				"Char": [
+																					{
+																						"first": "\n\t",
+																						"rest": []
+																					},
+																					"'\\r'"
+																				]
+																			}
+																		}
+																	},
+																	"semi": {
+																		"ws": {
+																			"first": "",
+																			"rest": []
+																		},
+																		"token": ";"
+																	}
+																}
+															}
+														},
+														{
+															"Expression": {
+																"WithoutBlock": {
+																	"expr": {
+																		"attrs": [],
+																		"inner": {
+																			"Literal": {
+																				"Char": [
+																					{
+																						"first": "\n\t",
+																						"rest": []
+																					},
+																					"'\\t'"
+																				]
+																			}
+																		}
+																	},
+																	"semi": {
+																		"ws": {
+																			"first": "",
+																			"rest": []
+																		},
+																		"token": ";"
+																	}
+																}
+															}
+														},
+														{
+															"Expression": {
+																"WithoutBlock": {
+																	"expr": {
+																		"attrs": [],
+																		"inner": {
+																			"Literal": {
+																				"Char": [
+																					{
+																						"first": "\n\t",
+																						"rest": []
+																					},
+																					"'\\0'"
+																				]
+																			}
+																		}
+																	},
+																	"semi": {
+																		"ws": {
+																			"first": "",
+																			"rest": []
+																		},
+																		"token": ";"
+																	}
+																}
+															}
+														},
+														{
+															"Expression": {
+																"WithoutBlock": {
+																	"expr": {
+																		"attrs": [],
+																		"inner": {
+																			"Literal": {
+																				"Char": [
+																					{
+																						"first": "\n\t",
+																						"rest": []
+																					},
+																					"'\\u{0}'"
+																				]
+																			}
+																		}
+																	},
+																	"semi": {
+																		"ws": {
+																			"first": "",
+																			"rest": []
+																		},
+																		"token": ";"
+																	}
+																}
+															}
+														},
+														{
+															"Expression": {
+																"WithoutBlock": {
+																	"expr": {
+																		"attrs": [],
+																		"inner": {
+																			"Literal": {
+																				"Char": [
+																					{
+																						"first": "\n\t",
+																						"rest": []
+																					},
+																					"'\\u{0_}'"
+																				]
+																			}
+																		}
+																	},
+																	"semi": {
+																		"ws": {
+																			"first": "",
+																			"rest": []
+																		},
+																		"token": ";"
+																	}
+																}
+															}
+														},
+														{
+															"Expression": {
+																"WithoutBlock": {
+																	"expr": {
+																		"attrs": [],
+																		"inner": {
+																			"Literal": {
+																				"Char": [
+																					{
+																						"first": "\n\t",
+																						"rest": []
+																					},
+																					"'\\u{0___________1}'"
+																				]
+																			}
+																		}
+																	},
+																	"semi": {
+																		"ws": {
+																			"first": "",
+																			"rest": []
+																		},
+																		"token": ";"
+																	}
+																}
+															}
+														},
+														{
+															"Expression": {
+																"WithoutBlock": {
+																	"expr": {
+																		"attrs": [],
+																		"inner": {
+																			"Literal": {
+																				"Char": [
+																					{
+																						"first": "\n\t",
+																						"rest": []
+																					},
+																					"'\\u{12345}'"
+																				]
+																			}
+																		}
+																	},
+																	"semi": {
+																		"ws": {
+																			"first": "",
+																			"rest": []
+																		},
+																		"token": ";"
+																	}
+																}
+															}
+														},
+														{
+															"Expression": {
+																"WithoutBlock": {
+																	"expr": {
+																		"attrs": [],
+																		"inner": {
+																			"Literal": {
+																				"Char": [
+																					{
+																						"first": "\n\t",
+																						"rest": []
+																					},
+																					"'\\u{1__2__3__4__5__6__}'"
+																				]
+																			}
+																		}
+																	},
+																	"semi": {
+																		"ws": {
+																			"first": "",
+																			"rest": []
+																		},
+																		"token": ";"
+																	}
+																}
+															}
+														}
+													]
 												},
-												{
-													"Expression": {
-														"WithoutBlock": {
-															"expr": {
-																"attrs": [],
-																"inner": {
-																	"Literal": {
-																		"Char": [
-																			{
-																				"first": "\n\t",
-																				"rest": []
-																			},
-																			"'\\''"
-																		]
-																	}
-																}
-															},
-															"semi": {
-																"ws": {
-																	"first": "",
-																	"rest": []
-																},
-																"token": ";"
-															}
-														}
-													}
-												},
-												{
-													"Expression": {
-														"WithoutBlock": {
-															"expr": {
-																"attrs": [],
-																"inner": {
-																	"Literal": {
-																		"Char": [
-																			{
-																				"first": "\n\t",
-																				"rest": []
-																			},
-																			"'\\\"'"
-																		]
-																	}
-																}
-															},
-															"semi": {
-																"ws": {
-																	"first": "",
-																	"rest": []
-																},
-																"token": ";"
-															}
-														}
-													}
-												},
-												{
-													"Expression": {
-														"WithoutBlock": {
-															"expr": {
-																"attrs": [],
-																"inner": {
-																	"Literal": {
-																		"Char": [
-																			{
-																				"first": "\n\t",
-																				"rest": []
-																			},
-																			"'\\x7f'"
-																		]
-																	}
-																}
-															},
-															"semi": {
-																"ws": {
-																	"first": "",
-																	"rest": []
-																},
-																"token": ";"
-															}
-														}
-													}
-												},
-												{
-													"Expression": {
-														"WithoutBlock": {
-															"expr": {
-																"attrs": [],
-																"inner": {
-																	"Literal": {
-																		"Char": [
-																			{
-																				"first": "\n\t",
-																				"rest": []
-																			},
-																			"'\\n'"
-																		]
-																	}
-																}
-															},
-															"semi": {
-																"ws": {
-																	"first": "",
-																	"rest": []
-																},
-																"token": ";"
-															}
-														}
-													}
-												},
-												{
-													"Expression": {
-														"WithoutBlock": {
-															"expr": {
-																"attrs": [],
-																"inner": {
-																	"Literal": {
-																		"Char": [
-																			{
-																				"first": "\n\t",
-																				"rest": []
-																			},
-																			"'\\r'"
-																		]
-																	}
-																}
-															},
-															"semi": {
-																"ws": {
-																	"first": "",
-																	"rest": []
-																},
-																"token": ";"
-															}
-														}
-													}
-												},
-												{
-													"Expression": {
-														"WithoutBlock": {
-															"expr": {
-																"attrs": [],
-																"inner": {
-																	"Literal": {
-																		"Char": [
-																			{
-																				"first": "\n\t",
-																				"rest": []
-																			},
-																			"'\\t'"
-																		]
-																	}
-																}
-															},
-															"semi": {
-																"ws": {
-																	"first": "",
-																	"rest": []
-																},
-																"token": ";"
-															}
-														}
-													}
-												},
-												{
-													"Expression": {
-														"WithoutBlock": {
-															"expr": {
-																"attrs": [],
-																"inner": {
-																	"Literal": {
-																		"Char": [
-																			{
-																				"first": "\n\t",
-																				"rest": []
-																			},
-																			"'\\0'"
-																		]
-																	}
-																}
-															},
-															"semi": {
-																"ws": {
-																	"first": "",
-																	"rest": []
-																},
-																"token": ";"
-															}
-														}
-													}
-												},
-												{
-													"Expression": {
-														"WithoutBlock": {
-															"expr": {
-																"attrs": [],
-																"inner": {
-																	"Literal": {
-																		"Char": [
-																			{
-																				"first": "\n\t",
-																				"rest": []
-																			},
-																			"'\\u{0}'"
-																		]
-																	}
-																}
-															},
-															"semi": {
-																"ws": {
-																	"first": "",
-																	"rest": []
-																},
-																"token": ";"
-															}
-														}
-													}
-												},
-												{
-													"Expression": {
-														"WithoutBlock": {
-															"expr": {
-																"attrs": [],
-																"inner": {
-																	"Literal": {
-																		"Char": [
-																			{
-																				"first": "\n\t",
-																				"rest": []
-																			},
-																			"'\\u{0_}'"
-																		]
-																	}
-																}
-															},
-															"semi": {
-																"ws": {
-																	"first": "",
-																	"rest": []
-																},
-																"token": ";"
-															}
-														}
-													}
-												},
-												{
-													"Expression": {
-														"WithoutBlock": {
-															"expr": {
-																"attrs": [],
-																"inner": {
-																	"Literal": {
-																		"Char": [
-																			{
-																				"first": "\n\t",
-																				"rest": []
-																			},
-																			"'\\u{0___________1}'"
-																		]
-																	}
-																}
-															},
-															"semi": {
-																"ws": {
-																	"first": "",
-																	"rest": []
-																},
-																"token": ";"
-															}
-														}
-													}
-												},
-												{
-													"Expression": {
-														"WithoutBlock": {
-															"expr": {
-																"attrs": [],
-																"inner": {
-																	"Literal": {
-																		"Char": [
-																			{
-																				"first": "\n\t",
-																				"rest": []
-																			},
-																			"'\\u{12345}'"
-																		]
-																	}
-																}
-															},
-															"semi": {
-																"ws": {
-																	"first": "",
-																	"rest": []
-																},
-																"token": ";"
-															}
-														}
-													}
-												},
-												{
-													"Expression": {
-														"WithoutBlock": {
-															"expr": {
-																"attrs": [],
-																"inner": {
-																	"Literal": {
-																		"Char": [
-																			{
-																				"first": "\n\t",
-																				"rest": []
-																			},
-																			"'\\u{1__2__3__4__5__6__}'"
-																		]
-																	}
-																}
-															},
-															"semi": {
-																"ws": {
-																	"first": "",
-																	"rest": []
-																},
-																"token": ";"
-															}
-														}
-													}
-												}
-											],
-											"trailing_expr": null
+												"trailing_expr": null
+											}
 										}
 									},
 									"suffix": {
@@ -495,525 +499,529 @@
 										"value": {
 											"attrs": [],
 											"inner": {
-												"stmts": [
-													{
-														"Expression": {
-															"WithoutBlock": {
-																"expr": {
-																	"attrs": [],
-																	"inner": {
-																		"Literal": {
-																			"String": {
-																				"ws": {
-																					"first": "\n\t",
-																					"rest": []
-																				},
-																				"s": "\"\"",
-																				"suffix": null
-																			}
-																		}
-																	}
-																},
-																"semi": {
-																	"ws": {
-																		"first": "",
-																		"rest": []
-																	},
-																	"token": ";"
-																}
-															}
-														}
-													},
-													{
-														"Expression": {
-															"WithoutBlock": {
-																"expr": {
-																	"attrs": [],
-																	"inner": {
-																		"Literal": {
-																			"String": {
-																				"ws": {
-																					"first": "\n\t",
-																					"rest": []
-																				},
-																				"s": "\"\"",
-																				"suffix": [
-																					{
-																						"first": "",
+												"Full": {
+													"stmts": {
+														"first": {
+															"Expression": {
+																"WithoutBlock": {
+																	"expr": {
+																		"attrs": [],
+																		"inner": {
+																			"Literal": {
+																				"String": {
+																					"ws": {
+																						"first": "\n\t",
 																						"rest": []
 																					},
-																					"e"
-																				]
+																					"s": "\"\"",
+																					"suffix": null
+																				}
 																			}
 																		}
-																	}
-																},
-																"semi": {
-																	"ws": {
-																		"first": "",
-																		"rest": []
 																	},
-																	"token": ";"
+																	"semi": {
+																		"ws": {
+																			"first": "",
+																			"rest": []
+																		},
+																		"token": ";"
+																	}
 																}
 															}
-														}
+														},
+														"rest": [
+															{
+																"Expression": {
+																	"WithoutBlock": {
+																		"expr": {
+																			"attrs": [],
+																			"inner": {
+																				"Literal": {
+																					"String": {
+																						"ws": {
+																							"first": "\n\t",
+																							"rest": []
+																						},
+																						"s": "\"\"",
+																						"suffix": [
+																							{
+																								"first": "",
+																								"rest": []
+																							},
+																							"e"
+																						]
+																					}
+																				}
+																			}
+																		},
+																		"semi": {
+																			"ws": {
+																				"first": "",
+																				"rest": []
+																			},
+																			"token": ";"
+																		}
+																	}
+																}
+															},
+															{
+																"Expression": {
+																	"WithoutBlock": {
+																		"expr": {
+																			"attrs": [],
+																			"inner": {
+																				"Literal": {
+																					"String": {
+																						"ws": {
+																							"first": "\n\t",
+																							"rest": []
+																						},
+																						"s": "\"\"",
+																						"suffix": [
+																							{
+																								"first": "",
+																								"rest": []
+																							},
+																							"abc"
+																						]
+																					}
+																				}
+																			}
+																		},
+																		"semi": {
+																			"ws": {
+																				"first": "",
+																				"rest": []
+																			},
+																			"token": ";"
+																		}
+																	}
+																}
+															},
+															{
+																"Expression": {
+																	"WithoutBlock": {
+																		"expr": {
+																			"attrs": [],
+																			"inner": {
+																				"Literal": {
+																					"String": {
+																						"ws": {
+																							"first": "\n\t",
+																							"rest": []
+																						},
+																						"s": "\"a\"",
+																						"suffix": null
+																					}
+																				}
+																			}
+																		},
+																		"semi": {
+																			"ws": {
+																				"first": "",
+																				"rest": []
+																			},
+																			"token": ";"
+																		}
+																	}
+																}
+															},
+															{
+																"Expression": {
+																	"WithoutBlock": {
+																		"expr": {
+																			"attrs": [],
+																			"inner": {
+																				"Literal": {
+																					"String": {
+																						"ws": {
+																							"first": "\n\t",
+																							"rest": []
+																						},
+																						"s": "\"\\'\"",
+																						"suffix": null
+																					}
+																				}
+																			}
+																		},
+																		"semi": {
+																			"ws": {
+																				"first": "",
+																				"rest": []
+																			},
+																			"token": ";"
+																		}
+																	}
+																}
+															},
+															{
+																"Expression": {
+																	"WithoutBlock": {
+																		"expr": {
+																			"attrs": [],
+																			"inner": {
+																				"Literal": {
+																					"String": {
+																						"ws": {
+																							"first": "\n\t",
+																							"rest": []
+																						},
+																						"s": "\"\\\"\"",
+																						"suffix": null
+																					}
+																				}
+																			}
+																		},
+																		"semi": {
+																			"ws": {
+																				"first": "",
+																				"rest": []
+																			},
+																			"token": ";"
+																		}
+																	}
+																}
+															},
+															{
+																"Expression": {
+																	"WithoutBlock": {
+																		"expr": {
+																			"attrs": [],
+																			"inner": {
+																				"Literal": {
+																					"String": {
+																						"ws": {
+																							"first": "\n\t",
+																							"rest": []
+																						},
+																						"s": "\"\\\\\"",
+																						"suffix": null
+																					}
+																				}
+																			}
+																		},
+																		"semi": {
+																			"ws": {
+																				"first": "",
+																				"rest": []
+																			},
+																			"token": ";"
+																		}
+																	}
+																}
+															},
+															{
+																"Expression": {
+																	"WithoutBlock": {
+																		"expr": {
+																			"attrs": [],
+																			"inner": {
+																				"Literal": {
+																					"String": {
+																						"ws": {
+																							"first": "\n\t",
+																							"rest": []
+																						},
+																						"s": "\"\\x7f\"",
+																						"suffix": null
+																					}
+																				}
+																			}
+																		},
+																		"semi": {
+																			"ws": {
+																				"first": "",
+																				"rest": []
+																			},
+																			"token": ";"
+																		}
+																	}
+																}
+															},
+															{
+																"Expression": {
+																	"WithoutBlock": {
+																		"expr": {
+																			"attrs": [],
+																			"inner": {
+																				"Literal": {
+																					"String": {
+																						"ws": {
+																							"first": "\n\t",
+																							"rest": []
+																						},
+																						"s": "\"\\n\"",
+																						"suffix": null
+																					}
+																				}
+																			}
+																		},
+																		"semi": {
+																			"ws": {
+																				"first": "",
+																				"rest": []
+																			},
+																			"token": ";"
+																		}
+																	}
+																}
+															},
+															{
+																"Expression": {
+																	"WithoutBlock": {
+																		"expr": {
+																			"attrs": [],
+																			"inner": {
+																				"Literal": {
+																					"String": {
+																						"ws": {
+																							"first": "\n\t",
+																							"rest": []
+																						},
+																						"s": "\"\\r\"",
+																						"suffix": null
+																					}
+																				}
+																			}
+																		},
+																		"semi": {
+																			"ws": {
+																				"first": "",
+																				"rest": []
+																			},
+																			"token": ";"
+																		}
+																	}
+																}
+															},
+															{
+																"Expression": {
+																	"WithoutBlock": {
+																		"expr": {
+																			"attrs": [],
+																			"inner": {
+																				"Literal": {
+																					"String": {
+																						"ws": {
+																							"first": "\n\t",
+																							"rest": []
+																						},
+																						"s": "\"\\t\"",
+																						"suffix": null
+																					}
+																				}
+																			}
+																		},
+																		"semi": {
+																			"ws": {
+																				"first": "",
+																				"rest": []
+																			},
+																			"token": ";"
+																		}
+																	}
+																}
+															},
+															{
+																"Expression": {
+																	"WithoutBlock": {
+																		"expr": {
+																			"attrs": [],
+																			"inner": {
+																				"Literal": {
+																					"String": {
+																						"ws": {
+																							"first": "\n\t",
+																							"rest": []
+																						},
+																						"s": "\"\\0\"",
+																						"suffix": null
+																					}
+																				}
+																			}
+																		},
+																		"semi": {
+																			"ws": {
+																				"first": "",
+																				"rest": []
+																			},
+																			"token": ";"
+																		}
+																	}
+																}
+															},
+															{
+																"Expression": {
+																	"WithoutBlock": {
+																		"expr": {
+																			"attrs": [],
+																			"inner": {
+																				"Literal": {
+																					"String": {
+																						"ws": {
+																							"first": "\n\t",
+																							"rest": []
+																						},
+																						"s": "\"\\u{0}\"",
+																						"suffix": null
+																					}
+																				}
+																			}
+																		},
+																		"semi": {
+																			"ws": {
+																				"first": "",
+																				"rest": []
+																			},
+																			"token": ";"
+																		}
+																	}
+																}
+															},
+															{
+																"Expression": {
+																	"WithoutBlock": {
+																		"expr": {
+																			"attrs": [],
+																			"inner": {
+																				"Literal": {
+																					"String": {
+																						"ws": {
+																							"first": "\n\t",
+																							"rest": []
+																						},
+																						"s": "\"\\u{0_}\"",
+																						"suffix": null
+																					}
+																				}
+																			}
+																		},
+																		"semi": {
+																			"ws": {
+																				"first": "",
+																				"rest": []
+																			},
+																			"token": ";"
+																		}
+																	}
+																}
+															},
+															{
+																"Expression": {
+																	"WithoutBlock": {
+																		"expr": {
+																			"attrs": [],
+																			"inner": {
+																				"Literal": {
+																					"String": {
+																						"ws": {
+																							"first": "\n\t",
+																							"rest": []
+																						},
+																						"s": "\"\\u{0___________1}\"",
+																						"suffix": null
+																					}
+																				}
+																			}
+																		},
+																		"semi": {
+																			"ws": {
+																				"first": "",
+																				"rest": []
+																			},
+																			"token": ";"
+																		}
+																	}
+																}
+															},
+															{
+																"Expression": {
+																	"WithoutBlock": {
+																		"expr": {
+																			"attrs": [],
+																			"inner": {
+																				"Literal": {
+																					"String": {
+																						"ws": {
+																							"first": "\n\t",
+																							"rest": []
+																						},
+																						"s": "\"\\u{12345}\"",
+																						"suffix": null
+																					}
+																				}
+																			}
+																		},
+																		"semi": {
+																			"ws": {
+																				"first": "",
+																				"rest": []
+																			},
+																			"token": ";"
+																		}
+																	}
+																}
+															},
+															{
+																"Expression": {
+																	"WithoutBlock": {
+																		"expr": {
+																			"attrs": [],
+																			"inner": {
+																				"Literal": {
+																					"String": {
+																						"ws": {
+																							"first": "\n\t",
+																							"rest": []
+																						},
+																						"s": "\"\\u{1__2__3__4__5__6__}\"",
+																						"suffix": null
+																					}
+																				}
+																			}
+																		},
+																		"semi": {
+																			"ws": {
+																				"first": "",
+																				"rest": []
+																			},
+																			"token": ";"
+																		}
+																	}
+																}
+															},
+															{
+																"Expression": {
+																	"WithoutBlock": {
+																		"expr": {
+																			"attrs": [],
+																			"inner": {
+																				"Literal": {
+																					"String": {
+																						"ws": {
+																							"first": "\n\t",
+																							"rest": []
+																						},
+																						"s": "\"\\\n\"",
+																						"suffix": null
+																					}
+																				}
+																			}
+																		},
+																		"semi": {
+																			"ws": {
+																				"first": "",
+																				"rest": []
+																			},
+																			"token": ";"
+																		}
+																	}
+																}
+															}
+														]
 													},
-													{
-														"Expression": {
-															"WithoutBlock": {
-																"expr": {
-																	"attrs": [],
-																	"inner": {
-																		"Literal": {
-																			"String": {
-																				"ws": {
-																					"first": "\n\t",
-																					"rest": []
-																				},
-																				"s": "\"\"",
-																				"suffix": [
-																					{
-																						"first": "",
-																						"rest": []
-																					},
-																					"abc"
-																				]
-																			}
-																		}
-																	}
-																},
-																"semi": {
-																	"ws": {
-																		"first": "",
-																		"rest": []
-																	},
-																	"token": ";"
-																}
-															}
-														}
-													},
-													{
-														"Expression": {
-															"WithoutBlock": {
-																"expr": {
-																	"attrs": [],
-																	"inner": {
-																		"Literal": {
-																			"String": {
-																				"ws": {
-																					"first": "\n\t",
-																					"rest": []
-																				},
-																				"s": "\"a\"",
-																				"suffix": null
-																			}
-																		}
-																	}
-																},
-																"semi": {
-																	"ws": {
-																		"first": "",
-																		"rest": []
-																	},
-																	"token": ";"
-																}
-															}
-														}
-													},
-													{
-														"Expression": {
-															"WithoutBlock": {
-																"expr": {
-																	"attrs": [],
-																	"inner": {
-																		"Literal": {
-																			"String": {
-																				"ws": {
-																					"first": "\n\t",
-																					"rest": []
-																				},
-																				"s": "\"\\'\"",
-																				"suffix": null
-																			}
-																		}
-																	}
-																},
-																"semi": {
-																	"ws": {
-																		"first": "",
-																		"rest": []
-																	},
-																	"token": ";"
-																}
-															}
-														}
-													},
-													{
-														"Expression": {
-															"WithoutBlock": {
-																"expr": {
-																	"attrs": [],
-																	"inner": {
-																		"Literal": {
-																			"String": {
-																				"ws": {
-																					"first": "\n\t",
-																					"rest": []
-																				},
-																				"s": "\"\\\"\"",
-																				"suffix": null
-																			}
-																		}
-																	}
-																},
-																"semi": {
-																	"ws": {
-																		"first": "",
-																		"rest": []
-																	},
-																	"token": ";"
-																}
-															}
-														}
-													},
-													{
-														"Expression": {
-															"WithoutBlock": {
-																"expr": {
-																	"attrs": [],
-																	"inner": {
-																		"Literal": {
-																			"String": {
-																				"ws": {
-																					"first": "\n\t",
-																					"rest": []
-																				},
-																				"s": "\"\\\\\"",
-																				"suffix": null
-																			}
-																		}
-																	}
-																},
-																"semi": {
-																	"ws": {
-																		"first": "",
-																		"rest": []
-																	},
-																	"token": ";"
-																}
-															}
-														}
-													},
-													{
-														"Expression": {
-															"WithoutBlock": {
-																"expr": {
-																	"attrs": [],
-																	"inner": {
-																		"Literal": {
-																			"String": {
-																				"ws": {
-																					"first": "\n\t",
-																					"rest": []
-																				},
-																				"s": "\"\\x7f\"",
-																				"suffix": null
-																			}
-																		}
-																	}
-																},
-																"semi": {
-																	"ws": {
-																		"first": "",
-																		"rest": []
-																	},
-																	"token": ";"
-																}
-															}
-														}
-													},
-													{
-														"Expression": {
-															"WithoutBlock": {
-																"expr": {
-																	"attrs": [],
-																	"inner": {
-																		"Literal": {
-																			"String": {
-																				"ws": {
-																					"first": "\n\t",
-																					"rest": []
-																				},
-																				"s": "\"\\n\"",
-																				"suffix": null
-																			}
-																		}
-																	}
-																},
-																"semi": {
-																	"ws": {
-																		"first": "",
-																		"rest": []
-																	},
-																	"token": ";"
-																}
-															}
-														}
-													},
-													{
-														"Expression": {
-															"WithoutBlock": {
-																"expr": {
-																	"attrs": [],
-																	"inner": {
-																		"Literal": {
-																			"String": {
-																				"ws": {
-																					"first": "\n\t",
-																					"rest": []
-																				},
-																				"s": "\"\\r\"",
-																				"suffix": null
-																			}
-																		}
-																	}
-																},
-																"semi": {
-																	"ws": {
-																		"first": "",
-																		"rest": []
-																	},
-																	"token": ";"
-																}
-															}
-														}
-													},
-													{
-														"Expression": {
-															"WithoutBlock": {
-																"expr": {
-																	"attrs": [],
-																	"inner": {
-																		"Literal": {
-																			"String": {
-																				"ws": {
-																					"first": "\n\t",
-																					"rest": []
-																				},
-																				"s": "\"\\t\"",
-																				"suffix": null
-																			}
-																		}
-																	}
-																},
-																"semi": {
-																	"ws": {
-																		"first": "",
-																		"rest": []
-																	},
-																	"token": ";"
-																}
-															}
-														}
-													},
-													{
-														"Expression": {
-															"WithoutBlock": {
-																"expr": {
-																	"attrs": [],
-																	"inner": {
-																		"Literal": {
-																			"String": {
-																				"ws": {
-																					"first": "\n\t",
-																					"rest": []
-																				},
-																				"s": "\"\\0\"",
-																				"suffix": null
-																			}
-																		}
-																	}
-																},
-																"semi": {
-																	"ws": {
-																		"first": "",
-																		"rest": []
-																	},
-																	"token": ";"
-																}
-															}
-														}
-													},
-													{
-														"Expression": {
-															"WithoutBlock": {
-																"expr": {
-																	"attrs": [],
-																	"inner": {
-																		"Literal": {
-																			"String": {
-																				"ws": {
-																					"first": "\n\t",
-																					"rest": []
-																				},
-																				"s": "\"\\u{0}\"",
-																				"suffix": null
-																			}
-																		}
-																	}
-																},
-																"semi": {
-																	"ws": {
-																		"first": "",
-																		"rest": []
-																	},
-																	"token": ";"
-																}
-															}
-														}
-													},
-													{
-														"Expression": {
-															"WithoutBlock": {
-																"expr": {
-																	"attrs": [],
-																	"inner": {
-																		"Literal": {
-																			"String": {
-																				"ws": {
-																					"first": "\n\t",
-																					"rest": []
-																				},
-																				"s": "\"\\u{0_}\"",
-																				"suffix": null
-																			}
-																		}
-																	}
-																},
-																"semi": {
-																	"ws": {
-																		"first": "",
-																		"rest": []
-																	},
-																	"token": ";"
-																}
-															}
-														}
-													},
-													{
-														"Expression": {
-															"WithoutBlock": {
-																"expr": {
-																	"attrs": [],
-																	"inner": {
-																		"Literal": {
-																			"String": {
-																				"ws": {
-																					"first": "\n\t",
-																					"rest": []
-																				},
-																				"s": "\"\\u{0___________1}\"",
-																				"suffix": null
-																			}
-																		}
-																	}
-																},
-																"semi": {
-																	"ws": {
-																		"first": "",
-																		"rest": []
-																	},
-																	"token": ";"
-																}
-															}
-														}
-													},
-													{
-														"Expression": {
-															"WithoutBlock": {
-																"expr": {
-																	"attrs": [],
-																	"inner": {
-																		"Literal": {
-																			"String": {
-																				"ws": {
-																					"first": "\n\t",
-																					"rest": []
-																				},
-																				"s": "\"\\u{12345}\"",
-																				"suffix": null
-																			}
-																		}
-																	}
-																},
-																"semi": {
-																	"ws": {
-																		"first": "",
-																		"rest": []
-																	},
-																	"token": ";"
-																}
-															}
-														}
-													},
-													{
-														"Expression": {
-															"WithoutBlock": {
-																"expr": {
-																	"attrs": [],
-																	"inner": {
-																		"Literal": {
-																			"String": {
-																				"ws": {
-																					"first": "\n\t",
-																					"rest": []
-																				},
-																				"s": "\"\\u{1__2__3__4__5__6__}\"",
-																				"suffix": null
-																			}
-																		}
-																	}
-																},
-																"semi": {
-																	"ws": {
-																		"first": "",
-																		"rest": []
-																	},
-																	"token": ";"
-																}
-															}
-														}
-													},
-													{
-														"Expression": {
-															"WithoutBlock": {
-																"expr": {
-																	"attrs": [],
-																	"inner": {
-																		"Literal": {
-																			"String": {
-																				"ws": {
-																					"first": "\n\t",
-																					"rest": []
-																				},
-																				"s": "\"\\\n\"",
-																				"suffix": null
-																			}
-																		}
-																	}
-																},
-																"semi": {
-																	"ws": {
-																		"first": "",
-																		"rest": []
-																	},
-																	"token": ";"
-																}
-															}
-														}
-													}
-												],
-												"trailing_expr": null
+													"trailing_expr": null
+												}
 											}
 										},
 										"suffix": {
@@ -1091,251 +1099,255 @@
 										"value": {
 											"attrs": [],
 											"inner": {
-												"stmts": [
-													{
-														"Expression": {
-															"WithoutBlock": {
-																"expr": {
-																	"attrs": [],
-																	"inner": {
-																		"Literal": {
-																			"RawString": {
-																				"ws": {
-																					"first": "\n\t",
-																					"rest": []
-																				},
-																				"s": "r\"\"",
-																				"suffix": null
-																			}
-																		}
-																	}
-																},
-																"semi": {
-																	"ws": {
-																		"first": "",
-																		"rest": []
-																	},
-																	"token": ";"
-																}
-															}
-														}
-													},
-													{
-														"Expression": {
-															"WithoutBlock": {
-																"expr": {
-																	"attrs": [],
-																	"inner": {
-																		"Literal": {
-																			"RawString": {
-																				"ws": {
-																					"first": "\n\t",
-																					"rest": []
-																				},
-																				"s": "r\"\"",
-																				"suffix": [
-																					{
-																						"first": "",
+												"Full": {
+													"stmts": {
+														"first": {
+															"Expression": {
+																"WithoutBlock": {
+																	"expr": {
+																		"attrs": [],
+																		"inner": {
+																			"Literal": {
+																				"RawString": {
+																					"ws": {
+																						"first": "\n\t",
 																						"rest": []
 																					},
-																					"e"
-																				]
+																					"s": "r\"\"",
+																					"suffix": null
+																				}
 																			}
 																		}
-																	}
-																},
-																"semi": {
-																	"ws": {
-																		"first": "",
-																		"rest": []
 																	},
-																	"token": ";"
+																	"semi": {
+																		"ws": {
+																			"first": "",
+																			"rest": []
+																		},
+																		"token": ";"
+																	}
 																}
 															}
-														}
+														},
+														"rest": [
+															{
+																"Expression": {
+																	"WithoutBlock": {
+																		"expr": {
+																			"attrs": [],
+																			"inner": {
+																				"Literal": {
+																					"RawString": {
+																						"ws": {
+																							"first": "\n\t",
+																							"rest": []
+																						},
+																						"s": "r\"\"",
+																						"suffix": [
+																							{
+																								"first": "",
+																								"rest": []
+																							},
+																							"e"
+																						]
+																					}
+																				}
+																			}
+																		},
+																		"semi": {
+																			"ws": {
+																				"first": "",
+																				"rest": []
+																			},
+																			"token": ";"
+																		}
+																	}
+																}
+															},
+															{
+																"Expression": {
+																	"WithoutBlock": {
+																		"expr": {
+																			"attrs": [],
+																			"inner": {
+																				"Literal": {
+																					"RawString": {
+																						"ws": {
+																							"first": "\n\t",
+																							"rest": []
+																						},
+																						"s": "r\"\"",
+																						"suffix": [
+																							{
+																								"first": "",
+																								"rest": []
+																							},
+																							"abc"
+																						]
+																					}
+																				}
+																			}
+																		},
+																		"semi": {
+																			"ws": {
+																				"first": "",
+																				"rest": []
+																			},
+																			"token": ";"
+																		}
+																	}
+																}
+															},
+															{
+																"Expression": {
+																	"WithoutBlock": {
+																		"expr": {
+																			"attrs": [],
+																			"inner": {
+																				"Literal": {
+																					"RawString": {
+																						"ws": {
+																							"first": "\n\t",
+																							"rest": []
+																						},
+																						"s": "r\"a\"",
+																						"suffix": null
+																					}
+																				}
+																			}
+																		},
+																		"semi": {
+																			"ws": {
+																				"first": "",
+																				"rest": []
+																			},
+																			"token": ";"
+																		}
+																	}
+																}
+															},
+															{
+																"Expression": {
+																	"WithoutBlock": {
+																		"expr": {
+																			"attrs": [],
+																			"inner": {
+																				"Literal": {
+																					"RawString": {
+																						"ws": {
+																							"first": "\n\t",
+																							"rest": []
+																						},
+																						"s": "r#\"\"#",
+																						"suffix": null
+																					}
+																				}
+																			}
+																		},
+																		"semi": {
+																			"ws": {
+																				"first": "",
+																				"rest": []
+																			},
+																			"token": ";"
+																		}
+																	}
+																}
+															},
+															{
+																"Expression": {
+																	"WithoutBlock": {
+																		"expr": {
+																			"attrs": [],
+																			"inner": {
+																				"Literal": {
+																					"RawString": {
+																						"ws": {
+																							"first": "\n\t",
+																							"rest": []
+																						},
+																						"s": "r#\"\"#",
+																						"suffix": [
+																							{
+																								"first": "",
+																								"rest": []
+																							},
+																							"a"
+																						]
+																					}
+																				}
+																			}
+																		},
+																		"semi": {
+																			"ws": {
+																				"first": "",
+																				"rest": []
+																			},
+																			"token": ";"
+																		}
+																	}
+																}
+															},
+															{
+																"Expression": {
+																	"WithoutBlock": {
+																		"expr": {
+																			"attrs": [],
+																			"inner": {
+																				"Literal": {
+																					"RawString": {
+																						"ws": {
+																							"first": "\n\t",
+																							"rest": []
+																						},
+																						"s": "r#\"\"\"#",
+																						"suffix": null
+																					}
+																				}
+																			}
+																		},
+																		"semi": {
+																			"ws": {
+																				"first": "",
+																				"rest": []
+																			},
+																			"token": ";"
+																		}
+																	}
+																}
+															},
+															{
+																"Expression": {
+																	"WithoutBlock": {
+																		"expr": {
+																			"attrs": [],
+																			"inner": {
+																				"Literal": {
+																					"RawString": {
+																						"ws": {
+																							"first": "\n\t",
+																							"rest": []
+																						},
+																						"s": "r##\"\"#\"##",
+																						"suffix": null
+																					}
+																				}
+																			}
+																		},
+																		"semi": {
+																			"ws": {
+																				"first": "",
+																				"rest": []
+																			},
+																			"token": ";"
+																		}
+																	}
+																}
+															}
+														]
 													},
-													{
-														"Expression": {
-															"WithoutBlock": {
-																"expr": {
-																	"attrs": [],
-																	"inner": {
-																		"Literal": {
-																			"RawString": {
-																				"ws": {
-																					"first": "\n\t",
-																					"rest": []
-																				},
-																				"s": "r\"\"",
-																				"suffix": [
-																					{
-																						"first": "",
-																						"rest": []
-																					},
-																					"abc"
-																				]
-																			}
-																		}
-																	}
-																},
-																"semi": {
-																	"ws": {
-																		"first": "",
-																		"rest": []
-																	},
-																	"token": ";"
-																}
-															}
-														}
-													},
-													{
-														"Expression": {
-															"WithoutBlock": {
-																"expr": {
-																	"attrs": [],
-																	"inner": {
-																		"Literal": {
-																			"RawString": {
-																				"ws": {
-																					"first": "\n\t",
-																					"rest": []
-																				},
-																				"s": "r\"a\"",
-																				"suffix": null
-																			}
-																		}
-																	}
-																},
-																"semi": {
-																	"ws": {
-																		"first": "",
-																		"rest": []
-																	},
-																	"token": ";"
-																}
-															}
-														}
-													},
-													{
-														"Expression": {
-															"WithoutBlock": {
-																"expr": {
-																	"attrs": [],
-																	"inner": {
-																		"Literal": {
-																			"RawString": {
-																				"ws": {
-																					"first": "\n\t",
-																					"rest": []
-																				},
-																				"s": "r#\"\"#",
-																				"suffix": null
-																			}
-																		}
-																	}
-																},
-																"semi": {
-																	"ws": {
-																		"first": "",
-																		"rest": []
-																	},
-																	"token": ";"
-																}
-															}
-														}
-													},
-													{
-														"Expression": {
-															"WithoutBlock": {
-																"expr": {
-																	"attrs": [],
-																	"inner": {
-																		"Literal": {
-																			"RawString": {
-																				"ws": {
-																					"first": "\n\t",
-																					"rest": []
-																				},
-																				"s": "r#\"\"#",
-																				"suffix": [
-																					{
-																						"first": "",
-																						"rest": []
-																					},
-																					"a"
-																				]
-																			}
-																		}
-																	}
-																},
-																"semi": {
-																	"ws": {
-																		"first": "",
-																		"rest": []
-																	},
-																	"token": ";"
-																}
-															}
-														}
-													},
-													{
-														"Expression": {
-															"WithoutBlock": {
-																"expr": {
-																	"attrs": [],
-																	"inner": {
-																		"Literal": {
-																			"RawString": {
-																				"ws": {
-																					"first": "\n\t",
-																					"rest": []
-																				},
-																				"s": "r#\"\"\"#",
-																				"suffix": null
-																			}
-																		}
-																	}
-																},
-																"semi": {
-																	"ws": {
-																		"first": "",
-																		"rest": []
-																	},
-																	"token": ";"
-																}
-															}
-														}
-													},
-													{
-														"Expression": {
-															"WithoutBlock": {
-																"expr": {
-																	"attrs": [],
-																	"inner": {
-																		"Literal": {
-																			"RawString": {
-																				"ws": {
-																					"first": "\n\t",
-																					"rest": []
-																				},
-																				"s": "r##\"\"#\"##",
-																				"suffix": null
-																			}
-																		}
-																	}
-																},
-																"semi": {
-																	"ws": {
-																		"first": "",
-																		"rest": []
-																	},
-																	"token": ";"
-																}
-															}
-														}
-													}
-												],
-												"trailing_expr": null
+													"trailing_expr": null
+												}
 											}
 										},
 										"suffix": {
@@ -1413,252 +1425,256 @@
 										"value": {
 											"attrs": [],
 											"inner": {
-												"stmts": [
-													{
-														"Expression": {
-															"WithoutBlock": {
-																"expr": {
-																	"attrs": [],
-																	"inner": {
-																		"Literal": {
-																			"Byte": [
-																				{
-																					"first": "\n\t",
-																					"rest": []
-																				},
-																				"b'a'"
-																			]
+												"Full": {
+													"stmts": {
+														"first": {
+															"Expression": {
+																"WithoutBlock": {
+																	"expr": {
+																		"attrs": [],
+																		"inner": {
+																			"Literal": {
+																				"Byte": [
+																					{
+																						"first": "\n\t",
+																						"rest": []
+																					},
+																					"b'a'"
+																				]
+																			}
 																		}
-																	}
-																},
-																"semi": {
-																	"ws": {
-																		"first": "",
-																		"rest": []
 																	},
-																	"token": ";"
+																	"semi": {
+																		"ws": {
+																			"first": "",
+																			"rest": []
+																		},
+																		"token": ";"
+																	}
 																}
 															}
-														}
+														},
+														"rest": [
+															{
+																"Expression": {
+																	"WithoutBlock": {
+																		"expr": {
+																			"attrs": [],
+																			"inner": {
+																				"Literal": {
+																					"Byte": [
+																						{
+																							"first": "\n\t",
+																							"rest": []
+																						},
+																						"b'\\''"
+																					]
+																				}
+																			}
+																		},
+																		"semi": {
+																			"ws": {
+																				"first": "",
+																				"rest": []
+																			},
+																			"token": ";"
+																		}
+																	}
+																}
+															},
+															{
+																"Expression": {
+																	"WithoutBlock": {
+																		"expr": {
+																			"attrs": [],
+																			"inner": {
+																				"Literal": {
+																					"Byte": [
+																						{
+																							"first": "\n\t",
+																							"rest": []
+																						},
+																						"b'\\\"'"
+																					]
+																				}
+																			}
+																		},
+																		"semi": {
+																			"ws": {
+																				"first": "",
+																				"rest": []
+																			},
+																			"token": ";"
+																		}
+																	}
+																}
+															},
+															{
+																"Expression": {
+																	"WithoutBlock": {
+																		"expr": {
+																			"attrs": [],
+																			"inner": {
+																				"Literal": {
+																					"Byte": [
+																						{
+																							"first": "\n\t",
+																							"rest": []
+																						},
+																						"b'\\x7f'"
+																					]
+																				}
+																			}
+																		},
+																		"semi": {
+																			"ws": {
+																				"first": "",
+																				"rest": []
+																			},
+																			"token": ";"
+																		}
+																	}
+																}
+															},
+															{
+																"Expression": {
+																	"WithoutBlock": {
+																		"expr": {
+																			"attrs": [],
+																			"inner": {
+																				"Literal": {
+																					"Byte": [
+																						{
+																							"first": "\n\t",
+																							"rest": []
+																						},
+																						"b'\\xff'"
+																					]
+																				}
+																			}
+																		},
+																		"semi": {
+																			"ws": {
+																				"first": "",
+																				"rest": []
+																			},
+																			"token": ";"
+																		}
+																	}
+																}
+															},
+															{
+																"Expression": {
+																	"WithoutBlock": {
+																		"expr": {
+																			"attrs": [],
+																			"inner": {
+																				"Literal": {
+																					"Byte": [
+																						{
+																							"first": "\n\t",
+																							"rest": []
+																						},
+																						"b'\\n'"
+																					]
+																				}
+																			}
+																		},
+																		"semi": {
+																			"ws": {
+																				"first": "",
+																				"rest": []
+																			},
+																			"token": ";"
+																		}
+																	}
+																}
+															},
+															{
+																"Expression": {
+																	"WithoutBlock": {
+																		"expr": {
+																			"attrs": [],
+																			"inner": {
+																				"Literal": {
+																					"Byte": [
+																						{
+																							"first": "\n\t",
+																							"rest": []
+																						},
+																						"b'\\r'"
+																					]
+																				}
+																			}
+																		},
+																		"semi": {
+																			"ws": {
+																				"first": "",
+																				"rest": []
+																			},
+																			"token": ";"
+																		}
+																	}
+																}
+															},
+															{
+																"Expression": {
+																	"WithoutBlock": {
+																		"expr": {
+																			"attrs": [],
+																			"inner": {
+																				"Literal": {
+																					"Byte": [
+																						{
+																							"first": "\n\t",
+																							"rest": []
+																						},
+																						"b'\\t'"
+																					]
+																				}
+																			}
+																		},
+																		"semi": {
+																			"ws": {
+																				"first": "",
+																				"rest": []
+																			},
+																			"token": ";"
+																		}
+																	}
+																}
+															},
+															{
+																"Expression": {
+																	"WithoutBlock": {
+																		"expr": {
+																			"attrs": [],
+																			"inner": {
+																				"Literal": {
+																					"Byte": [
+																						{
+																							"first": "\n\t",
+																							"rest": []
+																						},
+																						"b'\\0'"
+																					]
+																				}
+																			}
+																		},
+																		"semi": {
+																			"ws": {
+																				"first": "",
+																				"rest": []
+																			},
+																			"token": ";"
+																		}
+																	}
+																}
+															}
+														]
 													},
-													{
-														"Expression": {
-															"WithoutBlock": {
-																"expr": {
-																	"attrs": [],
-																	"inner": {
-																		"Literal": {
-																			"Byte": [
-																				{
-																					"first": "\n\t",
-																					"rest": []
-																				},
-																				"b'\\''"
-																			]
-																		}
-																	}
-																},
-																"semi": {
-																	"ws": {
-																		"first": "",
-																		"rest": []
-																	},
-																	"token": ";"
-																}
-															}
-														}
-													},
-													{
-														"Expression": {
-															"WithoutBlock": {
-																"expr": {
-																	"attrs": [],
-																	"inner": {
-																		"Literal": {
-																			"Byte": [
-																				{
-																					"first": "\n\t",
-																					"rest": []
-																				},
-																				"b'\\\"'"
-																			]
-																		}
-																	}
-																},
-																"semi": {
-																	"ws": {
-																		"first": "",
-																		"rest": []
-																	},
-																	"token": ";"
-																}
-															}
-														}
-													},
-													{
-														"Expression": {
-															"WithoutBlock": {
-																"expr": {
-																	"attrs": [],
-																	"inner": {
-																		"Literal": {
-																			"Byte": [
-																				{
-																					"first": "\n\t",
-																					"rest": []
-																				},
-																				"b'\\x7f'"
-																			]
-																		}
-																	}
-																},
-																"semi": {
-																	"ws": {
-																		"first": "",
-																		"rest": []
-																	},
-																	"token": ";"
-																}
-															}
-														}
-													},
-													{
-														"Expression": {
-															"WithoutBlock": {
-																"expr": {
-																	"attrs": [],
-																	"inner": {
-																		"Literal": {
-																			"Byte": [
-																				{
-																					"first": "\n\t",
-																					"rest": []
-																				},
-																				"b'\\xff'"
-																			]
-																		}
-																	}
-																},
-																"semi": {
-																	"ws": {
-																		"first": "",
-																		"rest": []
-																	},
-																	"token": ";"
-																}
-															}
-														}
-													},
-													{
-														"Expression": {
-															"WithoutBlock": {
-																"expr": {
-																	"attrs": [],
-																	"inner": {
-																		"Literal": {
-																			"Byte": [
-																				{
-																					"first": "\n\t",
-																					"rest": []
-																				},
-																				"b'\\n'"
-																			]
-																		}
-																	}
-																},
-																"semi": {
-																	"ws": {
-																		"first": "",
-																		"rest": []
-																	},
-																	"token": ";"
-																}
-															}
-														}
-													},
-													{
-														"Expression": {
-															"WithoutBlock": {
-																"expr": {
-																	"attrs": [],
-																	"inner": {
-																		"Literal": {
-																			"Byte": [
-																				{
-																					"first": "\n\t",
-																					"rest": []
-																				},
-																				"b'\\r'"
-																			]
-																		}
-																	}
-																},
-																"semi": {
-																	"ws": {
-																		"first": "",
-																		"rest": []
-																	},
-																	"token": ";"
-																}
-															}
-														}
-													},
-													{
-														"Expression": {
-															"WithoutBlock": {
-																"expr": {
-																	"attrs": [],
-																	"inner": {
-																		"Literal": {
-																			"Byte": [
-																				{
-																					"first": "\n\t",
-																					"rest": []
-																				},
-																				"b'\\t'"
-																			]
-																		}
-																	}
-																},
-																"semi": {
-																	"ws": {
-																		"first": "",
-																		"rest": []
-																	},
-																	"token": ";"
-																}
-															}
-														}
-													},
-													{
-														"Expression": {
-															"WithoutBlock": {
-																"expr": {
-																	"attrs": [],
-																	"inner": {
-																		"Literal": {
-																			"Byte": [
-																				{
-																					"first": "\n\t",
-																					"rest": []
-																				},
-																				"b'\\0'"
-																			]
-																		}
-																	}
-																},
-																"semi": {
-																	"ws": {
-																		"first": "",
-																		"rest": []
-																	},
-																	"token": ";"
-																}
-															}
-														}
-													}
-												],
-												"trailing_expr": null
+													"trailing_expr": null
+												}
 											}
 										},
 										"suffix": {
@@ -1736,413 +1752,417 @@
 										"value": {
 											"attrs": [],
 											"inner": {
-												"stmts": [
-													{
-														"Expression": {
-															"WithoutBlock": {
-																"expr": {
-																	"attrs": [],
-																	"inner": {
-																		"Literal": {
-																			"ByteString": {
-																				"ws": {
-																					"first": "\n\t",
-																					"rest": []
-																				},
-																				"s": "b\"\"",
-																				"suffix": null
-																			}
-																		}
-																	}
-																},
-																"semi": {
-																	"ws": {
-																		"first": "",
-																		"rest": []
-																	},
-																	"token": ";"
-																}
-															}
-														}
-													},
-													{
-														"Expression": {
-															"WithoutBlock": {
-																"expr": {
-																	"attrs": [],
-																	"inner": {
-																		"Literal": {
-																			"ByteString": {
-																				"ws": {
-																					"first": "\n\t",
-																					"rest": []
-																				},
-																				"s": "b\"\"",
-																				"suffix": [
-																					{
-																						"first": "",
+												"Full": {
+													"stmts": {
+														"first": {
+															"Expression": {
+																"WithoutBlock": {
+																	"expr": {
+																		"attrs": [],
+																		"inner": {
+																			"Literal": {
+																				"ByteString": {
+																					"ws": {
+																						"first": "\n\t",
 																						"rest": []
 																					},
-																					"e"
-																				]
+																					"s": "b\"\"",
+																					"suffix": null
+																				}
 																			}
 																		}
-																	}
-																},
-																"semi": {
-																	"ws": {
-																		"first": "",
-																		"rest": []
 																	},
-																	"token": ";"
+																	"semi": {
+																		"ws": {
+																			"first": "",
+																			"rest": []
+																		},
+																		"token": ";"
+																	}
 																}
 															}
-														}
+														},
+														"rest": [
+															{
+																"Expression": {
+																	"WithoutBlock": {
+																		"expr": {
+																			"attrs": [],
+																			"inner": {
+																				"Literal": {
+																					"ByteString": {
+																						"ws": {
+																							"first": "\n\t",
+																							"rest": []
+																						},
+																						"s": "b\"\"",
+																						"suffix": [
+																							{
+																								"first": "",
+																								"rest": []
+																							},
+																							"e"
+																						]
+																					}
+																				}
+																			}
+																		},
+																		"semi": {
+																			"ws": {
+																				"first": "",
+																				"rest": []
+																			},
+																			"token": ";"
+																		}
+																	}
+																}
+															},
+															{
+																"Expression": {
+																	"WithoutBlock": {
+																		"expr": {
+																			"attrs": [],
+																			"inner": {
+																				"Literal": {
+																					"ByteString": {
+																						"ws": {
+																							"first": "\n\t",
+																							"rest": []
+																						},
+																						"s": "b\"\"",
+																						"suffix": [
+																							{
+																								"first": "",
+																								"rest": []
+																							},
+																							"abc"
+																						]
+																					}
+																				}
+																			}
+																		},
+																		"semi": {
+																			"ws": {
+																				"first": "",
+																				"rest": []
+																			},
+																			"token": ";"
+																		}
+																	}
+																}
+															},
+															{
+																"Expression": {
+																	"WithoutBlock": {
+																		"expr": {
+																			"attrs": [],
+																			"inner": {
+																				"Literal": {
+																					"ByteString": {
+																						"ws": {
+																							"first": "\n\t",
+																							"rest": []
+																						},
+																						"s": "b\"a\"",
+																						"suffix": null
+																					}
+																				}
+																			}
+																		},
+																		"semi": {
+																			"ws": {
+																				"first": "",
+																				"rest": []
+																			},
+																			"token": ";"
+																		}
+																	}
+																}
+															},
+															{
+																"Expression": {
+																	"WithoutBlock": {
+																		"expr": {
+																			"attrs": [],
+																			"inner": {
+																				"Literal": {
+																					"ByteString": {
+																						"ws": {
+																							"first": "\n\t",
+																							"rest": []
+																						},
+																						"s": "b\"\\'\"",
+																						"suffix": null
+																					}
+																				}
+																			}
+																		},
+																		"semi": {
+																			"ws": {
+																				"first": "",
+																				"rest": []
+																			},
+																			"token": ";"
+																		}
+																	}
+																}
+															},
+															{
+																"Expression": {
+																	"WithoutBlock": {
+																		"expr": {
+																			"attrs": [],
+																			"inner": {
+																				"Literal": {
+																					"ByteString": {
+																						"ws": {
+																							"first": "\n\t",
+																							"rest": []
+																						},
+																						"s": "b\"\\\"\"",
+																						"suffix": null
+																					}
+																				}
+																			}
+																		},
+																		"semi": {
+																			"ws": {
+																				"first": "",
+																				"rest": []
+																			},
+																			"token": ";"
+																		}
+																	}
+																}
+															},
+															{
+																"Expression": {
+																	"WithoutBlock": {
+																		"expr": {
+																			"attrs": [],
+																			"inner": {
+																				"Literal": {
+																					"ByteString": {
+																						"ws": {
+																							"first": "\n\t",
+																							"rest": []
+																						},
+																						"s": "b\"\\\\\"",
+																						"suffix": null
+																					}
+																				}
+																			}
+																		},
+																		"semi": {
+																			"ws": {
+																				"first": "",
+																				"rest": []
+																			},
+																			"token": ";"
+																		}
+																	}
+																}
+															},
+															{
+																"Expression": {
+																	"WithoutBlock": {
+																		"expr": {
+																			"attrs": [],
+																			"inner": {
+																				"Literal": {
+																					"ByteString": {
+																						"ws": {
+																							"first": "\n\t",
+																							"rest": []
+																						},
+																						"s": "b\"\\x7f\"",
+																						"suffix": null
+																					}
+																				}
+																			}
+																		},
+																		"semi": {
+																			"ws": {
+																				"first": "",
+																				"rest": []
+																			},
+																			"token": ";"
+																		}
+																	}
+																}
+															},
+															{
+																"Expression": {
+																	"WithoutBlock": {
+																		"expr": {
+																			"attrs": [],
+																			"inner": {
+																				"Literal": {
+																					"ByteString": {
+																						"ws": {
+																							"first": "\n\t",
+																							"rest": []
+																						},
+																						"s": "b\"\\xff\"",
+																						"suffix": null
+																					}
+																				}
+																			}
+																		},
+																		"semi": {
+																			"ws": {
+																				"first": "",
+																				"rest": []
+																			},
+																			"token": ";"
+																		}
+																	}
+																}
+															},
+															{
+																"Expression": {
+																	"WithoutBlock": {
+																		"expr": {
+																			"attrs": [],
+																			"inner": {
+																				"Literal": {
+																					"ByteString": {
+																						"ws": {
+																							"first": "\n\t",
+																							"rest": []
+																						},
+																						"s": "b\"\\n\"",
+																						"suffix": null
+																					}
+																				}
+																			}
+																		},
+																		"semi": {
+																			"ws": {
+																				"first": "",
+																				"rest": []
+																			},
+																			"token": ";"
+																		}
+																	}
+																}
+															},
+															{
+																"Expression": {
+																	"WithoutBlock": {
+																		"expr": {
+																			"attrs": [],
+																			"inner": {
+																				"Literal": {
+																					"ByteString": {
+																						"ws": {
+																							"first": "\n\t",
+																							"rest": []
+																						},
+																						"s": "b\"\\r\"",
+																						"suffix": null
+																					}
+																				}
+																			}
+																		},
+																		"semi": {
+																			"ws": {
+																				"first": "",
+																				"rest": []
+																			},
+																			"token": ";"
+																		}
+																	}
+																}
+															},
+															{
+																"Expression": {
+																	"WithoutBlock": {
+																		"expr": {
+																			"attrs": [],
+																			"inner": {
+																				"Literal": {
+																					"ByteString": {
+																						"ws": {
+																							"first": "\n\t",
+																							"rest": []
+																						},
+																						"s": "b\"\\t\"",
+																						"suffix": null
+																					}
+																				}
+																			}
+																		},
+																		"semi": {
+																			"ws": {
+																				"first": "",
+																				"rest": []
+																			},
+																			"token": ";"
+																		}
+																	}
+																}
+															},
+															{
+																"Expression": {
+																	"WithoutBlock": {
+																		"expr": {
+																			"attrs": [],
+																			"inner": {
+																				"Literal": {
+																					"ByteString": {
+																						"ws": {
+																							"first": "\n\t",
+																							"rest": []
+																						},
+																						"s": "b\"\\0\"",
+																						"suffix": null
+																					}
+																				}
+																			}
+																		},
+																		"semi": {
+																			"ws": {
+																				"first": "",
+																				"rest": []
+																			},
+																			"token": ";"
+																		}
+																	}
+																}
+															},
+															{
+																"Expression": {
+																	"WithoutBlock": {
+																		"expr": {
+																			"attrs": [],
+																			"inner": {
+																				"Literal": {
+																					"ByteString": {
+																						"ws": {
+																							"first": "\n\t",
+																							"rest": []
+																						},
+																						"s": "b\"\\\n\"",
+																						"suffix": null
+																					}
+																				}
+																			}
+																		},
+																		"semi": {
+																			"ws": {
+																				"first": "",
+																				"rest": []
+																			},
+																			"token": ";"
+																		}
+																	}
+																}
+															}
+														]
 													},
-													{
-														"Expression": {
-															"WithoutBlock": {
-																"expr": {
-																	"attrs": [],
-																	"inner": {
-																		"Literal": {
-																			"ByteString": {
-																				"ws": {
-																					"first": "\n\t",
-																					"rest": []
-																				},
-																				"s": "b\"\"",
-																				"suffix": [
-																					{
-																						"first": "",
-																						"rest": []
-																					},
-																					"abc"
-																				]
-																			}
-																		}
-																	}
-																},
-																"semi": {
-																	"ws": {
-																		"first": "",
-																		"rest": []
-																	},
-																	"token": ";"
-																}
-															}
-														}
-													},
-													{
-														"Expression": {
-															"WithoutBlock": {
-																"expr": {
-																	"attrs": [],
-																	"inner": {
-																		"Literal": {
-																			"ByteString": {
-																				"ws": {
-																					"first": "\n\t",
-																					"rest": []
-																				},
-																				"s": "b\"a\"",
-																				"suffix": null
-																			}
-																		}
-																	}
-																},
-																"semi": {
-																	"ws": {
-																		"first": "",
-																		"rest": []
-																	},
-																	"token": ";"
-																}
-															}
-														}
-													},
-													{
-														"Expression": {
-															"WithoutBlock": {
-																"expr": {
-																	"attrs": [],
-																	"inner": {
-																		"Literal": {
-																			"ByteString": {
-																				"ws": {
-																					"first": "\n\t",
-																					"rest": []
-																				},
-																				"s": "b\"\\'\"",
-																				"suffix": null
-																			}
-																		}
-																	}
-																},
-																"semi": {
-																	"ws": {
-																		"first": "",
-																		"rest": []
-																	},
-																	"token": ";"
-																}
-															}
-														}
-													},
-													{
-														"Expression": {
-															"WithoutBlock": {
-																"expr": {
-																	"attrs": [],
-																	"inner": {
-																		"Literal": {
-																			"ByteString": {
-																				"ws": {
-																					"first": "\n\t",
-																					"rest": []
-																				},
-																				"s": "b\"\\\"\"",
-																				"suffix": null
-																			}
-																		}
-																	}
-																},
-																"semi": {
-																	"ws": {
-																		"first": "",
-																		"rest": []
-																	},
-																	"token": ";"
-																}
-															}
-														}
-													},
-													{
-														"Expression": {
-															"WithoutBlock": {
-																"expr": {
-																	"attrs": [],
-																	"inner": {
-																		"Literal": {
-																			"ByteString": {
-																				"ws": {
-																					"first": "\n\t",
-																					"rest": []
-																				},
-																				"s": "b\"\\\\\"",
-																				"suffix": null
-																			}
-																		}
-																	}
-																},
-																"semi": {
-																	"ws": {
-																		"first": "",
-																		"rest": []
-																	},
-																	"token": ";"
-																}
-															}
-														}
-													},
-													{
-														"Expression": {
-															"WithoutBlock": {
-																"expr": {
-																	"attrs": [],
-																	"inner": {
-																		"Literal": {
-																			"ByteString": {
-																				"ws": {
-																					"first": "\n\t",
-																					"rest": []
-																				},
-																				"s": "b\"\\x7f\"",
-																				"suffix": null
-																			}
-																		}
-																	}
-																},
-																"semi": {
-																	"ws": {
-																		"first": "",
-																		"rest": []
-																	},
-																	"token": ";"
-																}
-															}
-														}
-													},
-													{
-														"Expression": {
-															"WithoutBlock": {
-																"expr": {
-																	"attrs": [],
-																	"inner": {
-																		"Literal": {
-																			"ByteString": {
-																				"ws": {
-																					"first": "\n\t",
-																					"rest": []
-																				},
-																				"s": "b\"\\xff\"",
-																				"suffix": null
-																			}
-																		}
-																	}
-																},
-																"semi": {
-																	"ws": {
-																		"first": "",
-																		"rest": []
-																	},
-																	"token": ";"
-																}
-															}
-														}
-													},
-													{
-														"Expression": {
-															"WithoutBlock": {
-																"expr": {
-																	"attrs": [],
-																	"inner": {
-																		"Literal": {
-																			"ByteString": {
-																				"ws": {
-																					"first": "\n\t",
-																					"rest": []
-																				},
-																				"s": "b\"\\n\"",
-																				"suffix": null
-																			}
-																		}
-																	}
-																},
-																"semi": {
-																	"ws": {
-																		"first": "",
-																		"rest": []
-																	},
-																	"token": ";"
-																}
-															}
-														}
-													},
-													{
-														"Expression": {
-															"WithoutBlock": {
-																"expr": {
-																	"attrs": [],
-																	"inner": {
-																		"Literal": {
-																			"ByteString": {
-																				"ws": {
-																					"first": "\n\t",
-																					"rest": []
-																				},
-																				"s": "b\"\\r\"",
-																				"suffix": null
-																			}
-																		}
-																	}
-																},
-																"semi": {
-																	"ws": {
-																		"first": "",
-																		"rest": []
-																	},
-																	"token": ";"
-																}
-															}
-														}
-													},
-													{
-														"Expression": {
-															"WithoutBlock": {
-																"expr": {
-																	"attrs": [],
-																	"inner": {
-																		"Literal": {
-																			"ByteString": {
-																				"ws": {
-																					"first": "\n\t",
-																					"rest": []
-																				},
-																				"s": "b\"\\t\"",
-																				"suffix": null
-																			}
-																		}
-																	}
-																},
-																"semi": {
-																	"ws": {
-																		"first": "",
-																		"rest": []
-																	},
-																	"token": ";"
-																}
-															}
-														}
-													},
-													{
-														"Expression": {
-															"WithoutBlock": {
-																"expr": {
-																	"attrs": [],
-																	"inner": {
-																		"Literal": {
-																			"ByteString": {
-																				"ws": {
-																					"first": "\n\t",
-																					"rest": []
-																				},
-																				"s": "b\"\\0\"",
-																				"suffix": null
-																			}
-																		}
-																	}
-																},
-																"semi": {
-																	"ws": {
-																		"first": "",
-																		"rest": []
-																	},
-																	"token": ";"
-																}
-															}
-														}
-													},
-													{
-														"Expression": {
-															"WithoutBlock": {
-																"expr": {
-																	"attrs": [],
-																	"inner": {
-																		"Literal": {
-																			"ByteString": {
-																				"ws": {
-																					"first": "\n\t",
-																					"rest": []
-																				},
-																				"s": "b\"\\\n\"",
-																				"suffix": null
-																			}
-																		}
-																	}
-																},
-																"semi": {
-																	"ws": {
-																		"first": "",
-																		"rest": []
-																	},
-																	"token": ";"
-																}
-															}
-														}
-													}
-												],
-												"trailing_expr": null
+													"trailing_expr": null
+												}
 											}
 										},
 										"suffix": {
@@ -2220,251 +2240,255 @@
 										"value": {
 											"attrs": [],
 											"inner": {
-												"stmts": [
-													{
-														"Expression": {
-															"WithoutBlock": {
-																"expr": {
-																	"attrs": [],
-																	"inner": {
-																		"Literal": {
-																			"RawByteString": {
-																				"ws": {
-																					"first": "\n\t",
-																					"rest": []
-																				},
-																				"s": "br\"\"",
-																				"suffix": null
-																			}
-																		}
-																	}
-																},
-																"semi": {
-																	"ws": {
-																		"first": "",
-																		"rest": []
-																	},
-																	"token": ";"
-																}
-															}
-														}
-													},
-													{
-														"Expression": {
-															"WithoutBlock": {
-																"expr": {
-																	"attrs": [],
-																	"inner": {
-																		"Literal": {
-																			"RawByteString": {
-																				"ws": {
-																					"first": "\n\t",
-																					"rest": []
-																				},
-																				"s": "br\"\"",
-																				"suffix": [
-																					{
-																						"first": "",
+												"Full": {
+													"stmts": {
+														"first": {
+															"Expression": {
+																"WithoutBlock": {
+																	"expr": {
+																		"attrs": [],
+																		"inner": {
+																			"Literal": {
+																				"RawByteString": {
+																					"ws": {
+																						"first": "\n\t",
 																						"rest": []
 																					},
-																					"e"
-																				]
+																					"s": "br\"\"",
+																					"suffix": null
+																				}
 																			}
 																		}
-																	}
-																},
-																"semi": {
-																	"ws": {
-																		"first": "",
-																		"rest": []
 																	},
-																	"token": ";"
+																	"semi": {
+																		"ws": {
+																			"first": "",
+																			"rest": []
+																		},
+																		"token": ";"
+																	}
 																}
 															}
-														}
+														},
+														"rest": [
+															{
+																"Expression": {
+																	"WithoutBlock": {
+																		"expr": {
+																			"attrs": [],
+																			"inner": {
+																				"Literal": {
+																					"RawByteString": {
+																						"ws": {
+																							"first": "\n\t",
+																							"rest": []
+																						},
+																						"s": "br\"\"",
+																						"suffix": [
+																							{
+																								"first": "",
+																								"rest": []
+																							},
+																							"e"
+																						]
+																					}
+																				}
+																			}
+																		},
+																		"semi": {
+																			"ws": {
+																				"first": "",
+																				"rest": []
+																			},
+																			"token": ";"
+																		}
+																	}
+																}
+															},
+															{
+																"Expression": {
+																	"WithoutBlock": {
+																		"expr": {
+																			"attrs": [],
+																			"inner": {
+																				"Literal": {
+																					"RawByteString": {
+																						"ws": {
+																							"first": "\n\t",
+																							"rest": []
+																						},
+																						"s": "br\"\"",
+																						"suffix": [
+																							{
+																								"first": "",
+																								"rest": []
+																							},
+																							"abc"
+																						]
+																					}
+																				}
+																			}
+																		},
+																		"semi": {
+																			"ws": {
+																				"first": "",
+																				"rest": []
+																			},
+																			"token": ";"
+																		}
+																	}
+																}
+															},
+															{
+																"Expression": {
+																	"WithoutBlock": {
+																		"expr": {
+																			"attrs": [],
+																			"inner": {
+																				"Literal": {
+																					"RawByteString": {
+																						"ws": {
+																							"first": "\n\t",
+																							"rest": []
+																						},
+																						"s": "br\"a\"",
+																						"suffix": null
+																					}
+																				}
+																			}
+																		},
+																		"semi": {
+																			"ws": {
+																				"first": "",
+																				"rest": []
+																			},
+																			"token": ";"
+																		}
+																	}
+																}
+															},
+															{
+																"Expression": {
+																	"WithoutBlock": {
+																		"expr": {
+																			"attrs": [],
+																			"inner": {
+																				"Literal": {
+																					"RawByteString": {
+																						"ws": {
+																							"first": "\n\t",
+																							"rest": []
+																						},
+																						"s": "br#\"\"#",
+																						"suffix": null
+																					}
+																				}
+																			}
+																		},
+																		"semi": {
+																			"ws": {
+																				"first": "",
+																				"rest": []
+																			},
+																			"token": ";"
+																		}
+																	}
+																}
+															},
+															{
+																"Expression": {
+																	"WithoutBlock": {
+																		"expr": {
+																			"attrs": [],
+																			"inner": {
+																				"Literal": {
+																					"RawByteString": {
+																						"ws": {
+																							"first": "\n\t",
+																							"rest": []
+																						},
+																						"s": "br#\"\"#",
+																						"suffix": [
+																							{
+																								"first": "",
+																								"rest": []
+																							},
+																							"a"
+																						]
+																					}
+																				}
+																			}
+																		},
+																		"semi": {
+																			"ws": {
+																				"first": "",
+																				"rest": []
+																			},
+																			"token": ";"
+																		}
+																	}
+																}
+															},
+															{
+																"Expression": {
+																	"WithoutBlock": {
+																		"expr": {
+																			"attrs": [],
+																			"inner": {
+																				"Literal": {
+																					"RawByteString": {
+																						"ws": {
+																							"first": "\n\t",
+																							"rest": []
+																						},
+																						"s": "br#\"\"\"#",
+																						"suffix": null
+																					}
+																				}
+																			}
+																		},
+																		"semi": {
+																			"ws": {
+																				"first": "",
+																				"rest": []
+																			},
+																			"token": ";"
+																		}
+																	}
+																}
+															},
+															{
+																"Expression": {
+																	"WithoutBlock": {
+																		"expr": {
+																			"attrs": [],
+																			"inner": {
+																				"Literal": {
+																					"RawByteString": {
+																						"ws": {
+																							"first": "\n\t",
+																							"rest": []
+																						},
+																						"s": "br##\"\"#\"##",
+																						"suffix": null
+																					}
+																				}
+																			}
+																		},
+																		"semi": {
+																			"ws": {
+																				"first": "",
+																				"rest": []
+																			},
+																			"token": ";"
+																		}
+																	}
+																}
+															}
+														]
 													},
-													{
-														"Expression": {
-															"WithoutBlock": {
-																"expr": {
-																	"attrs": [],
-																	"inner": {
-																		"Literal": {
-																			"RawByteString": {
-																				"ws": {
-																					"first": "\n\t",
-																					"rest": []
-																				},
-																				"s": "br\"\"",
-																				"suffix": [
-																					{
-																						"first": "",
-																						"rest": []
-																					},
-																					"abc"
-																				]
-																			}
-																		}
-																	}
-																},
-																"semi": {
-																	"ws": {
-																		"first": "",
-																		"rest": []
-																	},
-																	"token": ";"
-																}
-															}
-														}
-													},
-													{
-														"Expression": {
-															"WithoutBlock": {
-																"expr": {
-																	"attrs": [],
-																	"inner": {
-																		"Literal": {
-																			"RawByteString": {
-																				"ws": {
-																					"first": "\n\t",
-																					"rest": []
-																				},
-																				"s": "br\"a\"",
-																				"suffix": null
-																			}
-																		}
-																	}
-																},
-																"semi": {
-																	"ws": {
-																		"first": "",
-																		"rest": []
-																	},
-																	"token": ";"
-																}
-															}
-														}
-													},
-													{
-														"Expression": {
-															"WithoutBlock": {
-																"expr": {
-																	"attrs": [],
-																	"inner": {
-																		"Literal": {
-																			"RawByteString": {
-																				"ws": {
-																					"first": "\n\t",
-																					"rest": []
-																				},
-																				"s": "br#\"\"#",
-																				"suffix": null
-																			}
-																		}
-																	}
-																},
-																"semi": {
-																	"ws": {
-																		"first": "",
-																		"rest": []
-																	},
-																	"token": ";"
-																}
-															}
-														}
-													},
-													{
-														"Expression": {
-															"WithoutBlock": {
-																"expr": {
-																	"attrs": [],
-																	"inner": {
-																		"Literal": {
-																			"RawByteString": {
-																				"ws": {
-																					"first": "\n\t",
-																					"rest": []
-																				},
-																				"s": "br#\"\"#",
-																				"suffix": [
-																					{
-																						"first": "",
-																						"rest": []
-																					},
-																					"a"
-																				]
-																			}
-																		}
-																	}
-																},
-																"semi": {
-																	"ws": {
-																		"first": "",
-																		"rest": []
-																	},
-																	"token": ";"
-																}
-															}
-														}
-													},
-													{
-														"Expression": {
-															"WithoutBlock": {
-																"expr": {
-																	"attrs": [],
-																	"inner": {
-																		"Literal": {
-																			"RawByteString": {
-																				"ws": {
-																					"first": "\n\t",
-																					"rest": []
-																				},
-																				"s": "br#\"\"\"#",
-																				"suffix": null
-																			}
-																		}
-																	}
-																},
-																"semi": {
-																	"ws": {
-																		"first": "",
-																		"rest": []
-																	},
-																	"token": ";"
-																}
-															}
-														}
-													},
-													{
-														"Expression": {
-															"WithoutBlock": {
-																"expr": {
-																	"attrs": [],
-																	"inner": {
-																		"Literal": {
-																			"RawByteString": {
-																				"ws": {
-																					"first": "\n\t",
-																					"rest": []
-																				},
-																				"s": "br##\"\"#\"##",
-																				"suffix": null
-																			}
-																		}
-																	}
-																},
-																"semi": {
-																	"ws": {
-																		"first": "",
-																		"rest": []
-																	},
-																	"token": ";"
-																}
-															}
-														}
-													}
-												],
-												"trailing_expr": null
+													"trailing_expr": null
+												}
 											}
 										},
 										"suffix": {
@@ -2542,385 +2566,389 @@
 										"value": {
 											"attrs": [],
 											"inner": {
-												"stmts": [
-													{
-														"Expression": {
-															"WithoutBlock": {
-																"expr": {
-																	"attrs": [],
-																	"inner": {
-																		"Literal": {
-																			"CString": {
-																				"ws": {
-																					"first": "\n\t",
-																					"rest": []
-																				},
-																				"s": "c\"\"",
-																				"suffix": null
-																			}
-																		}
-																	}
-																},
-																"semi": {
-																	"ws": {
-																		"first": "",
-																		"rest": []
-																	},
-																	"token": ";"
-																}
-															}
-														}
-													},
-													{
-														"Expression": {
-															"WithoutBlock": {
-																"expr": {
-																	"attrs": [],
-																	"inner": {
-																		"Literal": {
-																			"CString": {
-																				"ws": {
-																					"first": "\n\t",
-																					"rest": []
-																				},
-																				"s": "c\"\"",
-																				"suffix": [
-																					{
-																						"first": "",
+												"Full": {
+													"stmts": {
+														"first": {
+															"Expression": {
+																"WithoutBlock": {
+																	"expr": {
+																		"attrs": [],
+																		"inner": {
+																			"Literal": {
+																				"CString": {
+																					"ws": {
+																						"first": "\n\t",
 																						"rest": []
 																					},
-																					"e"
-																				]
+																					"s": "c\"\"",
+																					"suffix": null
+																				}
 																			}
 																		}
-																	}
-																},
-																"semi": {
-																	"ws": {
-																		"first": "",
-																		"rest": []
 																	},
-																	"token": ";"
+																	"semi": {
+																		"ws": {
+																			"first": "",
+																			"rest": []
+																		},
+																		"token": ";"
+																	}
 																}
 															}
-														}
+														},
+														"rest": [
+															{
+																"Expression": {
+																	"WithoutBlock": {
+																		"expr": {
+																			"attrs": [],
+																			"inner": {
+																				"Literal": {
+																					"CString": {
+																						"ws": {
+																							"first": "\n\t",
+																							"rest": []
+																						},
+																						"s": "c\"\"",
+																						"suffix": [
+																							{
+																								"first": "",
+																								"rest": []
+																							},
+																							"e"
+																						]
+																					}
+																				}
+																			}
+																		},
+																		"semi": {
+																			"ws": {
+																				"first": "",
+																				"rest": []
+																			},
+																			"token": ";"
+																		}
+																	}
+																}
+															},
+															{
+																"Expression": {
+																	"WithoutBlock": {
+																		"expr": {
+																			"attrs": [],
+																			"inner": {
+																				"Literal": {
+																					"CString": {
+																						"ws": {
+																							"first": "\n\t",
+																							"rest": []
+																						},
+																						"s": "c\"\"",
+																						"suffix": [
+																							{
+																								"first": "",
+																								"rest": []
+																							},
+																							"abc"
+																						]
+																					}
+																				}
+																			}
+																		},
+																		"semi": {
+																			"ws": {
+																				"first": "",
+																				"rest": []
+																			},
+																			"token": ";"
+																		}
+																	}
+																}
+															},
+															{
+																"Expression": {
+																	"WithoutBlock": {
+																		"expr": {
+																			"attrs": [],
+																			"inner": {
+																				"Literal": {
+																					"CString": {
+																						"ws": {
+																							"first": "\n\t",
+																							"rest": []
+																						},
+																						"s": "c\"a\"",
+																						"suffix": null
+																					}
+																				}
+																			}
+																		},
+																		"semi": {
+																			"ws": {
+																				"first": "",
+																				"rest": []
+																			},
+																			"token": ";"
+																		}
+																	}
+																}
+															},
+															{
+																"Expression": {
+																	"WithoutBlock": {
+																		"expr": {
+																			"attrs": [],
+																			"inner": {
+																				"Literal": {
+																					"CString": {
+																						"ws": {
+																							"first": "\n\t",
+																							"rest": []
+																						},
+																						"s": "c\"\\'\"",
+																						"suffix": null
+																					}
+																				}
+																			}
+																		},
+																		"semi": {
+																			"ws": {
+																				"first": "",
+																				"rest": []
+																			},
+																			"token": ";"
+																		}
+																	}
+																}
+															},
+															{
+																"Expression": {
+																	"WithoutBlock": {
+																		"expr": {
+																			"attrs": [],
+																			"inner": {
+																				"Literal": {
+																					"CString": {
+																						"ws": {
+																							"first": "\n\t",
+																							"rest": []
+																						},
+																						"s": "c\"\\\"\"",
+																						"suffix": null
+																					}
+																				}
+																			}
+																		},
+																		"semi": {
+																			"ws": {
+																				"first": "",
+																				"rest": []
+																			},
+																			"token": ";"
+																		}
+																	}
+																}
+															},
+															{
+																"Expression": {
+																	"WithoutBlock": {
+																		"expr": {
+																			"attrs": [],
+																			"inner": {
+																				"Literal": {
+																					"CString": {
+																						"ws": {
+																							"first": "\n\t",
+																							"rest": []
+																						},
+																						"s": "c\"\\\\\"",
+																						"suffix": null
+																					}
+																				}
+																			}
+																		},
+																		"semi": {
+																			"ws": {
+																				"first": "",
+																				"rest": []
+																			},
+																			"token": ";"
+																		}
+																	}
+																}
+															},
+															{
+																"Expression": {
+																	"WithoutBlock": {
+																		"expr": {
+																			"attrs": [],
+																			"inner": {
+																				"Literal": {
+																					"CString": {
+																						"ws": {
+																							"first": "\n\t",
+																							"rest": []
+																						},
+																						"s": "c\"\\x7f\"",
+																						"suffix": null
+																					}
+																				}
+																			}
+																		},
+																		"semi": {
+																			"ws": {
+																				"first": "",
+																				"rest": []
+																			},
+																			"token": ";"
+																		}
+																	}
+																}
+															},
+															{
+																"Expression": {
+																	"WithoutBlock": {
+																		"expr": {
+																			"attrs": [],
+																			"inner": {
+																				"Literal": {
+																					"CString": {
+																						"ws": {
+																							"first": "\n\t",
+																							"rest": []
+																						},
+																						"s": "c\"\\xff\"",
+																						"suffix": null
+																					}
+																				}
+																			}
+																		},
+																		"semi": {
+																			"ws": {
+																				"first": "",
+																				"rest": []
+																			},
+																			"token": ";"
+																		}
+																	}
+																}
+															},
+															{
+																"Expression": {
+																	"WithoutBlock": {
+																		"expr": {
+																			"attrs": [],
+																			"inner": {
+																				"Literal": {
+																					"CString": {
+																						"ws": {
+																							"first": "\n\t",
+																							"rest": []
+																						},
+																						"s": "c\"\\n\"",
+																						"suffix": null
+																					}
+																				}
+																			}
+																		},
+																		"semi": {
+																			"ws": {
+																				"first": "",
+																				"rest": []
+																			},
+																			"token": ";"
+																		}
+																	}
+																}
+															},
+															{
+																"Expression": {
+																	"WithoutBlock": {
+																		"expr": {
+																			"attrs": [],
+																			"inner": {
+																				"Literal": {
+																					"CString": {
+																						"ws": {
+																							"first": "\n\t",
+																							"rest": []
+																						},
+																						"s": "c\"\\r\"",
+																						"suffix": null
+																					}
+																				}
+																			}
+																		},
+																		"semi": {
+																			"ws": {
+																				"first": "",
+																				"rest": []
+																			},
+																			"token": ";"
+																		}
+																	}
+																}
+															},
+															{
+																"Expression": {
+																	"WithoutBlock": {
+																		"expr": {
+																			"attrs": [],
+																			"inner": {
+																				"Literal": {
+																					"CString": {
+																						"ws": {
+																							"first": "\n\t",
+																							"rest": []
+																						},
+																						"s": "c\"\\t\"",
+																						"suffix": null
+																					}
+																				}
+																			}
+																		},
+																		"semi": {
+																			"ws": {
+																				"first": "",
+																				"rest": []
+																			},
+																			"token": ";"
+																		}
+																	}
+																}
+															},
+															{
+																"Expression": {
+																	"WithoutBlock": {
+																		"expr": {
+																			"attrs": [],
+																			"inner": {
+																				"Literal": {
+																					"CString": {
+																						"ws": {
+																							"first": "\n\t",
+																							"rest": []
+																						},
+																						"s": "c\"\\\n\"",
+																						"suffix": null
+																					}
+																				}
+																			}
+																		},
+																		"semi": {
+																			"ws": {
+																				"first": "",
+																				"rest": []
+																			},
+																			"token": ";"
+																		}
+																	}
+																}
+															}
+														]
 													},
-													{
-														"Expression": {
-															"WithoutBlock": {
-																"expr": {
-																	"attrs": [],
-																	"inner": {
-																		"Literal": {
-																			"CString": {
-																				"ws": {
-																					"first": "\n\t",
-																					"rest": []
-																				},
-																				"s": "c\"\"",
-																				"suffix": [
-																					{
-																						"first": "",
-																						"rest": []
-																					},
-																					"abc"
-																				]
-																			}
-																		}
-																	}
-																},
-																"semi": {
-																	"ws": {
-																		"first": "",
-																		"rest": []
-																	},
-																	"token": ";"
-																}
-															}
-														}
-													},
-													{
-														"Expression": {
-															"WithoutBlock": {
-																"expr": {
-																	"attrs": [],
-																	"inner": {
-																		"Literal": {
-																			"CString": {
-																				"ws": {
-																					"first": "\n\t",
-																					"rest": []
-																				},
-																				"s": "c\"a\"",
-																				"suffix": null
-																			}
-																		}
-																	}
-																},
-																"semi": {
-																	"ws": {
-																		"first": "",
-																		"rest": []
-																	},
-																	"token": ";"
-																}
-															}
-														}
-													},
-													{
-														"Expression": {
-															"WithoutBlock": {
-																"expr": {
-																	"attrs": [],
-																	"inner": {
-																		"Literal": {
-																			"CString": {
-																				"ws": {
-																					"first": "\n\t",
-																					"rest": []
-																				},
-																				"s": "c\"\\'\"",
-																				"suffix": null
-																			}
-																		}
-																	}
-																},
-																"semi": {
-																	"ws": {
-																		"first": "",
-																		"rest": []
-																	},
-																	"token": ";"
-																}
-															}
-														}
-													},
-													{
-														"Expression": {
-															"WithoutBlock": {
-																"expr": {
-																	"attrs": [],
-																	"inner": {
-																		"Literal": {
-																			"CString": {
-																				"ws": {
-																					"first": "\n\t",
-																					"rest": []
-																				},
-																				"s": "c\"\\\"\"",
-																				"suffix": null
-																			}
-																		}
-																	}
-																},
-																"semi": {
-																	"ws": {
-																		"first": "",
-																		"rest": []
-																	},
-																	"token": ";"
-																}
-															}
-														}
-													},
-													{
-														"Expression": {
-															"WithoutBlock": {
-																"expr": {
-																	"attrs": [],
-																	"inner": {
-																		"Literal": {
-																			"CString": {
-																				"ws": {
-																					"first": "\n\t",
-																					"rest": []
-																				},
-																				"s": "c\"\\\\\"",
-																				"suffix": null
-																			}
-																		}
-																	}
-																},
-																"semi": {
-																	"ws": {
-																		"first": "",
-																		"rest": []
-																	},
-																	"token": ";"
-																}
-															}
-														}
-													},
-													{
-														"Expression": {
-															"WithoutBlock": {
-																"expr": {
-																	"attrs": [],
-																	"inner": {
-																		"Literal": {
-																			"CString": {
-																				"ws": {
-																					"first": "\n\t",
-																					"rest": []
-																				},
-																				"s": "c\"\\x7f\"",
-																				"suffix": null
-																			}
-																		}
-																	}
-																},
-																"semi": {
-																	"ws": {
-																		"first": "",
-																		"rest": []
-																	},
-																	"token": ";"
-																}
-															}
-														}
-													},
-													{
-														"Expression": {
-															"WithoutBlock": {
-																"expr": {
-																	"attrs": [],
-																	"inner": {
-																		"Literal": {
-																			"CString": {
-																				"ws": {
-																					"first": "\n\t",
-																					"rest": []
-																				},
-																				"s": "c\"\\xff\"",
-																				"suffix": null
-																			}
-																		}
-																	}
-																},
-																"semi": {
-																	"ws": {
-																		"first": "",
-																		"rest": []
-																	},
-																	"token": ";"
-																}
-															}
-														}
-													},
-													{
-														"Expression": {
-															"WithoutBlock": {
-																"expr": {
-																	"attrs": [],
-																	"inner": {
-																		"Literal": {
-																			"CString": {
-																				"ws": {
-																					"first": "\n\t",
-																					"rest": []
-																				},
-																				"s": "c\"\\n\"",
-																				"suffix": null
-																			}
-																		}
-																	}
-																},
-																"semi": {
-																	"ws": {
-																		"first": "",
-																		"rest": []
-																	},
-																	"token": ";"
-																}
-															}
-														}
-													},
-													{
-														"Expression": {
-															"WithoutBlock": {
-																"expr": {
-																	"attrs": [],
-																	"inner": {
-																		"Literal": {
-																			"CString": {
-																				"ws": {
-																					"first": "\n\t",
-																					"rest": []
-																				},
-																				"s": "c\"\\r\"",
-																				"suffix": null
-																			}
-																		}
-																	}
-																},
-																"semi": {
-																	"ws": {
-																		"first": "",
-																		"rest": []
-																	},
-																	"token": ";"
-																}
-															}
-														}
-													},
-													{
-														"Expression": {
-															"WithoutBlock": {
-																"expr": {
-																	"attrs": [],
-																	"inner": {
-																		"Literal": {
-																			"CString": {
-																				"ws": {
-																					"first": "\n\t",
-																					"rest": []
-																				},
-																				"s": "c\"\\t\"",
-																				"suffix": null
-																			}
-																		}
-																	}
-																},
-																"semi": {
-																	"ws": {
-																		"first": "",
-																		"rest": []
-																	},
-																	"token": ";"
-																}
-															}
-														}
-													},
-													{
-														"Expression": {
-															"WithoutBlock": {
-																"expr": {
-																	"attrs": [],
-																	"inner": {
-																		"Literal": {
-																			"CString": {
-																				"ws": {
-																					"first": "\n\t",
-																					"rest": []
-																				},
-																				"s": "c\"\\\n\"",
-																				"suffix": null
-																			}
-																		}
-																	}
-																},
-																"semi": {
-																	"ws": {
-																		"first": "",
-																		"rest": []
-																	},
-																	"token": ";"
-																}
-															}
-														}
-													}
-												],
-												"trailing_expr": null
+													"trailing_expr": null
+												}
 											}
 										},
 										"suffix": {
@@ -2998,251 +3026,255 @@
 										"value": {
 											"attrs": [],
 											"inner": {
-												"stmts": [
-													{
-														"Expression": {
-															"WithoutBlock": {
-																"expr": {
-																	"attrs": [],
-																	"inner": {
-																		"Literal": {
-																			"RawCString": {
-																				"ws": {
-																					"first": "\n\t",
-																					"rest": []
-																				},
-																				"s": "cr\"\"",
-																				"suffix": null
-																			}
-																		}
-																	}
-																},
-																"semi": {
-																	"ws": {
-																		"first": "",
-																		"rest": []
-																	},
-																	"token": ";"
-																}
-															}
-														}
-													},
-													{
-														"Expression": {
-															"WithoutBlock": {
-																"expr": {
-																	"attrs": [],
-																	"inner": {
-																		"Literal": {
-																			"RawCString": {
-																				"ws": {
-																					"first": "\n\t",
-																					"rest": []
-																				},
-																				"s": "cr\"\"",
-																				"suffix": [
-																					{
-																						"first": "",
+												"Full": {
+													"stmts": {
+														"first": {
+															"Expression": {
+																"WithoutBlock": {
+																	"expr": {
+																		"attrs": [],
+																		"inner": {
+																			"Literal": {
+																				"RawCString": {
+																					"ws": {
+																						"first": "\n\t",
 																						"rest": []
 																					},
-																					"e"
-																				]
+																					"s": "cr\"\"",
+																					"suffix": null
+																				}
 																			}
 																		}
-																	}
-																},
-																"semi": {
-																	"ws": {
-																		"first": "",
-																		"rest": []
 																	},
-																	"token": ";"
+																	"semi": {
+																		"ws": {
+																			"first": "",
+																			"rest": []
+																		},
+																		"token": ";"
+																	}
 																}
 															}
-														}
+														},
+														"rest": [
+															{
+																"Expression": {
+																	"WithoutBlock": {
+																		"expr": {
+																			"attrs": [],
+																			"inner": {
+																				"Literal": {
+																					"RawCString": {
+																						"ws": {
+																							"first": "\n\t",
+																							"rest": []
+																						},
+																						"s": "cr\"\"",
+																						"suffix": [
+																							{
+																								"first": "",
+																								"rest": []
+																							},
+																							"e"
+																						]
+																					}
+																				}
+																			}
+																		},
+																		"semi": {
+																			"ws": {
+																				"first": "",
+																				"rest": []
+																			},
+																			"token": ";"
+																		}
+																	}
+																}
+															},
+															{
+																"Expression": {
+																	"WithoutBlock": {
+																		"expr": {
+																			"attrs": [],
+																			"inner": {
+																				"Literal": {
+																					"RawCString": {
+																						"ws": {
+																							"first": "\n\t",
+																							"rest": []
+																						},
+																						"s": "cr\"\"",
+																						"suffix": [
+																							{
+																								"first": "",
+																								"rest": []
+																							},
+																							"abc"
+																						]
+																					}
+																				}
+																			}
+																		},
+																		"semi": {
+																			"ws": {
+																				"first": "",
+																				"rest": []
+																			},
+																			"token": ";"
+																		}
+																	}
+																}
+															},
+															{
+																"Expression": {
+																	"WithoutBlock": {
+																		"expr": {
+																			"attrs": [],
+																			"inner": {
+																				"Literal": {
+																					"RawCString": {
+																						"ws": {
+																							"first": "\n\t",
+																							"rest": []
+																						},
+																						"s": "cr\"a\"",
+																						"suffix": null
+																					}
+																				}
+																			}
+																		},
+																		"semi": {
+																			"ws": {
+																				"first": "",
+																				"rest": []
+																			},
+																			"token": ";"
+																		}
+																	}
+																}
+															},
+															{
+																"Expression": {
+																	"WithoutBlock": {
+																		"expr": {
+																			"attrs": [],
+																			"inner": {
+																				"Literal": {
+																					"RawCString": {
+																						"ws": {
+																							"first": "\n\t",
+																							"rest": []
+																						},
+																						"s": "cr#\"\"#",
+																						"suffix": null
+																					}
+																				}
+																			}
+																		},
+																		"semi": {
+																			"ws": {
+																				"first": "",
+																				"rest": []
+																			},
+																			"token": ";"
+																		}
+																	}
+																}
+															},
+															{
+																"Expression": {
+																	"WithoutBlock": {
+																		"expr": {
+																			"attrs": [],
+																			"inner": {
+																				"Literal": {
+																					"RawCString": {
+																						"ws": {
+																							"first": "\n\t",
+																							"rest": []
+																						},
+																						"s": "cr#\"\"#",
+																						"suffix": [
+																							{
+																								"first": "",
+																								"rest": []
+																							},
+																							"a"
+																						]
+																					}
+																				}
+																			}
+																		},
+																		"semi": {
+																			"ws": {
+																				"first": "",
+																				"rest": []
+																			},
+																			"token": ";"
+																		}
+																	}
+																}
+															},
+															{
+																"Expression": {
+																	"WithoutBlock": {
+																		"expr": {
+																			"attrs": [],
+																			"inner": {
+																				"Literal": {
+																					"RawCString": {
+																						"ws": {
+																							"first": "\n\t",
+																							"rest": []
+																						},
+																						"s": "cr#\"\"\"#",
+																						"suffix": null
+																					}
+																				}
+																			}
+																		},
+																		"semi": {
+																			"ws": {
+																				"first": "",
+																				"rest": []
+																			},
+																			"token": ";"
+																		}
+																	}
+																}
+															},
+															{
+																"Expression": {
+																	"WithoutBlock": {
+																		"expr": {
+																			"attrs": [],
+																			"inner": {
+																				"Literal": {
+																					"RawCString": {
+																						"ws": {
+																							"first": "\n\t",
+																							"rest": []
+																						},
+																						"s": "cr##\"\"#\"##",
+																						"suffix": null
+																					}
+																				}
+																			}
+																		},
+																		"semi": {
+																			"ws": {
+																				"first": "",
+																				"rest": []
+																			},
+																			"token": ";"
+																		}
+																	}
+																}
+															}
+														]
 													},
-													{
-														"Expression": {
-															"WithoutBlock": {
-																"expr": {
-																	"attrs": [],
-																	"inner": {
-																		"Literal": {
-																			"RawCString": {
-																				"ws": {
-																					"first": "\n\t",
-																					"rest": []
-																				},
-																				"s": "cr\"\"",
-																				"suffix": [
-																					{
-																						"first": "",
-																						"rest": []
-																					},
-																					"abc"
-																				]
-																			}
-																		}
-																	}
-																},
-																"semi": {
-																	"ws": {
-																		"first": "",
-																		"rest": []
-																	},
-																	"token": ";"
-																}
-															}
-														}
-													},
-													{
-														"Expression": {
-															"WithoutBlock": {
-																"expr": {
-																	"attrs": [],
-																	"inner": {
-																		"Literal": {
-																			"RawCString": {
-																				"ws": {
-																					"first": "\n\t",
-																					"rest": []
-																				},
-																				"s": "cr\"a\"",
-																				"suffix": null
-																			}
-																		}
-																	}
-																},
-																"semi": {
-																	"ws": {
-																		"first": "",
-																		"rest": []
-																	},
-																	"token": ";"
-																}
-															}
-														}
-													},
-													{
-														"Expression": {
-															"WithoutBlock": {
-																"expr": {
-																	"attrs": [],
-																	"inner": {
-																		"Literal": {
-																			"RawCString": {
-																				"ws": {
-																					"first": "\n\t",
-																					"rest": []
-																				},
-																				"s": "cr#\"\"#",
-																				"suffix": null
-																			}
-																		}
-																	}
-																},
-																"semi": {
-																	"ws": {
-																		"first": "",
-																		"rest": []
-																	},
-																	"token": ";"
-																}
-															}
-														}
-													},
-													{
-														"Expression": {
-															"WithoutBlock": {
-																"expr": {
-																	"attrs": [],
-																	"inner": {
-																		"Literal": {
-																			"RawCString": {
-																				"ws": {
-																					"first": "\n\t",
-																					"rest": []
-																				},
-																				"s": "cr#\"\"#",
-																				"suffix": [
-																					{
-																						"first": "",
-																						"rest": []
-																					},
-																					"a"
-																				]
-																			}
-																		}
-																	}
-																},
-																"semi": {
-																	"ws": {
-																		"first": "",
-																		"rest": []
-																	},
-																	"token": ";"
-																}
-															}
-														}
-													},
-													{
-														"Expression": {
-															"WithoutBlock": {
-																"expr": {
-																	"attrs": [],
-																	"inner": {
-																		"Literal": {
-																			"RawCString": {
-																				"ws": {
-																					"first": "\n\t",
-																					"rest": []
-																				},
-																				"s": "cr#\"\"\"#",
-																				"suffix": null
-																			}
-																		}
-																	}
-																},
-																"semi": {
-																	"ws": {
-																		"first": "",
-																		"rest": []
-																	},
-																	"token": ";"
-																}
-															}
-														}
-													},
-													{
-														"Expression": {
-															"WithoutBlock": {
-																"expr": {
-																	"attrs": [],
-																	"inner": {
-																		"Literal": {
-																			"RawCString": {
-																				"ws": {
-																					"first": "\n\t",
-																					"rest": []
-																				},
-																				"s": "cr##\"\"#\"##",
-																				"suffix": null
-																			}
-																		}
-																	}
-																},
-																"semi": {
-																	"ws": {
-																		"first": "",
-																		"rest": []
-																	},
-																	"token": ";"
-																}
-															}
-														}
-													}
-												],
-												"trailing_expr": null
+													"trailing_expr": null
+												}
 											}
 										},
 										"suffix": {
@@ -3320,381 +3352,385 @@
 										"value": {
 											"attrs": [],
 											"inner": {
-												"stmts": [
-													{
-														"Expression": {
-															"WithoutBlock": {
-																"expr": {
-																	"attrs": [],
-																	"inner": {
-																		"Literal": {
-																			"Integer": {
-																				"ws": {
-																					"first": "\n\t",
-																					"rest": []
-																				},
-																				"inner": {
-																					"Decimal": "0"
-																				},
-																				"suffix": null
-																			}
-																		}
-																	}
-																},
-																"semi": {
-																	"ws": {
-																		"first": "",
-																		"rest": []
-																	},
-																	"token": ";"
-																}
-															}
-														}
-													},
-													{
-														"Expression": {
-															"WithoutBlock": {
-																"expr": {
-																	"attrs": [],
-																	"inner": {
-																		"Literal": {
-																			"Integer": {
-																				"ws": {
-																					"first": "\n\t",
-																					"rest": []
-																				},
-																				"inner": {
-																					"Decimal": "00"
-																				},
-																				"suffix": null
-																			}
-																		}
-																	}
-																},
-																"semi": {
-																	"ws": {
-																		"first": "",
-																		"rest": []
-																	},
-																	"token": ";"
-																}
-															}
-														}
-													},
-													{
-														"Expression": {
-															"WithoutBlock": {
-																"expr": {
-																	"attrs": [],
-																	"inner": {
-																		"Literal": {
-																			"Integer": {
-																				"ws": {
-																					"first": "\n\t",
-																					"rest": []
-																				},
-																				"inner": {
-																					"Decimal": "1234567890"
-																				},
-																				"suffix": null
-																			}
-																		}
-																	}
-																},
-																"semi": {
-																	"ws": {
-																		"first": "",
-																		"rest": []
-																	},
-																	"token": ";"
-																}
-															}
-														}
-													},
-													{
-														"Expression": {
-															"WithoutBlock": {
-																"expr": {
-																	"attrs": [],
-																	"inner": {
-																		"Literal": {
-																			"Integer": {
-																				"ws": {
-																					"first": "\n\t",
-																					"rest": []
-																				},
-																				"inner": {
-																					"Decimal": "0__1__2__3__4__5__"
-																				},
-																				"suffix": null
-																			}
-																		}
-																	}
-																},
-																"semi": {
-																	"ws": {
-																		"first": "",
-																		"rest": []
-																	},
-																	"token": ";"
-																}
-															}
-														}
-													},
-													{
-														"Expression": {
-															"WithoutBlock": {
-																"expr": {
-																	"attrs": [],
-																	"inner": {
-																		"Literal": {
-																			"Integer": {
-																				"ws": {
-																					"first": "\n\t",
-																					"rest": []
-																				},
-																				"inner": {
-																					"Decimal": "1"
-																				},
-																				"suffix": [
-																					{
-																						"first": "",
+												"Full": {
+													"stmts": {
+														"first": {
+															"Expression": {
+																"WithoutBlock": {
+																	"expr": {
+																		"attrs": [],
+																		"inner": {
+																			"Literal": {
+																				"Integer": {
+																					"ws": {
+																						"first": "\n\t",
 																						"rest": []
 																					},
-																					"abc"
-																				]
-																			}
-																		}
-																	}
-																},
-																"semi": {
-																	"ws": {
-																		"first": "",
-																		"rest": []
-																	},
-																	"token": ";"
-																}
-															}
-														}
-													},
-													{
-														"Expression": {
-															"WithoutBlock": {
-																"expr": {
-																	"attrs": [],
-																	"inner": {
-																		"Literal": {
-																			"Integer": {
-																				"ws": {
-																					"first": "\n\t",
-																					"rest": []
-																				},
-																				"inner": {
-																					"Decimal": "1_"
-																				},
-																				"suffix": [
-																					{
-																						"first": "",
-																						"rest": []
+																					"inner": {
+																						"Decimal": "0"
 																					},
-																					"abc"
-																				]
+																					"suffix": null
+																				}
 																			}
 																		}
-																	}
-																},
-																"semi": {
-																	"ws": {
-																		"first": "",
-																		"rest": []
 																	},
-																	"token": ";"
+																	"semi": {
+																		"ws": {
+																			"first": "",
+																			"rest": []
+																		},
+																		"token": ";"
+																	}
 																}
 															}
-														}
+														},
+														"rest": [
+															{
+																"Expression": {
+																	"WithoutBlock": {
+																		"expr": {
+																			"attrs": [],
+																			"inner": {
+																				"Literal": {
+																					"Integer": {
+																						"ws": {
+																							"first": "\n\t",
+																							"rest": []
+																						},
+																						"inner": {
+																							"Decimal": "00"
+																						},
+																						"suffix": null
+																					}
+																				}
+																			}
+																		},
+																		"semi": {
+																			"ws": {
+																				"first": "",
+																				"rest": []
+																			},
+																			"token": ";"
+																		}
+																	}
+																}
+															},
+															{
+																"Expression": {
+																	"WithoutBlock": {
+																		"expr": {
+																			"attrs": [],
+																			"inner": {
+																				"Literal": {
+																					"Integer": {
+																						"ws": {
+																							"first": "\n\t",
+																							"rest": []
+																						},
+																						"inner": {
+																							"Decimal": "1234567890"
+																						},
+																						"suffix": null
+																					}
+																				}
+																			}
+																		},
+																		"semi": {
+																			"ws": {
+																				"first": "",
+																				"rest": []
+																			},
+																			"token": ";"
+																		}
+																	}
+																}
+															},
+															{
+																"Expression": {
+																	"WithoutBlock": {
+																		"expr": {
+																			"attrs": [],
+																			"inner": {
+																				"Literal": {
+																					"Integer": {
+																						"ws": {
+																							"first": "\n\t",
+																							"rest": []
+																						},
+																						"inner": {
+																							"Decimal": "0__1__2__3__4__5__"
+																						},
+																						"suffix": null
+																					}
+																				}
+																			}
+																		},
+																		"semi": {
+																			"ws": {
+																				"first": "",
+																				"rest": []
+																			},
+																			"token": ";"
+																		}
+																	}
+																}
+															},
+															{
+																"Expression": {
+																	"WithoutBlock": {
+																		"expr": {
+																			"attrs": [],
+																			"inner": {
+																				"Literal": {
+																					"Integer": {
+																						"ws": {
+																							"first": "\n\t",
+																							"rest": []
+																						},
+																						"inner": {
+																							"Decimal": "1"
+																						},
+																						"suffix": [
+																							{
+																								"first": "",
+																								"rest": []
+																							},
+																							"abc"
+																						]
+																					}
+																				}
+																			}
+																		},
+																		"semi": {
+																			"ws": {
+																				"first": "",
+																				"rest": []
+																			},
+																			"token": ";"
+																		}
+																	}
+																}
+															},
+															{
+																"Expression": {
+																	"WithoutBlock": {
+																		"expr": {
+																			"attrs": [],
+																			"inner": {
+																				"Literal": {
+																					"Integer": {
+																						"ws": {
+																							"first": "\n\t",
+																							"rest": []
+																						},
+																						"inner": {
+																							"Decimal": "1_"
+																						},
+																						"suffix": [
+																							{
+																								"first": "",
+																								"rest": []
+																							},
+																							"abc"
+																						]
+																					}
+																				}
+																			}
+																		},
+																		"semi": {
+																			"ws": {
+																				"first": "",
+																				"rest": []
+																			},
+																			"token": ";"
+																		}
+																	}
+																}
+															},
+															{
+																"Expression": {
+																	"WithoutBlock": {
+																		"expr": {
+																			"attrs": [],
+																			"inner": {
+																				"Literal": {
+																					"Integer": {
+																						"ws": {
+																							"first": "\n\n\t",
+																							"rest": []
+																						},
+																						"inner": {
+																							"Decimal": "0"
+																						},
+																						"suffix": [
+																							{
+																								"first": "",
+																								"rest": []
+																							},
+																							"b0"
+																						]
+																					}
+																				}
+																			}
+																		},
+																		"semi": {
+																			"ws": {
+																				"first": "",
+																				"rest": []
+																			},
+																			"token": ";"
+																		}
+																	}
+																}
+															},
+															{
+																"Expression": {
+																	"WithoutBlock": {
+																		"expr": {
+																			"attrs": [],
+																			"inner": {
+																				"Literal": {
+																					"Integer": {
+																						"ws": {
+																							"first": "\n\t",
+																							"rest": []
+																						},
+																						"inner": {
+																							"Decimal": "0"
+																						},
+																						"suffix": [
+																							{
+																								"first": "",
+																								"rest": []
+																							},
+																							"b______0"
+																						]
+																					}
+																				}
+																			}
+																		},
+																		"semi": {
+																			"ws": {
+																				"first": "",
+																				"rest": []
+																			},
+																			"token": ";"
+																		}
+																	}
+																}
+															},
+															{
+																"Expression": {
+																	"WithoutBlock": {
+																		"expr": {
+																			"attrs": [],
+																			"inner": {
+																				"Literal": {
+																					"Integer": {
+																						"ws": {
+																							"first": "\n\t",
+																							"rest": []
+																						},
+																						"inner": {
+																							"Decimal": "0"
+																						},
+																						"suffix": [
+																							{
+																								"first": "",
+																								"rest": []
+																							},
+																							"b_0_1_0_1_0"
+																						]
+																					}
+																				}
+																			}
+																		},
+																		"semi": {
+																			"ws": {
+																				"first": "",
+																				"rest": []
+																			},
+																			"token": ";"
+																		}
+																	}
+																}
+															},
+															{
+																"Expression": {
+																	"WithoutBlock": {
+																		"expr": {
+																			"attrs": [],
+																			"inner": {
+																				"Literal": {
+																					"Integer": {
+																						"ws": {
+																							"first": "\n\n\t",
+																							"rest": []
+																						},
+																						"inner": {
+																							"Decimal": "0"
+																						},
+																						"suffix": [
+																							{
+																								"first": "",
+																								"rest": []
+																							},
+																							"o_0_7_"
+																						]
+																					}
+																				}
+																			}
+																		},
+																		"semi": {
+																			"ws": {
+																				"first": "",
+																				"rest": []
+																			},
+																			"token": ";"
+																		}
+																	}
+																}
+															},
+															{
+																"Expression": {
+																	"WithoutBlock": {
+																		"expr": {
+																			"attrs": [],
+																			"inner": {
+																				"Literal": {
+																					"Integer": {
+																						"ws": {
+																							"first": "\n\t",
+																							"rest": []
+																						},
+																						"inner": {
+																							"Decimal": "0"
+																						},
+																						"suffix": [
+																							{
+																								"first": "",
+																								"rest": []
+																							},
+																							"x_0_9_a_f_"
+																						]
+																					}
+																				}
+																			}
+																		},
+																		"semi": {
+																			"ws": {
+																				"first": "",
+																				"rest": []
+																			},
+																			"token": ";"
+																		}
+																	}
+																}
+															}
+														]
 													},
-													{
-														"Expression": {
-															"WithoutBlock": {
-																"expr": {
-																	"attrs": [],
-																	"inner": {
-																		"Literal": {
-																			"Integer": {
-																				"ws": {
-																					"first": "\n\n\t",
-																					"rest": []
-																				},
-																				"inner": {
-																					"Decimal": "0"
-																				},
-																				"suffix": [
-																					{
-																						"first": "",
-																						"rest": []
-																					},
-																					"b0"
-																				]
-																			}
-																		}
-																	}
-																},
-																"semi": {
-																	"ws": {
-																		"first": "",
-																		"rest": []
-																	},
-																	"token": ";"
-																}
-															}
-														}
-													},
-													{
-														"Expression": {
-															"WithoutBlock": {
-																"expr": {
-																	"attrs": [],
-																	"inner": {
-																		"Literal": {
-																			"Integer": {
-																				"ws": {
-																					"first": "\n\t",
-																					"rest": []
-																				},
-																				"inner": {
-																					"Decimal": "0"
-																				},
-																				"suffix": [
-																					{
-																						"first": "",
-																						"rest": []
-																					},
-																					"b______0"
-																				]
-																			}
-																		}
-																	}
-																},
-																"semi": {
-																	"ws": {
-																		"first": "",
-																		"rest": []
-																	},
-																	"token": ";"
-																}
-															}
-														}
-													},
-													{
-														"Expression": {
-															"WithoutBlock": {
-																"expr": {
-																	"attrs": [],
-																	"inner": {
-																		"Literal": {
-																			"Integer": {
-																				"ws": {
-																					"first": "\n\t",
-																					"rest": []
-																				},
-																				"inner": {
-																					"Decimal": "0"
-																				},
-																				"suffix": [
-																					{
-																						"first": "",
-																						"rest": []
-																					},
-																					"b_0_1_0_1_0"
-																				]
-																			}
-																		}
-																	}
-																},
-																"semi": {
-																	"ws": {
-																		"first": "",
-																		"rest": []
-																	},
-																	"token": ";"
-																}
-															}
-														}
-													},
-													{
-														"Expression": {
-															"WithoutBlock": {
-																"expr": {
-																	"attrs": [],
-																	"inner": {
-																		"Literal": {
-																			"Integer": {
-																				"ws": {
-																					"first": "\n\n\t",
-																					"rest": []
-																				},
-																				"inner": {
-																					"Decimal": "0"
-																				},
-																				"suffix": [
-																					{
-																						"first": "",
-																						"rest": []
-																					},
-																					"o_0_7_"
-																				]
-																			}
-																		}
-																	}
-																},
-																"semi": {
-																	"ws": {
-																		"first": "",
-																		"rest": []
-																	},
-																	"token": ";"
-																}
-															}
-														}
-													},
-													{
-														"Expression": {
-															"WithoutBlock": {
-																"expr": {
-																	"attrs": [],
-																	"inner": {
-																		"Literal": {
-																			"Integer": {
-																				"ws": {
-																					"first": "\n\t",
-																					"rest": []
-																				},
-																				"inner": {
-																					"Decimal": "0"
-																				},
-																				"suffix": [
-																					{
-																						"first": "",
-																						"rest": []
-																					},
-																					"x_0_9_a_f_"
-																				]
-																			}
-																		}
-																	}
-																},
-																"semi": {
-																	"ws": {
-																		"first": "",
-																		"rest": []
-																	},
-																	"token": ";"
-																}
-															}
-														}
-													}
-												],
-												"trailing_expr": null
+													"trailing_expr": null
+												}
 											}
 										},
 										"suffix": {
@@ -3772,392 +3808,396 @@
 										"value": {
 											"attrs": [],
 											"inner": {
-												"stmts": [
-													{
-														"Expression": {
-															"WithoutBlock": {
-																"expr": {
-																	"attrs": [],
-																	"inner": {
-																		"Literal": {
-																			"Float": {
-																				"ws": {
-																					"first": "\n\t",
-																					"rest": []
-																				},
-																				"int": "0",
-																				"dot": {
+												"Full": {
+													"stmts": {
+														"first": {
+															"Expression": {
+																"WithoutBlock": {
+																	"expr": {
+																		"attrs": [],
+																		"inner": {
+																			"Literal": {
+																				"Float": {
 																					"ws": {
-																						"first": "",
+																						"first": "\n\t",
 																						"rest": []
 																					},
-																					"token": "."
-																				},
-																				"frac": null,
-																				"exponent": null,
-																				"suffix": null
-																			}
-																		}
-																	}
-																},
-																"semi": {
-																	"ws": {
-																		"first": "",
-																		"rest": []
-																	},
-																	"token": ";"
-																}
-															}
-														}
-													},
-													{
-														"Expression": {
-															"WithoutBlock": {
-																"expr": {
-																	"attrs": [],
-																	"inner": {
-																		"Literal": {
-																			"Float": {
-																				"ws": {
-																					"first": "\n\t",
-																					"rest": []
-																				},
-																				"int": "0",
-																				"dot": {
-																					"ws": {
-																						"first": "",
-																						"rest": []
+																					"int": "0",
+																					"dot": {
+																						"ws": {
+																							"first": "",
+																							"rest": []
+																						},
+																						"token": "."
 																					},
-																					"token": "."
-																				},
-																				"frac": "0",
-																				"exponent": null,
-																				"suffix": null
+																					"frac": null,
+																					"exponent": null,
+																					"suffix": null
+																				}
 																			}
 																		}
-																	}
-																},
-																"semi": {
-																	"ws": {
-																		"first": "",
-																		"rest": []
 																	},
-																	"token": ";"
+																	"semi": {
+																		"ws": {
+																			"first": "",
+																			"rest": []
+																		},
+																		"token": ";"
+																	}
 																}
 															}
-														}
+														},
+														"rest": [
+															{
+																"Expression": {
+																	"WithoutBlock": {
+																		"expr": {
+																			"attrs": [],
+																			"inner": {
+																				"Literal": {
+																					"Float": {
+																						"ws": {
+																							"first": "\n\t",
+																							"rest": []
+																						},
+																						"int": "0",
+																						"dot": {
+																							"ws": {
+																								"first": "",
+																								"rest": []
+																							},
+																							"token": "."
+																						},
+																						"frac": "0",
+																						"exponent": null,
+																						"suffix": null
+																					}
+																				}
+																			}
+																		},
+																		"semi": {
+																			"ws": {
+																				"first": "",
+																				"rest": []
+																			},
+																			"token": ";"
+																		}
+																	}
+																}
+															},
+															{
+																"Expression": {
+																	"WithoutBlock": {
+																		"expr": {
+																			"attrs": [],
+																			"inner": {
+																				"Literal": {
+																					"Float": {
+																						"ws": {
+																							"first": "\n\t",
+																							"rest": []
+																						},
+																						"int": "0_1_2_3",
+																						"dot": {
+																							"ws": {
+																								"first": "",
+																								"rest": []
+																							},
+																							"token": "."
+																						},
+																						"frac": "0_1_2_3",
+																						"exponent": null,
+																						"suffix": null
+																					}
+																				}
+																			}
+																		},
+																		"semi": {
+																			"ws": {
+																				"first": "",
+																				"rest": []
+																			},
+																			"token": ";"
+																		}
+																	}
+																}
+															},
+															{
+																"Expression": {
+																	"WithoutBlock": {
+																		"expr": {
+																			"attrs": [],
+																			"inner": {
+																				"Literal": {
+																					"Float": {
+																						"ws": {
+																							"first": "\n\t",
+																							"rest": []
+																						},
+																						"int": "0",
+																						"dot": {
+																							"ws": {
+																								"first": "",
+																								"rest": []
+																							},
+																							"token": "."
+																						},
+																						"frac": "0",
+																						"exponent": null,
+																						"suffix": [
+																							{
+																								"first": "",
+																								"rest": []
+																							},
+																							"abc"
+																						]
+																					}
+																				}
+																			}
+																		},
+																		"semi": {
+																			"ws": {
+																				"first": "",
+																				"rest": []
+																			},
+																			"token": ";"
+																		}
+																	}
+																}
+															},
+															{
+																"Expression": {
+																	"WithoutBlock": {
+																		"expr": {
+																			"attrs": [],
+																			"inner": {
+																				"Literal": {
+																					"Float": {
+																						"ws": {
+																							"first": "\n\t",
+																							"rest": []
+																						},
+																						"int": "0",
+																						"dot": null,
+																						"frac": null,
+																						"exponent": "e1",
+																						"suffix": null
+																					}
+																				}
+																			}
+																		},
+																		"semi": {
+																			"ws": {
+																				"first": "",
+																				"rest": []
+																			},
+																			"token": ";"
+																		}
+																	}
+																}
+															},
+															{
+																"Expression": {
+																	"WithoutBlock": {
+																		"expr": {
+																			"attrs": [],
+																			"inner": {
+																				"Literal": {
+																					"Float": {
+																						"ws": {
+																							"first": "\n\t",
+																							"rest": []
+																						},
+																						"int": "0",
+																						"dot": null,
+																						"frac": null,
+																						"exponent": "E1",
+																						"suffix": null
+																					}
+																				}
+																			}
+																		},
+																		"semi": {
+																			"ws": {
+																				"first": "",
+																				"rest": []
+																			},
+																			"token": ";"
+																		}
+																	}
+																}
+															},
+															{
+																"Expression": {
+																	"WithoutBlock": {
+																		"expr": {
+																			"attrs": [],
+																			"inner": {
+																				"Literal": {
+																					"Float": {
+																						"ws": {
+																							"first": "\n\t",
+																							"rest": []
+																						},
+																						"int": "0",
+																						"dot": null,
+																						"frac": null,
+																						"exponent": "e+1",
+																						"suffix": null
+																					}
+																				}
+																			}
+																		},
+																		"semi": {
+																			"ws": {
+																				"first": "",
+																				"rest": []
+																			},
+																			"token": ";"
+																		}
+																	}
+																}
+															},
+															{
+																"Expression": {
+																	"WithoutBlock": {
+																		"expr": {
+																			"attrs": [],
+																			"inner": {
+																				"Literal": {
+																					"Float": {
+																						"ws": {
+																							"first": "\n\t",
+																							"rest": []
+																						},
+																						"int": "0",
+																						"dot": null,
+																						"frac": null,
+																						"exponent": "e-1",
+																						"suffix": null
+																					}
+																				}
+																			}
+																		},
+																		"semi": {
+																			"ws": {
+																				"first": "",
+																				"rest": []
+																			},
+																			"token": ";"
+																		}
+																	}
+																}
+															},
+															{
+																"Expression": {
+																	"WithoutBlock": {
+																		"expr": {
+																			"attrs": [],
+																			"inner": {
+																				"Literal": {
+																					"Float": {
+																						"ws": {
+																							"first": "\n\t",
+																							"rest": []
+																						},
+																						"int": "0",
+																						"dot": null,
+																						"frac": null,
+																						"exponent": "e_1_2_3_",
+																						"suffix": null
+																					}
+																				}
+																			}
+																		},
+																		"semi": {
+																			"ws": {
+																				"first": "",
+																				"rest": []
+																			},
+																			"token": ";"
+																		}
+																	}
+																}
+															},
+															{
+																"Expression": {
+																	"WithoutBlock": {
+																		"expr": {
+																			"attrs": [],
+																			"inner": {
+																				"Literal": {
+																					"Float": {
+																						"ws": {
+																							"first": "\n\t",
+																							"rest": []
+																						},
+																						"int": "0",
+																						"dot": null,
+																						"frac": null,
+																						"exponent": "e_1_2_3_",
+																						"suffix": [
+																							{
+																								"first": "",
+																								"rest": []
+																							},
+																							"abc"
+																						]
+																					}
+																				}
+																			}
+																		},
+																		"semi": {
+																			"ws": {
+																				"first": "",
+																				"rest": []
+																			},
+																			"token": ";"
+																		}
+																	}
+																}
+															},
+															{
+																"Expression": {
+																	"WithoutBlock": {
+																		"expr": {
+																			"attrs": [],
+																			"inner": {
+																				"Literal": {
+																					"Float": {
+																						"ws": {
+																							"first": "\n\t",
+																							"rest": []
+																						},
+																						"int": "0",
+																						"dot": null,
+																						"frac": null,
+																						"exponent": "e_1_2_3",
+																						"suffix": [
+																							{
+																								"first": "",
+																								"rest": []
+																							},
+																							"e_1_2_3"
+																						]
+																					}
+																				}
+																			}
+																		},
+																		"semi": {
+																			"ws": {
+																				"first": "",
+																				"rest": []
+																			},
+																			"token": ";"
+																		}
+																	}
+																}
+															}
+														]
 													},
-													{
-														"Expression": {
-															"WithoutBlock": {
-																"expr": {
-																	"attrs": [],
-																	"inner": {
-																		"Literal": {
-																			"Float": {
-																				"ws": {
-																					"first": "\n\t",
-																					"rest": []
-																				},
-																				"int": "0_1_2_3",
-																				"dot": {
-																					"ws": {
-																						"first": "",
-																						"rest": []
-																					},
-																					"token": "."
-																				},
-																				"frac": "0_1_2_3",
-																				"exponent": null,
-																				"suffix": null
-																			}
-																		}
-																	}
-																},
-																"semi": {
-																	"ws": {
-																		"first": "",
-																		"rest": []
-																	},
-																	"token": ";"
-																}
-															}
-														}
-													},
-													{
-														"Expression": {
-															"WithoutBlock": {
-																"expr": {
-																	"attrs": [],
-																	"inner": {
-																		"Literal": {
-																			"Float": {
-																				"ws": {
-																					"first": "\n\t",
-																					"rest": []
-																				},
-																				"int": "0",
-																				"dot": {
-																					"ws": {
-																						"first": "",
-																						"rest": []
-																					},
-																					"token": "."
-																				},
-																				"frac": "0",
-																				"exponent": null,
-																				"suffix": [
-																					{
-																						"first": "",
-																						"rest": []
-																					},
-																					"abc"
-																				]
-																			}
-																		}
-																	}
-																},
-																"semi": {
-																	"ws": {
-																		"first": "",
-																		"rest": []
-																	},
-																	"token": ";"
-																}
-															}
-														}
-													},
-													{
-														"Expression": {
-															"WithoutBlock": {
-																"expr": {
-																	"attrs": [],
-																	"inner": {
-																		"Literal": {
-																			"Float": {
-																				"ws": {
-																					"first": "\n\t",
-																					"rest": []
-																				},
-																				"int": "0",
-																				"dot": null,
-																				"frac": null,
-																				"exponent": "e1",
-																				"suffix": null
-																			}
-																		}
-																	}
-																},
-																"semi": {
-																	"ws": {
-																		"first": "",
-																		"rest": []
-																	},
-																	"token": ";"
-																}
-															}
-														}
-													},
-													{
-														"Expression": {
-															"WithoutBlock": {
-																"expr": {
-																	"attrs": [],
-																	"inner": {
-																		"Literal": {
-																			"Float": {
-																				"ws": {
-																					"first": "\n\t",
-																					"rest": []
-																				},
-																				"int": "0",
-																				"dot": null,
-																				"frac": null,
-																				"exponent": "E1",
-																				"suffix": null
-																			}
-																		}
-																	}
-																},
-																"semi": {
-																	"ws": {
-																		"first": "",
-																		"rest": []
-																	},
-																	"token": ";"
-																}
-															}
-														}
-													},
-													{
-														"Expression": {
-															"WithoutBlock": {
-																"expr": {
-																	"attrs": [],
-																	"inner": {
-																		"Literal": {
-																			"Float": {
-																				"ws": {
-																					"first": "\n\t",
-																					"rest": []
-																				},
-																				"int": "0",
-																				"dot": null,
-																				"frac": null,
-																				"exponent": "e+1",
-																				"suffix": null
-																			}
-																		}
-																	}
-																},
-																"semi": {
-																	"ws": {
-																		"first": "",
-																		"rest": []
-																	},
-																	"token": ";"
-																}
-															}
-														}
-													},
-													{
-														"Expression": {
-															"WithoutBlock": {
-																"expr": {
-																	"attrs": [],
-																	"inner": {
-																		"Literal": {
-																			"Float": {
-																				"ws": {
-																					"first": "\n\t",
-																					"rest": []
-																				},
-																				"int": "0",
-																				"dot": null,
-																				"frac": null,
-																				"exponent": "e-1",
-																				"suffix": null
-																			}
-																		}
-																	}
-																},
-																"semi": {
-																	"ws": {
-																		"first": "",
-																		"rest": []
-																	},
-																	"token": ";"
-																}
-															}
-														}
-													},
-													{
-														"Expression": {
-															"WithoutBlock": {
-																"expr": {
-																	"attrs": [],
-																	"inner": {
-																		"Literal": {
-																			"Float": {
-																				"ws": {
-																					"first": "\n\t",
-																					"rest": []
-																				},
-																				"int": "0",
-																				"dot": null,
-																				"frac": null,
-																				"exponent": "e_1_2_3_",
-																				"suffix": null
-																			}
-																		}
-																	}
-																},
-																"semi": {
-																	"ws": {
-																		"first": "",
-																		"rest": []
-																	},
-																	"token": ";"
-																}
-															}
-														}
-													},
-													{
-														"Expression": {
-															"WithoutBlock": {
-																"expr": {
-																	"attrs": [],
-																	"inner": {
-																		"Literal": {
-																			"Float": {
-																				"ws": {
-																					"first": "\n\t",
-																					"rest": []
-																				},
-																				"int": "0",
-																				"dot": null,
-																				"frac": null,
-																				"exponent": "e_1_2_3_",
-																				"suffix": [
-																					{
-																						"first": "",
-																						"rest": []
-																					},
-																					"abc"
-																				]
-																			}
-																		}
-																	}
-																},
-																"semi": {
-																	"ws": {
-																		"first": "",
-																		"rest": []
-																	},
-																	"token": ";"
-																}
-															}
-														}
-													},
-													{
-														"Expression": {
-															"WithoutBlock": {
-																"expr": {
-																	"attrs": [],
-																	"inner": {
-																		"Literal": {
-																			"Float": {
-																				"ws": {
-																					"first": "\n\t",
-																					"rest": []
-																				},
-																				"int": "0",
-																				"dot": null,
-																				"frac": null,
-																				"exponent": "e_1_2_3",
-																				"suffix": [
-																					{
-																						"first": "",
-																						"rest": []
-																					},
-																					"e_1_2_3"
-																				]
-																			}
-																		}
-																	}
-																},
-																"semi": {
-																	"ws": {
-																		"first": "",
-																		"rest": []
-																	},
-																	"token": ";"
-																}
-															}
-														}
-													}
-												],
-												"trailing_expr": null
+													"trailing_expr": null
+												}
 											}
 										},
 										"suffix": {
@@ -4235,63 +4275,67 @@
 										"value": {
 											"attrs": [],
 											"inner": {
-												"stmts": [
-													{
-														"Expression": {
-															"WithoutBlock": {
-																"expr": {
-																	"attrs": [],
-																	"inner": {
-																		"Literal": {
-																			"True": {
-																				"ws": {
-																					"first": "\n\t",
-																					"rest": []
-																				},
-																				"token": "true"
+												"Full": {
+													"stmts": {
+														"first": {
+															"Expression": {
+																"WithoutBlock": {
+																	"expr": {
+																		"attrs": [],
+																		"inner": {
+																			"Literal": {
+																				"True": {
+																					"ws": {
+																						"first": "\n\t",
+																						"rest": []
+																					},
+																					"token": "true"
+																				}
 																			}
 																		}
-																	}
-																},
-																"semi": {
-																	"ws": {
-																		"first": "",
-																		"rest": []
 																	},
-																	"token": ";"
+																	"semi": {
+																		"ws": {
+																			"first": "",
+																			"rest": []
+																		},
+																		"token": ";"
+																	}
 																}
 															}
-														}
+														},
+														"rest": [
+															{
+																"Expression": {
+																	"WithoutBlock": {
+																		"expr": {
+																			"attrs": [],
+																			"inner": {
+																				"Literal": {
+																					"False": {
+																						"ws": {
+																							"first": "\n\t",
+																							"rest": []
+																						},
+																						"token": "false"
+																					}
+																				}
+																			}
+																		},
+																		"semi": {
+																			"ws": {
+																				"first": "",
+																				"rest": []
+																			},
+																			"token": ";"
+																		}
+																	}
+																}
+															}
+														]
 													},
-													{
-														"Expression": {
-															"WithoutBlock": {
-																"expr": {
-																	"attrs": [],
-																	"inner": {
-																		"Literal": {
-																			"False": {
-																				"ws": {
-																					"first": "\n\t",
-																					"rest": []
-																				},
-																				"token": "false"
-																			}
-																		}
-																	}
-																},
-																"semi": {
-																	"ws": {
-																		"first": "",
-																		"rest": []
-																	},
-																	"token": ";"
-																}
-															}
-														}
-													}
-												],
-												"trailing_expr": null
+													"trailing_expr": null
+												}
 											}
 										},
 										"suffix": {

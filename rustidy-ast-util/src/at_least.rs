@@ -21,6 +21,11 @@ pub struct AtLeast1<T> {
 }
 
 impl<T> AtLeast1<T> {
+	/// Creates this collection from a single item
+	pub const fn single(value: T) -> Self {
+		Self { first: value, rest: vec![], }
+	}
+
 	pub fn iter(&self) -> <&Self as IntoIterator>::IntoIter {
 		self.into_iter()
 	}

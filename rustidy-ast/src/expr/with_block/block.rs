@@ -14,7 +14,7 @@ use {
 		},
 		token,
 	},
-	rustidy_ast_util::NotFollows,
+	rustidy_ast_util::{AtLeast1, NotFollows, at_least},
 	rustidy_format::{Format, Formattable, WhitespaceFormat},
 	rustidy_parse::{Parse, ParseError, Parser, ParserError, ParserTag},
 	rustidy_print::Print,
@@ -27,28 +27,31 @@ use {
 #[derive(Parse, Formattable, Format, Print)]
 #[parse(name = "a block expression")]
 #[parse(skip_if_tag = ParserTag::SkipBlockExpression)]
-pub struct BlockExpression(pub ArenaIdx<BracedWithInnerAttributes<Statements>>);
+pub struct BlockExpression(pub ArenaIdx<BracedWithInnerAttributes<Option<Statements>>>);
+
+decl_arena! { BracedWithInnerAttributes<Option<Statements>> }
 
 /// `Statements`
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Formattable, Format, Print)]
-pub struct Statements {
-	#[format(args = rustidy_format::vec::args_prefix_ws(Whitespace::INDENT))]
-	pub stmts:         Vec<Statement>,
-	#[format(prefix_ws(expr = Whitespace::INDENT, if_ = !self.stmts.is_empty()))]
-	pub trailing_expr: Option<ExpressionWithoutBlock>,
+pub enum Statements {
+	OnlyExpr(ExpressionWithoutBlock),
+	Full(StatementsFull),
 }
-
-decl_arena! { BracedWithInnerAttributes<Statements> }
 
 impl Parse for Statements {
 	type Error = StatementsError;
 
 	#[coverage(on)]
 	fn parse_from(parser: &mut Parser) -> Result<Self, Self::Error> {
-		let mut stmts = vec![];
-		let trailing_expr = loop {
+		let mut stmts = None::<AtLeast1<_>>;
+		let mut push_stmt = |stmt| match &mut stmts {
+			Some(stmts) => stmts.rest.push(stmt),
+			None => stmts = Some(AtLeast1::single(stmt)),
+		};
+
+		let stmts = loop {
 			// Note: Blocks usually take priority over expressions here, as `{} * a`
 			//       parses as an empty block, followed by the expression `*a`, but
 			//       this is not the case for field/method access and the question mark
@@ -56,7 +59,7 @@ impl Parse for Statements {
 			if let Ok((expr, ..)) = parser
 				.try_parse::<(ExpressionStatementWithBlock, NotFollows<token::Dot>, NotFollows<token::Question>,)>()? {
 				let stmt = StatementInner::Expression(ExpressionStatement::WithBlock(expr));
-				stmts.push(Statement(ArenaIdx::new(stmt)));
+				push_stmt(Statement(ArenaIdx::new(stmt)));
 				continue;
 			}
 
@@ -68,24 +71,28 @@ impl Parse for Statements {
 						let stmt = StatementInner::Expression(
 							ExpressionStatement::WithoutBlock(ExpressionStatementWithoutBlock { expr, semi })
 						);
-						stmts.push(Statement(ArenaIdx::new(stmt)));
+						push_stmt(Statement(ArenaIdx::new(stmt)));
 					},
 					None => match parser.with_tag(
 						ParserTag::SkipExpressionWithoutBlock,
 						Parser::peek::<Statement>
 					)? {
-						// Note: On macros, we want to ensure we parse a statement macro instead of expression macro,
 						//       since braced statement macros don't need a semi-colon, while expression ones do.
 						//       Since both have the same length, we prefer statements to expressions if they have
 						//       the same length here.
 						Ok((stmt, peek_stmt_state)) if peek_stmt_state
 							.ahead_of_or_equal(&peek_expr_state) => {
 							parser.set_peeked(peek_stmt_state);
-							stmts.push(stmt);
+							push_stmt(stmt);
 						},
 						_ => {
 							parser.set_peeked(peek_expr_state);
-							break Some(expr);
+							break match stmts {
+								Some(stmts) => Self::Full(
+									StatementsFull { stmts, trailing_expr: Some(expr) }
+								),
+								None => Self::OnlyExpr(expr),
+							};
 						},
 					},
 				},
@@ -93,13 +100,16 @@ impl Parse for Statements {
 					ParserTag::SkipExpressionWithoutBlock,
 					Parser::try_parse::<Statement>
 				)? {
-					Ok(stmt) => stmts.push(stmt),
-					Err(_) => break None,
+					Ok(stmt) => push_stmt(stmt),
+					Err(err) => match stmts {
+						Some(stmts) => break Self::Full(StatementsFull { stmts, trailing_expr: None }),
+						None => return Err(StatementsError::Statement(err)),
+					},
 				},
 			}
 		};
 
-		Ok(Self { stmts, trailing_expr })
+		Ok(stmts)
 	}
 }
 
@@ -115,4 +125,14 @@ pub enum StatementsError {
 
 	#[parse_error(transparent)]
 	Statement(ParserError<Statement>),
+}
+
+#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(serde::Serialize, serde::Deserialize)]
+#[derive(Formattable, Format, Print)]
+pub struct StatementsFull {
+	#[format(args = at_least::fmt_prefix_ws(Whitespace::INDENT))]
+	pub stmts:         AtLeast1<Statement>,
+	#[format(prefix_ws = Whitespace::INDENT)]
+	pub trailing_expr: Option<ExpressionWithoutBlock>,
 }
