@@ -63,7 +63,7 @@ use {
 pub struct Crate {
 	pub shebang:     Option<Shebang>,
 	pub inner_attrs: Vec<InnerAttrOrDocComment>,
-	pub items:       Items,
+	pub items:       Option<Items>,
 	pub suffix_ws:   Whitespace,
 }
 

@@ -50,8 +50,8 @@ use {
 		util::{Braced, Parenthesized},
 		vis::Visibility,
 	},
-	core::mem,
-	rustidy_ast_util::{Identifier, PunctuatedTrailing, delimited, punct},
+	itertools::Itertools,
+	rustidy_ast_util::{AtLeast1, Identifier, PunctuatedTrailing, delimited, punct},
 	rustidy_format::{Format, Formattable, WhitespaceFormat},
 	rustidy_parse::Parse,
 	rustidy_print::Print,
@@ -63,35 +63,45 @@ use {
 #[derive(Parse, Formattable, Format, Print)]
 #[format(before_with = Self::merge_use)]
 pub struct Items(
-	#[format(args = rustidy_format::vec::args_prefix_ws(Whitespace::INDENT))]
-	pub Vec<Item>,
+	#[format(args = rustidy_ast_util::at_least::fmt_prefix_ws(Whitespace::INDENT))]
+	pub AtLeast1<Item>,
 );
 
 impl Items {
 	pub fn merge_use(&mut self, ctx: &mut rustidy_format::Context) {
-		#[expect(clippy::unused_peekable, reason = "We use `Peekable::next_if_map`")]
-		let mut items = mem::take(&mut self.0).into_iter().peekable();
-		while let Some(mut item) = items.next() {
-			item = match item.try_into_use_decl() {
-				Ok((attrs, vis, mut first_use_decl)) => {
-					while let Some(use_decl) = items.next_if_map(
-						|item| item
-							.try_into_just_use_decl(ctx, vis.as_ref())
-					) {
-						first_use_decl.merge(use_decl);
-					}
+		replace_with::replace_with_or_abort(&mut self.0, |items| {
+			let mut items = items
+				.into_iter()
+				.peekable()
+				.batching(|items| {
+					let item = items.next()?;
+					let item = match item.try_into_use_decl() {
+						Ok((attrs, vis, mut first_use_decl)) => {
+							while let Some(use_decl) = items.next_if_map(
+								|item| item
+									.try_into_just_use_decl(ctx, vis.as_ref())
+							) {
+								first_use_decl.merge(use_decl);
+							}
 
-					Item(ArenaIdx::new(
-						WithOuterAttributes { attrs, inner: ItemInner::Vis(
-							VisItem { vis, inner: VisItemInner::Use(first_use_decl), }
-						), }
-					))
-				},
-				Err(item) => item,
-			};
+							Item(ArenaIdx::new(
+								WithOuterAttributes { attrs, inner: ItemInner::Vis(
+									VisItem { vis, inner: VisItemInner::Use(first_use_decl), }
+								), }
+							))
+						},
+						Err(item) => item,
+					};
 
-			self.0.push(item);
-		}
+					Some(item)
+				});
+
+			let first = items
+				.next()
+				.expect("Should have at least 1 item");
+
+			AtLeast1 { first, rest: items.collect(), }
+		});
 	}
 }
 

@@ -141,8 +141,8 @@ fn format_file(
 	)?;
 
 	// Queue modules for formatting.
-	if let Some(file_path) = file_path && let Some(files) = files {
-		for item in &crate_.items.0 {
+	if let Some(file_path) = file_path && let Some(files) = files && let Some(items) = &crate_.items {
+		for item in &items.0 {
 			// If it's not a module definition, skip it
 			// TODO: Support modules inside of other modules (and other items).
 			let ItemInner::Vis(vis_item) = &item.0.inner else {

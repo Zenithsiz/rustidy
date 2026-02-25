@@ -1,8 +1,8 @@
 {
 	"shebang": null,
 	"inner_attrs": [],
-	"items": [
-		{
+	"items": {
+		"first": {
 			"attrs": [],
 			"inner": {
 				"Vis": {
@@ -43,163 +43,241 @@
 				}
 			}
 		},
-		{
-			"attrs": [],
-			"inner": {
-				"Vis": {
-					"vis": null,
-					"inner": {
-						"ExternBlock": {
-							"unsafe_": {
-								"ws": {
-									"first": "\n\n",
-									"rest": []
+		"rest": [
+			{
+				"attrs": [],
+				"inner": {
+					"Vis": {
+						"vis": null,
+						"inner": {
+							"ExternBlock": {
+								"unsafe_": {
+									"ws": {
+										"first": "\n\n",
+										"rest": []
+									},
+									"token": "unsafe"
 								},
-								"token": "unsafe"
-							},
-							"extern_": {
-								"ws": {
-									"first": " ",
-									"rest": []
-								},
-								"token": "extern"
-							},
-							"abi": null,
-							"inner": {
-								"prefix": {
+								"extern_": {
 									"ws": {
 										"first": " ",
 										"rest": []
 									},
-									"token": "{"
+									"token": "extern"
 								},
-								"value": {
-									"attrs": [],
-									"inner": []
-								},
-								"suffix": {
-									"ws": {
-										"first": "",
-										"rest": []
+								"abi": null,
+								"inner": {
+									"prefix": {
+										"ws": {
+											"first": " ",
+											"rest": []
+										},
+										"token": "{"
 									},
-									"token": "}"
+									"value": {
+										"attrs": [],
+										"inner": []
+									},
+									"suffix": {
+										"ws": {
+											"first": "",
+											"rest": []
+										},
+										"token": "}"
+									}
 								}
 							}
 						}
 					}
 				}
-			}
-		},
-		{
-			"attrs": [],
-			"inner": {
-				"Vis": {
-					"vis": null,
-					"inner": {
-						"ExternBlock": {
-							"unsafe_": null,
-							"extern_": {
-								"ws": {
-									"first": "\n",
-									"rest": []
-								},
-								"token": "extern"
-							},
-							"abi": {
-								"String": {
+			},
+			{
+				"attrs": [],
+				"inner": {
+					"Vis": {
+						"vis": null,
+						"inner": {
+							"ExternBlock": {
+								"unsafe_": null,
+								"extern_": {
 									"ws": {
-										"first": " ",
+										"first": "\n",
 										"rest": []
 									},
-									"s": "\"C\"",
-									"suffix": null
-								}
-							},
-							"inner": {
-								"prefix": {
-									"ws": {
-										"first": " ",
-										"rest": []
-									},
-									"token": "{"
+									"token": "extern"
 								},
-								"value": {
-									"attrs": [],
-									"inner": []
+								"abi": {
+									"String": {
+										"ws": {
+											"first": " ",
+											"rest": []
+										},
+										"s": "\"C\"",
+										"suffix": null
+									}
 								},
-								"suffix": {
-									"ws": {
-										"first": "",
-										"rest": []
+								"inner": {
+									"prefix": {
+										"ws": {
+											"first": " ",
+											"rest": []
+										},
+										"token": "{"
 									},
-									"token": "}"
+									"value": {
+										"attrs": [],
+										"inner": []
+									},
+									"suffix": {
+										"ws": {
+											"first": "",
+											"rest": []
+										},
+										"token": "}"
+									}
 								}
 							}
 						}
 					}
 				}
-			}
-		},
-		{
-			"attrs": [],
-			"inner": {
-				"Vis": {
-					"vis": null,
-					"inner": {
-						"ExternBlock": {
-							"unsafe_": null,
-							"extern_": {
-								"ws": {
-									"first": "\n\n",
-									"rest": []
-								},
-								"token": "extern"
-							},
-							"abi": null,
-							"inner": {
-								"prefix": {
+			},
+			{
+				"attrs": [],
+				"inner": {
+					"Vis": {
+						"vis": null,
+						"inner": {
+							"ExternBlock": {
+								"unsafe_": null,
+								"extern_": {
 									"ws": {
-										"first": " ",
+										"first": "\n\n",
 										"rest": []
 									},
-									"token": "{"
+									"token": "extern"
 								},
-								"value": {
-									"attrs": [
-										{
-											"Attr": {
-												"pound": {
-													"ws": {
-														"first": " ",
-														"rest": []
+								"abi": null,
+								"inner": {
+									"prefix": {
+										"ws": {
+											"first": " ",
+											"rest": []
+										},
+										"token": "{"
+									},
+									"value": {
+										"attrs": [
+											{
+												"Attr": {
+													"pound": {
+														"ws": {
+															"first": " ",
+															"rest": []
+														},
+														"token": "#"
 													},
-													"token": "#"
-												},
-												"not": {
-													"ws": {
-														"first": "",
-														"rest": []
-													},
-													"token": "!"
-												},
-												"attr": {
-													"prefix": {
+													"not": {
 														"ws": {
 															"first": "",
 															"rest": []
 														},
-														"token": "["
+														"token": "!"
 													},
-													"value": {
-														"Meta": {
-															"Path": {
+													"attr": {
+														"prefix": {
+															"ws": {
+																"first": "",
+																"rest": []
+															},
+															"token": "["
+														},
+														"value": {
+															"Meta": {
+																"Path": {
+																	"prefix": null,
+																	"segments": {
+																		"first": {
+																			"Ident": {
+																				"NonKw": [
+																					{
+																						"first": "",
+																						"rest": []
+																					},
+																					"a"
+																				]
+																			}
+																		},
+																		"rest": []
+																	}
+																}
+															}
+														},
+														"suffix": {
+															"ws": {
+																"first": "",
+																"rest": []
+															},
+															"token": "]"
+														}
+													}
+												}
+											}
+										],
+										"inner": []
+									},
+									"suffix": {
+										"ws": {
+											"first": " ",
+											"rest": []
+										},
+										"token": "}"
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			{
+				"attrs": [],
+				"inner": {
+					"Vis": {
+						"vis": null,
+						"inner": {
+							"ExternBlock": {
+								"unsafe_": null,
+								"extern_": {
+									"ws": {
+										"first": "\n\n",
+										"rest": []
+									},
+									"token": "extern"
+								},
+								"abi": null,
+								"inner": {
+									"prefix": {
+										"ws": {
+											"first": " ",
+											"rest": []
+										},
+										"token": "{"
+									},
+									"value": {
+										"attrs": [],
+										"inner": [
+											{
+												"attrs": [],
+												"inner": {
+													"Macro": {
+														"Braces": {
+															"path": {
 																"prefix": null,
 																"segments": {
 																	"first": {
 																		"Ident": {
 																			"NonKw": [
 																				{
-																					"first": "",
+																					"first": " ",
 																					"rest": []
 																				},
 																				"a"
@@ -208,459 +286,148 @@
 																	},
 																	"rest": []
 																}
+															},
+															"not": {
+																"ws": {
+																	"first": "",
+																	"rest": []
+																},
+																"token": "!"
+															},
+															"tokens": {
+																"prefix": {
+																	"ws": {
+																		"first": " ",
+																		"rest": []
+																	},
+																	"token": "{"
+																},
+																"value": [],
+																"suffix": {
+																	"ws": {
+																		"first": "",
+																		"rest": []
+																	},
+																	"token": "}"
+																}
 															}
 														}
-													},
-													"suffix": {
-														"ws": {
-															"first": "",
-															"rest": []
-														},
-														"token": "]"
 													}
 												}
 											}
-										}
-									],
-									"inner": []
-								},
-								"suffix": {
-									"ws": {
-										"first": " ",
-										"rest": []
+										]
 									},
-									"token": "}"
+									"suffix": {
+										"ws": {
+											"first": " ",
+											"rest": []
+										},
+										"token": "}"
+									}
 								}
 							}
 						}
 					}
 				}
-			}
-		},
-		{
-			"attrs": [],
-			"inner": {
-				"Vis": {
-					"vis": null,
-					"inner": {
-						"ExternBlock": {
-							"unsafe_": null,
-							"extern_": {
-								"ws": {
-									"first": "\n\n",
-									"rest": []
-								},
-								"token": "extern"
-							},
-							"abi": null,
-							"inner": {
-								"prefix": {
+			},
+			{
+				"attrs": [],
+				"inner": {
+					"Vis": {
+						"vis": null,
+						"inner": {
+							"ExternBlock": {
+								"unsafe_": null,
+								"extern_": {
 									"ws": {
-										"first": " ",
+										"first": "\n\n",
 										"rest": []
 									},
-									"token": "{"
+									"token": "extern"
 								},
-								"value": {
-									"attrs": [],
-									"inner": [
-										{
-											"attrs": [],
-											"inner": {
-												"Macro": {
-													"Braces": {
-														"path": {
-															"prefix": null,
-															"segments": {
-																"first": {
-																	"Ident": {
-																		"NonKw": [
-																			{
-																				"first": " ",
-																				"rest": []
+								"abi": null,
+								"inner": {
+									"prefix": {
+										"ws": {
+											"first": " ",
+											"rest": []
+										},
+										"token": "{"
+									},
+									"value": {
+										"attrs": [],
+										"inner": [
+											{
+												"attrs": [],
+												"inner": {
+													"Static": {
+														"vis": null,
+														"static_": {
+															"safety": null,
+															"static_": {
+																"ws": {
+																	"first": " ",
+																	"rest": []
+																},
+																"token": "static"
+															},
+															"mut_": null,
+															"ident": {
+																"NonKw": [
+																	{
+																		"first": " ",
+																		"rest": []
+																	},
+																	"A"
+																]
+															},
+															"colon": {
+																"ws": {
+																	"first": "",
+																	"rest": []
+																},
+																"token": ":"
+															},
+															"ty": {
+																"TraitObject": {
+																	"dyn_": null,
+																	"bound": {
+																		"punctuated": {
+																			"first": {
+																				"Trait": {
+																					"Normal": {
+																						"prefix": null,
+																						"path": {
+																							"prefix": null,
+																							"segments": {
+																								"first": {
+																									"path": {
+																										"Ident": {
+																											"NonKw": [
+																												{
+																													"first": " ",
+																													"rest": []
+																												},
+																												"u32"
+																											]
+																										}
+																									},
+																									"generics": null
+																								},
+																								"rest": []
+																							}
+																						}
+																					}
+																				}
 																			},
-																			"a"
-																		]
+																			"rest": []
+																		},
+																		"trailing": null
 																	}
-																},
-																"rest": []
-															}
-														},
-														"not": {
-															"ws": {
-																"first": "",
-																"rest": []
-															},
-															"token": "!"
-														},
-														"tokens": {
-															"prefix": {
-																"ws": {
-																	"first": " ",
-																	"rest": []
-																},
-																"token": "{"
-															},
-															"value": [],
-															"suffix": {
-																"ws": {
-																	"first": "",
-																	"rest": []
-																},
-																"token": "}"
-															}
-														}
-													}
-												}
-											}
-										}
-									]
-								},
-								"suffix": {
-									"ws": {
-										"first": " ",
-										"rest": []
-									},
-									"token": "}"
-								}
-							}
-						}
-					}
-				}
-			}
-		},
-		{
-			"attrs": [],
-			"inner": {
-				"Vis": {
-					"vis": null,
-					"inner": {
-						"ExternBlock": {
-							"unsafe_": null,
-							"extern_": {
-								"ws": {
-									"first": "\n\n",
-									"rest": []
-								},
-								"token": "extern"
-							},
-							"abi": null,
-							"inner": {
-								"prefix": {
-									"ws": {
-										"first": " ",
-										"rest": []
-									},
-									"token": "{"
-								},
-								"value": {
-									"attrs": [],
-									"inner": [
-										{
-											"attrs": [],
-											"inner": {
-												"Static": {
-													"vis": null,
-													"static_": {
-														"safety": null,
-														"static_": {
-															"ws": {
-																"first": " ",
-																"rest": []
-															},
-															"token": "static"
-														},
-														"mut_": null,
-														"ident": {
-															"NonKw": [
-																{
-																	"first": " ",
-																	"rest": []
-																},
-																"A"
-															]
-														},
-														"colon": {
-															"ws": {
-																"first": "",
-																"rest": []
-															},
-															"token": ":"
-														},
-														"ty": {
-															"TraitObject": {
-																"dyn_": null,
-																"bound": {
-																	"punctuated": {
-																		"first": {
-																			"Trait": {
-																				"Normal": {
-																					"prefix": null,
-																					"path": {
-																						"prefix": null,
-																						"segments": {
-																							"first": {
-																								"path": {
-																									"Ident": {
-																										"NonKw": [
-																											{
-																												"first": " ",
-																												"rest": []
-																											},
-																											"u32"
-																										]
-																									}
-																								},
-																								"generics": null
-																							},
-																							"rest": []
-																						}
-																					}
-																				}
-																			}
-																		},
-																		"rest": []
-																	},
-																	"trailing": null
 																}
-															}
-														},
-														"value": null,
-														"semi": {
-															"ws": {
-																"first": "",
-																"rest": []
-															},
-															"token": ";"
-														}
-													}
-												}
-											}
-										}
-									]
-								},
-								"suffix": {
-									"ws": {
-										"first": " ",
-										"rest": []
-									},
-									"token": "}"
-								}
-							}
-						}
-					}
-				}
-			}
-		},
-		{
-			"attrs": [],
-			"inner": {
-				"Vis": {
-					"vis": null,
-					"inner": {
-						"ExternBlock": {
-							"unsafe_": null,
-							"extern_": {
-								"ws": {
-									"first": "\n",
-									"rest": []
-								},
-								"token": "extern"
-							},
-							"abi": null,
-							"inner": {
-								"prefix": {
-									"ws": {
-										"first": " ",
-										"rest": []
-									},
-									"token": "{"
-								},
-								"value": {
-									"attrs": [],
-									"inner": [
-										{
-											"attrs": [],
-											"inner": {
-												"Static": {
-													"vis": {
-														"pub_": {
-															"ws": {
-																"first": " ",
-																"rest": []
-															},
-															"token": "pub"
-														},
-														"path": null
-													},
-													"static_": {
-														"safety": null,
-														"static_": {
-															"ws": {
-																"first": " ",
-																"rest": []
-															},
-															"token": "static"
-														},
-														"mut_": null,
-														"ident": {
-															"NonKw": [
-																{
-																	"first": " ",
-																	"rest": []
-																},
-																"A"
-															]
-														},
-														"colon": {
-															"ws": {
-																"first": "",
-																"rest": []
-															},
-															"token": ":"
-														},
-														"ty": {
-															"TraitObject": {
-																"dyn_": null,
-																"bound": {
-																	"punctuated": {
-																		"first": {
-																			"Trait": {
-																				"Normal": {
-																					"prefix": null,
-																					"path": {
-																						"prefix": null,
-																						"segments": {
-																							"first": {
-																								"path": {
-																									"Ident": {
-																										"NonKw": [
-																											{
-																												"first": " ",
-																												"rest": []
-																											},
-																											"u32"
-																										]
-																									}
-																								},
-																								"generics": null
-																							},
-																							"rest": []
-																						}
-																					}
-																				}
-																			}
-																		},
-																		"rest": []
-																	},
-																	"trailing": null
-																}
-															}
-														},
-														"value": null,
-														"semi": {
-															"ws": {
-																"first": "",
-																"rest": []
-															},
-															"token": ";"
-														}
-													}
-												}
-											}
-										}
-									]
-								},
-								"suffix": {
-									"ws": {
-										"first": " ",
-										"rest": []
-									},
-									"token": "}"
-								}
-							}
-						}
-					}
-				}
-			}
-		},
-		{
-			"attrs": [],
-			"inner": {
-				"Vis": {
-					"vis": null,
-					"inner": {
-						"ExternBlock": {
-							"unsafe_": null,
-							"extern_": {
-								"ws": {
-									"first": "\n\n",
-									"rest": []
-								},
-								"token": "extern"
-							},
-							"abi": null,
-							"inner": {
-								"prefix": {
-									"ws": {
-										"first": " ",
-										"rest": []
-									},
-									"token": "{"
-								},
-								"value": {
-									"attrs": [],
-									"inner": [
-										{
-											"attrs": [],
-											"inner": {
-												"Function": {
-													"vis": null,
-													"function": {
-														"qualifiers": {
-															"const_": null,
-															"async_": null,
-															"safety": null,
-															"extern_": null
-														},
-														"fn_": {
-															"ws": {
-																"first": " ",
-																"rest": []
-															},
-															"token": "fn"
-														},
-														"ident": {
-															"NonKw": [
-																{
-																	"first": " ",
-																	"rest": []
-																},
-																"a"
-															]
-														},
-														"generics": null,
-														"params": {
-															"prefix": {
-																"ws": {
-																	"first": "",
-																	"rest": []
-																},
-																"token": "("
 															},
 															"value": null,
-															"suffix": {
-																"ws": {
-																	"first": "",
-																	"rest": []
-																},
-																"token": ")"
-															}
-														},
-														"ret": null,
-														"where_": null,
-														"body": {
-															"Semi": {
+															"semi": {
 																"ws": {
 																	"first": "",
 																	"rest": []
@@ -671,108 +438,128 @@
 													}
 												}
 											}
-										}
-									]
-								},
-								"suffix": {
-									"ws": {
-										"first": " ",
-										"rest": []
+										]
 									},
-									"token": "}"
+									"suffix": {
+										"ws": {
+											"first": " ",
+											"rest": []
+										},
+										"token": "}"
+									}
 								}
 							}
 						}
 					}
 				}
-			}
-		},
-		{
-			"attrs": [],
-			"inner": {
-				"Vis": {
-					"vis": null,
-					"inner": {
-						"ExternBlock": {
-							"unsafe_": null,
-							"extern_": {
-								"ws": {
-									"first": "\n",
-									"rest": []
-								},
-								"token": "extern"
-							},
-							"abi": null,
-							"inner": {
-								"prefix": {
+			},
+			{
+				"attrs": [],
+				"inner": {
+					"Vis": {
+						"vis": null,
+						"inner": {
+							"ExternBlock": {
+								"unsafe_": null,
+								"extern_": {
 									"ws": {
-										"first": " ",
+										"first": "\n",
 										"rest": []
 									},
-									"token": "{"
+									"token": "extern"
 								},
-								"value": {
-									"attrs": [],
-									"inner": [
-										{
-											"attrs": [],
-											"inner": {
-												"Function": {
-													"vis": {
-														"pub_": {
-															"ws": {
-																"first": " ",
-																"rest": []
-															},
-															"token": "pub"
-														},
-														"path": null
-													},
-													"function": {
-														"qualifiers": {
-															"const_": null,
-															"async_": null,
-															"safety": null,
-															"extern_": null
-														},
-														"fn_": {
-															"ws": {
-																"first": " ",
-																"rest": []
-															},
-															"token": "fn"
-														},
-														"ident": {
-															"NonKw": [
-																{
+								"abi": null,
+								"inner": {
+									"prefix": {
+										"ws": {
+											"first": " ",
+											"rest": []
+										},
+										"token": "{"
+									},
+									"value": {
+										"attrs": [],
+										"inner": [
+											{
+												"attrs": [],
+												"inner": {
+													"Static": {
+														"vis": {
+															"pub_": {
+																"ws": {
 																	"first": " ",
 																	"rest": []
 																},
-																"a"
-															]
+																"token": "pub"
+															},
+															"path": null
 														},
-														"generics": null,
-														"params": {
-															"prefix": {
+														"static_": {
+															"safety": null,
+															"static_": {
+																"ws": {
+																	"first": " ",
+																	"rest": []
+																},
+																"token": "static"
+															},
+															"mut_": null,
+															"ident": {
+																"NonKw": [
+																	{
+																		"first": " ",
+																		"rest": []
+																	},
+																	"A"
+																]
+															},
+															"colon": {
 																"ws": {
 																	"first": "",
 																	"rest": []
 																},
-																"token": "("
+																"token": ":"
+															},
+															"ty": {
+																"TraitObject": {
+																	"dyn_": null,
+																	"bound": {
+																		"punctuated": {
+																			"first": {
+																				"Trait": {
+																					"Normal": {
+																						"prefix": null,
+																						"path": {
+																							"prefix": null,
+																							"segments": {
+																								"first": {
+																									"path": {
+																										"Ident": {
+																											"NonKw": [
+																												{
+																													"first": " ",
+																													"rest": []
+																												},
+																												"u32"
+																											]
+																										}
+																									},
+																									"generics": null
+																								},
+																								"rest": []
+																							}
+																						}
+																					}
+																				}
+																			},
+																			"rest": []
+																		},
+																		"trailing": null
+																	}
+																}
 															},
 															"value": null,
-															"suffix": {
-																"ws": {
-																	"first": "",
-																	"rest": []
-																},
-																"token": ")"
-															}
-														},
-														"ret": null,
-														"where_": null,
-														"body": {
-															"Semi": {
+															"semi": {
 																"ws": {
 																	"first": "",
 																	"rest": []
@@ -783,97 +570,347 @@
 													}
 												}
 											}
-										}
-									]
-								},
-								"suffix": {
-									"ws": {
-										"first": " ",
-										"rest": []
+										]
 									},
-									"token": "}"
+									"suffix": {
+										"ws": {
+											"first": " ",
+											"rest": []
+										},
+										"token": "}"
+									}
 								}
 							}
 						}
 					}
 				}
-			}
-		},
-		{
-			"attrs": [],
-			"inner": {
-				"Vis": {
-					"vis": null,
-					"inner": {
-						"ExternBlock": {
-							"unsafe_": {
-								"ws": {
-									"first": "\n\n",
-									"rest": []
-								},
-								"token": "unsafe"
-							},
-							"extern_": {
-								"ws": {
-									"first": " ",
-									"rest": []
-								},
-								"token": "extern"
-							},
-							"abi": {
-								"String": {
+			},
+			{
+				"attrs": [],
+				"inner": {
+					"Vis": {
+						"vis": null,
+						"inner": {
+							"ExternBlock": {
+								"unsafe_": null,
+								"extern_": {
 									"ws": {
-										"first": " ",
+										"first": "\n\n",
 										"rest": []
 									},
-									"s": "\"C\"",
-									"suffix": null
+									"token": "extern"
+								},
+								"abi": null,
+								"inner": {
+									"prefix": {
+										"ws": {
+											"first": " ",
+											"rest": []
+										},
+										"token": "{"
+									},
+									"value": {
+										"attrs": [],
+										"inner": [
+											{
+												"attrs": [],
+												"inner": {
+													"Function": {
+														"vis": null,
+														"function": {
+															"qualifiers": {
+																"const_": null,
+																"async_": null,
+																"safety": null,
+																"extern_": null
+															},
+															"fn_": {
+																"ws": {
+																	"first": " ",
+																	"rest": []
+																},
+																"token": "fn"
+															},
+															"ident": {
+																"NonKw": [
+																	{
+																		"first": " ",
+																		"rest": []
+																	},
+																	"a"
+																]
+															},
+															"generics": null,
+															"params": {
+																"prefix": {
+																	"ws": {
+																		"first": "",
+																		"rest": []
+																	},
+																	"token": "("
+																},
+																"value": null,
+																"suffix": {
+																	"ws": {
+																		"first": "",
+																		"rest": []
+																	},
+																	"token": ")"
+																}
+															},
+															"ret": null,
+															"where_": null,
+															"body": {
+																"Semi": {
+																	"ws": {
+																		"first": "",
+																		"rest": []
+																	},
+																	"token": ";"
+																}
+															}
+														}
+													}
+												}
+											}
+										]
+									},
+									"suffix": {
+										"ws": {
+											"first": " ",
+											"rest": []
+										},
+										"token": "}"
+									}
 								}
-							},
-							"inner": {
-								"prefix": {
+							}
+						}
+					}
+				}
+			},
+			{
+				"attrs": [],
+				"inner": {
+					"Vis": {
+						"vis": null,
+						"inner": {
+							"ExternBlock": {
+								"unsafe_": null,
+								"extern_": {
+									"ws": {
+										"first": "\n",
+										"rest": []
+									},
+									"token": "extern"
+								},
+								"abi": null,
+								"inner": {
+									"prefix": {
+										"ws": {
+											"first": " ",
+											"rest": []
+										},
+										"token": "{"
+									},
+									"value": {
+										"attrs": [],
+										"inner": [
+											{
+												"attrs": [],
+												"inner": {
+													"Function": {
+														"vis": {
+															"pub_": {
+																"ws": {
+																	"first": " ",
+																	"rest": []
+																},
+																"token": "pub"
+															},
+															"path": null
+														},
+														"function": {
+															"qualifiers": {
+																"const_": null,
+																"async_": null,
+																"safety": null,
+																"extern_": null
+															},
+															"fn_": {
+																"ws": {
+																	"first": " ",
+																	"rest": []
+																},
+																"token": "fn"
+															},
+															"ident": {
+																"NonKw": [
+																	{
+																		"first": " ",
+																		"rest": []
+																	},
+																	"a"
+																]
+															},
+															"generics": null,
+															"params": {
+																"prefix": {
+																	"ws": {
+																		"first": "",
+																		"rest": []
+																	},
+																	"token": "("
+																},
+																"value": null,
+																"suffix": {
+																	"ws": {
+																		"first": "",
+																		"rest": []
+																	},
+																	"token": ")"
+																}
+															},
+															"ret": null,
+															"where_": null,
+															"body": {
+																"Semi": {
+																	"ws": {
+																		"first": "",
+																		"rest": []
+																	},
+																	"token": ";"
+																}
+															}
+														}
+													}
+												}
+											}
+										]
+									},
+									"suffix": {
+										"ws": {
+											"first": " ",
+											"rest": []
+										},
+										"token": "}"
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			{
+				"attrs": [],
+				"inner": {
+					"Vis": {
+						"vis": null,
+						"inner": {
+							"ExternBlock": {
+								"unsafe_": {
+									"ws": {
+										"first": "\n\n",
+										"rest": []
+									},
+									"token": "unsafe"
+								},
+								"extern_": {
 									"ws": {
 										"first": " ",
 										"rest": []
 									},
-									"token": "{"
+									"token": "extern"
 								},
-								"value": {
-									"attrs": [
-										{
-											"Attr": {
-												"pound": {
-													"ws": {
-														"first": " ",
-														"rest": []
+								"abi": {
+									"String": {
+										"ws": {
+											"first": " ",
+											"rest": []
+										},
+										"s": "\"C\"",
+										"suffix": null
+									}
+								},
+								"inner": {
+									"prefix": {
+										"ws": {
+											"first": " ",
+											"rest": []
+										},
+										"token": "{"
+									},
+									"value": {
+										"attrs": [
+											{
+												"Attr": {
+													"pound": {
+														"ws": {
+															"first": " ",
+															"rest": []
+														},
+														"token": "#"
 													},
-													"token": "#"
-												},
-												"not": {
-													"ws": {
-														"first": "",
-														"rest": []
-													},
-													"token": "!"
-												},
-												"attr": {
-													"prefix": {
+													"not": {
 														"ws": {
 															"first": "",
 															"rest": []
 														},
-														"token": "["
+														"token": "!"
 													},
-													"value": {
-														"Meta": {
-															"Path": {
+													"attr": {
+														"prefix": {
+															"ws": {
+																"first": "",
+																"rest": []
+															},
+															"token": "["
+														},
+														"value": {
+															"Meta": {
+																"Path": {
+																	"prefix": null,
+																	"segments": {
+																		"first": {
+																			"Ident": {
+																				"NonKw": [
+																					{
+																						"first": "",
+																						"rest": []
+																					},
+																					"a"
+																				]
+																			}
+																		},
+																		"rest": []
+																	}
+																}
+															}
+														},
+														"suffix": {
+															"ws": {
+																"first": "",
+																"rest": []
+															},
+															"token": "]"
+														}
+													}
+												}
+											}
+										],
+										"inner": [
+											{
+												"attrs": [],
+												"inner": {
+													"Macro": {
+														"Braces": {
+															"path": {
 																"prefix": null,
 																"segments": {
 																	"first": {
 																		"Ident": {
 																			"NonKw": [
 																				{
-																					"first": "",
+																					"first": " ",
 																					"rest": []
 																				},
 																				"a"
@@ -882,220 +919,115 @@
 																	},
 																	"rest": []
 																}
-															}
-														}
-													},
-													"suffix": {
-														"ws": {
-															"first": "",
-															"rest": []
-														},
-														"token": "]"
-													}
-												}
-											}
-										}
-									],
-									"inner": [
-										{
-											"attrs": [],
-											"inner": {
-												"Macro": {
-													"Braces": {
-														"path": {
-															"prefix": null,
-															"segments": {
-																"first": {
-																	"Ident": {
-																		"NonKw": [
-																			{
-																				"first": " ",
-																				"rest": []
-																			},
-																			"a"
-																		]
-																	}
-																},
-																"rest": []
-															}
-														},
-														"not": {
-															"ws": {
-																"first": "",
-																"rest": []
 															},
-															"token": "!"
-														},
-														"tokens": {
-															"prefix": {
-																"ws": {
-																	"first": " ",
-																	"rest": []
-																},
-																"token": "{"
-															},
-															"value": [],
-															"suffix": {
+															"not": {
 																"ws": {
 																	"first": "",
 																	"rest": []
 																},
-																"token": "}"
+																"token": "!"
+															},
+															"tokens": {
+																"prefix": {
+																	"ws": {
+																		"first": " ",
+																		"rest": []
+																	},
+																	"token": "{"
+																},
+																"value": [],
+																"suffix": {
+																	"ws": {
+																		"first": "",
+																		"rest": []
+																	},
+																	"token": "}"
+																}
 															}
 														}
 													}
 												}
-											}
-										},
-										{
-											"attrs": [],
-											"inner": {
-												"Static": {
-													"vis": {
-														"pub_": {
-															"ws": {
-																"first": " ",
-																"rest": []
-															},
-															"token": "pub"
-														},
-														"path": null
-													},
-													"static_": {
-														"safety": null,
-														"static_": {
-															"ws": {
-																"first": " ",
-																"rest": []
-															},
-															"token": "static"
-														},
-														"mut_": null,
-														"ident": {
-															"NonKw": [
-																{
+											},
+											{
+												"attrs": [],
+												"inner": {
+													"Static": {
+														"vis": {
+															"pub_": {
+																"ws": {
 																	"first": " ",
 																	"rest": []
 																},
-																"A"
-															]
-														},
-														"colon": {
-															"ws": {
-																"first": "",
-																"rest": []
+																"token": "pub"
 															},
-															"token": ":"
+															"path": null
 														},
-														"ty": {
-															"TraitObject": {
-																"dyn_": null,
-																"bound": {
-																	"punctuated": {
-																		"first": {
-																			"Trait": {
-																				"Normal": {
-																					"prefix": null,
-																					"path": {
+														"static_": {
+															"safety": null,
+															"static_": {
+																"ws": {
+																	"first": " ",
+																	"rest": []
+																},
+																"token": "static"
+															},
+															"mut_": null,
+															"ident": {
+																"NonKw": [
+																	{
+																		"first": " ",
+																		"rest": []
+																	},
+																	"A"
+																]
+															},
+															"colon": {
+																"ws": {
+																	"first": "",
+																	"rest": []
+																},
+																"token": ":"
+															},
+															"ty": {
+																"TraitObject": {
+																	"dyn_": null,
+																	"bound": {
+																		"punctuated": {
+																			"first": {
+																				"Trait": {
+																					"Normal": {
 																						"prefix": null,
-																						"segments": {
-																							"first": {
-																								"path": {
-																									"Ident": {
-																										"NonKw": [
-																											{
-																												"first": " ",
-																												"rest": []
-																											},
-																											"u32"
-																										]
-																									}
+																						"path": {
+																							"prefix": null,
+																							"segments": {
+																								"first": {
+																									"path": {
+																										"Ident": {
+																											"NonKw": [
+																												{
+																													"first": " ",
+																													"rest": []
+																												},
+																												"u32"
+																											]
+																										}
+																									},
+																									"generics": null
 																								},
-																								"generics": null
-																							},
-																							"rest": []
+																								"rest": []
+																							}
 																						}
 																					}
 																				}
-																			}
+																			},
+																			"rest": []
 																		},
-																		"rest": []
-																	},
-																	"trailing": null
+																		"trailing": null
+																	}
 																}
-															}
-														},
-														"value": null,
-														"semi": {
-															"ws": {
-																"first": "",
-																"rest": []
-															},
-															"token": ";"
-														}
-													}
-												}
-											}
-										},
-										{
-											"attrs": [],
-											"inner": {
-												"Function": {
-													"vis": {
-														"pub_": {
-															"ws": {
-																"first": " ",
-																"rest": []
-															},
-															"token": "pub"
-														},
-														"path": null
-													},
-													"function": {
-														"qualifiers": {
-															"const_": null,
-															"async_": null,
-															"safety": null,
-															"extern_": null
-														},
-														"fn_": {
-															"ws": {
-																"first": " ",
-																"rest": []
-															},
-															"token": "fn"
-														},
-														"ident": {
-															"NonKw": [
-																{
-																	"first": " ",
-																	"rest": []
-																},
-																"a"
-															]
-														},
-														"generics": null,
-														"params": {
-															"prefix": {
-																"ws": {
-																	"first": "",
-																	"rest": []
-																},
-																"token": "("
 															},
 															"value": null,
-															"suffix": {
-																"ws": {
-																	"first": "",
-																	"rest": []
-																},
-																"token": ")"
-															}
-														},
-														"ret": null,
-														"where_": null,
-														"body": {
-															"Semi": {
+															"semi": {
 																"ws": {
 																	"first": "",
 																	"rest": []
@@ -1105,24 +1037,94 @@
 														}
 													}
 												}
+											},
+											{
+												"attrs": [],
+												"inner": {
+													"Function": {
+														"vis": {
+															"pub_": {
+																"ws": {
+																	"first": " ",
+																	"rest": []
+																},
+																"token": "pub"
+															},
+															"path": null
+														},
+														"function": {
+															"qualifiers": {
+																"const_": null,
+																"async_": null,
+																"safety": null,
+																"extern_": null
+															},
+															"fn_": {
+																"ws": {
+																	"first": " ",
+																	"rest": []
+																},
+																"token": "fn"
+															},
+															"ident": {
+																"NonKw": [
+																	{
+																		"first": " ",
+																		"rest": []
+																	},
+																	"a"
+																]
+															},
+															"generics": null,
+															"params": {
+																"prefix": {
+																	"ws": {
+																		"first": "",
+																		"rest": []
+																	},
+																	"token": "("
+																},
+																"value": null,
+																"suffix": {
+																	"ws": {
+																		"first": "",
+																		"rest": []
+																	},
+																	"token": ")"
+																}
+															},
+															"ret": null,
+															"where_": null,
+															"body": {
+																"Semi": {
+																	"ws": {
+																		"first": "",
+																		"rest": []
+																	},
+																	"token": ";"
+																}
+															}
+														}
+													}
+												}
 											}
-										}
-									]
-								},
-								"suffix": {
-									"ws": {
-										"first": " ",
-										"rest": []
+										]
 									},
-									"token": "}"
+									"suffix": {
+										"ws": {
+											"first": " ",
+											"rest": []
+										},
+										"token": "}"
+									}
 								}
 							}
 						}
 					}
 				}
 			}
-		}
-	],
+		]
+	},
 	"suffix_ws": {
 		"first": "\n",
 		"rest": []

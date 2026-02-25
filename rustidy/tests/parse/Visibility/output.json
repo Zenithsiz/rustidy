@@ -1,8 +1,8 @@
 {
 	"shebang": null,
 	"inner_attrs": [],
-	"items": [
-		{
+	"items": {
+		"first": {
 			"attrs": [],
 			"inner": {
 				"Vis": {
@@ -49,389 +49,391 @@
 				}
 			}
 		},
-		{
-			"attrs": [],
-			"inner": {
-				"Vis": {
-					"vis": {
-						"pub_": {
-							"ws": {
-								"first": "\n",
-								"rest": []
-							},
-							"token": "pub"
-						},
-						"path": {
-							"prefix": {
+		"rest": [
+			{
+				"attrs": [],
+				"inner": {
+					"Vis": {
+						"vis": {
+							"pub_": {
 								"ws": {
-									"first": "",
+									"first": "\n",
 									"rest": []
 								},
-								"token": "("
+								"token": "pub"
 							},
-							"value": {
-								"Crate": {
+							"path": {
+								"prefix": {
 									"ws": {
 										"first": "",
 										"rest": []
 									},
-									"token": "crate"
-								}
-							},
-							"suffix": {
-								"ws": {
-									"first": "",
-									"rest": []
+									"token": "("
 								},
-								"token": ")"
-							}
-						}
-					},
-					"inner": {
-						"Module": {
-							"unsafe_": null,
-							"mod_": {
-								"ws": {
-									"first": " ",
-									"rest": []
-								},
-								"token": "mod"
-							},
-							"ident": {
-								"NonKw": [
-									{
-										"first": " ",
-										"rest": []
-									},
-									"a"
-								]
-							},
-							"inner": {
-								"None": {
-									"ws": {
-										"first": "",
-										"rest": []
-									},
-									"token": ";"
-								}
-							}
-						}
-					}
-				}
-			}
-		},
-		{
-			"attrs": [],
-			"inner": {
-				"Vis": {
-					"vis": {
-						"pub_": {
-							"ws": {
-								"first": "\n",
-								"rest": []
-							},
-							"token": "pub"
-						},
-						"path": {
-							"prefix": {
-								"ws": {
-									"first": "",
-									"rest": []
-								},
-								"token": "("
-							},
-							"value": {
-								"Self_": {
-									"ws": {
-										"first": "",
-										"rest": []
-									},
-									"token": "self"
-								}
-							},
-							"suffix": {
-								"ws": {
-									"first": "",
-									"rest": []
-								},
-								"token": ")"
-							}
-						}
-					},
-					"inner": {
-						"Module": {
-							"unsafe_": null,
-							"mod_": {
-								"ws": {
-									"first": " ",
-									"rest": []
-								},
-								"token": "mod"
-							},
-							"ident": {
-								"NonKw": [
-									{
-										"first": " ",
-										"rest": []
-									},
-									"a"
-								]
-							},
-							"inner": {
-								"None": {
-									"ws": {
-										"first": "",
-										"rest": []
-									},
-									"token": ";"
-								}
-							}
-						}
-					}
-				}
-			}
-		},
-		{
-			"attrs": [],
-			"inner": {
-				"Vis": {
-					"vis": {
-						"pub_": {
-							"ws": {
-								"first": "\n",
-								"rest": []
-							},
-							"token": "pub"
-						},
-						"path": {
-							"prefix": {
-								"ws": {
-									"first": "",
-									"rest": []
-								},
-								"token": "("
-							},
-							"value": {
-								"Super": {
-									"ws": {
-										"first": "",
-										"rest": []
-									},
-									"token": "super"
-								}
-							},
-							"suffix": {
-								"ws": {
-									"first": "",
-									"rest": []
-								},
-								"token": ")"
-							}
-						}
-					},
-					"inner": {
-						"Module": {
-							"unsafe_": null,
-							"mod_": {
-								"ws": {
-									"first": " ",
-									"rest": []
-								},
-								"token": "mod"
-							},
-							"ident": {
-								"NonKw": [
-									{
-										"first": " ",
-										"rest": []
-									},
-									"a"
-								]
-							},
-							"inner": {
-								"None": {
-									"ws": {
-										"first": "",
-										"rest": []
-									},
-									"token": ";"
-								}
-							}
-						}
-					}
-				}
-			}
-		},
-		{
-			"attrs": [],
-			"inner": {
-				"Vis": {
-					"vis": {
-						"pub_": {
-							"ws": {
-								"first": "\n",
-								"rest": []
-							},
-							"token": "pub"
-						},
-						"path": {
-							"prefix": {
-								"ws": {
-									"first": "",
-									"rest": []
-								},
-								"token": "("
-							},
-							"value": {
-								"In": {
-									"in_": {
+								"value": {
+									"Crate": {
 										"ws": {
 											"first": "",
 											"rest": []
 										},
-										"token": "in"
-									},
-									"path": {
-										"prefix": {
-											"ws": {
-												"first": " ",
-												"rest": []
-											},
-											"token": "::"
-										},
-										"segments": {
-											"first": {
-												"Crate": {
-													"ws": {
-														"first": "",
-														"rest": []
-													},
-													"token": "crate"
-												}
-											},
-											"rest": [
-												{
-													"punct": {
-														"ws": {
-															"first": "",
-															"rest": []
-														},
-														"token": "::"
-													},
-													"value": {
-														"SelfLower": {
-															"ws": {
-																"first": "",
-																"rest": []
-															},
-															"token": "self"
-														}
-													}
-												},
-												{
-													"punct": {
-														"ws": {
-															"first": "",
-															"rest": []
-														},
-														"token": "::"
-													},
-													"value": {
-														"Super": {
-															"ws": {
-																"first": "",
-																"rest": []
-															},
-															"token": "super"
-														}
-													}
-												},
-												{
-													"punct": {
-														"ws": {
-															"first": "",
-															"rest": []
-														},
-														"token": "::"
-													},
-													"value": {
-														"Ident": {
-															"NonKw": [
-																{
-																	"first": "",
-																	"rest": []
-																},
-																"a"
-															]
-														}
-													}
-												},
-												{
-													"punct": {
-														"ws": {
-															"first": "",
-															"rest": []
-														},
-														"token": "::"
-													},
-													"value": {
-														"DollarCrate": {
-															"ws": {
-																"first": "",
-																"rest": []
-															},
-															"token": "$crate"
-														}
-													}
-												}
-											]
-										}
+										"token": "crate"
 									}
-								}
-							},
-							"suffix": {
-								"ws": {
-									"first": "",
-									"rest": []
 								},
-								"token": ")"
-							}
-						}
-					},
-					"inner": {
-						"Module": {
-							"unsafe_": null,
-							"mod_": {
-								"ws": {
-									"first": " ",
-									"rest": []
-								},
-								"token": "mod"
-							},
-							"ident": {
-								"NonKw": [
-									{
-										"first": " ",
-										"rest": []
-									},
-									"a"
-								]
-							},
-							"inner": {
-								"None": {
+								"suffix": {
 									"ws": {
 										"first": "",
 										"rest": []
 									},
-									"token": ";"
+									"token": ")"
+								}
+							}
+						},
+						"inner": {
+							"Module": {
+								"unsafe_": null,
+								"mod_": {
+									"ws": {
+										"first": " ",
+										"rest": []
+									},
+									"token": "mod"
+								},
+								"ident": {
+									"NonKw": [
+										{
+											"first": " ",
+											"rest": []
+										},
+										"a"
+									]
+								},
+								"inner": {
+									"None": {
+										"ws": {
+											"first": "",
+											"rest": []
+										},
+										"token": ";"
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			{
+				"attrs": [],
+				"inner": {
+					"Vis": {
+						"vis": {
+							"pub_": {
+								"ws": {
+									"first": "\n",
+									"rest": []
+								},
+								"token": "pub"
+							},
+							"path": {
+								"prefix": {
+									"ws": {
+										"first": "",
+										"rest": []
+									},
+									"token": "("
+								},
+								"value": {
+									"Self_": {
+										"ws": {
+											"first": "",
+											"rest": []
+										},
+										"token": "self"
+									}
+								},
+								"suffix": {
+									"ws": {
+										"first": "",
+										"rest": []
+									},
+									"token": ")"
+								}
+							}
+						},
+						"inner": {
+							"Module": {
+								"unsafe_": null,
+								"mod_": {
+									"ws": {
+										"first": " ",
+										"rest": []
+									},
+									"token": "mod"
+								},
+								"ident": {
+									"NonKw": [
+										{
+											"first": " ",
+											"rest": []
+										},
+										"a"
+									]
+								},
+								"inner": {
+									"None": {
+										"ws": {
+											"first": "",
+											"rest": []
+										},
+										"token": ";"
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			{
+				"attrs": [],
+				"inner": {
+					"Vis": {
+						"vis": {
+							"pub_": {
+								"ws": {
+									"first": "\n",
+									"rest": []
+								},
+								"token": "pub"
+							},
+							"path": {
+								"prefix": {
+									"ws": {
+										"first": "",
+										"rest": []
+									},
+									"token": "("
+								},
+								"value": {
+									"Super": {
+										"ws": {
+											"first": "",
+											"rest": []
+										},
+										"token": "super"
+									}
+								},
+								"suffix": {
+									"ws": {
+										"first": "",
+										"rest": []
+									},
+									"token": ")"
+								}
+							}
+						},
+						"inner": {
+							"Module": {
+								"unsafe_": null,
+								"mod_": {
+									"ws": {
+										"first": " ",
+										"rest": []
+									},
+									"token": "mod"
+								},
+								"ident": {
+									"NonKw": [
+										{
+											"first": " ",
+											"rest": []
+										},
+										"a"
+									]
+								},
+								"inner": {
+									"None": {
+										"ws": {
+											"first": "",
+											"rest": []
+										},
+										"token": ";"
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			{
+				"attrs": [],
+				"inner": {
+					"Vis": {
+						"vis": {
+							"pub_": {
+								"ws": {
+									"first": "\n",
+									"rest": []
+								},
+								"token": "pub"
+							},
+							"path": {
+								"prefix": {
+									"ws": {
+										"first": "",
+										"rest": []
+									},
+									"token": "("
+								},
+								"value": {
+									"In": {
+										"in_": {
+											"ws": {
+												"first": "",
+												"rest": []
+											},
+											"token": "in"
+										},
+										"path": {
+											"prefix": {
+												"ws": {
+													"first": " ",
+													"rest": []
+												},
+												"token": "::"
+											},
+											"segments": {
+												"first": {
+													"Crate": {
+														"ws": {
+															"first": "",
+															"rest": []
+														},
+														"token": "crate"
+													}
+												},
+												"rest": [
+													{
+														"punct": {
+															"ws": {
+																"first": "",
+																"rest": []
+															},
+															"token": "::"
+														},
+														"value": {
+															"SelfLower": {
+																"ws": {
+																	"first": "",
+																	"rest": []
+																},
+																"token": "self"
+															}
+														}
+													},
+													{
+														"punct": {
+															"ws": {
+																"first": "",
+																"rest": []
+															},
+															"token": "::"
+														},
+														"value": {
+															"Super": {
+																"ws": {
+																	"first": "",
+																	"rest": []
+																},
+																"token": "super"
+															}
+														}
+													},
+													{
+														"punct": {
+															"ws": {
+																"first": "",
+																"rest": []
+															},
+															"token": "::"
+														},
+														"value": {
+															"Ident": {
+																"NonKw": [
+																	{
+																		"first": "",
+																		"rest": []
+																	},
+																	"a"
+																]
+															}
+														}
+													},
+													{
+														"punct": {
+															"ws": {
+																"first": "",
+																"rest": []
+															},
+															"token": "::"
+														},
+														"value": {
+															"DollarCrate": {
+																"ws": {
+																	"first": "",
+																	"rest": []
+																},
+																"token": "$crate"
+															}
+														}
+													}
+												]
+											}
+										}
+									}
+								},
+								"suffix": {
+									"ws": {
+										"first": "",
+										"rest": []
+									},
+									"token": ")"
+								}
+							}
+						},
+						"inner": {
+							"Module": {
+								"unsafe_": null,
+								"mod_": {
+									"ws": {
+										"first": " ",
+										"rest": []
+									},
+									"token": "mod"
+								},
+								"ident": {
+									"NonKw": [
+										{
+											"first": " ",
+											"rest": []
+										},
+										"a"
+									]
+								},
+								"inner": {
+									"None": {
+										"ws": {
+											"first": "",
+											"rest": []
+										},
+										"token": ";"
+									}
 								}
 							}
 						}
 					}
 				}
 			}
-		}
-	],
+		]
+	},
 	"suffix_ws": {
 		"first": "\n",
 		"rest": []

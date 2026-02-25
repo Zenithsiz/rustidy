@@ -36,5 +36,5 @@ pub struct Module {
 #[derive(Parse, Formattable, Format, Print)]
 pub enum ModuleInner {
 	None(token::Semi),
-	Def(BracedWithInnerAttributes<Items>),
+	Def(BracedWithInnerAttributes<Option<Items>>),
 }

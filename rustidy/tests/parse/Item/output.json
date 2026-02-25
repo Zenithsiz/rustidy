@@ -1,8 +1,8 @@
 {
 	"shebang": null,
 	"inner_attrs": [],
-	"items": [
-		{
+	"items": {
+		"first": {
 			"attrs": [],
 			"inner": {
 				"Vis": {
@@ -40,150 +40,41 @@
 				}
 			}
 		},
-		{
-			"attrs": [],
-			"inner": {
-				"Vis": {
-					"vis": null,
-					"inner": {
-						"ExternCrate": {
-							"extern_": {
-								"ws": {
-									"first": "\n",
-									"rest": []
-								},
-								"token": "extern"
-							},
-							"crate_": {
-								"ws": {
-									"first": " ",
-									"rest": []
-								},
-								"token": "crate"
-							},
-							"crate_ref": {
-								"Ident": {
-									"NonKw": [
-										{
-											"first": " ",
-											"rest": []
-										},
-										"a"
-									]
-								}
-							},
-							"as_clause": null,
-							"semi": {
-								"ws": {
-									"first": "",
-									"rest": []
-								},
-								"token": ";"
-							}
-						}
-					}
-				}
-			}
-		},
-		{
-			"attrs": [],
-			"inner": {
-				"Vis": {
-					"vis": null,
-					"inner": {
-						"Use": {
-							"use_": {
-								"ws": {
-									"first": "\n",
-									"rest": []
-								},
-								"token": "use"
-							},
-							"tree": {
-								"Simple": {
-									"path": {
-										"prefix": null,
-										"segments": {
-											"first": {
-												"Ident": {
-													"NonKw": [
-														{
-															"first": " ",
-															"rest": []
-														},
-														"a"
-													]
-												}
-											},
-											"rest": []
-										}
+		"rest": [
+			{
+				"attrs": [],
+				"inner": {
+					"Vis": {
+						"vis": null,
+						"inner": {
+							"ExternCrate": {
+								"extern_": {
+									"ws": {
+										"first": "\n",
+										"rest": []
 									},
-									"as_": null
-								}
-							},
-							"semi": {
-								"ws": {
-									"first": "",
-									"rest": []
+									"token": "extern"
 								},
-								"token": ";"
-							}
-						}
-					}
-				}
-			}
-		},
-		{
-			"attrs": [],
-			"inner": {
-				"Vis": {
-					"vis": null,
-					"inner": {
-						"Function": {
-							"qualifiers": {
-								"const_": null,
-								"async_": null,
-								"safety": null,
-								"extern_": null
-							},
-							"fn_": {
-								"ws": {
-									"first": "\n",
-									"rest": []
-								},
-								"token": "fn"
-							},
-							"ident": {
-								"NonKw": [
-									{
+								"crate_": {
+									"ws": {
 										"first": " ",
 										"rest": []
 									},
-									"a"
-								]
-							},
-							"generics": null,
-							"params": {
-								"prefix": {
-									"ws": {
-										"first": "",
-										"rest": []
-									},
-									"token": "("
+									"token": "crate"
 								},
-								"value": null,
-								"suffix": {
-									"ws": {
-										"first": "",
-										"rest": []
-									},
-									"token": ")"
-								}
-							},
-							"ret": null,
-							"where_": null,
-							"body": {
-								"Semi": {
+								"crate_ref": {
+									"Ident": {
+										"NonKw": [
+											{
+												"first": " ",
+												"rest": []
+											},
+											"a"
+										]
+									}
+								},
+								"as_clause": null,
+								"semi": {
 									"ws": {
 										"first": "",
 										"rest": []
@@ -194,61 +85,74 @@
 						}
 					}
 				}
-			}
-		},
-		{
-			"attrs": [],
-			"inner": {
-				"Vis": {
-					"vis": null,
-					"inner": {
-						"TypeAlias": {
-							"type_": {
-								"ws": {
-									"first": "\n",
-									"rest": []
-								},
-								"token": "type"
-							},
-							"ident": {
-								"NonKw": [
-									{
-										"first": " ",
-										"rest": []
-									},
-									"A"
-								]
-							},
-							"generics": null,
-							"bounds": null,
-							"where_": null,
-							"eq": null,
-							"semi": {
-								"ws": {
-									"first": "",
-									"rest": []
-								},
-								"token": ";"
-							}
-						}
-					}
-				}
-			}
-		},
-		{
-			"attrs": [],
-			"inner": {
-				"Vis": {
-					"vis": null,
-					"inner": {
-						"Struct": {
-							"Struct": {
-								"struct_": {
+			},
+			{
+				"attrs": [],
+				"inner": {
+					"Vis": {
+						"vis": null,
+						"inner": {
+							"Use": {
+								"use_": {
 									"ws": {
 										"first": "\n",
 										"rest": []
 									},
-									"token": "struct"
+									"token": "use"
+								},
+								"tree": {
+									"Simple": {
+										"path": {
+											"prefix": null,
+											"segments": {
+												"first": {
+													"Ident": {
+														"NonKw": [
+															{
+																"first": " ",
+																"rest": []
+															},
+															"a"
+														]
+													}
+												},
+												"rest": []
+											}
+										},
+										"as_": null
+									}
+								},
+								"semi": {
+									"ws": {
+										"first": "",
+										"rest": []
+									},
+									"token": ";"
+								}
+							}
+						}
+					}
+				}
+			},
+			{
+				"attrs": [],
+				"inner": {
+					"Vis": {
+						"vis": null,
+						"inner": {
+							"Function": {
+								"qualifiers": {
+									"const_": null,
+									"async_": null,
+									"safety": null,
+									"extern_": null
+								},
+								"fn_": {
+									"ws": {
+										"first": "\n",
+										"rest": []
+									},
+									"token": "fn"
 								},
 								"ident": {
 									"NonKw": [
@@ -256,12 +160,30 @@
 											"first": " ",
 											"rest": []
 										},
-										"A"
+										"a"
 									]
 								},
 								"generics": null,
+								"params": {
+									"prefix": {
+										"ws": {
+											"first": "",
+											"rest": []
+										},
+										"token": "("
+									},
+									"value": null,
+									"suffix": {
+										"ws": {
+											"first": "",
+											"rest": []
+										},
+										"token": ")"
+									}
+								},
+								"ret": null,
 								"where_": null,
-								"inner": {
+								"body": {
 									"Semi": {
 										"ws": {
 											"first": "",
@@ -274,118 +196,22 @@
 						}
 					}
 				}
-			}
-		},
-		{
-			"attrs": [],
-			"inner": {
-				"Vis": {
-					"vis": null,
-					"inner": {
-						"Enum": {
-							"enum_": {
-								"ws": {
-									"first": "\n",
-									"rest": []
-								},
-								"token": "enum"
-							},
-							"ident": {
-								"NonKw": [
-									{
-										"first": " ",
-										"rest": []
-									},
-									"A"
-								]
-							},
-							"generic": null,
-							"where_": null,
-							"variants": {
-								"prefix": {
+			},
+			{
+				"attrs": [],
+				"inner": {
+					"Vis": {
+						"vis": null,
+						"inner": {
+							"TypeAlias": {
+								"type_": {
 									"ws": {
-										"first": " ",
+										"first": "\n",
 										"rest": []
 									},
-									"token": "{"
+									"token": "type"
 								},
-								"value": null,
-								"suffix": {
-									"ws": {
-										"first": "",
-										"rest": []
-									},
-									"token": "}"
-								}
-							}
-						}
-					}
-				}
-			}
-		},
-		{
-			"attrs": [],
-			"inner": {
-				"Vis": {
-					"vis": null,
-					"inner": {
-						"Union": {
-							"union": {
-								"ws": {
-									"first": "\n",
-									"rest": []
-								},
-								"token": "union"
-							},
-							"ident": {
-								"NonKw": [
-									{
-										"first": " ",
-										"rest": []
-									},
-									"A"
-								]
-							},
-							"generics": null,
-							"where_": null,
-							"fields": {
-								"prefix": {
-									"ws": {
-										"first": " ",
-										"rest": []
-									},
-									"token": "{"
-								},
-								"value": null,
-								"suffix": {
-									"ws": {
-										"first": "",
-										"rest": []
-									},
-									"token": "}"
-								}
-							}
-						}
-					}
-				}
-			}
-		},
-		{
-			"attrs": [],
-			"inner": {
-				"Vis": {
-					"vis": null,
-					"inner": {
-						"Constant": {
-							"const_": {
-								"ws": {
-									"first": "\n",
-									"rest": []
-								},
-								"token": "const"
-							},
-							"name": {
-								"Ident": {
+								"ident": {
 									"NonKw": [
 										{
 											"first": " ",
@@ -393,179 +219,90 @@
 										},
 										"A"
 									]
-								}
-							},
-							"colon": {
-								"ws": {
-									"first": "",
-									"rest": []
 								},
-								"token": ":"
-							},
-							"ty": {
-								"TraitObject": {
-									"dyn_": null,
-									"bound": {
-										"punctuated": {
-											"first": {
-												"Trait": {
-													"Normal": {
-														"prefix": null,
-														"path": {
-															"prefix": null,
-															"segments": {
-																"first": {
-																	"path": {
-																		"Ident": {
-																			"NonKw": [
-																				{
-																					"first": " ",
-																					"rest": []
-																				},
-																				"u32"
-																			]
-																		}
-																	},
-																	"generics": null
-																},
-																"rest": []
-															}
-														}
-													}
-												}
-											},
-											"rest": []
-										},
-										"trailing": null
-									}
+								"generics": null,
+								"bounds": null,
+								"where_": null,
+								"eq": null,
+								"semi": {
+									"ws": {
+										"first": "",
+										"rest": []
+									},
+									"token": ";"
 								}
-							},
-							"value": null,
-							"semi": {
-								"ws": {
-									"first": "",
-									"rest": []
-								},
-								"token": ";"
 							}
 						}
 					}
 				}
-			}
-		},
-		{
-			"attrs": [],
-			"inner": {
-				"Vis": {
-					"vis": null,
-					"inner": {
-						"Static": {
-							"safety": null,
-							"static_": {
-								"ws": {
-									"first": "\n",
-									"rest": []
-								},
-								"token": "static"
-							},
-							"mut_": null,
-							"ident": {
-								"NonKw": [
-									{
-										"first": " ",
-										"rest": []
-									},
-									"A"
-								]
-							},
-							"colon": {
-								"ws": {
-									"first": "",
-									"rest": []
-								},
-								"token": ":"
-							},
-							"ty": {
-								"TraitObject": {
-									"dyn_": null,
-									"bound": {
-										"punctuated": {
-											"first": {
-												"Trait": {
-													"Normal": {
-														"prefix": null,
-														"path": {
-															"prefix": null,
-															"segments": {
-																"first": {
-																	"path": {
-																		"Ident": {
-																			"NonKw": [
-																				{
-																					"first": " ",
-																					"rest": []
-																				},
-																				"u32"
-																			]
-																		}
-																	},
-																	"generics": null
-																},
-																"rest": []
-															}
-														}
-													}
-												}
-											},
+			},
+			{
+				"attrs": [],
+				"inner": {
+					"Vis": {
+						"vis": null,
+						"inner": {
+							"Struct": {
+								"Struct": {
+									"struct_": {
+										"ws": {
+											"first": "\n",
 											"rest": []
 										},
-										"trailing": null
+										"token": "struct"
+									},
+									"ident": {
+										"NonKw": [
+											{
+												"first": " ",
+												"rest": []
+											},
+											"A"
+										]
+									},
+									"generics": null,
+									"where_": null,
+									"inner": {
+										"Semi": {
+											"ws": {
+												"first": "",
+												"rest": []
+											},
+											"token": ";"
+										}
 									}
 								}
-							},
-							"value": null,
-							"semi": {
-								"ws": {
-									"first": "",
-									"rest": []
-								},
-								"token": ";"
 							}
 						}
 					}
 				}
-			}
-		},
-		{
-			"attrs": [],
-			"inner": {
-				"Vis": {
-					"vis": null,
-					"inner": {
-						"Trait": {
-							"unsafe_": null,
-							"auto": null,
-							"trait_": {
-								"ws": {
-									"first": "\n",
-									"rest": []
-								},
-								"token": "trait"
-							},
-							"ident": {
-								"NonKw": [
-									{
-										"first": " ",
+			},
+			{
+				"attrs": [],
+				"inner": {
+					"Vis": {
+						"vis": null,
+						"inner": {
+							"Enum": {
+								"enum_": {
+									"ws": {
+										"first": "\n",
 										"rest": []
 									},
-									"A"
-								]
-							},
-							"generics": null,
-							"bounds": null,
-							"where_": null,
-							"body": {
-								"Full": {
+									"token": "enum"
+								},
+								"ident": {
+									"NonKw": [
+										{
+											"first": " ",
+											"rest": []
+										},
+										"A"
+									]
+								},
+								"generic": null,
+								"where_": null,
+								"variants": {
 									"prefix": {
 										"ws": {
 											"first": " ",
@@ -573,10 +310,7 @@
 										},
 										"token": "{"
 									},
-									"value": {
-										"attrs": [],
-										"inner": []
-									},
+									"value": null,
 									"suffix": {
 										"ws": {
 											"first": "",
@@ -589,24 +323,86 @@
 						}
 					}
 				}
-			}
-		},
-		{
-			"attrs": [],
-			"inner": {
-				"Vis": {
-					"vis": null,
-					"inner": {
-						"Implementation": {
-							"Inherent": {
-								"impl_": {
+			},
+			{
+				"attrs": [],
+				"inner": {
+					"Vis": {
+						"vis": null,
+						"inner": {
+							"Union": {
+								"union": {
 									"ws": {
 										"first": "\n",
 										"rest": []
 									},
-									"token": "impl"
+									"token": "union"
+								},
+								"ident": {
+									"NonKw": [
+										{
+											"first": " ",
+											"rest": []
+										},
+										"A"
+									]
 								},
 								"generics": null,
+								"where_": null,
+								"fields": {
+									"prefix": {
+										"ws": {
+											"first": " ",
+											"rest": []
+										},
+										"token": "{"
+									},
+									"value": null,
+									"suffix": {
+										"ws": {
+											"first": "",
+											"rest": []
+										},
+										"token": "}"
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			{
+				"attrs": [],
+				"inner": {
+					"Vis": {
+						"vis": null,
+						"inner": {
+							"Constant": {
+								"const_": {
+									"ws": {
+										"first": "\n",
+										"rest": []
+									},
+									"token": "const"
+								},
+								"name": {
+									"Ident": {
+										"NonKw": [
+											{
+												"first": " ",
+												"rest": []
+											},
+											"A"
+										]
+									}
+								},
+								"colon": {
+									"ws": {
+										"first": "",
+										"rest": []
+									},
+									"token": ":"
+								},
 								"ty": {
 									"TraitObject": {
 										"dyn_": null,
@@ -627,7 +423,7 @@
 																						"first": " ",
 																						"rest": []
 																					},
-																					"A"
+																					"u32"
 																				]
 																			}
 																		},
@@ -645,8 +441,255 @@
 										}
 									}
 								},
+								"value": null,
+								"semi": {
+									"ws": {
+										"first": "",
+										"rest": []
+									},
+									"token": ";"
+								}
+							}
+						}
+					}
+				}
+			},
+			{
+				"attrs": [],
+				"inner": {
+					"Vis": {
+						"vis": null,
+						"inner": {
+							"Static": {
+								"safety": null,
+								"static_": {
+									"ws": {
+										"first": "\n",
+										"rest": []
+									},
+									"token": "static"
+								},
+								"mut_": null,
+								"ident": {
+									"NonKw": [
+										{
+											"first": " ",
+											"rest": []
+										},
+										"A"
+									]
+								},
+								"colon": {
+									"ws": {
+										"first": "",
+										"rest": []
+									},
+									"token": ":"
+								},
+								"ty": {
+									"TraitObject": {
+										"dyn_": null,
+										"bound": {
+											"punctuated": {
+												"first": {
+													"Trait": {
+														"Normal": {
+															"prefix": null,
+															"path": {
+																"prefix": null,
+																"segments": {
+																	"first": {
+																		"path": {
+																			"Ident": {
+																				"NonKw": [
+																					{
+																						"first": " ",
+																						"rest": []
+																					},
+																					"u32"
+																				]
+																			}
+																		},
+																		"generics": null
+																	},
+																	"rest": []
+																}
+															}
+														}
+													}
+												},
+												"rest": []
+											},
+											"trailing": null
+										}
+									}
+								},
+								"value": null,
+								"semi": {
+									"ws": {
+										"first": "",
+										"rest": []
+									},
+									"token": ";"
+								}
+							}
+						}
+					}
+				}
+			},
+			{
+				"attrs": [],
+				"inner": {
+					"Vis": {
+						"vis": null,
+						"inner": {
+							"Trait": {
+								"unsafe_": null,
+								"auto": null,
+								"trait_": {
+									"ws": {
+										"first": "\n",
+										"rest": []
+									},
+									"token": "trait"
+								},
+								"ident": {
+									"NonKw": [
+										{
+											"first": " ",
+											"rest": []
+										},
+										"A"
+									]
+								},
+								"generics": null,
+								"bounds": null,
 								"where_": null,
 								"body": {
+									"Full": {
+										"prefix": {
+											"ws": {
+												"first": " ",
+												"rest": []
+											},
+											"token": "{"
+										},
+										"value": {
+											"attrs": [],
+											"inner": []
+										},
+										"suffix": {
+											"ws": {
+												"first": "",
+												"rest": []
+											},
+											"token": "}"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			{
+				"attrs": [],
+				"inner": {
+					"Vis": {
+						"vis": null,
+						"inner": {
+							"Implementation": {
+								"Inherent": {
+									"impl_": {
+										"ws": {
+											"first": "\n",
+											"rest": []
+										},
+										"token": "impl"
+									},
+									"generics": null,
+									"ty": {
+										"TraitObject": {
+											"dyn_": null,
+											"bound": {
+												"punctuated": {
+													"first": {
+														"Trait": {
+															"Normal": {
+																"prefix": null,
+																"path": {
+																	"prefix": null,
+																	"segments": {
+																		"first": {
+																			"path": {
+																				"Ident": {
+																					"NonKw": [
+																						{
+																							"first": " ",
+																							"rest": []
+																						},
+																						"A"
+																					]
+																				}
+																			},
+																			"generics": null
+																		},
+																		"rest": []
+																	}
+																}
+															}
+														}
+													},
+													"rest": []
+												},
+												"trailing": null
+											}
+										}
+									},
+									"where_": null,
+									"body": {
+										"prefix": {
+											"ws": {
+												"first": " ",
+												"rest": []
+											},
+											"token": "{"
+										},
+										"value": {
+											"attrs": [],
+											"inner": []
+										},
+										"suffix": {
+											"ws": {
+												"first": "",
+												"rest": []
+											},
+											"token": "}"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			{
+				"attrs": [],
+				"inner": {
+					"Vis": {
+						"vis": null,
+						"inner": {
+							"ExternBlock": {
+								"unsafe_": null,
+								"extern_": {
+									"ws": {
+										"first": "\n",
+										"rest": []
+									},
+									"token": "extern"
+								},
+								"abi": null,
+								"inner": {
 									"prefix": {
 										"ws": {
 											"first": " ",
@@ -670,132 +713,38 @@
 						}
 					}
 				}
-			}
-		},
-		{
-			"attrs": [],
-			"inner": {
-				"Vis": {
-					"vis": null,
-					"inner": {
-						"ExternBlock": {
-							"unsafe_": null,
-							"extern_": {
-								"ws": {
-									"first": "\n",
-									"rest": []
-								},
-								"token": "extern"
-							},
-							"abi": null,
-							"inner": {
-								"prefix": {
-									"ws": {
-										"first": " ",
-										"rest": []
-									},
-									"token": "{"
-								},
-								"value": {
-									"attrs": [],
-									"inner": []
-								},
-								"suffix": {
-									"ws": {
-										"first": "",
-										"rest": []
-									},
-									"token": "}"
-								}
-							}
-						}
-					}
-				}
-			}
-		},
-		{
-			"attrs": [],
-			"inner": {
-				"Macro": {
-					"Invocation": {
-						"Braces": {
-							"path": {
-								"prefix": null,
-								"segments": {
-									"first": {
-										"Ident": {
-											"NonKw": [
-												{
-													"first": "\n\n",
-													"rest": []
-												},
-												"a"
-											]
-										}
-									},
-									"rest": []
-								}
-							},
-							"not": {
-								"ws": {
-									"first": "",
-									"rest": []
-								},
-								"token": "!"
-							},
-							"tokens": {
-								"prefix": {
-									"ws": {
-										"first": " ",
-										"rest": []
-									},
-									"token": "{"
-								},
-								"value": [],
-								"suffix": {
-									"ws": {
-										"first": "",
-										"rest": []
-									},
-									"token": "}"
-								}
-							}
-						}
-					}
-				}
-			}
-		},
-		{
-			"attrs": [],
-			"inner": {
-				"Macro": {
-					"Definition": {
-						"macro_rules": {
-							"ws": {
-								"first": "\n",
-								"rest": []
-							},
-							"token": "macro_rules"
-						},
-						"not": {
-							"ws": {
-								"first": "",
-								"rest": []
-							},
-							"token": "!"
-						},
-						"ident": {
-							"NonKw": [
-								{
-									"first": " ",
-									"rest": []
-								},
-								"a"
-							]
-						},
-						"def": {
+			},
+			{
+				"attrs": [],
+				"inner": {
+					"Macro": {
+						"Invocation": {
 							"Braces": {
-								"rules": {
+								"path": {
+									"prefix": null,
+									"segments": {
+										"first": {
+											"Ident": {
+												"NonKw": [
+													{
+														"first": "\n\n",
+														"rest": []
+													},
+													"a"
+												]
+											}
+										},
+										"rest": []
+									}
+								},
+								"not": {
+									"ws": {
+										"first": "",
+										"rest": []
+									},
+									"token": "!"
+								},
+								"tokens": {
 									"prefix": {
 										"ws": {
 											"first": " ",
@@ -803,62 +752,10 @@
 										},
 										"token": "{"
 									},
-									"value": {
-										"punctuated": {
-											"first": {
-												"matcher": {
-													"Parens": {
-														"prefix": {
-															"ws": {
-																"first": " ",
-																"rest": []
-															},
-															"token": "("
-														},
-														"value": [],
-														"suffix": {
-															"ws": {
-																"first": "",
-																"rest": []
-															},
-															"token": ")"
-														}
-													}
-												},
-												"arrow": {
-													"ws": {
-														"first": " ",
-														"rest": []
-													},
-													"token": "=>"
-												},
-												"transcriber": {
-													"Parens": {
-														"prefix": {
-															"ws": {
-																"first": " ",
-																"rest": []
-															},
-															"token": "("
-														},
-														"value": [],
-														"suffix": {
-															"ws": {
-																"first": "",
-																"rest": []
-															},
-															"token": ")"
-														}
-													}
-												}
-											},
-											"rest": []
-										},
-										"trailing": null
-									},
+									"value": [],
 									"suffix": {
 										"ws": {
-											"first": " ",
+											"first": "",
 											"rest": []
 										},
 										"token": "}"
@@ -868,9 +765,114 @@
 						}
 					}
 				}
+			},
+			{
+				"attrs": [],
+				"inner": {
+					"Macro": {
+						"Definition": {
+							"macro_rules": {
+								"ws": {
+									"first": "\n",
+									"rest": []
+								},
+								"token": "macro_rules"
+							},
+							"not": {
+								"ws": {
+									"first": "",
+									"rest": []
+								},
+								"token": "!"
+							},
+							"ident": {
+								"NonKw": [
+									{
+										"first": " ",
+										"rest": []
+									},
+									"a"
+								]
+							},
+							"def": {
+								"Braces": {
+									"rules": {
+										"prefix": {
+											"ws": {
+												"first": " ",
+												"rest": []
+											},
+											"token": "{"
+										},
+										"value": {
+											"punctuated": {
+												"first": {
+													"matcher": {
+														"Parens": {
+															"prefix": {
+																"ws": {
+																	"first": " ",
+																	"rest": []
+																},
+																"token": "("
+															},
+															"value": [],
+															"suffix": {
+																"ws": {
+																	"first": "",
+																	"rest": []
+																},
+																"token": ")"
+															}
+														}
+													},
+													"arrow": {
+														"ws": {
+															"first": " ",
+															"rest": []
+														},
+														"token": "=>"
+													},
+													"transcriber": {
+														"Parens": {
+															"prefix": {
+																"ws": {
+																	"first": " ",
+																	"rest": []
+																},
+																"token": "("
+															},
+															"value": [],
+															"suffix": {
+																"ws": {
+																	"first": "",
+																	"rest": []
+																},
+																"token": ")"
+															}
+														}
+													}
+												},
+												"rest": []
+											},
+											"trailing": null
+										},
+										"suffix": {
+											"ws": {
+												"first": " ",
+												"rest": []
+											},
+											"token": "}"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
 			}
-		}
-	],
+		]
+	},
 	"suffix_ws": {
 		"first": "",
 		"rest": []
