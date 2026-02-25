@@ -4,14 +4,14 @@ fn a() {
 
 	let _ = [
 		// Comment
-		1,
+		1
 	];
 	let _ = [
-		1,
+		1
 		// Comment
 	];
 
-	let _ = [1, 2, 3, 4, 5, 6];
+	let _ = [1, 2, 3, 4, 5, 6,];
 
 	#[rustidy::config(max_array_expr_len = 6)]
 	let _ = [
@@ -44,10 +44,10 @@ fn a() {
 		6,
 	];
 	#[rustidy::config(array_expr_cols = 10)]
-	let _ = [1, 2, 3, 4, 5, 6];
+	let _ = [1, 2, 3, 4, 5, 6,];
 
 
-	let _ = [A { a }, B { b }, C { c }, D { d }, E { e }, F { f }];
+	let _ = [A { a }, B { b }, C { c }, D { d }, E { e }, F { f },];
 	#[rustidy::config(array_expr_cols = 1)]
 	let _ = [
 		A { a },
@@ -69,7 +69,7 @@ fn a() {
 		F { f },
 	];
 	#[rustidy::config(array_expr_cols = 10)]
-	let _ = [A { a }, B { b }, C { c }, D { d }, E { e }, F { f }];
+	let _ = [A { a }, B { b }, C { c }, D { d }, E { e }, F { f },];
 
 	#[rustidy::config(array_expr_cols = 2)]
 	let _ = [

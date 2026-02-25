@@ -33,3 +33,20 @@ impl FmtSingleOrIndent {
 		}
 	}
 }
+
+/// Remove or indent formatting
+#[derive(Clone, Copy, Debug)]
+pub enum FmtRemoveOrIndent {
+	Remove,
+	Indent,
+}
+
+impl FmtRemoveOrIndent {
+	#[must_use]
+	pub const fn prefix_ws(self) -> WhitespaceConfig {
+		match self {
+			Self::Remove => Whitespace::REMOVE,
+			Self::Indent => Whitespace::INDENT,
+		}
+	}
+}

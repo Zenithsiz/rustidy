@@ -266,9 +266,10 @@ where
 /// Formatting arguments for [`fmt_remove_or_indent_if_non_blank`]
 #[derive(Clone, Copy, Debug)]
 pub struct FmtArgsRemoveOrIndentIfNonBlank<TArgs> {
-	max_len:           usize,
-	value_args_remove: TArgs,
-	value_args_indent: TArgs,
+	pub force_indent_on_multiline: bool,
+	pub max_len:                   usize,
+	pub value_args_remove:         TArgs,
+	pub value_args_indent:         TArgs,
 }
 
 /// Formats a delimited with [`fmt_remove_if_non_blank`] if under or equal to
@@ -279,7 +280,12 @@ pub const fn fmt_remove_or_indent_if_non_blank<TArgs>(
 	value_args_remove: TArgs,
 	value_args_indent: TArgs
 ) -> FmtArgsRemoveOrIndentIfNonBlank<TArgs> {
-	FmtArgsRemoveOrIndentIfNonBlank { max_len, value_args_remove, value_args_indent }
+	FmtArgsRemoveOrIndentIfNonBlank {
+		force_indent_on_multiline: false,
+		max_len,
+		value_args_remove,
+		value_args_indent
+	}
 }
 
 impl<T, L, R, TArgs> Format<WhitespaceConfig, FmtArgsRemoveOrIndentIfNonBlank<TArgs>> for Delimited<T, L, R>
@@ -300,13 +306,14 @@ where
 			FmtRemoveWith(args.value_args_remove)
 		);
 
-		match output.len_non_multiline_ws() <= args.max_len {
-			true => output,
-			false => self.format(
+		let should_indent = (args.force_indent_on_multiline && output.multiline.is_some()) || output.len_non_multiline_ws() > args.max_len;
+		match should_indent {
+			true => self.format(
 				ctx,
 				prefix_ws,
 				self::fmt_indent_if_non_blank_with_value(args.value_args_indent)
 			),
+			false => output,
 		}
 	}
 }
