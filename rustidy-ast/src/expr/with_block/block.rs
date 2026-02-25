@@ -10,6 +10,7 @@ use {
 			ExpressionStatementWithBlock,
 			ExpressionStatementWithoutBlock,
 			Statement,
+			StatementInner,
 		},
 		token,
 	},
@@ -54,9 +55,8 @@ impl Parse for Statements {
 			//       operator.
 			if let Ok((expr, ..)) = parser
 				.try_parse::<(ExpressionStatementWithBlock, NotFollows<token::Dot>, NotFollows<token::Question>,)>()? {
-				stmts.push(
-					Statement::Expression(ExpressionStatement::WithBlock(expr))
-				);
+				let stmt = StatementInner::Expression(ExpressionStatement::WithBlock(expr));
+				stmts.push(Statement(ArenaIdx::new(stmt)));
 				continue;
 			}
 
@@ -65,9 +65,10 @@ impl Parse for Statements {
 				Ok(((expr, semi), peek_expr_state)) => match semi {
 					Some(semi) => {
 						parser.set_peeked(peek_expr_state);
-						stmts.push(Statement::Expression(
-							ExpressionStatement::WithoutBlock(ExpressionStatementWithoutBlock { expr, semi },)
-						));
+						let stmt = StatementInner::Expression(
+							ExpressionStatement::WithoutBlock(ExpressionStatementWithoutBlock { expr, semi })
+						);
+						stmts.push(Statement(ArenaIdx::new(stmt)));
 					},
 					None => match parser.with_tag(
 						ParserTag::SkipExpressionWithoutBlock,

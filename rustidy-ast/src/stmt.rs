@@ -14,15 +14,22 @@ use {
 	rustidy_format::{Format, Formattable, WhitespaceFormat},
 	rustidy_parse::{Parse, ParseError, Parser, ParserError},
 	rustidy_print::Print,
-	rustidy_util::Whitespace,
+	rustidy_util::{ArenaData, ArenaIdx, Whitespace},
 };
 
-/// `Statement`
+/// `Item`
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
+pub struct Statement(pub ArenaIdx<StatementInner>);
+
+/// `Statement`
+#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(ArenaData)]
+#[derive(serde::Serialize, serde::Deserialize)]
+#[derive(Parse, Formattable, Format, Print)]
 #[parse(name = "a statement")]
-pub enum Statement {
+pub enum StatementInner {
 	Empty(token::Semi),
 	Let(LetStatement),
 	Expression(ExpressionStatement),
