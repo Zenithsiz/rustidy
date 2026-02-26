@@ -28,7 +28,15 @@ use {
 #[parse(name = "a block expression")]
 #[parse(skip_if_tag = ParserTag::SkipBlockExpression)]
 pub struct BlockExpression(
-	#[format(args = attr::with::fmt_braced_indent())]
+	#[format(args = {
+		let max_len = match &self.0.0.value.inner {
+			// If we have any non-expression statements, never
+			// use a single line for it.
+			Some(Statements::Full(_)) => 0,
+			_ => 50,
+		};
+		attr::with::fmt_braced_single_or_indent(true, max_len)
+	})]
 	pub ArenaIdx<BracedWithInnerAttributes<Option<Statements>>>,
 );
 

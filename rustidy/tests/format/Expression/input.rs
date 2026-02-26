@@ -83,3 +83,12 @@ fn doc_comment_newline() {
 		C,
 	}
 }
+
+fn block() {
+	let _ = {};
+	let _ = { 5 };
+	let _ = { 1 + 5 };
+	let _ = { 1 + loooooooooooooooooooooooooooooooooooooooong + 2 };
+	let _ = { let _ = a; };
+	let _ = { let _ = a; 10 };
+}

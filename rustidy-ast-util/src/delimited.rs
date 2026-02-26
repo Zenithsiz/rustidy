@@ -218,9 +218,10 @@ impl<T: Format<WhitespaceConfig, ()>, L: Format<WhitespaceConfig, ()>, R: Format
 /// Formatting arguments for [`fmt_single_or_indent_if_non_blank`]
 #[derive(Clone, Copy, Debug)]
 pub struct FmtArgsSingleOrIndentIfNonBlank<TArgs> {
-	max_len:           usize,
-	value_args_single: TArgs,
-	value_args_indent: TArgs,
+	pub force_indent_on_multiline: bool,
+	pub max_len:                   usize,
+	pub value_args_single:         TArgs,
+	pub value_args_indent:         TArgs,
 }
 
 /// Formats a delimited with [`fmt_single_if_non_blank`] if under or equal to
@@ -231,9 +232,15 @@ pub const fn fmt_single_or_indent_if_non_blank<TArgs>(
 	value_args_single: TArgs,
 	value_args_indent: TArgs
 ) -> FmtArgsSingleOrIndentIfNonBlank<TArgs> {
-	FmtArgsSingleOrIndentIfNonBlank { max_len, value_args_single, value_args_indent }
+	FmtArgsSingleOrIndentIfNonBlank {
+		force_indent_on_multiline: false,
+		max_len,
+		value_args_single,
+		value_args_indent
+	}
 }
 
+// TODO: Merge this impl with `FmtArgsRemoveOrIndentIfNonBlank`
 impl<T, L, R, TArgs> Format<WhitespaceConfig, FmtArgsSingleOrIndentIfNonBlank<TArgs>> for Delimited<T, L, R>
 where
 	L: Format<WhitespaceConfig, ()>,
@@ -249,16 +256,17 @@ where
 		let output = self.format(
 			ctx,
 			prefix_ws,
-			self::fmt_single_if_non_blank_with_value(args.value_args_single)
+			fmt_single_if_non_blank_with_value(args.value_args_single)
 		);
 
-		match output.len_non_multiline_ws() <= args.max_len {
-			true => output,
-			false => self.format(
+		let should_indent = (args.force_indent_on_multiline && output.multiline.is_some()) || output.len_non_multiline_ws() > args.max_len;
+		match should_indent {
+			true => self.format(
 				ctx,
 				prefix_ws,
 				self::fmt_indent_if_non_blank_with_value(args.value_args_indent)
 			),
+			false => output,
 		}
 	}
 }

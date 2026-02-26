@@ -134,7 +134,7 @@ where
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Print)]
-pub struct BracedWithInnerAttributes<T>(Braced<WithInnerAttributes<T>>);
+pub struct BracedWithInnerAttributes<T>(pub Braced<WithInnerAttributes<T>>);
 
 impl<T, A> Format<WhitespaceConfig, FmtBracedArgs<A>> for BracedWithInnerAttributes<T>
 where
@@ -163,7 +163,7 @@ where
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Print)]
-struct WithInnerAttributes<T> {
+pub struct WithInnerAttributes<T> {
 	pub attrs: Vec<InnerAttrOrDocComment>,
 	pub inner: T,
 }
@@ -235,6 +235,18 @@ pub const fn fmt_braced_with<A>(delimited_args: A) -> FmtBracedArgs<A> {
 pub const fn fmt_braced_indent() -> FmtBracedArgs<delimited::FmtArgs<WhitespaceConfig, WhitespaceConfig, (), FmtArgs<()>, (),>> {
 	FmtBracedArgs {
 		delimited_args: delimited::fmt_indent_if_non_blank_with_value(self::fmt(Whitespace::INDENT))
+	}
+}
+
+#[must_use]
+pub const fn fmt_braced_single_or_indent(force_indent_on_multiline: bool, max_len: usize) -> FmtBracedArgs<delimited::FmtArgsSingleOrIndentIfNonBlank<FmtArgs<()>>> {
+	FmtBracedArgs {
+		delimited_args: delimited::FmtArgsSingleOrIndentIfNonBlank {
+			force_indent_on_multiline,
+			max_len,
+			value_args_single: self::fmt(Whitespace::SINGLE),
+			value_args_indent: self::fmt(Whitespace::INDENT)
+		}
 	}
 }
 
