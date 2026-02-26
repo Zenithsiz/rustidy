@@ -185,12 +185,33 @@ pub struct AttrInputEqExpr {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub enum DelimTokenTree {
+	Parens(DelimTokenTreeParens),
+	Brackets(DelimTokenTreeBrackets),
+	Braces(DelimTokenTreeBraces),
+}
+
+#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(serde::Serialize, serde::Deserialize)]
+#[derive(Parse, Formattable, Format, Print)]
+pub enum DelimTokenTreeParens {
 	#[format(args = delimited::fmt_preserve())]
-	Parens(Parenthesized<DelimTokenTreeInner>),
+	Tokens(Parenthesized<DelimTokenTreeInner>),
+}
+
+#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(serde::Serialize, serde::Deserialize)]
+#[derive(Parse, Formattable, Format, Print)]
+pub enum DelimTokenTreeBrackets {
 	#[format(args = delimited::fmt_preserve())]
-	Brackets(Bracketed<DelimTokenTreeInner>),
+	Tokens(Bracketed<DelimTokenTreeInner>),
+}
+
+#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(serde::Serialize, serde::Deserialize)]
+#[derive(Parse, Formattable, Format, Print)]
+pub enum DelimTokenTreeBraces {
 	#[format(args = delimited::fmt_preserve())]
-	Braces(Braced<DelimTokenTreeInner>),
+	Tokens(Braced<DelimTokenTreeInner>),
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]

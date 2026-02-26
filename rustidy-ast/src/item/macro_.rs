@@ -3,12 +3,10 @@
 // Imports
 use {
 	crate::{
-		attr::TokenTree,
+		attr::{DelimTokenTreeBraces, DelimTokenTreeBrackets, DelimTokenTreeParens},
 		path::SimplePath,
 		token,
-		util::{Braced, Bracketed, Parenthesized},
 	},
-	rustidy_ast_util::delimited,
 	rustidy_format::{Format, Formattable, WhitespaceFormat},
 	rustidy_parse::Parse,
 	rustidy_print::Print,
@@ -33,8 +31,7 @@ pub struct MacroInvocationSemiParens {
 	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub not:    token::Not,
 	#[format(prefix_ws = Whitespace::REMOVE)]
-	#[format(args = delimited::fmt_preserve())]
-	pub tokens: Parenthesized<MacroInvocationSemiTokens>,
+	pub tokens: DelimTokenTreeParens,
 	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub semi:   token::Semi,
 }
@@ -47,8 +44,7 @@ pub struct MacroInvocationSemiBrackets {
 	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub not:    token::Not,
 	#[format(prefix_ws = Whitespace::REMOVE)]
-	#[format(args = delimited::fmt_preserve())]
-	pub tokens: Bracketed<MacroInvocationSemiTokens>,
+	pub tokens: DelimTokenTreeBrackets,
 	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub semi:   token::Semi,
 }
@@ -61,14 +57,5 @@ pub struct MacroInvocationSemiBraces {
 	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub not:    token::Not,
 	#[format(prefix_ws = Whitespace::SINGLE)]
-	#[format(args = delimited::fmt_preserve())]
-	pub tokens: Braced<MacroInvocationSemiTokens>,
+	pub tokens: DelimTokenTreeBraces,
 }
-
-#[derive(PartialEq, Eq, Clone, Debug)]
-#[derive(serde::Serialize, serde::Deserialize)]
-#[derive(Parse, Formattable, Format, Print)]
-pub struct MacroInvocationSemiTokens(
-	#[format(args = rustidy_format::vec::args_prefix_ws(Whitespace::PRESERVE))]
-	Vec<TokenTree>,
-);

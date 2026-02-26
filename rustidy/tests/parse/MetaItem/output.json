@@ -1382,43 +1382,45 @@
 							"input": {
 								"DelimTokenTree": {
 									"Parens": {
-										"prefix": {
-											"ws": {
-												"first": "",
-												"rest": []
+										"Tokens": {
+											"prefix": {
+												"ws": {
+													"first": "",
+													"rest": []
+												},
+												"token": "("
 											},
-											"token": "("
-										},
-										"value": [
-											{
-												"Token": {
-													"IdentOrKeyword": [
-														{
-															"first": "",
-															"rest": []
-														},
-														"a"
-													]
+											"value": [
+												{
+													"Token": {
+														"IdentOrKeyword": [
+															{
+																"first": "",
+																"rest": []
+															},
+															"a"
+														]
+													}
+												},
+												{
+													"Token": {
+														"IdentOrKeyword": [
+															{
+																"first": " ",
+																"rest": []
+															},
+															"b"
+														]
+													}
 												}
-											},
-											{
-												"Token": {
-													"IdentOrKeyword": [
-														{
-															"first": " ",
-															"rest": []
-														},
-														"b"
-													]
-												}
+											],
+											"suffix": {
+												"ws": {
+													"first": "",
+													"rest": []
+												},
+												"token": ")"
 											}
-										],
-										"suffix": {
-											"ws": {
-												"first": "",
-												"rest": []
-											},
-											"token": ")"
 										}
 									}
 								}
@@ -1481,56 +1483,58 @@
 							"input": {
 								"DelimTokenTree": {
 									"Parens": {
-										"prefix": {
-											"ws": {
-												"first": "",
-												"rest": []
+										"Tokens": {
+											"prefix": {
+												"ws": {
+													"first": "",
+													"rest": []
+												},
+												"token": "("
 											},
-											"token": "("
-										},
-										"value": [
-											{
-												"Token": {
-													"IdentOrKeyword": [
-														{
-															"first": "",
-															"rest": []
-														},
-														"a"
-													]
-												}
-											},
-											{
-												"Token": {
-													"Punctuation": {
-														"Eq": {
-															"ws": {
+											"value": [
+												{
+													"Token": {
+														"IdentOrKeyword": [
+															{
+																"first": "",
+																"rest": []
+															},
+															"a"
+														]
+													}
+												},
+												{
+													"Token": {
+														"Punctuation": {
+															"Eq": {
+																"ws": {
+																	"first": " ",
+																	"rest": []
+																},
+																"token": "="
+															}
+														}
+													}
+												},
+												{
+													"Token": {
+														"IdentOrKeyword": [
+															{
 																"first": " ",
 																"rest": []
 															},
-															"token": "="
-														}
+															"let"
+														]
 													}
 												}
-											},
-											{
-												"Token": {
-													"IdentOrKeyword": [
-														{
-															"first": " ",
-															"rest": []
-														},
-														"let"
-													]
-												}
+											],
+											"suffix": {
+												"ws": {
+													"first": "",
+													"rest": []
+												},
+												"token": ")"
 											}
-										],
-										"suffix": {
-											"ws": {
-												"first": "",
-												"rest": []
-											},
-											"token": ")"
 										}
 									}
 								}
