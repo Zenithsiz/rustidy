@@ -4,7 +4,7 @@
 use {
 	crate::{
 		attr::{self, WithOuterAttributes},
-		expr::BlockExpression,
+		expr::{BlockExpression, with_block::block::BlockExpressionFmt},
 		lifetime::Lifetime,
 		pat::PatternNoTopAlt,
 		token,
@@ -59,6 +59,8 @@ pub struct Function {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub enum FunctionBody {
+	// TODO: Should we allow singleline function bodies?
+	#[format(args = BlockExpressionFmt { allow_singleline: false })]
 	Expr(BlockExpression),
 	Semi(token::Semi),
 }

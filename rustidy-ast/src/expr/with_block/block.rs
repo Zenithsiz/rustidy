@@ -15,7 +15,7 @@ use {
 		token,
 	},
 	rustidy_ast_util::{AtLeast1, NotFollows, at_least},
-	rustidy_format::{Format, Formattable, WhitespaceFormat},
+	rustidy_format::{Format, Formattable, WhitespaceConfig, WhitespaceFormat},
 	rustidy_parse::{Parse, ParseError, Parser, ParserError, ParserTag},
 	rustidy_print::Print,
 	rustidy_util::{ArenaIdx, Whitespace, decl_arena},
@@ -27,18 +27,41 @@ use {
 #[derive(Parse, Formattable, Format, Print)]
 #[parse(name = "a block expression")]
 #[parse(skip_if_tag = ParserTag::SkipBlockExpression)]
+#[format(args(ty = "BlockExpressionFmt"))]
 pub struct BlockExpression(
 	#[format(args = {
-		let max_len = match &self.0.0.value.inner {
-			// If we have any non-expression statements, never
-			// use a single line for it.
-			Some(Statements::Full(_)) => 0,
-			_ => 50,
+		let max_len = match args.allow_singleline {
+			true => match &self.0.0.value.inner {
+				// If we have any non-expression statements, never
+				// use a single line for it.
+				Some(Statements::Full(_)) => 0,
+				_ => 50,
+			},
+			false => 0,
 		};
 		attr::with::fmt_braced_single_or_indent(true, max_len)
 	})]
 	pub ArenaIdx<BracedWithInnerAttributes<Option<Statements>>>,
 );
+
+impl Format<WhitespaceConfig, ()> for BlockExpression {
+	fn format(
+		&mut self,
+		ctx: &mut rustidy_format::Context,
+		prefix_ws: WhitespaceConfig,
+		_args: ()
+	) -> rustidy_format::FormatOutput {
+		self.format(
+			ctx,
+			prefix_ws,
+			BlockExpressionFmt { allow_singleline: true }
+		)
+	}
+}
+
+pub struct BlockExpressionFmt {
+	pub allow_singleline: bool,
+}
 
 decl_arena! { BracedWithInnerAttributes<Option<Statements>> }
 
