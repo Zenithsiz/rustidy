@@ -56,6 +56,13 @@ pub trait Formattable {
 			.ok()
 	}
 
+	/// Returns if the prefix whitespace has any newlines
+	fn prefix_ws_has_newlines(&mut self, ctx: &mut Context) -> Option<bool> {
+		self
+			.with_prefix_ws(ctx, &mut |ws, _ctx| ws.has_newlines())
+			.ok()
+	}
+
 	/// Joins a string as a prefix onto the prefix whitespace of this type.
 	fn prefix_ws_join_prefix(&mut self, ctx: &mut Context, ws: Whitespace) -> Result<(), Whitespace> {
 		let mut join_ws = Some(ws);

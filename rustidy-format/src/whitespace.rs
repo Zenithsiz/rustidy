@@ -59,6 +59,16 @@ pub impl Whitespace {
 		self.0.rest.is_empty()
 	}
 
+	/// Returns if this whitespace has any newlines
+	fn has_newlines(&mut self) -> bool {
+		self.0.first.0.has_newlines() || self.0.rest.iter().any(
+			|(comment, ws)| ws.0.has_newlines() || match comment {
+				Comment::Block(comment) => comment.0.has_newlines(),
+				Comment::Line(comment) => comment.0.has_newlines(),
+			}
+		)
+	}
+
 	/// Joins `other` to this whitespace as a suffix
 	fn join_suffix(&mut self, other: Self) {
 		let lhs = &mut *self.0;
