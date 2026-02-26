@@ -55,9 +55,7 @@ impl Parse for MatchArms {
 			// TODO: For some reason, clippy (and only clippy) errors out when we
 			//       merge this into `let Ok(arm) = ... else { break }`.
 			let arm_res = parser.try_parse::<MatchArm>()?;
-			let Ok(arm) = arm_res else {
-				break
-			};
+			let Ok(arm) = arm_res else { break };
 			let arrow = parser.parse::<token::FatArrow>()?;
 
 

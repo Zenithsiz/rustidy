@@ -602,7 +602,7 @@ fn emit_transparent(
 	root_conversion_impls: Option<&proc_macro2::TokenStream>,
 ) -> Result<proc_macro::TokenStream, AppError> {
 	let darling::ast::Data::Struct(fields) = &attrs.data else {
-		app_error::bail!("`#[parse_recursive(transparent)]` is only supported on structs");
+		app_error::bail!("`#[parse_recursive(transparent)]` is only supported on structs")
 	};
 
 	let item_ident = &attrs.ident;

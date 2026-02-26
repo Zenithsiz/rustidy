@@ -83,7 +83,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 	let transparent_field_access = match is_item_transparent {
 		true => {
 			let darling::ast::Data::Struct(fields) = &attrs.data else {
-				bail!("Cannot set `#[parse_error(transparent)]` on enums or unions");
+				bail!("Cannot set `#[parse_error(transparent)]` on enums or unions")
 			};
 			let field = fields.fields.iter().exactly_one().context(
 				"`#[parse_error(transparent)]` is only supported for single-field structs"
@@ -177,9 +177,8 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 									.fields
 									.iter()
 									.enumerate()
-									.filter(|(_, variant_field)| {
-										variant_field.source
-									}).at_most_one().context(
+									.filter(|(_, variant_field)| { variant_field.source })
+									.at_most_one().context(
 									"At most 1 field may have `#[parse_error(source)]`"
 								)?,
 							};

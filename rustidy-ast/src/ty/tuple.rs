@@ -33,9 +33,7 @@ impl Format<WhitespaceConfig, ()> for TupleTypeInner {
 		prefix_ws: WhitespaceConfig,
 		_args: ()
 	) -> FormatOutput {
-		let [(first_ty, first_comma), tys @ ..] = &mut *self.tys else {
-			return ctx.format(&mut self.end, prefix_ws);
-		};
+		let [(first_ty, first_comma), tys @ ..] = &mut *self.tys else { return ctx.format(&mut self.end, prefix_ws) };
 
 		let mut output = FormatOutput::default();
 

@@ -263,20 +263,16 @@ pub fn update_from_attr(attr: &AttrOrMetaItem, ctx: &mut rustidy_format::Context
 
 /// Parses a `#[rustidy::config]` attribute
 fn update_config(meta: &MetaItem, ctx: &mut rustidy_format::Context) -> Result<(), AppError> {
-	let MetaItem::Seq(meta) = meta else {
-		bail!("Expected `rustidy::config([...])`");
-	};
+	let MetaItem::Seq(meta) = meta else { bail!("Expected `rustidy::config([...])`") };
 
-	let Some(configs) = &meta.seq.value else {
-		return Ok(())
-	};
+	let Some(configs) = &meta.seq.value else { return Ok(()) };
 
 	for config in configs.0.values() {
 		let config = try {
 			config.try_as_meta_ref()?.try_as_eq_expr_ref()?
 		};
 		let Some(config) = config else {
-			bail!("Expected `rustidy::config(<config-name> = <value>)`");
+			bail!("Expected `rustidy::config(<config-name> = <value>)`")
 		};
 
 		macro str() {

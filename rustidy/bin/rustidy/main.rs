@@ -145,12 +145,8 @@ fn format_file(
 		for item in &items.0 {
 			// If it's not a module definition, skip it
 			// TODO: Support modules inside of other modules (and other items).
-			let ItemInner::Vis(vis_item) = &item.0.inner else {
-				continue;
-			};
-			let VisItemInner::Module(mod_) = &vis_item.inner else {
-				continue;
-			};
+			let ItemInner::Vis(vis_item) = &item.0.inner else { continue };
+			let VisItemInner::Module(mod_) = &vis_item.inner else { continue };
 			if mod_.inner.is_def() {
 				continue;
 			}
@@ -240,21 +236,15 @@ fn find_path_attr<'a>(
 	attrs: impl IntoIterator<Item = &'a OuterAttrOrDocComment>,
 ) -> Result<Option<Cow<'a, str>>, AppError> {
 	for attr in attrs {
-		let Some(attr) = attr.try_as_attr_ref() else {
-			continue;
-		};
-		let Some(meta) = attr.open.value.try_as_meta_ref() else {
-			continue;
-		};
+		let Some(attr) = attr.try_as_attr_ref() else { continue };
+		let Some(meta) = attr.open.value.try_as_meta_ref() else { continue };
 		if !(meta.path().is_str("path")) {
 			continue;
 		}
-		let Some(meta) = meta.try_as_eq_expr_ref() else {
-			bail!("Malformed `#[path = ...]` attribute");
-		};
+		let Some(meta) = meta.try_as_eq_expr_ref() else { bail!("Malformed `#[path = ...]` attribute") };
 		// TODO: Support raw strings here
 		let Some(literal) = meta.expr.as_string_literal() else {
-			bail!("Expected a literal expression in `#[path = ...]` attribute");
+			bail!("Expected a literal expression in `#[path = ...]` attribute")
 		};
 
 		return Ok(Some(literal.contents()));

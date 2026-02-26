@@ -72,9 +72,7 @@ impl<T> Arena<T> {
 		self.init[idx] = false;
 
 		// SAFETY: No other references to `slot` exist
-		unsafe {
-			ptr::read(slot).assume_init()
-		}
+		unsafe { ptr::read(slot).assume_init() }
 	}
 }
 
@@ -98,9 +96,7 @@ impl<T: ArenaData> ArenaIdx<T> {
 	pub fn new(value: T) -> Self {
 		T::with_arena(|arena| {
 			// SAFETY: We create no other references to `arena` in this block
-			let arena = unsafe {
-				arena.as_mut_unchecked()
-			};
+			let arena = unsafe { arena.as_mut_unchecked() };
 
 			// Before inserting, remove any trailing dead values
 			arena.clean_trailing();
@@ -126,9 +122,7 @@ impl<T: ArenaData> ArenaIdx<T> {
 			// Finally push the new value and set it as initialized.
 			// SAFETY: No other mutable references to `slot` exist, since
 			//         the slot was empty.
-			unsafe {
-				slot.as_mut_unchecked().write(value)
-			};
+			unsafe { slot.as_mut_unchecked().write(value) };
 			arena.init.push(true);
 
 			Self {
@@ -146,14 +140,10 @@ impl<T: ArenaData> ArenaIdx<T> {
 
 		T::with_arena(|arena| {
 			// SAFETY: We create no other references to `arena` in this block
-			let arena = unsafe {
-				arena.as_mut_unchecked()
-			};
+			let arena = unsafe { arena.as_mut_unchecked() };
 
 			// SAFETY: No other mutable references to the slot exist, since we take `self`
-			unsafe {
-				arena.take_slot(idx)
-			}
+			unsafe { arena.take_slot(idx) }
 		})
 	}
 
@@ -193,16 +183,12 @@ impl<T: ArenaData> ops::Deref for ArenaIdx<T> {
 
 		T::with_arena(|arena| {
 			// SAFETY: We create no other references to `arena` in this block
-			let arena = unsafe {
-				arena.as_ref_unchecked()
-			};
+			let arena = unsafe { arena.as_ref_unchecked() };
 
 			let slot = arena.slot(idx);
 
 			// SAFETY: No mutable reference to the value exists since we take `&self`
-			unsafe {
-				MaybeUninit::assume_init_ref(&*slot)
-			}
+			unsafe { MaybeUninit::assume_init_ref(&*slot) }
 		})
 	}
 }
@@ -213,16 +199,12 @@ impl<T: ArenaData> ops::DerefMut for ArenaIdx<T> {
 
 		T::with_arena(|arena| {
 			// SAFETY: We create no other references to `arena` in this block
-			let arena = unsafe {
-				arena.as_ref_unchecked()
-			};
+			let arena = unsafe { arena.as_ref_unchecked() };
 
 			let slot = arena.slot(idx);
 
 			// SAFETY: No other references to the value exist since we take `&mut self`
-			unsafe {
-				MaybeUninit::assume_init_mut(&mut *slot)
-			}
+			unsafe { MaybeUninit::assume_init_mut(&mut *slot) }
 		})
 	}
 }
@@ -233,15 +215,11 @@ impl<T: ArenaData> Drop for ArenaIdx<T> {
 
 		T::with_arena(|arena| {
 			// SAFETY: We create no other references to `arena` in this block
-			let arena = unsafe {
-				arena.as_mut_unchecked()
-			};
+			let arena = unsafe { arena.as_mut_unchecked() };
 
 			// SAFETY: No other mutable references to the slot exist, since we take `&mut self`
 			// TODO: Should we manually implement this to avoid moving the value onto the stack?
-			let _ = unsafe {
-				arena.take_slot(idx)
-			};
+			let _ = unsafe { arena.take_slot(idx) };
 		});
 	}
 }

@@ -699,9 +699,7 @@ where
 
 #[cfg(feature = "flamegraph-traces")]
 fn get_flamegraph_trace_max_depth(var: &str, default: usize) -> Result<usize, AppError> {
-	let Ok(max_depth) = env::var(var) else {
-		return Ok(default);
-	};
+	let Ok(max_depth) = env::var(var) else { return Ok(default) };
 
 	max_depth
 		.parse::<usize>()
@@ -725,7 +723,5 @@ fn open_flamegraph_trace_file(var: &str, default: &str) -> Result<BufWriter<GzEn
 #[cfg(feature = "flamegraph-traces")]
 fn flamegraph_trace_get_timestamp() -> u64 {
 	// Safety: `rdtsc` is always safe to call
-	unsafe {
-		std::arch::x86_64::_rdtsc()
-	}
+	unsafe { std::arch::x86_64::_rdtsc() }
 }

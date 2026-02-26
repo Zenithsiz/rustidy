@@ -437,9 +437,7 @@ impl<T: Format<WhitespaceConfig, ()>, P: Format<WhitespaceConfig, ()>> Format<Wh
 				.append_to(&mut output);
 			prefix_ws.take_if(|_| !output.is_empty);
 
-			let Some(punct) = self.punct_mut(cur_idx) else {
-				break;
-			};
+			let Some(punct) = self.punct_mut(cur_idx) else { break };
 			ctx
 				.format(punct, prefix_ws.unwrap_or(Whitespace::REMOVE))
 				.append_to(&mut output);
@@ -449,17 +447,13 @@ impl<T: Format<WhitespaceConfig, ()>, P: Format<WhitespaceConfig, ()>> Format<Wh
 			let row_len = args.columns.unwrap_or(1);
 			let row_rest_len = row_len.saturating_sub(1);
 			for _ in 0..row_rest_len {
-				let Some(value) = self.value_mut(cur_idx) else {
-					break 'values;
-				};
+				let Some(value) = self.value_mut(cur_idx) else { break 'values };
 				ctx
 					.format(value, prefix_ws.unwrap_or(Whitespace::SINGLE))
 					.append_to(&mut output);
 				prefix_ws.take_if(|_| !output.is_empty);
 
-				let Some(punct) = self.punct_mut(cur_idx) else {
-					break 'values;
-				};
+				let Some(punct) = self.punct_mut(cur_idx) else { break 'values };
 				ctx
 					.format(punct, prefix_ws.unwrap_or(Whitespace::REMOVE))
 					.append_to(&mut output);

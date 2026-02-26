@@ -547,9 +547,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 				let error_enum_variants = itertools::izip!(&fields.fields, &error_names, &field_tys, &fatal_fields)
 					.filter_map(
 						|(field, error_name, field_ty, is_fatal)| {
-							let Some(error_name) = error_name else {
-								return None
-							};
+							let Some(error_name) = error_name else { return None };
 
 							let fatal = match is_fatal {
 								true => quote! { #[parse_error(fatal)] },

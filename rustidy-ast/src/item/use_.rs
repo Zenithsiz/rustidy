@@ -174,9 +174,7 @@ impl UseTreeGroup {
 
 	/// Sorts all trees inside
 	pub fn sort(&mut self, _ctx: &mut rustidy_format::Context) {
-		let Some(trees) = &mut self.tree.value else {
-			return
-		};
+		let Some(trees) = &mut self.tree.value else { return };
 
 		// TODO: Move this wrapper elsewhere
 		struct SimplePathSortOrder<'a>(&'a SimplePath);

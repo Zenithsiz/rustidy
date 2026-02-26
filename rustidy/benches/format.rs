@@ -68,9 +68,8 @@ where
 
 	let config = Config::default();
 	let mut ctx = rustidy_format::Context::new(input, &config);
-	bencher.iter(|| {
-		value.format(&mut ctx, prefix_ws, args)
-	});
+	bencher
+		.iter(|| value.format(&mut ctx, prefix_ws, args));
 }
 
 #[cold]
