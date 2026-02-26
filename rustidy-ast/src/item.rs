@@ -38,14 +38,9 @@ pub use self::{
 
 // Imports
 use {
-	crate::attr,
+	crate::attr::{self, DelimTokenTreeBraces, DelimTokenTreeParens},
 	super::{
-		attr::{
-			DelimTokenTree,
-			DelimTokenTreeInner,
-			OuterAttrOrDocComment,
-			WithOuterAttributes,
-		},
+		attr::{DelimTokenTree, OuterAttrOrDocComment, WithOuterAttributes},
 		token,
 		util::{Braced, Parenthesized},
 		vis::Visibility,
@@ -226,11 +221,9 @@ pub enum DeclMacroBody {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct DeclMacroBodyInline {
-	#[format(args = delimited::fmt_indent_if_non_blank())]
-	pub args: Parenthesized<DelimTokenTreeInner>,
+	pub args: DelimTokenTreeParens,
 	#[format(prefix_ws = Whitespace::SINGLE)]
-	#[format(args = delimited::fmt_indent_if_non_blank())]
-	pub body: Braced<DelimTokenTreeInner>,
+	pub body: DelimTokenTreeBraces,
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]
@@ -276,8 +269,7 @@ pub enum DeclMacroBranchExtra {
 pub struct DeclMacroBranchAttr {
 	pub attr: token::Attr,
 	#[format(prefix_ws = Whitespace::REMOVE)]
-	#[format(args = delimited::FmtRemove)]
-	pub args: Parenthesized<DelimTokenTreeInner>,
+	pub args: DelimTokenTreeParens,
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]
