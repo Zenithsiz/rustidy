@@ -50,7 +50,7 @@ pub struct CallExpression {
 #[format(args = MethodCallExpressionFmt)]
 pub struct MethodCallExpression {
 	pub expr:    Expression,
-	#[format(indent(if_has_tag = FormatTag::InsideChain))]
+	#[format(indent(if_ = ctx.has_tag(FormatTag::InsideChain)))]
 	#[format(prefix_ws = match ctx.has_tag(FormatTag::InsideChain) {
 		true => Whitespace::INDENT,
 		false => Whitespace::REMOVE,
@@ -60,7 +60,7 @@ pub struct MethodCallExpression {
 	pub segment: PathExprSegment,
 	#[format(prefix_ws = Whitespace::REMOVE)]
 	#[format(without_tag = FormatTag::InsideChain)]
-	#[format(indent(if_has_tag = FormatTag::InsideChain))]
+	#[format(indent(if_ = ctx.has_tag(FormatTag::InsideChain)))]
 	#[format(args = delimited::fmt_remove_or_indent_if_non_blank(
 		50,
 		FmtSingleOrIndent::Single,

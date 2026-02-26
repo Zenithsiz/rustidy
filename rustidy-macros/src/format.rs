@@ -24,9 +24,9 @@ struct ArgsTy {
 }
 
 #[derive(Debug, darling::FromMeta)]
-#[darling(from_word = || Ok(Self { if_has_tag: None }))]
+#[darling(from_word = || Ok(Self { if_: None }))]
 struct Indent {
-	if_has_tag: Option<syn::Expr>,
+	if_: Option<syn::Expr>,
 }
 
 #[derive(Clone, Debug, darling::FromMeta)]
@@ -452,8 +452,10 @@ fn derive_format(
 	);
 
 	let format = match indent {
-		Some(Indent { if_has_tag }) => match if_has_tag {
-			Some(cond) => parse_quote! { ctx.with_indent_if(ctx.has_tag(#cond), |ctx| #format) },
+		Some(Indent { if_ }) => match if_ {
+			Some(cond) => parse_quote! { match #cond {
+				cond => ctx.with_indent_if(cond, |ctx| #format),
+			}},
 			None => parse_quote! { ctx.with_indent(|ctx| #format) },
 		},
 		None => format,
