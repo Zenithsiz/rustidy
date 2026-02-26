@@ -3,7 +3,7 @@
 // Imports
 use {
 	crate::{
-		attr::BracedWithInnerAttributes,
+		attr::{self, BracedWithInnerAttributes},
 		expr::ExpressionWithoutBlock,
 		stmt::{
 			ExpressionStatement,
@@ -27,7 +27,10 @@ use {
 #[derive(Parse, Formattable, Format, Print)]
 #[parse(name = "a block expression")]
 #[parse(skip_if_tag = ParserTag::SkipBlockExpression)]
-pub struct BlockExpression(pub ArenaIdx<BracedWithInnerAttributes<Option<Statements>>>);
+pub struct BlockExpression(
+	#[format(args = attr::with::fmt_braced_indent())]
+	pub ArenaIdx<BracedWithInnerAttributes<Option<Statements>>>,
+);
 
 decl_arena! { BracedWithInnerAttributes<Option<Statements>> }
 

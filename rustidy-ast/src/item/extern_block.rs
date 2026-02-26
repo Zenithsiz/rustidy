@@ -25,6 +25,7 @@ pub struct ExternBlock {
 	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub abi:     Option<Abi>,
 	#[format(prefix_ws = Whitespace::SINGLE)]
+	#[format(args = attr::with::fmt_braced_indent())]
 	pub inner:   BracedWithInnerAttributes<ExternBlockItems>,
 }
 

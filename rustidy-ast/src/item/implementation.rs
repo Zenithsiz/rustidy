@@ -2,7 +2,7 @@
 
 // Imports
 use {
-	crate::{attr::BracedWithInnerAttributes, token, ty::{Type, TypePath}},
+	crate::{attr::{self, BracedWithInnerAttributes}, token, ty::{Type, TypePath}},
 	super::{function::{GenericParams, WhereClause}, trait_::AssociatedItem},
 	rustidy_format::{Format, Formattable, WhitespaceFormat},
 	rustidy_parse::Parse,
@@ -33,6 +33,7 @@ pub struct InherentImpl {
 	#[format(prefix_ws = Whitespace::INDENT)]
 	pub where_:   Option<WhereClause>,
 	#[format(prefix_ws = Whitespace::SINGLE)]
+	#[format(args = attr::with::fmt_braced_indent())]
 	pub body:     BracedWithInnerAttributes<ImplBody>,
 }
 
@@ -63,6 +64,7 @@ pub struct TraitImpl {
 	#[format(prefix_ws = Whitespace::INDENT)]
 	pub where_:   Option<WhereClause>,
 	#[format(prefix_ws = Whitespace::SINGLE)]
+	#[format(args = attr::with::fmt_braced_indent())]
 	pub body:     BracedWithInnerAttributes<ImplBody>,
 }
 

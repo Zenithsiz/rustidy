@@ -136,27 +136,15 @@ where
 #[derive(Parse, Formattable, Print)]
 pub struct BracedWithInnerAttributes<T>(Braced<WithInnerAttributes<T>>);
 
-impl<T: Format<WhitespaceConfig, ()>> Format<WhitespaceConfig, ()> for BracedWithInnerAttributes<T> {
+impl<T, A> Format<WhitespaceConfig, FmtBracedArgs<A>> for BracedWithInnerAttributes<T>
+where
+	Braced<WithInnerAttributes<T>>: Format<WhitespaceConfig, A>,
+	A: Clone {
 	fn format(
 		&mut self,
 		ctx: &mut rustidy_format::Context,
 		prefix_ws: WhitespaceConfig,
-		_args: ()
-	) -> FormatOutput {
-		self.format(
-			ctx,
-			prefix_ws,
-			FmtArgs { prefix_ws: Whitespace::INDENT, inner_args: () }
-		)
-	}
-}
-
-impl<T: Format<WhitespaceConfig, A>, A: Clone> Format<WhitespaceConfig, FmtArgs<A>> for BracedWithInnerAttributes<T> {
-	fn format(
-		&mut self,
-		ctx: &mut rustidy_format::Context,
-		prefix_ws: WhitespaceConfig,
-		args: FmtArgs<A>,
+		args: FmtBracedArgs<A>,
 	) -> FormatOutput {
 		let mut ctx = ctx.sub_context();
 		for attr in &self.0.value.attrs {
@@ -165,11 +153,8 @@ impl<T: Format<WhitespaceConfig, A>, A: Clone> Format<WhitespaceConfig, FmtArgs<
 			}
 		}
 
-		ctx.format_with(
-			&mut self.0,
-			prefix_ws,
-			delimited::fmt_indent_if_non_blank_with_value(args)
-		)
+		ctx
+			.format_with(&mut self.0, prefix_ws, args.delimited_args)
 
 	}
 }
@@ -227,6 +212,29 @@ impl<T: Format<WhitespaceConfig, A>, A> Format<WhitespaceConfig, FmtArgs<A>> for
 			.append_to(&mut output);
 
 		output
+	}
+}
+
+/// Braced formatting arguments
+#[derive(Clone, Copy, Debug)]
+pub struct FmtBracedArgs<A> {
+	pub delimited_args: A,
+}
+
+#[must_use]
+pub const fn fmt_braced() -> FmtBracedArgs<()> {
+	self::fmt_braced_with(())
+}
+
+#[must_use]
+pub const fn fmt_braced_with<A>(delimited_args: A) -> FmtBracedArgs<A> {
+	FmtBracedArgs { delimited_args }
+}
+
+#[must_use]
+pub const fn fmt_braced_indent() -> FmtBracedArgs<delimited::FmtArgs<WhitespaceConfig, WhitespaceConfig, (), FmtArgs<()>, (),>> {
+	FmtBracedArgs {
+		delimited_args: delimited::fmt_indent_if_non_blank_with_value(self::fmt(Whitespace::INDENT))
 	}
 }
 

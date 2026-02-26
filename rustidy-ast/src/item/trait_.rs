@@ -49,6 +49,7 @@ pub struct Trait {
 pub enum TraitBody {
 	// Note: Nightly-only
 	Eq(TraitBodyEq),
+	#[format(args = attr::with::fmt_braced_indent())]
 	Full(BracedWithInnerAttributes<TraitBodyFull>),
 }
 

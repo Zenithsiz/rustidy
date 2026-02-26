@@ -27,6 +27,7 @@ pub struct MatchExpression {
 	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub scrutinee: Box<Scrutinee>,
 	#[format(prefix_ws = Whitespace::SINGLE)]
+	#[format(args = attr::with::fmt_braced_indent())]
 	pub arms:      BracedWithInnerAttributes<Option<MatchArms>>,
 }
 

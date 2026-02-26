@@ -2,7 +2,7 @@
 
 // Imports
 use {
-	crate::{attr::BracedWithInnerAttributes, token},
+	crate::{attr::{self, BracedWithInnerAttributes}, token},
 	super::Items,
 	rustidy_ast_util::Identifier,
 	rustidy_format::{Format, Formattable, WhitespaceFormat},
@@ -36,5 +36,6 @@ pub struct Module {
 #[derive(Parse, Formattable, Format, Print)]
 pub enum ModuleInner {
 	None(token::Semi),
+	#[format(args = attr::with::fmt_braced_indent())]
 	Def(BracedWithInnerAttributes<Option<Items>>),
 }
