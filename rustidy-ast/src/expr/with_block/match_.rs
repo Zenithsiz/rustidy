@@ -68,9 +68,9 @@ impl Parse for MatchArms {
 				.peek::<(ExpressionWithoutBlock, Option<token::Comma>)>()?;
 			let (expr, trailing_comma, control_flow) = match (with_block_res, without_block_res) {
 				// If both parse, we only accept with block if the without block had no comma.
-				(Ok(((expr_with_block, with_block_trailing_comma), with_block_peek_state)), Ok(((expr_without_block, without_block_trailing_comma), without_block_peek_state)),) => match without_block_trailing_comma {
+				(Ok(((expr_with_block, with_block_trailing_comma), with_block_peek_pos)), Ok(((expr_without_block, without_block_trailing_comma), without_block_peek_pos)),) => match without_block_trailing_comma {
 					Some(trailing_comma) => {
-						parser.set_peeked(without_block_peek_state);
+						parser.set_pos(without_block_peek_pos);
 
 						let expr = Expression::from_recursive_root(
 							ExpressionInner::from(expr_without_block),
@@ -79,21 +79,21 @@ impl Parse for MatchArms {
 						(expr, Some(trailing_comma), ControlFlow::Continue(()))
 					},
 					None => {
-						parser.set_peeked(with_block_peek_state);
+						parser.set_pos(with_block_peek_pos);
 
 						let expr = Expression::from_recursive_root(ExpressionInner::from(expr_with_block), parser);
 						(expr, with_block_trailing_comma, ControlFlow::Continue(()))
 					},
 				},
 				// If only one of them parses, we take it
-				(Ok(((expr, trailing_comma), peek_state)), Err(_)) => {
-					parser.set_peeked(peek_state);
+				(Ok(((expr, trailing_comma), peek_pos)), Err(_)) => {
+					parser.set_pos(peek_pos);
 
 					let expr = Expression::from_recursive_root(ExpressionInner::from(expr), parser);
 					(expr, trailing_comma, ControlFlow::Continue(()))
 				},
-				(Err(_), Ok(((expr, trailing_comma), peek_state))) => {
-					parser.set_peeked(peek_state);
+				(Err(_), Ok(((expr, trailing_comma), peek_pos))) => {
+					parser.set_pos(peek_pos);
 
 					let expr = Expression::from_recursive_root(ExpressionInner::from(expr), parser);
 					let control_flow = match trailing_comma.is_some() {

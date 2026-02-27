@@ -5,10 +5,11 @@ pub use rustidy_macros::ParseRecursive;
 
 // Imports
 use {
-	crate::{self as rustidy_parse, PeekState},
+	crate::{self as rustidy_parse},
 	super::{ParsableFrom, Parse, ParseError, Parser, ParserError, ParserTag},
 	core::{marker::PhantomData, mem},
 	either::Either,
+	rustidy_util::AstPos,
 };
 
 /// Recursive type
@@ -205,7 +206,7 @@ fn parse<R: ParsableRecursive<R>>(parser: &mut Parser) -> Result<RecursiveWrappe
 	//       on each parse.
 	// TODO: This is not a very good solution.
 	#[expect(clippy::type_complexity, reason = "TODO")]
-	fn peek<T: Parse>(parser: &mut Parser, tags: &[ParserTag],) -> Result<Result<(T, PeekState), ParserError<T>>, ParserError<T>> {
+	fn peek<T: Parse>(parser: &mut Parser, tags: &[ParserTag],) -> Result<Result<(T, AstPos), ParserError<T>>, ParserError<T>> {
 		parser
 			.with_tags(tags.iter().copied(), Parser::peek::<T>)
 	}
@@ -221,31 +222,31 @@ fn parse<R: ParsableRecursive<R>>(parser: &mut Parser) -> Result<RecursiveWrappe
 			.map_err(RecursiveWrapperError::Base)?;
 
 		let parsed = match (prefix, base) {
-			(Ok((prefix, prefix_state)), Ok((base, base_state))) => {
-				parser.set_peeked(base_state);
+			(Ok((prefix, prefix_pos)), Ok((base, base_pos))) => {
+				parser.set_pos(base_pos);
 				match peek::<R::Base>(parser, &tags)
 					.map_err(RecursiveWrapperError::Base)?
 					.is_ok() {
-					true => Either::Left((prefix, prefix_state)),
+					true => Either::Left((prefix, prefix_pos)),
 					// TODO: We should undo the peek here
 					false => Either::Right((base, None)),
 				}
 			},
-			(Ok((prefix, prefix_state)), Err(_)) => Either::Left((prefix, prefix_state)),
-			(Err(_), Ok((base, base_state))) => Either::Right((base, Some(base_state))),
+			(Ok((prefix, prefix_pos)), Err(_)) => Either::Left((prefix, prefix_pos)),
+			(Err(_), Ok((base, base_pos))) => Either::Right((base, Some(base_pos))),
 			(Err(prefix), Err(base)) => return Err(
 				RecursiveWrapperError::PrefixOrBase { prefix, base }
 			),
 		};
 
 		match parsed {
-			Either::Left((prefix, prefix_state)) => {
-				parser.set_peeked(prefix_state);
+			Either::Left((prefix, prefix_pos)) => {
+				parser.set_pos(prefix_pos);
 				cur_prefixes.push(prefix);
 			},
-			Either::Right((base, base_state)) => {
-				if let Some(state) = base_state {
-					parser.set_peeked(state);
+			Either::Right((base, base_pos)) => {
+				if let Some(pos) = base_pos {
+					parser.set_pos(pos);
 				}
 
 				let mut cur_suffixes = vec![];
@@ -256,8 +257,8 @@ fn parse<R: ParsableRecursive<R>>(parser: &mut Parser) -> Result<RecursiveWrappe
 						.map_err(RecursiveWrapperError::Infix)?;
 
 					let parsed = match (suffix, infix) {
-						(Ok((suffix, suffix_state)), Ok((infix, infix_state))) => 'parsed: {
-							parser.set_peeked(infix_state);
+						(Ok((suffix, suffix_pos)), Ok((infix, infix_pos))) => 'parsed: {
+							parser.set_pos(infix_pos);
 							// TODO: This is a semi-hack to ensure that we parse `for _ in 0.. {}` correctly.
 							//       Technically this should be always correct, since the only suffix that can
 							//       be equal to an infix is `..`, and it can't be chained, so the only time
@@ -272,7 +273,7 @@ fn parse<R: ParsableRecursive<R>>(parser: &mut Parser) -> Result<RecursiveWrappe
 								.map_err(RecursiveWrapperError::BracesOpen)?
 								.is_ok() {
 								// TODO: We should undo the peek here
-								break 'parsed Either::Left((suffix, suffix_state));
+								break 'parsed Either::Left((suffix, suffix_pos));
 							}
 
 							match peek::<R::Prefix>(parser, &tags)
@@ -282,22 +283,22 @@ fn parse<R: ParsableRecursive<R>>(parser: &mut Parser) -> Result<RecursiveWrappe
 								.is_ok() {
 								// TODO: We should undo the peek here
 								true => Either::Right((infix, None)),
-								false => Either::Left((suffix, suffix_state)),
+								false => Either::Left((suffix, suffix_pos)),
 							}
 						},
-						(Ok((suffix, suffix_state)), Err(_)) => Either::Left((suffix, suffix_state)),
-						(Err(_), Ok((infix, infix_state))) => Either::Right((infix, Some(infix_state))),
+						(Ok((suffix, suffix_pos)), Err(_)) => Either::Left((suffix, suffix_pos)),
+						(Err(_), Ok((infix, infix_pos))) => Either::Right((infix, Some(infix_pos))),
 						(Err(_), Err(_)) => break None,
 					};
 
 					match parsed {
-						Either::Left((suffix, suffix_state)) => {
-							parser.set_peeked(suffix_state);
+						Either::Left((suffix, suffix_pos)) => {
+							parser.set_pos(suffix_pos);
 							cur_suffixes.push(suffix);
 						},
-						Either::Right((infix, infix_state)) => {
-							if let Some(state) = infix_state {
-								parser.set_peeked(state);
+						Either::Right((infix, infix_pos)) => {
+							if let Some(pos) = infix_pos {
+								parser.set_pos(pos);
 							}
 							break Some(infix);
 						},

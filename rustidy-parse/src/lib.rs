@@ -532,7 +532,7 @@ impl Parser {
 	/// Peeks a `T` from this parser using `parser` for parsing.
 	///
 	/// Parser is only advanced is a fatal error occurs
-	pub fn peek_with<T, E: ParseError>(&mut self, parse: impl FnOnce(&mut Self) -> Result<T, E>,) -> Result<Result<(T, PeekState), E>, E> {
+	pub fn peek_with<T, E: ParseError>(&mut self, parse: impl FnOnce(&mut Self) -> Result<T, E>,) -> Result<Result<(T, AstPos), E>, E> {
 		let start_pos = self.cur_pos;
 		let output = match parse(self) {
 			Ok(value) => Ok(value),
@@ -540,10 +540,10 @@ impl Parser {
 			Err(err) => Err(err),
 		};
 
-		let peek_state = PeekState { cur_pos: self.cur_pos };
+		let end_pos = self.cur_pos;
 		self.cur_pos = start_pos;
 
-		let output = output.map(|value| (value, peek_state));
+		let output = output.map(|value| (value, end_pos));
 		Ok(output)
 	}
 
@@ -551,17 +551,8 @@ impl Parser {
 	///
 	/// Parser is only advanced is a fatal error occurs
 	#[expect(clippy::type_complexity, reason = "TODO")]
-	pub fn peek<T: Parse>(&mut self) -> Result<Result<(T, PeekState), ParserError<T>>, ParserError<T>> {
+	pub fn peek<T: Parse>(&mut self) -> Result<Result<(T, AstPos), ParserError<T>>, ParserError<T>> {
 		self.peek_with(Self::parse::<T>)
-	}
-
-	/// Accepts a peeked state.
-	#[expect(
-		clippy::needless_pass_by_value,
-		reason = "It's to ensure the user doesn't use the same peek state multiple times"
-	)]
-	pub const fn set_peeked(&mut self, peek_state: PeekState) {
-		self.cur_pos = peek_state.cur_pos;
 	}
 
 	/// Returns all current tags
@@ -616,26 +607,6 @@ impl Parser {
 		self.tags_offset = prev_offset;
 
 		output
-	}
-}
-
-/// Peek state
-#[derive(Debug)]
-pub struct PeekState {
-	cur_pos: AstPos,
-}
-
-impl PeekState {
-	/// Returns if this peek state is further ahead than another
-	#[must_use]
-	pub fn ahead_of(&self, other: &Self) -> bool {
-		self.cur_pos > other.cur_pos
-	}
-
-	/// Returns if this peek state is further ahead or equal to another
-	#[must_use]
-	pub fn ahead_of_or_equal(&self, other: &Self) -> bool {
-		self.cur_pos >= other.cur_pos
 	}
 }
 

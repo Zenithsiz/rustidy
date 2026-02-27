@@ -43,17 +43,17 @@ impl<L: Parse, R: Parse> Parse for Longest<L, R> {
 		let lhs = parser.peek::<L>().map_err(Self::Error::Left)?;
 		let rhs = parser.peek::<R>().map_err(Self::Error::Right)?;
 
-		let (value, state) = match (lhs, rhs) {
-			(Ok((lhs, lhs_state)), Ok((rhs, rhs_state))) => match lhs_state.ahead_of(&rhs_state) {
-				true => (Self::Left(lhs), lhs_state),
-				false => (Self::Right(rhs), rhs_state),
+		let (value, pos) = match (lhs, rhs) {
+			(Ok((lhs, lhs_pos)), Ok((rhs, rhs_pos))) => match lhs_pos > rhs_pos {
+				true => (Self::Left(lhs), lhs_pos),
+				false => (Self::Right(rhs), rhs_pos),
 			},
 			(Ok((lhs, pos)), Err(_)) => (Self::Left(lhs), pos),
 			(Err(_), Ok((rhs, pos))) => (Self::Right(rhs), pos),
 			(Err(lhs), Err(rhs)) => return Err(Self::Error::Both { lhs, rhs }),
 		};
 
-		parser.set_peeked(state);
+		parser.set_pos(pos);
 		Ok(value)
 	}
 }

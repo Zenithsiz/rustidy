@@ -99,9 +99,9 @@ impl Parse for Statements {
 
 			match parser
 				.peek::<(ExpressionWithoutBlock, Option<token::Semi>)>()? {
-				Ok(((expr, semi), peek_expr_state)) => match semi {
+				Ok(((expr, semi), peek_expr_pos)) => match semi {
 					Some(semi) => {
-						parser.set_peeked(peek_expr_state);
+						parser.set_pos(peek_expr_pos);
 						let stmt = StatementInner::Expression(
 							ExpressionStatement::WithoutBlock(ExpressionStatementWithoutBlock { expr, semi })
 						);
@@ -114,13 +114,12 @@ impl Parse for Statements {
 						//       since braced statement macros don't need a semi-colon, while expression ones do.
 						//       Since both have the same length, we prefer statements to expressions if they have
 						//       the same length here.
-						Ok((stmt, peek_stmt_state)) if peek_stmt_state
-							.ahead_of_or_equal(&peek_expr_state) => {
-							parser.set_peeked(peek_stmt_state);
+						Ok((stmt, peek_stmt_pos)) if peek_stmt_pos >= peek_expr_pos => {
+							parser.set_pos(peek_stmt_pos);
 							push_stmt(stmt);
 						},
 						_ => {
-							parser.set_peeked(peek_expr_state);
+							parser.set_pos(peek_expr_pos);
 							break match stmts {
 								Some(stmts) => Self::Full(
 									StatementsFull { stmts, trailing_expr: Some(expr) }
