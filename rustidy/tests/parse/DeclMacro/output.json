@@ -28,22 +28,20 @@
 							"body": {
 								"Inline": {
 									"args": {
-										"Tokens": {
-											"prefix": {
-												"ws": {
-													"first": "",
-													"rest": []
-												},
-												"token": "("
+										"prefix": {
+											"ws": {
+												"first": "",
+												"rest": []
 											},
-											"value": [],
-											"suffix": {
-												"ws": {
-													"first": "",
-													"rest": []
-												},
-												"token": ")"
-											}
+											"token": "("
+										},
+										"value": [],
+										"suffix": {
+											"ws": {
+												"first": "",
+												"rest": []
+											},
+											"token": ")"
 										}
 									},
 									"body": {
@@ -109,9 +107,9 @@
 											"punctuated": {
 												"first": {
 													"extra": null,
-													"args": {
-														"Parens": {
-															"Tokens": {
+													"rule": {
+														"matcher": {
+															"Parens": {
 																"prefix": {
 																	"ws": {
 																		"first": " ",
@@ -128,32 +126,32 @@
 																	"token": ")"
 																}
 															}
-														}
-													},
-													"arrow": {
-														"ws": {
-															"first": " ",
-															"rest": []
 														},
-														"token": "=>"
-													},
-													"body": {
-														"Braces": {
-															"Tokens": {
-																"prefix": {
-																	"ws": {
-																		"first": " ",
-																		"rest": []
+														"arrow": {
+															"ws": {
+																"first": " ",
+																"rest": []
+															},
+															"token": "=>"
+														},
+														"transcriber": {
+															"Braces": {
+																"Tokens": {
+																	"prefix": {
+																		"ws": {
+																			"first": " ",
+																			"rest": []
+																		},
+																		"token": "{"
 																	},
-																	"token": "{"
-																},
-																"value": [],
-																"suffix": {
-																	"ws": {
-																		"first": "",
-																		"rest": []
-																	},
-																	"token": "}"
+																	"value": [],
+																	"suffix": {
+																		"ws": {
+																			"first": "",
+																			"rest": []
+																		},
+																		"token": "}"
+																	}
 																}
 															}
 														}
@@ -213,9 +211,9 @@
 											"punctuated": {
 												"first": {
 													"extra": null,
-													"args": {
-														"Parens": {
-															"Tokens": {
+													"rule": {
+														"matcher": {
+															"Parens": {
 																"prefix": {
 																	"ws": {
 																		"first": " ",
@@ -232,32 +230,32 @@
 																	"token": ")"
 																}
 															}
-														}
-													},
-													"arrow": {
-														"ws": {
-															"first": " ",
-															"rest": []
 														},
-														"token": "=>"
-													},
-													"body": {
-														"Braces": {
-															"Tokens": {
-																"prefix": {
-																	"ws": {
-																		"first": " ",
-																		"rest": []
+														"arrow": {
+															"ws": {
+																"first": " ",
+																"rest": []
+															},
+															"token": "=>"
+														},
+														"transcriber": {
+															"Braces": {
+																"Tokens": {
+																	"prefix": {
+																		"ws": {
+																			"first": " ",
+																			"rest": []
+																		},
+																		"token": "{"
 																	},
-																	"token": "{"
-																},
-																"value": [],
-																"suffix": {
-																	"ws": {
-																		"first": "",
-																		"rest": []
-																	},
-																	"token": "}"
+																	"value": [],
+																	"suffix": {
+																		"ws": {
+																			"first": "",
+																			"rest": []
+																		},
+																		"token": "}"
+																	}
 																}
 															}
 														}
@@ -274,9 +272,9 @@
 														},
 														"value": {
 															"extra": null,
-															"args": {
-																"Parens": {
-																	"Tokens": {
+															"rule": {
+																"matcher": {
+																	"Parens": {
 																		"prefix": {
 																			"ws": {
 																				"first": " ",
@@ -293,32 +291,32 @@
 																			"token": ")"
 																		}
 																	}
-																}
-															},
-															"arrow": {
-																"ws": {
-																	"first": " ",
-																	"rest": []
 																},
-																"token": "=>"
-															},
-															"body": {
-																"Braces": {
-																	"Tokens": {
-																		"prefix": {
-																			"ws": {
-																				"first": " ",
-																				"rest": []
+																"arrow": {
+																	"ws": {
+																		"first": " ",
+																		"rest": []
+																	},
+																	"token": "=>"
+																},
+																"transcriber": {
+																	"Braces": {
+																		"Tokens": {
+																			"prefix": {
+																				"ws": {
+																					"first": " ",
+																					"rest": []
+																				},
+																				"token": "{"
 																			},
-																			"token": "{"
-																		},
-																		"value": [],
-																		"suffix": {
-																			"ws": {
-																				"first": "",
-																				"rest": []
-																			},
-																			"token": "}"
+																			"value": [],
+																			"suffix": {
+																				"ws": {
+																					"first": "",
+																					"rest": []
+																				},
+																				"token": "}"
+																			}
 																		}
 																	}
 																}
@@ -379,9 +377,9 @@
 											"punctuated": {
 												"first": {
 													"extra": null,
-													"args": {
-														"Parens": {
-															"Tokens": {
+													"rule": {
+														"matcher": {
+															"Parens": {
 																"prefix": {
 																	"ws": {
 																		"first": " ",
@@ -398,32 +396,32 @@
 																	"token": ")"
 																}
 															}
-														}
-													},
-													"arrow": {
-														"ws": {
-															"first": " ",
-															"rest": []
 														},
-														"token": "=>"
-													},
-													"body": {
-														"Braces": {
-															"Tokens": {
-																"prefix": {
-																	"ws": {
-																		"first": " ",
-																		"rest": []
+														"arrow": {
+															"ws": {
+																"first": " ",
+																"rest": []
+															},
+															"token": "=>"
+														},
+														"transcriber": {
+															"Braces": {
+																"Tokens": {
+																	"prefix": {
+																		"ws": {
+																			"first": " ",
+																			"rest": []
+																		},
+																		"token": "{"
 																	},
-																	"token": "{"
-																},
-																"value": [],
-																"suffix": {
-																	"ws": {
-																		"first": "",
-																		"rest": []
-																	},
-																	"token": "}"
+																	"value": [],
+																	"suffix": {
+																		"ws": {
+																			"first": "",
+																			"rest": []
+																		},
+																		"token": "}"
+																	}
 																}
 															}
 														}
@@ -440,9 +438,9 @@
 														},
 														"value": {
 															"extra": null,
-															"args": {
-																"Parens": {
-																	"Tokens": {
+															"rule": {
+																"matcher": {
+																	"Parens": {
 																		"prefix": {
 																			"ws": {
 																				"first": " ",
@@ -459,32 +457,32 @@
 																			"token": ")"
 																		}
 																	}
-																}
-															},
-															"arrow": {
-																"ws": {
-																	"first": " ",
-																	"rest": []
 																},
-																"token": "=>"
-															},
-															"body": {
-																"Braces": {
-																	"Tokens": {
-																		"prefix": {
-																			"ws": {
-																				"first": " ",
-																				"rest": []
+																"arrow": {
+																	"ws": {
+																		"first": " ",
+																		"rest": []
+																	},
+																	"token": "=>"
+																},
+																"transcriber": {
+																	"Braces": {
+																		"Tokens": {
+																			"prefix": {
+																				"ws": {
+																					"first": " ",
+																					"rest": []
+																				},
+																				"token": "{"
 																			},
-																			"token": "{"
-																		},
-																		"value": [],
-																		"suffix": {
-																			"ws": {
-																				"first": "",
-																				"rest": []
-																			},
-																			"token": "}"
+																			"value": [],
+																			"suffix": {
+																				"ws": {
+																					"first": "",
+																					"rest": []
+																				},
+																				"token": "}"
+																			}
 																		}
 																	}
 																}
@@ -507,6 +505,4453 @@
 												"rest": []
 											},
 											"token": "}"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			{
+				"attrs": [],
+				"inner": {
+					"Vis": {
+						"vis": null,
+						"inner": {
+							"DeclMacro": {
+								"macro_": {
+									"ws": {
+										"first": "\n\n",
+										"rest": []
+									},
+									"token": "macro"
+								},
+								"ident": {
+									"NonKw": [
+										{
+											"first": " ",
+											"rest": []
+										},
+										"a"
+									]
+								},
+								"body": {
+									"Branches": {
+										"prefix": {
+											"ws": {
+												"first": " ",
+												"rest": []
+											},
+											"token": "{"
+										},
+										"value": {
+											"punctuated": {
+												"first": {
+													"extra": null,
+													"rule": {
+														"matcher": {
+															"Parens": {
+																"prefix": {
+																	"ws": {
+																		"first": " ",
+																		"rest": []
+																	},
+																	"token": "("
+																},
+																"value": [],
+																"suffix": {
+																	"ws": {
+																		"first": "",
+																		"rest": []
+																	},
+																	"token": ")"
+																}
+															}
+														},
+														"arrow": {
+															"ws": {
+																"first": " ",
+																"rest": []
+															},
+															"token": "=>"
+														},
+														"transcriber": {
+															"Parens": {
+																"Tokens": {
+																	"prefix": {
+																		"ws": {
+																			"first": " ",
+																			"rest": []
+																		},
+																		"token": "("
+																	},
+																	"value": [],
+																	"suffix": {
+																		"ws": {
+																			"first": "",
+																			"rest": []
+																		},
+																		"token": ")"
+																	}
+																}
+															}
+														}
+													}
+												},
+												"rest": []
+											},
+											"trailing": null
+										},
+										"suffix": {
+											"ws": {
+												"first": " ",
+												"rest": []
+											},
+											"token": "}"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			{
+				"attrs": [],
+				"inner": {
+					"Vis": {
+						"vis": null,
+						"inner": {
+							"DeclMacro": {
+								"macro_": {
+									"ws": {
+										"first": "\n",
+										"rest": []
+									},
+									"token": "macro"
+								},
+								"ident": {
+									"NonKw": [
+										{
+											"first": " ",
+											"rest": []
+										},
+										"a"
+									]
+								},
+								"body": {
+									"Branches": {
+										"prefix": {
+											"ws": {
+												"first": " ",
+												"rest": []
+											},
+											"token": "{"
+										},
+										"value": {
+											"punctuated": {
+												"first": {
+													"extra": null,
+													"rule": {
+														"matcher": {
+															"Parens": {
+																"prefix": {
+																	"ws": {
+																		"first": " ",
+																		"rest": []
+																	},
+																	"token": "("
+																},
+																"value": [],
+																"suffix": {
+																	"ws": {
+																		"first": "",
+																		"rest": []
+																	},
+																	"token": ")"
+																}
+															}
+														},
+														"arrow": {
+															"ws": {
+																"first": " ",
+																"rest": []
+															},
+															"token": "=>"
+														},
+														"transcriber": {
+															"Brackets": {
+																"Tokens": {
+																	"prefix": {
+																		"ws": {
+																			"first": " ",
+																			"rest": []
+																		},
+																		"token": "["
+																	},
+																	"value": [],
+																	"suffix": {
+																		"ws": {
+																			"first": "",
+																			"rest": []
+																		},
+																		"token": "]"
+																	}
+																}
+															}
+														}
+													}
+												},
+												"rest": []
+											},
+											"trailing": null
+										},
+										"suffix": {
+											"ws": {
+												"first": " ",
+												"rest": []
+											},
+											"token": "}"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			{
+				"attrs": [],
+				"inner": {
+					"Vis": {
+						"vis": null,
+						"inner": {
+							"DeclMacro": {
+								"macro_": {
+									"ws": {
+										"first": "\n",
+										"rest": []
+									},
+									"token": "macro"
+								},
+								"ident": {
+									"NonKw": [
+										{
+											"first": " ",
+											"rest": []
+										},
+										"a"
+									]
+								},
+								"body": {
+									"Branches": {
+										"prefix": {
+											"ws": {
+												"first": " ",
+												"rest": []
+											},
+											"token": "{"
+										},
+										"value": {
+											"punctuated": {
+												"first": {
+													"extra": null,
+													"rule": {
+														"matcher": {
+															"Parens": {
+																"prefix": {
+																	"ws": {
+																		"first": " ",
+																		"rest": []
+																	},
+																	"token": "("
+																},
+																"value": [],
+																"suffix": {
+																	"ws": {
+																		"first": "",
+																		"rest": []
+																	},
+																	"token": ")"
+																}
+															}
+														},
+														"arrow": {
+															"ws": {
+																"first": " ",
+																"rest": []
+															},
+															"token": "=>"
+														},
+														"transcriber": {
+															"Braces": {
+																"Tokens": {
+																	"prefix": {
+																		"ws": {
+																			"first": " ",
+																			"rest": []
+																		},
+																		"token": "{"
+																	},
+																	"value": [],
+																	"suffix": {
+																		"ws": {
+																			"first": "",
+																			"rest": []
+																		},
+																		"token": "}"
+																	}
+																}
+															}
+														}
+													}
+												},
+												"rest": []
+											},
+											"trailing": null
+										},
+										"suffix": {
+											"ws": {
+												"first": " ",
+												"rest": []
+											},
+											"token": "}"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			{
+				"attrs": [],
+				"inner": {
+					"Vis": {
+						"vis": null,
+						"inner": {
+							"DeclMacro": {
+								"macro_": {
+									"ws": {
+										"first": "\n\n",
+										"rest": []
+									},
+									"token": "macro"
+								},
+								"ident": {
+									"NonKw": [
+										{
+											"first": " ",
+											"rest": []
+										},
+										"a"
+									]
+								},
+								"body": {
+									"Branches": {
+										"prefix": {
+											"ws": {
+												"first": " ",
+												"rest": []
+											},
+											"token": "{"
+										},
+										"value": {
+											"punctuated": {
+												"first": {
+													"extra": null,
+													"rule": {
+														"matcher": {
+															"Parens": {
+																"prefix": {
+																	"ws": {
+																		"first": " ",
+																		"rest": []
+																	},
+																	"token": "("
+																},
+																"value": [],
+																"suffix": {
+																	"ws": {
+																		"first": "",
+																		"rest": []
+																	},
+																	"token": ")"
+																}
+															}
+														},
+														"arrow": {
+															"ws": {
+																"first": " ",
+																"rest": []
+															},
+															"token": "=>"
+														},
+														"transcriber": {
+															"Parens": {
+																"Tokens": {
+																	"prefix": {
+																		"ws": {
+																			"first": " ",
+																			"rest": []
+																		},
+																		"token": "("
+																	},
+																	"value": [],
+																	"suffix": {
+																		"ws": {
+																			"first": "",
+																			"rest": []
+																		},
+																		"token": ")"
+																	}
+																}
+															}
+														}
+													}
+												},
+												"rest": []
+											},
+											"trailing": null
+										},
+										"suffix": {
+											"ws": {
+												"first": " ",
+												"rest": []
+											},
+											"token": "}"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			{
+				"attrs": [],
+				"inner": {
+					"Vis": {
+						"vis": null,
+						"inner": {
+							"DeclMacro": {
+								"macro_": {
+									"ws": {
+										"first": "\n",
+										"rest": []
+									},
+									"token": "macro"
+								},
+								"ident": {
+									"NonKw": [
+										{
+											"first": " ",
+											"rest": []
+										},
+										"a"
+									]
+								},
+								"body": {
+									"Branches": {
+										"prefix": {
+											"ws": {
+												"first": " ",
+												"rest": []
+											},
+											"token": "{"
+										},
+										"value": {
+											"punctuated": {
+												"first": {
+													"extra": null,
+													"rule": {
+														"matcher": {
+															"Brackets": {
+																"prefix": {
+																	"ws": {
+																		"first": " ",
+																		"rest": []
+																	},
+																	"token": "["
+																},
+																"value": [],
+																"suffix": {
+																	"ws": {
+																		"first": "",
+																		"rest": []
+																	},
+																	"token": "]"
+																}
+															}
+														},
+														"arrow": {
+															"ws": {
+																"first": " ",
+																"rest": []
+															},
+															"token": "=>"
+														},
+														"transcriber": {
+															"Parens": {
+																"Tokens": {
+																	"prefix": {
+																		"ws": {
+																			"first": " ",
+																			"rest": []
+																		},
+																		"token": "("
+																	},
+																	"value": [],
+																	"suffix": {
+																		"ws": {
+																			"first": "",
+																			"rest": []
+																		},
+																		"token": ")"
+																	}
+																}
+															}
+														}
+													}
+												},
+												"rest": []
+											},
+											"trailing": null
+										},
+										"suffix": {
+											"ws": {
+												"first": " ",
+												"rest": []
+											},
+											"token": "}"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			{
+				"attrs": [],
+				"inner": {
+					"Vis": {
+						"vis": null,
+						"inner": {
+							"DeclMacro": {
+								"macro_": {
+									"ws": {
+										"first": "\n",
+										"rest": []
+									},
+									"token": "macro"
+								},
+								"ident": {
+									"NonKw": [
+										{
+											"first": " ",
+											"rest": []
+										},
+										"a"
+									]
+								},
+								"body": {
+									"Branches": {
+										"prefix": {
+											"ws": {
+												"first": " ",
+												"rest": []
+											},
+											"token": "{"
+										},
+										"value": {
+											"punctuated": {
+												"first": {
+													"extra": null,
+													"rule": {
+														"matcher": {
+															"Braces": {
+																"prefix": {
+																	"ws": {
+																		"first": " ",
+																		"rest": []
+																	},
+																	"token": "{"
+																},
+																"value": [],
+																"suffix": {
+																	"ws": {
+																		"first": "",
+																		"rest": []
+																	},
+																	"token": "}"
+																}
+															}
+														},
+														"arrow": {
+															"ws": {
+																"first": " ",
+																"rest": []
+															},
+															"token": "=>"
+														},
+														"transcriber": {
+															"Parens": {
+																"Tokens": {
+																	"prefix": {
+																		"ws": {
+																			"first": " ",
+																			"rest": []
+																		},
+																		"token": "("
+																	},
+																	"value": [],
+																	"suffix": {
+																		"ws": {
+																			"first": "",
+																			"rest": []
+																		},
+																		"token": ")"
+																	}
+																}
+															}
+														}
+													}
+												},
+												"rest": []
+											},
+											"trailing": null
+										},
+										"suffix": {
+											"ws": {
+												"first": " ",
+												"rest": []
+											},
+											"token": "}"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			{
+				"attrs": [],
+				"inner": {
+					"Vis": {
+						"vis": null,
+						"inner": {
+							"DeclMacro": {
+								"macro_": {
+									"ws": {
+										"first": "\n\n",
+										"rest": []
+									},
+									"token": "macro"
+								},
+								"ident": {
+									"NonKw": [
+										{
+											"first": " ",
+											"rest": []
+										},
+										"a"
+									]
+								},
+								"body": {
+									"Branches": {
+										"prefix": {
+											"ws": {
+												"first": " ",
+												"rest": []
+											},
+											"token": "{"
+										},
+										"value": {
+											"punctuated": {
+												"first": {
+													"extra": null,
+													"rule": {
+														"matcher": {
+															"Parens": {
+																"prefix": {
+																	"ws": {
+																		"first": " ",
+																		"rest": []
+																	},
+																	"token": "("
+																},
+																"value": [
+																	{
+																		"Token": {
+																			"IdentOrKeyword": [
+																				{
+																					"first": "",
+																					"rest": []
+																				},
+																				"a"
+																			]
+																		}
+																	}
+																],
+																"suffix": {
+																	"ws": {
+																		"first": "",
+																		"rest": []
+																	},
+																	"token": ")"
+																}
+															}
+														},
+														"arrow": {
+															"ws": {
+																"first": " ",
+																"rest": []
+															},
+															"token": "=>"
+														},
+														"transcriber": {
+															"Parens": {
+																"Tokens": {
+																	"prefix": {
+																		"ws": {
+																			"first": " ",
+																			"rest": []
+																		},
+																		"token": "("
+																	},
+																	"value": [],
+																	"suffix": {
+																		"ws": {
+																			"first": "",
+																			"rest": []
+																		},
+																		"token": ")"
+																	}
+																}
+															}
+														}
+													}
+												},
+												"rest": []
+											},
+											"trailing": null
+										},
+										"suffix": {
+											"ws": {
+												"first": " ",
+												"rest": []
+											},
+											"token": "}"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			{
+				"attrs": [],
+				"inner": {
+					"Vis": {
+						"vis": null,
+						"inner": {
+							"DeclMacro": {
+								"macro_": {
+									"ws": {
+										"first": "\n",
+										"rest": []
+									},
+									"token": "macro"
+								},
+								"ident": {
+									"NonKw": [
+										{
+											"first": " ",
+											"rest": []
+										},
+										"a"
+									]
+								},
+								"body": {
+									"Branches": {
+										"prefix": {
+											"ws": {
+												"first": " ",
+												"rest": []
+											},
+											"token": "{"
+										},
+										"value": {
+											"punctuated": {
+												"first": {
+													"extra": null,
+													"rule": {
+														"matcher": {
+															"Parens": {
+																"prefix": {
+																	"ws": {
+																		"first": " ",
+																		"rest": []
+																	},
+																	"token": "("
+																},
+																"value": [
+																	{
+																		"Matcher": {
+																			"Parens": {
+																				"prefix": {
+																					"ws": {
+																						"first": "",
+																						"rest": []
+																					},
+																					"token": "("
+																				},
+																				"value": [],
+																				"suffix": {
+																					"ws": {
+																						"first": "",
+																						"rest": []
+																					},
+																					"token": ")"
+																				}
+																			}
+																		}
+																	}
+																],
+																"suffix": {
+																	"ws": {
+																		"first": "",
+																		"rest": []
+																	},
+																	"token": ")"
+																}
+															}
+														},
+														"arrow": {
+															"ws": {
+																"first": " ",
+																"rest": []
+															},
+															"token": "=>"
+														},
+														"transcriber": {
+															"Parens": {
+																"Tokens": {
+																	"prefix": {
+																		"ws": {
+																			"first": " ",
+																			"rest": []
+																		},
+																		"token": "("
+																	},
+																	"value": [],
+																	"suffix": {
+																		"ws": {
+																			"first": "",
+																			"rest": []
+																		},
+																		"token": ")"
+																	}
+																}
+															}
+														}
+													}
+												},
+												"rest": []
+											},
+											"trailing": null
+										},
+										"suffix": {
+											"ws": {
+												"first": " ",
+												"rest": []
+											},
+											"token": "}"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			{
+				"attrs": [],
+				"inner": {
+					"Vis": {
+						"vis": null,
+						"inner": {
+							"DeclMacro": {
+								"macro_": {
+									"ws": {
+										"first": "\n",
+										"rest": []
+									},
+									"token": "macro"
+								},
+								"ident": {
+									"NonKw": [
+										{
+											"first": " ",
+											"rest": []
+										},
+										"a"
+									]
+								},
+								"body": {
+									"Branches": {
+										"prefix": {
+											"ws": {
+												"first": " ",
+												"rest": []
+											},
+											"token": "{"
+										},
+										"value": {
+											"punctuated": {
+												"first": {
+													"extra": null,
+													"rule": {
+														"matcher": {
+															"Parens": {
+																"prefix": {
+																	"ws": {
+																		"first": " ",
+																		"rest": []
+																	},
+																	"token": "("
+																},
+																"value": [
+																	{
+																		"DollarIdent": {
+																			"dollar": {
+																				"ws": {
+																					"first": "",
+																					"rest": []
+																				},
+																				"token": "$"
+																			},
+																			"ident": {
+																				"IdentOrKw": [
+																					{
+																						"first": "",
+																						"rest": []
+																					},
+																					"a"
+																				]
+																			},
+																			"colon": {
+																				"ws": {
+																					"first": "",
+																					"rest": []
+																				},
+																				"token": ":"
+																			},
+																			"spec": {
+																				"Expr": {
+																					"ws": {
+																						"first": "",
+																						"rest": []
+																					},
+																					"token": "expr"
+																				}
+																			}
+																		}
+																	}
+																],
+																"suffix": {
+																	"ws": {
+																		"first": "",
+																		"rest": []
+																	},
+																	"token": ")"
+																}
+															}
+														},
+														"arrow": {
+															"ws": {
+																"first": " ",
+																"rest": []
+															},
+															"token": "=>"
+														},
+														"transcriber": {
+															"Parens": {
+																"Tokens": {
+																	"prefix": {
+																		"ws": {
+																			"first": " ",
+																			"rest": []
+																		},
+																		"token": "("
+																	},
+																	"value": [],
+																	"suffix": {
+																		"ws": {
+																			"first": "",
+																			"rest": []
+																		},
+																		"token": ")"
+																	}
+																}
+															}
+														}
+													}
+												},
+												"rest": []
+											},
+											"trailing": null
+										},
+										"suffix": {
+											"ws": {
+												"first": " ",
+												"rest": []
+											},
+											"token": "}"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			{
+				"attrs": [],
+				"inner": {
+					"Vis": {
+						"vis": null,
+						"inner": {
+							"DeclMacro": {
+								"macro_": {
+									"ws": {
+										"first": "\n",
+										"rest": []
+									},
+									"token": "macro"
+								},
+								"ident": {
+									"NonKw": [
+										{
+											"first": " ",
+											"rest": []
+										},
+										"a"
+									]
+								},
+								"body": {
+									"Branches": {
+										"prefix": {
+											"ws": {
+												"first": " ",
+												"rest": []
+											},
+											"token": "{"
+										},
+										"value": {
+											"punctuated": {
+												"first": {
+													"extra": null,
+													"rule": {
+														"matcher": {
+															"Parens": {
+																"prefix": {
+																	"ws": {
+																		"first": " ",
+																		"rest": []
+																	},
+																	"token": "("
+																},
+																"value": [
+																	{
+																		"DollarIdent": {
+																			"dollar": {
+																				"ws": {
+																					"first": "",
+																					"rest": []
+																				},
+																				"token": "$"
+																			},
+																			"ident": {
+																				"Underscore": {
+																					"ws": {
+																						"first": "",
+																						"rest": []
+																					},
+																					"token": "_"
+																				}
+																			},
+																			"colon": {
+																				"ws": {
+																					"first": "",
+																					"rest": []
+																				},
+																				"token": ":"
+																			},
+																			"spec": {
+																				"Expr": {
+																					"ws": {
+																						"first": "",
+																						"rest": []
+																					},
+																					"token": "expr"
+																				}
+																			}
+																		}
+																	}
+																],
+																"suffix": {
+																	"ws": {
+																		"first": "",
+																		"rest": []
+																	},
+																	"token": ")"
+																}
+															}
+														},
+														"arrow": {
+															"ws": {
+																"first": " ",
+																"rest": []
+															},
+															"token": "=>"
+														},
+														"transcriber": {
+															"Parens": {
+																"Tokens": {
+																	"prefix": {
+																		"ws": {
+																			"first": " ",
+																			"rest": []
+																		},
+																		"token": "("
+																	},
+																	"value": [],
+																	"suffix": {
+																		"ws": {
+																			"first": "",
+																			"rest": []
+																		},
+																		"token": ")"
+																	}
+																}
+															}
+														}
+													}
+												},
+												"rest": []
+											},
+											"trailing": null
+										},
+										"suffix": {
+											"ws": {
+												"first": " ",
+												"rest": []
+											},
+											"token": "}"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			{
+				"attrs": [],
+				"inner": {
+					"Vis": {
+						"vis": null,
+						"inner": {
+							"DeclMacro": {
+								"macro_": {
+									"ws": {
+										"first": "\n",
+										"rest": []
+									},
+									"token": "macro"
+								},
+								"ident": {
+									"NonKw": [
+										{
+											"first": " ",
+											"rest": []
+										},
+										"a"
+									]
+								},
+								"body": {
+									"Branches": {
+										"prefix": {
+											"ws": {
+												"first": " ",
+												"rest": []
+											},
+											"token": "{"
+										},
+										"value": {
+											"punctuated": {
+												"first": {
+													"extra": null,
+													"rule": {
+														"matcher": {
+															"Parens": {
+																"prefix": {
+																	"ws": {
+																		"first": " ",
+																		"rest": []
+																	},
+																	"token": "("
+																},
+																"value": [
+																	{
+																		"DollarRep": {
+																			"dollar": {
+																				"ws": {
+																					"first": "",
+																					"rest": []
+																				},
+																				"token": "$"
+																			},
+																			"matches": {
+																				"prefix": {
+																					"ws": {
+																						"first": "",
+																						"rest": []
+																					},
+																					"token": "("
+																				},
+																				"value": {
+																					"first": {
+																						"Token": {
+																							"IdentOrKeyword": [
+																								{
+																									"first": "",
+																									"rest": []
+																								},
+																								"a"
+																							]
+																						}
+																					},
+																					"rest": []
+																				},
+																				"suffix": {
+																					"ws": {
+																						"first": "",
+																						"rest": []
+																					},
+																					"token": ")"
+																				}
+																			},
+																			"rep_sep": null,
+																			"rep_op": {
+																				"Star": {
+																					"ws": {
+																						"first": "",
+																						"rest": []
+																					},
+																					"token": "*"
+																				}
+																			}
+																		}
+																	}
+																],
+																"suffix": {
+																	"ws": {
+																		"first": "",
+																		"rest": []
+																	},
+																	"token": ")"
+																}
+															}
+														},
+														"arrow": {
+															"ws": {
+																"first": " ",
+																"rest": []
+															},
+															"token": "=>"
+														},
+														"transcriber": {
+															"Parens": {
+																"Tokens": {
+																	"prefix": {
+																		"ws": {
+																			"first": " ",
+																			"rest": []
+																		},
+																		"token": "("
+																	},
+																	"value": [],
+																	"suffix": {
+																		"ws": {
+																			"first": "",
+																			"rest": []
+																		},
+																		"token": ")"
+																	}
+																}
+															}
+														}
+													}
+												},
+												"rest": []
+											},
+											"trailing": null
+										},
+										"suffix": {
+											"ws": {
+												"first": " ",
+												"rest": []
+											},
+											"token": "}"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			{
+				"attrs": [],
+				"inner": {
+					"Vis": {
+						"vis": null,
+						"inner": {
+							"DeclMacro": {
+								"macro_": {
+									"ws": {
+										"first": "\n",
+										"rest": []
+									},
+									"token": "macro"
+								},
+								"ident": {
+									"NonKw": [
+										{
+											"first": " ",
+											"rest": []
+										},
+										"a"
+									]
+								},
+								"body": {
+									"Branches": {
+										"prefix": {
+											"ws": {
+												"first": " ",
+												"rest": []
+											},
+											"token": "{"
+										},
+										"value": {
+											"punctuated": {
+												"first": {
+													"extra": null,
+													"rule": {
+														"matcher": {
+															"Parens": {
+																"prefix": {
+																	"ws": {
+																		"first": " ",
+																		"rest": []
+																	},
+																	"token": "("
+																},
+																"value": [
+																	{
+																		"DollarRep": {
+																			"dollar": {
+																				"ws": {
+																					"first": "",
+																					"rest": []
+																				},
+																				"token": "$"
+																			},
+																			"matches": {
+																				"prefix": {
+																					"ws": {
+																						"first": "",
+																						"rest": []
+																					},
+																					"token": "("
+																				},
+																				"value": {
+																					"first": {
+																						"Token": {
+																							"IdentOrKeyword": [
+																								{
+																									"first": "",
+																									"rest": []
+																								},
+																								"a"
+																							]
+																						}
+																					},
+																					"rest": []
+																				},
+																				"suffix": {
+																					"ws": {
+																						"first": "",
+																						"rest": []
+																					},
+																					"token": ")"
+																				}
+																			},
+																			"rep_sep": null,
+																			"rep_op": {
+																				"Plus": {
+																					"ws": {
+																						"first": "",
+																						"rest": []
+																					},
+																					"token": "+"
+																				}
+																			}
+																		}
+																	}
+																],
+																"suffix": {
+																	"ws": {
+																		"first": "",
+																		"rest": []
+																	},
+																	"token": ")"
+																}
+															}
+														},
+														"arrow": {
+															"ws": {
+																"first": " ",
+																"rest": []
+															},
+															"token": "=>"
+														},
+														"transcriber": {
+															"Parens": {
+																"Tokens": {
+																	"prefix": {
+																		"ws": {
+																			"first": " ",
+																			"rest": []
+																		},
+																		"token": "("
+																	},
+																	"value": [],
+																	"suffix": {
+																		"ws": {
+																			"first": "",
+																			"rest": []
+																		},
+																		"token": ")"
+																	}
+																}
+															}
+														}
+													}
+												},
+												"rest": []
+											},
+											"trailing": null
+										},
+										"suffix": {
+											"ws": {
+												"first": " ",
+												"rest": []
+											},
+											"token": "}"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			{
+				"attrs": [],
+				"inner": {
+					"Vis": {
+						"vis": null,
+						"inner": {
+							"DeclMacro": {
+								"macro_": {
+									"ws": {
+										"first": "\n",
+										"rest": []
+									},
+									"token": "macro"
+								},
+								"ident": {
+									"NonKw": [
+										{
+											"first": " ",
+											"rest": []
+										},
+										"a"
+									]
+								},
+								"body": {
+									"Branches": {
+										"prefix": {
+											"ws": {
+												"first": " ",
+												"rest": []
+											},
+											"token": "{"
+										},
+										"value": {
+											"punctuated": {
+												"first": {
+													"extra": null,
+													"rule": {
+														"matcher": {
+															"Parens": {
+																"prefix": {
+																	"ws": {
+																		"first": " ",
+																		"rest": []
+																	},
+																	"token": "("
+																},
+																"value": [
+																	{
+																		"DollarRep": {
+																			"dollar": {
+																				"ws": {
+																					"first": "",
+																					"rest": []
+																				},
+																				"token": "$"
+																			},
+																			"matches": {
+																				"prefix": {
+																					"ws": {
+																						"first": "",
+																						"rest": []
+																					},
+																					"token": "("
+																				},
+																				"value": {
+																					"first": {
+																						"Token": {
+																							"IdentOrKeyword": [
+																								{
+																									"first": "",
+																									"rest": []
+																								},
+																								"a"
+																							]
+																						}
+																					},
+																					"rest": []
+																				},
+																				"suffix": {
+																					"ws": {
+																						"first": "",
+																						"rest": []
+																					},
+																					"token": ")"
+																				}
+																			},
+																			"rep_sep": null,
+																			"rep_op": {
+																				"Question": {
+																					"ws": {
+																						"first": "",
+																						"rest": []
+																					},
+																					"token": "?"
+																				}
+																			}
+																		}
+																	}
+																],
+																"suffix": {
+																	"ws": {
+																		"first": "",
+																		"rest": []
+																	},
+																	"token": ")"
+																}
+															}
+														},
+														"arrow": {
+															"ws": {
+																"first": " ",
+																"rest": []
+															},
+															"token": "=>"
+														},
+														"transcriber": {
+															"Parens": {
+																"Tokens": {
+																	"prefix": {
+																		"ws": {
+																			"first": " ",
+																			"rest": []
+																		},
+																		"token": "("
+																	},
+																	"value": [],
+																	"suffix": {
+																		"ws": {
+																			"first": "",
+																			"rest": []
+																		},
+																		"token": ")"
+																	}
+																}
+															}
+														}
+													}
+												},
+												"rest": []
+											},
+											"trailing": null
+										},
+										"suffix": {
+											"ws": {
+												"first": " ",
+												"rest": []
+											},
+											"token": "}"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			{
+				"attrs": [],
+				"inner": {
+					"Vis": {
+						"vis": null,
+						"inner": {
+							"DeclMacro": {
+								"macro_": {
+									"ws": {
+										"first": "\n\n",
+										"rest": []
+									},
+									"token": "macro"
+								},
+								"ident": {
+									"NonKw": [
+										{
+											"first": " ",
+											"rest": []
+										},
+										"a"
+									]
+								},
+								"body": {
+									"Branches": {
+										"prefix": {
+											"ws": {
+												"first": " ",
+												"rest": []
+											},
+											"token": "{"
+										},
+										"value": {
+											"punctuated": {
+												"first": {
+													"extra": null,
+													"rule": {
+														"matcher": {
+															"Parens": {
+																"prefix": {
+																	"ws": {
+																		"first": " ",
+																		"rest": []
+																	},
+																	"token": "("
+																},
+																"value": [
+																	{
+																		"DollarRep": {
+																			"dollar": {
+																				"ws": {
+																					"first": "",
+																					"rest": []
+																				},
+																				"token": "$"
+																			},
+																			"matches": {
+																				"prefix": {
+																					"ws": {
+																						"first": "",
+																						"rest": []
+																					},
+																					"token": "("
+																				},
+																				"value": {
+																					"first": {
+																						"Token": {
+																							"IdentOrKeyword": [
+																								{
+																									"first": "",
+																									"rest": []
+																								},
+																								"a"
+																							]
+																						}
+																					},
+																					"rest": []
+																				},
+																				"suffix": {
+																					"ws": {
+																						"first": "",
+																						"rest": []
+																					},
+																					"token": ")"
+																				}
+																			},
+																			"rep_sep": {
+																				"IdentOrKeyword": [
+																					{
+																						"first": "",
+																						"rest": []
+																					},
+																					"b"
+																				]
+																			},
+																			"rep_op": {
+																				"Star": {
+																					"ws": {
+																						"first": "",
+																						"rest": []
+																					},
+																					"token": "*"
+																				}
+																			}
+																		}
+																	}
+																],
+																"suffix": {
+																	"ws": {
+																		"first": "",
+																		"rest": []
+																	},
+																	"token": ")"
+																}
+															}
+														},
+														"arrow": {
+															"ws": {
+																"first": " ",
+																"rest": []
+															},
+															"token": "=>"
+														},
+														"transcriber": {
+															"Parens": {
+																"Tokens": {
+																	"prefix": {
+																		"ws": {
+																			"first": " ",
+																			"rest": []
+																		},
+																		"token": "("
+																	},
+																	"value": [],
+																	"suffix": {
+																		"ws": {
+																			"first": "",
+																			"rest": []
+																		},
+																		"token": ")"
+																	}
+																}
+															}
+														}
+													}
+												},
+												"rest": []
+											},
+											"trailing": null
+										},
+										"suffix": {
+											"ws": {
+												"first": " ",
+												"rest": []
+											},
+											"token": "}"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			{
+				"attrs": [],
+				"inner": {
+					"Vis": {
+						"vis": null,
+						"inner": {
+							"DeclMacro": {
+								"macro_": {
+									"ws": {
+										"first": "\n\n",
+										"rest": []
+									},
+									"token": "macro"
+								},
+								"ident": {
+									"NonKw": [
+										{
+											"first": " ",
+											"rest": []
+										},
+										"a"
+									]
+								},
+								"body": {
+									"Branches": {
+										"prefix": {
+											"ws": {
+												"first": " ",
+												"rest": []
+											},
+											"token": "{"
+										},
+										"value": {
+											"punctuated": {
+												"first": {
+													"extra": null,
+													"rule": {
+														"matcher": {
+															"Parens": {
+																"prefix": {
+																	"ws": {
+																		"first": " ",
+																		"rest": []
+																	},
+																	"token": "("
+																},
+																"value": [
+																	{
+																		"DollarIdent": {
+																			"dollar": {
+																				"ws": {
+																					"first": "",
+																					"rest": []
+																				},
+																				"token": "$"
+																			},
+																			"ident": {
+																				"IdentOrKw": [
+																					{
+																						"first": "",
+																						"rest": []
+																					},
+																					"a"
+																				]
+																			},
+																			"colon": {
+																				"ws": {
+																					"first": "",
+																					"rest": []
+																				},
+																				"token": ":"
+																			},
+																			"spec": {
+																				"Block": {
+																					"ws": {
+																						"first": "",
+																						"rest": []
+																					},
+																					"token": "block"
+																				}
+																			}
+																		}
+																	}
+																],
+																"suffix": {
+																	"ws": {
+																		"first": "",
+																		"rest": []
+																	},
+																	"token": ")"
+																}
+															}
+														},
+														"arrow": {
+															"ws": {
+																"first": " ",
+																"rest": []
+															},
+															"token": "=>"
+														},
+														"transcriber": {
+															"Parens": {
+																"Tokens": {
+																	"prefix": {
+																		"ws": {
+																			"first": " ",
+																			"rest": []
+																		},
+																		"token": "("
+																	},
+																	"value": [],
+																	"suffix": {
+																		"ws": {
+																			"first": "",
+																			"rest": []
+																		},
+																		"token": ")"
+																	}
+																}
+															}
+														}
+													}
+												},
+												"rest": []
+											},
+											"trailing": null
+										},
+										"suffix": {
+											"ws": {
+												"first": " ",
+												"rest": []
+											},
+											"token": "}"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			{
+				"attrs": [],
+				"inner": {
+					"Vis": {
+						"vis": null,
+						"inner": {
+							"DeclMacro": {
+								"macro_": {
+									"ws": {
+										"first": "\n",
+										"rest": []
+									},
+									"token": "macro"
+								},
+								"ident": {
+									"NonKw": [
+										{
+											"first": " ",
+											"rest": []
+										},
+										"a"
+									]
+								},
+								"body": {
+									"Branches": {
+										"prefix": {
+											"ws": {
+												"first": " ",
+												"rest": []
+											},
+											"token": "{"
+										},
+										"value": {
+											"punctuated": {
+												"first": {
+													"extra": null,
+													"rule": {
+														"matcher": {
+															"Parens": {
+																"prefix": {
+																	"ws": {
+																		"first": " ",
+																		"rest": []
+																	},
+																	"token": "("
+																},
+																"value": [
+																	{
+																		"DollarIdent": {
+																			"dollar": {
+																				"ws": {
+																					"first": "",
+																					"rest": []
+																				},
+																				"token": "$"
+																			},
+																			"ident": {
+																				"IdentOrKw": [
+																					{
+																						"first": "",
+																						"rest": []
+																					},
+																					"a"
+																				]
+																			},
+																			"colon": {
+																				"ws": {
+																					"first": "",
+																					"rest": []
+																				},
+																				"token": ":"
+																			},
+																			"spec": {
+																				"Expr": {
+																					"ws": {
+																						"first": "",
+																						"rest": []
+																					},
+																					"token": "expr"
+																				}
+																			}
+																		}
+																	}
+																],
+																"suffix": {
+																	"ws": {
+																		"first": "",
+																		"rest": []
+																	},
+																	"token": ")"
+																}
+															}
+														},
+														"arrow": {
+															"ws": {
+																"first": " ",
+																"rest": []
+															},
+															"token": "=>"
+														},
+														"transcriber": {
+															"Parens": {
+																"Tokens": {
+																	"prefix": {
+																		"ws": {
+																			"first": " ",
+																			"rest": []
+																		},
+																		"token": "("
+																	},
+																	"value": [],
+																	"suffix": {
+																		"ws": {
+																			"first": "",
+																			"rest": []
+																		},
+																		"token": ")"
+																	}
+																}
+															}
+														}
+													}
+												},
+												"rest": []
+											},
+											"trailing": null
+										},
+										"suffix": {
+											"ws": {
+												"first": " ",
+												"rest": []
+											},
+											"token": "}"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			{
+				"attrs": [],
+				"inner": {
+					"Vis": {
+						"vis": null,
+						"inner": {
+							"DeclMacro": {
+								"macro_": {
+									"ws": {
+										"first": "\n",
+										"rest": []
+									},
+									"token": "macro"
+								},
+								"ident": {
+									"NonKw": [
+										{
+											"first": " ",
+											"rest": []
+										},
+										"a"
+									]
+								},
+								"body": {
+									"Branches": {
+										"prefix": {
+											"ws": {
+												"first": " ",
+												"rest": []
+											},
+											"token": "{"
+										},
+										"value": {
+											"punctuated": {
+												"first": {
+													"extra": null,
+													"rule": {
+														"matcher": {
+															"Parens": {
+																"prefix": {
+																	"ws": {
+																		"first": " ",
+																		"rest": []
+																	},
+																	"token": "("
+																},
+																"value": [
+																	{
+																		"DollarIdent": {
+																			"dollar": {
+																				"ws": {
+																					"first": "",
+																					"rest": []
+																				},
+																				"token": "$"
+																			},
+																			"ident": {
+																				"IdentOrKw": [
+																					{
+																						"first": "",
+																						"rest": []
+																					},
+																					"a"
+																				]
+																			},
+																			"colon": {
+																				"ws": {
+																					"first": "",
+																					"rest": []
+																				},
+																				"token": ":"
+																			},
+																			"spec": {
+																				"Expr2021": {
+																					"ws": {
+																						"first": "",
+																						"rest": []
+																					},
+																					"token": "expr_2021"
+																				}
+																			}
+																		}
+																	}
+																],
+																"suffix": {
+																	"ws": {
+																		"first": "",
+																		"rest": []
+																	},
+																	"token": ")"
+																}
+															}
+														},
+														"arrow": {
+															"ws": {
+																"first": " ",
+																"rest": []
+															},
+															"token": "=>"
+														},
+														"transcriber": {
+															"Parens": {
+																"Tokens": {
+																	"prefix": {
+																		"ws": {
+																			"first": " ",
+																			"rest": []
+																		},
+																		"token": "("
+																	},
+																	"value": [],
+																	"suffix": {
+																		"ws": {
+																			"first": "",
+																			"rest": []
+																		},
+																		"token": ")"
+																	}
+																}
+															}
+														}
+													}
+												},
+												"rest": []
+											},
+											"trailing": null
+										},
+										"suffix": {
+											"ws": {
+												"first": " ",
+												"rest": []
+											},
+											"token": "}"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			{
+				"attrs": [],
+				"inner": {
+					"Vis": {
+						"vis": null,
+						"inner": {
+							"DeclMacro": {
+								"macro_": {
+									"ws": {
+										"first": "\n",
+										"rest": []
+									},
+									"token": "macro"
+								},
+								"ident": {
+									"NonKw": [
+										{
+											"first": " ",
+											"rest": []
+										},
+										"a"
+									]
+								},
+								"body": {
+									"Branches": {
+										"prefix": {
+											"ws": {
+												"first": " ",
+												"rest": []
+											},
+											"token": "{"
+										},
+										"value": {
+											"punctuated": {
+												"first": {
+													"extra": null,
+													"rule": {
+														"matcher": {
+															"Parens": {
+																"prefix": {
+																	"ws": {
+																		"first": " ",
+																		"rest": []
+																	},
+																	"token": "("
+																},
+																"value": [
+																	{
+																		"DollarIdent": {
+																			"dollar": {
+																				"ws": {
+																					"first": "",
+																					"rest": []
+																				},
+																				"token": "$"
+																			},
+																			"ident": {
+																				"IdentOrKw": [
+																					{
+																						"first": "",
+																						"rest": []
+																					},
+																					"a"
+																				]
+																			},
+																			"colon": {
+																				"ws": {
+																					"first": "",
+																					"rest": []
+																				},
+																				"token": ":"
+																			},
+																			"spec": {
+																				"Ident": {
+																					"ws": {
+																						"first": "",
+																						"rest": []
+																					},
+																					"token": "ident"
+																				}
+																			}
+																		}
+																	}
+																],
+																"suffix": {
+																	"ws": {
+																		"first": "",
+																		"rest": []
+																	},
+																	"token": ")"
+																}
+															}
+														},
+														"arrow": {
+															"ws": {
+																"first": " ",
+																"rest": []
+															},
+															"token": "=>"
+														},
+														"transcriber": {
+															"Parens": {
+																"Tokens": {
+																	"prefix": {
+																		"ws": {
+																			"first": " ",
+																			"rest": []
+																		},
+																		"token": "("
+																	},
+																	"value": [],
+																	"suffix": {
+																		"ws": {
+																			"first": "",
+																			"rest": []
+																		},
+																		"token": ")"
+																	}
+																}
+															}
+														}
+													}
+												},
+												"rest": []
+											},
+											"trailing": null
+										},
+										"suffix": {
+											"ws": {
+												"first": " ",
+												"rest": []
+											},
+											"token": "}"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			{
+				"attrs": [],
+				"inner": {
+					"Vis": {
+						"vis": null,
+						"inner": {
+							"DeclMacro": {
+								"macro_": {
+									"ws": {
+										"first": "\n",
+										"rest": []
+									},
+									"token": "macro"
+								},
+								"ident": {
+									"NonKw": [
+										{
+											"first": " ",
+											"rest": []
+										},
+										"a"
+									]
+								},
+								"body": {
+									"Branches": {
+										"prefix": {
+											"ws": {
+												"first": " ",
+												"rest": []
+											},
+											"token": "{"
+										},
+										"value": {
+											"punctuated": {
+												"first": {
+													"extra": null,
+													"rule": {
+														"matcher": {
+															"Parens": {
+																"prefix": {
+																	"ws": {
+																		"first": " ",
+																		"rest": []
+																	},
+																	"token": "("
+																},
+																"value": [
+																	{
+																		"DollarIdent": {
+																			"dollar": {
+																				"ws": {
+																					"first": "",
+																					"rest": []
+																				},
+																				"token": "$"
+																			},
+																			"ident": {
+																				"IdentOrKw": [
+																					{
+																						"first": "",
+																						"rest": []
+																					},
+																					"a"
+																				]
+																			},
+																			"colon": {
+																				"ws": {
+																					"first": "",
+																					"rest": []
+																				},
+																				"token": ":"
+																			},
+																			"spec": {
+																				"Item": {
+																					"ws": {
+																						"first": "",
+																						"rest": []
+																					},
+																					"token": "item"
+																				}
+																			}
+																		}
+																	}
+																],
+																"suffix": {
+																	"ws": {
+																		"first": "",
+																		"rest": []
+																	},
+																	"token": ")"
+																}
+															}
+														},
+														"arrow": {
+															"ws": {
+																"first": " ",
+																"rest": []
+															},
+															"token": "=>"
+														},
+														"transcriber": {
+															"Parens": {
+																"Tokens": {
+																	"prefix": {
+																		"ws": {
+																			"first": " ",
+																			"rest": []
+																		},
+																		"token": "("
+																	},
+																	"value": [],
+																	"suffix": {
+																		"ws": {
+																			"first": "",
+																			"rest": []
+																		},
+																		"token": ")"
+																	}
+																}
+															}
+														}
+													}
+												},
+												"rest": []
+											},
+											"trailing": null
+										},
+										"suffix": {
+											"ws": {
+												"first": " ",
+												"rest": []
+											},
+											"token": "}"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			{
+				"attrs": [],
+				"inner": {
+					"Vis": {
+						"vis": null,
+						"inner": {
+							"DeclMacro": {
+								"macro_": {
+									"ws": {
+										"first": "\n",
+										"rest": []
+									},
+									"token": "macro"
+								},
+								"ident": {
+									"NonKw": [
+										{
+											"first": " ",
+											"rest": []
+										},
+										"a"
+									]
+								},
+								"body": {
+									"Branches": {
+										"prefix": {
+											"ws": {
+												"first": " ",
+												"rest": []
+											},
+											"token": "{"
+										},
+										"value": {
+											"punctuated": {
+												"first": {
+													"extra": null,
+													"rule": {
+														"matcher": {
+															"Parens": {
+																"prefix": {
+																	"ws": {
+																		"first": " ",
+																		"rest": []
+																	},
+																	"token": "("
+																},
+																"value": [
+																	{
+																		"DollarIdent": {
+																			"dollar": {
+																				"ws": {
+																					"first": "",
+																					"rest": []
+																				},
+																				"token": "$"
+																			},
+																			"ident": {
+																				"IdentOrKw": [
+																					{
+																						"first": "",
+																						"rest": []
+																					},
+																					"a"
+																				]
+																			},
+																			"colon": {
+																				"ws": {
+																					"first": "",
+																					"rest": []
+																				},
+																				"token": ":"
+																			},
+																			"spec": {
+																				"Lifetime": {
+																					"ws": {
+																						"first": "",
+																						"rest": []
+																					},
+																					"token": "lifetime"
+																				}
+																			}
+																		}
+																	}
+																],
+																"suffix": {
+																	"ws": {
+																		"first": "",
+																		"rest": []
+																	},
+																	"token": ")"
+																}
+															}
+														},
+														"arrow": {
+															"ws": {
+																"first": " ",
+																"rest": []
+															},
+															"token": "=>"
+														},
+														"transcriber": {
+															"Parens": {
+																"Tokens": {
+																	"prefix": {
+																		"ws": {
+																			"first": " ",
+																			"rest": []
+																		},
+																		"token": "("
+																	},
+																	"value": [],
+																	"suffix": {
+																		"ws": {
+																			"first": "",
+																			"rest": []
+																		},
+																		"token": ")"
+																	}
+																}
+															}
+														}
+													}
+												},
+												"rest": []
+											},
+											"trailing": null
+										},
+										"suffix": {
+											"ws": {
+												"first": " ",
+												"rest": []
+											},
+											"token": "}"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			{
+				"attrs": [],
+				"inner": {
+					"Vis": {
+						"vis": null,
+						"inner": {
+							"DeclMacro": {
+								"macro_": {
+									"ws": {
+										"first": "\n",
+										"rest": []
+									},
+									"token": "macro"
+								},
+								"ident": {
+									"NonKw": [
+										{
+											"first": " ",
+											"rest": []
+										},
+										"a"
+									]
+								},
+								"body": {
+									"Branches": {
+										"prefix": {
+											"ws": {
+												"first": " ",
+												"rest": []
+											},
+											"token": "{"
+										},
+										"value": {
+											"punctuated": {
+												"first": {
+													"extra": null,
+													"rule": {
+														"matcher": {
+															"Parens": {
+																"prefix": {
+																	"ws": {
+																		"first": " ",
+																		"rest": []
+																	},
+																	"token": "("
+																},
+																"value": [
+																	{
+																		"DollarIdent": {
+																			"dollar": {
+																				"ws": {
+																					"first": "",
+																					"rest": []
+																				},
+																				"token": "$"
+																			},
+																			"ident": {
+																				"IdentOrKw": [
+																					{
+																						"first": "",
+																						"rest": []
+																					},
+																					"a"
+																				]
+																			},
+																			"colon": {
+																				"ws": {
+																					"first": "",
+																					"rest": []
+																				},
+																				"token": ":"
+																			},
+																			"spec": {
+																				"Literal": {
+																					"ws": {
+																						"first": "",
+																						"rest": []
+																					},
+																					"token": "literal"
+																				}
+																			}
+																		}
+																	}
+																],
+																"suffix": {
+																	"ws": {
+																		"first": "",
+																		"rest": []
+																	},
+																	"token": ")"
+																}
+															}
+														},
+														"arrow": {
+															"ws": {
+																"first": " ",
+																"rest": []
+															},
+															"token": "=>"
+														},
+														"transcriber": {
+															"Parens": {
+																"Tokens": {
+																	"prefix": {
+																		"ws": {
+																			"first": " ",
+																			"rest": []
+																		},
+																		"token": "("
+																	},
+																	"value": [],
+																	"suffix": {
+																		"ws": {
+																			"first": "",
+																			"rest": []
+																		},
+																		"token": ")"
+																	}
+																}
+															}
+														}
+													}
+												},
+												"rest": []
+											},
+											"trailing": null
+										},
+										"suffix": {
+											"ws": {
+												"first": " ",
+												"rest": []
+											},
+											"token": "}"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			{
+				"attrs": [],
+				"inner": {
+					"Vis": {
+						"vis": null,
+						"inner": {
+							"DeclMacro": {
+								"macro_": {
+									"ws": {
+										"first": "\n",
+										"rest": []
+									},
+									"token": "macro"
+								},
+								"ident": {
+									"NonKw": [
+										{
+											"first": " ",
+											"rest": []
+										},
+										"a"
+									]
+								},
+								"body": {
+									"Branches": {
+										"prefix": {
+											"ws": {
+												"first": " ",
+												"rest": []
+											},
+											"token": "{"
+										},
+										"value": {
+											"punctuated": {
+												"first": {
+													"extra": null,
+													"rule": {
+														"matcher": {
+															"Parens": {
+																"prefix": {
+																	"ws": {
+																		"first": " ",
+																		"rest": []
+																	},
+																	"token": "("
+																},
+																"value": [
+																	{
+																		"DollarIdent": {
+																			"dollar": {
+																				"ws": {
+																					"first": "",
+																					"rest": []
+																				},
+																				"token": "$"
+																			},
+																			"ident": {
+																				"IdentOrKw": [
+																					{
+																						"first": "",
+																						"rest": []
+																					},
+																					"a"
+																				]
+																			},
+																			"colon": {
+																				"ws": {
+																					"first": "",
+																					"rest": []
+																				},
+																				"token": ":"
+																			},
+																			"spec": {
+																				"Meta": {
+																					"ws": {
+																						"first": "",
+																						"rest": []
+																					},
+																					"token": "meta"
+																				}
+																			}
+																		}
+																	}
+																],
+																"suffix": {
+																	"ws": {
+																		"first": "",
+																		"rest": []
+																	},
+																	"token": ")"
+																}
+															}
+														},
+														"arrow": {
+															"ws": {
+																"first": " ",
+																"rest": []
+															},
+															"token": "=>"
+														},
+														"transcriber": {
+															"Parens": {
+																"Tokens": {
+																	"prefix": {
+																		"ws": {
+																			"first": " ",
+																			"rest": []
+																		},
+																		"token": "("
+																	},
+																	"value": [],
+																	"suffix": {
+																		"ws": {
+																			"first": "",
+																			"rest": []
+																		},
+																		"token": ")"
+																	}
+																}
+															}
+														}
+													}
+												},
+												"rest": []
+											},
+											"trailing": null
+										},
+										"suffix": {
+											"ws": {
+												"first": " ",
+												"rest": []
+											},
+											"token": "}"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			{
+				"attrs": [],
+				"inner": {
+					"Vis": {
+						"vis": null,
+						"inner": {
+							"DeclMacro": {
+								"macro_": {
+									"ws": {
+										"first": "\n",
+										"rest": []
+									},
+									"token": "macro"
+								},
+								"ident": {
+									"NonKw": [
+										{
+											"first": " ",
+											"rest": []
+										},
+										"a"
+									]
+								},
+								"body": {
+									"Branches": {
+										"prefix": {
+											"ws": {
+												"first": " ",
+												"rest": []
+											},
+											"token": "{"
+										},
+										"value": {
+											"punctuated": {
+												"first": {
+													"extra": null,
+													"rule": {
+														"matcher": {
+															"Parens": {
+																"prefix": {
+																	"ws": {
+																		"first": " ",
+																		"rest": []
+																	},
+																	"token": "("
+																},
+																"value": [
+																	{
+																		"DollarIdent": {
+																			"dollar": {
+																				"ws": {
+																					"first": "",
+																					"rest": []
+																				},
+																				"token": "$"
+																			},
+																			"ident": {
+																				"IdentOrKw": [
+																					{
+																						"first": "",
+																						"rest": []
+																					},
+																					"a"
+																				]
+																			},
+																			"colon": {
+																				"ws": {
+																					"first": "",
+																					"rest": []
+																				},
+																				"token": ":"
+																			},
+																			"spec": {
+																				"Pat": {
+																					"ws": {
+																						"first": "",
+																						"rest": []
+																					},
+																					"token": "pat"
+																				}
+																			}
+																		}
+																	}
+																],
+																"suffix": {
+																	"ws": {
+																		"first": "",
+																		"rest": []
+																	},
+																	"token": ")"
+																}
+															}
+														},
+														"arrow": {
+															"ws": {
+																"first": " ",
+																"rest": []
+															},
+															"token": "=>"
+														},
+														"transcriber": {
+															"Parens": {
+																"Tokens": {
+																	"prefix": {
+																		"ws": {
+																			"first": " ",
+																			"rest": []
+																		},
+																		"token": "("
+																	},
+																	"value": [],
+																	"suffix": {
+																		"ws": {
+																			"first": "",
+																			"rest": []
+																		},
+																		"token": ")"
+																	}
+																}
+															}
+														}
+													}
+												},
+												"rest": []
+											},
+											"trailing": null
+										},
+										"suffix": {
+											"ws": {
+												"first": " ",
+												"rest": []
+											},
+											"token": "}"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			{
+				"attrs": [],
+				"inner": {
+					"Vis": {
+						"vis": null,
+						"inner": {
+							"DeclMacro": {
+								"macro_": {
+									"ws": {
+										"first": "\n",
+										"rest": []
+									},
+									"token": "macro"
+								},
+								"ident": {
+									"NonKw": [
+										{
+											"first": " ",
+											"rest": []
+										},
+										"a"
+									]
+								},
+								"body": {
+									"Branches": {
+										"prefix": {
+											"ws": {
+												"first": " ",
+												"rest": []
+											},
+											"token": "{"
+										},
+										"value": {
+											"punctuated": {
+												"first": {
+													"extra": null,
+													"rule": {
+														"matcher": {
+															"Parens": {
+																"prefix": {
+																	"ws": {
+																		"first": " ",
+																		"rest": []
+																	},
+																	"token": "("
+																},
+																"value": [
+																	{
+																		"DollarIdent": {
+																			"dollar": {
+																				"ws": {
+																					"first": "",
+																					"rest": []
+																				},
+																				"token": "$"
+																			},
+																			"ident": {
+																				"IdentOrKw": [
+																					{
+																						"first": "",
+																						"rest": []
+																					},
+																					"a"
+																				]
+																			},
+																			"colon": {
+																				"ws": {
+																					"first": "",
+																					"rest": []
+																				},
+																				"token": ":"
+																			},
+																			"spec": {
+																				"PatParam": {
+																					"ws": {
+																						"first": "",
+																						"rest": []
+																					},
+																					"token": "pat_param"
+																				}
+																			}
+																		}
+																	}
+																],
+																"suffix": {
+																	"ws": {
+																		"first": "",
+																		"rest": []
+																	},
+																	"token": ")"
+																}
+															}
+														},
+														"arrow": {
+															"ws": {
+																"first": " ",
+																"rest": []
+															},
+															"token": "=>"
+														},
+														"transcriber": {
+															"Parens": {
+																"Tokens": {
+																	"prefix": {
+																		"ws": {
+																			"first": " ",
+																			"rest": []
+																		},
+																		"token": "("
+																	},
+																	"value": [],
+																	"suffix": {
+																		"ws": {
+																			"first": "",
+																			"rest": []
+																		},
+																		"token": ")"
+																	}
+																}
+															}
+														}
+													}
+												},
+												"rest": []
+											},
+											"trailing": null
+										},
+										"suffix": {
+											"ws": {
+												"first": " ",
+												"rest": []
+											},
+											"token": "}"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			{
+				"attrs": [],
+				"inner": {
+					"Vis": {
+						"vis": null,
+						"inner": {
+							"DeclMacro": {
+								"macro_": {
+									"ws": {
+										"first": "\n",
+										"rest": []
+									},
+									"token": "macro"
+								},
+								"ident": {
+									"NonKw": [
+										{
+											"first": " ",
+											"rest": []
+										},
+										"a"
+									]
+								},
+								"body": {
+									"Branches": {
+										"prefix": {
+											"ws": {
+												"first": " ",
+												"rest": []
+											},
+											"token": "{"
+										},
+										"value": {
+											"punctuated": {
+												"first": {
+													"extra": null,
+													"rule": {
+														"matcher": {
+															"Parens": {
+																"prefix": {
+																	"ws": {
+																		"first": " ",
+																		"rest": []
+																	},
+																	"token": "("
+																},
+																"value": [
+																	{
+																		"DollarIdent": {
+																			"dollar": {
+																				"ws": {
+																					"first": "",
+																					"rest": []
+																				},
+																				"token": "$"
+																			},
+																			"ident": {
+																				"IdentOrKw": [
+																					{
+																						"first": "",
+																						"rest": []
+																					},
+																					"a"
+																				]
+																			},
+																			"colon": {
+																				"ws": {
+																					"first": "",
+																					"rest": []
+																				},
+																				"token": ":"
+																			},
+																			"spec": {
+																				"Path": {
+																					"ws": {
+																						"first": "",
+																						"rest": []
+																					},
+																					"token": "path"
+																				}
+																			}
+																		}
+																	}
+																],
+																"suffix": {
+																	"ws": {
+																		"first": "",
+																		"rest": []
+																	},
+																	"token": ")"
+																}
+															}
+														},
+														"arrow": {
+															"ws": {
+																"first": " ",
+																"rest": []
+															},
+															"token": "=>"
+														},
+														"transcriber": {
+															"Parens": {
+																"Tokens": {
+																	"prefix": {
+																		"ws": {
+																			"first": " ",
+																			"rest": []
+																		},
+																		"token": "("
+																	},
+																	"value": [],
+																	"suffix": {
+																		"ws": {
+																			"first": "",
+																			"rest": []
+																		},
+																		"token": ")"
+																	}
+																}
+															}
+														}
+													}
+												},
+												"rest": []
+											},
+											"trailing": null
+										},
+										"suffix": {
+											"ws": {
+												"first": " ",
+												"rest": []
+											},
+											"token": "}"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			{
+				"attrs": [],
+				"inner": {
+					"Vis": {
+						"vis": null,
+						"inner": {
+							"DeclMacro": {
+								"macro_": {
+									"ws": {
+										"first": "\n",
+										"rest": []
+									},
+									"token": "macro"
+								},
+								"ident": {
+									"NonKw": [
+										{
+											"first": " ",
+											"rest": []
+										},
+										"a"
+									]
+								},
+								"body": {
+									"Branches": {
+										"prefix": {
+											"ws": {
+												"first": " ",
+												"rest": []
+											},
+											"token": "{"
+										},
+										"value": {
+											"punctuated": {
+												"first": {
+													"extra": null,
+													"rule": {
+														"matcher": {
+															"Parens": {
+																"prefix": {
+																	"ws": {
+																		"first": " ",
+																		"rest": []
+																	},
+																	"token": "("
+																},
+																"value": [
+																	{
+																		"DollarIdent": {
+																			"dollar": {
+																				"ws": {
+																					"first": "",
+																					"rest": []
+																				},
+																				"token": "$"
+																			},
+																			"ident": {
+																				"IdentOrKw": [
+																					{
+																						"first": "",
+																						"rest": []
+																					},
+																					"a"
+																				]
+																			},
+																			"colon": {
+																				"ws": {
+																					"first": "",
+																					"rest": []
+																				},
+																				"token": ":"
+																			},
+																			"spec": {
+																				"Stmt": {
+																					"ws": {
+																						"first": "",
+																						"rest": []
+																					},
+																					"token": "stmt"
+																				}
+																			}
+																		}
+																	}
+																],
+																"suffix": {
+																	"ws": {
+																		"first": "",
+																		"rest": []
+																	},
+																	"token": ")"
+																}
+															}
+														},
+														"arrow": {
+															"ws": {
+																"first": " ",
+																"rest": []
+															},
+															"token": "=>"
+														},
+														"transcriber": {
+															"Parens": {
+																"Tokens": {
+																	"prefix": {
+																		"ws": {
+																			"first": " ",
+																			"rest": []
+																		},
+																		"token": "("
+																	},
+																	"value": [],
+																	"suffix": {
+																		"ws": {
+																			"first": "",
+																			"rest": []
+																		},
+																		"token": ")"
+																	}
+																}
+															}
+														}
+													}
+												},
+												"rest": []
+											},
+											"trailing": null
+										},
+										"suffix": {
+											"ws": {
+												"first": " ",
+												"rest": []
+											},
+											"token": "}"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			{
+				"attrs": [],
+				"inner": {
+					"Vis": {
+						"vis": null,
+						"inner": {
+							"DeclMacro": {
+								"macro_": {
+									"ws": {
+										"first": "\n",
+										"rest": []
+									},
+									"token": "macro"
+								},
+								"ident": {
+									"NonKw": [
+										{
+											"first": " ",
+											"rest": []
+										},
+										"a"
+									]
+								},
+								"body": {
+									"Branches": {
+										"prefix": {
+											"ws": {
+												"first": " ",
+												"rest": []
+											},
+											"token": "{"
+										},
+										"value": {
+											"punctuated": {
+												"first": {
+													"extra": null,
+													"rule": {
+														"matcher": {
+															"Parens": {
+																"prefix": {
+																	"ws": {
+																		"first": " ",
+																		"rest": []
+																	},
+																	"token": "("
+																},
+																"value": [
+																	{
+																		"DollarIdent": {
+																			"dollar": {
+																				"ws": {
+																					"first": "",
+																					"rest": []
+																				},
+																				"token": "$"
+																			},
+																			"ident": {
+																				"IdentOrKw": [
+																					{
+																						"first": "",
+																						"rest": []
+																					},
+																					"a"
+																				]
+																			},
+																			"colon": {
+																				"ws": {
+																					"first": "",
+																					"rest": []
+																				},
+																				"token": ":"
+																			},
+																			"spec": {
+																				"Tt": {
+																					"ws": {
+																						"first": "",
+																						"rest": []
+																					},
+																					"token": "tt"
+																				}
+																			}
+																		}
+																	}
+																],
+																"suffix": {
+																	"ws": {
+																		"first": "",
+																		"rest": []
+																	},
+																	"token": ")"
+																}
+															}
+														},
+														"arrow": {
+															"ws": {
+																"first": " ",
+																"rest": []
+															},
+															"token": "=>"
+														},
+														"transcriber": {
+															"Parens": {
+																"Tokens": {
+																	"prefix": {
+																		"ws": {
+																			"first": " ",
+																			"rest": []
+																		},
+																		"token": "("
+																	},
+																	"value": [],
+																	"suffix": {
+																		"ws": {
+																			"first": "",
+																			"rest": []
+																		},
+																		"token": ")"
+																	}
+																}
+															}
+														}
+													}
+												},
+												"rest": []
+											},
+											"trailing": null
+										},
+										"suffix": {
+											"ws": {
+												"first": " ",
+												"rest": []
+											},
+											"token": "}"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			{
+				"attrs": [],
+				"inner": {
+					"Vis": {
+						"vis": null,
+						"inner": {
+							"DeclMacro": {
+								"macro_": {
+									"ws": {
+										"first": "\n",
+										"rest": []
+									},
+									"token": "macro"
+								},
+								"ident": {
+									"NonKw": [
+										{
+											"first": " ",
+											"rest": []
+										},
+										"a"
+									]
+								},
+								"body": {
+									"Branches": {
+										"prefix": {
+											"ws": {
+												"first": " ",
+												"rest": []
+											},
+											"token": "{"
+										},
+										"value": {
+											"punctuated": {
+												"first": {
+													"extra": null,
+													"rule": {
+														"matcher": {
+															"Parens": {
+																"prefix": {
+																	"ws": {
+																		"first": " ",
+																		"rest": []
+																	},
+																	"token": "("
+																},
+																"value": [
+																	{
+																		"DollarIdent": {
+																			"dollar": {
+																				"ws": {
+																					"first": "",
+																					"rest": []
+																				},
+																				"token": "$"
+																			},
+																			"ident": {
+																				"IdentOrKw": [
+																					{
+																						"first": "",
+																						"rest": []
+																					},
+																					"a"
+																				]
+																			},
+																			"colon": {
+																				"ws": {
+																					"first": "",
+																					"rest": []
+																				},
+																				"token": ":"
+																			},
+																			"spec": {
+																				"Ty": {
+																					"ws": {
+																						"first": "",
+																						"rest": []
+																					},
+																					"token": "ty"
+																				}
+																			}
+																		}
+																	}
+																],
+																"suffix": {
+																	"ws": {
+																		"first": "",
+																		"rest": []
+																	},
+																	"token": ")"
+																}
+															}
+														},
+														"arrow": {
+															"ws": {
+																"first": " ",
+																"rest": []
+															},
+															"token": "=>"
+														},
+														"transcriber": {
+															"Parens": {
+																"Tokens": {
+																	"prefix": {
+																		"ws": {
+																			"first": " ",
+																			"rest": []
+																		},
+																		"token": "("
+																	},
+																	"value": [],
+																	"suffix": {
+																		"ws": {
+																			"first": "",
+																			"rest": []
+																		},
+																		"token": ")"
+																	}
+																}
+															}
+														}
+													}
+												},
+												"rest": []
+											},
+											"trailing": null
+										},
+										"suffix": {
+											"ws": {
+												"first": " ",
+												"rest": []
+											},
+											"token": "}"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			{
+				"attrs": [],
+				"inner": {
+					"Vis": {
+						"vis": null,
+						"inner": {
+							"DeclMacro": {
+								"macro_": {
+									"ws": {
+										"first": "\n",
+										"rest": []
+									},
+									"token": "macro"
+								},
+								"ident": {
+									"NonKw": [
+										{
+											"first": " ",
+											"rest": []
+										},
+										"a"
+									]
+								},
+								"body": {
+									"Branches": {
+										"prefix": {
+											"ws": {
+												"first": " ",
+												"rest": []
+											},
+											"token": "{"
+										},
+										"value": {
+											"punctuated": {
+												"first": {
+													"extra": null,
+													"rule": {
+														"matcher": {
+															"Parens": {
+																"prefix": {
+																	"ws": {
+																		"first": " ",
+																		"rest": []
+																	},
+																	"token": "("
+																},
+																"value": [
+																	{
+																		"DollarIdent": {
+																			"dollar": {
+																				"ws": {
+																					"first": "",
+																					"rest": []
+																				},
+																				"token": "$"
+																			},
+																			"ident": {
+																				"IdentOrKw": [
+																					{
+																						"first": "",
+																						"rest": []
+																					},
+																					"a"
+																				]
+																			},
+																			"colon": {
+																				"ws": {
+																					"first": "",
+																					"rest": []
+																				},
+																				"token": ":"
+																			},
+																			"spec": {
+																				"Vis": {
+																					"ws": {
+																						"first": "",
+																						"rest": []
+																					},
+																					"token": "vis"
+																				}
+																			}
+																		}
+																	}
+																],
+																"suffix": {
+																	"ws": {
+																		"first": "",
+																		"rest": []
+																	},
+																	"token": ")"
+																}
+															}
+														},
+														"arrow": {
+															"ws": {
+																"first": " ",
+																"rest": []
+															},
+															"token": "=>"
+														},
+														"transcriber": {
+															"Parens": {
+																"Tokens": {
+																	"prefix": {
+																		"ws": {
+																			"first": " ",
+																			"rest": []
+																		},
+																		"token": "("
+																	},
+																	"value": [],
+																	"suffix": {
+																		"ws": {
+																			"first": "",
+																			"rest": []
+																		},
+																		"token": ")"
+																	}
+																}
+															}
+														}
+													}
+												},
+												"rest": []
+											},
+											"trailing": null
+										},
+										"suffix": {
+											"ws": {
+												"first": " ",
+												"rest": []
+											},
+											"token": "}"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			{
+				"attrs": [],
+				"inner": {
+					"Vis": {
+						"vis": null,
+						"inner": {
+							"DeclMacro": {
+								"macro_": {
+									"ws": {
+										"first": "\n\n",
+										"rest": []
+									},
+									"token": "macro"
+								},
+								"ident": {
+									"NonKw": [
+										{
+											"first": " ",
+											"rest": []
+										},
+										"a"
+									]
+								},
+								"body": {
+									"Branches": {
+										"prefix": {
+											"ws": {
+												"first": " ",
+												"rest": []
+											},
+											"token": "{"
+										},
+										"value": {
+											"punctuated": {
+												"first": {
+													"extra": null,
+													"rule": {
+														"matcher": {
+															"Parens": {
+																"prefix": {
+																	"ws": {
+																		"first": " ",
+																		"rest": []
+																	},
+																	"token": "("
+																},
+																"value": [
+																	{
+																		"DollarRep": {
+																			"dollar": {
+																				"ws": {
+																					"first": " ",
+																					"rest": []
+																				},
+																				"token": "$"
+																			},
+																			"matches": {
+																				"prefix": {
+																					"ws": {
+																						"first": "",
+																						"rest": []
+																					},
+																					"token": "("
+																				},
+																				"value": {
+																					"first": {
+																						"DollarIdent": {
+																							"dollar": {
+																								"ws": {
+																									"first": "",
+																									"rest": []
+																								},
+																								"token": "$"
+																							},
+																							"ident": {
+																								"IdentOrKw": [
+																									{
+																										"first": "",
+																										"rest": []
+																									},
+																									"a"
+																								]
+																							},
+																							"colon": {
+																								"ws": {
+																									"first": "",
+																									"rest": []
+																								},
+																								"token": ":"
+																							},
+																							"spec": {
+																								"Expr": {
+																									"ws": {
+																										"first": "",
+																										"rest": []
+																									},
+																									"token": "expr"
+																								}
+																							}
+																						}
+																					},
+																					"rest": [
+																						{
+																							"Token": {
+																								"Punctuation": {
+																									"FatArrow": {
+																										"ws": {
+																											"first": " ",
+																											"rest": []
+																										},
+																										"token": "=>"
+																									}
+																								}
+																							}
+																						},
+																						{
+																							"DollarIdent": {
+																								"dollar": {
+																									"ws": {
+																										"first": " ",
+																										"rest": []
+																									},
+																									"token": "$"
+																								},
+																								"ident": {
+																									"IdentOrKw": [
+																										{
+																											"first": "",
+																											"rest": []
+																										},
+																										"b"
+																									]
+																								},
+																								"colon": {
+																									"ws": {
+																										"first": "",
+																										"rest": []
+																									},
+																									"token": ":"
+																								},
+																								"spec": {
+																									"Expr": {
+																										"ws": {
+																											"first": "",
+																											"rest": []
+																										},
+																										"token": "expr"
+																									}
+																								}
+																							}
+																						}
+																					]
+																				},
+																				"suffix": {
+																					"ws": {
+																						"first": "",
+																						"rest": []
+																					},
+																					"token": ")"
+																				}
+																			},
+																			"rep_sep": {
+																				"Punctuation": {
+																					"Comma": {
+																						"ws": {
+																							"first": "",
+																							"rest": []
+																						},
+																						"token": ","
+																					}
+																				}
+																			},
+																			"rep_op": {
+																				"Star": {
+																					"ws": {
+																						"first": "",
+																						"rest": []
+																					},
+																					"token": "*"
+																				}
+																			}
+																		}
+																	},
+																	{
+																		"DollarRep": {
+																			"dollar": {
+																				"ws": {
+																					"first": " ",
+																					"rest": []
+																				},
+																				"token": "$"
+																			},
+																			"matches": {
+																				"prefix": {
+																					"ws": {
+																						"first": "",
+																						"rest": []
+																					},
+																					"token": "("
+																				},
+																				"value": {
+																					"first": {
+																						"Token": {
+																							"Punctuation": {
+																								"Comma": {
+																									"ws": {
+																										"first": "",
+																										"rest": []
+																									},
+																									"token": ","
+																								}
+																							}
+																						}
+																					},
+																					"rest": []
+																				},
+																				"suffix": {
+																					"ws": {
+																						"first": "",
+																						"rest": []
+																					},
+																					"token": ")"
+																				}
+																			},
+																			"rep_sep": null,
+																			"rep_op": {
+																				"Question": {
+																					"ws": {
+																						"first": "",
+																						"rest": []
+																					},
+																					"token": "?"
+																				}
+																			}
+																		}
+																	}
+																],
+																"suffix": {
+																	"ws": {
+																		"first": " ",
+																		"rest": []
+																	},
+																	"token": ")"
+																}
+															}
+														},
+														"arrow": {
+															"ws": {
+																"first": " ",
+																"rest": []
+															},
+															"token": "=>"
+														},
+														"transcriber": {
+															"Parens": {
+																"Tokens": {
+																	"prefix": {
+																		"ws": {
+																			"first": " ",
+																			"rest": []
+																		},
+																		"token": "("
+																	},
+																	"value": [],
+																	"suffix": {
+																		"ws": {
+																			"first": "",
+																			"rest": []
+																		},
+																		"token": ")"
+																	}
+																}
+															}
+														}
+													}
+												},
+												"rest": []
+											},
+											"trailing": null
+										},
+										"suffix": {
+											"ws": {
+												"first": " ",
+												"rest": []
+											},
+											"token": "}"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			{
+				"attrs": [],
+				"inner": {
+					"Vis": {
+						"vis": null,
+						"inner": {
+							"DeclMacro": {
+								"macro_": {
+									"ws": {
+										"first": "\n\n",
+										"rest": []
+									},
+									"token": "macro"
+								},
+								"ident": {
+									"NonKw": [
+										{
+											"first": " ",
+											"rest": []
+										},
+										"a"
+									]
+								},
+								"body": {
+									"Inline": {
+										"args": {
+											"prefix": {
+												"ws": {
+													"first": "",
+													"rest": []
+												},
+												"token": "("
+											},
+											"value": [
+												{
+													"DollarRep": {
+														"dollar": {
+															"ws": {
+																"first": " ",
+																"rest": []
+															},
+															"token": "$"
+														},
+														"matches": {
+															"prefix": {
+																"ws": {
+																	"first": "",
+																	"rest": []
+																},
+																"token": "("
+															},
+															"value": {
+																"first": {
+																	"DollarIdent": {
+																		"dollar": {
+																			"ws": {
+																				"first": "",
+																				"rest": []
+																			},
+																			"token": "$"
+																		},
+																		"ident": {
+																			"IdentOrKw": [
+																				{
+																					"first": "",
+																					"rest": []
+																				},
+																				"a"
+																			]
+																		},
+																		"colon": {
+																			"ws": {
+																				"first": "",
+																				"rest": []
+																			},
+																			"token": ":"
+																		},
+																		"spec": {
+																			"Expr": {
+																				"ws": {
+																					"first": "",
+																					"rest": []
+																				},
+																				"token": "expr"
+																			}
+																		}
+																	}
+																},
+																"rest": [
+																	{
+																		"Token": {
+																			"Punctuation": {
+																				"FatArrow": {
+																					"ws": {
+																						"first": " ",
+																						"rest": []
+																					},
+																					"token": "=>"
+																				}
+																			}
+																		}
+																	},
+																	{
+																		"DollarIdent": {
+																			"dollar": {
+																				"ws": {
+																					"first": " ",
+																					"rest": []
+																				},
+																				"token": "$"
+																			},
+																			"ident": {
+																				"IdentOrKw": [
+																					{
+																						"first": "",
+																						"rest": []
+																					},
+																					"b"
+																				]
+																			},
+																			"colon": {
+																				"ws": {
+																					"first": "",
+																					"rest": []
+																				},
+																				"token": ":"
+																			},
+																			"spec": {
+																				"Expr": {
+																					"ws": {
+																						"first": "",
+																						"rest": []
+																					},
+																					"token": "expr"
+																				}
+																			}
+																		}
+																	}
+																]
+															},
+															"suffix": {
+																"ws": {
+																	"first": "",
+																	"rest": []
+																},
+																"token": ")"
+															}
+														},
+														"rep_sep": {
+															"Punctuation": {
+																"Comma": {
+																	"ws": {
+																		"first": "",
+																		"rest": []
+																	},
+																	"token": ","
+																}
+															}
+														},
+														"rep_op": {
+															"Star": {
+																"ws": {
+																	"first": "",
+																	"rest": []
+																},
+																"token": "*"
+															}
+														}
+													}
+												},
+												{
+													"DollarRep": {
+														"dollar": {
+															"ws": {
+																"first": " ",
+																"rest": []
+															},
+															"token": "$"
+														},
+														"matches": {
+															"prefix": {
+																"ws": {
+																	"first": "",
+																	"rest": []
+																},
+																"token": "("
+															},
+															"value": {
+																"first": {
+																	"Token": {
+																		"Punctuation": {
+																			"Comma": {
+																				"ws": {
+																					"first": "",
+																					"rest": []
+																				},
+																				"token": ","
+																			}
+																		}
+																	}
+																},
+																"rest": []
+															},
+															"suffix": {
+																"ws": {
+																	"first": "",
+																	"rest": []
+																},
+																"token": ")"
+															}
+														},
+														"rep_sep": null,
+														"rep_op": {
+															"Question": {
+																"ws": {
+																	"first": "",
+																	"rest": []
+																},
+																"token": "?"
+															}
+														}
+													}
+												}
+											],
+											"suffix": {
+												"ws": {
+													"first": " ",
+													"rest": []
+												},
+												"token": ")"
+											}
+										},
+										"body": {
+											"Tokens": {
+												"prefix": {
+													"ws": {
+														"first": " ",
+														"rest": []
+													},
+													"token": "{"
+												},
+												"value": [],
+												"suffix": {
+													"ws": {
+														"first": "",
+														"rest": []
+													},
+													"token": "}"
+												}
+											}
 										}
 									}
 								}

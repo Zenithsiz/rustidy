@@ -40,11 +40,12 @@ pub use self::{
 use {
 	crate::attr::{self, DelimTokenTreeBraces, DelimTokenTreeParens},
 	super::{
-		attr::{DelimTokenTree, OuterAttrOrDocComment, WithOuterAttributes},
+		attr::{OuterAttrOrDocComment, WithOuterAttributes},
 		token,
 		util::{Braced, Parenthesized},
 		vis::Visibility,
 	},
+	self::macro_rules::{MacroMatcherMatches, MacroRule},
 	itertools::Itertools,
 	rustidy_ast_util::{AtLeast1, Identifier, PunctuatedTrailing, delimited, punct},
 	rustidy_format::{Format, Formattable, WhitespaceFormat},
@@ -221,7 +222,8 @@ pub enum DeclMacroBody {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct DeclMacroBodyInline {
-	pub args: DelimTokenTreeParens,
+	#[format(args = delimited::fmt_preserve())]
+	pub args: Parenthesized<MacroMatcherMatches>,
 	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub body: DelimTokenTreeBraces,
 }
@@ -248,11 +250,7 @@ pub struct DeclMacroBodyBranchesInner(
 pub struct DeclMacroBranch {
 	pub extra: Option<DeclMacroBranchExtra>,
 	#[format(prefix_ws(expr = Whitespace::SINGLE, if_ = self.extra.is_some()))]
-	pub args:  DelimTokenTree,
-	#[format(prefix_ws = Whitespace::SINGLE)]
-	pub arrow: token::FatArrow,
-	#[format(prefix_ws = Whitespace::SINGLE)]
-	pub body:  DelimTokenTree,
+	pub rule:  MacroRule,
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]
