@@ -213,7 +213,8 @@ fn parse<R: ParsableRecursive<R>>(parser: &mut Parser) -> Result<RecursiveWrappe
 
 	let mut inners = vec![];
 
-	let last_inner = loop {
+	let mut last_pos_before_infix = None;
+	let last_inner = 'last_inner: loop {
 		// Parse prefixes followed by a base
 		let mut prefixes = vec![];
 		let base = loop {
@@ -248,16 +249,26 @@ fn parse<R: ParsableRecursive<R>>(parser: &mut Parser) -> Result<RecursiveWrappe
 					break base;
 				},
 
-				// If we parsed none, then this is an invalid value.
-				(Err(prefix), Err(base)) => return Err(
-					RecursiveWrapperError::PrefixOrBase { prefix, base }
-				),
+				(Err(prefix), Err(base)) => match inners.pop().zip(last_pos_before_infix) {
+					// If we didn't parse any, but we had an inner + infix parsed, then just discard
+					// the infix and return the last inner we parsed
+					Some(((inner, _infix), last_pos_before_infix)) => {
+						parser.set_pos(last_pos_before_infix);
+						break 'last_inner inner;
+					},
+
+					// Otherwise, we're fully empty, so return an error
+					None => return Err(
+						RecursiveWrapperError::PrefixOrBase { prefix, base }
+					),
+				},
 			}
 		};
 
 		// Then parse suffixes followed by an optional infix
 		let mut suffixes = vec![];
 		let infix = loop {
+			last_pos_before_infix = Some(parser.cur_pos());
 			let suffix = peek::<R::Suffix>(parser, &tags)
 				.map_err(RecursiveWrapperError::Suffix)?;
 			let infix = peek::<R::Infix>(parser, &tags)
