@@ -7,8 +7,7 @@ pub use rustidy_macros::ParseRecursive;
 use {
 	crate::{self as rustidy_parse},
 	super::{ParsableFrom, Parse, ParseError, Parser, ParserError, ParserTag},
-	core::{marker::PhantomData, mem},
-	either::Either,
+	core::marker::PhantomData,
 	rustidy_util::AstPos,
 };
 
@@ -214,108 +213,110 @@ fn parse<R: ParsableRecursive<R>>(parser: &mut Parser) -> Result<RecursiveWrappe
 
 	let mut inners = vec![];
 
-	let mut cur_prefixes = vec![];
 	let last_inner = loop {
-		let prefix = peek::<R::Prefix>(parser, &tags)
-			.map_err(RecursiveWrapperError::Prefix)?;
-		let base = peek::<R::Base>(parser, &tags)
-			.map_err(RecursiveWrapperError::Base)?;
+		// Parse prefixes followed by a base
+		let mut prefixes = vec![];
+		let base = loop {
+			let prefix = peek::<R::Prefix>(parser, &tags)
+				.map_err(RecursiveWrapperError::Prefix)?;
+			let base = peek::<R::Base>(parser, &tags)
+				.map_err(RecursiveWrapperError::Base)?;
+			match (prefix, base) {
+				(Ok((prefix, prefix_pos)), Ok((base, base_pos))) => {
+					// If we parsed both a valid prefix and base, then
+					// look ahead to see if there's another base after
+					// the base. If so, then consider this a prefix.
+					parser.set_pos(base_pos);
+					match peek::<R::Base>(parser, &tags)
+						.map_err(RecursiveWrapperError::Base)?
+						.is_ok() {
+						true => {
+							parser.set_pos(prefix_pos);
+							prefixes.push(prefix);
+						},
+						false => break base,
+					}
+				},
 
-		let parsed = match (prefix, base) {
-			(Ok((prefix, prefix_pos)), Ok((base, base_pos))) => {
-				parser.set_pos(base_pos);
-				match peek::<R::Base>(parser, &tags)
-					.map_err(RecursiveWrapperError::Base)?
-					.is_ok() {
-					true => Either::Left((prefix, prefix_pos)),
-					// TODO: We should undo the peek here
-					false => Either::Right((base, None)),
-				}
-			},
-			(Ok((prefix, prefix_pos)), Err(_)) => Either::Left((prefix, prefix_pos)),
-			(Err(_), Ok((base, base_pos))) => Either::Right((base, Some(base_pos))),
-			(Err(prefix), Err(base)) => return Err(
-				RecursiveWrapperError::PrefixOrBase { prefix, base }
-			),
+				// If we parsed just one, then use it
+				(Ok((prefix, prefix_pos)), Err(_)) => {
+					parser.set_pos(prefix_pos);
+					prefixes.push(prefix);
+				},
+				(Err(_), Ok((base, base_pos))) => {
+					parser.set_pos(base_pos);
+					break base;
+				},
+
+				// If we parsed none, then this is an invalid value.
+				(Err(prefix), Err(base)) => return Err(
+					RecursiveWrapperError::PrefixOrBase { prefix, base }
+				),
+			}
 		};
 
-		match parsed {
-			Either::Left((prefix, prefix_pos)) => {
-				parser.set_pos(prefix_pos);
-				cur_prefixes.push(prefix);
-			},
-			Either::Right((base, base_pos)) => {
-				if let Some(pos) = base_pos {
-					parser.set_pos(pos);
-				}
+		// Then parse suffixes followed by an optional infix
+		let mut suffixes = vec![];
+		let infix = loop {
+			let suffix = peek::<R::Suffix>(parser, &tags)
+				.map_err(RecursiveWrapperError::Suffix)?;
+			let infix = peek::<R::Infix>(parser, &tags)
+				.map_err(RecursiveWrapperError::Infix)?;
 
-				let mut cur_suffixes = vec![];
-				let infix = loop {
-					let suffix = peek::<R::Suffix>(parser, &tags)
-						.map_err(RecursiveWrapperError::Suffix)?;
-					let infix = peek::<R::Infix>(parser, &tags)
-						.map_err(RecursiveWrapperError::Infix)?;
+			match (suffix, infix) {
+				(Ok((suffix, suffix_pos)), Ok((infix, infix_pos))) => {
+					parser.set_pos(infix_pos);
 
-					let parsed = match (suffix, infix) {
-						(Ok((suffix, suffix_pos)), Ok((infix, infix_pos))) => 'parsed: {
-							parser.set_pos(infix_pos);
-							// TODO: This is a semi-hack to ensure that we parse `for _ in 0.. {}` correctly.
-							//       Technically this should be always correct, since the only suffix that can
-							//       be equal to an infix is `..`, and it can't be chained, so the only time
-							//       we'd ever find a block expression after `..` would be when it shouldn't
-							//       be parsed.
-							//       Despite that, this is a very inelegant way to perform this check, and we
-							//       should instead just make optional suffixes / base expressions aware of the
-							//       `SkipOptionalTrailingBlockExpression` tag and skip themselves or something
-							//       similar that doesn't involve us doing anything.
-							if tags
-								.contains(&ParserTag::SkipOptionalTrailingBlockExpression) && peek::<ParseBracesOpen>(parser, &tags)
-								.map_err(RecursiveWrapperError::BracesOpen)?
-								.is_ok() {
-								// TODO: We should undo the peek here
-								break 'parsed Either::Left((suffix, suffix_pos));
-							}
+					// TODO: This is a semi-hack to ensure that we parse `for _ in 0.. {}` correctly.
+					//       Technically this should be always correct, since the only suffix that can
+					//       be equal to an infix is `..`, and it can't be chained, so the only time
+					//       we'd ever find a block expression after `..` would be when it shouldn't
+					//       be parsed.
+					//       Despite that, this is a very inelegant way to perform this check, and we
+					//       should instead just make optional suffixes / base expressions aware of the
+					//       `SkipOptionalTrailingBlockExpression` tag and skip themselves or something
+					//       similar that doesn't involve us doing anything.
+					if tags
+						.contains(&ParserTag::SkipOptionalTrailingBlockExpression) && peek::<ParseBracesOpen>(parser, &tags)
+						.map_err(RecursiveWrapperError::BracesOpen)?
+						.is_ok() {
+						parser.set_pos(suffix_pos);
+						suffixes.push(suffix);
+						continue;
+					}
 
-							match peek::<R::Prefix>(parser, &tags)
-								.map_err(RecursiveWrapperError::Prefix)?
-								.is_ok() || peek::<R::Base>(parser, &tags)
-								.map_err(RecursiveWrapperError::Base)?
-								.is_ok() {
-								// TODO: We should undo the peek here
-								true => Either::Right((infix, None)),
-								false => Either::Left((suffix, suffix_pos)),
-							}
-						},
-						(Ok((suffix, suffix_pos)), Err(_)) => Either::Left((suffix, suffix_pos)),
-						(Err(_), Ok((infix, infix_pos))) => Either::Right((infix, Some(infix_pos))),
-						(Err(_), Err(_)) => break None,
-					};
-
-					match parsed {
-						Either::Left((suffix, suffix_pos)) => {
+					// If we parsed both a valid suffix and infix, then
+					// look ahead to see if there's a prefix/base after the infix.
+					// If so, then consider this to be an infix.
+					match peek::<R::Prefix>(parser, &tags)
+						.map_err(RecursiveWrapperError::Prefix)?
+						.is_ok() || peek::<R::Base>(parser, &tags)
+						.map_err(RecursiveWrapperError::Base)?
+						.is_ok() {
+						true => break Some(infix),
+						false => {
 							parser.set_pos(suffix_pos);
-							cur_suffixes.push(suffix);
-						},
-						Either::Right((infix, infix_pos)) => {
-							if let Some(pos) = infix_pos {
-								parser.set_pos(pos);
-							}
-							break Some(infix);
+							suffixes.push(suffix);
 						},
 					}
-				};
+				},
+				(Ok((suffix, suffix_pos)), Err(_)) => {
+					parser.set_pos(suffix_pos);
+					suffixes.push(suffix);
+				},
+				(Err(_), Ok((infix, infix_pos))) => {
+					parser.set_pos(infix_pos);
+					break Some(infix);
+				},
+				(Err(_), Err(_)) => break None,
+			}
+		};
 
-				let inner = RecursiveWrapperInnerPart {
-					prefixes: mem::take(&mut cur_prefixes),
-					base,
-					suffixes: cur_suffixes,
-				};
-
-				match infix {
-					Some(infix) => inners.push((inner, infix)),
-					None => break inner,
-				}
-			},
+		// Finally if we didn't get an infix, we're done.
+		let inner = RecursiveWrapperInnerPart { prefixes, base, suffixes, };
+		match infix {
+			Some(infix) => inners.push((inner, infix)),
+			None => break inner,
 		}
 	};
 
