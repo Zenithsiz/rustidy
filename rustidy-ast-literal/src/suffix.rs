@@ -2,7 +2,7 @@
 
 // Imports
 use {
-	rustidy_ast_util::IdentifierOrKeyword,
+	crate::IdentifierOrKeyword,
 	rustidy_format::{Format, Formattable, WhitespaceFormat},
 	rustidy_parse::{Parse, Parser, ParserTag},
 	rustidy_print::Print,

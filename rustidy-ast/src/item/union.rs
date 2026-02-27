@@ -4,7 +4,8 @@
 use {
 	crate::{token, util::Braced},
 	super::{function::{GenericParams, WhereClause}, struct_::StructFields},
-	rustidy_ast_util::{Identifier, delimited},
+	rustidy_ast_literal::Identifier,
+	rustidy_ast_util::delimited,
 	rustidy_format::{Format, Formattable, WhitespaceFormat},
 	rustidy_parse::Parse,
 	rustidy_print::Print,

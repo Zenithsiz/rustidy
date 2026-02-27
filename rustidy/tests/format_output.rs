@@ -10,7 +10,7 @@
 use {
 	app_error::{AppError, Context, ensure},
 	rustidy_ast::Crate,
-	rustidy_ast_util::IdentifierOrKeyword,
+	rustidy_ast_literal::IdentifierOrKeyword,
 	rustidy_format::{FormatMultilineOutput, FormatOutput, Formattable},
 	rustidy_parse::{Parse, ParseError, Parser},
 	rustidy_util::Config,

@@ -3,7 +3,7 @@
 use {
 	crate::{expr::{Expression, ExpressionInner}, token},
 	super::ExpressionWithoutBlockInner,
-	rustidy_ast_util::Identifier,
+	rustidy_ast_literal::Identifier,
 	rustidy_format::{
 		Format,
 		FormatOutput,

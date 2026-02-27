@@ -11,10 +11,10 @@ use {
 		util::Parenthesized,
 	},
 	super::LiteralExpression,
+	rustidy_ast_literal::Identifier,
 	rustidy_ast_util::{
 		AtLeast1,
 		Delimited,
-		Identifier,
 		Longest,
 		Punctuated,
 		PunctuatedTrailing,

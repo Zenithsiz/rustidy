@@ -25,6 +25,7 @@ pub mod raw_c_string;
 pub mod raw_string;
 pub mod string;
 pub mod suffix;
+pub mod ident;
 
 // Exports
 pub use self::{
@@ -42,6 +43,7 @@ pub use self::{
 		UnicodeEscape,
 	},
 	float::FloatLiteral,
+	ident::{Identifier, IdentifierOrKeyword, NonKeywordIdentifier, RawIdentifier},
 	int::IntegerLiteral,
 	raw_byte_string::RawByteStringLiteral,
 	raw_c_string::RawCStringLiteral,

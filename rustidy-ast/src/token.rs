@@ -15,7 +15,7 @@ use {
 		RawStringLiteral,
 		StringLiteral,
 	},
-	rustidy_ast_util::{IdentifierOrKeyword, RawIdentifier},
+	rustidy_ast_literal::{IdentifierOrKeyword, RawIdentifier},
 	rustidy_format::{Format, Formattable},
 	rustidy_parse::{Parse, ParseError, ParserError, ParserTag},
 	rustidy_print::Print,

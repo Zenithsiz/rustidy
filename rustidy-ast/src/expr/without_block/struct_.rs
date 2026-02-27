@@ -4,7 +4,8 @@
 use {
 	crate::{attr::{self, WithOuterAttributes}, expr::Expression, token, util::Braced},
 	super::{TupleIndex, path::PathInExpression},
-	rustidy_ast_util::{Identifier, Punctuated, delimited, punct},
+	rustidy_ast_literal::Identifier,
+	rustidy_ast_util::{Punctuated, delimited, punct},
 	rustidy_format::{Format, Formattable, WhitespaceConfig, WhitespaceFormat},
 	rustidy_parse::{Parse, ParserTag},
 	rustidy_print::Print,

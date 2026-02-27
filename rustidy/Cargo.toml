@@ -18,12 +18,13 @@ path = "bin/cargo-rustidy/main.rs"
 [dependencies]
 
 # Workspace
-rustidy-ast      = { workspace = true }
-rustidy-ast-util = { workspace = true }
-rustidy-format   = { workspace = true }
-rustidy-parse    = { workspace = true }
-rustidy-print    = { workspace = true }
-rustidy-util     = { workspace = true }
+rustidy-ast         = { workspace = true }
+rustidy-ast-literal = { workspace = true }
+rustidy-ast-util    = { workspace = true }
+rustidy-format      = { workspace = true }
+rustidy-parse       = { workspace = true }
+rustidy-print       = { workspace = true }
+rustidy-util        = { workspace = true }
 
 app-error      = { workspace = true }
 cargo_metadata = { workspace = true }

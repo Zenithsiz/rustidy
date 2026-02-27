@@ -11,7 +11,7 @@ use {
 		Visibility,
 		function::{GenericParams, TypeParamBounds, WhereClause},
 	},
-	rustidy_ast_util::Identifier,
+	rustidy_ast_literal::Identifier,
 	rustidy_format::{Format, Formattable, WhitespaceFormat},
 	rustidy_parse::Parse,
 	rustidy_print::Print,

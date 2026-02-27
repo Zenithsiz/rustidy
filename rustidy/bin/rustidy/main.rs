@@ -29,7 +29,7 @@ use {
 	app_error::{AppError, Context, bail, ensure},
 	clap::Parser as _,
 	rustidy_ast::{attr::OuterAttrOrDocComment, item::{ItemInner, Module, VisItemInner}},
-	rustidy_ast_util::Identifier,
+	rustidy_ast_literal::Identifier,
 	rustidy_format::FormatOutput,
 	rustidy_print::Print,
 	rustidy_util::Config,
