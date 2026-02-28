@@ -1,12 +1,7 @@
 //! Line remainder
 
 // Imports
-use {
-	format::{Format, Formattable},
-	parse::Parse,
-	print::Print,
-	util::AstStr,
-};
+use {format::{Format, Formattable}, parse::Parse, print::Print, util::AstStr};
 
 /// Characters remaining until the end of the line (including the newline if it exists)
 #[derive(PartialEq, Eq, Clone, Debug)]

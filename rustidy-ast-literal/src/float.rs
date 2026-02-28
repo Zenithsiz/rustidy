@@ -8,8 +8,8 @@ use {
 	macros::ParseError,
 	parse::{Parse, Parser, ParserError, ParserTag},
 	print::Print,
-	util::{AstStr, Whitespace},
 	std::fmt,
+	util::{AstStr, Whitespace},
 };
 
 

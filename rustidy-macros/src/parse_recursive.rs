@@ -149,7 +149,8 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 			let recursive_variants = variants
 				.iter()
 				.filter(|variant| variant.recursive)
-				.cloned().collect::<Vec<_>>();
+				.cloned()
+				.collect::<Vec<_>>();
 
 			let mut suffix_variants = recursive_variants.clone();
 			let suffix_match_arms = suffix_variants

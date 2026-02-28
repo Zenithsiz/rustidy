@@ -18,9 +18,9 @@ use {
 		},
 		util::{Braced, Bracketed, Parenthesized},
 	},
-	core::fmt::Debug,
 	ast_literal::{ByteLiteral, ByteStringLiteral, Identifier, LiteralExpression},
 	ast_util::{AtLeast1, Punctuated, PunctuatedTrailing, at_least, delimited, punct},
+	core::fmt::Debug,
 	format::{Format, Formattable, WhitespaceFormat},
 	parse::{Parse, ParsePeeked, ParserError},
 	print::Print,
@@ -339,10 +339,7 @@ impl ParsePeeked<ByteLiteral> for LiteralPattern {
 }
 
 impl ParsePeeked<ByteStringLiteral> for LiteralPattern {
-	fn parse_from_with_peeked(
-		_parser: &mut parse::Parser,
-		parsed: ByteStringLiteral
-	) -> Result<Self, Self::Error> {
+	fn parse_from_with_peeked(_parser: &mut parse::Parser, parsed: ByteStringLiteral) -> Result<Self, Self::Error> {
 		Ok(Self {
 			minus: None,
 			literal: LiteralExpression::ByteString(parsed),

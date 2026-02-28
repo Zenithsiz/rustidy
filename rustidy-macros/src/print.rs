@@ -81,7 +81,8 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 					let print_non_ws = quote! { print::Print::print_non_ws(&self.#field_ident, f); };
 
 					(print, print_non_ws)
-				}).collect::<(Vec<_>, Vec<_>)>();
+				})
+				.collect::<(Vec<_>, Vec<_>)>();
 
 			let print = quote! { #( #print )* };
 			let print_non_ws = quote! { #( #print_non_ws )* };
@@ -90,10 +91,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 		},
 	};
 
-	let impl_generics = util::with_bounds(
-		&attrs,
-		|ty| parse_quote! { #ty: print::Print }
-	);
+	let impl_generics = util::with_bounds(&attrs, |ty| parse_quote! { #ty: print::Print });
 	let (impl_generics, ty_generics, fmt_where_clause) = impl_generics.split_for_impl();
 	let output = quote! {
 		impl #impl_generics print::Print for #item_ident #ty_generics #fmt_where_clause {

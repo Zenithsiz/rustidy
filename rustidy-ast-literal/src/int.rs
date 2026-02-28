@@ -7,8 +7,8 @@ use {
 	format::{Format, Formattable},
 	parse::Parse,
 	print::Print,
-	util::{AstStr, Whitespace},
 	std::borrow::Cow,
+	util::{AstStr, Whitespace},
 };
 
 /// `INTEGER_LITERAL`

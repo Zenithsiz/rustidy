@@ -1,12 +1,7 @@
 //! Escapes
 
 // Imports
-use {
-	format::{Format, Formattable},
-	parse::Parse,
-	print::Print,
-	util::AstStr,
-};
+use {format::{Format, Formattable}, parse::Parse, print::Print, util::AstStr};
 
 /// `QUOTE_ESCAPE`
 #[derive(PartialEq, Eq, Clone, Debug)]

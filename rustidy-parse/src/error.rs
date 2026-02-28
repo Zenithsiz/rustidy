@@ -86,7 +86,8 @@ impl<T: Parse<Error: fmt::Debug>> fmt::Debug for ParserError<T> {
 		f
 			.debug_struct("ParserError")
 			.field("source", &self.source)
-			.field("span", &self.range).finish()
+			.field("span", &self.range)
+			.finish()
 	}
 }
 

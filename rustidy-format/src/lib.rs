@@ -634,7 +634,12 @@ impl<'a> Context<'a> {
 	}
 
 	/// Runs `f` with a tag and data if `pred` is true, removing it after
-	pub fn with_tag_with_if<Tag: FormatTag, O>(&mut self, pred: bool, data: Tag::Data, f: impl FnOnce(&mut Self) -> O) -> O {
+	pub fn with_tag_with_if<Tag: FormatTag, O>(
+		&mut self,
+		pred: bool,
+		data: Tag::Data,
+		f: impl FnOnce(&mut Self) -> O
+	) -> O {
 		match pred {
 			true => self.with_tag_with::<Tag, _>(data, f),
 			false => f(self),

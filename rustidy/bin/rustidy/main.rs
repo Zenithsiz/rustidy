@@ -27,12 +27,11 @@ mod args;
 use {
 	self::args::Args,
 	app_error::{AppError, Context, bail, ensure},
-	clap::Parser as _,
 	ast::{attr::OuterAttrOrDocComment, item::{ItemInner, Module, VisItemInner}},
 	ast_literal::Identifier,
+	clap::Parser as _,
 	format::FormatOutput,
 	print::Print,
-	util::Config,
 	std::{
 		borrow::Cow,
 		fs,
@@ -41,6 +40,7 @@ use {
 		process::ExitCode,
 		time::Instant,
 	},
+	util::Config,
 	zutil_logger::Logger,
 };
 
@@ -206,7 +206,8 @@ fn mod_path<'a>(
 			let mod_rs_path = file_path
 				.parent()
 				.expect("File had no parent")
-				.join(&*name).join("mod.rs");
+				.join(&*name)
+				.join("mod.rs");
 			match mod_rs_path
 				.try_exists()
 				.context("Unable to check if file exists")? {

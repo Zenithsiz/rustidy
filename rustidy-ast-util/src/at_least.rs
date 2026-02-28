@@ -2,8 +2,8 @@
 
 // Imports
 use {
-	itertools::chain,
 	format::{Format, Formattable, WhitespaceConfig},
+	itertools::chain,
 	parse::Parse,
 	print::Print,
 };

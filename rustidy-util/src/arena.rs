@@ -247,7 +247,8 @@ impl<T: ArenaData + fmt::Debug> fmt::Debug for ArenaIdx<T> {
 		f
 			.debug_struct("ArenaIdx")
 			.field("idx", &self.inner)
-			.field("inner", &**self).finish()
+			.field("inner", &**self)
+			.finish()
 	}
 }
 

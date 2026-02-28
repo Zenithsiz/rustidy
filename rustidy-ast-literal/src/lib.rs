@@ -57,11 +57,7 @@ pub use self::{
 };
 
 // Imports
-use {
-	format::{Format, Formattable},
-	parse::Parse,
-	print::Print,
-};
+use {format::{Format, Formattable}, parse::Parse, print::Print};
 
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(strum::EnumTryAs)]

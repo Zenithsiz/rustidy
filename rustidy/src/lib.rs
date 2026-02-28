@@ -35,8 +35,8 @@ use {
 	ast::Crate,
 	format::{FormatOutput},
 	parse::{ParseError, Parser},
-	util::Config,
 	std::path::Path,
+	util::Config,
 };
 
 /// Formats the crate `crate_`.
@@ -83,7 +83,8 @@ fn parser_error_ctx(file: &Path, parser: &Parser) -> String {
 		.map(|ch| match ch.is_whitespace() {
 			true => ch,
 			false => ' ',
-		}).collect::<String>();
+		})
+		.collect::<String>();
 
 	format!(
 		"Error at {}:{loc}:\n    |\n{:>3} | {}\n    | {indent}^",

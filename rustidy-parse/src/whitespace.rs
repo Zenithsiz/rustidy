@@ -30,7 +30,8 @@ impl Parse for Whitespace {
 
 		parser
 			.parse::<ArenaIdx<WhitespaceInner>>()
-			.map(Self).map_err(WhitespaceError)
+			.map(Self)
+			.map_err(WhitespaceError)
 	}
 }
 

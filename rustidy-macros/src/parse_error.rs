@@ -133,7 +133,8 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 									variant_field.ident.as_ref().context(
 										"`#[parse_error(multiple)]` is only supported on named variants"
 									)
-								}).collect::<Result<Vec<_>, _>>()?;
+								})
+								.collect::<Result<Vec<_>, _>>()?;
 
 							let variants_pos = fields_ident
 								.iter()
@@ -178,9 +179,10 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 									.iter()
 									.enumerate()
 									.filter(|(_, variant_field)| { variant_field.source })
-									.at_most_one().context(
-									"At most 1 field may have `#[parse_error(source)]`"
-								)?,
+									.at_most_one()
+									.context(
+										"At most 1 field may have `#[parse_error(source)]`"
+									)?,
 							};
 
 							let is_fatal = variant.fatal;
@@ -238,7 +240,8 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 									Span::mixed_site()
 								),
 							}
-						).collect::<Vec<_>>();
+						)
+						.collect::<Vec<_>>();
 
 					let output = match &*field_idents {
 						[] => {

@@ -1,10 +1,7 @@
 //! Not follows
 
 // Imports
-use {
-	core::marker::PhantomData,
-	parse::{Parse, ParseError, ParserError},
-};
+use {core::marker::PhantomData, parse::{Parse, ParseError, ParserError}};
 
 /// Not follows.
 ///

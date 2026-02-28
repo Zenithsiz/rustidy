@@ -11,8 +11,8 @@ use {
 	ast::{Crate, expr::Expression, item::UseDeclaration},
 	format::{Format, WhitespaceFormat},
 	parse::{Parse, ParseError, Parser, ParserError},
-	util::{Config, Whitespace},
 	test::Bencher,
+	util::{Config, Whitespace},
 };
 extern crate test;
 

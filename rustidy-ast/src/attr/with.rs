@@ -5,13 +5,7 @@ use {
 	crate::{attr::{InnerDocComment, OuterDocComment}, util::Braced},
 	super::{InnerAttrOrDocComment, OuterAttrOrDocComment},
 	ast_util::delimited,
-	format::{
-		Format,
-		FormatOutput,
-		Formattable,
-		WhitespaceConfig,
-		WhitespaceFormat,
-	},
+	format::{Format, FormatOutput, Formattable, WhitespaceConfig, WhitespaceFormat},
 	parse::{ParsableRecursive, Parse, Parser},
 	print::Print,
 	util::Whitespace,
@@ -77,10 +71,8 @@ impl<A, T: Format<WhitespaceConfig, A>> Format<WhitespaceConfig, FmtArgs<A>> for
 		}
 
 		match has_prefix_ws {
-			true => value_ctx
-				.format_with(&mut self.inner, prefix_ws, args.inner_args),
-			false => value_ctx
-				.format_with(&mut self.inner, args.prefix_ws, args.inner_args),
+			true => value_ctx.format_with(&mut self.inner, prefix_ws, args.inner_args),
+			false => value_ctx.format_with(&mut self.inner, args.prefix_ws, args.inner_args),
 		}.append_to(&mut output);
 
 		output

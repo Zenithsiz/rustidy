@@ -47,8 +47,8 @@ use {
 	app_error::AppError,
 	arcstr::ArcStr,
 	core::{marker::PhantomData, ops::{Residual, Try}},
-	util::{ArenaData, ArenaIdx, AstPos, AstRange, AstStr},
 	std::fmt,
+	util::{ArenaData, ArenaIdx, AstPos, AstRange, AstStr},
 };
 #[cfg(feature = "flamegraph-traces")]
 use {
@@ -373,7 +373,8 @@ impl Parser {
 		let line = self
 			.input[..pos.0]
 			.chars()
-			.filter(|&ch| ch == '\n').count();
+			.filter(|&ch| ch == '\n')
+			.count();
 		let column = match self.input[..pos.0].rfind('\n') {
 			Some(newline_pos) => pos.0 - newline_pos - 1,
 			None => pos.0,

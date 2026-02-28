@@ -29,9 +29,10 @@ fn test_case_with(
 	let mut parser = Parser::new(source);
 	let mut whitespace = parser
 		.parse::<Whitespace>()
-		.map_err(|err| err.to_app_error(&parser)).with_context(
-		|| format!("Unable to parse whitespace: {source:?}")
-	)?;
+		.map_err(|err| err.to_app_error(&parser))
+		.with_context(
+			|| format!("Unable to parse whitespace: {source:?}")
+		)?;
 	ensure!(
 		parser.is_finished(),
 		"Parser didn't parse all the whitespace: {source:?}"

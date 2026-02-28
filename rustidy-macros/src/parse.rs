@@ -301,7 +301,8 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 								Err(err) => err,
 							};
 						}
-					}).collect::<Vec<_>>();
+					})
+					.collect::<Vec<_>>();
 
 				let unknown_errs_create = variants
 					.iter()
@@ -339,20 +340,22 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 							#[parse_error(transparent)]
 							#variant_ident(#ty),
 						}
-					}).chain(peeks.iter().map(|peek| {
-					let Peek {
-						variant: _,
-						variant_ty: _,
-						peek_ty: PeekAttrs(ty),
-						err_variant,
-					} = peek;
-					let err_ty = quote! { parse::ParserError<#ty> };
+					})
+					.chain(peeks.iter().map(|peek| {
+						let Peek {
+							variant: _,
+							variant_ty: _,
+							peek_ty: PeekAttrs(ty),
+							err_variant,
+						} = peek;
+						let err_ty = quote! { parse::ParserError<#ty> };
 
-					quote! {
+						quote! {
 							#[parse_error(transparent)]
 							#err_variant(#err_ty),
 						}
-				})).collect::<Vec<_>>();
+					}))
+					.collect::<Vec<_>>();
 
 				let unknown_errs_decl = itertools::izip!(variants, &err_idents, &variant_tys)
 					.map(|(variant, err_ident, variant_ty)| {
@@ -368,10 +371,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 					})
 					.collect::<Vec<_>>();
 
-				let error_generics = util::with_bounds(
-					&attrs,
-					|ty| parse_quote! { #ty: parse::Parse }
-				);
+				let error_generics = util::with_bounds(&attrs, |ty| parse_quote! { #ty: parse::Parse });
 
 				// TODO: Figure out why using just `#error_generics` doesn't work here
 				let (impl_generics, _, where_clause) = error_generics.split_for_impl();
@@ -570,10 +570,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 					.collect::<Vec<_>>();
 
 				// TODO: Figure out why using just `#error_generics` doesn't work here
-				let error_generics = util::with_bounds(
-					&attrs,
-					|ty| parse_quote! { #ty: parse::Parse }
-				);
+				let error_generics = util::with_bounds(&attrs, |ty| parse_quote! { #ty: parse::Parse });
 				let (impl_generics, _, where_clause) = error_generics.split_for_impl();
 				let extra_variants = attrs
 					.error
@@ -597,10 +594,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 	};
 
 	let parse_impl = {
-		let generics = util::with_bounds(
-			&attrs,
-			|ty| parse_quote! { #ty: parse::Parse }
-		);
+		let generics = util::with_bounds(&attrs, |ty| parse_quote! { #ty: parse::Parse });
 		let (impl_generics, ty_generics, where_clause) = generics.split_for_impl();
 		let try_with = attrs.try_with;
 		let and_try_with = attrs.and_try_with;

@@ -10,8 +10,8 @@
 use {
 	ast::{Crate, expr::Expression},
 	parse::{Parse, ParseError, Parser, ParserError},
-	util::{AstPos, Whitespace},
 	test::Bencher,
+	util::{AstPos, Whitespace},
 };
 extern crate test;
 
