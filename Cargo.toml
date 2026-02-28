@@ -6,7 +6,7 @@ members = [
 	"rustidy",
 	"rustidy-ast",
 	"rustidy-ast-literal",
-	"rustidy-ast-tokens",
+	"rustidy-ast-token",
 	"rustidy-ast-util",
 	"rustidy-format",
 	"rustidy-macros",
@@ -29,7 +29,7 @@ version     = "0.1.0"
 # Workspace
 ast         = { package = "rustidy-ast", path = "rustidy-ast", version = "0.1.0" }
 ast-literal = { package = "rustidy-ast-literal", path = "rustidy-ast-literal", version = "0.1.0" }
-ast-tokens  = { package = "rustidy-ast-tokens", path = "rustidy-ast-tokens", version = "0.1.0" }
+ast-token   = { package = "rustidy-ast-token", path = "rustidy-ast-token", version = "0.1.0" }
 ast-util    = { package = "rustidy-ast-util", path = "rustidy-ast-util", version = "0.1.0" }
 format      = { package = "rustidy-format", path = "rustidy-format", version = "0.1.0" }
 macros      = { package = "rustidy-macros", path = "rustidy-macros", version = "0.1.0" }

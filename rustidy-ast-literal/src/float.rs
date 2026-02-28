@@ -22,7 +22,7 @@ pub struct FloatLiteral {
 	#[format(prefix_ws = ())]
 	pub int:      DecLiteral,
 	#[format(prefix_ws = Whitespace::REMOVE)]
-	pub dot:      Option<ast_tokens::Dot>,
+	pub dot:      Option<ast_token::Dot>,
 	#[format(prefix_ws = ())]
 	pub frac:     Option<DecLiteral>,
 	#[format(prefix_ws = ())]
@@ -46,7 +46,7 @@ impl Parse for FloatLiteral {
 
 		let (dot, frac) = match parser.with_tag(
 			ParserTag::SkipWhitespace,
-			Parser::try_parse::<ast_tokens::Dot>
+			Parser::try_parse::<ast_token::Dot>
 		)? {
 			Ok(dot) => match parser.try_parse::<DecLiteral>()? {
 				Ok(frac) => (Some(dot), Some(frac)),
@@ -88,7 +88,7 @@ pub enum FloatLiteralError {
 	#[parse_error(transparent)]
 	DecLiteral(ParserError<DecLiteral>),
 	#[parse_error(transparent)]
-	Dot(ParserError<ast_tokens::Dot>),
+	Dot(ParserError<ast_token::Dot>),
 	#[parse_error(transparent)]
 	Suffix(ParserError<Suffix>),
 	#[parse_error(transparent)]

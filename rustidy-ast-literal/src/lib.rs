@@ -79,6 +79,6 @@ pub enum LiteralExpression {
 	CString(CStringLiteral),
 	RawCString(RawCStringLiteral),
 	Integer(IntegerLiteral),
-	True(ast_tokens::True),
-	False(ast_tokens::False),
+	True(ast_token::True),
+	False(ast_token::False),
 }

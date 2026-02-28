@@ -24,7 +24,7 @@ use {
 };
 
 // Exports
-pub use ast_tokens::*;
+pub use ast_token::*;
 
 /// `Token`
 #[derive(PartialEq, Eq, Clone, Debug)]
