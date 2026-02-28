@@ -4,14 +4,7 @@ use {
 	crate::expr::{Expression, ExpressionInner},
 	super::ExpressionWithoutBlockInner,
 	ast_literal::Identifier,
-	format::{
-		Format,
-		FormatOutput,
-		FormatTag,
-		Formattable,
-		WhitespaceConfig,
-		WhitespaceFormat,
-	},
+	format::{Format, FormatOutput, Formattable, WhitespaceConfig, WhitespaceFormat},
 	parse::ParseRecursive,
 	print::Print,
 	util::Whitespace,
@@ -27,8 +20,8 @@ use {
 #[format(args = FieldExpressionFmt)]
 pub struct FieldExpression {
 	pub expr:  Expression,
-	#[format(indent(if_ = ctx.has_tag(FormatTag::InsideChain)))]
-	#[format(prefix_ws = match ctx.has_tag(FormatTag::InsideChain) {
+	#[format(indent(if_ = ctx.has_tag::<format::tag::InsideChain>()))]
+	#[format(prefix_ws = match ctx.has_tag::<format::tag::InsideChain>() {
 		true => Whitespace::INDENT,
 		false => Whitespace::REMOVE,
 	})]
@@ -48,12 +41,12 @@ impl Format<WhitespaceConfig, ()> for FieldExpression {
 	) -> FormatOutput {
 		let output = self.format(ctx, prefix_ws, FieldExpressionFmt);
 
-		match ctx.has_tag(FormatTag::InsideChain) {
+		match ctx.has_tag::<format::tag::InsideChain>() {
 			true => output,
 			false => match output.len_non_multiline_ws() >= ctx.config().max_chain_len {
 				// TODO: Ideally we wouldn't re-format everything here.
 				true => ctx
-					.with_tag(FormatTag::InsideChain, |ctx| {
+					.with_tag::<format::tag::InsideChain, _>(|ctx| {
 						self
 							.format(ctx, prefix_ws, FieldExpressionFmt)
 					}),

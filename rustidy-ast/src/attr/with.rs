@@ -8,7 +8,6 @@ use {
 	format::{
 		Format,
 		FormatOutput,
-		FormatTag,
 		Formattable,
 		WhitespaceConfig,
 		WhitespaceFormat,
@@ -52,7 +51,7 @@ impl<A, T: Format<WhitespaceConfig, A>> Format<WhitespaceConfig, FmtArgs<A>> for
 		let mut has_prefix_ws = true;
 		for attr in &mut self.attrs {
 			if is_after_newline {
-				ctx.add_tag(FormatTag::AfterNewline);
+				ctx.add_tag::<format::tag::AfterNewline>();
 			}
 
 			match has_prefix_ws {
@@ -73,7 +72,8 @@ impl<A, T: Format<WhitespaceConfig, A>> Format<WhitespaceConfig, FmtArgs<A>> for
 
 
 		if is_after_newline {
-			value_ctx.add_tag(FormatTag::AfterNewline);
+			value_ctx
+				.add_tag::<format::tag::AfterNewline>();
 		}
 
 		match has_prefix_ws {
@@ -181,7 +181,7 @@ impl<T: Format<WhitespaceConfig, A>, A> Format<WhitespaceConfig, FmtArgs<A>> for
 		let mut has_prefix_ws = true;
 		for attr in &mut self.attrs {
 			if is_after_newline {
-				ctx.add_tag(FormatTag::AfterNewline);
+				ctx.add_tag::<format::tag::AfterNewline>();
 			}
 
 			let prefix_ws = match has_prefix_ws {
@@ -200,7 +200,7 @@ impl<T: Format<WhitespaceConfig, A>, A> Format<WhitespaceConfig, FmtArgs<A>> for
 		// Note: `self.inner` might be empty, so we add the tag
 		//       for the suffix in `BracedWithInnerAttributes`.
 		if is_after_newline {
-			ctx.add_tag(FormatTag::AfterNewline);
+			ctx.add_tag::<format::tag::AfterNewline>();
 		}
 
 		let prefix_ws = match has_prefix_ws {

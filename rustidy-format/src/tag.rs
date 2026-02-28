@@ -4,12 +4,108 @@
 use core::mem;
 
 /// Formatter tag
-// TODO: These should be separated by tags that need scopes,
-//       and tags that are pushed/popped.
-#[derive(PartialEq, Eq, Clone, Copy, Debug)]
-pub enum FormatTag {
-	InsideChain,
+pub trait FormatTag {
+	type Data;
 
+	fn field(tags: &FormatTags) -> &Option<Self::Data>;
+	fn field_mut(tags: &mut FormatTags) -> &mut Option<Self::Data>;
+}
+
+macro decl_tags(
+	$FormatTags:ident;
+	$new:ident;
+	$add:ident;
+	$remove:ident;
+	$set:ident;
+	$contains:ident;
+
+	$(
+		$( #[$doc:meta] )*
+		$Tag:ident: $TagData:ty,
+	)*
+) {
+	$(
+		$( #[$doc] )*
+		pub struct $Tag;
+
+		impl FormatTag for $Tag {
+			type Data = $TagData;
+
+			fn field(tags: &FormatTags) -> &Option<Self::Data> {
+				&tags.$Tag
+			}
+
+			fn field_mut(tags: &mut FormatTags) -> &mut Option<Self::Data> {
+				&mut tags.$Tag
+			}
+		}
+	)*
+
+	/// Formatter tags
+	#[derive(Clone, Copy, Debug)]
+	#[expect(non_snake_case, reason = "Macro-generated")]
+	pub struct $FormatTags {
+		$(
+			$Tag: Option<$TagData>,
+		)*
+	}
+
+	impl $FormatTags {
+		/// Creates new, empty, tags
+		#[must_use]
+		pub const fn $new() -> Self {
+			Self {
+				$( $Tag: None, )*
+			}
+		}
+
+		/// Adds a tag.
+		///
+		/// Returns the previous tag data, if any
+		pub fn $add<Tag: FormatTag>(&mut self, data: Tag::Data) -> Option<Tag::Data> {
+			self.$set::<Tag>(Some(data))
+		}
+
+		/// Removes a tag.
+		///
+		/// Returns the previous tag data, if any
+		pub fn $remove<Tag: FormatTag>(&mut self) -> Option<Tag::Data> {
+			self.$set::<Tag>(None)
+		}
+
+		/// Sets whether a tag is present or not.
+		///
+		/// Returns the previous tag data, if any.
+		pub fn $set<Tag: FormatTag>(&mut self, data: Option<Tag::Data>) -> Option<Tag::Data> {
+			mem::replace(Tag::field_mut(self), data)
+		}
+
+		/// Returns a tag's data, if it exists
+		#[must_use]
+		pub fn $contains<Tag: FormatTag>(&self) -> Option<&Tag::Data> {
+			Tag::field(self).as_ref()
+		}
+	}
+
+	impl Default for FormatTags {
+		fn default() -> Self {
+			Self::$new()
+		}
+	}
+}
+
+decl_tags! {
+	FormatTags;
+	new;
+	add;
+	remove;
+	set;
+	contains;
+
+	/// Inside chain
+	InsideChain: (),
+
+	/// After newline
 	// Note: This attribute only works because every time
 	//       we apply it, there's always whitespace directly
 	//       after to remove it, otherwise it would stay for
@@ -17,59 +113,5 @@ pub enum FormatTag {
 	// TODO: Ideally, we'd assign some "position" to this, but
 	//       during formatting, we no longer necessarily have
 	//       the input ranges.
-	AfterNewline,
-}
-
-/// Formatter tags
-#[derive(Clone, Copy, Debug)]
-pub struct FormatTags {
-	pub inside_chain:  bool,
-	pub after_newline: bool,
-}
-
-impl FormatTags {
-	/// Creates new, empty, tags
-	#[must_use]
-	pub const fn new() -> Self {
-		Self { inside_chain: false, after_newline: false, }
-	}
-
-	/// Adds a tag.
-	///
-	/// Returns if the tag was present
-	pub const fn add(&mut self, tag: FormatTag) -> bool {
-		self.set(tag, true)
-	}
-
-	/// Removes a tag.
-	///
-	/// Returns if the tag was present
-	pub const fn remove(&mut self, tag: FormatTag) -> bool {
-		self.set(tag, false)
-	}
-
-	/// Sets whether a tag is present or not.
-	///
-	/// Returns if the tag was present.
-	pub const fn set(&mut self, tag: FormatTag, present: bool) -> bool {
-		match tag {
-			FormatTag::InsideChain => mem::replace(&mut self.inside_chain, present),
-			FormatTag::AfterNewline => mem::replace(&mut self.after_newline, present),
-		}
-	}
-
-	/// Returns if a tag exists
-	#[must_use]
-	pub const fn contains(&self, tag: FormatTag) -> bool {
-		match tag {
-			FormatTag::InsideChain => self.inside_chain,
-			FormatTag::AfterNewline => self.after_newline,
-		}
-	}
-}
-
-impl Default for FormatTags {
-	fn default() -> Self {
-		Self::new()
-	}
+	AfterNewline: (),
 }

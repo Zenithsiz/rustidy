@@ -47,7 +47,7 @@ pub mod vis;
 use {
 	self::{attr::InnerAttrOrDocComment, item::Items, shebang::Shebang},
 	core::fmt::Debug,
-	format::{Format, FormatOutput, FormatTag, Formattable, WhitespaceFormat},
+	format::{Format, FormatOutput, Formattable, WhitespaceFormat},
 	parse::Parse,
 	print::Print,
 	util::Whitespace,
@@ -87,7 +87,7 @@ impl Format<(), ()> for Crate {
 
 		// Note: We always say we're after a newline to ensure any comments
 		//       aren't forced to have a newline before them.
-		ctx.add_tag(FormatTag::AfterNewline);
+		ctx.add_tag::<format::tag::AfterNewline>();
 
 		let mut is_first = true;
 		for attr in &mut self.inner_attrs {
@@ -101,7 +101,7 @@ impl Format<(), ()> for Crate {
 			is_first = false;
 
 			if let Some(doc) = attr.try_as_doc_comment_ref() && doc.is_line() {
-				ctx.add_tag(FormatTag::AfterNewline);
+				ctx.add_tag::<format::tag::AfterNewline>();
 			}
 		}
 

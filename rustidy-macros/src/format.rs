@@ -438,16 +438,16 @@ fn derive_format(
 	let format = without_tag.iter().fold(
 		format,
 		|format, WithExprIf { expr: tag, if_ }| match if_ {
-			Some(cond) => parse_quote! { ctx.without_tag_if(#cond, #tag, |ctx| #format) },
-			None => parse_quote! { ctx.without_tag(#tag, |ctx| #format) },
+			Some(cond) => parse_quote! { ctx.without_tag_if::<#tag, _>(#cond, |ctx| #format) },
+			None => parse_quote! { ctx.without_tag::<#tag, _>(|ctx| #format) },
 		}
 	);
 
 	let format = with_tag.iter().fold(
 		format,
 		|format, WithExprIf { expr: tag, if_ }| match if_ {
-			Some(cond) => parse_quote! { ctx.with_tag_if(#cond, #tag, |ctx| #format) },
-			None => parse_quote! { ctx.with_tag(#tag, |ctx| #format) },
+			Some(cond) => parse_quote! { ctx.with_tag_if::<#tag, _>(#cond, |ctx| #format) },
+			None => parse_quote! { ctx.with_tag::<#tag, _>(|ctx| #format) },
 		}
 	);
 

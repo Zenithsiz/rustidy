@@ -2,11 +2,11 @@
 
 // Imports
 use {
-	crate::{Format, FormatOutput, FormatTag, Formattable, WhitespaceConfig},
+	crate::{Format, FormatOutput, Formattable, WhitespaceConfig, tag},
 	core::ops::ControlFlow,
 	itertools::Itertools,
-	util::{AstStr, ast_str::AstStrRepr, whitespace::{Comment, Whitespace}},
 	std::sync::Arc,
+	util::{AstStr, ast_str::AstStrRepr, whitespace::{Comment, Whitespace}},
 };
 
 #[extend::ext(name = WhitespaceFormat)]
@@ -305,7 +305,7 @@ pub fn format(
 	// Note: If we're whitespace after a line doc comment, then we have a newline
 	//       prior to us that we need to take into account.
 	// TODO: We should do this even when we're preserving the whitespace
-	let after_newline = ctx.remove_tag(FormatTag::AfterNewline);
+	let after_newline = ctx.remove_tag::<tag::AfterNewline>().is_some();
 
 	let prefix_str = kind.prefix_str(
 		ctx,

@@ -11,7 +11,7 @@
 )]
 
 // Modules
-mod tag;
+pub mod tag;
 pub mod vec;
 pub mod whitespace;
 pub mod output;
@@ -31,8 +31,8 @@ use {
 	crate as format,
 	arcstr::ArcStr,
 	core::{marker::PhantomData, ops::ControlFlow},
-	util::{ArenaData, ArenaIdx, AstStr, Config, Oob, Whitespace},
 	std::borrow::Cow,
+	util::{ArenaData, ArenaIdx, AstStr, Config, Oob, Whitespace},
 };
 
 /// Formattable types
@@ -576,71 +576,84 @@ impl<'a> Context<'a> {
 
 	/// Adds a tag.
 	///
-	/// Returns if the tag was present
-	pub fn add_tag(&mut self, tag: FormatTag) -> bool {
-		self.tags.add(tag)
+	/// Returns the previous tag data, if any
+	pub fn add_tag<Tag: FormatTag<Data = ()>>(&mut self) -> Option<Tag::Data> {
+		self.add_tag_with::<Tag>(())
+	}
+
+	/// Adds a tag with data.
+	///
+	/// Returns the previous tag data, if any
+	pub fn add_tag_with<Tag: FormatTag>(&mut self, data: Tag::Data) -> Option<Tag::Data> {
+		self.tags.add::<Tag>(data)
 	}
 
 	/// Removes a tag.
 	///
-	/// Returns if the tag was present
-	pub fn remove_tag(&mut self, tag: FormatTag) -> bool {
-		self.tags.remove(tag)
+	/// Returns the previous tag data, if any
+	pub fn remove_tag<Tag: FormatTag>(&mut self) -> Option<Tag::Data> {
+		self.tags.remove::<Tag>()
 	}
 
 	/// Sets whether a tag is present.
 	///
-	/// Returns if the tag was present
-	pub fn set_tag(&mut self, tag: FormatTag, present: bool) -> bool {
-		self.tags.set(tag, present)
+	/// Returns the previous tag data, if any
+	pub fn set_tag<Tag: FormatTag>(&mut self, data: Option<Tag::Data>) -> Option<Tag::Data> {
+		self.tags.set::<Tag>(data)
+	}
+
+	/// Returns a tag's data
+	#[must_use]
+	pub fn tag<Tag: FormatTag>(&self) -> Option<&Tag::Data> {
+		self.tags.contains::<Tag>()
 	}
 
 	/// Returns if a tag exists
 	#[must_use]
-	pub fn has_tag(&self, tag: FormatTag) -> bool {
-		self.tags.contains(tag)
+	pub fn has_tag<Tag: FormatTag>(&self) -> bool {
+		self.tag::<Tag>().is_some()
 	}
 
 	/// Runs `f` with a tag, removing it after
-	pub fn with_tag<O>(&mut self, tag: FormatTag, f: impl FnOnce(&mut Self) -> O) -> O {
-		let was_present = self.add_tag(tag);
+	pub fn with_tag<Tag: FormatTag<Data = ()>, O>(&mut self, f: impl FnOnce(&mut Self) -> O) -> O {
+		self.with_tag_with::<Tag, _>((), f)
+	}
+
+	/// Runs `f` with a tag and data, removing it after
+	pub fn with_tag_with<Tag: FormatTag, O>(&mut self, data: Tag::Data, f: impl FnOnce(&mut Self) -> O) -> O {
+		let prev_data = self.add_tag_with::<Tag>(data);
 		let output = f(self);
-		self.set_tag(tag, was_present);
+		self.set_tag::<Tag>(prev_data);
 
 		output
 	}
 
 	/// Runs `f` with a tag if `pred` is true, removing it after
-	pub fn with_tag_if<O>(
-		&mut self,
-		pred: bool,
-		tag: FormatTag,
-		f: impl FnOnce(&mut Self) -> O
-	) -> O {
+	pub fn with_tag_if<Tag: FormatTag<Data = ()>, O>(&mut self, pred: bool, f: impl FnOnce(&mut Self) -> O) -> O {
+		self.with_tag_with_if::<Tag, _>(pred, (), f)
+	}
+
+	/// Runs `f` with a tag and data if `pred` is true, removing it after
+	pub fn with_tag_with_if<Tag: FormatTag, O>(&mut self, pred: bool, data: Tag::Data, f: impl FnOnce(&mut Self) -> O) -> O {
 		match pred {
-			true => self.with_tag(tag, f),
+			true => self.with_tag_with::<Tag, _>(data, f),
 			false => f(self),
 		}
 	}
 
 	/// Runs `f` without a tag, adding it after if it existed
-	pub fn without_tag<O>(&mut self, tag: FormatTag, f: impl FnOnce(&mut Self) -> O) -> O {
-		let was_present = self.remove_tag(tag);
+	pub fn without_tag<Tag: FormatTag, O>(&mut self, f: impl FnOnce(&mut Self) -> O) -> O {
+		let prev_data = self.remove_tag::<Tag>();
 		let output = f(self);
-		self.set_tag(tag, was_present);
+		self.set_tag::<Tag>(prev_data);
 
 		output
 	}
 
 	/// Runs `f` without a tag if `pred` is true, adding it after if it existed
-	pub fn without_tag_if<O>(
-		&mut self,
-		pred: bool,
-		tag: FormatTag,
-		f: impl FnOnce(&mut Self) -> O
-	) -> O {
+	pub fn without_tag_if<Tag: FormatTag, O>(&mut self, pred: bool, f: impl FnOnce(&mut Self) -> O) -> O {
 		match pred {
-			true => self.without_tag(tag, f),
+			true => self.without_tag::<Tag, _>(f),
 			false => f(self),
 		}
 	}
