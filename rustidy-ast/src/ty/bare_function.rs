@@ -5,11 +5,10 @@ use {
 	crate::{
 		attr::{self, WithOuterAttributes},
 		item::function::{ExternAbi, ForLifetimes},
-		token,
 		util::Parenthesized,
 	},
 	super::{Type, TypeNoBounds},
-	rustidy_ast_literal::Identifier,
+	rustidy_ast_literal::{Identifier, token},
 	rustidy_ast_util::{Punctuated, PunctuatedTrailing, delimited, punct},
 	rustidy_format::{Format, Formattable, WhitespaceFormat},
 	rustidy_parse::Parse,

@@ -2,8 +2,9 @@
 
 // Imports
 use {
-	crate::{expr::PathExpression, token},
+	crate::expr::PathExpression,
 	super::LiteralPattern,
+	rustidy_ast_literal::token,
 	rustidy_format::{Format, Formattable, WhitespaceFormat},
 	rustidy_parse::Parse,
 	rustidy_print::Print,

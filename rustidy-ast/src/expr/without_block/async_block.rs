@@ -2,7 +2,8 @@
 
 // Imports
 use {
-	crate::{expr::BlockExpression, token},
+	crate::expr::BlockExpression,
+	rustidy_ast_literal::token,
 	rustidy_format::{Format, Formattable, WhitespaceFormat},
 	rustidy_parse::Parse,
 	rustidy_print::Print,

@@ -2,8 +2,9 @@
 
 // Imports
 use {
-	crate::{token, util::Parenthesized},
+	crate::util::Parenthesized,
 	super::Type,
+	rustidy_ast_literal::token,
 	rustidy_ast_util::delimited,
 	rustidy_format::{Format, FormatOutput, Formattable, WhitespaceConfig, WhitespaceFormat},
 	rustidy_parse::Parse,

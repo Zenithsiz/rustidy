@@ -2,10 +2,9 @@
 
 // Imports
 use {
-	super::token,
 	core::fmt::Debug,
 	either::Either,
-	rustidy_ast_literal::Identifier,
+	rustidy_ast_literal::{Identifier, token},
 	rustidy_ast_util::{Punctuated, punct},
 	rustidy_format::{Format, Formattable, WhitespaceFormat},
 	rustidy_parse::Parse,

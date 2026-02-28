@@ -2,12 +2,8 @@
 
 // Imports
 use {
-	crate::{
-		attr::DelimTokenTree,
-		token::{self, Token},
-		util::{Braced, Bracketed, Parenthesized},
-	},
-	rustidy_ast_literal::{Identifier, IdentifierOrKeyword, RawIdentifier},
+	crate::{attr::DelimTokenTree, util::{Braced, Bracketed, Parenthesized}},
+	rustidy_ast_literal::{Identifier, IdentifierOrKeyword, RawIdentifier, Token, token},
 	rustidy_ast_util::{AtLeast1, PunctuatedTrailing, at_least, delimited, punct},
 	rustidy_format::{Format, Formattable, WhitespaceFormat},
 	rustidy_parse::{Parse, ParserTag},

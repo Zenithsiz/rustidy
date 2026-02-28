@@ -3,10 +3,10 @@
 use {
 	crate::{
 		expr::{Expression, ExpressionInner},
-		token,
 		util::{FmtSingleOrIndent, Parenthesized},
 	},
 	super::{ExpressionWithoutBlockInner, path::PathExprSegment},
+	rustidy_ast_literal::token,
 	rustidy_ast_util::{PunctuatedTrailing, delimited, punct},
 	rustidy_format::{
 		Format,

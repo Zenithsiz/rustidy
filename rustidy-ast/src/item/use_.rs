@@ -2,8 +2,8 @@
 
 // Imports
 use {
-	crate::{path::{SimplePath, SimplePathSegment}, token, util::Braced},
-	rustidy_ast_literal::Identifier,
+	crate::{path::{SimplePath, SimplePathSegment}, util::Braced},
+	rustidy_ast_literal::{Identifier, token},
 	rustidy_ast_util::{Punctuated, PunctuatedTrailing, delimited, punct::{self, PunctuatedRest}},
 	rustidy_format::{Format, FormatOutput, Formattable, WhitespaceConfig, WhitespaceFormat},
 	rustidy_parse::Parse,

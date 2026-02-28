@@ -2,8 +2,9 @@
 
 // Imports
 use {
-	crate::{expr::without_block::path::QualifiedPathType, token},
+	crate::{expr::without_block::path::QualifiedPathType},
 	super::path::TypePathSegment,
+	rustidy_ast_literal::token,
 	rustidy_ast_util::{AtLeast1, at_least},
 	rustidy_format::{Format, Formattable, WhitespaceFormat},
 	rustidy_parse::Parse,

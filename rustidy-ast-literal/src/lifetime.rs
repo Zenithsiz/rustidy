@@ -2,8 +2,8 @@
 
 // Imports
 use {
+	crate::{IdentifierOrKeyword, NonKeywordIdentifier},
 	super::token,
-	rustidy_ast_literal::{IdentifierOrKeyword, NonKeywordIdentifier},
 	rustidy_format::{Format, Formattable, WhitespaceFormat},
 	rustidy_parse::{Parse, Parser, ParserTag},
 	rustidy_print::Print,

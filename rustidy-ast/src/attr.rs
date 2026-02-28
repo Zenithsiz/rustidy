@@ -12,12 +12,12 @@ use {
 	super::{
 		expr::Expression,
 		path::SimplePath,
-		token,
 		util::{Braced, Bracketed, Parenthesized},
 	},
 	self::meta::MetaItem,
 	app_error::{AppError, Context, bail},
 	core::fmt::Debug,
+	rustidy_ast_literal::token,
 	rustidy_ast_util::{Longest, RemainingBlockComment, RemainingLine, delimited},
 	rustidy_format::{Format, Formattable, WhitespaceFormat},
 	rustidy_parse::{ParsableFrom, Parse, ParserTag},

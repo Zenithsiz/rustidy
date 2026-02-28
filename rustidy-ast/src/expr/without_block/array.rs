@@ -2,7 +2,8 @@
 
 // Imports
 use {
-	crate::{expr::Expression, token, util::{Bracketed, FmtRemoveOrIndent}},
+	crate::{expr::Expression, util::{Bracketed, FmtRemoveOrIndent}},
+	rustidy_ast_literal::token,
 	rustidy_ast_util::{delimited, punct::{self, PunctuatedTrailing}},
 	rustidy_format::{Format, FormatOutput, Formattable, WhitespaceConfig, WhitespaceFormat},
 	rustidy_parse::Parse,

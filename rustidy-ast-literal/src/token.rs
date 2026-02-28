@@ -2,20 +2,21 @@
 
 // Imports
 use {
-	super::lifetime::LifetimeToken,
-	rustidy_ast_literal::{
+	crate::{
 		ByteLiteral,
 		ByteStringLiteral,
 		CStringLiteral,
 		CharLiteral,
 		FloatLiteral,
+		IdentifierOrKeyword,
 		IntegerLiteral,
+		LifetimeToken,
 		RawByteStringLiteral,
 		RawCStringLiteral,
+		RawIdentifier,
 		RawStringLiteral,
 		StringLiteral,
 	},
-	rustidy_ast_literal::{IdentifierOrKeyword, RawIdentifier},
 	rustidy_format::{Format, Formattable},
 	rustidy_parse::{Parse, ParseError, ParserError, ParserTag},
 	rustidy_print::Print,

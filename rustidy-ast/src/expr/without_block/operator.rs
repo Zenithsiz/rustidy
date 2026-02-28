@@ -2,8 +2,9 @@
 
 // Imports
 use {
-	crate::{expr::{Expression, ExpressionInner}, token, ty::TypeNoBounds},
+	crate::{expr::{Expression, ExpressionInner}, ty::TypeNoBounds},
 	super::{ExpressionWithoutBlockInner, Parse},
+	rustidy_ast_literal::token,
 	rustidy_format::{Format, Formattable, WhitespaceFormat},
 	rustidy_parse::{ParseRecursive, ParserTag},
 	rustidy_print::Print,

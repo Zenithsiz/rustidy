@@ -2,7 +2,7 @@
 
 // Imports
 use {
-	crate::{attr::{self, BracedWithInnerAttributes, WithOuterAttributes}, token},
+	crate::attr::{self, BracedWithInnerAttributes, WithOuterAttributes},
 	super::{
 		ConstantItem,
 		Function,
@@ -11,7 +11,7 @@ use {
 		Visibility,
 		function::{GenericParams, TypeParamBounds, WhereClause},
 	},
-	rustidy_ast_literal::Identifier,
+	rustidy_ast_literal::{Identifier, token},
 	rustidy_format::{Format, Formattable, WhitespaceFormat},
 	rustidy_parse::Parse,
 	rustidy_print::Print,

@@ -25,10 +25,9 @@ use {
 	super::{
 		expr::without_block::MacroInvocation,
 		item::function::{TraitBound, TypeParamBounds},
-		lifetime::Lifetime,
-		token,
 		util::Parenthesized,
 	},
+	rustidy_ast_literal::{Lifetime, token},
 	rustidy_ast_util::delimited,
 	rustidy_format::{Format, Formattable, WhitespaceFormat},
 	rustidy_parse::Parse,

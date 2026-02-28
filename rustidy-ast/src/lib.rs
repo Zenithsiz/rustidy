@@ -35,12 +35,10 @@
 pub mod attr;
 pub mod expr;
 pub mod item;
-pub mod lifetime;
 pub mod pat;
 pub mod path;
 pub mod shebang;
 pub mod stmt;
-pub mod token;
 pub mod ty;
 pub mod util;
 pub mod vis;

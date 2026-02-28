@@ -2,9 +2,9 @@
 
 // Imports
 use {
-	crate::{expr::Expression, token, ty::Type},
+	crate::{expr::Expression, ty::Type},
 	super::function::ItemSafety,
-	rustidy_ast_literal::Identifier,
+	rustidy_ast_literal::{Identifier, token},
 	rustidy_format::{Format, Formattable, WhitespaceFormat},
 	rustidy_parse::Parse,
 	rustidy_print::Print,

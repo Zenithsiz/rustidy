@@ -21,6 +21,8 @@ pub mod escape;
 pub mod float;
 pub mod int;
 pub mod raw_byte_string;
+pub mod token;
+pub mod lifetime;
 pub mod raw_c_string;
 pub mod raw_string;
 pub mod string;
@@ -45,11 +47,13 @@ pub use self::{
 	float::FloatLiteral,
 	ident::{Identifier, IdentifierOrKeyword, NonKeywordIdentifier, RawIdentifier},
 	int::IntegerLiteral,
+	lifetime::{Lifetime, LifetimeOrLabel, LifetimeToken},
 	raw_byte_string::RawByteStringLiteral,
 	raw_c_string::RawCStringLiteral,
 	raw_string::RawStringLiteral,
 	string::StringLiteral,
 	suffix::{Suffix, SuffixNoE},
+	token::{Punctuation, Token},
 };
 
 // Imports

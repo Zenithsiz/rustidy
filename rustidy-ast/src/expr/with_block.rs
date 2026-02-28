@@ -9,13 +9,9 @@ pub use self::{block::BlockExpression, match_::{MatchExpression, Scrutinee}};
 
 // Imports
 use {
-	crate::{
-		attr::{self, WithOuterAttributes},
-		lifetime::LifetimeOrLabel,
-		pat::Pattern,
-		token,
-	},
+	crate::{attr::{self, WithOuterAttributes}, pat::Pattern},
 	super::Expression,
+	rustidy_ast_literal::{LifetimeOrLabel, token},
 	rustidy_ast_util::{Longest, Punctuated, punct},
 	rustidy_format::{Format, Formattable, WhitespaceFormat},
 	rustidy_parse::{ParsableFrom, Parse, ParserTag},

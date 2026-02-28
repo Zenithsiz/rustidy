@@ -2,8 +2,8 @@
 
 // Imports
 use {
-	crate::token,
 	rustidy_ast_literal::Identifier,
+	rustidy_ast_literal::token,
 	rustidy_format::{Format, Formattable, WhitespaceFormat},
 	rustidy_parse::Parse,
 	rustidy_print::Print,

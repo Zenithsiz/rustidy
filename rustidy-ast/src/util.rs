@@ -2,7 +2,7 @@
 
 // Imports
 use {
-	super::token,
+	rustidy_ast_literal::token,
 	rustidy_ast_util::delimited::Delimited,
 	rustidy_format::{WhitespaceConfig, WhitespaceFormat},
 	rustidy_util::Whitespace,

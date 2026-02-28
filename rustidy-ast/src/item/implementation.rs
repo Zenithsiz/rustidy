@@ -2,8 +2,9 @@
 
 // Imports
 use {
-	crate::{attr::{self, BracedWithInnerAttributes}, token, ty::{Type, TypePath}},
+	crate::{attr::{self, BracedWithInnerAttributes}, ty::{Type, TypePath}},
 	super::{function::{GenericParams, WhereClause}, trait_::AssociatedItem},
+	rustidy_ast_literal::token,
 	rustidy_format::{Format, Formattable, WhitespaceFormat},
 	rustidy_parse::Parse,
 	rustidy_print::Print,

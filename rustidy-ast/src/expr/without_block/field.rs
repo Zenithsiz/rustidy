@@ -1,9 +1,9 @@
 //! Field expression
 
 use {
-	crate::{expr::{Expression, ExpressionInner}, token},
+	crate::expr::{Expression, ExpressionInner},
 	super::ExpressionWithoutBlockInner,
-	rustidy_ast_literal::Identifier,
+	rustidy_ast_literal::{Identifier, token},
 	rustidy_format::{
 		Format,
 		FormatOutput,

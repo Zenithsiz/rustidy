@@ -4,10 +4,10 @@
 use {
 	crate::{
 		attr::{self, BracedWithInnerAttributes, WithOuterAttributes},
-		token,
 		vis::Visibility,
 	},
 	super::{Function, MacroInvocationSemi, StaticItem, TypeAlias, function::Abi},
+	rustidy_ast_literal::token,
 	rustidy_format::{Format, Formattable, WhitespaceFormat},
 	rustidy_parse::Parse,
 	rustidy_print::Print,

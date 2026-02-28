@@ -4,14 +4,13 @@ use {
 	crate::{
 		expr::with_block::BlockExpression,
 		item::function::TypeParamBounds,
-		lifetime::Lifetime,
 		path::SimplePathSegment,
-		token,
 		ty::{Type, TypeNoBounds, TypePath, path::TypePathSegment},
 		util::Parenthesized,
 	},
 	super::LiteralExpression,
 	rustidy_ast_literal::Identifier,
+	rustidy_ast_literal::{Lifetime, token},
 	rustidy_ast_util::{
 		AtLeast1,
 		Delimited,

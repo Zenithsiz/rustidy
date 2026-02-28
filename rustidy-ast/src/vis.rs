@@ -2,7 +2,8 @@
 
 // Imports
 use {
-	super::{path::SimplePath, token, util::Parenthesized},
+	super::{path::SimplePath, util::Parenthesized},
+	rustidy_ast_literal::token,
 	rustidy_ast_util::delimited,
 	rustidy_format::{Format, Formattable, WhitespaceFormat},
 	rustidy_parse::Parse,

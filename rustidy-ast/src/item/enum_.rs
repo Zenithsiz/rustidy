@@ -5,7 +5,6 @@ use {
 	crate::{
 		attr::{self, WithOuterAttributes},
 		expr::Expression,
-		token,
 		util::{Braced, Parenthesized},
 		vis::Visibility,
 	},
@@ -13,7 +12,7 @@ use {
 		function::{GenericParams, WhereClause},
 		struct_::{StructFields, TupleFields, TupleStruct},
 	},
-	rustidy_ast_literal::Identifier,
+	rustidy_ast_literal::{Identifier, token},
 	rustidy_ast_util::{PunctuatedTrailing, delimited, punct},
 	rustidy_format::{Format, Formattable, WhitespaceFormat},
 	rustidy_parse::Parse,

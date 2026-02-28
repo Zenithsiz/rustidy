@@ -2,10 +2,8 @@
 
 // Imports
 use {
-	crate::{
-		expr::without_block::path::{GenericArgs, PathIdentSegment, TypePathFn},
-		token,
-	},
+	crate::expr::without_block::path::{GenericArgs, PathIdentSegment, TypePathFn},
+	rustidy_ast_literal::token,
 	rustidy_ast_util::{Punctuated, punct},
 	rustidy_format::{Format, Formattable, WhitespaceFormat},
 	rustidy_parse::Parse,

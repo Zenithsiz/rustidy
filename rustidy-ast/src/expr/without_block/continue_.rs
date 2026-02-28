@@ -2,7 +2,7 @@
 
 // Imports
 use {
-	crate::{lifetime::LifetimeOrLabel, token},
+	rustidy_ast_literal::{LifetimeOrLabel, token},
 	rustidy_format::{Format, Formattable, WhitespaceFormat},
 	rustidy_parse::Parse,
 	rustidy_print::Print,

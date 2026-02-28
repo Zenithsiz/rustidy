@@ -2,9 +2,9 @@
 
 // Imports
 use {
-	crate::{token, ty::Type},
+	crate::ty::Type,
 	super::function::{GenericParams, TypeParamBounds, WhereClause},
-	rustidy_ast_literal::Identifier,
+	rustidy_ast_literal::{Identifier, token},
 	rustidy_format::{Format, Formattable, WhitespaceFormat},
 	rustidy_parse::Parse,
 	rustidy_print::Print,

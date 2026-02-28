@@ -46,9 +46,9 @@ pub use self::{
 
 // Imports
 use {
-	crate::{attr::{self, OuterAttrOrDocComment, WithOuterAttributes}, token},
+	crate::attr::{self, OuterAttrOrDocComment, WithOuterAttributes},
 	super::{Expression, ExpressionInner},
-	rustidy_ast_literal::{IntegerLiteral, LiteralExpression},
+	rustidy_ast_literal::{IntegerLiteral, LiteralExpression, token},
 	rustidy_format::{Format, Formattable, WhitespaceFormat},
 	rustidy_parse::{Parse, ParseRecursive, Parser, ParserError, ParserTag, RecursiveWrapper},
 	rustidy_print::Print,
