@@ -103,7 +103,7 @@ decl_tags! {
 	contains;
 
 	/// Inside chain
-	InsideChain: (),
+	InsideChain: InsideChainData,
 
 	/// After newline
 	// Note: This attribute only works because every time
@@ -114,4 +114,9 @@ decl_tags! {
 	//       during formatting, we no longer necessarily have
 	//       the input ranges.
 	AfterNewline: (),
+}
+
+#[derive(Clone, Copy, Debug)]
+pub struct InsideChainData {
+	pub indent: bool
 }
