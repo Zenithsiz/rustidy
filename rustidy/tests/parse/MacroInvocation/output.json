@@ -1,0 +1,872 @@
+{
+	"shebang": null,
+	"inner_attrs": [],
+	"items": {
+		"first": {
+			"attrs": [],
+			"inner": {
+				"Vis": {
+					"vis": null,
+					"inner": {
+						"Function": {
+							"qualifiers": {
+								"const_": null,
+								"async_": null,
+								"safety": null,
+								"extern_": null
+							},
+							"fn_": {
+								"ws": {
+									"first": "",
+									"rest": []
+								},
+								"token": "fn"
+							},
+							"ident": {
+								"NonKw": [
+									{
+										"first": " ",
+										"rest": []
+									},
+									"trailing_macro_invocation"
+								]
+							},
+							"generics": null,
+							"params": {
+								"prefix": {
+									"ws": {
+										"first": "",
+										"rest": []
+									},
+									"token": "("
+								},
+								"value": null,
+								"suffix": {
+									"ws": {
+										"first": "",
+										"rest": []
+									},
+									"token": ")"
+								}
+							},
+							"ret": null,
+							"where_": null,
+							"body": {
+								"Expr": {
+									"prefix": {
+										"ws": {
+											"first": " ",
+											"rest": []
+										},
+										"token": "{"
+									},
+									"value": {
+										"attrs": [],
+										"inner": {
+											"Full": {
+												"stmts": {
+													"first": {
+														"Let": {
+															"attrs": [],
+															"inner": {
+																"super_": null,
+																"let_": {
+																	"ws": {
+																		"first": "\n\t",
+																		"rest": []
+																	},
+																	"token": "let"
+																},
+																"pat": {
+																	"WithoutRange": {
+																		"Wildcard": {
+																			"ws": {
+																				"first": " ",
+																				"rest": []
+																			},
+																			"token": "_"
+																		}
+																	}
+																},
+																"ty": null,
+																"eq": {
+																	"Normal": {
+																		"eq": {
+																			"ws": {
+																				"first": " ",
+																				"rest": []
+																			},
+																			"token": "="
+																		},
+																		"expr": {
+																			"WithBlock": {
+																				"attrs": [],
+																				"inner": {
+																					"Block": {
+																						"prefix": {
+																							"ws": {
+																								"first": " ",
+																								"rest": []
+																							},
+																							"token": "{"
+																						},
+																						"value": {
+																							"attrs": [],
+																							"inner": {
+																								"OnlyExpr": {
+																									"attrs": [],
+																									"inner": {
+																										"MacroInvocation": {
+																											"path": {
+																												"prefix": null,
+																												"segments": {
+																													"first": {
+																														"Ident": {
+																															"NonKw": [
+																																{
+																																	"first": " ",
+																																	"rest": []
+																																},
+																																"a"
+																															]
+																														}
+																													},
+																													"rest": []
+																												}
+																											},
+																											"not": {
+																												"ws": {
+																													"first": "",
+																													"rest": []
+																												},
+																												"token": "!"
+																											},
+																											"tree": {
+																												"Braces": {
+																													"Tokens": {
+																														"prefix": {
+																															"ws": {
+																																"first": "",
+																																"rest": []
+																															},
+																															"token": "{"
+																														},
+																														"value": [],
+																														"suffix": {
+																															"ws": {
+																																"first": "",
+																																"rest": []
+																															},
+																															"token": "}"
+																														}
+																													}
+																												}
+																											}
+																										}
+																									}
+																								}
+																							}
+																						},
+																						"suffix": {
+																							"ws": {
+																								"first": " ",
+																								"rest": []
+																							},
+																							"token": "}"
+																						}
+																					}
+																				}
+																			}
+																		}
+																	}
+																},
+																"semi": {
+																	"ws": {
+																		"first": "",
+																		"rest": []
+																	},
+																	"token": ";"
+																}
+															}
+														}
+													},
+													"rest": [
+														{
+															"Let": {
+																"attrs": [],
+																"inner": {
+																	"super_": null,
+																	"let_": {
+																		"ws": {
+																			"first": "\n\t",
+																			"rest": []
+																		},
+																		"token": "let"
+																	},
+																	"pat": {
+																		"WithoutRange": {
+																			"Wildcard": {
+																				"ws": {
+																					"first": " ",
+																					"rest": []
+																				},
+																				"token": "_"
+																			}
+																		}
+																	},
+																	"ty": null,
+																	"eq": {
+																		"Normal": {
+																			"eq": {
+																				"ws": {
+																					"first": " ",
+																					"rest": []
+																				},
+																				"token": "="
+																			},
+																			"expr": {
+																				"WithBlock": {
+																					"attrs": [],
+																					"inner": {
+																						"Block": {
+																							"prefix": {
+																								"ws": {
+																									"first": " ",
+																									"rest": []
+																								},
+																								"token": "{"
+																							},
+																							"value": {
+																								"attrs": [],
+																								"inner": {
+																									"Full": {
+																										"stmts": {
+																											"first": {
+																												"Item": {
+																													"attrs": [],
+																													"inner": {
+																														"Macro": {
+																															"Invocation": {
+																																"Braces": {
+																																	"path": {
+																																		"prefix": null,
+																																		"segments": {
+																																			"first": {
+																																				"Ident": {
+																																					"NonKw": [
+																																						{
+																																							"first": " ",
+																																							"rest": []
+																																						},
+																																						"a"
+																																					]
+																																				}
+																																			},
+																																			"rest": []
+																																		}
+																																	},
+																																	"not": {
+																																		"ws": {
+																																			"first": "",
+																																			"rest": []
+																																		},
+																																		"token": "!"
+																																	},
+																																	"tokens": {
+																																		"Tokens": {
+																																			"prefix": {
+																																				"ws": {
+																																					"first": "",
+																																					"rest": []
+																																				},
+																																				"token": "{"
+																																			},
+																																			"value": [],
+																																			"suffix": {
+																																				"ws": {
+																																					"first": "",
+																																					"rest": []
+																																				},
+																																				"token": "}"
+																																			}
+																																		}
+																																	}
+																																}
+																															}
+																														}
+																													}
+																												}
+																											},
+																											"rest": []
+																										},
+																										"trailing_expr": {
+																											"attrs": [],
+																											"inner": {
+																												"Literal": {
+																													"Integer": {
+																														"ws": {
+																															"first": " ",
+																															"rest": []
+																														},
+																														"inner": {
+																															"Decimal": "0"
+																														},
+																														"suffix": null
+																													}
+																												}
+																											}
+																										}
+																									}
+																								}
+																							},
+																							"suffix": {
+																								"ws": {
+																									"first": " ",
+																									"rest": []
+																								},
+																								"token": "}"
+																							}
+																						}
+																					}
+																				}
+																			}
+																		}
+																	},
+																	"semi": {
+																		"ws": {
+																			"first": "",
+																			"rest": []
+																		},
+																		"token": ";"
+																	}
+																}
+															}
+														},
+														{
+															"Let": {
+																"attrs": [],
+																"inner": {
+																	"super_": null,
+																	"let_": {
+																		"ws": {
+																			"first": "\n\t",
+																			"rest": []
+																		},
+																		"token": "let"
+																	},
+																	"pat": {
+																		"WithoutRange": {
+																			"Wildcard": {
+																				"ws": {
+																					"first": " ",
+																					"rest": []
+																				},
+																				"token": "_"
+																			}
+																		}
+																	},
+																	"ty": null,
+																	"eq": {
+																		"Normal": {
+																			"eq": {
+																				"ws": {
+																					"first": " ",
+																					"rest": []
+																				},
+																				"token": "="
+																			},
+																			"expr": {
+																				"WithBlock": {
+																					"attrs": [],
+																					"inner": {
+																						"Block": {
+																							"prefix": {
+																								"ws": {
+																									"first": " ",
+																									"rest": []
+																								},
+																								"token": "{"
+																							},
+																							"value": {
+																								"attrs": [],
+																								"inner": {
+																									"Full": {
+																										"stmts": {
+																											"first": {
+																												"Item": {
+																													"attrs": [],
+																													"inner": {
+																														"Macro": {
+																															"Invocation": {
+																																"Braces": {
+																																	"path": {
+																																		"prefix": null,
+																																		"segments": {
+																																			"first": {
+																																				"Ident": {
+																																					"NonKw": [
+																																						{
+																																							"first": " ",
+																																							"rest": []
+																																						},
+																																						"a"
+																																					]
+																																				}
+																																			},
+																																			"rest": []
+																																		}
+																																	},
+																																	"not": {
+																																		"ws": {
+																																			"first": "",
+																																			"rest": []
+																																		},
+																																		"token": "!"
+																																	},
+																																	"tokens": {
+																																		"Tokens": {
+																																			"prefix": {
+																																				"ws": {
+																																					"first": "",
+																																					"rest": []
+																																				},
+																																				"token": "{"
+																																			},
+																																			"value": [],
+																																			"suffix": {
+																																				"ws": {
+																																					"first": "",
+																																					"rest": []
+																																				},
+																																				"token": "}"
+																																			}
+																																		}
+																																	}
+																																}
+																															}
+																														}
+																													}
+																												}
+																											},
+																											"rest": []
+																										},
+																										"trailing_expr": {
+																											"attrs": [],
+																											"inner": {
+																												"MacroInvocation": {
+																													"path": {
+																														"prefix": null,
+																														"segments": {
+																															"first": {
+																																"Ident": {
+																																	"NonKw": [
+																																		{
+																																			"first": " ",
+																																			"rest": []
+																																		},
+																																		"b"
+																																	]
+																																}
+																															},
+																															"rest": []
+																														}
+																													},
+																													"not": {
+																														"ws": {
+																															"first": "",
+																															"rest": []
+																														},
+																														"token": "!"
+																													},
+																													"tree": {
+																														"Braces": {
+																															"Tokens": {
+																																"prefix": {
+																																	"ws": {
+																																		"first": "",
+																																		"rest": []
+																																	},
+																																	"token": "{"
+																																},
+																																"value": [],
+																																"suffix": {
+																																	"ws": {
+																																		"first": "",
+																																		"rest": []
+																																	},
+																																	"token": "}"
+																																}
+																															}
+																														}
+																													}
+																												}
+																											}
+																										}
+																									}
+																								}
+																							},
+																							"suffix": {
+																								"ws": {
+																									"first": " ",
+																									"rest": []
+																								},
+																								"token": "}"
+																							}
+																						}
+																					}
+																				}
+																			}
+																		}
+																	},
+																	"semi": {
+																		"ws": {
+																			"first": "",
+																			"rest": []
+																		},
+																		"token": ";"
+																	}
+																}
+															}
+														},
+														{
+															"Let": {
+																"attrs": [],
+																"inner": {
+																	"super_": null,
+																	"let_": {
+																		"ws": {
+																			"first": "\n\t",
+																			"rest": []
+																		},
+																		"token": "let"
+																	},
+																	"pat": {
+																		"WithoutRange": {
+																			"Wildcard": {
+																				"ws": {
+																					"first": " ",
+																					"rest": []
+																				},
+																				"token": "_"
+																			}
+																		}
+																	},
+																	"ty": null,
+																	"eq": {
+																		"Normal": {
+																			"eq": {
+																				"ws": {
+																					"first": " ",
+																					"rest": []
+																				},
+																				"token": "="
+																			},
+																			"expr": {
+																				"WithBlock": {
+																					"attrs": [],
+																					"inner": {
+																						"Block": {
+																							"prefix": {
+																								"ws": {
+																									"first": " ",
+																									"rest": []
+																								},
+																								"token": "{"
+																							},
+																							"value": {
+																								"attrs": [],
+																								"inner": {
+																									"OnlyExpr": {
+																										"attrs": [],
+																										"inner": {
+																											"MethodCall": {
+																												"expr": {
+																													"WithoutBlock": {
+																														"attrs": [],
+																														"inner": {
+																															"MacroInvocation": {
+																																"path": {
+																																	"prefix": null,
+																																	"segments": {
+																																		"first": {
+																																			"Ident": {
+																																				"NonKw": [
+																																					{
+																																						"first": " ",
+																																						"rest": []
+																																					},
+																																					"a"
+																																				]
+																																			}
+																																		},
+																																		"rest": []
+																																	}
+																																},
+																																"not": {
+																																	"ws": {
+																																		"first": "",
+																																		"rest": []
+																																	},
+																																	"token": "!"
+																																},
+																																"tree": {
+																																	"Braces": {
+																																		"Tokens": {
+																																			"prefix": {
+																																				"ws": {
+																																					"first": "",
+																																					"rest": []
+																																				},
+																																				"token": "{"
+																																			},
+																																			"value": [],
+																																			"suffix": {
+																																				"ws": {
+																																					"first": "",
+																																					"rest": []
+																																				},
+																																				"token": "}"
+																																			}
+																																		}
+																																	}
+																																}
+																															}
+																														}
+																													}
+																												},
+																												"dot": {
+																													"ws": {
+																														"first": "",
+																														"rest": []
+																													},
+																													"token": "."
+																												},
+																												"segment": {
+																													"ident": {
+																														"Ident": {
+																															"NonKw": [
+																																{
+																																	"first": "",
+																																	"rest": []
+																																},
+																																"f"
+																															]
+																														}
+																													},
+																													"generic": null
+																												},
+																												"params": {
+																													"prefix": {
+																														"ws": {
+																															"first": "",
+																															"rest": []
+																														},
+																														"token": "("
+																													},
+																													"value": null,
+																													"suffix": {
+																														"ws": {
+																															"first": "",
+																															"rest": []
+																														},
+																														"token": ")"
+																													}
+																												}
+																											}
+																										}
+																									}
+																								}
+																							},
+																							"suffix": {
+																								"ws": {
+																									"first": " ",
+																									"rest": []
+																								},
+																								"token": "}"
+																							}
+																						}
+																					}
+																				}
+																			}
+																		}
+																	},
+																	"semi": {
+																		"ws": {
+																			"first": "",
+																			"rest": []
+																		},
+																		"token": ";"
+																	}
+																}
+															}
+														},
+														{
+															"Let": {
+																"attrs": [],
+																"inner": {
+																	"super_": null,
+																	"let_": {
+																		"ws": {
+																			"first": "\n\t",
+																			"rest": []
+																		},
+																		"token": "let"
+																	},
+																	"pat": {
+																		"WithoutRange": {
+																			"Wildcard": {
+																				"ws": {
+																					"first": " ",
+																					"rest": []
+																				},
+																				"token": "_"
+																			}
+																		}
+																	},
+																	"ty": null,
+																	"eq": {
+																		"Normal": {
+																			"eq": {
+																				"ws": {
+																					"first": " ",
+																					"rest": []
+																				},
+																				"token": "="
+																			},
+																			"expr": {
+																				"WithBlock": {
+																					"attrs": [],
+																					"inner": {
+																						"Block": {
+																							"prefix": {
+																								"ws": {
+																									"first": " ",
+																									"rest": []
+																								},
+																								"token": "{"
+																							},
+																							"value": {
+																								"attrs": [],
+																								"inner": {
+																									"OnlyExpr": {
+																										"attrs": [],
+																										"inner": {
+																											"Operator": {
+																												"TryPropagation": {
+																													"expr": {
+																														"WithoutBlock": {
+																															"attrs": [],
+																															"inner": {
+																																"MacroInvocation": {
+																																	"path": {
+																																		"prefix": null,
+																																		"segments": {
+																																			"first": {
+																																				"Ident": {
+																																					"NonKw": [
+																																						{
+																																							"first": " ",
+																																							"rest": []
+																																						},
+																																						"a"
+																																					]
+																																				}
+																																			},
+																																			"rest": []
+																																		}
+																																	},
+																																	"not": {
+																																		"ws": {
+																																			"first": "",
+																																			"rest": []
+																																		},
+																																		"token": "!"
+																																	},
+																																	"tree": {
+																																		"Braces": {
+																																			"Tokens": {
+																																				"prefix": {
+																																					"ws": {
+																																						"first": "",
+																																						"rest": []
+																																					},
+																																					"token": "{"
+																																				},
+																																				"value": [],
+																																				"suffix": {
+																																					"ws": {
+																																						"first": "",
+																																						"rest": []
+																																					},
+																																					"token": "}"
+																																				}
+																																			}
+																																		}
+																																	}
+																																}
+																															}
+																														}
+																													},
+																													"question": {
+																														"ws": {
+																															"first": "",
+																															"rest": []
+																														},
+																														"token": "?"
+																													}
+																												}
+																											}
+																										}
+																									}
+																								}
+																							},
+																							"suffix": {
+																								"ws": {
+																									"first": " ",
+																									"rest": []
+																								},
+																								"token": "}"
+																							}
+																						}
+																					}
+																				}
+																			}
+																		}
+																	},
+																	"semi": {
+																		"ws": {
+																			"first": "",
+																			"rest": []
+																		},
+																		"token": ";"
+																	}
+																}
+															}
+														}
+													]
+												},
+												"trailing_expr": null
+											}
+										}
+									},
+									"suffix": {
+										"ws": {
+											"first": "\n",
+											"rest": []
+										},
+										"token": "}"
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"rest": []
+	},
+	"suffix_ws": {
+		"first": "",
+		"rest": []
+	}
+}

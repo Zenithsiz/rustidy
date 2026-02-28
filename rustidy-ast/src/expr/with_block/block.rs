@@ -3,8 +3,13 @@
 // Imports
 use {
 	crate::{
-		attr::{self, BracedWithInnerAttributes},
-		expr::ExpressionWithoutBlock,
+		attr::{self, BracedWithInnerAttributes, DelimTokenTree, WithOuterAttributes},
+		expr::{
+			ExpressionWithoutBlock,
+			MacroInvocation,
+			without_block::ExpressionWithoutBlockInner,
+		},
+		item::macro_::MacroInvocationSemiBraces,
 		stmt::{
 			ExpressionStatement,
 			ExpressionStatementWithBlock,
@@ -97,6 +102,22 @@ impl Parse for Statements {
 				continue;
 			}
 
+			// Note: Macro invocations with braces are valid as both `ExpressionWithoutBlock` and
+			//       as `Statement`s, so if we parse them and we can't parse a statement after,
+			//       we can use it as the trailing expression
+			let start_pos = parser.cur_pos();
+			if let Some(expr) = self::parse_macro_invocation_expr(parser)? {
+				match parser.peek::<Statement>()?.is_ok() || parser.peek::<ExpressionWithoutBlock>()?.is_ok() {
+					true => parser.set_pos(start_pos),
+					false => break match stmts {
+						Some(stmts) => Self::Full(
+							StatementsFull { stmts, trailing_expr: Some(expr) }
+						),
+						None => Self::OnlyExpr(expr),
+					},
+				}
+			}
+
 			match parser
 				.peek::<(ExpressionWithoutBlock, Option<ast_token::Semi>)>()? {
 				Ok(((expr, semi), peek_expr_pos)) => match semi {
@@ -146,6 +167,23 @@ impl Parse for Statements {
 	}
 }
 
+fn parse_macro_invocation_expr(parser: &mut Parser) -> Result<Option<ExpressionWithoutBlock>, StatementsError> {
+	let Ok((macro_invocation, ..)) = parser
+		.try_parse::<(WithOuterAttributes<MacroInvocationSemiBraces>, NotFollows<ast_token::Dot>, NotFollows<ast_token::Question>)>()? else {
+		return Ok(None);
+	};
+
+	let expr = ExpressionWithoutBlock(WithOuterAttributes {
+		attrs: macro_invocation.attrs,
+		inner: ExpressionWithoutBlockInner::MacroInvocation(MacroInvocation {
+			path: macro_invocation.inner.path,
+			not: macro_invocation.inner.not,
+			tree: DelimTokenTree::Braces(macro_invocation.inner.tokens),
+		})
+	});
+	Ok(Some(expr))
+}
+
 #[derive(derive_more::Debug, derive_more::From, ParseError)]
 pub enum StatementsError {
 	#[parse_error(transparent)]
@@ -154,10 +192,18 @@ pub enum StatementsError {
 	),
 
 	#[parse_error(transparent)]
-	ExpressionWithoutBlock(ParserError<(ExpressionWithoutBlock, Option<ast_token::Semi>)>),
+	ExpressionWithoutBlockSemi(ParserError<(ExpressionWithoutBlock, Option<ast_token::Semi>)>),
+
+	#[parse_error(transparent)]
+	ExpressionWithoutBlock(ParserError<ExpressionWithoutBlock>),
 
 	#[parse_error(transparent)]
 	Statement(ParserError<Statement>),
+
+	#[parse_error(transparent)]
+	MacroInvocation(
+		ParserError<(WithOuterAttributes<MacroInvocationSemiBraces>, NotFollows<ast_token::Dot>, NotFollows<ast_token::Question>)>,
+	),
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]
