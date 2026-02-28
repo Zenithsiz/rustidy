@@ -10,7 +10,7 @@ use {
 		ty::{Type, TypeNoBounds},
 	},
 	super::ExpressionWithoutBlockInner,
-	ast_literal::token,
+
 	ast_util::{Delimited, PunctuatedTrailing, delimited, punct},
 	format::{Format, Formattable, WhitespaceFormat},
 	parse::{Parse, ParseRecursive},
@@ -27,9 +27,9 @@ use {
 pub struct ClosureExpression {
 	pub for_:   Option<ForLifetimes>,
 	#[format(prefix_ws(expr = Whitespace::SINGLE, if_ = self.for_.is_some()))]
-	pub async_: Option<token::Async>,
+	pub async_: Option<ast_token::Async>,
 	#[format(prefix_ws(expr = Whitespace::SINGLE, if_ = self.for_.is_some() || self.async_.is_some()))]
-	pub move_:  Option<token::Move>,
+	pub move_:  Option<ast_token::Move>,
 	#[format(prefix_ws(
 		expr = Whitespace::SINGLE,
 		if_ = self.for_.is_some() || self.async_.is_some() || self.move_.is_some()
@@ -47,16 +47,16 @@ pub struct ClosureExpression {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub enum ClosureParams {
-	NoParams(token::OrOr),
+	NoParams(ast_token::OrOr),
 	#[format(args = delimited::FmtRemove)]
-	WithParams(Delimited<Option<ClosureParameters>, token::Or, token::Or>),
+	WithParams(Delimited<Option<ClosureParameters>, ast_token::Or, ast_token::Or>),
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct ClosureRet {
-	pub arrow: token::RArrow,
+	pub arrow: ast_token::RArrow,
 	#[parse(fatal)]
 	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub ty:    TypeNoBounds,
@@ -68,7 +68,7 @@ pub struct ClosureRet {
 #[derive(Parse, Formattable, Format, Print)]
 pub struct ClosureParameters(
 	#[format(args = punct::fmt(Whitespace::SINGLE, Whitespace::REMOVE))]
-	pub PunctuatedTrailing<ClosureParameter, token::Comma>,
+	pub PunctuatedTrailing<ClosureParameter, ast_token::Comma>,
 );
 
 /// `ClosureParameter`
@@ -93,7 +93,7 @@ pub struct ClosureParameterInner {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct ClosureParameterInnerTy {
-	pub colon: token::Colon,
+	pub colon: ast_token::Colon,
 	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub ty:    Type,
 }

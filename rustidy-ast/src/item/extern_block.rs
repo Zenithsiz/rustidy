@@ -7,7 +7,7 @@ use {
 		vis::Visibility,
 	},
 	super::{Function, MacroInvocationSemi, StaticItem, TypeAlias, function::Abi},
-	ast_literal::token,
+
 	format::{Format, Formattable, WhitespaceFormat},
 	parse::Parse,
 	print::Print,
@@ -19,9 +19,9 @@ use {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct ExternBlock {
-	pub unsafe_: Option<token::Unsafe>,
+	pub unsafe_: Option<ast_token::Unsafe>,
 	#[format(prefix_ws(expr = Whitespace::SINGLE, if_ = self.unsafe_.is_some()))]
-	pub extern_: token::Extern,
+	pub extern_: ast_token::Extern,
 	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub abi:     Option<Abi>,
 	#[format(prefix_ws = Whitespace::SINGLE)]

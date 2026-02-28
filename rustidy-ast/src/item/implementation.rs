@@ -4,7 +4,7 @@
 use {
 	crate::{attr::{self, BracedWithInnerAttributes}, ty::{Type, TypePath}},
 	super::{function::{GenericParams, WhereClause}, trait_::AssociatedItem},
-	ast_literal::token,
+
 	format::{Format, Formattable, WhitespaceFormat},
 	parse::Parse,
 	print::Print,
@@ -26,7 +26,7 @@ pub enum Implementation {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct InherentImpl {
-	pub impl_:    token::Impl,
+	pub impl_:    ast_token::Impl,
 	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub generics: Option<GenericParams>,
 	#[format(prefix_ws = Whitespace::SINGLE)]
@@ -43,15 +43,15 @@ pub struct InherentImpl {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct TraitImpl {
-	pub unsafe_:  Option<token::Unsafe>,
+	pub unsafe_:  Option<ast_token::Unsafe>,
 	#[format(prefix_ws(expr = Whitespace::SINGLE, if_ = self.unsafe_.is_some()))]
-	pub impl_:    token::Impl,
+	pub impl_:    ast_token::Impl,
 	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub generics: Option<GenericParams>,
 	#[format(prefix_ws = Whitespace::SINGLE)]
-	pub const_:   Option<token::Const>,
+	pub const_:   Option<ast_token::Const>,
 	#[format(prefix_ws = Whitespace::SINGLE)]
-	pub not:      Option<token::Not>,
+	pub not:      Option<ast_token::Not>,
 	#[format(prefix_ws = match self.not.is_some() {
 		true => Whitespace::REMOVE,
 		false => Whitespace::SINGLE,
@@ -59,7 +59,7 @@ pub struct TraitImpl {
 	pub trait_:   TypePath,
 	#[parse(fatal)]
 	#[format(prefix_ws = Whitespace::SINGLE)]
-	pub for_:     token::For,
+	pub for_:     ast_token::For,
 	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub ty:       Type,
 	#[format(prefix_ws = Whitespace::INDENT)]

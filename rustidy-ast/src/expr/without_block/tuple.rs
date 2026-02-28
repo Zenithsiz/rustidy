@@ -3,7 +3,7 @@
 // Imports
 use {
 	crate::{expr::Expression, util::Parenthesized},
-	ast_literal::token,
+
 	ast_util::{AtLeast1, at_least, delimited},
 	format::{Format, Formattable, WhitespaceFormat},
 	parse::Parse,
@@ -34,5 +34,5 @@ pub struct TupleElements {
 pub struct TupleElementsInner {
 	pub expr:  Expression,
 	#[format(prefix_ws = Whitespace::REMOVE)]
-	pub comma: token::Comma,
+	pub comma: ast_token::Comma,
 }

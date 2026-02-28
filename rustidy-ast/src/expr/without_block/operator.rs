@@ -4,7 +4,7 @@
 use {
 	crate::{expr::{Expression, ExpressionInner}, ty::TypeNoBounds},
 	super::{ExpressionWithoutBlockInner, Parse},
-	ast_literal::token,
+
 	format::{Format, Formattable, WhitespaceFormat},
 	parse::{ParseRecursive, ParserTag},
 	print::Print,
@@ -52,7 +52,7 @@ pub enum OperatorExpression {
 pub struct TryPropagationExpression {
 	pub expr:     Expression,
 	#[format(prefix_ws = Whitespace::REMOVE)]
-	pub question: token::Question,
+	pub question: ast_token::Question,
 }
 
 /// `BorrowExpression`
@@ -77,17 +77,17 @@ pub struct BorrowExpression {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub enum BorrowExpressionKindRef {
-	And(token::And),
-	AndAnd(token::AndAnd),
+	And(ast_token::And),
+	AndAnd(ast_token::AndAnd),
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub enum BorrowExpressionKindRest {
-	Mut(token::Mut),
-	RawConst((token::Raw, token::Const)),
-	RawMut((token::Raw, token::Mut)),
+	Mut(ast_token::Mut),
+	RawConst((ast_token::Raw, ast_token::Const)),
+	RawMut((ast_token::Raw, ast_token::Mut)),
 }
 
 /// `DereferenceExpression`
@@ -98,7 +98,7 @@ pub enum BorrowExpressionKindRest {
 #[parse_recursive(into_root = OperatorExpression)]
 #[parse_recursive(kind = "right")]
 pub struct DereferenceExpression {
-	pub star: token::Star,
+	pub star: ast_token::Star,
 	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub expr: Expression,
 }
@@ -120,8 +120,8 @@ pub struct NegationExpression {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub enum NegationExpressionToken {
-	Minus(token::Minus),
-	Not(token::Not),
+	Minus(ast_token::Minus),
+	Not(ast_token::Not),
 }
 
 /// `ArithmeticOrLogicalExpression`
@@ -143,16 +143,16 @@ pub struct ArithmeticOrLogicalExpression {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub enum ArithmeticOrLogicalExpressionOp {
-	Plus(token::Plus),
-	Minus(token::Minus),
-	Star(token::Star),
-	Div(token::Slash),
-	Percent(token::Percent),
-	And(token::And),
-	Or(token::Or),
-	Caret(token::Caret),
-	Shl(token::Shl),
-	Shr(token::Shr),
+	Plus(ast_token::Plus),
+	Minus(ast_token::Minus),
+	Star(ast_token::Star),
+	Div(ast_token::Slash),
+	Percent(ast_token::Percent),
+	And(ast_token::And),
+	Or(ast_token::Or),
+	Caret(ast_token::Caret),
+	Shl(ast_token::Shl),
+	Shr(ast_token::Shr),
 }
 
 /// `ComparisonExpression`
@@ -174,12 +174,12 @@ pub struct ComparisonExpression {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub enum ComparisonExpressionOp {
-	EqEq(token::EqEq),
-	Ne(token::Ne),
-	Ge(token::Ge),
-	Le(token::Le),
-	Gt(token::Gt),
-	Lt(token::Lt),
+	EqEq(ast_token::EqEq),
+	Ne(ast_token::Ne),
+	Ge(ast_token::Ge),
+	Le(ast_token::Le),
+	Gt(ast_token::Gt),
+	Lt(ast_token::Lt),
 }
 
 /// `LazyBooleanExpression`
@@ -202,8 +202,8 @@ pub struct LazyBooleanExpression {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub enum LazyBooleanExpressionOp {
-	Or(token::OrOr),
-	And(token::AndAnd),
+	Or(ast_token::OrOr),
+	And(ast_token::AndAnd),
 }
 
 /// `TypeCastExpression`
@@ -216,7 +216,7 @@ pub enum LazyBooleanExpressionOp {
 pub struct TypeCastExpression {
 	pub lhs: Expression,
 	#[format(prefix_ws = Whitespace::SINGLE)]
-	pub as_: token::As,
+	pub as_: ast_token::As,
 	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub ty:  TypeNoBounds,
 }
@@ -232,7 +232,7 @@ pub struct TypeCastExpression {
 pub struct AssignmentExpression {
 	pub lhs: Expression,
 	#[format(prefix_ws = Whitespace::SINGLE)]
-	pub eq:  token::Eq,
+	pub eq:  ast_token::Eq,
 	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub rhs: Expression,
 }
@@ -257,14 +257,14 @@ pub struct CompoundAssignmentExpression {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub enum CompoundAssignmentExpressionOp {
-	Plus(token::PlusEq),
-	Minus(token::MinusEq),
-	Star(token::StarEq),
-	Div(token::SlashEq),
-	Percent(token::PercentEq),
-	And(token::AndEq),
-	Or(token::OrEq),
-	Caret(token::CaretEq),
-	Shl(token::ShlEq),
-	Shr(token::ShrEq),
+	Plus(ast_token::PlusEq),
+	Minus(ast_token::MinusEq),
+	Star(ast_token::StarEq),
+	Div(ast_token::SlashEq),
+	Percent(ast_token::PercentEq),
+	And(ast_token::AndEq),
+	Or(ast_token::OrEq),
+	Caret(ast_token::CaretEq),
+	Shl(ast_token::ShlEq),
+	Shr(ast_token::ShrEq),
 }

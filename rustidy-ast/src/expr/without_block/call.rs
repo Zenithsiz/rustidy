@@ -6,7 +6,7 @@ use {
 		util::{FmtSingleOrIndent, Parenthesized},
 	},
 	super::{ExpressionWithoutBlockInner, path::PathExprSegment},
-	ast_literal::token,
+
 	ast_util::{PunctuatedTrailing, delimited, punct},
 	format::{
 		Format,
@@ -55,7 +55,7 @@ pub struct MethodCallExpression {
 		true => Whitespace::INDENT,
 		false => Whitespace::REMOVE,
 	})]
-	pub dot:     token::Dot,
+	pub dot:     ast_token::Dot,
 	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub segment: PathExprSegment,
 	#[format(prefix_ws = Whitespace::REMOVE)]
@@ -103,5 +103,5 @@ impl Format<WhitespaceConfig, ()> for MethodCallExpression {
 #[format(args(ty = "FmtSingleOrIndent"))]
 pub struct CallParams(
 	#[format(args = punct::fmt(args.prefix_ws(), Whitespace::REMOVE))]
-	pub PunctuatedTrailing<Expression, token::Comma>,
+	pub PunctuatedTrailing<Expression, ast_token::Comma>,
 );

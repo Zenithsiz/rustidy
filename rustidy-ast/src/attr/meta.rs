@@ -3,7 +3,7 @@
 // Imports
 use {
 	crate::{expr::Expression, path::SimplePath, util::Parenthesized},
-	ast_literal::token,
+
 	ast_util::{Longest, PunctuatedTrailing, delimited, punct},
 	format::{Format, Formattable, WhitespaceConfig, WhitespaceFormat},
 	parse::{ParsableFrom, Parse},
@@ -45,7 +45,7 @@ pub struct MetaItemPath(SimplePath);
 pub struct MetaItemEqExpr {
 	pub path: SimplePath,
 	#[format(prefix_ws = Whitespace::SINGLE)]
-	pub eq:   token::Eq,
+	pub eq:   ast_token::Eq,
 	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub expr: Expression,
 }
@@ -71,7 +71,7 @@ pub struct MetaItemSeq {
 #[format(args(ty = "MetaSeqFmt"))]
 pub struct MetaSeq(
 	#[format(args = punct::fmt(args.inner, Whitespace::REMOVE))]
-	pub PunctuatedTrailing<MetaItemInner, token::Comma>,
+	pub PunctuatedTrailing<MetaItemInner, ast_token::Comma>,
 );
 
 #[derive(Clone, Copy, Debug)]

@@ -11,7 +11,7 @@ use {
 		Visibility,
 		function::{GenericParams, TypeParamBounds, WhereClause},
 	},
-	ast_literal::{Identifier, token},
+	ast_literal::Identifier,
 	format::{Format, Formattable, WhitespaceFormat},
 	parse::Parse,
 	print::Print,
@@ -24,12 +24,12 @@ use {
 #[derive(Parse, Formattable, Format, Print)]
 #[parse(name = "a trait")]
 pub struct Trait {
-	pub unsafe_:  Option<token::Unsafe>,
+	pub unsafe_:  Option<ast_token::Unsafe>,
 	// Note: Nightly-only
 	#[format(prefix_ws(expr = Whitespace::SINGLE, if_ = self.unsafe_.is_some()))]
-	pub auto:     Option<token::Auto>,
+	pub auto:     Option<ast_token::Auto>,
 	#[format(prefix_ws(expr = Whitespace::SINGLE, if_ = self.unsafe_.is_some() || self.auto.is_some()))]
-	pub trait_:   token::Trait,
+	pub trait_:   ast_token::Trait,
 	#[parse(fatal)]
 	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub ident:    Identifier,
@@ -57,11 +57,11 @@ pub enum TraitBody {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct TraitBodyEq {
-	pub eq:     token::Eq,
+	pub eq:     ast_token::Eq,
 	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub bounds: Option<TypeParamBounds>,
 	#[format(prefix_ws = Whitespace::REMOVE)]
-	pub semi:   token::Semi,
+	pub semi:   ast_token::Semi,
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]
@@ -76,7 +76,7 @@ pub struct TraitBodyFull(
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct TraitColonBounds {
-	pub colon:  token::Colon,
+	pub colon:  ast_token::Colon,
 	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub bounds: Option<TypeParamBounds>,
 }

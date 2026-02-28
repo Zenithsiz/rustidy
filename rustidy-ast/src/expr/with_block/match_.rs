@@ -9,7 +9,7 @@ use {
 	},
 	super::Conditions,
 	core::ops::ControlFlow,
-	ast_literal::token,
+
 	format::{Format, Formattable, WhitespaceFormat},
 	parse::{FromRecursiveRoot, Parse, ParseError, Parser, ParserError, ParserTag},
 	print::Print,
@@ -22,7 +22,7 @@ use {
 #[derive(Parse, Formattable, Format, Print)]
 #[parse(name = "a match expression")]
 pub struct MatchExpression {
-	pub match_:    token::Match,
+	pub match_:    ast_token::Match,
 	#[parse(fatal)]
 	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub scrutinee: Box<Scrutinee>,
@@ -56,16 +56,16 @@ impl Parse for MatchArms {
 			//       merge this into `let Ok(arm) = ... else { break }`.
 			let arm_res = parser.try_parse::<MatchArm>()?;
 			let Ok(arm) = arm_res else { break };
-			let arrow = parser.parse::<token::FatArrow>()?;
+			let arrow = parser.parse::<ast_token::FatArrow>()?;
 
 
 			// Note: Because of `match () { () => {} () => {} }` and `match () { () => {}?, () => {} }`
 			//       requiring look-ahead after the block expressions, we need to parse both with and
 			//       without block.
 			let with_block_res = parser
-				.peek::<(ExpressionWithBlock, Option<token::Comma>)>()?;
+				.peek::<(ExpressionWithBlock, Option<ast_token::Comma>)>()?;
 			let without_block_res = parser
-				.peek::<(ExpressionWithoutBlock, Option<token::Comma>)>()?;
+				.peek::<(ExpressionWithoutBlock, Option<ast_token::Comma>)>()?;
 			let (expr, trailing_comma, control_flow) = match (with_block_res, without_block_res) {
 				// If both parse, we only accept with block if the without block had no comma.
 				(Ok(((expr_with_block, with_block_trailing_comma), with_block_peek_pos)), Ok(((expr_without_block, without_block_trailing_comma), without_block_peek_pos)),) => match without_block_trailing_comma {
@@ -128,26 +128,26 @@ pub enum MatchArmsError {
 
 	#[parse_error(transparent)]
 	#[parse_error(fatal)]
-	FatArrow(ParserError<token::FatArrow>),
+	FatArrow(ParserError<ast_token::FatArrow>),
 
 	#[parse_error(transparent)]
 	#[parse_error(fatal)]
-	ExpressionWithBlock(ParserError<(ExpressionWithBlock, Option<token::Comma>)>),
+	ExpressionWithBlock(ParserError<(ExpressionWithBlock, Option<ast_token::Comma>)>),
 
 	#[parse_error(transparent)]
 	#[parse_error(fatal)]
-	ExpressionWithoutBlock(ParserError<(ExpressionWithoutBlock, Option<token::Comma>)>),
+	ExpressionWithoutBlock(ParserError<(ExpressionWithoutBlock, Option<ast_token::Comma>)>),
 
 	#[parse_error(multiple)]
 	#[parse_error(fatal)]
 	Expression {
-		with_block:    ParserError<(ExpressionWithBlock, Option<token::Comma>)>,
-		without_block: ParserError<(ExpressionWithoutBlock, Option<token::Comma>)>,
+		with_block:    ParserError<(ExpressionWithBlock, Option<ast_token::Comma>)>,
+		without_block: ParserError<(ExpressionWithoutBlock, Option<ast_token::Comma>)>,
 	},
 
 	#[parse_error(transparent)]
 	#[parse_error(fatal)]
-	Comma(ParserError<token::Comma>),
+	Comma(ParserError<ast_token::Comma>),
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]
@@ -156,11 +156,11 @@ pub enum MatchArmsError {
 pub struct MatchArmWithExpr {
 	pub arm:            MatchArm,
 	#[format(prefix_ws = Whitespace::SINGLE)]
-	pub arrow:          token::FatArrow,
+	pub arrow:          ast_token::FatArrow,
 	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub expr:           Expression,
 	#[format(prefix_ws = Whitespace::REMOVE)]
-	pub trailing_comma: Option<token::Comma>,
+	pub trailing_comma: Option<ast_token::Comma>,
 }
 
 /// `MatchArm`
@@ -187,7 +187,7 @@ pub struct MatchArmInner {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct MatchArmGuard {
-	pub if_:  token::If,
+	pub if_:  ast_token::If,
 	// TODO: The reference says this is just an expression, but
 	//       that means we don't parse `Some(...) if let ...`, so
 	//       instead we allow any conditions.

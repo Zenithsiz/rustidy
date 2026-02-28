@@ -3,7 +3,7 @@
 // Imports
 use {
 	crate::expr::without_block::path::{GenericArgs, PathIdentSegment, TypePathFn},
-	ast_literal::token,
+
 	ast_util::{Punctuated, punct},
 	format::{Format, Formattable, WhitespaceFormat},
 	parse::Parse,
@@ -16,10 +16,10 @@ use {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct TypePath {
-	pub prefix:   Option<token::PathSep>,
+	pub prefix:   Option<ast_token::PathSep>,
 	#[format(prefix_ws(expr = Whitespace::REMOVE, if_ = self.prefix.is_some()))]
 	#[format(args = punct::fmt(Whitespace::REMOVE, Whitespace::REMOVE))]
-	pub segments: Punctuated<TypePathSegment, token::PathSep>,
+	pub segments: Punctuated<TypePathSegment, ast_token::PathSep>,
 }
 
 /// `TypePathSegment`
@@ -36,7 +36,7 @@ pub struct TypePathSegment {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct TypePathSegmentGenerics {
-	pub sep:   Option<token::PathSep>,
+	pub sep:   Option<ast_token::PathSep>,
 	#[format(prefix_ws(expr = Whitespace::REMOVE, if_ = self.sep.is_some()))]
 	pub inner: GenericArgsOrTypePathFn,
 }

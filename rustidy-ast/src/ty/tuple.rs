@@ -4,7 +4,7 @@
 use {
 	crate::util::Parenthesized,
 	super::Type,
-	ast_literal::token,
+
 	ast_util::delimited,
 	format::{Format, FormatOutput, Formattable, WhitespaceConfig, WhitespaceFormat},
 	parse::Parse,
@@ -23,7 +23,7 @@ pub struct TupleType(#[format(args = delimited::FmtRemove)] Parenthesized<Option
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Print)]
 pub struct TupleTypeInner {
-	pub tys: Vec<(Type, token::Comma)>,
+	pub tys: Vec<(Type, ast_token::Comma)>,
 	pub end: Option<Box<Type>>,
 }
 

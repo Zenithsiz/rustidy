@@ -6,7 +6,7 @@ use {
 		attr::{DelimTokenTreeBraces, DelimTokenTreeBrackets, DelimTokenTreeParens},
 		path::SimplePath,
 	},
-	ast_literal::token,
+
 	format::{Format, Formattable, WhitespaceFormat},
 	parse::Parse,
 	print::Print,
@@ -29,11 +29,11 @@ pub enum MacroInvocationSemi {
 pub struct MacroInvocationSemiParens {
 	pub path:   SimplePath,
 	#[format(prefix_ws = Whitespace::REMOVE)]
-	pub not:    token::Not,
+	pub not:    ast_token::Not,
 	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub tokens: DelimTokenTreeParens,
 	#[format(prefix_ws = Whitespace::REMOVE)]
-	pub semi:   token::Semi,
+	pub semi:   ast_token::Semi,
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]
@@ -42,11 +42,11 @@ pub struct MacroInvocationSemiParens {
 pub struct MacroInvocationSemiBrackets {
 	pub path:   SimplePath,
 	#[format(prefix_ws = Whitespace::REMOVE)]
-	pub not:    token::Not,
+	pub not:    ast_token::Not,
 	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub tokens: DelimTokenTreeBrackets,
 	#[format(prefix_ws = Whitespace::REMOVE)]
-	pub semi:   token::Semi,
+	pub semi:   ast_token::Semi,
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]
@@ -55,7 +55,7 @@ pub struct MacroInvocationSemiBrackets {
 pub struct MacroInvocationSemiBraces {
 	pub path:   SimplePath,
 	#[format(prefix_ws = Whitespace::REMOVE)]
-	pub not:    token::Not,
+	pub not:    ast_token::Not,
 	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub tokens: DelimTokenTreeBraces,
 }

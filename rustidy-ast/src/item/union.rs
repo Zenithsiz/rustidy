@@ -4,7 +4,7 @@
 use {
 	crate::util::Braced,
 	super::{function::{GenericParams, WhereClause}, struct_::StructFields},
-	ast_literal::{Identifier, token},
+	ast_literal::Identifier,
 	ast_util::delimited,
 	format::{Format, Formattable, WhitespaceFormat},
 	parse::Parse,
@@ -17,7 +17,7 @@ use {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct Union {
-	pub union:    token::Union,
+	pub union:    ast_token::Union,
 	#[parse(fatal)]
 	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub ident:    Identifier,

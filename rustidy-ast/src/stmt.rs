@@ -10,7 +10,7 @@ use {
 		pat::PatternNoTopAlt,
 		ty::Type,
 	},
-	ast_literal::token,
+
 	format::{Format, Formattable, WhitespaceFormat},
 	parse::{Parse, ParseError, Parser, ParserError},
 	print::Print,
@@ -30,7 +30,7 @@ pub struct Statement(pub ArenaIdx<StatementInner>);
 #[derive(Parse, Formattable, Format, Print)]
 #[parse(name = "a statement")]
 pub enum StatementInner {
-	Empty(token::Semi),
+	Empty(ast_token::Semi),
 	Let(LetStatement),
 	Expression(ExpressionStatement),
 	Item(Item),
@@ -50,9 +50,9 @@ pub struct LetStatement(
 #[derive(Parse, Formattable, Format, Print)]
 #[parse(name = "a let statement")]
 pub struct LetStatementInner {
-	pub super_: Option<token::Super>,
+	pub super_: Option<ast_token::Super>,
 	#[format(prefix_ws(expr = Whitespace::SINGLE, if_ = self.super_.is_some()))]
-	pub let_:   token::Let,
+	pub let_:   ast_token::Let,
 	#[parse(fatal)]
 	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub pat:    PatternNoTopAlt,
@@ -61,14 +61,14 @@ pub struct LetStatementInner {
 	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub eq:     Option<LetStatementEq>,
 	#[format(prefix_ws = Whitespace::REMOVE)]
-	pub semi:   token::Semi,
+	pub semi:   ast_token::Semi,
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct LetStatementTy {
-	pub colon: token::Colon,
+	pub colon: ast_token::Colon,
 	#[parse(fatal)]
 	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub ty:    Type,
@@ -90,7 +90,7 @@ impl Parse for LetStatementEq {
 		let eq = parser.parse()?;
 		let expr = parser.parse()?;
 
-		match parser.try_parse::<token::Else>()? {
+		match parser.try_parse::<ast_token::Else>()? {
 			Ok(else_) => {
 				let else_expr = parser.parse()?;
 				Ok(Self::Else(
@@ -104,13 +104,13 @@ impl Parse for LetStatementEq {
 #[derive(derive_more::Debug, derive_more::From, ParseError)]
 pub enum LetStatementEqError {
 	#[parse_error(transparent)]
-	Eq(ParserError<token::Eq>),
+	Eq(ParserError<ast_token::Eq>),
 
 	#[parse_error(transparent)]
 	Expr(ParserError<Expression>),
 
 	#[parse_error(transparent)]
-	Else(ParserError<token::Else>),
+	Else(ParserError<ast_token::Else>),
 
 	#[parse_error(transparent)]
 	#[parse_error(fatal)]
@@ -121,7 +121,7 @@ pub enum LetStatementEqError {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct LetStatementEqNormal {
-	pub eq:   token::Eq,
+	pub eq:   ast_token::Eq,
 	#[parse(fatal)]
 	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub expr: Expression,
@@ -131,12 +131,12 @@ pub struct LetStatementEqNormal {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct LetStatementEqElse {
-	pub eq:        token::Eq,
+	pub eq:        ast_token::Eq,
 	#[format(prefix_ws = Whitespace::SINGLE)]
 	// TODO: Except `LazyBooleanExpression` and ending with `}`.
 	pub expr:      Expression,
 	#[format(prefix_ws = Whitespace::SINGLE)]
-	pub else_:     token::Else,
+	pub else_:     ast_token::Else,
 	#[parse(fatal)]
 	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub else_expr: BlockExpression,
@@ -157,7 +157,7 @@ pub enum ExpressionStatement {
 pub struct ExpressionStatementWithoutBlock {
 	pub expr: ExpressionWithoutBlock,
 	#[format(prefix_ws = Whitespace::REMOVE)]
-	pub semi: token::Semi,
+	pub semi: ast_token::Semi,
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]
@@ -166,5 +166,5 @@ pub struct ExpressionStatementWithoutBlock {
 pub struct ExpressionStatementWithBlock {
 	pub expr: ExpressionWithBlock,
 	#[format(prefix_ws = Whitespace::REMOVE)]
-	pub semi: Option<token::Semi>,
+	pub semi: Option<ast_token::Semi>,
 }

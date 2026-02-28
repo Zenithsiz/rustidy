@@ -3,7 +3,7 @@
 // Imports
 use {
 	crate::expr::Expression,
-	ast_literal::{LifetimeOrLabel, token},
+	ast_literal::LifetimeOrLabel,
 	format::{Format, Formattable, WhitespaceFormat},
 	parse::{Parse, ParserTag},
 	print::Print,
@@ -15,7 +15,7 @@ use {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct BreakExpression {
-	pub continue_: token::Break,
+	pub continue_: ast_token::Break,
 	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub label:     Option<LifetimeOrLabel>,
 	// TODO: Do we need to be parse-recursive here?

@@ -45,10 +45,10 @@ use {
 		vis::Visibility,
 	},
 	self::macro_rules::{MacroMatcherMatches, MacroRule},
-	itertools::Itertools,
-	ast_literal::{Identifier, token},
+	ast_literal::Identifier,
 	ast_util::{AtLeast1, PunctuatedTrailing, delimited, punct},
 	format::{Format, Formattable, WhitespaceFormat},
+	itertools::Itertools,
 	parse::Parse,
 	print::Print,
 	util::{ArenaIdx, Whitespace, decl_arena},
@@ -199,7 +199,7 @@ pub enum MacroItem {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct DeclMacro {
-	pub macro_: token::Macro,
+	pub macro_: ast_token::Macro,
 	#[parse(fatal)]
 	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub ident:  Identifier,
@@ -241,7 +241,7 @@ pub struct DeclMacroBodyBranches(
 #[derive(Parse, Formattable, Format, Print)]
 pub struct DeclMacroBodyBranchesInner(
 	#[format(args = punct::fmt(Whitespace::INDENT, Whitespace::REMOVE))]
-	pub PunctuatedTrailing<DeclMacroBranch, token::Comma>,
+	pub PunctuatedTrailing<DeclMacroBranch, ast_token::Comma>,
 );
 
 #[derive(PartialEq, Eq, Clone, Debug)]
@@ -265,7 +265,7 @@ pub enum DeclMacroBranchExtra {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct DeclMacroBranchAttr {
-	pub attr: token::Attr,
+	pub attr: ast_token::Attr,
 	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub args: DelimTokenTreeParens,
 }
@@ -274,7 +274,7 @@ pub struct DeclMacroBranchAttr {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct DeclMacroBranchDerive {
-	pub derive: token::Derive,
+	pub derive: ast_token::Derive,
 	#[format(prefix_ws = Whitespace::REMOVE)]
 	#[format(args = delimited::FmtArgs {
 		indent: false,

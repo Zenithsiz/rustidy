@@ -16,9 +16,9 @@ use {
 	},
 	self::meta::MetaItem,
 	app_error::{AppError, Context, bail},
-	core::fmt::Debug,
-	ast_literal::token,
+	ast_literal::Token,
 	ast_util::{Longest, RemainingBlockComment, RemainingLine, delimited},
+	core::fmt::Debug,
 	format::{Format, Formattable, WhitespaceFormat},
 	parse::{ParsableFrom, Parse, ParserTag},
 	print::Print,
@@ -40,9 +40,9 @@ pub enum InnerAttrOrDocComment {
 #[derive(Parse, Formattable, Format, Print)]
 #[parse(name = "an inner attribute")]
 pub struct InnerAttribute {
-	pub pound: token::Pound,
+	pub pound: ast_token::Pound,
 	#[format(prefix_ws = Whitespace::REMOVE)]
-	pub not:   token::Not,
+	pub not:   ast_token::Not,
 	#[parse(fatal)]
 	#[format(prefix_ws = Whitespace::REMOVE)]
 	#[format(args = delimited::FmtRemove)]
@@ -64,7 +64,7 @@ pub enum InnerDocComment {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct InnerLineDoc {
-	pub prefix:  token::InnerLineDoc,
+	pub prefix:  ast_token::InnerLineDoc,
 	#[format(prefix_ws = ())]
 	pub comment: RemainingLine,
 }
@@ -74,7 +74,7 @@ pub struct InnerLineDoc {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct InnerBlockDoc {
-	pub prefix:  token::InnerBlockDoc,
+	pub prefix:  ast_token::InnerBlockDoc,
 	pub comment: RemainingBlockComment,
 }
 
@@ -93,7 +93,7 @@ pub enum OuterAttrOrDocComment {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct OuterAttribute {
-	pub pound: token::Pound,
+	pub pound: ast_token::Pound,
 	#[format(prefix_ws = Whitespace::REMOVE)]
 	#[format(args = delimited::FmtRemove)]
 	pub open:  Bracketed<AttrOrMetaItem>,
@@ -114,7 +114,7 @@ pub enum OuterDocComment {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct OuterLineDoc {
-	pub prefix:  token::OuterLineDoc,
+	pub prefix:  ast_token::OuterLineDoc,
 	#[format(prefix_ws = ())]
 	pub comment: RemainingLine,
 }
@@ -124,7 +124,7 @@ pub struct OuterLineDoc {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct OuterBlockDoc {
-	pub prefix:  token::OuterBlockDoc,
+	pub prefix:  ast_token::OuterBlockDoc,
 	// TODO: This should technically need whitespace before if we find `/**/**/*/`,
 	//       but the reference doesn't seem to mention this, so we allow it.
 	pub comment: RemainingBlockComment,
@@ -175,7 +175,7 @@ pub enum AttrInput {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct AttrInputEqExpr {
-	pub eq:   token::Eq,
+	pub eq:   ast_token::Eq,
 	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub expr: Expression,
 }
@@ -236,7 +236,7 @@ pub enum TokenTree {
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
-pub struct TokenNonDelimited(#[parse(with_tag = ParserTag::SkipDelimiters)] pub token::Token);
+pub struct TokenNonDelimited(#[parse(with_tag = ParserTag::SkipDelimiters)] pub Token);
 
 /// Updates the configuration based on an attribute
 // TODO: We need to return the position for better error messages.

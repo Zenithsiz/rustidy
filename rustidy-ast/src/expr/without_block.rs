@@ -48,7 +48,7 @@ pub use self::{
 use {
 	crate::attr::{self, OuterAttrOrDocComment, WithOuterAttributes},
 	super::{Expression, ExpressionInner},
-	ast_literal::{IntegerLiteral, LiteralExpression, token},
+	ast_literal::{IntegerLiteral, LiteralExpression},
 	format::{Format, Formattable, WhitespaceFormat},
 	parse::{Parse, ParseRecursive, Parser, ParserError, ParserTag, RecursiveWrapper},
 	print::Print,
@@ -166,9 +166,9 @@ pub enum ExpressionWithoutBlockInner {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct DoYeetExpression {
-	pub do_:   token::Do,
+	pub do_:   ast_token::Do,
 	#[format(prefix_ws = Whitespace::SINGLE)]
-	pub yeet_: token::Yeet,
+	pub yeet_: ast_token::Yeet,
 	// TODO: This should be recursive
 	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub expr:  Option<Expression>,

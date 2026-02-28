@@ -3,7 +3,7 @@
 use {
 	crate::expr::{Expression, ExpressionInner},
 	super::ExpressionWithoutBlockInner,
-	ast_literal::{Identifier, token},
+	ast_literal::Identifier,
 	format::{
 		Format,
 		FormatOutput,
@@ -32,7 +32,7 @@ pub struct FieldExpression {
 		true => Whitespace::INDENT,
 		false => Whitespace::REMOVE,
 	})]
-	pub dot:   token::Dot,
+	pub dot:   ast_token::Dot,
 	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub ident: Identifier,
 }

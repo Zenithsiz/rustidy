@@ -4,7 +4,7 @@
 use {
 	crate::expr::PathExpression,
 	super::LiteralPattern,
-	ast_literal::token,
+
 	format::{Format, Formattable, WhitespaceFormat},
 	parse::Parse,
 	print::Print,
@@ -30,7 +30,7 @@ pub enum RangePattern {
 pub struct RangeExclusivePattern {
 	lhs:     RangePatternBound,
 	#[format(prefix_ws = Whitespace::REMOVE)]
-	dot_dot: token::DotDot,
+	dot_dot: ast_token::DotDot,
 	#[format(prefix_ws = Whitespace::REMOVE)]
 	rhs:     RangePatternBound,
 }
@@ -41,7 +41,7 @@ pub struct RangeExclusivePattern {
 pub struct RangeInclusivePattern {
 	lhs:        RangePatternBound,
 	#[format(prefix_ws = Whitespace::REMOVE)]
-	dot_dot_eq: token::DotDotEq,
+	dot_dot_eq: ast_token::DotDotEq,
 	#[format(prefix_ws = Whitespace::REMOVE)]
 	rhs:        RangePatternBound,
 }
@@ -52,14 +52,14 @@ pub struct RangeInclusivePattern {
 pub struct RangeFromPattern {
 	lhs:     RangePatternBound,
 	#[format(prefix_ws = Whitespace::REMOVE)]
-	dot_dot: token::DotDot,
+	dot_dot: ast_token::DotDot,
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct RangeToExclusivePattern {
-	dot_dot: token::DotDot,
+	dot_dot: ast_token::DotDot,
 	#[format(prefix_ws = Whitespace::REMOVE)]
 	rhs:     RangePatternBound,
 }
@@ -68,7 +68,7 @@ pub struct RangeToExclusivePattern {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct RangeToInclusivePattern {
-	dot_dot_eq: token::DotDotEq,
+	dot_dot_eq: ast_token::DotDotEq,
 	#[format(prefix_ws = Whitespace::REMOVE)]
 	rhs:        RangePatternBound,
 }
@@ -79,7 +79,7 @@ pub struct RangeToInclusivePattern {
 pub struct ObsoleteRangePattern {
 	lhs:         RangePatternBound,
 	#[format(prefix_ws = Whitespace::REMOVE)]
-	dot_dot_dot: token::DotDotDot,
+	dot_dot_dot: ast_token::DotDotDot,
 	#[format(prefix_ws = Whitespace::REMOVE)]
 	rhs:         RangePatternBound,
 }

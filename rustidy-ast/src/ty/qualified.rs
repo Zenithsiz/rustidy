@@ -4,7 +4,7 @@
 use {
 	crate::{expr::without_block::path::QualifiedPathType},
 	super::path::TypePathSegment,
-	ast_literal::token,
+
 	ast_util::{AtLeast1, at_least},
 	format::{Format, Formattable, WhitespaceFormat},
 	parse::Parse,
@@ -27,7 +27,7 @@ pub struct QualifiedPathInType {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct QualifiedPathInTypeSegment {
-	pub sep:     token::PathSep,
+	pub sep:     ast_token::PathSep,
 	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub segment: TypePathSegment,
 }

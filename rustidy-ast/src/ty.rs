@@ -27,7 +27,7 @@ use {
 		item::function::{TraitBound, TypeParamBounds},
 		util::Parenthesized,
 	},
-	ast_literal::{Lifetime, token},
+	ast_literal::Lifetime,
 	ast_util::delimited,
 	format::{Format, Formattable, WhitespaceFormat},
 	parse::Parse,
@@ -89,7 +89,7 @@ pub struct ParenthesizedPath(
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
-pub struct NeverType(token::Not);
+pub struct NeverType(ast_token::Not);
 
 /// `ReferenceType`
 #[derive(PartialEq, Eq, Clone, Debug)]
@@ -97,14 +97,14 @@ pub struct NeverType(token::Not);
 #[derive(Parse, Formattable, Format, Print)]
 #[parse(name = "a reference type")]
 pub struct ReferenceType {
-	pub ref_:     token::AndTy,
+	pub ref_:     ast_token::AndTy,
 	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub lifetime: Option<Lifetime>,
 	#[format(prefix_ws = match self.lifetime.is_some() {
 		true => Whitespace::SINGLE,
 		false => Whitespace::REMOVE,
 	})]
-	pub mut_:     Option<token::Mut>,
+	pub mut_:     Option<ast_token::Mut>,
 	#[format(prefix_ws = match self.lifetime.is_some() || self.mut_.is_some() {
 		true => Whitespace::SINGLE,
 		false => Whitespace::REMOVE,
@@ -116,14 +116,14 @@ pub struct ReferenceType {
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
-pub struct InferredType(token::Underscore);
+pub struct InferredType(ast_token::Underscore);
 
 /// `ImplTraitTypeOneBound`
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct ImplTraitTypeOneBound {
-	pub impl_: token::Impl,
+	pub impl_: ast_token::Impl,
 	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub bound: TraitBound,
 }
@@ -133,7 +133,7 @@ pub struct ImplTraitTypeOneBound {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct TraitObjectTypeOneBound {
-	pub dyn_:  Option<token::Dyn>,
+	pub dyn_:  Option<ast_token::Dyn>,
 	#[format(prefix_ws(expr = Whitespace::SINGLE, if_ = self.dyn_.is_some()))]
 	pub bound: TraitBound,
 }
@@ -143,7 +143,7 @@ pub struct TraitObjectTypeOneBound {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct ImplTraitType {
-	pub impl_: token::Impl,
+	pub impl_: ast_token::Impl,
 	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub bound: TypeParamBounds,
 }
@@ -153,7 +153,7 @@ pub struct ImplTraitType {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct TraitObjectType {
-	pub dyn_:  Option<token::Dyn>,
+	pub dyn_:  Option<ast_token::Dyn>,
 	#[format(prefix_ws(expr = Whitespace::SINGLE, if_ = self.dyn_.is_some()))]
 	pub bound: TypeParamBounds,
 }

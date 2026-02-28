@@ -3,7 +3,7 @@
 // Imports
 use {
 	crate::expr::BlockExpression,
-	ast_literal::token,
+
 	format::{Format, Formattable, WhitespaceFormat},
 	parse::Parse,
 	print::Print,
@@ -15,9 +15,9 @@ use {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct AsyncBlockExpression {
-	pub async_: token::Async,
+	pub async_: ast_token::Async,
 	#[format(prefix_ws = Whitespace::SINGLE)]
-	pub move_:  Option<token::Move>,
+	pub move_:  Option<ast_token::Move>,
 	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub block:  Box<BlockExpression>,
 }

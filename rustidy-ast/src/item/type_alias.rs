@@ -4,7 +4,7 @@
 use {
 	crate::ty::Type,
 	super::function::{GenericParams, TypeParamBounds, WhereClause},
-	ast_literal::{Identifier, token},
+	ast_literal::Identifier,
 	format::{Format, Formattable, WhitespaceFormat},
 	parse::Parse,
 	print::Print,
@@ -16,7 +16,7 @@ use {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct TypeAlias {
-	pub type_:    token::Type,
+	pub type_:    ast_token::Type,
 	#[parse(fatal)]
 	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub ident:    Identifier,
@@ -29,14 +29,14 @@ pub struct TypeAlias {
 	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub eq:       Option<TypeAliasEq>,
 	#[format(prefix_ws = Whitespace::REMOVE)]
-	pub semi:     token::Semi,
+	pub semi:     ast_token::Semi,
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct TypeAliasBounds {
-	pub colon:  token::Colon,
+	pub colon:  ast_token::Colon,
 	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub bounds: TypeParamBounds,
 }
@@ -45,7 +45,7 @@ pub struct TypeAliasBounds {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct TypeAliasEq {
-	pub eq:     token::Eq,
+	pub eq:     ast_token::Eq,
 	#[parse(fatal)]
 	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub ty:     Type,

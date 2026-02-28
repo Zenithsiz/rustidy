@@ -3,7 +3,6 @@
 // Imports
 use {
 	crate::{IdentifierOrKeyword, NonKeywordIdentifier},
-	super::token,
 	format::{Format, Formattable, WhitespaceFormat},
 	parse::{Parse, Parser, ParserTag},
 	print::Print,
@@ -22,7 +21,7 @@ pub struct Lifetime(LifetimeToken);
 #[derive(Parse, Formattable, Format, Print)]
 pub enum LifetimeToken {
 	IdentOrKeyword(QuoteNotQuote<IdentifierOrKeyword>),
-	Underscore(QuoteNotQuote<token::Underscore>),
+	Underscore(QuoteNotQuote<ast_token::Underscore>),
 	// TODO: `r#'ident`
 }
 
@@ -32,7 +31,7 @@ pub enum LifetimeToken {
 #[derive(Parse, Formattable, Format, Print)]
 pub enum LifetimeOrLabel {
 	IdentOrKeyword(QuoteNotQuote<NonKeywordIdentifier>),
-	Underscore(QuoteNotQuote<token::Underscore>),
+	Underscore(QuoteNotQuote<ast_token::Underscore>),
 	// TODO: `r#'ident`
 }
 
@@ -43,7 +42,7 @@ pub enum LifetimeOrLabel {
 #[parse(error(name = SuffixQuote, fmt = "Unexpected `'`"))]
 #[parse(and_try_with = Self::check_suffix_quote)]
 pub struct QuoteNotQuote<T> {
-	pub quote: token::Quote,
+	pub quote: ast_token::Quote,
 	#[parse(with_tag = ParserTag::SkipWhitespace)]
 	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub value: T,
@@ -56,7 +55,7 @@ impl<T: Parse> QuoteNotQuote<T> {
 		if parser
 			.with_tag(
 				ParserTag::SkipWhitespace,
-				Parser::try_parse::<token::Quote>
+				Parser::try_parse::<ast_token::Quote>
 			)
 			.map_err(QuoteNotQuoteError::Quote)?
 			.is_ok() {

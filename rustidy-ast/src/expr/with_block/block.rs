@@ -13,7 +13,7 @@ use {
 			StatementInner,
 		},
 	},
-	ast_literal::token,
+
 	ast_util::{AtLeast1, NotFollows, at_least},
 	format::{Format, Formattable, WhitespaceConfig, WhitespaceFormat},
 	parse::{Parse, ParseError, Parser, ParserError, ParserTag},
@@ -91,14 +91,14 @@ impl Parse for Statements {
 			//       this is not the case for field/method access and the question mark
 			//       operator.
 			if let Ok((expr, ..)) = parser
-				.try_parse::<(ExpressionStatementWithBlock, NotFollows<token::Dot>, NotFollows<token::Question>,)>()? {
+				.try_parse::<(ExpressionStatementWithBlock, NotFollows<ast_token::Dot>, NotFollows<ast_token::Question>,)>()? {
 				let stmt = StatementInner::Expression(ExpressionStatement::WithBlock(expr));
 				push_stmt(Statement(ArenaIdx::new(stmt)));
 				continue;
 			}
 
 			match parser
-				.peek::<(ExpressionWithoutBlock, Option<token::Semi>)>()? {
+				.peek::<(ExpressionWithoutBlock, Option<ast_token::Semi>)>()? {
 				Ok(((expr, semi), peek_expr_pos)) => match semi {
 					Some(semi) => {
 						parser.set_pos(peek_expr_pos);
@@ -150,11 +150,11 @@ impl Parse for Statements {
 pub enum StatementsError {
 	#[parse_error(transparent)]
 	ExpressionStatementWithBlock(
-		ParserError<(ExpressionStatementWithBlock, NotFollows<token::Dot>, NotFollows<token::Question>,)>,
+		ParserError<(ExpressionStatementWithBlock, NotFollows<ast_token::Dot>, NotFollows<ast_token::Question>,)>,
 	),
 
 	#[parse_error(transparent)]
-	ExpressionWithoutBlock(ParserError<(ExpressionWithoutBlock, Option<token::Semi>)>),
+	ExpressionWithoutBlock(ParserError<(ExpressionWithoutBlock, Option<ast_token::Semi>)>),
 
 	#[parse_error(transparent)]
 	Statement(ParserError<Statement>),

@@ -5,7 +5,7 @@
 use {
 	crate::expr::{Expression, ExpressionInner},
 	super::ExpressionWithoutBlockInner,
-	ast_literal::token,
+
 	format::{Format, Formattable, WhitespaceFormat},
 	parse::{Parse, ParseRecursive, ParserTag},
 	print::Print,
@@ -45,7 +45,7 @@ pub enum RangeExpression {
 pub struct RangeExpr {
 	pub lhs:     Expression,
 	#[format(prefix_ws = Whitespace::REMOVE)]
-	pub dot_dot: token::DotDot,
+	pub dot_dot: ast_token::DotDot,
 	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub rhs:     Expression,
 }
@@ -61,7 +61,7 @@ pub struct RangeExpr {
 pub struct RangeFromExpr {
 	pub lhs:     Expression,
 	#[format(prefix_ws = Whitespace::REMOVE)]
-	pub dot_dot: token::DotDot,
+	pub dot_dot: ast_token::DotDot,
 }
 
 /// `RangeToExpr`
@@ -72,7 +72,7 @@ pub struct RangeFromExpr {
 #[parse_recursive(into_root = RangeExpression)]
 #[parse_recursive(kind = "right")]
 pub struct RangeToExpr {
-	pub dot_dot: token::DotDot,
+	pub dot_dot: ast_token::DotDot,
 	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub rhs:     Expression,
 }
@@ -81,7 +81,7 @@ pub struct RangeToExpr {
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
-pub struct RangeFullExpr(token::DotDot);
+pub struct RangeFullExpr(ast_token::DotDot);
 
 
 /// `RangeInclusiveExpr`
@@ -95,7 +95,7 @@ pub struct RangeFullExpr(token::DotDot);
 pub struct RangeInclusiveExpr {
 	pub lhs:        Expression,
 	#[format(prefix_ws = Whitespace::REMOVE)]
-	pub dot_dot_eq: token::DotDotEq,
+	pub dot_dot_eq: ast_token::DotDotEq,
 	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub rhs:        Expression,
 }
@@ -108,7 +108,7 @@ pub struct RangeInclusiveExpr {
 #[parse_recursive(into_root = RangeExpression)]
 #[parse_recursive(kind = "right")]
 pub struct RangeToInclusiveExpr {
-	pub dot_dot_eq: token::DotDotEq,
+	pub dot_dot_eq: ast_token::DotDotEq,
 	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub rhs:        Expression,
 }

@@ -3,7 +3,7 @@
 // Imports
 use {
 	ast_literal::Identifier,
-	ast_literal::token,
+
 	format::{Format, Formattable, WhitespaceFormat},
 	parse::Parse,
 	print::Print,
@@ -16,15 +16,15 @@ use {
 #[derive(Parse, Formattable, Format, Print)]
 #[parse(name = "extern crate")]
 pub struct ExternCrate {
-	pub extern_:   token::Extern,
+	pub extern_:   ast_token::Extern,
 	#[format(prefix_ws = Whitespace::SINGLE)]
-	pub crate_:    token::Crate,
+	pub crate_:    ast_token::Crate,
 	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub crate_ref: CrateRef,
 	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub as_clause: Option<AsClause>,
 	#[format(prefix_ws = Whitespace::REMOVE)]
-	pub semi:      token::Semi,
+	pub semi:      ast_token::Semi,
 }
 
 /// `CrateRef`
@@ -32,7 +32,7 @@ pub struct ExternCrate {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub enum CrateRef {
-	Self_(token::SelfLower),
+	Self_(ast_token::SelfLower),
 	Ident(Identifier),
 }
 
@@ -41,7 +41,7 @@ pub enum CrateRef {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct AsClause {
-	pub as_:  token::As,
+	pub as_:  ast_token::As,
 	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub name: AsClauseName,
 }
@@ -51,5 +51,5 @@ pub struct AsClause {
 #[derive(Parse, Formattable, Format, Print)]
 pub enum AsClauseName {
 	Ident(Identifier),
-	Underscore(token::Underscore),
+	Underscore(ast_token::Underscore),
 }

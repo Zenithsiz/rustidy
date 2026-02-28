@@ -5,19 +5,18 @@ pub use util::*;
 
 // Imports
 use {
-	ast_literal::token,
 	ast_util::delimited::Delimited,
 	format::{WhitespaceConfig, WhitespaceFormat},
 };
 
 /// A value delimited by parenthesis
-pub type Parenthesized<T> = Delimited<T, token::ParenOpen, token::ParenClose>;
+pub type Parenthesized<T> = Delimited<T, ast_token::ParenOpen, ast_token::ParenClose>;
 
 /// A value delimited by brackets
-pub type Bracketed<T> = Delimited<T, token::BracketOpen, token::BracketClose>;
+pub type Bracketed<T> = Delimited<T, ast_token::BracketOpen, ast_token::BracketClose>;
 
 /// A value delimited by braces
-pub type Braced<T> = Delimited<T, token::BracesOpen, token::BracesClose>;
+pub type Braced<T> = Delimited<T, ast_token::BracesOpen, ast_token::BracesClose>;
 
 /// Single or indent formatting
 #[derive(Clone, Copy, Debug)]

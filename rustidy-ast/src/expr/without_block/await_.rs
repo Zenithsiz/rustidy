@@ -4,7 +4,7 @@
 use {
 	crate::expr::{Expression, ExpressionInner},
 	super::ExpressionWithoutBlockInner,
-	ast_literal::token,
+
 	format::{Format, Formattable, WhitespaceFormat},
 	parse::ParseRecursive,
 	print::Print,
@@ -21,7 +21,7 @@ use {
 pub struct AwaitExpression {
 	pub expr:   Expression,
 	#[format(prefix_ws = Whitespace::REMOVE)]
-	pub dot:    token::Dot,
+	pub dot:    ast_token::Dot,
 	#[format(prefix_ws = Whitespace::REMOVE)]
-	pub await_: token::Await,
+	pub await_: ast_token::Await,
 }

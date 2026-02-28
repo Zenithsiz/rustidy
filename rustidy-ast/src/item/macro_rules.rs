@@ -3,7 +3,7 @@
 // Imports
 use {
 	crate::{attr::DelimTokenTree, util::{Braced, Bracketed, Parenthesized}},
-	ast_literal::{Identifier, IdentifierOrKeyword, RawIdentifier, Token, token},
+	ast_literal::{Identifier, IdentifierOrKeyword, RawIdentifier, Token},
 	ast_util::{AtLeast1, PunctuatedTrailing, at_least, delimited, punct},
 	format::{Format, Formattable, WhitespaceFormat},
 	parse::{Parse, ParserTag},
@@ -16,10 +16,10 @@ use {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct MacroRulesDefinition {
-	pub macro_rules: token::MacroRules,
+	pub macro_rules: ast_token::MacroRules,
 	#[parse(fatal)]
 	#[format(prefix_ws = Whitespace::REMOVE)]
-	pub not:         token::Not,
+	pub not:         ast_token::Not,
 	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub ident:       Identifier,
 	#[format(prefix_ws = Whitespace::SINGLE)]
@@ -43,7 +43,7 @@ pub enum MacroRulesDef {
 pub struct MacroRulesDefParens {
 	#[format(args = delimited::fmt_preserve())]
 	pub rules: Parenthesized<MacroRules>,
-	pub semi:  token::Semi,
+	pub semi:  ast_token::Semi,
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]
@@ -52,7 +52,7 @@ pub struct MacroRulesDefParens {
 pub struct MacroRulesDefBrackets {
 	#[format(args = delimited::fmt_preserve())]
 	pub rules: Bracketed<MacroRules>,
-	pub semi:  token::Semi,
+	pub semi:  ast_token::Semi,
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]
@@ -69,7 +69,7 @@ pub struct MacroRulesDefBraces {
 #[derive(Parse, Formattable, Format, Print)]
 pub struct MacroRules(
 	#[format(args = punct::fmt(Whitespace::PRESERVE, Whitespace::PRESERVE))]
-	PunctuatedTrailing<MacroRule, token::Semi>,
+	PunctuatedTrailing<MacroRule, ast_token::Semi>,
 );
 
 /// `MacroRule`
@@ -80,7 +80,7 @@ pub struct MacroRule {
 	pub matcher:     MacroMatcher,
 	#[parse(fatal)]
 	#[format(prefix_ws = Whitespace::SINGLE)]
-	pub arrow:       token::FatArrow,
+	pub arrow:       ast_token::FatArrow,
 	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub transcriber: MacroTranscriber,
 }
@@ -123,19 +123,19 @@ pub enum MacroMatch {
 	// Note: The reference says we shouldn't allow `$` here, but
 	//       the compiler does, so we do as well, just with lower
 	//       priority
-	Dollar(token::Dollar),
+	Dollar(ast_token::Dollar),
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct MacroMatchDollarIdent {
-	pub dollar: token::Dollar,
+	pub dollar: ast_token::Dollar,
 	#[format(prefix_ws = Whitespace::PRESERVE)]
 	pub ident:  MacroMatchDollarIdentInner,
 	#[parse(fatal)]
 	#[format(prefix_ws = Whitespace::PRESERVE)]
-	pub colon:  token::Colon,
+	pub colon:  ast_token::Colon,
 	#[format(prefix_ws = Whitespace::PRESERVE)]
 	pub spec:   MacroFragSpec,
 }
@@ -147,7 +147,7 @@ pub enum MacroMatchDollarIdentInner {
 	Raw(RawIdentifier),
 	#[parse(with_tag = ParserTag::SkipTokenCrate)]
 	IdentOrKw(IdentifierOrKeyword),
-	Underscore(token::Underscore),
+	Underscore(ast_token::Underscore),
 }
 
 /// `MacroFragSpec`
@@ -155,28 +155,28 @@ pub enum MacroMatchDollarIdentInner {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub enum MacroFragSpec {
-	Block(token::Block),
-	Expr(token::Expr),
-	Expr2021(token::Expr2021),
-	Ident(token::Ident),
-	Item(token::Item),
-	Lifetime(token::Lifetime),
-	Literal(token::Literal),
-	Meta(token::Meta),
-	Pat(token::Pat),
-	PatParam(token::PatParam),
-	Path(token::Path),
-	Stmt(token::Stmt),
-	Tt(token::Tt),
-	Ty(token::Ty),
-	Vis(token::Vis),
+	Block(ast_token::Block),
+	Expr(ast_token::Expr),
+	Expr2021(ast_token::Expr2021),
+	Ident(ast_token::Ident),
+	Item(ast_token::Item),
+	Lifetime(ast_token::Lifetime),
+	Literal(ast_token::Literal),
+	Meta(ast_token::Meta),
+	Pat(ast_token::Pat),
+	PatParam(ast_token::PatParam),
+	Path(ast_token::Path),
+	Stmt(ast_token::Stmt),
+	Tt(ast_token::Tt),
+	Ty(ast_token::Ty),
+	Vis(ast_token::Vis),
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct MacroMatchDollarRep {
-	pub dollar:  token::Dollar,
+	pub dollar:  ast_token::Dollar,
 	#[format(prefix_ws = Whitespace::PRESERVE)]
 	#[format(args = delimited::fmt_preserve())]
 	pub matches: Parenthesized<MacroMatchDollarRepMatches>,
@@ -212,9 +212,9 @@ pub struct MacroRepSep(
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub enum MacroRepOp {
-	Star(token::Star),
-	Plus(token::Plus),
-	Question(token::Question),
+	Star(ast_token::Star),
+	Plus(ast_token::Plus),
+	Question(ast_token::Question),
 }
 
 /// `MacroTranscriber`

@@ -4,7 +4,7 @@
 use {
 	crate::{expr::Expression, ty::Type},
 	super::function::ItemSafety,
-	ast_literal::{Identifier, token},
+	ast_literal::Identifier,
 	format::{Format, Formattable, WhitespaceFormat},
 	parse::Parse,
 	print::Print,
@@ -18,26 +18,26 @@ use {
 pub struct StaticItem {
 	pub safety:  Option<ItemSafety>,
 	#[format(prefix_ws(expr = Whitespace::SINGLE, if_ = self.safety.is_some()))]
-	pub static_: token::Static,
+	pub static_: ast_token::Static,
 	#[format(prefix_ws = Whitespace::SINGLE)]
-	pub mut_:    Option<token::Mut>,
+	pub mut_:    Option<ast_token::Mut>,
 	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub ident:   Identifier,
 	#[format(prefix_ws = Whitespace::REMOVE)]
-	pub colon:   token::Colon,
+	pub colon:   ast_token::Colon,
 	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub ty:      Type,
 	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub value:   Option<StaticItemValue>,
 	#[format(prefix_ws = Whitespace::REMOVE)]
-	pub semi:    token::Semi,
+	pub semi:    ast_token::Semi,
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct StaticItemValue {
-	pub eq:    token::Eq,
+	pub eq:    ast_token::Eq,
 	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub value: Expression,
 }

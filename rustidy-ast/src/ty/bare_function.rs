@@ -8,7 +8,7 @@ use {
 		util::Parenthesized,
 	},
 	super::{Type, TypeNoBounds},
-	ast_literal::{Identifier, token},
+	ast_literal::Identifier,
 	ast_util::{Punctuated, PunctuatedTrailing, delimited, punct},
 	format::{Format, Formattable, WhitespaceFormat},
 	parse::Parse,
@@ -30,7 +30,7 @@ pub struct BareFunctionType {
 			|qualifiers| qualifiers.unsafe_.is_some() || qualifiers.extern_.is_some()
 		)
 	))]
-	pub fn_:           token::Fn,
+	pub fn_:           ast_token::Fn,
 	#[parse(fatal)]
 	#[format(prefix_ws = Whitespace::REMOVE)]
 	#[format(args = delimited::FmtRemove)]
@@ -44,7 +44,7 @@ pub struct BareFunctionType {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct FunctionTypeQualifiers {
-	pub unsafe_: Option<token::Unsafe>,
+	pub unsafe_: Option<ast_token::Unsafe>,
 	#[format(prefix_ws(expr = Whitespace::SINGLE, if_ = self.unsafe_.is_some()))]
 	pub extern_: Option<ExternAbi>,
 }
@@ -64,7 +64,7 @@ pub enum FunctionParametersMaybeNamedVariadic {
 #[derive(Parse, Formattable, Format, Print)]
 pub struct MaybeNamedFunctionParameters(
 	#[format(args = punct::fmt(Whitespace::SINGLE, Whitespace::REMOVE))]
-	PunctuatedTrailing<MaybeNamedParam, token::Comma>,
+	PunctuatedTrailing<MaybeNamedParam, ast_token::Comma>,
 );
 
 /// `MaybeNamedParam`
@@ -91,7 +91,7 @@ pub struct MaybeNamedParamInner {
 pub struct MaybeNamedParamInnerName {
 	pub inner: MaybeNamedParamInnerNameInner,
 	#[format(prefix_ws = Whitespace::REMOVE)]
-	pub colon: token::Colon,
+	pub colon: ast_token::Colon,
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]
@@ -99,7 +99,7 @@ pub struct MaybeNamedParamInnerName {
 #[derive(Parse, Formattable, Format, Print)]
 pub enum MaybeNamedParamInnerNameInner {
 	Ident(Identifier),
-	Underscore(token::Underscore),
+	Underscore(ast_token::Underscore),
 }
 
 /// `MaybeNamedFunctionParametersVariadic`
@@ -111,12 +111,12 @@ pub struct MaybeNamedFunctionParametersVariadic {
 	//       the reference demands at least 1 argument, should
 	//       we allow it?
 	#[format(args = punct::fmt(Whitespace::SINGLE, Whitespace::REMOVE))]
-	pub params:   Punctuated<MaybeNamedParam, token::Comma>,
+	pub params:   Punctuated<MaybeNamedParam, ast_token::Comma>,
 	#[format(prefix_ws = Whitespace::REMOVE)]
-	pub comma:    token::Comma,
+	pub comma:    ast_token::Comma,
 	#[format(prefix_ws = Whitespace::SINGLE)]
 	#[format(args = attr::with::fmt(Whitespace::SINGLE))]
-	pub variadic: WithOuterAttributes<token::DotDotDot>,
+	pub variadic: WithOuterAttributes<ast_token::DotDotDot>,
 }
 
 /// `BareFunctionReturnType`
@@ -124,7 +124,7 @@ pub struct MaybeNamedFunctionParametersVariadic {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct BareFunctionReturnType {
-	pub arrow: token::RArrow,
+	pub arrow: ast_token::RArrow,
 	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub ty:    Box<TypeNoBounds>,
 }

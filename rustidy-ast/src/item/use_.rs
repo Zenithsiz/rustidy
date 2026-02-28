@@ -3,13 +3,13 @@
 // Imports
 use {
 	crate::{path::{SimplePath, SimplePathSegment}, util::Braced},
-	ast_literal::{Identifier, token},
+	ast_literal::Identifier,
 	ast_util::{Punctuated, PunctuatedTrailing, delimited, punct::{self, PunctuatedRest}},
 	format::{Format, FormatOutput, Formattable, WhitespaceConfig, WhitespaceFormat},
 	parse::Parse,
 	print::Print,
-	util::Whitespace,
 	std::{borrow::Cow, cmp},
+	util::Whitespace,
 };
 
 /// `UseDeclaration`
@@ -18,12 +18,12 @@ use {
 #[derive(Parse, Formattable, Format, Print)]
 #[parse(name = "use declaration")]
 pub struct UseDeclaration {
-	pub use_: token::Use,
+	pub use_: ast_token::Use,
 	#[parse(fatal)]
 	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub tree: UseTree,
 	#[format(prefix_ws = Whitespace::REMOVE)]
-	pub semi: token::Semi,
+	pub semi: ast_token::Semi,
 }
 
 impl UseDeclaration {
@@ -85,7 +85,7 @@ impl UseTree {
 pub struct UseTreeGlob {
 	pub prefix: Option<UseTreeGlobPrefix>,
 	#[format(prefix_ws(expr = Whitespace::REMOVE, if_ = self.prefix.is_some()))]
-	pub glob:   token::Star,
+	pub glob:   ast_token::Star,
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]
@@ -94,7 +94,7 @@ pub struct UseTreeGlob {
 pub struct UseTreeGlobPrefix {
 	pub path: Option<SimplePath>,
 	#[format(prefix_ws(expr = Whitespace::REMOVE, if_ = self.path.is_some()))]
-	pub sep:  token::PathSep,
+	pub sep:  ast_token::PathSep,
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]
@@ -106,7 +106,7 @@ pub struct UseTreeGroup {
 	pub prefix: Option<UseTreeGroupPrefix>,
 	#[format(prefix_ws(expr = Whitespace::REMOVE, if_ = self.prefix.is_some()))]
 	#[format(with = Self::format_tree)]
-	pub tree:   Braced<Option<PunctuatedTrailing<Box<UseTree>, token::Comma>>>,
+	pub tree:   Braced<Option<PunctuatedTrailing<Box<UseTree>, ast_token::Comma>>>,
 }
 
 impl UseTreeGroup {
@@ -241,7 +241,7 @@ impl UseTreeGroup {
 
 		#[expect(clippy::borrowed_box, reason = "It's necessary for the closure")]
 		trees.sort_values_by_key(
-			for<'a> |tree: &'a Box<UseTree>, _: Option<&'a token::Comma>| -> SortOrder<'a> {
+			for<'a> |tree: &'a Box<UseTree>, _: Option<&'a ast_token::Comma>| -> SortOrder<'a> {
 				match &**tree {
 					UseTree::Glob(_) => SortOrder::Glob,
 					UseTree::Group(tree) => match &tree.prefix {
@@ -262,11 +262,11 @@ impl UseTreeGroup {
 		replace_with::replace_with_or_abort(&mut self.tree.value, |trees| {
 			let mut trees = trees?;
 			let mut trees_first = Some(PunctuatedRest {
-				punct: token::Comma::new(),
+				punct: ast_token::Comma::new(),
 				value: trees.punctuated.first,
 			});
 			let mut sub_trees = vec![];
-			let mut new_trees: Vec<PunctuatedRest<_, token::Comma>> = vec![];
+			let mut new_trees: Vec<PunctuatedRest<_, ast_token::Comma>> = vec![];
 			let mut trailing_comma = trees.trailing;
 
 			// Note: We process the trees backwards to ensure that we always have
@@ -325,7 +325,7 @@ impl UseTreeGroup {
 	}
 
 	fn format_tree_compact(
-		tree: &mut Braced<Option<PunctuatedTrailing<Box<UseTree>, token::Comma>>>,
+		tree: &mut Braced<Option<PunctuatedTrailing<Box<UseTree>, ast_token::Comma>>>,
 		ctx: &mut format::Context,
 		prefix_ws: WhitespaceConfig,
 	) -> FormatOutput {
@@ -346,7 +346,7 @@ impl UseTreeGroup {
 	}
 
 	fn format_tree(
-		tree: &mut Braced<Option<PunctuatedTrailing<Box<UseTree>, token::Comma>>>,
+		tree: &mut Braced<Option<PunctuatedTrailing<Box<UseTree>, ast_token::Comma>>>,
 		ctx: &mut format::Context,
 		prefix_ws: WhitespaceConfig,
 		_args: (),
@@ -359,7 +359,7 @@ impl UseTreeGroup {
 		match compact_output.len_without_prefix_ws() > ctx.config().max_use_tree_len {
 			true => {
 				if let Some(punct) = &mut tree.value && punct.trailing.is_none() {
-					punct.trailing = Some(token::Comma::new());
+					punct.trailing = Some(ast_token::Comma::new());
 				}
 
 				tree.format(
@@ -384,7 +384,7 @@ impl UseTreeGroup {
 pub struct UseTreeGroupPrefix {
 	pub path: Option<SimplePath>,
 	#[format(prefix_ws(expr = Whitespace::REMOVE, if_ = self.path.is_some()))]
-	pub sep:  token::PathSep,
+	pub sep:  ast_token::PathSep,
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]
@@ -400,7 +400,7 @@ pub struct UseTreeSimple {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct UseTreeSimpleAs {
-	pub as_:   token::As,
+	pub as_:   ast_token::As,
 	#[parse(fatal)]
 	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub value: UseTreeSimpleAsValue,
@@ -411,5 +411,5 @@ pub struct UseTreeSimpleAs {
 #[derive(Parse, Formattable, Format, Print)]
 pub enum UseTreeSimpleAsValue {
 	Ident(Identifier),
-	Underscore(token::Underscore),
+	Underscore(ast_token::Underscore),
 }

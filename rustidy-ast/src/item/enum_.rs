@@ -12,7 +12,7 @@ use {
 		function::{GenericParams, WhereClause},
 		struct_::{StructFields, TupleFields, TupleStruct},
 	},
-	ast_literal::{Identifier, token},
+	ast_literal::Identifier,
 	ast_util::{PunctuatedTrailing, delimited, punct},
 	format::{Format, Formattable, WhitespaceFormat},
 	parse::Parse,
@@ -25,7 +25,7 @@ use {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct Enumeration {
-	pub enum_:    token::Enum,
+	pub enum_:    ast_token::Enum,
 	#[parse(fatal)]
 	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub ident:    Identifier,
@@ -44,7 +44,7 @@ pub struct Enumeration {
 #[derive(Parse, Formattable, Format, Print)]
 pub struct EnumVariants(
 	#[format(args = punct::fmt(Whitespace::INDENT, Whitespace::REMOVE))]
-	pub PunctuatedTrailing<EnumVariant, token::Comma>,
+	pub PunctuatedTrailing<EnumVariant, ast_token::Comma>,
 );
 
 /// `EnumVariant`
@@ -104,7 +104,7 @@ pub struct EnumVariantStruct(
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct EnumVariantDiscriminant {
-	pub eq:   token::Eq,
+	pub eq:   ast_token::Eq,
 	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub expr: Expression,
 }

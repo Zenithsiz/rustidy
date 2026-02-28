@@ -3,7 +3,7 @@
 // Imports
 use {
 	crate::{attr::DelimTokenTree, path::SimplePath},
-	ast_literal::token,
+
 	format::{Format, Formattable, WhitespaceFormat},
 	parse::Parse,
 	print::Print,
@@ -18,7 +18,7 @@ use {
 pub struct MacroInvocation {
 	pub path: SimplePath,
 	#[format(prefix_ws = Whitespace::REMOVE)]
-	pub not:  token::Not,
+	pub not:  ast_token::Not,
 	#[format(prefix_ws = match self.tree {
 		DelimTokenTree::Braces(_) => Whitespace::SINGLE,
 		_ => Whitespace::REMOVE,

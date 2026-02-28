@@ -11,7 +11,7 @@ pub use self::{block::BlockExpression, match_::{MatchExpression, Scrutinee}};
 use {
 	crate::{attr::{self, WithOuterAttributes}, pat::Pattern},
 	super::Expression,
-	ast_literal::{LifetimeOrLabel, token},
+	ast_literal::LifetimeOrLabel,
 	ast_util::{Longest, Punctuated, punct},
 	format::{Format, Formattable, WhitespaceFormat},
 	parse::{ParsableFrom, Parse, ParserTag},
@@ -47,7 +47,7 @@ pub enum ExpressionWithBlockInner {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct ConstBlockExpression {
-	pub const_: token::Const,
+	pub const_: ast_token::Const,
 	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub expr:   BlockExpression,
 }
@@ -57,7 +57,7 @@ pub struct ConstBlockExpression {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct UnsafeBlockExpression {
-	pub unsafe_: token::Unsafe,
+	pub unsafe_: ast_token::Unsafe,
 	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub expr:    BlockExpression,
 }
@@ -67,7 +67,7 @@ pub struct UnsafeBlockExpression {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct TryBlockExpression {
-	pub try_: token::Try,
+	pub try_: ast_token::Try,
 	#[parse(fatal)]
 	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub expr: BlockExpression,
@@ -79,7 +79,7 @@ pub struct TryBlockExpression {
 #[derive(Parse, Formattable, Format, Print)]
 #[parse(name = "an if expression")]
 pub struct IfExpression {
-	pub if_:        token::If,
+	pub if_:        ast_token::If,
 	#[parse(fatal)]
 	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub conditions: Conditions,
@@ -93,7 +93,7 @@ pub struct IfExpression {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct IfExpressionElse {
-	pub else_: token::Else,
+	pub else_: ast_token::Else,
 	#[parse(fatal)]
 	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub inner: IfExpressionElseInner,
@@ -141,7 +141,7 @@ pub struct ConditionsExpr(
 #[derive(Parse, Formattable, Format, Print)]
 pub struct LetChain(
 	#[format(args = punct::fmt(Whitespace::SINGLE, Whitespace::SINGLE))]
-	pub Punctuated<LetChainCondition, token::AndAnd>,
+	pub Punctuated<LetChainCondition, ast_token::AndAnd>,
 );
 
 /// `LetChainCondition`
@@ -166,12 +166,12 @@ pub enum LetChainCondition {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct LetChainConditionLet {
-	pub let_:      token::Let,
+	pub let_:      ast_token::Let,
 	#[parse(fatal)]
 	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub pat:       Pattern,
 	#[format(prefix_ws = Whitespace::SINGLE)]
-	pub eq:        token::Eq,
+	pub eq:        ast_token::Eq,
 	#[parse(with_tag = ParserTag::SkipStructExpression)]
 	#[parse(with_tag = ParserTag::SkipLazyBooleanExpression)]
 	#[parse(with_tag = ParserTag::SkipRangeExpr)]
@@ -201,7 +201,7 @@ pub struct LoopExpression {
 pub struct LoopLabel {
 	pub lifetime: LifetimeOrLabel,
 	#[format(prefix_ws = Whitespace::REMOVE)]
-	pub colon:    token::Colon,
+	pub colon:    ast_token::Colon,
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]
@@ -219,11 +219,11 @@ pub enum LoopExpressionInner {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct IteratorLoopExpression {
-	pub for_: token::For,
+	pub for_: ast_token::For,
 	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub pat:  Pattern,
 	#[format(prefix_ws = Whitespace::SINGLE)]
-	pub in_:  token::In,
+	pub in_:  ast_token::In,
 	#[parse(with_tag = ParserTag::SkipStructExpression)]
 	#[parse(with_tag = ParserTag::SkipOptionalTrailingBlockExpression)]
 	#[format(prefix_ws = Whitespace::SINGLE)]
@@ -237,7 +237,7 @@ pub struct IteratorLoopExpression {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct PredicateLoopExpression {
-	pub for_: token::While,
+	pub for_: ast_token::While,
 	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub cond: Conditions,
 	#[format(prefix_ws = Whitespace::SINGLE)]
@@ -249,7 +249,7 @@ pub struct PredicateLoopExpression {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct InfiniteLoopExpression {
-	pub loop_: token::Loop,
+	pub loop_: ast_token::Loop,
 	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub body:  BlockExpression,
 }

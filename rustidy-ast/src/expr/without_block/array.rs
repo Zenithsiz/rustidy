@@ -3,7 +3,7 @@
 // Imports
 use {
 	crate::{expr::Expression, util::{Bracketed, FmtRemoveOrIndent}},
-	ast_literal::token,
+
 	ast_util::{delimited, punct::{self, PunctuatedTrailing}},
 	format::{Format, FormatOutput, Formattable, WhitespaceConfig, WhitespaceFormat},
 	parse::Parse,
@@ -43,12 +43,12 @@ pub enum ArrayElements {
 	Repeat(ArrayElementsRepeat),
 	#[format(with = Self::format_punctuated)]
 	#[format(args = args)]
-	Punctuated(PunctuatedTrailing<Expression, token::Comma>),
+	Punctuated(PunctuatedTrailing<Expression, ast_token::Comma>),
 }
 
 impl ArrayElements {
 	pub fn format_punctuated(
-		values: &mut PunctuatedTrailing<Expression, token::Comma>,
+		values: &mut PunctuatedTrailing<Expression, ast_token::Comma>,
 		ctx: &mut format::Context,
 		prefix_ws: WhitespaceConfig,
 		args: FmtRemoveOrIndent
@@ -74,7 +74,7 @@ impl ArrayElements {
 pub struct ArrayElementsRepeat {
 	pub expr:  Expression,
 	#[format(prefix_ws = Whitespace::REMOVE)]
-	pub semi:  token::Semi,
+	pub semi:  ast_token::Semi,
 	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub count: Expression,
 }

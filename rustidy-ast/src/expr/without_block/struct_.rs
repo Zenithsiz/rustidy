@@ -4,7 +4,7 @@
 use {
 	crate::{attr::{self, WithOuterAttributes}, expr::Expression, util::Braced},
 	super::{TupleIndex, path::PathInExpression},
-	ast_literal::{Identifier, token},
+	ast_literal::Identifier,
 	ast_util::{Punctuated, delimited, punct},
 	format::{Format, Formattable, WhitespaceConfig, WhitespaceFormat},
 	parse::{Parse, ParserTag},
@@ -51,7 +51,7 @@ pub struct StructExprFields {
 		args,
 		()
 	))]
-	pub fields: Punctuated<StructExprField, token::Comma>,
+	pub fields: Punctuated<StructExprField, ast_token::Comma>,
 	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub end:    Option<StructExprFieldsEnd>,
 }
@@ -66,14 +66,14 @@ pub struct StructExprFieldsFmt {
 #[derive(Parse, Formattable, Format, Print)]
 pub enum StructExprFieldsEnd {
 	Base(StructExprFieldsEndBase),
-	TrailingComma(token::Comma),
+	TrailingComma(ast_token::Comma),
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct StructExprFieldsEndBase {
-	pub comma: token::Comma,
+	pub comma: ast_token::Comma,
 	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub base:  StructBase,
 }
@@ -102,7 +102,7 @@ pub enum StructExprFieldInner {
 pub struct StructExprFieldInnerWithExpr {
 	pub start: StructExprFieldInnerWithExprStart,
 	#[format(prefix_ws = Whitespace::REMOVE)]
-	pub colon: token::Colon,
+	pub colon: ast_token::Colon,
 	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub expr:  Expression,
 }
@@ -120,7 +120,7 @@ pub enum StructExprFieldInnerWithExprStart {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct StructBase {
-	pub dot_dot: token::DotDot,
+	pub dot_dot: ast_token::DotDot,
 	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub expr:    Expression,
 }

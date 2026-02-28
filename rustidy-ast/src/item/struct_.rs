@@ -10,7 +10,7 @@ use {
 		vis::Visibility,
 	},
 	super::function::{GenericParams, WhereClause},
-	ast_literal::{Identifier, token},
+	ast_literal::Identifier,
 	ast_util::{PunctuatedTrailing, delimited, punct},
 	format::{Format, FormatOutput, Formattable, WhitespaceConfig, WhitespaceFormat},
 	parse::Parse,
@@ -32,7 +32,7 @@ pub enum Struct {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct StructStruct {
-	pub struct_:  token::Struct,
+	pub struct_:  ast_token::Struct,
 	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub ident:    Identifier,
 	#[format(prefix_ws = Whitespace::REMOVE)]
@@ -53,7 +53,7 @@ pub struct StructStruct {
 pub enum StructStructInner {
 	#[format(args = delimited::fmt_indent_if_non_blank())]
 	Fields(Braced<Option<StructFields>>),
-	Semi(token::Semi),
+	Semi(ast_token::Semi),
 }
 
 /// `StructFields`
@@ -72,7 +72,7 @@ pub struct StructFields(#[format(args = {
 		StructFieldInnerArgs { max_ident_len },
 		()
 	)
-})] PunctuatedTrailing<StructField, token::Comma>);
+})] PunctuatedTrailing<StructField, ast_token::Comma>);
 
 /// `StructField`
 #[derive(PartialEq, Eq, Clone, Debug)]
@@ -93,7 +93,7 @@ pub struct StructFieldInner {
 	#[format(prefix_ws(expr = Whitespace::SINGLE, if_ = self.vis.is_some()))]
 	pub ident: Identifier,
 	#[format(prefix_ws = Whitespace::REMOVE)]
-	pub colon: token::Colon,
+	pub colon: ast_token::Colon,
 	#[format(prefix_ws = {
 		let ident_len = self.ident.non_ws_len();
 		let ty_prefix_ws_len = 1 + args.max_ident_len - ident_len;
@@ -114,7 +114,7 @@ struct StructFieldInnerArgs {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct StructFieldEq {
-	pub eq:   token::Eq,
+	pub eq:   ast_token::Eq,
 	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub expr: Expression,
 }
@@ -124,7 +124,7 @@ pub struct StructFieldEq {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct TupleStruct {
-	pub struct_:  token::Struct,
+	pub struct_:  ast_token::Struct,
 	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub ident:    Identifier,
 	#[format(prefix_ws = Whitespace::REMOVE)]
@@ -136,7 +136,7 @@ pub struct TupleStruct {
 	#[format(prefix_ws = Whitespace::INDENT)]
 	pub where_:   Option<WhereClause>,
 	#[format(prefix_ws = Whitespace::REMOVE)]
-	pub semi:     token::Semi,
+	pub semi:     ast_token::Semi,
 }
 
 impl TupleStruct {
@@ -158,7 +158,7 @@ impl TupleStruct {
 			true => output,
 			false => {
 				if let Some(fields) = &mut fields.value && fields.0.trailing.is_none() {
-					fields.0.trailing = Some(token::Comma::new());
+					fields.0.trailing = Some(ast_token::Comma::new());
 				}
 
 				fields.format(
@@ -185,7 +185,7 @@ pub struct TupleFields(
 		args,
 		()
 	))]
-	pub PunctuatedTrailing<TupleField, token::Comma>,
+	pub PunctuatedTrailing<TupleField, ast_token::Comma>,
 );
 
 #[derive(Clone, Copy, Debug)]

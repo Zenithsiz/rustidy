@@ -2,15 +2,15 @@
 
 // Imports
 use {
+	ast_literal::Identifier,
+	ast_util::{Punctuated, punct},
 	core::fmt::Debug,
 	either::Either,
-	ast_literal::{Identifier, token},
-	ast_util::{Punctuated, punct},
 	format::{Format, Formattable, WhitespaceFormat},
 	parse::Parse,
 	print::Print,
-	util::Whitespace,
 	std::borrow::Cow,
+	util::Whitespace,
 };
 
 /// `SimplePath`
@@ -19,10 +19,10 @@ use {
 #[derive(Parse, Formattable, Format, Print)]
 #[parse(name = "a simple path")]
 pub struct SimplePath {
-	pub prefix:   Option<token::PathSep>,
+	pub prefix:   Option<ast_token::PathSep>,
 	#[format(prefix_ws(expr = Whitespace::REMOVE, if_ = self.prefix.is_some()))]
 	#[format(args = punct::fmt(Whitespace::REMOVE, Whitespace::REMOVE))]
-	pub segments: Punctuated<SimplePathSegment, token::PathSep>,
+	pub segments: Punctuated<SimplePathSegment, ast_token::PathSep>,
 }
 
 impl SimplePath {
@@ -91,10 +91,10 @@ impl SimplePath {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub enum SimplePathSegment {
-	Super(token::Super),
-	SelfLower(token::SelfLower),
-	Crate(token::Crate),
-	DollarCrate(token::DollarCrate),
+	Super(ast_token::Super),
+	SelfLower(ast_token::SelfLower),
+	Crate(ast_token::Crate),
+	DollarCrate(ast_token::DollarCrate),
 	Ident(Identifier),
 }
 

@@ -3,7 +3,7 @@
 use {
 	crate::expr::{Expression, ExpressionInner},
 	super::{ExpressionWithoutBlockInner, TupleIndex},
-	ast_literal::token,
+
 	format::{Format, Formattable, WhitespaceFormat},
 	parse::ParseRecursive,
 	print::Print,
@@ -20,7 +20,7 @@ use {
 pub struct TupleIndexingExpression {
 	pub expr:  Expression,
 	#[format(prefix_ws = Whitespace::REMOVE)]
-	pub dot:   token::Dot,
+	pub dot:   ast_token::Dot,
 	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub ident: TupleIndex,
 }

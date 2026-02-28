@@ -4,7 +4,7 @@
 use {
 	crate::{expr::Expression, util::Bracketed},
 	super::Type,
-	ast_literal::token,
+
 	ast_util::delimited,
 	format::{Format, Formattable, WhitespaceFormat},
 	parse::Parse,
@@ -24,7 +24,7 @@ pub struct ArrayType(#[format(args = delimited::FmtRemove)] Bracketed<ArrayTypeI
 pub struct ArrayTypeInner {
 	pub ty:   Box<Type>,
 	#[format(prefix_ws = Whitespace::REMOVE)]
-	pub semi: token::Semi,
+	pub semi: ast_token::Semi,
 	#[format(prefix_ws = Whitespace::SINGLE)]
 	pub expr: Expression,
 }

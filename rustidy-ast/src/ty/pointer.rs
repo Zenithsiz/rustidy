@@ -3,7 +3,7 @@
 // Imports
 use {
 	super::TypeNoBounds,
-	ast_literal::token,
+
 	format::{Format, Formattable, WhitespaceFormat},
 	parse::Parse,
 	print::Print,
@@ -15,7 +15,7 @@ use {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct RawPointerType {
-	pub star: token::Star,
+	pub star: ast_token::Star,
 	#[format(prefix_ws = Whitespace::REMOVE)]
 	pub kind: RawPointerTypeKind,
 	#[format(prefix_ws = Whitespace::SINGLE)]
@@ -26,6 +26,6 @@ pub struct RawPointerType {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub enum RawPointerTypeKind {
-	Const(token::Const),
-	Mut(token::Mut),
+	Const(ast_token::Const),
+	Mut(ast_token::Mut),
 }
