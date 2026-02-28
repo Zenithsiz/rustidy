@@ -4,11 +4,11 @@
 use {
 	crate::{attr::{self, BracedWithInnerAttributes}, ty::{Type, TypePath}},
 	super::{function::{GenericParams, WhereClause}, trait_::AssociatedItem},
-	rustidy_ast_literal::token,
-	rustidy_format::{Format, Formattable, WhitespaceFormat},
-	rustidy_parse::Parse,
-	rustidy_print::Print,
-	rustidy_util::Whitespace,
+	ast_literal::token,
+	format::{Format, Formattable, WhitespaceFormat},
+	parse::Parse,
+	print::Print,
+	util::Whitespace,
 };
 
 /// `Implementation`
@@ -73,6 +73,6 @@ pub struct TraitImpl {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct ImplBody(
-	#[format(args = rustidy_format::vec::args_prefix_ws(Whitespace::INDENT))]
+	#[format(args = format::vec::args_prefix_ws(Whitespace::INDENT))]
 	pub Vec<AssociatedItem>,
 );

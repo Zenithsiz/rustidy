@@ -8,9 +8,9 @@
 
 // Imports
 use {
-	rustidy_ast::{Crate, expr::Expression},
-	rustidy_parse::{Parse, ParseError, Parser, ParserError},
-	rustidy_util::{AstPos, Whitespace},
+	ast::{Crate, expr::Expression},
+	parse::{Parse, ParseError, Parser, ParserError},
+	util::{AstPos, Whitespace},
 	test::Bencher,
 };
 extern crate test;

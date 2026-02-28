@@ -4,11 +4,11 @@
 use {
 	crate::expr::{Expression, ExpressionInner},
 	super::ExpressionWithoutBlockInner,
-	rustidy_ast_literal::token,
-	rustidy_format::{Format, Formattable, WhitespaceFormat},
-	rustidy_parse::ParseRecursive,
-	rustidy_print::Print,
-	rustidy_util::Whitespace,
+	ast_literal::token,
+	format::{Format, Formattable, WhitespaceFormat},
+	parse::ParseRecursive,
+	print::Print,
+	util::Whitespace,
 };
 
 /// `AwaitExpression`

@@ -3,12 +3,12 @@
 // Imports
 use {
 	crate::{expr::Expression, path::SimplePath, util::Parenthesized},
-	rustidy_ast_literal::token,
-	rustidy_ast_util::{Longest, PunctuatedTrailing, delimited, punct},
-	rustidy_format::{Format, Formattable, WhitespaceConfig, WhitespaceFormat},
-	rustidy_parse::{ParsableFrom, Parse},
-	rustidy_print::Print,
-	rustidy_util::Whitespace,
+	ast_literal::token,
+	ast_util::{Longest, PunctuatedTrailing, delimited, punct},
+	format::{Format, Formattable, WhitespaceConfig, WhitespaceFormat},
+	parse::{ParsableFrom, Parse},
+	print::Print,
+	util::Whitespace,
 };
 
 /// `MetaItem`

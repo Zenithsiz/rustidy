@@ -2,8 +2,8 @@
 
 // Imports
 use {
-	crate::{self as rustidy_parse, Parse, ParseError, Parser, ParserError, ParserTag},
-	rustidy_util::{
+	crate::{self as parse, Parse, ParseError, Parser, ParserError, ParserTag},
+	util::{
 		ArenaIdx,
 		whitespace::{
 			BlockComment,

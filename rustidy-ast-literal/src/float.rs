@@ -4,11 +4,11 @@
 use {
 	crate::SuffixNoE,
 	super::{Suffix, int::DecLiteral},
-	rustidy_format::{Format, Formattable, WhitespaceFormat},
-	rustidy_macros::ParseError,
-	rustidy_parse::{Parse, Parser, ParserError, ParserTag},
-	rustidy_print::Print,
-	rustidy_util::{AstStr, Whitespace},
+	format::{Format, Formattable, WhitespaceFormat},
+	macros::ParseError,
+	parse::{Parse, Parser, ParserError, ParserTag},
+	print::Print,
+	util::{AstStr, Whitespace},
 	std::fmt,
 };
 
@@ -22,7 +22,7 @@ pub struct FloatLiteral {
 	#[format(prefix_ws = ())]
 	pub int:      DecLiteral,
 	#[format(prefix_ws = Whitespace::REMOVE)]
-	pub dot:      Option<rustidy_ast_tokens::Dot>,
+	pub dot:      Option<ast_tokens::Dot>,
 	#[format(prefix_ws = ())]
 	pub frac:     Option<DecLiteral>,
 	#[format(prefix_ws = ())]
@@ -46,7 +46,7 @@ impl Parse for FloatLiteral {
 
 		let (dot, frac) = match parser.with_tag(
 			ParserTag::SkipWhitespace,
-			Parser::try_parse::<rustidy_ast_tokens::Dot>
+			Parser::try_parse::<ast_tokens::Dot>
 		)? {
 			Ok(dot) => match parser.try_parse::<DecLiteral>()? {
 				Ok(frac) => (Some(dot), Some(frac)),
@@ -88,7 +88,7 @@ pub enum FloatLiteralError {
 	#[parse_error(transparent)]
 	DecLiteral(ParserError<DecLiteral>),
 	#[parse_error(transparent)]
-	Dot(ParserError<rustidy_ast_tokens::Dot>),
+	Dot(ParserError<ast_tokens::Dot>),
 	#[parse_error(transparent)]
 	Suffix(ParserError<Suffix>),
 	#[parse_error(transparent)]

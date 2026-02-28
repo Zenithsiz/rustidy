@@ -23,15 +23,15 @@ pub use {
 		tag::{FormatTag, FormatTags},
 		whitespace::{WhitespaceFormat, WhitespaceFormatKind},
 	},
-	rustidy_macros::{Format, Formattable},
+	macros::{Format, Formattable},
 };
 
 // Imports
 use {
-	crate as rustidy_format,
+	crate as format,
 	arcstr::ArcStr,
 	core::{marker::PhantomData, ops::ControlFlow},
-	rustidy_util::{ArenaData, ArenaIdx, AstStr, Config, Oob, Whitespace},
+	util::{ArenaData, ArenaIdx, AstStr, Config, Oob, Whitespace},
 	std::borrow::Cow,
 };
 

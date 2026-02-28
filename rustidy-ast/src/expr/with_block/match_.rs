@@ -9,11 +9,11 @@ use {
 	},
 	super::Conditions,
 	core::ops::ControlFlow,
-	rustidy_ast_literal::token,
-	rustidy_format::{Format, Formattable, WhitespaceFormat},
-	rustidy_parse::{FromRecursiveRoot, Parse, ParseError, Parser, ParserError, ParserTag},
-	rustidy_print::Print,
-	rustidy_util::Whitespace,
+	ast_literal::token,
+	format::{Format, Formattable, WhitespaceFormat},
+	parse::{FromRecursiveRoot, Parse, ParseError, Parser, ParserError, ParserTag},
+	print::Print,
+	util::Whitespace,
 };
 
 /// `MatchExpression`
@@ -42,7 +42,7 @@ pub struct Scrutinee(#[parse(with_tag = ParserTag::SkipStructExpression)] Expres
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Formattable, Format, Print)]
 pub struct MatchArms {
-	#[format(args = rustidy_format::vec::args_prefix_ws(Whitespace::INDENT))]
+	#[format(args = format::vec::args_prefix_ws(Whitespace::INDENT))]
 	pub arms: Vec<MatchArmWithExpr>,
 }
 

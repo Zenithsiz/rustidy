@@ -2,10 +2,10 @@
 
 // Imports
 use {
-	rustidy_format::{Format, Formattable},
-	rustidy_parse::Parse,
-	rustidy_print::Print,
-	rustidy_util::AstStr,
+	format::{Format, Formattable},
+	parse::Parse,
+	print::Print,
+	util::AstStr,
 };
 
 /// `QUOTE_ESCAPE`
@@ -102,7 +102,7 @@ pub struct NonNulByteEscape(#[parse(try_update_with = Self::parse)] #[format(str
 
 impl NonNulByteEscape {
 	pub fn parse(s: &mut &str) -> Result<(), NonNulByteEscapeError> {
-		let s = rustidy_parse::parse_from_str(s, ByteEscape::parse)
+		let s = parse::parse_from_str(s, ByteEscape::parse)
 			.map_err(NonNulByteEscapeError::ByteEscape)?;
 		if s == "\\0" {
 			return Err(NonNulByteEscapeError::Nul);
@@ -157,7 +157,7 @@ pub struct NonNulUnicodeEscape(#[parse(try_update_with = Self::parse)] #[format(
 
 impl NonNulUnicodeEscape {
 	pub fn parse(s: &mut &str) -> Result<(), NonNulUnicodeEscapeError> {
-		let s = rustidy_parse::parse_from_str(s, UnicodeEscape::parse)
+		let s = parse::parse_from_str(s, UnicodeEscape::parse)
 			.map_err(NonNulUnicodeEscapeError::UnicodeEscape)?;
 		// TODO: This check should be done better
 		if s

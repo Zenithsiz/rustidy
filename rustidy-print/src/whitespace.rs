@@ -3,7 +3,7 @@
 // Imports
 use {
 	crate::Print,
-	rustidy_util::{
+	util::{
 		Whitespace,
 		whitespace::{BlockComment, Comment, LineComment, PureWhitespace, WhitespaceInner},
 	},

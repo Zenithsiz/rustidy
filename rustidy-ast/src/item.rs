@@ -46,12 +46,12 @@ use {
 	},
 	self::macro_rules::{MacroMatcherMatches, MacroRule},
 	itertools::Itertools,
-	rustidy_ast_literal::{Identifier, token},
-	rustidy_ast_util::{AtLeast1, PunctuatedTrailing, delimited, punct},
-	rustidy_format::{Format, Formattable, WhitespaceFormat},
-	rustidy_parse::Parse,
-	rustidy_print::Print,
-	rustidy_util::{ArenaIdx, Whitespace, decl_arena},
+	ast_literal::{Identifier, token},
+	ast_util::{AtLeast1, PunctuatedTrailing, delimited, punct},
+	format::{Format, Formattable, WhitespaceFormat},
+	parse::Parse,
+	print::Print,
+	util::{ArenaIdx, Whitespace, decl_arena},
 };
 
 #[derive(PartialEq, Eq, Clone, Debug)]
@@ -59,12 +59,12 @@ use {
 #[derive(Parse, Formattable, Format, Print)]
 #[format(before_with = Self::merge_use)]
 pub struct Items(
-	#[format(args = rustidy_ast_util::at_least::fmt_prefix_ws(Whitespace::INDENT))]
+	#[format(args = ast_util::at_least::fmt_prefix_ws(Whitespace::INDENT))]
 	pub AtLeast1<Item>,
 );
 
 impl Items {
-	pub fn merge_use(&mut self, ctx: &mut rustidy_format::Context) {
+	pub fn merge_use(&mut self, ctx: &mut format::Context) {
 		replace_with::replace_with_or_abort(&mut self.0, |items| {
 			let mut items = items
 				.into_iter()
@@ -123,7 +123,7 @@ impl Item {
 	#[expect(clippy::result_large_err, reason = "TODO")]
 	fn try_into_just_use_decl(
 		self,
-		ctx: &mut rustidy_format::Context,
+		ctx: &mut format::Context,
 		expected_vis: Option<&Visibility>,
 	) -> Result<UseDeclaration, Self> {
 		self.0.try_take_map(|mut item| {

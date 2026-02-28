@@ -6,9 +6,9 @@ use {
 		util::{FmtSingleOrIndent, Parenthesized},
 	},
 	super::{ExpressionWithoutBlockInner, path::PathExprSegment},
-	rustidy_ast_literal::token,
-	rustidy_ast_util::{PunctuatedTrailing, delimited, punct},
-	rustidy_format::{
+	ast_literal::token,
+	ast_util::{PunctuatedTrailing, delimited, punct},
+	format::{
 		Format,
 		FormatOutput,
 		FormatTag,
@@ -16,9 +16,9 @@ use {
 		WhitespaceConfig,
 		WhitespaceFormat,
 	},
-	rustidy_parse::{Parse, ParseRecursive},
-	rustidy_print::Print,
-	rustidy_util::Whitespace,
+	parse::{Parse, ParseRecursive},
+	print::Print,
+	util::Whitespace,
 };
 
 /// `CallExpression`
@@ -74,7 +74,7 @@ struct MethodCallExpressionFmt;
 impl Format<WhitespaceConfig, ()> for MethodCallExpression {
 	fn format(
 		&mut self,
-		ctx: &mut rustidy_format::Context,
+		ctx: &mut format::Context,
 		prefix_ws: WhitespaceConfig,
 		_args: ()
 	) -> FormatOutput {

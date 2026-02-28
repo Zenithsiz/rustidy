@@ -57,8 +57,8 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 				.iter()
 				.map(|variant| {
 					let variant_ident = &variant.ident;
-					let print = quote! { Self::#variant_ident(ref value) => rustidy_print::Print::print(value, f), };
-					let print_non_ws = quote! { Self::#variant_ident(ref value) => rustidy_print::Print::print_non_ws(value, f), };
+					let print = quote! { Self::#variant_ident(ref value) => print::Print::print(value, f), };
+					let print_non_ws = quote! { Self::#variant_ident(ref value) => print::Print::print_non_ws(value, f), };
 
 					(print, print_non_ws)
 				})
@@ -77,8 +77,8 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 				.enumerate()
 				.map(|(field_idx, field)| {
 					let field_ident = util::field_member_access(field_idx, field);
-					let print = quote! { rustidy_print::Print::print(&self.#field_ident, f); };
-					let print_non_ws = quote! { rustidy_print::Print::print_non_ws(&self.#field_ident, f); };
+					let print = quote! { print::Print::print(&self.#field_ident, f); };
+					let print_non_ws = quote! { print::Print::print_non_ws(&self.#field_ident, f); };
 
 					(print, print_non_ws)
 				}).collect::<(Vec<_>, Vec<_>)>();
@@ -92,18 +92,18 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 
 	let impl_generics = util::with_bounds(
 		&attrs,
-		|ty| parse_quote! { #ty: rustidy_print::Print }
+		|ty| parse_quote! { #ty: print::Print }
 	);
 	let (impl_generics, ty_generics, fmt_where_clause) = impl_generics.split_for_impl();
 	let output = quote! {
-		impl #impl_generics rustidy_print::Print for #item_ident #ty_generics #fmt_where_clause {
+		impl #impl_generics print::Print for #item_ident #ty_generics #fmt_where_clause {
 			#[coverage(on)]
-			fn print(&self, f: &mut rustidy_print::PrintFmt) {
+			fn print(&self, f: &mut print::PrintFmt) {
 				#print
 			}
 
 			#[coverage(on)]
-			fn print_non_ws(&self, f: &mut rustidy_print::PrintFmt) {
+			fn print_non_ws(&self, f: &mut print::PrintFmt) {
 				#print_non_ws
 			}
 		}

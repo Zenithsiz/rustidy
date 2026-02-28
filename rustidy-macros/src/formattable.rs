@@ -65,30 +65,30 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 
 	let impl_generics = util::with_bounds(
 		&attrs,
-		|ty| parse_quote! { #ty: rustidy_format::Formattable }
+		|ty| parse_quote! { #ty: format::Formattable }
 	);
 	let (impl_generics, ty_generics, impl_where_clause) = impl_generics.split_for_impl();
 	let output = quote! {
 		#[automatically_derived]
-		impl #impl_generics rustidy_format::Formattable for #item_ident #ty_generics #impl_where_clause {
+		impl #impl_generics format::Formattable for #item_ident #ty_generics #impl_where_clause {
 			fn with_prefix_ws<WITH_PREFIX_WS_O>(
 				&mut self,
-				ctx: &mut rustidy_format::Context,
-				f: &mut impl FnMut(&mut rustidy_util::Whitespace, &mut rustidy_format::Context) -> WITH_PREFIX_WS_O,
+				ctx: &mut format::Context,
+				f: &mut impl FnMut(&mut util::Whitespace, &mut format::Context) -> WITH_PREFIX_WS_O,
 			) -> Result<WITH_PREFIX_WS_O, std::ops::ControlFlow<()>> {
 				#with_prefix_ws
 			}
 
 			fn with_strings<WITH_STRINGS_O>(
 				&mut self,
-				ctx: &mut rustidy_format::Context,
+				ctx: &mut format::Context,
 				mut exclude_prefix_ws: bool,
-				f: &mut impl FnMut(&mut rustidy_util::AstStr, &mut rustidy_format::Context) -> std::ops::ControlFlow<WITH_STRINGS_O>,
+				f: &mut impl FnMut(&mut util::AstStr, &mut format::Context) -> std::ops::ControlFlow<WITH_STRINGS_O>,
 			) -> std::ops::ControlFlow<WITH_STRINGS_O, bool> {
 				#with_strings
 			}
 
-			fn format_output(&mut self, ctx: &mut rustidy_format::Context) -> rustidy_format::FormatOutput {
+			fn format_output(&mut self, ctx: &mut format::Context) -> format::FormatOutput {
 				#format_output
 			}
 		}
@@ -102,10 +102,10 @@ fn derive_enum(variants: &[VariantAttrs]) -> Impls<syn::Expr, syn::Expr, syn::Ex
 		.iter()
 		.map(|variant| {
 			let variant_ident = &variant.ident;
-			let with_strings = parse_quote! { Self::#variant_ident(ref mut value) => rustidy_format::Formattable::with_strings(value, ctx, exclude_prefix_ws, f), };
+			let with_strings = parse_quote! { Self::#variant_ident(ref mut value) => format::Formattable::with_strings(value, ctx, exclude_prefix_ws, f), };
 
-			let with_prefix_ws = parse_quote! { Self::#variant_ident(ref mut value) => rustidy_format::Formattable::with_prefix_ws(value, ctx, f), };
-			let format_output = parse_quote! { Self::#variant_ident(ref mut value) => rustidy_format::Formattable::format_output(value, ctx), };
+			let with_prefix_ws = parse_quote! { Self::#variant_ident(ref mut value) => format::Formattable::with_prefix_ws(value, ctx, f), };
+			let format_output = parse_quote! { Self::#variant_ident(ref mut value) => format::Formattable::format_output(value, ctx), };
 
 			Impls { with_strings, with_prefix_ws, format_output, }
 		})
@@ -141,7 +141,7 @@ fn derive_struct(fields: &darling::ast::Fields<FieldAttrs>) -> Impls<syn::Expr, 
 	}};
 
 	let format_output = parse_quote! {{
-		let mut output = rustidy_format::FormatOutput::default();
+		let mut output = format::FormatOutput::default();
 		#( #format_output; )*
 
 		output
@@ -154,7 +154,7 @@ fn derive_struct_field(field_idx: usize, field: &FieldAttrs) -> Impls<syn::Expr,
 	let field_ident = util::field_member_access(field_idx, field);
 
 	let with_strings = parse_quote! {{
-		is_empty &= rustidy_format::Formattable::with_strings(&mut self.#field_ident, ctx, exclude_prefix_ws, f)?;
+		is_empty &= format::Formattable::with_strings(&mut self.#field_ident, ctx, exclude_prefix_ws, f)?;
 
 		// If this field wasn't empty, then we no longer exclude the prefix ws, since
 		// we already excluded it here.
@@ -164,7 +164,7 @@ fn derive_struct_field(field_idx: usize, field: &FieldAttrs) -> Impls<syn::Expr,
 	}};
 
 	let with_prefix_ws = parse_quote! {
-		match rustidy_format::Formattable::with_prefix_ws(&mut self.#field_ident, ctx, f) {
+		match format::Formattable::with_prefix_ws(&mut self.#field_ident, ctx, f) {
 			Ok(value) => return Ok(value),
 			Err(std::ops::ControlFlow::Continue(())) => (),
 			Err(std::ops::ControlFlow::Break(())) => return Err(std::ops::ControlFlow::Break(())),
@@ -172,7 +172,7 @@ fn derive_struct_field(field_idx: usize, field: &FieldAttrs) -> Impls<syn::Expr,
 	};
 
 	let format_output = parse_quote! {
-		rustidy_format::Formattable::format_output(&mut self.#field_ident, ctx)
+		format::Formattable::format_output(&mut self.#field_ident, ctx)
 			.append_to(&mut output)
 	};
 

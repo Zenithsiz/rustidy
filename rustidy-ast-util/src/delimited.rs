@@ -2,10 +2,10 @@
 
 // Imports
 use {
-	rustidy_format::{Format, FormatOutput, Formattable, WhitespaceConfig, WhitespaceFormat},
-	rustidy_parse::Parse,
-	rustidy_print::Print,
-	rustidy_util::Whitespace,
+	format::{Format, FormatOutput, Formattable, WhitespaceConfig, WhitespaceFormat},
+	parse::Parse,
+	print::Print,
+	util::Whitespace,
 };
 
 /// A value `T` delimited by prefix `L` and suffix `R`
@@ -47,7 +47,7 @@ where
 	TArgs: Clone, {
 	fn format(
 		&mut self,
-		ctx: &mut rustidy_format::Context,
+		ctx: &mut format::Context,
 		prefix_ws: LPrefixWs,
 		args: FmtArgs<TPrefixWs, RPrefixWs, LArgs, TArgs, RArgs>,
 	) -> FormatOutput {
@@ -189,7 +189,7 @@ pub struct FmtRemoveWith<TArgs>(pub TArgs);
 impl<T: Format<WhitespaceConfig, TArgs>, L: Format<WhitespaceConfig, ()>, R: Format<WhitespaceConfig, ()>, TArgs> Format<WhitespaceConfig, FmtRemoveWith<TArgs>> for Delimited<T, L, R> {
 	fn format(
 		&mut self,
-		ctx: &mut rustidy_format::Context,
+		ctx: &mut format::Context,
 		prefix_ws: WhitespaceConfig,
 		args: FmtRemoveWith<TArgs>
 	) -> FormatOutput {
@@ -207,7 +207,7 @@ pub struct FmtRemove;
 impl<T: Format<WhitespaceConfig, ()>, L: Format<WhitespaceConfig, ()>, R: Format<WhitespaceConfig, ()>> Format<WhitespaceConfig, FmtRemove> for Delimited<T, L, R> {
 	fn format(
 		&mut self,
-		ctx: &mut rustidy_format::Context,
+		ctx: &mut format::Context,
 		prefix_ws: WhitespaceConfig,
 		_args: FmtRemove
 	) -> FormatOutput {
@@ -249,7 +249,7 @@ where
 	TArgs: Clone {
 	fn format(
 		&mut self,
-		ctx: &mut rustidy_format::Context,
+		ctx: &mut format::Context,
 		prefix_ws: WhitespaceConfig,
 		args: FmtArgsSingleOrIndentIfNonBlank<TArgs>
 	) -> FormatOutput {
@@ -304,7 +304,7 @@ where
 	TArgs: Clone {
 	fn format(
 		&mut self,
-		ctx: &mut rustidy_format::Context,
+		ctx: &mut format::Context,
 		prefix_ws: WhitespaceConfig,
 		args: FmtArgsRemoveOrIndentIfNonBlank<TArgs>
 	) -> FormatOutput {

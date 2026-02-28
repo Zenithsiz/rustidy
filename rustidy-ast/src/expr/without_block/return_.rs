@@ -3,11 +3,11 @@
 // Imports
 use {
 	crate::expr::Expression,
-	rustidy_ast_literal::token,
-	rustidy_format::{Format, Formattable, WhitespaceFormat},
-	rustidy_parse::{Parse, ParserTag},
-	rustidy_print::Print,
-	rustidy_util::Whitespace,
+	ast_literal::token,
+	format::{Format, Formattable, WhitespaceFormat},
+	parse::{Parse, ParserTag},
+	print::Print,
+	util::Whitespace,
 };
 
 /// `ReturnExpression`

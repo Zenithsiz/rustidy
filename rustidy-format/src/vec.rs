@@ -4,14 +4,14 @@
 use {
 	crate::{Context, Format, FormatOutput, Formattable},
 	core::ops::ControlFlow,
-	rustidy_util::AstStr,
+	util::AstStr,
 };
 
 impl<T: Formattable> Formattable for Vec<T> {
 	fn with_prefix_ws<O>(
 		&mut self,
 		ctx: &mut Context,
-		f: &mut impl FnMut(&mut rustidy_util::Whitespace,&mut Context) -> O,
+		f: &mut impl FnMut(&mut util::Whitespace,&mut Context) -> O,
 	) -> Result<O, ControlFlow<()>> {
 		for value in self {
 			match value.with_prefix_ws(ctx, f) {

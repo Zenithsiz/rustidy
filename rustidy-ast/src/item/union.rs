@@ -4,12 +4,12 @@
 use {
 	crate::util::Braced,
 	super::{function::{GenericParams, WhereClause}, struct_::StructFields},
-	rustidy_ast_literal::{Identifier, token},
-	rustidy_ast_util::delimited,
-	rustidy_format::{Format, Formattable, WhitespaceFormat},
-	rustidy_parse::Parse,
-	rustidy_print::Print,
-	rustidy_util::Whitespace,
+	ast_literal::{Identifier, token},
+	ast_util::delimited,
+	format::{Format, Formattable, WhitespaceFormat},
+	parse::Parse,
+	print::Print,
+	util::Whitespace,
 };
 
 /// `Union`

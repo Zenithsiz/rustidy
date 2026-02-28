@@ -3,9 +3,9 @@
 // Imports
 use {
 	itertools::chain,
-	rustidy_format::{Format, Formattable, WhitespaceConfig},
-	rustidy_parse::Parse,
-	rustidy_print::Print,
+	format::{Format, Formattable, WhitespaceConfig},
+	parse::Parse,
+	print::Print,
 };
 
 #[derive(PartialEq, Eq, Clone, Debug)]
@@ -16,7 +16,7 @@ use {
 pub struct AtLeast1<T> {
 	pub first: T,
 	#[format(prefix_ws = args.rest_prefix_ws)]
-	#[format(args = rustidy_format::vec::args_prefix_ws(args.rest_prefix_ws))]
+	#[format(args = format::vec::args_prefix_ws(args.rest_prefix_ws))]
 	pub rest:  Vec<T>,
 }
 

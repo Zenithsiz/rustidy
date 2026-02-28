@@ -190,7 +190,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 
 	let prefix_ws_ty: syn::Type = match attrs.no_prefix_ws {
 		true => parse_quote! { () },
-		false => parse_quote! { rustidy_format::WhitespaceConfig },
+		false => parse_quote! { format::WhitespaceConfig },
 	};
 
 	let args_ty = match &attrs.args {
@@ -210,15 +210,15 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 				darling::ast::Data::Enum(variants) => util::with_enum_bounds(generics, variants, |variant, field| {
 					let ty = &field.ty;
 					match variant.args.is_some() {
-						true => parse_quote! { #ty: rustidy_format::Formattable },
-						false => parse_quote! { #ty: rustidy_format::Format<#prefix_ws_ty, ()> },
+						true => parse_quote! { #ty: format::Formattable },
+						false => parse_quote! { #ty: format::Format<#prefix_ws_ty, ()> },
 					}
 				}),
 				darling::ast::Data::Struct(fields) => util::with_struct_bounds(generics, &fields.fields, |field| {
 					let ty = &field.ty;
 					match field.args.is_some() {
-						true => parse_quote! { #ty: rustidy_format::Formattable },
-						false => parse_quote! { #ty: rustidy_format::Format<#prefix_ws_ty, ()> },
+						true => parse_quote! { #ty: format::Formattable },
+						false => parse_quote! { #ty: format::Format<#prefix_ws_ty, ()> },
 					}
 				}),
 			}
@@ -240,9 +240,9 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 
 	let output = quote! {
 		#[automatically_derived]
-		impl #impl_generics rustidy_format::Format<#prefix_ws_ty, #args_ty> for #item_ident #ty_generics #impl_where_clause {
+		impl #impl_generics format::Format<#prefix_ws_ty, #args_ty> for #item_ident #ty_generics #impl_where_clause {
 			#[coverage(on)]
-			fn format(&mut self, ctx: &mut rustidy_format::Context, prefix_ws: #prefix_ws_ty, args: #args_ty) -> rustidy_format::FormatOutput {
+			fn format(&mut self, ctx: &mut format::Context, prefix_ws: #prefix_ws_ty, args: #args_ty) -> format::FormatOutput {
 				#format
 			}
 		}
@@ -305,7 +305,7 @@ fn derive_struct(attrs: &Attrs, fields: &darling::ast::Fields<FieldAttrs>) -> Re
 		});
 
 	Ok(parse_quote! {{
-		let mut output = rustidy_format::FormatOutput::default();
+		let mut output = format::FormatOutput::default();
 		let mut has_prefix_ws = true;
 		#( #format_fields; )*
 
@@ -347,7 +347,7 @@ fn derive_struct_field(attrs: &Attrs, field_idx: usize, field: &FieldAttrs) -> R
 							stringify!(#field_ident)
 						);
 
-						<rustidy_util::Whitespace as rustidy_format::WhitespaceFormat>::PRESERVE
+						<util::Whitespace as format::WhitespaceFormat>::PRESERVE
 					},
 				}})
 			},
@@ -355,7 +355,7 @@ fn derive_struct_field(attrs: &Attrs, field_idx: usize, field: &FieldAttrs) -> R
 	};
 
 	let format = match field.str {
-		true => parse_quote! { <rustidy_util::AstStr as rustidy_format::Formattable>::format_output(&mut self.#field_ident, ctx) },
+		true => parse_quote! { <util::AstStr as format::Formattable>::format_output(&mut self.#field_ident, ctx) },
 		false => parse_quote! { ctx.format_with(&mut self.#field_ident, prefix_ws, args) },
 	};
 

@@ -10,12 +10,12 @@ use {
 		vis::Visibility,
 	},
 	super::function::{GenericParams, WhereClause},
-	rustidy_ast_literal::{Identifier, token},
-	rustidy_ast_util::{PunctuatedTrailing, delimited, punct},
-	rustidy_format::{Format, FormatOutput, Formattable, WhitespaceConfig, WhitespaceFormat},
-	rustidy_parse::Parse,
-	rustidy_print::Print,
-	rustidy_util::Whitespace,
+	ast_literal::{Identifier, token},
+	ast_util::{PunctuatedTrailing, delimited, punct},
+	format::{Format, FormatOutput, Formattable, WhitespaceConfig, WhitespaceFormat},
+	parse::Parse,
+	print::Print,
+	util::Whitespace,
 };
 
 /// `Struct`
@@ -142,7 +142,7 @@ pub struct TupleStruct {
 impl TupleStruct {
 	pub fn format_fields(
 		fields: &mut Parenthesized<Option<TupleFields>>,
-		ctx: &mut rustidy_format::Context,
+		ctx: &mut format::Context,
 		prefix_ws: WhitespaceConfig,
 		_args: ()
 	) -> FormatOutput {

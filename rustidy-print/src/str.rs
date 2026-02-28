@@ -1,7 +1,7 @@
 //! String impls
 
 // Imports
-use {crate::PrintOutput, arcstr::Substr, rustidy_util::AstStr};
+use {crate::PrintOutput, arcstr::Substr, util::AstStr};
 
 /// Writes a string onto an output
 pub fn write(s: &AstStr, output: &mut PrintOutput) {

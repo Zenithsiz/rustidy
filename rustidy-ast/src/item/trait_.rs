@@ -11,11 +11,11 @@ use {
 		Visibility,
 		function::{GenericParams, TypeParamBounds, WhereClause},
 	},
-	rustidy_ast_literal::{Identifier, token},
-	rustidy_format::{Format, Formattable, WhitespaceFormat},
-	rustidy_parse::Parse,
-	rustidy_print::Print,
-	rustidy_util::Whitespace,
+	ast_literal::{Identifier, token},
+	format::{Format, Formattable, WhitespaceFormat},
+	parse::Parse,
+	print::Print,
+	util::Whitespace,
 };
 
 /// `Trait`
@@ -68,7 +68,7 @@ pub struct TraitBodyEq {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct TraitBodyFull(
-	#[format(args = rustidy_format::vec::args_prefix_ws(Whitespace::INDENT))]
+	#[format(args = format::vec::args_prefix_ws(Whitespace::INDENT))]
 	pub Vec<AssociatedItem>,
 );
 

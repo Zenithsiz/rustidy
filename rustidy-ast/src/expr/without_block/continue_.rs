@@ -2,11 +2,11 @@
 
 // Imports
 use {
-	rustidy_ast_literal::{LifetimeOrLabel, token},
-	rustidy_format::{Format, Formattable, WhitespaceFormat},
-	rustidy_parse::Parse,
-	rustidy_print::Print,
-	rustidy_util::Whitespace,
+	ast_literal::{LifetimeOrLabel, token},
+	format::{Format, Formattable, WhitespaceFormat},
+	parse::Parse,
+	print::Print,
+	util::Whitespace,
 };
 
 /// `ContinueExpression`

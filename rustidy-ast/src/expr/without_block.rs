@@ -48,11 +48,11 @@ pub use self::{
 use {
 	crate::attr::{self, OuterAttrOrDocComment, WithOuterAttributes},
 	super::{Expression, ExpressionInner},
-	rustidy_ast_literal::{IntegerLiteral, LiteralExpression, token},
-	rustidy_format::{Format, Formattable, WhitespaceFormat},
-	rustidy_parse::{Parse, ParseRecursive, Parser, ParserError, ParserTag, RecursiveWrapper},
-	rustidy_print::Print,
-	rustidy_util::Whitespace,
+	ast_literal::{IntegerLiteral, LiteralExpression, token},
+	format::{Format, Formattable, WhitespaceFormat},
+	parse::{Parse, ParseRecursive, Parser, ParserError, ParserTag, RecursiveWrapper},
+	print::Print,
+	util::Whitespace,
 };
 
 /// `ExpressionWithoutBlock`
@@ -104,7 +104,7 @@ impl Parse for ExpressionWithoutBlock {
 		Ok(expr)
 	}
 }
-#[derive(derive_more::Debug, derive_more::From, rustidy_parse::ParseError)]
+#[derive(derive_more::Debug, derive_more::From, parse::ParseError)]
 pub enum ExpressionWithoutBlockError {
 	#[parse_error(transparent)]
 	Attributes(ParserError<Vec<OuterAttrOrDocComment>>),

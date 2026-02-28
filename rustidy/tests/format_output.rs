@@ -9,11 +9,11 @@
 // Imports
 use {
 	app_error::{AppError, Context, ensure},
-	rustidy_ast::Crate,
-	rustidy_ast_literal::IdentifierOrKeyword,
-	rustidy_format::{FormatMultilineOutput, FormatOutput, Formattable},
-	rustidy_parse::{Parse, ParseError, Parser},
-	rustidy_util::Config,
+	ast::Crate,
+	ast_literal::IdentifierOrKeyword,
+	format::{FormatMultilineOutput, FormatOutput, Formattable},
+	parse::{Parse, ParseError, Parser},
+	util::Config,
 };
 
 #[test]
@@ -77,7 +77,7 @@ pub fn test_case<T: Parse + Formattable>(input: &str, expected: FormatOutput) ->
 
 
 	let config = Config::default();
-	let mut ctx = rustidy_format::Context::new(input, &config);
+	let mut ctx = format::Context::new(input, &config);
 	let output = value.format_output(&mut ctx);
 	ensure!(output == expected, "Format output was different\n{}", difference::Changeset::new(
 		&format!("{expected:#?}"),

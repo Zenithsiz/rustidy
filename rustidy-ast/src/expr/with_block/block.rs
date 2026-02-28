@@ -13,12 +13,12 @@ use {
 			StatementInner,
 		},
 	},
-	rustidy_ast_literal::token,
-	rustidy_ast_util::{AtLeast1, NotFollows, at_least},
-	rustidy_format::{Format, Formattable, WhitespaceConfig, WhitespaceFormat},
-	rustidy_parse::{Parse, ParseError, Parser, ParserError, ParserTag},
-	rustidy_print::Print,
-	rustidy_util::{ArenaIdx, Whitespace, decl_arena},
+	ast_literal::token,
+	ast_util::{AtLeast1, NotFollows, at_least},
+	format::{Format, Formattable, WhitespaceConfig, WhitespaceFormat},
+	parse::{Parse, ParseError, Parser, ParserError, ParserTag},
+	print::Print,
+	util::{ArenaIdx, Whitespace, decl_arena},
 };
 
 /// `BlockExpression`
@@ -47,10 +47,10 @@ pub struct BlockExpression(
 impl Format<WhitespaceConfig, ()> for BlockExpression {
 	fn format(
 		&mut self,
-		ctx: &mut rustidy_format::Context,
+		ctx: &mut format::Context,
 		prefix_ws: WhitespaceConfig,
 		_args: ()
-	) -> rustidy_format::FormatOutput {
+	) -> format::FormatOutput {
 		self.format(
 			ctx,
 			prefix_ws,

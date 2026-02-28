@@ -47,10 +47,10 @@ pub mod vis;
 use {
 	self::{attr::InnerAttrOrDocComment, item::Items, shebang::Shebang},
 	core::fmt::Debug,
-	rustidy_format::{Format, FormatOutput, FormatTag, Formattable, WhitespaceFormat},
-	rustidy_parse::Parse,
-	rustidy_print::Print,
-	rustidy_util::Whitespace,
+	format::{Format, FormatOutput, FormatTag, Formattable, WhitespaceFormat},
+	parse::Parse,
+	print::Print,
+	util::Whitespace,
 };
 
 /// `Crate`
@@ -68,7 +68,7 @@ pub struct Crate {
 impl Format<(), ()> for Crate {
 	fn format(
 		&mut self,
-		ctx: &mut rustidy_format::Context,
+		ctx: &mut format::Context,
 		_prefix_ws: (),
 		_args: ()
 	) -> FormatOutput {

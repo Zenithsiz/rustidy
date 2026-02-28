@@ -2,10 +2,10 @@
 
 // Imports
 use {
-	rustidy_format::{Format, Formattable},
-	rustidy_parse::Parse,
-	rustidy_print::Print,
-	rustidy_util::{AstStr, Whitespace},
+	format::{Format, Formattable},
+	parse::Parse,
+	print::Print,
+	util::{AstStr, Whitespace},
 };
 
 /// `IDENTIFIER_OR_KEYWORD`
@@ -62,7 +62,7 @@ impl RawIdentifier {
 		*s = s
 			.strip_prefix("r#")
 			.ok_or(RawIdentifierError::Raw)?;
-		let ident = rustidy_parse::parse_from_str(s, IdentifierOrKeyword::parse)
+		let ident = parse::parse_from_str(s, IdentifierOrKeyword::parse)
 			.map_err(RawIdentifierError::IdentOrKeyword)?;
 		if ["crate", "self", "super", "Self"]
 			.contains(&ident) {

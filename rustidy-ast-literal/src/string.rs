@@ -4,10 +4,10 @@
 use {
 	crate::{AsciiEscape, QuoteEscape, StringContinue, UnicodeEscape},
 	super::Suffix,
-	rustidy_format::{Format, Formattable},
-	rustidy_parse::Parse,
-	rustidy_print::Print,
-	rustidy_util::{AstStr, Whitespace},
+	format::{Format, Formattable},
+	parse::Parse,
+	print::Print,
+	util::{AstStr, Whitespace},
 	std::borrow::Cow,
 };
 
@@ -108,7 +108,7 @@ impl StringLiteral {
 
 #[cfg(test)]
 mod tests {
-	use {super::*, rustidy_parse::Parser};
+	use {super::*, parse::Parser};
 
 	#[test]
 	fn contents() {

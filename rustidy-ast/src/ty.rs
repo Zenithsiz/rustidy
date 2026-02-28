@@ -27,12 +27,12 @@ use {
 		item::function::{TraitBound, TypeParamBounds},
 		util::Parenthesized,
 	},
-	rustidy_ast_literal::{Lifetime, token},
-	rustidy_ast_util::delimited,
-	rustidy_format::{Format, Formattable, WhitespaceFormat},
-	rustidy_parse::Parse,
-	rustidy_print::Print,
-	rustidy_util::{ArenaData, ArenaIdx, Whitespace},
+	ast_literal::{Lifetime, token},
+	ast_util::delimited,
+	format::{Format, Formattable, WhitespaceFormat},
+	parse::Parse,
+	print::Print,
+	util::{ArenaData, ArenaIdx, Whitespace},
 };
 
 /// `Type`

@@ -4,11 +4,11 @@
 use {
 	crate::ty::Type,
 	super::function::{GenericParams, TypeParamBounds, WhereClause},
-	rustidy_ast_literal::{Identifier, token},
-	rustidy_format::{Format, Formattable, WhitespaceFormat},
-	rustidy_parse::Parse,
-	rustidy_print::Print,
-	rustidy_util::Whitespace,
+	ast_literal::{Identifier, token},
+	format::{Format, Formattable, WhitespaceFormat},
+	parse::Parse,
+	print::Print,
+	util::Whitespace,
 };
 
 /// `TypeAlias`

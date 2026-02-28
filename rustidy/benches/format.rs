@@ -8,10 +8,10 @@
 
 // Imports
 use {
-	rustidy_ast::{Crate, expr::Expression, item::UseDeclaration},
-	rustidy_format::{Format, WhitespaceFormat},
-	rustidy_parse::{Parse, ParseError, Parser, ParserError},
-	rustidy_util::{Config, Whitespace},
+	ast::{Crate, expr::Expression, item::UseDeclaration},
+	format::{Format, WhitespaceFormat},
+	parse::{Parse, ParseError, Parser, ParserError},
+	util::{Config, Whitespace},
 	test::Bencher,
 };
 extern crate test;
@@ -67,7 +67,7 @@ where
 		.unwrap_or_else(|err| self::on_err(&parser, &err));
 
 	let config = Config::default();
-	let mut ctx = rustidy_format::Context::new(input, &config);
+	let mut ctx = format::Context::new(input, &config);
 	bencher
 		.iter(|| value.format(&mut ctx, prefix_ws, args));
 }

@@ -1,7 +1,7 @@
 //! Format output
 
 // Imports
-use rustidy_util::ast_str::AstStrRepr;
+use util::ast_str::AstStrRepr;
 
 /// Formatting output
 #[derive(PartialEq, Eq, Clone, Copy, Debug)]

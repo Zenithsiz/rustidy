@@ -4,11 +4,11 @@
 use {
 	crate::{expr::{Expression, ExpressionInner}, ty::TypeNoBounds},
 	super::{ExpressionWithoutBlockInner, Parse},
-	rustidy_ast_literal::token,
-	rustidy_format::{Format, Formattable, WhitespaceFormat},
-	rustidy_parse::{ParseRecursive, ParserTag},
-	rustidy_print::Print,
-	rustidy_util::Whitespace,
+	ast_literal::token,
+	format::{Format, Formattable, WhitespaceFormat},
+	parse::{ParseRecursive, ParserTag},
+	print::Print,
+	util::Whitespace,
 };
 
 /// `OperatorExpression`

@@ -4,10 +4,10 @@
 use {
 	super::SuffixNoE,
 	app_error::{AppError, Context},
-	rustidy_format::{Format, Formattable},
-	rustidy_parse::Parse,
-	rustidy_print::Print,
-	rustidy_util::{AstStr, Whitespace},
+	format::{Format, Formattable},
+	parse::Parse,
+	print::Print,
+	util::{AstStr, Whitespace},
 	std::borrow::Cow,
 };
 

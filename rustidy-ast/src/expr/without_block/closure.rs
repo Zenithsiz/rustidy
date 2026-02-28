@@ -10,12 +10,12 @@ use {
 		ty::{Type, TypeNoBounds},
 	},
 	super::ExpressionWithoutBlockInner,
-	rustidy_ast_literal::token,
-	rustidy_ast_util::{Delimited, PunctuatedTrailing, delimited, punct},
-	rustidy_format::{Format, Formattable, WhitespaceFormat},
-	rustidy_parse::{Parse, ParseRecursive},
-	rustidy_print::Print,
-	rustidy_util::Whitespace,
+	ast_literal::token,
+	ast_util::{Delimited, PunctuatedTrailing, delimited, punct},
+	format::{Format, Formattable, WhitespaceFormat},
+	parse::{Parse, ParseRecursive},
+	print::Print,
+	util::Whitespace,
 };
 
 #[derive(PartialEq, Eq, Clone, Debug)]

@@ -8,9 +8,9 @@ pub use self::ident_or_keyword::{IdentifierOrKeyword, RawIdentifier};
 
 // Imports
 use {
-	rustidy_format::{Format, Formattable},
-	rustidy_parse::{Parse, Parser},
-	rustidy_print::Print,
+	format::{Format, Formattable},
+	parse::{Parse, Parser},
+	print::Print,
 	std::borrow::Cow,
 };
 

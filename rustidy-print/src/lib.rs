@@ -9,11 +9,11 @@ mod str;
 mod output;
 
 // Exports
-pub use rustidy_macros::Print;
+pub use macros::Print;
 pub use self::output::PrintOutput;
 
 // Imports
-use {core::marker::PhantomData, rustidy_util::{ArenaData, ArenaIdx, AstStr}};
+use {core::marker::PhantomData, util::{ArenaData, ArenaIdx, AstStr}};
 
 /// Printable types
 pub trait Print: Sized {

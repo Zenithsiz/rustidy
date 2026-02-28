@@ -109,7 +109,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 						let ty = &field.ty;
 						impl_where_clause
 							.predicates
-							.push(parse_quote! { #ty: rustidy_parse::ParseError });
+							.push(parse_quote! { #ty: parse::ParseError });
 					}
 				}
 			}
@@ -255,10 +255,10 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 							}
 						},
 						[field_ident] => {
-							quote! { rustidy_parse::ParseError::to_app_error(#field_ident, parser) }
+							quote! { parse::ParseError::to_app_error(#field_ident, parser) }
 						},
 						_ => quote! { app_error::AppError::from_multiple([
-							#( rustidy_parse::ParseError::to_app_error(#field_idents, parser), )*
+							#( parse::ParseError::to_app_error(#field_idents, parser), )*
 						]) },
 					};
 
@@ -303,7 +303,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 						let ty = &field.ty;
 						impl_where_clause
 							.predicates
-							.push(parse_quote! { #ty: rustidy_parse::ParseError });
+							.push(parse_quote! { #ty: parse::ParseError });
 					}
 
 					quote! { #field_access.to_app_error(parser) }
@@ -341,16 +341,16 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 	let (impl_generics, ty_generics, where_clause) = impl_generics.split_for_impl();
 	let output = quote! {
 		#[automatically_derived]
-		impl #impl_generics rustidy_parse::ParseError for #item_ident #ty_generics #where_clause {
+		impl #impl_generics parse::ParseError for #item_ident #ty_generics #where_clause {
 			fn is_fatal(&self) -> bool {
 				#is_fatal
 			}
 
-			fn pos(&self) -> Option<rustidy_util::AstPos> {
+			fn pos(&self) -> Option<util::AstPos> {
 				#pos
 			}
 
-			fn to_app_error(&self, parser: &rustidy_parse::Parser) -> app_error::AppError {
+			fn to_app_error(&self, parser: &parse::Parser) -> app_error::AppError {
 				#to_app_error
 			}
 		}

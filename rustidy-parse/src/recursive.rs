@@ -1,14 +1,14 @@
 //! Recursively parsable types
 
 // Exports
-pub use rustidy_macros::ParseRecursive;
+pub use macros::ParseRecursive;
 
 // Imports
 use {
-	crate::{self as rustidy_parse},
+	crate::{self as parse},
 	super::{ParsableFrom, Parse, ParseError, Parser, ParserError, ParserTag},
 	core::marker::PhantomData,
-	rustidy_util::AstPos,
+	util::AstPos,
 };
 
 /// Recursive type

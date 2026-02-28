@@ -9,9 +9,9 @@ use {
 		util::Parenthesized,
 	},
 	super::LiteralExpression,
-	rustidy_ast_literal::Identifier,
-	rustidy_ast_literal::{Lifetime, token},
-	rustidy_ast_util::{
+	ast_literal::Identifier,
+	ast_literal::{Lifetime, token},
+	ast_util::{
 		AtLeast1,
 		Delimited,
 		Longest,
@@ -21,10 +21,10 @@ use {
 		delimited,
 		punct,
 	},
-	rustidy_format::{Format, Formattable, WhitespaceFormat},
-	rustidy_parse::Parse,
-	rustidy_print::Print,
-	rustidy_util::Whitespace,
+	format::{Format, Formattable, WhitespaceFormat},
+	parse::Parse,
+	print::Print,
+	util::Whitespace,
 };
 
 /// `PathExpression`

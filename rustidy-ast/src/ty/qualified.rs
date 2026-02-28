@@ -4,12 +4,12 @@
 use {
 	crate::{expr::without_block::path::QualifiedPathType},
 	super::path::TypePathSegment,
-	rustidy_ast_literal::token,
-	rustidy_ast_util::{AtLeast1, at_least},
-	rustidy_format::{Format, Formattable, WhitespaceFormat},
-	rustidy_parse::Parse,
-	rustidy_print::Print,
-	rustidy_util::Whitespace,
+	ast_literal::token,
+	ast_util::{AtLeast1, at_least},
+	format::{Format, Formattable, WhitespaceFormat},
+	parse::Parse,
+	print::Print,
+	util::Whitespace,
 };
 
 /// `QualifiedPathInType`

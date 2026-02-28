@@ -3,7 +3,7 @@
 // Imports
 use {
 	core::marker::PhantomData,
-	rustidy_parse::{Parse, ParseError, ParserError},
+	parse::{Parse, ParseError, ParserError},
 };
 
 /// Not follows.
@@ -15,7 +15,7 @@ impl<T: Parse> Parse for NotFollows<T> {
 	type Error = NotFollowsError<T>;
 
 	#[coverage(on)]
-	fn parse_from(parser: &mut rustidy_parse::Parser) -> Result<Self, Self::Error> {
+	fn parse_from(parser: &mut parse::Parser) -> Result<Self, Self::Error> {
 		match parser.peek::<T>()? {
 			Ok(_) => Err(NotFollowsError::Parsed),
 			Err(_) => Ok(Self(PhantomData)),

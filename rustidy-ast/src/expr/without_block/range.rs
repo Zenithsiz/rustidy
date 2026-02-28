@@ -5,11 +5,11 @@
 use {
 	crate::expr::{Expression, ExpressionInner},
 	super::ExpressionWithoutBlockInner,
-	rustidy_ast_literal::token,
-	rustidy_format::{Format, Formattable, WhitespaceFormat},
-	rustidy_parse::{Parse, ParseRecursive, ParserTag},
-	rustidy_print::Print,
-	rustidy_util::Whitespace,
+	ast_literal::token,
+	format::{Format, Formattable, WhitespaceFormat},
+	parse::{Parse, ParseRecursive, ParserTag},
+	print::Print,
+	util::Whitespace,
 };
 
 /// `RangeExpression`

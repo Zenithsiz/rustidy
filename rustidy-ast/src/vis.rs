@@ -3,12 +3,12 @@
 // Imports
 use {
 	super::{path::SimplePath, util::Parenthesized},
-	rustidy_ast_literal::token,
-	rustidy_ast_util::delimited,
-	rustidy_format::{Format, Formattable, WhitespaceFormat},
-	rustidy_parse::Parse,
-	rustidy_print::Print,
-	rustidy_util::Whitespace,
+	ast_literal::token,
+	ast_util::delimited,
+	format::{Format, Formattable, WhitespaceFormat},
+	parse::Parse,
+	print::Print,
+	util::Whitespace,
 };
 
 /// `Visibility`

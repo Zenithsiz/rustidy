@@ -4,10 +4,10 @@
 use {
 	core::mem,
 	either::Either,
-	rustidy_format::{Format, FormatOutput, Formattable, WhitespaceConfig, WhitespaceFormat},
-	rustidy_parse::Parse,
-	rustidy_print::Print,
-	rustidy_util::Whitespace,
+	format::{Format, FormatOutput, Formattable, WhitespaceConfig, WhitespaceFormat},
+	parse::Parse,
+	print::Print,
+	util::Whitespace,
 };
 
 /// Punctuated type `T`, separated by `P`
@@ -20,7 +20,7 @@ pub struct Punctuated<T, P> {
 	#[format(args = args.value_args.clone())]
 	pub first: T,
 	#[format(prefix_ws(if_ = output.has_prefix_ws(), expr = args.punct_prefix_ws))]
-	#[format(args = rustidy_format::vec::args(args.punct_prefix_ws, args))]
+	#[format(args = format::vec::args(args.punct_prefix_ws, args))]
 	pub rest:  Vec<PunctuatedRest<T, P>>,
 }
 
@@ -423,10 +423,10 @@ pub struct FmtIndentColumns {
 impl<T: Format<WhitespaceConfig, ()>, P: Format<WhitespaceConfig, ()>> Format<WhitespaceConfig, FmtIndentColumns> for Punctuated<T, P> {
 	fn format(
 		&mut self,
-		ctx: &mut rustidy_format::Context,
+		ctx: &mut format::Context,
 		prefix_ws: WhitespaceConfig,
 		args: FmtIndentColumns
-	) -> rustidy_format::FormatOutput {
+	) -> format::FormatOutput {
 		let mut output = FormatOutput::default();
 
 		let mut cur_idx = 0;
@@ -470,10 +470,10 @@ impl<T: Format<WhitespaceConfig, ()>, P: Format<WhitespaceConfig, ()>> Format<Wh
 impl<T: Format<WhitespaceConfig, ()>, P: Format<WhitespaceConfig, ()>> Format<WhitespaceConfig, FmtIndentColumns> for PunctuatedTrailing<T, P> {
 	fn format(
 		&mut self,
-		ctx: &mut rustidy_format::Context,
+		ctx: &mut format::Context,
 		prefix_ws: WhitespaceConfig,
 		args: FmtIndentColumns
-	) -> rustidy_format::FormatOutput {
+	) -> format::FormatOutput {
 		let mut output = FormatOutput::default();
 		ctx
 			.format_with(&mut self.punctuated, prefix_ws, args)

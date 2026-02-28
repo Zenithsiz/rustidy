@@ -32,25 +32,25 @@
 // Imports
 use {
 	app_error::{AppError, app_error},
-	rustidy_ast::Crate,
-	rustidy_format::{FormatOutput},
-	rustidy_parse::{ParseError, Parser},
-	rustidy_util::Config,
+	ast::Crate,
+	format::{FormatOutput},
+	parse::{ParseError, Parser},
+	util::Config,
 	std::path::Path,
 };
 
 /// Formats the crate `crate_`.
 pub fn format(input: &str, config: &Config, crate_: &mut Crate) -> FormatOutput {
-	let mut ctx = rustidy_format::Context::new(input, config);
+	let mut ctx = format::Context::new(input, config);
 	ctx.format(crate_, ())
 }
 
 /// Parses the input `input`.
 ///
 /// `file` is only used for error reporting and does not have to exist.
-pub fn parse(input: &str, file: &Path) -> Result<rustidy_ast::Crate, AppError> {
+pub fn parse(input: &str, file: &Path) -> Result<ast::Crate, AppError> {
 	let mut parser = Parser::new(input);
-	parser.parse::<rustidy_ast::Crate>().map_err(|err| {
+	parser.parse::<ast::Crate>().map_err(|err| {
 		if let Some(pos) = err.pos() {
 			parser.set_pos(pos);
 		}

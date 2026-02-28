@@ -3,8 +3,8 @@
 use {
 	crate::expr::{Expression, ExpressionInner},
 	super::ExpressionWithoutBlockInner,
-	rustidy_ast_literal::{Identifier, token},
-	rustidy_format::{
+	ast_literal::{Identifier, token},
+	format::{
 		Format,
 		FormatOutput,
 		FormatTag,
@@ -12,9 +12,9 @@ use {
 		WhitespaceConfig,
 		WhitespaceFormat,
 	},
-	rustidy_parse::ParseRecursive,
-	rustidy_print::Print,
-	rustidy_util::Whitespace,
+	parse::ParseRecursive,
+	print::Print,
+	util::Whitespace,
 };
 
 /// `FieldExpression`
@@ -42,7 +42,7 @@ struct FieldExpressionFmt;
 impl Format<WhitespaceConfig, ()> for FieldExpression {
 	fn format(
 		&mut self,
-		ctx: &mut rustidy_format::Context,
+		ctx: &mut format::Context,
 		prefix_ws: WhitespaceConfig,
 		_args: ()
 	) -> FormatOutput {

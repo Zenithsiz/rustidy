@@ -10,11 +10,11 @@ use {
 		pat::PatternNoTopAlt,
 		ty::Type,
 	},
-	rustidy_ast_literal::token,
-	rustidy_format::{Format, Formattable, WhitespaceFormat},
-	rustidy_parse::{Parse, ParseError, Parser, ParserError},
-	rustidy_print::Print,
-	rustidy_util::{ArenaData, ArenaIdx, Whitespace},
+	ast_literal::token,
+	format::{Format, Formattable, WhitespaceFormat},
+	parse::{Parse, ParseError, Parser, ParserError},
+	print::Print,
+	util::{ArenaData, ArenaIdx, Whitespace},
 };
 
 /// `Item`

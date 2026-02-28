@@ -4,12 +4,12 @@
 use {
 	core::fmt::Debug,
 	either::Either,
-	rustidy_ast_literal::{Identifier, token},
-	rustidy_ast_util::{Punctuated, punct},
-	rustidy_format::{Format, Formattable, WhitespaceFormat},
-	rustidy_parse::Parse,
-	rustidy_print::Print,
-	rustidy_util::Whitespace,
+	ast_literal::{Identifier, token},
+	ast_util::{Punctuated, punct},
+	format::{Format, Formattable, WhitespaceFormat},
+	parse::Parse,
+	print::Print,
+	util::Whitespace,
 	std::borrow::Cow,
 };
 

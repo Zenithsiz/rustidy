@@ -4,12 +4,12 @@
 use {
 	crate::util::Parenthesized,
 	super::Type,
-	rustidy_ast_literal::token,
-	rustidy_ast_util::delimited,
-	rustidy_format::{Format, FormatOutput, Formattable, WhitespaceConfig, WhitespaceFormat},
-	rustidy_parse::Parse,
-	rustidy_print::Print,
-	rustidy_util::Whitespace,
+	ast_literal::token,
+	ast_util::delimited,
+	format::{Format, FormatOutput, Formattable, WhitespaceConfig, WhitespaceFormat},
+	parse::Parse,
+	print::Print,
+	util::Whitespace,
 };
 
 /// `TupleType`
@@ -30,7 +30,7 @@ pub struct TupleTypeInner {
 impl Format<WhitespaceConfig, ()> for TupleTypeInner {
 	fn format(
 		&mut self,
-		ctx: &mut rustidy_format::Context,
+		ctx: &mut format::Context,
 		prefix_ws: WhitespaceConfig,
 		_args: ()
 	) -> FormatOutput {

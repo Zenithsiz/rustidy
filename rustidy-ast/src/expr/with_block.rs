@@ -11,12 +11,12 @@ pub use self::{block::BlockExpression, match_::{MatchExpression, Scrutinee}};
 use {
 	crate::{attr::{self, WithOuterAttributes}, pat::Pattern},
 	super::Expression,
-	rustidy_ast_literal::{LifetimeOrLabel, token},
-	rustidy_ast_util::{Longest, Punctuated, punct},
-	rustidy_format::{Format, Formattable, WhitespaceFormat},
-	rustidy_parse::{ParsableFrom, Parse, ParserTag},
-	rustidy_print::Print,
-	rustidy_util::Whitespace,
+	ast_literal::{LifetimeOrLabel, token},
+	ast_util::{Longest, Punctuated, punct},
+	format::{Format, Formattable, WhitespaceFormat},
+	parse::{ParsableFrom, Parse, ParserTag},
+	print::Print,
+	util::Whitespace,
 };
 
 /// `ExpressionWithBlock`

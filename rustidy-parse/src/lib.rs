@@ -39,7 +39,7 @@ pub use {
 		},
 		tag::ParserTag,
 	},
-	rustidy_macros::Parse,
+	macros::Parse,
 };
 
 // Imports
@@ -47,7 +47,7 @@ use {
 	app_error::AppError,
 	arcstr::ArcStr,
 	core::{marker::PhantomData, ops::{Residual, Try}},
-	rustidy_util::{ArenaData, ArenaIdx, AstPos, AstRange, AstStr},
+	util::{ArenaData, ArenaIdx, AstPos, AstRange, AstStr},
 	std::fmt,
 };
 #[cfg(feature = "flamegraph-traces")]

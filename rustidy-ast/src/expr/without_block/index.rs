@@ -4,11 +4,11 @@
 use {
 	crate::{expr::{Expression, ExpressionInner}, util::Bracketed},
 	super::ExpressionWithoutBlockInner,
-	rustidy_ast_util::delimited,
-	rustidy_format::{Format, Formattable, WhitespaceFormat},
-	rustidy_parse::ParseRecursive,
-	rustidy_print::Print,
-	rustidy_util::Whitespace,
+	ast_util::delimited,
+	format::{Format, Formattable, WhitespaceFormat},
+	parse::ParseRecursive,
+	print::Print,
+	util::Whitespace,
 };
 
 /// `IndexExpression`

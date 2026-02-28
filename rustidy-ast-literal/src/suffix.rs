@@ -3,10 +3,10 @@
 // Imports
 use {
 	crate::IdentifierOrKeyword,
-	rustidy_format::{Format, Formattable, WhitespaceFormat},
-	rustidy_parse::{Parse, Parser, ParserTag},
-	rustidy_print::Print,
-	rustidy_util::Whitespace,
+	format::{Format, Formattable, WhitespaceFormat},
+	parse::{Parse, Parser, ParserTag},
+	print::Print,
+	util::Whitespace,
 };
 
 /// `SUFFIX`

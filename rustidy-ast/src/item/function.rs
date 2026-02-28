@@ -9,7 +9,7 @@ use {
 		ty::{Type, TypePath},
 		util::{FmtSingleOrIndent, Parenthesized},
 	},
-	rustidy_ast_literal::{
+	ast_literal::{
 		Identifier,
 		Lifetime,
 		LiteralExpression,
@@ -17,11 +17,11 @@ use {
 		StringLiteral,
 		token,
 	},
-	rustidy_ast_util::{Delimited, Follows, PunctuatedTrailing, delimited, punct},
-	rustidy_format::{Format, Formattable, WhitespaceFormat},
-	rustidy_parse::{Parse, ParsePeeked},
-	rustidy_print::Print,
-	rustidy_util::Whitespace,
+	ast_util::{Delimited, Follows, PunctuatedTrailing, delimited, punct},
+	format::{Format, Formattable, WhitespaceFormat},
+	parse::{Parse, ParsePeeked},
+	print::Print,
+	util::Whitespace,
 };
 
 /// `Function`
@@ -147,7 +147,7 @@ pub struct FunctionParametersOnlySelf {
 
 impl ParsePeeked<(SelfParam, Option<token::Comma>, Follows<token::ParenClose>)> for FunctionParametersOnlySelf {
 	fn parse_from_with_peeked(
-		_parser: &mut rustidy_parse::Parser,
+		_parser: &mut parse::Parser,
 		(self_, trailing_comma, _): (SelfParam, Option<token::Comma>, Follows<token::ParenClose>),
 	) -> Result<Self, Self::Error> {
 		Ok(Self { self_, trailing_comma })

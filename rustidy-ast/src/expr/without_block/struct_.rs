@@ -4,12 +4,12 @@
 use {
 	crate::{attr::{self, WithOuterAttributes}, expr::Expression, util::Braced},
 	super::{TupleIndex, path::PathInExpression},
-	rustidy_ast_literal::{Identifier, token},
-	rustidy_ast_util::{Punctuated, delimited, punct},
-	rustidy_format::{Format, Formattable, WhitespaceConfig, WhitespaceFormat},
-	rustidy_parse::{Parse, ParserTag},
-	rustidy_print::Print,
-	rustidy_util::Whitespace,
+	ast_literal::{Identifier, token},
+	ast_util::{Punctuated, delimited, punct},
+	format::{Format, Formattable, WhitespaceConfig, WhitespaceFormat},
+	parse::{Parse, ParserTag},
+	print::Print,
+	util::Whitespace,
 };
 
 /// `StructExpression`

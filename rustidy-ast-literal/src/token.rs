@@ -17,14 +17,14 @@ use {
 		RawStringLiteral,
 		StringLiteral,
 	},
-	rustidy_format::{Format, Formattable},
-	rustidy_parse::{Parse, ParseError, ParserError, ParserTag},
-	rustidy_print::Print,
-	rustidy_util::{StrPopFirst, Whitespace},
+	format::{Format, Formattable},
+	parse::{Parse, ParseError, ParserError, ParserTag},
+	print::Print,
+	util::{StrPopFirst, Whitespace},
 };
 
 // Exports
-pub use rustidy_ast_tokens::*;
+pub use ast_tokens::*;
 
 /// `Token`
 #[derive(PartialEq, Eq, Clone, Debug)]
@@ -110,10 +110,10 @@ pub enum Punctuation {
 }
 
 // TODO: Autogenerate this impl?
-impl rustidy_parse::Parse for Punctuation {
+impl parse::Parse for Punctuation {
 	type Error = PunctuationError;
 
-	fn parse_from(parser: &mut rustidy_parse::Parser) -> Result<Self, Self::Error> {
+	fn parse_from(parser: &mut parse::Parser) -> Result<Self, Self::Error> {
 		// TODO: Autogenerate this from `Punctuation`.
 		#[derive(Clone, Copy, Debug)]
 		enum Punct {

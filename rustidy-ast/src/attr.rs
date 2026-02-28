@@ -17,12 +17,12 @@ use {
 	self::meta::MetaItem,
 	app_error::{AppError, Context, bail},
 	core::fmt::Debug,
-	rustidy_ast_literal::token,
-	rustidy_ast_util::{Longest, RemainingBlockComment, RemainingLine, delimited},
-	rustidy_format::{Format, Formattable, WhitespaceFormat},
-	rustidy_parse::{ParsableFrom, Parse, ParserTag},
-	rustidy_print::Print,
-	rustidy_util::{Config, Whitespace},
+	ast_literal::token,
+	ast_util::{Longest, RemainingBlockComment, RemainingLine, delimited},
+	format::{Format, Formattable, WhitespaceFormat},
+	parse::{ParsableFrom, Parse, ParserTag},
+	print::Print,
+	util::{Config, Whitespace},
 };
 
 #[derive(PartialEq, Eq, Clone, Debug)]
@@ -219,7 +219,7 @@ pub enum DelimTokenTreeBraces {
 #[derive(Parse, Formattable, Format, Print)]
 pub struct DelimTokenTreeInner(
 	#[parse(fatal)]
-	#[format(args = rustidy_format::vec::args_prefix_ws(Whitespace::PRESERVE))]
+	#[format(args = format::vec::args_prefix_ws(Whitespace::PRESERVE))]
 	pub Vec<TokenTree>,
 );
 
@@ -240,7 +240,7 @@ pub struct TokenNonDelimited(#[parse(with_tag = ParserTag::SkipDelimiters)] pub 
 
 /// Updates the configuration based on an attribute
 // TODO: We need to return the position for better error messages.
-pub fn update_from_attr(attr: &AttrOrMetaItem, ctx: &mut rustidy_format::Context) -> Result<(), AppError> {
+pub fn update_from_attr(attr: &AttrOrMetaItem, ctx: &mut format::Context) -> Result<(), AppError> {
 	let meta = match attr {
 		AttrOrMetaItem::Meta(meta) => match meta.path().starts_with("rustidy") {
 			true => meta,
@@ -262,7 +262,7 @@ pub fn update_from_attr(attr: &AttrOrMetaItem, ctx: &mut rustidy_format::Context
 }
 
 /// Parses a `#[rustidy::config]` attribute
-fn update_config(meta: &MetaItem, ctx: &mut rustidy_format::Context) -> Result<(), AppError> {
+fn update_config(meta: &MetaItem, ctx: &mut format::Context) -> Result<(), AppError> {
 	let MetaItem::Seq(meta) = meta else { bail!("Expected `rustidy::config([...])`") };
 
 	let Some(configs) = &meta.seq.value else { return Ok(()) };

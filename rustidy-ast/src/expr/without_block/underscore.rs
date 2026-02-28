@@ -2,10 +2,10 @@
 
 // Imports
 use {
-	rustidy_ast_literal::token,
-	rustidy_format::{Format, Formattable},
-	rustidy_parse::Parse,
-	rustidy_print::Print,
+	ast_literal::token,
+	format::{Format, Formattable},
+	parse::Parse,
+	print::Print,
 };
 
 /// `UnderscoreExpression`

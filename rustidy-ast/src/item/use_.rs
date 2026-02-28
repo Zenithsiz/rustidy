@@ -3,12 +3,12 @@
 // Imports
 use {
 	crate::{path::{SimplePath, SimplePathSegment}, util::Braced},
-	rustidy_ast_literal::{Identifier, token},
-	rustidy_ast_util::{Punctuated, PunctuatedTrailing, delimited, punct::{self, PunctuatedRest}},
-	rustidy_format::{Format, FormatOutput, Formattable, WhitespaceConfig, WhitespaceFormat},
-	rustidy_parse::Parse,
-	rustidy_print::Print,
-	rustidy_util::Whitespace,
+	ast_literal::{Identifier, token},
+	ast_util::{Punctuated, PunctuatedTrailing, delimited, punct::{self, PunctuatedRest}},
+	format::{Format, FormatOutput, Formattable, WhitespaceConfig, WhitespaceFormat},
+	parse::Parse,
+	print::Print,
+	util::Whitespace,
 	std::{borrow::Cow, cmp},
 };
 
@@ -168,7 +168,7 @@ impl UseTreeGroup {
 	}
 
 	/// Sorts all trees inside
-	pub fn sort(&mut self, _ctx: &mut rustidy_format::Context) {
+	pub fn sort(&mut self, _ctx: &mut format::Context) {
 		let Some(trees) = &mut self.tree.value else { return };
 
 		// TODO: Move this wrapper elsewhere
@@ -258,7 +258,7 @@ impl UseTreeGroup {
 	}
 
 	/// Flattens this use group
-	pub fn flatten(&mut self, ctx: &mut rustidy_format::Context) {
+	pub fn flatten(&mut self, ctx: &mut format::Context) {
 		replace_with::replace_with_or_abort(&mut self.tree.value, |trees| {
 			let mut trees = trees?;
 			let mut trees_first = Some(PunctuatedRest {
@@ -326,7 +326,7 @@ impl UseTreeGroup {
 
 	fn format_tree_compact(
 		tree: &mut Braced<Option<PunctuatedTrailing<Box<UseTree>, token::Comma>>>,
-		ctx: &mut rustidy_format::Context,
+		ctx: &mut format::Context,
 		prefix_ws: WhitespaceConfig,
 	) -> FormatOutput {
 		if let Some(punct) = &mut tree.value {
@@ -347,7 +347,7 @@ impl UseTreeGroup {
 
 	fn format_tree(
 		tree: &mut Braced<Option<PunctuatedTrailing<Box<UseTree>, token::Comma>>>,
-		ctx: &mut rustidy_format::Context,
+		ctx: &mut format::Context,
 		prefix_ws: WhitespaceConfig,
 		_args: (),
 	) -> FormatOutput {

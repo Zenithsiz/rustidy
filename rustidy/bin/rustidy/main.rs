@@ -28,11 +28,11 @@ use {
 	self::args::Args,
 	app_error::{AppError, Context, bail, ensure},
 	clap::Parser as _,
-	rustidy_ast::{attr::OuterAttrOrDocComment, item::{ItemInner, Module, VisItemInner}},
-	rustidy_ast_literal::Identifier,
-	rustidy_format::FormatOutput,
-	rustidy_print::Print,
-	rustidy_util::Config,
+	ast::{attr::OuterAttrOrDocComment, item::{ItemInner, Module, VisItemInner}},
+	ast_literal::Identifier,
+	format::FormatOutput,
+	print::Print,
+	util::Config,
 	std::{
 		borrow::Cow,
 		fs,
@@ -122,7 +122,7 @@ fn run() -> Result<(), AppError> {
 }
 
 fn format_file(
-	config: &rustidy_util::Config,
+	config: &util::Config,
 	files: Option<&mut Vec<PathBuf>>,
 	file_path: Option<&Path>,
 	check: bool

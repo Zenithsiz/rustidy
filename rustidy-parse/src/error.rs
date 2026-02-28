@@ -1,7 +1,7 @@
 //! Parser error
 
 // Exports
-pub use rustidy_macros::ParseError;
+pub use macros::ParseError;
 
 // Imports
 use {

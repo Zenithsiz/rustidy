@@ -8,9 +8,9 @@
 
 // Imports
 use {
-	rustidy_ast::{Crate, expr::Expression},
-	rustidy_parse::{Parse, ParseError, Parser, ParserError},
-	rustidy_print::Print,
+	ast::{Crate, expr::Expression},
+	parse::{Parse, ParseError, Parser, ParserError},
+	print::Print,
 	test::Bencher,
 };
 extern crate test;
@@ -50,7 +50,7 @@ where
 		.unwrap_or_else(|err| self::on_err(&parser, &err));
 
 	bencher.iter(|| {
-		let mut f = rustidy_print::PrintFmt::new();
+		let mut f = print::PrintFmt::new();
 		value.print(&mut f);
 	});
 }

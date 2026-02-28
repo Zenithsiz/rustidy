@@ -7,11 +7,11 @@ use {
 		vis::Visibility,
 	},
 	super::{Function, MacroInvocationSemi, StaticItem, TypeAlias, function::Abi},
-	rustidy_ast_literal::token,
-	rustidy_format::{Format, Formattable, WhitespaceFormat},
-	rustidy_parse::Parse,
-	rustidy_print::Print,
-	rustidy_util::Whitespace,
+	ast_literal::token,
+	format::{Format, Formattable, WhitespaceFormat},
+	parse::Parse,
+	print::Print,
+	util::Whitespace,
 };
 
 /// `ExternBlock`
@@ -33,7 +33,7 @@ pub struct ExternBlock {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct ExternBlockItems(
-	#[format(args = rustidy_format::vec::args_prefix_ws(Whitespace::INDENT))]
+	#[format(args = format::vec::args_prefix_ws(Whitespace::INDENT))]
 	Vec<ExternalItem>,
 );
 

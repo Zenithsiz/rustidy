@@ -9,7 +9,7 @@
 // Imports
 use {
 	app_error::{AppError, Context, app_error, ensure},
-	rustidy_print::Print,
+	print::Print,
 	serde::Serialize,
 	std::{env, fs, path::Path},
 };
@@ -77,7 +77,7 @@ fn test_case(test_dir: &Path) -> Result<(), AppError> {
 		false => {
 			let output = fs::read_to_string(output_path)
 				.context("Unable to read output path")?;
-			let output = serde_json::from_str::<rustidy_ast::Crate>(&output)
+			let output = serde_json::from_str::<ast::Crate>(&output)
 				.context("Unable to deserialize output")?;
 
 			assert_json_diff::assert_json_matches_no_panic(

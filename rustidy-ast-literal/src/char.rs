@@ -4,10 +4,10 @@
 use {
 	crate::{AsciiEscape, QuoteEscape, UnicodeEscape},
 	super::escape::{AsciiEscapeError, QuoteEscapeError, UnicodeEscapeError},
-	rustidy_format::{Format, Formattable},
-	rustidy_parse::Parse,
-	rustidy_print::Print,
-	rustidy_util::{AstStr, Whitespace},
+	format::{Format, Formattable},
+	parse::Parse,
+	print::Print,
+	util::{AstStr, Whitespace},
 };
 
 /// `CHAR_LITERAL`
@@ -43,7 +43,7 @@ impl CharLiteral {
 				macro try_parse(
 					$Escape:ident
 				) {
-					rustidy_parse::try_parse_from_str(s, $Escape::parse)
+					parse::try_parse_from_str(s, $Escape::parse)
 						.map_err(CharLiteralError::$Escape)?
 						.is_ok()
 				}

@@ -1,7 +1,7 @@
 //! Follows
 
 // Imports
-use rustidy_parse::Parse;
+use parse::Parse;
 
 /// Follows.
 ///
@@ -15,7 +15,7 @@ impl<T: Parse> Parse for Follows<T> {
 		T::name()
 	}
 
-	fn parse_from(parser: &mut rustidy_parse::Parser) -> Result<Self, Self::Error> {
+	fn parse_from(parser: &mut parse::Parser) -> Result<Self, Self::Error> {
 		let (value, _) = parser.peek_with(T::parse_from)??;
 		Ok(Self(value))
 	}

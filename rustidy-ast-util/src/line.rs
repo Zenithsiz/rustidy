@@ -2,10 +2,10 @@
 
 // Imports
 use {
-	rustidy_format::{Format, Formattable},
-	rustidy_parse::Parse,
-	rustidy_print::Print,
-	rustidy_util::AstStr,
+	format::{Format, Formattable},
+	parse::Parse,
+	print::Print,
+	util::AstStr,
 };
 
 /// Characters remaining until the end of the line (including the newline if it exists)

@@ -8,10 +8,10 @@
 
 use {
 	app_error::{AppError, Context, ensure},
-	rustidy_format::whitespace::{self, WhitespaceFormatKind},
-	rustidy_parse::{ParseError, Parser},
-	rustidy_print::Print,
-	rustidy_util::Whitespace,
+	format::whitespace::{self, WhitespaceFormatKind},
+	parse::{ParseError, Parser},
+	print::Print,
+	util::Whitespace,
 };
 
 #[derive(Clone, Debug)]
@@ -22,7 +22,7 @@ struct Config {
 fn test_case_with(
 	source: &str,
 	expected: &str,
-	fmt_config: &rustidy_util::Config,
+	fmt_config: &util::Config,
 	config: &Config,
 	kind: WhitespaceFormatKind,
 ) -> Result<(), AppError> {
@@ -38,7 +38,7 @@ fn test_case_with(
 	);
 
 
-	let mut fmt_ctx = rustidy_format::Context::new(source, fmt_config);
+	let mut fmt_ctx = format::Context::new(source, fmt_config);
 	fmt_ctx.set_indent_depth(config.indent_depth);
 	whitespace::format(&mut whitespace, &mut fmt_ctx, kind);
 
@@ -58,7 +58,7 @@ fn test_case_with(
 	);
 
 	{
-		let mut fmt_ctx = rustidy_format::Context::new(source, fmt_config);
+		let mut fmt_ctx = format::Context::new(source, fmt_config);
 		fmt_ctx.set_indent_depth(config.indent_depth);
 		whitespace::format(&mut whitespace, &mut fmt_ctx, kind);
 
@@ -90,7 +90,7 @@ struct CaseKinds<'a> {
 
 fn test_cases_with(
 	cases: impl IntoIterator<Item = CaseKinds<'_>>,
-	fmt_config: &rustidy_util::Config,
+	fmt_config: &util::Config,
 	config: &Config,
 ) -> Result<(), AppError> {
 	cases.into_iter().map(|case| {
@@ -195,7 +195,7 @@ fn whitespace() -> Result<(), AppError> {
 		},
 	];
 
-	let fmt_config = rustidy_util::Config::default();
+	let fmt_config = util::Config::default();
 	let config = Config { indent_depth: 2 };
 	self::test_cases_with(cases, &fmt_config, &config)
 		.map_err(AppError::flatten)

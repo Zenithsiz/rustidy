@@ -3,12 +3,12 @@
 // Imports
 use {
 	crate::{attr::DelimTokenTree, util::{Braced, Bracketed, Parenthesized}},
-	rustidy_ast_literal::{Identifier, IdentifierOrKeyword, RawIdentifier, Token, token},
-	rustidy_ast_util::{AtLeast1, PunctuatedTrailing, at_least, delimited, punct},
-	rustidy_format::{Format, Formattable, WhitespaceFormat},
-	rustidy_parse::{Parse, ParserTag},
-	rustidy_print::Print,
-	rustidy_util::Whitespace,
+	ast_literal::{Identifier, IdentifierOrKeyword, RawIdentifier, Token, token},
+	ast_util::{AtLeast1, PunctuatedTrailing, at_least, delimited, punct},
+	format::{Format, Formattable, WhitespaceFormat},
+	parse::{Parse, ParserTag},
+	print::Print,
+	util::Whitespace,
 };
 
 /// `MacroRulesDefinition`
@@ -102,7 +102,7 @@ pub enum MacroMatcher {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Parse, Formattable, Format, Print)]
 pub struct MacroMatcherMatches(
-	#[format(args = rustidy_format::vec::args_prefix_ws(Whitespace::PRESERVE))]
+	#[format(args = format::vec::args_prefix_ws(Whitespace::PRESERVE))]
 	Vec<MacroMatch>,
 );
 

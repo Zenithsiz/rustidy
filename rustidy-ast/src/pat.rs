@@ -19,12 +19,12 @@ use {
 		util::{Braced, Bracketed, Parenthesized},
 	},
 	core::fmt::Debug,
-	rustidy_ast_literal::{ByteLiteral, ByteStringLiteral, Identifier, LiteralExpression, token},
-	rustidy_ast_util::{AtLeast1, Punctuated, PunctuatedTrailing, at_least, delimited, punct},
-	rustidy_format::{Format, Formattable, WhitespaceFormat},
-	rustidy_parse::{Parse, ParsePeeked, ParserError},
-	rustidy_print::Print,
-	rustidy_util::Whitespace,
+	ast_literal::{ByteLiteral, ByteStringLiteral, Identifier, LiteralExpression, token},
+	ast_util::{AtLeast1, Punctuated, PunctuatedTrailing, at_least, delimited, punct},
+	format::{Format, Formattable, WhitespaceFormat},
+	parse::{Parse, ParsePeeked, ParserError},
+	print::Print,
+	util::Whitespace,
 };
 
 /// `Pattern`
@@ -330,7 +330,7 @@ pub struct LiteralPattern {
 }
 
 impl ParsePeeked<ByteLiteral> for LiteralPattern {
-	fn parse_from_with_peeked(_parser: &mut rustidy_parse::Parser, parsed: ByteLiteral) -> Result<Self, Self::Error> {
+	fn parse_from_with_peeked(_parser: &mut parse::Parser, parsed: ByteLiteral) -> Result<Self, Self::Error> {
 		Ok(Self {
 			minus: None,
 			literal: LiteralExpression::Byte(parsed),
@@ -340,7 +340,7 @@ impl ParsePeeked<ByteLiteral> for LiteralPattern {
 
 impl ParsePeeked<ByteStringLiteral> for LiteralPattern {
 	fn parse_from_with_peeked(
-		_parser: &mut rustidy_parse::Parser,
+		_parser: &mut parse::Parser,
 		parsed: ByteStringLiteral
 	) -> Result<Self, Self::Error> {
 		Ok(Self {
@@ -367,7 +367,7 @@ pub struct IdentifierPattern {
 
 impl ParsePeeked<(Option<token::Ref>, Option<token::Mut>, Identifier, token::At)> for IdentifierPattern {
 	fn parse_from_with_peeked(
-		parser: &mut rustidy_parse::Parser,
+		parser: &mut parse::Parser,
 		(ref_, mut_, ident, at): (Option<token::Ref>, Option<token::Mut>, Identifier, token::At),
 	) -> Result<Self, Self::Error> {
 		let pat = parser

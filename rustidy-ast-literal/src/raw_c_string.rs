@@ -3,10 +3,10 @@
 // Imports
 use {
 	super::Suffix,
-	rustidy_format::{Format, Formattable},
-	rustidy_parse::Parse,
-	rustidy_print::Print,
-	rustidy_util::{AstStr, Whitespace},
+	format::{Format, Formattable},
+	parse::Parse,
+	print::Print,
+	util::{AstStr, Whitespace},
 };
 
 /// `RAW_C_STRING_LITERAL`

@@ -4,10 +4,10 @@
 use {
 	crate::ByteEscape,
 	super::escape::ByteEscapeError,
-	rustidy_format::{Format, Formattable},
-	rustidy_parse::Parse,
-	rustidy_print::Print,
-	rustidy_util::{AstStr, Whitespace},
+	format::{Format, Formattable},
+	parse::Parse,
+	print::Print,
+	util::{AstStr, Whitespace},
 };
 
 /// `BYTE_LITERAL`
@@ -35,7 +35,7 @@ impl ByteLiteral {
 			|ch: char| ch.is_ascii() && !matches!(ch, '\'' | '\\' | '\n' | '\r' | '\t')
 		) {
 			Some(rest) => *s = rest,
-			None => _ = rustidy_parse::try_parse_from_str(s, ByteEscape::parse)
+			None => _ = parse::try_parse_from_str(s, ByteEscape::parse)
 				.map_err(ByteLiteralError::ByteEscape)?
 				.ok()
 				.ok_or(ByteLiteralError::CharOrEscape)?,

@@ -31,9 +31,9 @@ pub use self::{
 // Imports
 use {
 	crate::attr::OuterAttrOrDocComment,
-	rustidy_ast_literal::{IntegerLiteral, LiteralExpression, StringLiteral},
-	rustidy_format::{Format, Formattable},
-	rustidy_parse::{
+	ast_literal::{IntegerLiteral, LiteralExpression, StringLiteral},
+	format::{Format, Formattable},
+	parse::{
 		FromRecursiveRoot,
 		Parse,
 		ParseRecursive,
@@ -41,8 +41,8 @@ use {
 		ParserError,
 		RecursiveWrapper,
 	},
-	rustidy_print::Print,
-	rustidy_util::{ArenaData, ArenaIdx},
+	print::Print,
+	util::{ArenaData, ArenaIdx},
 };
 
 /// `Expression`
@@ -112,7 +112,7 @@ impl Parse for ExpressionInner {
 	}
 }
 
-#[derive(derive_more::Debug, derive_more::From, rustidy_parse::ParseError)]
+#[derive(derive_more::Debug, derive_more::From, parse::ParseError)]
 pub enum ExpressionInnerError {
 	#[parse_error(transparent)]
 	Attributes(ParserError<Vec<OuterAttrOrDocComment>>),

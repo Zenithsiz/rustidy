@@ -58,9 +58,9 @@ pub use self::{
 
 // Imports
 use {
-	rustidy_format::{Format, Formattable},
-	rustidy_parse::Parse,
-	rustidy_print::Print,
+	format::{Format, Formattable},
+	parse::Parse,
+	print::Print,
 };
 
 #[derive(PartialEq, Eq, Clone, Debug)]
@@ -79,6 +79,6 @@ pub enum LiteralExpression {
 	CString(CStringLiteral),
 	RawCString(RawCStringLiteral),
 	Integer(IntegerLiteral),
-	True(rustidy_ast_tokens::True),
-	False(rustidy_ast_tokens::False),
+	True(ast_tokens::True),
+	False(ast_tokens::False),
 }

@@ -4,9 +4,9 @@
 
 // Imports
 use {
-	rustidy_format::{Format, Formattable},
-	rustidy_parse::{Parse, ParseError, Parser, ParserError},
-	rustidy_print::Print,
+	format::{Format, Formattable},
+	parse::{Parse, ParseError, Parser, ParserError},
+	print::Print,
 };
 
 /// Parses the longest of two types

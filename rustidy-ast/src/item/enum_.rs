@@ -12,12 +12,12 @@ use {
 		function::{GenericParams, WhereClause},
 		struct_::{StructFields, TupleFields, TupleStruct},
 	},
-	rustidy_ast_literal::{Identifier, token},
-	rustidy_ast_util::{PunctuatedTrailing, delimited, punct},
-	rustidy_format::{Format, Formattable, WhitespaceFormat},
-	rustidy_parse::Parse,
-	rustidy_print::Print,
-	rustidy_util::Whitespace,
+	ast_literal::{Identifier, token},
+	ast_util::{PunctuatedTrailing, delimited, punct},
+	format::{Format, Formattable, WhitespaceFormat},
+	parse::Parse,
+	print::Print,
+	util::Whitespace,
 };
 
 /// `Enumeration`

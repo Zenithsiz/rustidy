@@ -4,8 +4,8 @@
 use {
 	crate::{attr::{InnerDocComment, OuterDocComment}, util::Braced},
 	super::{InnerAttrOrDocComment, OuterAttrOrDocComment},
-	rustidy_ast_util::delimited,
-	rustidy_format::{
+	ast_util::delimited,
+	format::{
 		Format,
 		FormatOutput,
 		FormatTag,
@@ -13,9 +13,9 @@ use {
 		WhitespaceConfig,
 		WhitespaceFormat,
 	},
-	rustidy_parse::{ParsableRecursive, Parse, Parser},
-	rustidy_print::Print,
-	rustidy_util::Whitespace,
+	parse::{ParsableRecursive, Parse, Parser},
+	print::Print,
+	util::Whitespace,
 };
 
 /// A type with outer attributes
@@ -42,7 +42,7 @@ impl<T> WithOuterAttributes<T> {
 impl<A, T: Format<WhitespaceConfig, A>> Format<WhitespaceConfig, FmtArgs<A>> for WithOuterAttributes<T> {
 	fn format(
 		&mut self,
-		ctx: &mut rustidy_format::Context,
+		ctx: &mut format::Context,
 		prefix_ws: WhitespaceConfig,
 		args: FmtArgs<A>,
 	) -> FormatOutput {
@@ -142,7 +142,7 @@ where
 	A: Clone {
 	fn format(
 		&mut self,
-		ctx: &mut rustidy_format::Context,
+		ctx: &mut format::Context,
 		prefix_ws: WhitespaceConfig,
 		args: FmtBracedArgs<A>,
 	) -> FormatOutput {
@@ -171,7 +171,7 @@ pub struct WithInnerAttributes<T> {
 impl<T: Format<WhitespaceConfig, A>, A> Format<WhitespaceConfig, FmtArgs<A>> for WithInnerAttributes<T> {
 	fn format(
 		&mut self,
-		ctx: &mut rustidy_format::Context,
+		ctx: &mut format::Context,
 		prefix_ws: WhitespaceConfig,
 		args: FmtArgs<A>
 	) -> FormatOutput {

@@ -5,7 +5,7 @@ use {
 	crate::{Format, FormatOutput, FormatTag, Formattable, WhitespaceConfig},
 	core::ops::ControlFlow,
 	itertools::Itertools,
-	rustidy_util::{AstStr, ast_str::AstStrRepr, whitespace::{Comment, Whitespace}},
+	util::{AstStr, ast_str::AstStrRepr, whitespace::{Comment, Whitespace}},
 	std::sync::Arc,
 };
 
@@ -220,7 +220,7 @@ impl WhitespaceFormatKind {
 		// Note: We try to use the input's number of newlines, since we might
 		//       have been changed.
 		let newlines = match cur_str.input() {
-			Some(input) => rustidy_util::str_count_newlines(input),
+			Some(input) => util::str_count_newlines(input),
 			None => cur_str.count_newlines(),
 		};
 		let newlines = newlines.clamp(min_newlines, max_newlines);

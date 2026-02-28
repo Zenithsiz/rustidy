@@ -3,12 +3,12 @@
 // Imports
 use {
 	crate::{expr::Expression, util::{Bracketed, FmtRemoveOrIndent}},
-	rustidy_ast_literal::token,
-	rustidy_ast_util::{delimited, punct::{self, PunctuatedTrailing}},
-	rustidy_format::{Format, FormatOutput, Formattable, WhitespaceConfig, WhitespaceFormat},
-	rustidy_parse::Parse,
-	rustidy_print::Print,
-	rustidy_util::Whitespace,
+	ast_literal::token,
+	ast_util::{delimited, punct::{self, PunctuatedTrailing}},
+	format::{Format, FormatOutput, Formattable, WhitespaceConfig, WhitespaceFormat},
+	parse::Parse,
+	print::Print,
+	util::Whitespace,
 };
 
 /// `ArrayExpression`
@@ -49,7 +49,7 @@ pub enum ArrayElements {
 impl ArrayElements {
 	pub fn format_punctuated(
 		values: &mut PunctuatedTrailing<Expression, token::Comma>,
-		ctx: &mut rustidy_format::Context,
+		ctx: &mut format::Context,
 		prefix_ws: WhitespaceConfig,
 		args: FmtRemoveOrIndent
 	) -> FormatOutput {

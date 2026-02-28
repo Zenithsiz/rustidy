@@ -114,9 +114,9 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 	let root_conversion_impls = attrs.into_root.as_ref().map(|into_root_ty| {
 		quote! {
 			#[automatically_derived]
-			impl rustidy_parse::IntoRecursiveRoot<#root_ty> for #item_ident {
-				fn into_recursive_root(self, parser: &mut rustidy_parse::Parser) -> #root_ty {
-					<#into_root_ty as rustidy_parse::IntoRecursiveRoot<#root_ty>>::into_recursive_root(
+			impl parse::IntoRecursiveRoot<#root_ty> for #item_ident {
+				fn into_recursive_root(self, parser: &mut parse::Parser) -> #root_ty {
+					<#into_root_ty as parse::IntoRecursiveRoot<#root_ty>>::into_recursive_root(
 						<#into_root_ty>::from(self),
 						parser
 					)
@@ -124,9 +124,9 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 			}
 
 			#[automatically_derived]
-			impl rustidy_parse::TryFromRecursiveRoot<#root_ty> for #item_ident {
-				fn try_from_recursive_root(root: #root_ty, parser: &mut rustidy_parse::Parser) -> Option<Self> {
-					let into_root = <#into_root_ty as rustidy_parse::TryFromRecursiveRoot<#root_ty>>::try_from_recursive_root(
+			impl parse::TryFromRecursiveRoot<#root_ty> for #item_ident {
+				fn try_from_recursive_root(root: #root_ty, parser: &mut parse::Parser) -> Option<Self> {
+					let into_root = <#into_root_ty as parse::TryFromRecursiveRoot<#root_ty>>::try_from_recursive_root(
 						root,
 						parser
 					)?;
@@ -163,7 +163,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 					let ty = &field.ty;
 					let variant_ident = &variant.ident;
 
-					quote! { #ident_suffix::#variant_ident(suffix) => Self::#variant_ident(<#ty as rustidy_parse::ParsableRecursive<#root_ty>>::join_suffix(root, suffix, parser)), }
+					quote! { #ident_suffix::#variant_ident(suffix) => Self::#variant_ident(<#ty as parse::ParsableRecursive<#root_ty>>::join_suffix(root, suffix, parser)), }
 				})
 				.collect::<Result<Vec<_>, _>>()?;
 			for variant in &mut suffix_variants {
@@ -172,14 +172,14 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 						"Enum variants must be tuple variants with a single field"
 					)?;
 				let ty = &field.ty;
-				field.ty = parse_quote! { <#ty as rustidy_parse::ParsableRecursive<#root_ty>>::Suffix };
+				field.ty = parse_quote! { <#ty as parse::ParsableRecursive<#root_ty>>::Suffix };
 			}
 
 			let suffix_impl = quote! {
 				type Suffix = #ident_suffix;
 
 				#[allow(unreachable_code)]
-				fn join_suffix(root: #root_ty, suffix: Self::Suffix, parser: &mut rustidy_parse::Parser) -> Self {
+				fn join_suffix(root: #root_ty, suffix: Self::Suffix, parser: &mut parse::Parser) -> Self {
 					match suffix {
 						#( #suffix_match_arms )*
 					}
@@ -187,7 +187,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 			};
 
 			let suffix_ty = quote! {
-				#[derive(Debug, rustidy_parse::Parse)]
+				#[derive(Debug, parse::Parse)]
 				#skip_if_tag_attr
 				pub enum #ident_suffix {
 					#( #suffix_variants, )*
@@ -206,7 +206,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 					let ty = &field.ty;
 					let variant_ident = &variant.ident;
 
-					quote! { #ident_prefix::#variant_ident(prefix) => Self::#variant_ident(<#ty as rustidy_parse::ParsableRecursive<#root_ty>>::join_prefix(prefix, root, parser)), }
+					quote! { #ident_prefix::#variant_ident(prefix) => Self::#variant_ident(<#ty as parse::ParsableRecursive<#root_ty>>::join_prefix(prefix, root, parser)), }
 				})
 				.collect::<Result<Vec<_>, AppError>>()?;
 			for variant in &mut prefix_variants {
@@ -215,21 +215,21 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 						"Enum variants must be tuple variants with a single field"
 					)?;
 				let ty = &field.ty;
-				field.ty = parse_quote! { <#ty as rustidy_parse::ParsableRecursive<#root_ty>>::Prefix };
+				field.ty = parse_quote! { <#ty as parse::ParsableRecursive<#root_ty>>::Prefix };
 			}
 
 			let prefix_impl = quote! {
 				type Prefix = #ident_prefix;
 
 				#[allow(unreachable_code)]
-				fn join_prefix(prefix: Self::Prefix, root: #root_ty, parser: &mut rustidy_parse::Parser) -> Self {
+				fn join_prefix(prefix: Self::Prefix, root: #root_ty, parser: &mut parse::Parser) -> Self {
 					match prefix {
 						#( #prefix_match_arms )*
 					}
 				}
 			};
 			let prefix_ty = quote! {
-				#[derive(Debug, rustidy_parse::Parse)]
+				#[derive(Debug, parse::Parse)]
 				#skip_if_tag_attr
 				pub enum #ident_prefix {
 					#( #prefix_variants, )*
@@ -248,7 +248,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 					let ty = &field.ty;
 					let variant_ident = &variant.ident;
 
-					quote! { #ident_infix::#variant_ident(infix) => Self::#variant_ident(<#ty as rustidy_parse::ParsableRecursive<#root_ty>>::join_infix(lhs, infix, rhs, parser)), }
+					quote! { #ident_infix::#variant_ident(infix) => Self::#variant_ident(<#ty as parse::ParsableRecursive<#root_ty>>::join_infix(lhs, infix, rhs, parser)), }
 				})
 				.collect::<Result<Vec<_>, AppError>>()?;
 			for variant in &mut infix_variants {
@@ -257,14 +257,14 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 						"Enum variants must be tuple variants with a single field"
 					)?;
 				let ty = &field.ty;
-				field.ty = parse_quote! { <#ty as rustidy_parse::ParsableRecursive<#root_ty>>::Infix };
+				field.ty = parse_quote! { <#ty as parse::ParsableRecursive<#root_ty>>::Infix };
 			}
 
 			let infix_impl = quote! {
 				type Infix = #ident_infix;
 
 				#[allow(unreachable_code)]
-				fn join_infix(lhs: #root_ty, infix: Self::Infix, rhs: #root_ty, parser: &mut rustidy_parse::Parser) -> Self {
+				fn join_infix(lhs: #root_ty, infix: Self::Infix, rhs: #root_ty, parser: &mut parse::Parser) -> Self {
 					match infix {
 						#( #infix_match_arms )*
 					}
@@ -272,7 +272,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 			};
 
 			let infix_ty = quote! {
-				#[derive(Debug, rustidy_parse::Parse)]
+				#[derive(Debug, parse::Parse)]
 				#skip_if_tag_attr
 				pub enum #ident_infix {
 					#( #infix_variants, )*
@@ -291,7 +291,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 					let ty = &field.ty;
 					let variant_ident = &variant.ident;
 
-					quote! { #ident_base::#variant_ident(base) => Self::#variant_ident(<#ty as rustidy_parse::ParsableRecursive<#root_ty>>::from_base(base, parser)), }
+					quote! { #ident_base::#variant_ident(base) => Self::#variant_ident(<#ty as parse::ParsableRecursive<#root_ty>>::from_base(base, parser)), }
 				})
 				.collect::<Result<Vec<_>, AppError>>()?;
 			for variant in &mut base_variants {
@@ -300,7 +300,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 						"Enum variants must be tuple variants with a single field"
 					)?;
 				let ty = &field.ty;
-				field.ty = parse_quote! { <#ty as rustidy_parse::ParsableRecursive<#root_ty>>::Base };
+				field.ty = parse_quote! { <#ty as parse::ParsableRecursive<#root_ty>>::Base };
 			}
 
 			for variant in variants {
@@ -322,14 +322,14 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 				type Base = #ident_base;
 
 				#[allow(unreachable_code)]
-				fn from_base(base: Self::Base, parser: &mut rustidy_parse::Parser) -> Self {
+				fn from_base(base: Self::Base, parser: &mut parse::Parser) -> Self {
 					match base {
 						#( #base_match_arms )*
 					}
 				}
 			};
 			let ty_base = quote! {
-				#[derive(Debug, rustidy_parse::Parse)]
+				#[derive(Debug, parse::Parse)]
 				#skip_if_tag_attr
 				pub enum #ident_base {
 					#( #base_variants, )*
@@ -338,7 +338,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 
 			quote! {
 				#[automatically_derived]
-				impl rustidy_parse::ParsableRecursive<#root_ty> for #item_ident {
+				impl parse::ParsableRecursive<#root_ty> for #item_ident {
 					#suffix_impl
 					#prefix_impl
 					#infix_impl
@@ -385,7 +385,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 
 							quote! {
 								Self {
-									#field_ident: <#field_ty as rustidy_parse::FromRecursiveRoot<#root_ty>>::from_recursive_root(lhs, parser),
+									#field_ident: <#field_ty as parse::FromRecursiveRoot<#root_ty>>::from_recursive_root(lhs, parser),
 									#( #suffix_fields_ident: suffix.#suffix_fields_ident, )*
 								}
 							}
@@ -397,13 +397,13 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 					let impl_ = quote! {
 						type Suffix = #ident_suffix;
 
-						fn join_suffix(lhs: #root_ty, suffix: Self::Suffix, parser: &mut rustidy_parse::Parser) -> Self {
+						fn join_suffix(lhs: #root_ty, suffix: Self::Suffix, parser: &mut parse::Parser) -> Self {
 							#join
 						}
 					};
 
 					let ty = quote! {
-						#[derive(Debug, rustidy_parse::Parse)]
+						#[derive(Debug, parse::Parse)]
 						#skip_if_tag_attr
 						pub struct #ident_suffix {
 							#( #suffix_fields, )*
@@ -415,7 +415,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 				_ => (quote! {
 						type Suffix = !;
 
-						fn join_suffix(lhs: #root_ty, suffix: Self::Suffix, parser: &mut rustidy_parse::Parser) -> Self {
+						fn join_suffix(lhs: #root_ty, suffix: Self::Suffix, parser: &mut parse::Parser) -> Self {
 							suffix
 						}
 					}, None,),
@@ -451,7 +451,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 
 							quote! {
 								Self {
-									#field_ident: <#field_ty as rustidy_parse::FromRecursiveRoot<#root_ty>>::from_recursive_root(lhs, parser),
+									#field_ident: <#field_ty as parse::FromRecursiveRoot<#root_ty>>::from_recursive_root(lhs, parser),
 									#( #prefix_fields_ident: prefix.#prefix_fields_ident, )*
 								}
 							}
@@ -463,13 +463,13 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 					let impl_ = quote! {
 						type Prefix = #ident_prefix;
 
-						fn join_prefix(prefix: Self::Prefix, lhs: #root_ty, parser: &mut rustidy_parse::Parser) -> Self {
+						fn join_prefix(prefix: Self::Prefix, lhs: #root_ty, parser: &mut parse::Parser) -> Self {
 							#join
 						}
 					};
 
 					let ty = quote! {
-						#[derive(Debug, rustidy_parse::Parse)]
+						#[derive(Debug, parse::Parse)]
 						#skip_if_tag_attr
 						pub struct #ident_prefix {
 							#( #prefix_fields, )*
@@ -481,7 +481,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 				_ => (quote! {
 						type Prefix = !;
 
-						fn join_prefix(prefix: Self::Prefix, _: #root_ty, parser: &mut rustidy_parse::Parser) -> Self {
+						fn join_prefix(prefix: Self::Prefix, _: #root_ty, parser: &mut parse::Parser) -> Self {
 							prefix
 						}
 					}, None,),
@@ -529,8 +529,8 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 
 							quote! {
 								Self {
-									#lhs_field_ident: <#lhs_field_ty as rustidy_parse::FromRecursiveRoot<#root_ty>>::from_recursive_root(lhs, parser),
-									#rhs_field_ident: <#rhs_field_ty as rustidy_parse::FromRecursiveRoot<#root_ty>>::from_recursive_root(rhs, parser),
+									#lhs_field_ident: <#lhs_field_ty as parse::FromRecursiveRoot<#root_ty>>::from_recursive_root(lhs, parser),
+									#rhs_field_ident: <#rhs_field_ty as parse::FromRecursiveRoot<#root_ty>>::from_recursive_root(rhs, parser),
 									#( #infix_fields_ident: infix.#infix_fields_ident, )*
 								}
 							}
@@ -542,13 +542,13 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 					let impl_ = quote! {
 						type Infix = #ident_infix;
 
-						fn join_infix(lhs: #root_ty, infix: Self::Infix, rhs: #root_ty, parser: &mut rustidy_parse::Parser) -> Self {
+						fn join_infix(lhs: #root_ty, infix: Self::Infix, rhs: #root_ty, parser: &mut parse::Parser) -> Self {
 							#join
 						}
 					};
 
 					let ty = quote! {
-						#[derive(Debug, rustidy_parse::Parse)]
+						#[derive(Debug, parse::Parse)]
 						#skip_if_tag_attr
 						pub struct #ident_infix {
 							#( #infix_fields, )*
@@ -560,7 +560,7 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 				_ => (quote! {
 						type Infix = !;
 
-						fn join_infix(_: #root_ty, infix: Self::Infix, _: #root_ty, parser: &mut rustidy_parse::Parser) -> Self {
+						fn join_infix(_: #root_ty, infix: Self::Infix, _: #root_ty, parser: &mut parse::Parser) -> Self {
 							infix
 						}
 					}, None,),
@@ -568,10 +568,10 @@ pub fn derive(input: proc_macro::TokenStream) -> Result<proc_macro::TokenStream,
 
 			quote! {
 				#[automatically_derived]
-				impl rustidy_parse::ParsableRecursive<#root_ty> for #item_ident {
+				impl parse::ParsableRecursive<#root_ty> for #item_ident {
 					type Base = !;
 
-					fn from_base(base: Self::Base, parser: &mut rustidy_parse::Parser) -> Self {
+					fn from_base(base: Self::Base, parser: &mut parse::Parser) -> Self {
 						base
 					}
 
@@ -615,23 +615,23 @@ fn emit_transparent(
 
 	let output = quote! {
 		#[automatically_derived]
-		impl rustidy_parse::ParsableRecursive<#root_ty> for #item_ident {
-			type Prefix = <#field_ty as rustidy_parse::ParsableRecursive<#root_ty>>::Prefix;
-			type Base   = <#field_ty as rustidy_parse::ParsableRecursive<#root_ty>>::Base;
-			type Suffix = <#field_ty as rustidy_parse::ParsableRecursive<#root_ty>>::Suffix;
-			type Infix  = <#field_ty as rustidy_parse::ParsableRecursive<#root_ty>>::Infix;
+		impl parse::ParsableRecursive<#root_ty> for #item_ident {
+			type Prefix = <#field_ty as parse::ParsableRecursive<#root_ty>>::Prefix;
+			type Base   = <#field_ty as parse::ParsableRecursive<#root_ty>>::Base;
+			type Suffix = <#field_ty as parse::ParsableRecursive<#root_ty>>::Suffix;
+			type Infix  = <#field_ty as parse::ParsableRecursive<#root_ty>>::Infix;
 
-			fn join_prefix(prefix: Self::Prefix, root: #root_ty, parser: &mut rustidy_parse::Parser) -> Self {
-				Self(<#field_ty as rustidy_parse::ParsableRecursive<#root_ty>>::join_prefix(prefix, root, parser))
+			fn join_prefix(prefix: Self::Prefix, root: #root_ty, parser: &mut parse::Parser) -> Self {
+				Self(<#field_ty as parse::ParsableRecursive<#root_ty>>::join_prefix(prefix, root, parser))
 			}
-			fn from_base(base: Self::Base, parser: &mut rustidy_parse::Parser) -> Self {
-				Self(<#field_ty as rustidy_parse::ParsableRecursive<#root_ty>>::from_base(base, parser))
+			fn from_base(base: Self::Base, parser: &mut parse::Parser) -> Self {
+				Self(<#field_ty as parse::ParsableRecursive<#root_ty>>::from_base(base, parser))
 			}
-			fn join_suffix(root: #root_ty, suffix: Self::Suffix, parser: &mut rustidy_parse::Parser) -> Self {
-				Self(<#field_ty as rustidy_parse::ParsableRecursive<#root_ty>>::join_suffix(root, suffix, parser))
+			fn join_suffix(root: #root_ty, suffix: Self::Suffix, parser: &mut parse::Parser) -> Self {
+				Self(<#field_ty as parse::ParsableRecursive<#root_ty>>::join_suffix(root, suffix, parser))
 			}
-			fn join_infix(lhs: #root_ty, infix: Self::Infix, rhs: #root_ty, parser: &mut rustidy_parse::Parser) -> Self {
-				Self(<#field_ty as rustidy_parse::ParsableRecursive<#root_ty>>::join_infix(lhs, infix, rhs, parser))
+			fn join_infix(lhs: #root_ty, infix: Self::Infix, rhs: #root_ty, parser: &mut parse::Parser) -> Self {
+				Self(<#field_ty as parse::ParsableRecursive<#root_ty>>::join_infix(lhs, infix, rhs, parser))
 			}
 		}
 

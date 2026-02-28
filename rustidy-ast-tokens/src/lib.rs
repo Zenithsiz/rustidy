@@ -12,10 +12,10 @@
 
 // Imports
 use {
-	rustidy_format::{Format, Formattable},
-	rustidy_parse::{Parse, ParserTag},
-	rustidy_print::Print,
-	rustidy_util::{AstStr, Whitespace},
+	format::{Format, Formattable},
+	parse::{Parse, ParserTag},
+	print::Print,
+	util::{AstStr, Whitespace},
 };
 
 pub macro decl_tokens(
